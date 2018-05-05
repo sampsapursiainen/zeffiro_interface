@@ -1,0 +1,12 @@
+Computer Lenovo P910
+Processor 2x2695Av4
+RAM 256 GB 
+GPU NVIDIA Quadro P6000
+Elements 36M 
+Nodes 6M
+Source Count 5E+05
+Segmentation 2029 s
+Segmentation 1329 s
+Leadfield EEG (128 electrodes) 2362 s 
+Leadfield EEG (154 magnetometers) 4826 s 
+Source Interpolation 212 S
