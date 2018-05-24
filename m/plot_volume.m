@@ -356,16 +356,10 @@ reconstruction = evalin('base','zef.reconstruction');
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+
+if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
-
-if evalin('base','zef.inv_scale') == 1
-reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 2
-reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-elseif evalin('base','zef.inv_scale') == 3
-reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
 I_3 = find(ismember(tetra_ind,brain_ind));
@@ -376,6 +370,50 @@ I_2_rec = I_2;
 I_1 = tetra_ind(I_3);
 I_1_rec = I_1;
 reconstruction = reconstruction(I_2(I_1));
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/4;
+rec_y = sum(rec_y(s_i_ind),2)/4;
+rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = rec_x(I_2);
+rec_y = rec_y(I_2);
+rec_z = rec_z(I_2);
+I_2_b_rec = I_2;
+I_3 = find(ismember(tetra_ind,brain_ind));
+I_3_rec = I_3;
+I_2 = zeros(length(aux_ind),1);
+I_2(brain_ind) = [1:length(brain_ind)]';
+I_2_rec = I_2;
+I_1 = tetra_ind(I_3);
+I_1_rec = I_1;
+rec_x = rec_x(I_2(I_1));
+rec_y = rec_y(I_2(I_1));
+rec_z = rec_z(I_2(I_1));
+n_vec_aux = cross(nodes(surface_triangles(I_3,2),:)' - nodes(surface_triangles(I_3,1),:)',...
+nodes(surface_triangles(I_3,3),:)' - nodes(surface_triangles(I_3,1),:)')';
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+end 
+
+if evalin('base','zef.reconstruction_type') == 2
+reconstruction = abs(rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3));
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - rec_x.*n_vec_aux(:,1)).^2 + (rec_y - rec_y.*n_vec_aux(:,2)).^2 + (rec_z - rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.inv_scale') == 1
+reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
+elseif evalin('base','zef.inv_scale') == 2
+reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+elseif evalin('base','zef.inv_scale') == 3
+reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
+
 
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1

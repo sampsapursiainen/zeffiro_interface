@@ -1,4 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
+
+if not(isfield(zef,'reconstruction_type')); 
+    zef.reconstruction_type = 1; 
+end; 
 if not(isfield(zef,'use_depth_electrodes')); 
     zef.use_depth_electrodes = 0; 
 end; 

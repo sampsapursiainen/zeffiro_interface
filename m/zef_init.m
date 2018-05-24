@@ -1,18 +1,20 @@
 %Copyright © 2018, Sampsa Pursiainen
+          zef.reconstruction_type = 1;
           zef.h_colorbar   = [];
           zef.location_unit= 1;
               zef.elevation= 0;
                 zef.azimuth= 0;
            zef.axes_visible= 0;
               zef.n_sources= 50000;
-               zef.sc_sigma= 0.330000000000000;
-               zef.sk_sigma= 0.004200000000000;
+               zef.sc_sigma= 0.430000000000000;
+               zef.sk_sigma= 0.006400000000000;
                 zef.c_sigma= 1.790000000000000;
                 zef.g_sigma= 0.330000000000000;
                 zef.w_sigma= 0.140000000000000;
                zef.d1_sigma= 0.33;
                zef.d2_sigma= 0.33;
                zef.d3_sigma= 0.33;
+               zef.d4_sigma= 0.33;
         zef.mesh_resolution= 2;
       zef.attach_electrodes= 0;
               zef.s_visible= 1;

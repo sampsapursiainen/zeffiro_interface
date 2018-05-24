@@ -18,6 +18,11 @@ load([zef.file_path zef.file]);
           else
           zef.source_model = 2;
           end;
+          if isfield(zef_data,'reconstruction_type')
+          zef.reconstruction_type      =      zef_data.reconstruction_type;
+          else
+          zef.reconstruction_type = 1;
+          end
           if isfield(zef_data,'use_gpu')
           zef.use_gpu      =      zef_data.use_gpu;
           else
