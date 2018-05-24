@@ -536,12 +536,12 @@ n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
-if evalin('base','zef.reconstruction_type') == 2
-reconstruction = abs(rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3));
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
 if evalin('base','zef.reconstruction_type') == 3
-reconstruction = sqrt((rec_x - rec_x.*n_vec_aux(:,1)).^2 + (rec_y - rec_y.*n_vec_aux(:,2)).^2 + (rec_z - rec_z.*n_vec_aux(:,3)).^2);
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
 if evalin('base','zef.inv_scale') == 1
@@ -629,13 +629,14 @@ n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
-if evalin('base','zef.reconstruction_type') == 2
-reconstruction = abs(rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3));
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
 if evalin('base','zef.reconstruction_type') == 3
-reconstruction = sqrt((rec_x - rec_x.*n_vec_aux(:,1)).^2 + (rec_y - rec_y.*n_vec_aux(:,2)).^2 + (rec_z - rec_z.*n_vec_aux(:,3)).^2);
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
+
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));

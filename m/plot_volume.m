@@ -398,12 +398,12 @@ nodes(surface_triangles(I_3,3),:)' - nodes(surface_triangles(I_3,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end 
 
-if evalin('base','zef.reconstruction_type') == 2
-reconstruction = abs(rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3));
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
 if evalin('base','zef.reconstruction_type') == 3
-reconstruction = sqrt((rec_x - rec_x.*n_vec_aux(:,1)).^2 + (rec_y - rec_y.*n_vec_aux(:,2)).^2 + (rec_z - rec_z.*n_vec_aux(:,3)).^2);
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
 if evalin('base','zef.inv_scale') == 1
@@ -632,8 +632,37 @@ reconstruction = evalin('base','zef.reconstruction');
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+
+if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = reconstruction(I_2_b_rec);
+reconstruction = reconstruction(I_2_rec(I_1_rec));
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/4;
+rec_y = sum(rec_y(s_i_ind),2)/4;
+rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = rec_x(I_2_b_rec);
+rec_y = rec_y(I_2_b_rec);
+rec_z = rec_z(I_2_b_rec);
+rec_x = rec_x(I_2_rec(I_1_rec));
+rec_y = rec_y(I_2_rec(I_1_rec));
+rec_z = rec_z(I_2_rec(I_1_rec));
+end 
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
+
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -643,8 +672,6 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 
-reconstruction = reconstruction(I_2_b_rec);
-reconstruction = reconstruction(I_2_rec(I_1_rec));
 
 h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
