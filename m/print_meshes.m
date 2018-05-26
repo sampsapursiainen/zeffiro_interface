@@ -392,8 +392,55 @@ reconstruction = evalin('base','zef.reconstruction');
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+
+if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = reconstruction(I_2);
+I_2_b_rec = I_2;
+I_3 = find(ismember(tetra_ind,brain_ind));
+I_3_rec = I_3;
+I_2 = zeros(length(aux_ind),1);
+I_2(brain_ind) = [1:length(brain_ind)]';
+I_2_rec = I_2;
+I_1 = tetra_ind(I_3);
+I_1_rec = I_1;
+reconstruction = reconstruction(I_2(I_1));
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/4;
+rec_y = sum(rec_y(s_i_ind),2)/4;
+rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = rec_x(I_2);
+rec_y = rec_y(I_2);
+rec_z = rec_z(I_2);
+I_2_b_rec = I_2;
+I_3 = find(ismember(tetra_ind,brain_ind));
+I_3_rec = I_3;
+I_2 = zeros(length(aux_ind),1);
+I_2(brain_ind) = [1:length(brain_ind)]';
+I_2_rec = I_2;
+I_1 = tetra_ind(I_3);
+I_1_rec = I_1;
+rec_x = rec_x(I_2(I_1));
+rec_y = rec_y(I_2(I_1));
+rec_z = rec_z(I_2(I_1));
+n_vec_aux = cross(nodes(surface_triangles(I_3,2),:)' - nodes(surface_triangles(I_3,1),:)',...
+nodes(surface_triangles(I_3,3),:)' - nodes(surface_triangles(I_3,1),:)')';
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+end 
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
 
 
 if evalin('base','zef.inv_scale') == 1
@@ -406,17 +453,6 @@ end
 [a_hist, b_hist] = hist(reconstruction,min_rec:(max_rec-min_rec)/50:max_rec - (max_rec - min_rec)/50);
 a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
-   
-reconstruction = reconstruction(I_2);
-I_2_b_rec = I_2;
-I_3 = find(ismember(tetra_ind,brain_ind));
-I_3_rec = I_3;
-I_2 = zeros(length(aux_ind),1);
-I_2(brain_ind) = [1:length(brain_ind)]';
-I_2_rec = I_2;
-I_1 = tetra_ind(I_3);
-I_1_rec = I_1;
-reconstruction = reconstruction(I_2(I_1));
 
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
@@ -607,7 +643,7 @@ end
 
   if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
   end
   
@@ -685,8 +721,36 @@ reconstruction = evalin('base','zef.reconstruction');
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+
+if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = reconstruction(I_2_b_rec);
+reconstruction = reconstruction(I_2_rec(I_1_rec));
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/4;
+rec_y = sum(rec_y(s_i_ind),2)/4;
+rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = rec_x(I_2_b_rec);
+rec_y = rec_y(I_2_b_rec);
+rec_z = rec_z(I_2_b_rec);
+rec_x = rec_x(I_2_rec(I_1_rec));
+rec_y = rec_y(I_2_rec(I_1_rec));
+rec_z = rec_z(I_2_rec(I_1_rec));
+end 
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -725,7 +789,7 @@ set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 
   axes(h_axes_text);set(15843,'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
  
   if file_index == 1; 
@@ -1348,9 +1412,31 @@ reconstruction = evalin('base','zef.reconstruction');
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
-reconstruction = sqrt(sum(reconstruction.^2))';
 
+if evalin('base','zef.reconstruction_type') == 1
+reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/3;
+rec_y = sum(rec_y(s_i_ind),2)/3;
+rec_z = sum(rec_z(s_i_ind),2)/3;
+n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)',...
+ reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,3),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)')';
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -1385,7 +1471,7 @@ axes(h_axes_image); set(15843,'visible','off');
 
 
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*0*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*0*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
 axes(h_axes_image); set(15843,'visible','off');
 
@@ -1503,8 +1589,32 @@ length_reconstruction = length(reconstruction);
 reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+
+if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+rec_x = reconstruction(1,:)';
+rec_y = reconstruction(2,:)';
+rec_z = reconstruction(3,:)';
+rec_x = sum(rec_x(s_i_ind),2)/3;
+rec_y = sum(rec_y(s_i_ind),2)/3;
+rec_z = sum(rec_z(s_i_ind),2)/3;
+n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)',... 
+ reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,3),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)')';
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') == 3
+reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
+
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -1541,7 +1651,7 @@ set(h_axes_hist,'ticklength',[0 0]);
 
 axes(h_axes_text);set(15843,'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on','fontsize',1500);
 set(h_axes_text,'layer','bottom');
 
