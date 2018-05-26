@@ -406,6 +406,10 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
+end
+
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -554,6 +558,7 @@ h_colorbar = colorbar('EastOutside','Position',[0.95 0.647 0.01 0.29]);
 %set(h_colorbar,'layer','bottom');
 lighting phong;
 end
+
 %**************************************************************************
 
 
@@ -663,6 +668,9 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
+end
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));

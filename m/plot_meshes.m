@@ -544,6 +544,10 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
+end
+
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -566,7 +570,7 @@ lighting phong;
 
 h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + 0*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + 0*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 axes(evalin('base','zef.h_axes1'));
@@ -637,6 +641,10 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
+end
+
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -663,7 +671,7 @@ lighting phong;
 
 h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 drawnow;

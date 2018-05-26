@@ -385,6 +385,29 @@ brain_ind = evalin('base','zef.brain_ind');
 [aux_vec, brain_ind, I_2] = intersect(I_aux,brain_ind);
 clear aux_vec;
 johtavuus(aux_ind(brain_ind))=0;
+
+%******************************************************
+if iscell(evalin('base','zef.reconstruction')) 
+reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
+else
+reconstruction = evalin('base','zef.reconstruction');
+end
+reconstruction = reconstruction(:);  
+reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+reconstruction = sqrt(sum(reconstruction.^2))';
+reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
+if evalin('base','zef.inv_scale') == 1
+reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
+elseif evalin('base','zef.inv_scale') == 2
+reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+elseif evalin('base','zef.inv_scale') == 3
+reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
+[a_hist, b_hist] = hist(reconstruction,min_rec:(max_rec-min_rec)/50:max_rec - (max_rec - min_rec)/50);
+a_hist = max(0,real(log10(a_hist)));
+length_reconstruction = length(reconstruction);
+%******************************************************
+
 if iscell(evalin('base','zef.reconstruction'))
 reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 else
@@ -442,6 +465,9 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
+end
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -450,9 +476,6 @@ reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
-[a_hist, b_hist] = hist(reconstruction,min_rec:(max_rec-min_rec)/50:max_rec - (max_rec - min_rec)/50);
-a_hist = max(0,real(log10(a_hist)));
-length_reconstruction = length(reconstruction);
 
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
@@ -713,6 +736,28 @@ delete(h_text);
 axes(h_axes_image);set(15843,'visible','off');
 delete(h_surf_2);
 hold on;
+
+%******************************************************
+if iscell(evalin('base','zef.reconstruction')) 
+reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
+else
+reconstruction = evalin('base','zef.reconstruction');
+end
+reconstruction = reconstruction(:);  
+reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+reconstruction = sqrt(sum(reconstruction.^2))';
+reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
+if evalin('base','zef.inv_scale') == 1
+reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
+elseif evalin('base','zef.inv_scale') == 2
+reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+elseif evalin('base','zef.inv_scale') == 3
+reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
+[a_hist, b_hist] = hist(reconstruction,min_rec:(max_rec-min_rec)/50:max_rec - (max_rec - min_rec)/50);
+a_hist = max(0,real(log10(a_hist)));
+length_reconstruction = length(reconstruction);
+%******************************************************
  
 if iscell(evalin('base','zef.reconstruction'))
 reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
@@ -752,6 +797,11 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
+end
+
+
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -759,10 +809,6 @@ reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
-
-[a_hist, b_hist] = hist(reconstruction,min_rec:(max_rec-min_rec)/50:max_rec - (max_rec - min_rec)/50);
-a_hist = max(0,real(log10(a_hist)));
-length_reconstruction = length(reconstruction);
 
 reconstruction = reconstruction(I_2_b_rec);
 reconstruction = reconstruction(I_2_rec(I_1_rec));
@@ -1438,6 +1484,11 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
 end
 
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
+end
+
+
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -1613,6 +1664,10 @@ end
 
 if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - reconstruction.*n_vec_aux(:,1)).^2 + (rec_y - reconstruction.*n_vec_aux(:,2)).^2 + (rec_z - reconstruction.*n_vec_aux(:,3)).^2);
+end
+
+if evalin('base','zef.reconstruction_type') > 1
+reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
 end
 
 if evalin('base','zef.inv_scale') == 1
