@@ -185,7 +185,7 @@ zef.h_edit76;
 ];
 uistack(flipud(zef.aux_handle_vec),'bottom');
 rmfield(zef,'aux_handle_vec');
-set(zef.h_popupmenu2,'string',{'Cartesian','Mesh-based'});
+set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Mesh-based'});
 set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)'});
 set(zef.h_pushbutton31,'string','Visualize volume')
 zef.o_h = findall(zef.h_zeffiro);
