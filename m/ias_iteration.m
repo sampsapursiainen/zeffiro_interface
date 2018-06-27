@@ -112,7 +112,7 @@ n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),3);
 n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),3);
 n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),3);
 
-n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+n_vec_aux = - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
 source_directions = n_vec_aux(s_ind_3,:);
 
