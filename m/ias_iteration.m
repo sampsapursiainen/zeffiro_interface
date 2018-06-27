@@ -1,7 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [z] = ias_iteration(void)
 
-[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}')); 
+[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
 
 beta = evalin('base','zef.inv_beta');
 theta0 = evalin('base','zef.inv_theta0');
@@ -17,33 +18,144 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 
 
-if source_direction_mode == 1
+if source_direction_mode == 2
+
+i = 0;
+length_reuna = 0;
+sigma_vec = [];
+priority_vec = [];
+visible_vec = [];
+color_cell = cell(0);
+for k = 1 : 9   
+switch k
+    case 1
+        var_0 = 'zef.d1_on';
+        var_1 = 'zef.d1_sigma';
+        var_2 = 'zef.d1_priority';
+        var_3 = 'zef.d1_visible';
+    color_str = evalin('base','zef.d1_color');
+     case 2
+        var_0 = 'zef.d2_on';
+        var_1 = 'zef.d2_sigma';   
+        var_2 = 'zef.d2_priority';
+        var_3 = 'zef.d2_visible';
+        color_str = evalin('base','zef.d2_color');
+     case 3
+        var_0 = 'zef.d3_on';
+        var_1 = 'zef.d3_sigma';   
+        var_2 = 'zef.d3_priority';
+        var_3 = 'zef.d3_visible';
+        color_str = evalin('base','zef.d3_color');
+     case 4
+        var_0 = 'zef.d4_on';
+        var_1 = 'zef.d4_sigma';   
+        var_2 = 'zef.d4_priority';
+        var_3 = 'zef.d4_visible';
+        color_str = evalin('base','zef.d4_color');
+    case 5
+        var_0 = 'zef.w_on';
+        var_1 = 'zef.w_sigma';    
+        var_2 = 'zef.w_priority';
+        var_3 = 'zef.w_visible';
+        color_str = evalin('base','zef.w_color');
+    case 6
+        var_0 = 'zef.g_on';
+        var_1 = 'zef.g_sigma';
+        var_2 = 'zef.g_priority';
+        var_3 = 'zef.g_visible';
+        color_str = evalin('base','zef.g_color');
+    case 7
+        var_0 = 'zef.c_on';
+        var_1 = 'zef.c_sigma';
+        var_2 = 'zef.c_priority';
+        var_3 = 'zef.c_visible';
+        color_str = evalin('base','zef.c_color');
+     case 8
+        var_0 = 'zef.sk_on';
+        var_1 = 'zef.sk_sigma';
+        var_2 = 'zef.sk_priority';
+        var_3 = 'zef.sk_visible';
+        color_str = evalin('base','zef.sk_color');
+     case 9
+        var_0 = 'zef.sc_on';
+        var_1 = 'zef.sc_sigma';
+        var_2 = 'zef.sc_priority';
+        var_3 = 'zef.sc_visible';
+        color_str = evalin('base','zef.sc_color');
+     end
+on_val = evalin('base',var_0);      
+sigma_val = evalin('base',var_1);  
+priority_val = evalin('base',var_2);
+visible_val = evalin('base',var_3);
+if on_val
+i = i + 1;
+sigma_vec(i,1) = sigma_val;
+priority_vec(i,1) = priority_val;
+color_cell{i} = color_str;
+visible_vec(i,1) = i*visible_val;
+if k == 6;
+    aux_brain_ind = i;
+end
+if k == 5;
+    aux_wm_ind = i;
+end
+end
+end
+
+aux_p = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind) '}']);
+aux_t = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
+
+n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+
+n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),3);
+n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),3);
+n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),3);
+
+n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+
+source_directions = n_vec_aux(s_ind_3,:);
+
+end
+
+if source_direction_mode == 2 || source_direction_mode == 3
+source_directions = source_directions(s_ind_1,:);
+end
+
+if source_direction_mode == 1  || source_direction_mode == 2
 s_ind_1 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 end
-if source_direction_mode == 2
+if  source_direction_mode == 3
 s_ind_2 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
-end
-
-
-
-if source_direction_mode == 2
-source_directions = source_directions(s_ind_1,:);
 end
 
 s_ind_1 = s_ind_1(:);
 
 L = evalin('base','zef.L');
+L = L(:,s_ind_1);
+
+if source_direction_mode == 2
+
+L_1 = L(:,1:3:end);
+L_2 = L(:,2:3:end);
+L_3 = L(:,3:3:end);
+s_1 = source_directions(:,1)';
+s_2 = source_directions(:,2)';
+s_3 = source_directions(:,3)';
+ones_vec = ones(size(L,1),1);
+L = L_1.*s_1(ones_vec,:) + L_2.*s_2(ones_vec,:) + L_3.*s_3(ones_vec,:);
+clear L_1 L_2 L_3 s_1 s_2 s_3;
+
+end
+
 if evalin('base','zef.use_gpu') == 1
 L = gpuArray(L);
 end
-L = L(:,s_ind_1);
 L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
 if evalin('base','zef.use_gpu') == 1
 S_mat = gpuArray(S_mat);
 end
-
-
 
 if number_of_frames > 1
 z = cell(number_of_frames,1);
@@ -80,7 +192,7 @@ f = f/data_norm;
 if source_direction_mode == 1
 z_aux = zeros(size(L,2),1); 
 end
-if source_direction_mode == 2
+if source_direction_mode == 2 || source_direction_mode == 3
 z_aux = zeros(3*size(L,2),1);
 end
 z_vec = ones(size(L,2),1); 
@@ -149,15 +261,15 @@ theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
 end;
 
-if source_direction_mode == 2
+if source_direction_mode == 2 || source_direction_mode == 3
 z_vec = [z_vec.*source_directions(:,1) z_vec.*source_directions(:,2)  z_vec.*source_directions(:,3)]';
 z_vec = z_vec(:);
 end
 
-if source_direction_mode == 1
+if source_direction_mode == 1 || source_direction_mode == 2
 z_aux(s_ind_1) = z_vec;
 end
-if source_direction_mode == 2
+if source_direction_mode == 3
 z_aux(s_ind_2) = z_vec;
 end
 

@@ -5,7 +5,11 @@ tic;
 
 if zef.source_direction_mode == 1
 zef.lf_param.direction_mode = 'cartesian';
-else
+end
+if zef.source_direction_mode == 2
+zef.lf_param.direction_mode = 'normal';
+end
+if zef.source_direction_mode == 3
 zef.lf_param.direction_mode = 'face_based';
 end
 if isfield(zef,'preconditioner')

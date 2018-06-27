@@ -777,7 +777,7 @@ L_eeg_ew = Aux_mat_2*L_eeg_ew;
 end
 
 
-if isequal(lower(direction_mode),'cartesian') 
+if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
 if evalin('base','zef.surface_sources')
 source_nonzero_ind = full(find(sum(T_fi)>=0))';
@@ -795,7 +795,7 @@ end
 
 
 
-if isequal(lower(direction_mode),'cartesian')
+if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
 c_tet = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
 dipole_locations = c_tet(source_nonzero_ind,:);
@@ -803,6 +803,7 @@ dipole_directions = [];
 L_eeg = zeros(L,3*M2);
 
 if source_model == 2
+tic;
  for i = 1 : M2
 
         ind_vec_aux_fi = full(find(T_fi(:,source_nonzero_ind(i))));
@@ -826,6 +827,7 @@ end
 
 
 if source_model == 1
+tic;
  for i = 1 : M2
 
         ind_vec_aux_fi = full(find(T_fi(:,source_nonzero_ind(i))));
