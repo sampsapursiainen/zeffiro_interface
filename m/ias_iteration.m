@@ -2,7 +2,6 @@
 function [z] = ias_iteration(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
-[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
 
 beta = evalin('base','zef.inv_beta');
 theta0 = evalin('base','zef.inv_theta0');
@@ -19,6 +18,8 @@ source_directions = evalin('base','zef.source_directions');
 
 
 if source_direction_mode == 2
+
+[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
 
 i = 0;
 length_reuna = 0;
