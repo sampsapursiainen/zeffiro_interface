@@ -113,7 +113,7 @@ n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
 n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
 n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
-n_vec_aux = - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+n_vec_aux =  n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
 source_directions = n_vec_aux(s_ind_3,:);
 
@@ -198,6 +198,9 @@ z_aux = zeros(3*size(L,2),1);
 end
 z_vec = ones(size(L,2),1); 
 theta = theta0*ones(length(z_vec),1);
+%aux_norm = (sum(L.^2))';
+%aux_norm = aux_norm./max(aux_norm(:));
+%theta = theta0*aux_norm;
 
 if size(f,2) > 1  
 if evalin('base','zef.inv_time_2') >=0 0 && evalin('base','zef.inv_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.inv_time_1') <= size(f,2);
