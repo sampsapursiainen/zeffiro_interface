@@ -1,7 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [z] = ias_iteration(void)
+function [z] = mcmc_sampler(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+n_interp = length(s_ind_1(:));
 
 beta = evalin('base','zef.inv_beta');
 theta0 = evalin('base','zef.inv_theta0');
@@ -11,11 +12,17 @@ std_lhood = evalin('base','zef.inv_likelihood_std');
 sampling_freq = evalin('base','zef.inv_sampling_frequency');
 high_pass = evalin('base','zef.inv_low_cut_frequency');
 low_pass = evalin('base','zef.inv_high_cut_frequency');
+roi_mode = evalin('base','zef.inv_roi_mode');
+roi_threshold = evalin('base','zef.inv_roi_threshold');
+roi_sphere = evalin('base', 'zef.inv_roi_sphere');
+n_sampler = evalin('base','zef.inv_n_sampler'); 
+n_burn_in = evalin('base','zef.inv_n_burn_in');
+
 number_of_frames = evalin('base','zef.number_of_frames');
 time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
-
+source_positions = evalin('base','zef.source_positions');
 
 if source_direction_mode == 2
 
@@ -113,11 +120,13 @@ n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
 n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
 n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
-n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
+n_vec_aux = - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
 source_directions = n_vec_aux(s_ind_3,:);
 
 end
+
+source_positions = source_positions(s_ind_1,:);
 
 if source_direction_mode == 2 || source_direction_mode == 3
 source_directions = source_directions(s_ind_1,:);
@@ -149,14 +158,14 @@ clear L_1 L_2 L_3 s_1 s_2 s_3;
 
 end
 
-if evalin('base','zef.use_gpu') == 1
-L = gpuArray(L);
-end
-L_aux = L;
+%if evalin('base','zef.use_gpu') == 1
+%L = gpuArray(L);
+%end
+%L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1
-S_mat = gpuArray(S_mat);
-end
+%if evalin('base','zef.use_gpu') == 1
+%S_mat = gpuArray(S_mat);
+%end
 
 if number_of_frames > 1
 z = cell(number_of_frames,1);
@@ -196,8 +205,8 @@ end
 if source_direction_mode == 2 || source_direction_mode == 3
 z_aux = zeros(3*size(L,2),1);
 end
-z_vec = ones(size(L,2),1); 
-theta = theta0*ones(length(z_vec),1);
+z_vec = zeros(size(L,2),1); 
+%theta = theta0*ones(length(z_vec),1);
 %aux_norm = (sum(L.^2))';
 %aux_norm = aux_norm./max(aux_norm(:));
 %theta = theta0*aux_norm;
@@ -229,44 +238,19 @@ end
 low_pass_ind = max(high_pass_ind,low_pass_ind);
 f = sum(f(:,high_pass_ind:low_pass_ind),2)/(low_pass_ind - high_pass_ind + 1);
 end
-if f_ind == 1
-h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
-end
+%if f_ind == 1
+%h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+%end
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
-if evalin('base','zef.use_gpu') == 1
-f = gpuArray(f);
-end
+%if evalin('base','zef.use_gpu') == 1
+%f = gpuArray(f);
+%end
 
-
-for i = 1 : n_ias_map_iter
-if f_ind > 1;    
-waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
-else
-waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
-end;
-m_max = sqrt(size(L,2));
-u = zeros(length(z_vec),1);
-z_vec = zeros(length(z_vec),1);
-d_sqrt = sqrt(theta);
-if evalin('base','zef.use_gpu') == 1
-d_sqrt = gpuArray(d_sqrt);
-end
-L = L_aux.*repmat(d_sqrt',size(L,1),1); 
-z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
-
-if evalin('base','zef.use_gpu') == 1
-z_vec = gather(z_vec);
-end
-if evalin('base','zef.inv_hyperprior') == 1;
-theta = theta0*(eta + sqrt((1/(2*theta0))*z_vec.^2 + eta^2)); 
-else
-theta = (theta0+0.5*z_vec.^2)./kappa;
-end;
-end;
+gibbs_sampler;
 
 if source_direction_mode == 2 || source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1) z_vec.*source_directions(:,2)  z_vec.*source_directions(:,3)]';
+z_vec = [z_vec.*source_directions(:,1) z_vec.*source_directions(:,2)  z_vec.*source_directions(:,3)];
 z_vec = z_vec(:);
 end
 
@@ -295,4 +279,8 @@ else
 aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2)); 
 z = z./max(aux_norm_vec);
 end;
-close(h);
+%close(h);
+
+z = z./max(abs(z(:)));
+
+end

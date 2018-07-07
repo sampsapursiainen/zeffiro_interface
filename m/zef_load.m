@@ -8,6 +8,31 @@ if not(isequal(zef.file,0));
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path; 
 load([zef.file_path zef.file]);
+          if (isfield(zef_data,'inv_roi_sphere'));
+          zef.inv_roi_sphere = zef_data.inv_roi_sphere; 
+          else
+          zef.inv_roi_sphere = [0 0 0 15];
+          end
+          if (isfield(zef_data,'inv_roi_threshold'));
+          zef.inv_roi_threshold = zef_data.inv_roi_threshold; 
+          else
+          zef.inv_roi_threshold = 0.5;
+          end
+          if (isfield(zef_data,'inv_roi_mode'));
+          zef.inv_roi_mode = zef_data.inv_roi_mode; 
+          else
+          zef.inv_roi_mode = 1;
+          end
+          if (isfield(zef_data,'inv_n_sampler'));
+          zef.inv_n_sampler = zef_data.inv_n_sampler; 
+          else
+          zef.inv_n_sampler = 10000;
+          end
+          if (isfield(zef_data,'inv_n_burn_in'));
+          zef.inv_n_burn_in = zef_data.inv_n_burn_in; 
+          else
+          zef.inv_n_burn_in = 1000;
+          end
           if (isfield(zef_data,'use_depth_electrodes'));
           zef.use_depth_electrodes = zef_data.use_depth_electrodes; 
           else

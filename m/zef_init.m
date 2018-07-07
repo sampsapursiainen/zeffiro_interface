@@ -1,4 +1,9 @@
 %Copyright © 2018, Sampsa Pursiainen
+          zef.inv_roi_mode = 1;
+          zef.inv_roi_threshold = 0.5;
+          zef.inv_roi_sphere = [0; 0; 0; 15];
+          zef.inv_n_sampler = 10000; 
+          zef.inv_n_burn_in = 1000; 
           zef.reconstruction_type = 1;
           zef.h_colorbar   = [];
           zef.location_unit= 1;
