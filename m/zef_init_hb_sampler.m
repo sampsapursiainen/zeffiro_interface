@@ -59,6 +59,13 @@ if not(isfield(zef,'number_of_frames'));
     zef.number_of_frames = 1; 
 end;
 
+set(zef.h_inv_roi_mode ,'value',zef.inv_roi_mode);
+set(zef.h_inv_roi_sphere_1 ,'string',num2str(zef.inv_roi_sphere(1)));
+set(zef.h_inv_roi_sphere_2 ,'string',num2str(zef.inv_roi_sphere(2)));
+set(zef.h_inv_roi_sphere_3 ,'string',num2str(zef.inv_roi_sphere(3)));
+set(zef.h_inv_roi_sphere_4 ,'string',num2str(zef.inv_roi_sphere(4)));
+set(zef.h_inv_n_sampler ,'string',num2str(zef.inv_n_sampler));
+set(zef.h_inv_n_burn_in ,'string',num2str(zef.inv_n_burn_in));
 set(zef.h_inv_hyperprior ,'value',zef.inv_hyperprior);
 set(zef.h_inv_beta ,'string',num2str(zef.inv_beta));
 set(zef.h_inv_theta0 ,'string',num2str(zef.inv_theta0));
