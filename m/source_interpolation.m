@@ -159,6 +159,10 @@ end
 end
 end
 
+s_ind_1 = unique(gather(source_interpolation_ind{1}));
+source_positions = source_positions(:,s_ind_1);
+ones_vec = ones(size(source_positions,2),1);
+
 center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind) '}']);
 center_points = center_points';
 
@@ -201,7 +205,7 @@ end
 
 end
 
-source_interpolation_ind{2} = gather(source_interpolation_aux);
+source_interpolation_ind{2} = s_ind_1(gather(source_interpolation_aux));
 
 if not(isempty(rand_perm_aux))
 source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
@@ -267,7 +271,7 @@ waitbar(i/size_source_positions,h,['Interpolation 3. Ready approx. ' datestr(dat
 end
 end
 
-source_interpolation_ind{3} = gather(source_interpolation_aux);
+source_interpolation_ind{3} = s_ind_1(gather(source_interpolation_aux));
 
 % if not(isempty(rand_perm_aux))
 % source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
