@@ -1,5 +1,6 @@
 %Copyright © 2018, Sampsa Pursiainen
 
+
 if not(isfield(zef,'inv_roi_mode')); 
     zef.inv_roi_mode = 1; 
 end; 
@@ -8,9 +9,6 @@ if not(isfield(zef,'inv_roi_sphere'));
 end; 
 if not(isfield(zef,'inv_roi_threshold')); 
     zef.inv_roi_threshold = 0.5; 
-end; 
-if not(isfield(zef,'inv_n_burn_in')); 
-    zef.inv_n_burn_in = 1000; 
 end; 
 if not(isfield(zef,'inv_hyperprior')); 
     zef.inv_hyperprior = 1; 
@@ -25,7 +23,7 @@ if not(isfield(zef,'inv_likelihood_std'));
     zef.inv_likelihood_std = 0.01; 
 end;
 if not(isfield(zef,'inv_n_map_iterations')); 
-    zef.inv_n_sampler = 10000; 
+    zef.inv_n_map_iterations = 25; 
 end;
 if not(isfield(zef,'inv_pcg_tol')); 
     zef.inv_pcg_tol = 1e-8; 
@@ -64,12 +62,11 @@ set(zef.h_inv_roi_sphere_1 ,'string',num2str(zef.inv_roi_sphere(:,1)'));
 set(zef.h_inv_roi_sphere_2 ,'string',num2str(zef.inv_roi_sphere(:,2)'));
 set(zef.h_inv_roi_sphere_3 ,'string',num2str(zef.inv_roi_sphere(:,3)'));
 set(zef.h_inv_roi_sphere_4 ,'string',num2str(zef.inv_roi_sphere(:,4)'));
-set(zef.h_inv_n_sampler ,'string',num2str(zef.inv_n_sampler));
-set(zef.h_inv_n_burn_in ,'string',num2str(zef.inv_n_burn_in));
 set(zef.h_inv_hyperprior ,'value',zef.inv_hyperprior);
 set(zef.h_inv_beta ,'string',num2str(zef.inv_beta));
 set(zef.h_inv_theta0 ,'string',num2str(zef.inv_theta0));
 set(zef.h_inv_likelihood_std ,'string',num2str(zef.inv_likelihood_std));
+set(zef.h_inv_n_map_iterations ,'string',num2str(zef.inv_n_map_iterations));
 % set(zef.h_inv_pcg_tol ,'string',num2str(zef.inv_pcg_tol));
 set(zef.h_inv_sampling_frequency ,'string',num2str(zef.inv_sampling_frequency));
 set(zef.h_inv_low_cut_frequency ,'string',num2str(zef.inv_low_cut_frequency));
@@ -81,4 +78,16 @@ set(zef.h_inv_time_2 ,'string',num2str(zef.inv_time_2));
 set(zef.h_inv_time_3 ,'string',num2str(zef.inv_time_3));
 set(zef.h_number_of_frames ,'string',num2str(zef.number_of_frames));
 
-if get(zef.h_inv_roi_mode,'value')==1; set(zef.h_inv_roi_sphere_1,'enable','on');set(zef.h_inv_roi_sphere_2,'enable','on');set(zef.h_inv_roi_sphere_3,'enable','on');set(zef.h_inv_roi_sphere_4,'enable','on');set(zef.h_inv_roi_threshold,'enable','off');else;set(zef.h_inv_roi_sphere_1,'enable','off');set(zef.h_inv_roi_sphere_2,'enable','off');set(zef.h_inv_roi_sphere_3,'enable','off');set(zef.h_inv_roi_sphere_4,'enable','off');set(zef.h_inv_roi_threshold,'enable','on');end;
+if get(zef.h_inv_roi_mode,'value')==1; 
+set(zef.h_inv_roi_sphere_1,'enable','on');
+set(zef.h_inv_roi_sphere_2,'enable','on');
+set(zef.h_inv_roi_sphere_3,'enable','on');
+set(zef.h_inv_roi_sphere_4,'enable','on');
+set(zef.h_inv_roi_threshold,'enable','off');
+else;
+set(zef.h_inv_roi_sphere_1,'enable','off');
+set(zef.h_inv_roi_sphere_2,'enable','off');
+set(zef.h_inv_roi_sphere_3,'enable','off');
+set(zef.h_inv_roi_sphere_4,'enable','off');
+set(zef.h_inv_roi_threshold,'enable','on');
+end;

@@ -1,5 +1,9 @@
 %Copyright © 2018, Sampsa Pursiainen
+if ispc | ismac
+zef.h_hb_sampler = open('hb_sampler_alt.fig');
+else
 zef.h_hb_sampler = open('hb_sampler.fig');
+end
 zef_init_hb_sampler;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)

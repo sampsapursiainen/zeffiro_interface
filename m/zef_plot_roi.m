@@ -1,29 +1,41 @@
 %Copyright © 2018, Sampsa Pursiainen
-zef.inv_roi_sphere = str2num(get(zef.h_inv_roi_sphere_1 ,'string')); 
-zef.inv_roi_sphere = zef.inv_roi_sphere(:);
-zef.inv_roi_sphere = [ zef.inv_roi_sphere ...
-reshape(str2num(get(zef.h_inv_roi_sphere_2 ,'string')),size(zef.inv_roi_sphere,1),size(zef.inv_roi_sphere,2)) ...
-reshape(str2num(get(zef.h_inv_roi_sphere_3 ,'string')),size(zef.inv_roi_sphere,1),size(zef.inv_roi_sphere,2)) ...
-reshape(str2num(get(zef.h_inv_roi_sphere_4 ,'string')),size(zef.inv_roi_sphere,1),size(zef.inv_roi_sphere,2)) ...
+function [inv_roi_sphere,h_roi_sphere] = zef_plot_roi
+h_inv_roi_sphere_1 = evalin('base','zef.h_inv_roi_sphere_1');
+h_inv_roi_sphere_2 = evalin('base','zef.h_inv_roi_sphere_2');
+h_inv_roi_sphere_3 = evalin('base','zef.h_inv_roi_sphere_3');
+h_inv_roi_sphere_4 = evalin('base','zef.h_inv_roi_sphere_4');
+inv_roi_sphere = str2num(get(h_inv_roi_sphere_1 ,'string')); 
+inv_roi_sphere = inv_roi_sphere(:);
+inv_roi_sphere = [ inv_roi_sphere ...
+reshape(str2num(get(h_inv_roi_sphere_2 ,'string')),size(inv_roi_sphere,1),size(inv_roi_sphere,2)) ...
+reshape(str2num(get(h_inv_roi_sphere_3 ,'string')),size(inv_roi_sphere,1),size(inv_roi_sphere,2)) ...
+reshape(str2num(get(h_inv_roi_sphere_4 ,'string')),size(inv_roi_sphere,1),size(inv_roi_sphere,2)) ...
 ];
 
-[zef.s_x,zef.s_y,zef.s_z] = sphere(100);
-hold(zef.h_axes1,'on');
-if isfield(zef,'h_roi_sphere')
-delete(zef.h_roi_sphere);
+[s_x,s_y,s_z] = sphere(100);
+h_axes1 = evalin('base','zef.h_axes1');
+hold(h_axes1,'on');
+if isfield(evalin('base','zef'),'h_roi_sphere')
+h_roi_sphere = evalin('base','zef.h_roi_sphere');
+if ishandle(h_roi_sphere)
+delete(h_roi_sphere);
+end
 end
 
-for j = 1 : size(zef.inv_roi_sphere,1)
+h_roi_sphere = zeros(size(inv_roi_sphere,1),1);
 
-zef.s_x_2 = zef.inv_roi_sphere(j,4)*zef.s_x + zef.inv_roi_sphere(j,1);
-zef.s_y_2 = zef.inv_roi_sphere(j,4)*zef.s_y + zef.inv_roi_sphere(j,2);
-zef.s_z_2 = zef.inv_roi_sphere(j,4)*zef.s_z + zef.inv_roi_sphere(j,3);
+for j = 1 : size(inv_roi_sphere,1)
 
-zef.h_roi_sphere(j) = surf(zef.h_axes1,zef.s_x_2,zef.s_y_2,zef.s_z_2);
-set(zef.h_roi_sphere(j),'facealpha',0.6,'edgecolor','none','facecolor',[0.5 0.5 0.5]);
+s_x_2 = inv_roi_sphere(j,4)*s_x + inv_roi_sphere(j,1);
+s_y_2 = inv_roi_sphere(j,4)*s_y + inv_roi_sphere(j,2);
+s_z_2 = inv_roi_sphere(j,4)*s_z + inv_roi_sphere(j,3);
+
+h_roi_sphere(j) = surf(h_axes1,s_x_2,s_y_2,s_z_2);
+set(h_roi_sphere(j),'facealpha',0.6,'edgecolor','none','facecolor',[0.5 0.5 0.5]);
 
 end
-
 
 drawnow;
-hold(zef.h_axes1,'off');
+hold(h_axes1,'off');
+
+end
