@@ -5,6 +5,7 @@ function [z] = ias_iteration_roi(void)
 n_interp = length(s_ind_1(:));
 
 source_positions = evalin('base','zef.source_positions');
+source_positions = source_positions(s_ind_1,:);
 roi_mode = evalin('base','zef.inv_roi_mode');
 roi_threshold = evalin('base','zef.inv_roi_threshold');
 roi_sphere = evalin('base', 'zef.inv_roi_sphere');
