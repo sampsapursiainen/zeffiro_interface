@@ -216,9 +216,10 @@ if roi_mode == 1
 
 rec_size = length(roi_ind_vec);
 for j = 1 : size(roi_sphere,1)
-    r_aux = find(roi_ind_vec==j);
-    rec_pos = [z_vec(r_aux).*source_positions(roi_aux_ind(r_aux),1) z_vec(rec_size+r_aux).*source_positions(roi_aux_ind(r_aux),2) z_vec(2*rec_size +r_aux).*source_positions(roi_aux_ind(r_aux),3)];
-    rec_pos = sum(rec_pos)./sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)]);
+  r_aux = find(roi_ind_vec==j);
+    w_vec = sqrt(sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)].^2,2));
+    rec_pos = [w_vec.*source_positions(roi_aux_ind(r_aux),1) w_vec.*source_positions(roi_aux_ind(r_aux),2) w_vec.*source_positions(roi_aux_ind(r_aux),3)];
+    rec_pos = sum(rec_pos)./sum([w_vec w_vec w_vec]);
     rec_dir =  1e3*sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)]);
     rec_norm = norm(rec_dir); 
     rec_dir = rec_dir/rec_norm;
