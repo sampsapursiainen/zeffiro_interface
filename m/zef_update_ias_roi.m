@@ -26,3 +26,9 @@ zef.inv_roi_threshold = str2num(get(zef.h_inv_roi_threshold ,'string'));
     zef.inv_time_3 = str2num(get(zef.h_inv_time_3,'string')); 
     zef.number_of_frames = str2num(get(zef.h_number_of_frames,'string')); 
     zef.normalize_data = get(zef.h_normalize_data ,'value');
+    
+    if not(size(zef.inv_rec_source,1) == size(zef.inv_roi_sphere,1)) 
+   zef.inv_rec_source = zeros(size(zef.inv_roi_sphere,1),9);
+    end
+    zef.inv_rec_source(:,8) = str2num(get(zef.h_inv_rec_source_8,'string')); 
+    zef.inv_rec_source(:,9) = get(zef.h_inv_rec_source_9,'value'); 

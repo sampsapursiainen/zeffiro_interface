@@ -8,6 +8,11 @@ if not(isequal(zef.file,0));
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path; 
 load([zef.file_path zef.file]);
+ if (isfield(zef_data,'inv_rec_source'));
+          zef.inv_rec_source = zef_data.inv_rec_source; 
+          else
+          zef.inv_rec_source = [0 0 0 1 0 0 0 3 1];
+          end
  if (isfield(zef_data,'inv_synth_source'));
           zef.inv_synth_source = zef_data.inv_synth_source; 
           else

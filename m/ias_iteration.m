@@ -180,13 +180,13 @@ end
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
 data_norm = max(abs(f(:)).^2); 
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==2;
 data_norm = max((sum(abs(f).^2)));
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==3;
 data_norm = sum((sum(abs(f).^2)))/size(f,2);
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 end;
 f = f/data_norm;
 

@@ -1,6 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
 
-
+if not(isfield(zef,'inv_rec_source')); 
+    zef.inv_rec_source = [0 0 0 0 0 0 0 3 1]; 
+end; 
 if not(isfield(zef,'inv_roi_mode')); 
     zef.inv_roi_mode = 1; 
 end; 
@@ -57,6 +59,8 @@ if not(isfield(zef,'number_of_frames'));
     zef.number_of_frames = 1; 
 end;
 
+set(zef.h_inv_rec_source_8 ,'string',num2str(zef.inv_rec_source(1,8)));
+set(zef.h_inv_rec_source_9 ,'value',zef.inv_rec_source(1,9));
 set(zef.h_inv_roi_mode ,'value',zef.inv_roi_mode);
 set(zef.h_inv_roi_sphere_1 ,'string',num2str(zef.inv_roi_sphere(:,1)'));
 set(zef.h_inv_roi_sphere_2 ,'string',num2str(zef.inv_roi_sphere(:,2)'));

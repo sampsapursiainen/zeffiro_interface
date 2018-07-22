@@ -15,14 +15,19 @@ t_res = 20;
 t_tol = 7;
 
 I_aux = [];
+roi_ind_vec = [];
 
 if roi_mode == 1
 
+    
 for j = 1 : size(roi_sphere,1)
 
-I_aux = [I_aux find(sqrt(sum((source_positions'-c_roi(:,j*ones(1,size(source_positions,1)))).^2))<=r_roi(j))];
+r_aux = find(sqrt(sum((source_positions'-c_roi(:,j*ones(1,size(source_positions,1)))).^2))<=r_roi(j));
+I_aux = [I_aux r_aux];
+roi_ind_vec = [roi_ind_vec j*ones(1,size(r_aux,2))];
 
 end
+roi_ind_vec = roi_ind_vec(:);
 end
 
 if roi_mode == 2
@@ -205,6 +210,22 @@ end
 x_history_burn_in = x_history(:,1:burn_in);
 x_history = x_history(:,burn_in+1:end);
 x_cm = x_cm/(n_iter - burn_in);
+z_vec = x_cm;
+
+if roi_mode == 1
+
+rec_size = length(roi_ind_vec);
+for j = 1 : size(roi_sphere,1)
+    r_aux = find(roi_ind_vec==j);
+    rec_pos = [z_vec(r_aux).*source_positions(roi_aux_ind(r_aux),1) z_vec(rec_size+r_aux).*source_positions(roi_aux_ind(r_aux),2) z_vec(2*rec_size +r_aux).*source_positions(roi_aux_ind(r_aux),3)];
+    rec_pos = sum(rec_pos)./sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)]);
+    rec_dir =  1e3*sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)]);
+    rec_norm = norm(rec_dir); 
+    rec_dir = rec_dir/rec_norm;
+rec_source(j,1:7) = [rec_pos rec_dir rec_norm];
+end
+
+end
 
 z_vec = zeros(size(L,2),1);
 z_vec(roi_aux_ind) = x_cm./max(abs(x_cm(:)));

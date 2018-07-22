@@ -1,6 +1,8 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018, Sampsa Pursiainen  
+          zef.h_rec_source = [];
           zef.h_synth_source = [];
           zef.h_roi_sphere = [];
+          zef.inv_rec_source = [0 0 0 1 0 0 0 3 1];
           zef.inv_synth_source = [0 0 0 1 0 0 10 0 3 1];
           zef.inv_roi_mode = 1;
           zef.inv_roi_threshold = 0.5;

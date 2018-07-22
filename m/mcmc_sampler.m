@@ -1,5 +1,5 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [z] = mcmc_sampler(void)
+function [z,rec_source] = mcmc_sampler(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1(:));
@@ -15,6 +15,7 @@ low_pass = evalin('base','zef.inv_high_cut_frequency');
 roi_mode = evalin('base','zef.inv_roi_mode');
 roi_threshold = evalin('base','zef.inv_roi_threshold');
 roi_sphere = evalin('base', 'zef.inv_roi_sphere');
+rec_source = evalin('base', 'zef.inv_rec_source');
 n_sampler = evalin('base','zef.inv_n_sampler'); 
 n_burn_in = evalin('base','zef.inv_n_burn_in');
 
@@ -189,13 +190,13 @@ end
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
 data_norm = max(abs(f(:)).^2); 
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==2;
 data_norm = max((sum(abs(f).^2)));
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==3;
 data_norm = sum((sum(abs(f).^2)))/size(f,2);
-std_lhood = std_lhood^2;
+%std_lhood = std_lhood^2;
 end;
 f = f/data_norm;
 
