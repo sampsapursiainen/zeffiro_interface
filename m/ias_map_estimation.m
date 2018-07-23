@@ -1,7 +1,6 @@
 %Copyright © 2018, Sampsa Pursiainen
 if  ismac
 zef.h_ias_map_estimation = open('ias_map_estimation_alt.fig');
-else
 elseif ispc 
 zef.h_ias_map_estimation = open('ias_map_estimation_alt2.fig');
 else
