@@ -5,7 +5,6 @@ zef.h_additional_options = open('additional_options_alt.fig');
 elseif ispc 
 zef.h_additional_options = open('additional_options_alt2.fig');
 else
-else
 zef.h_additional_options = open('additional_options.fig');
 end
 
