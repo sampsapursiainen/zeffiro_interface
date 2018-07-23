@@ -1,6 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
-if ispc | ismac
+if ismac
 zef.h_find_synthetic_source = open('find_synthetic_source_alt.fig');
+elseif ispc
+zef.h_find_synthetic_source = open('find_synthetic_source_alt2.fig');
 else
 zef.h_find_synthetic_source = open('find_synthetic_source.fig');
 end
