@@ -149,12 +149,12 @@ clear L_1 L_2 L_3 s_1 s_2 s_3;
 
 end
 
-if evalin('base','zef.use_gpu') == 1
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 L = gpuArray(L);
 end
 L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 S_mat = gpuArray(S_mat);
 end
 
@@ -234,7 +234,7 @@ h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(num
 end
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
-if evalin('base','zef.use_gpu') == 1
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 f = gpuArray(f);
 end
 
@@ -272,13 +272,13 @@ else
 waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 d_sqrt = sqrt(theta);
-if evalin('base','zef.use_gpu') == 1
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 d_sqrt = gpuArray(d_sqrt);
 end
 L = L_aux_2.*repmat(d_sqrt',size(L,1),1); 
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
-if evalin('base','zef.use_gpu') == 1
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 z_vec = gather(z_vec);
 end
 if evalin('base','zef.inv_hyperprior') == 1;
