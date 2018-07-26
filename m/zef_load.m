@@ -1,4 +1,5 @@
 %Copyright © 2018, Sampsa Pursiainen
+      
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path] = uigetfile('*.mat','Open project',zef.save_file_path);
 else
@@ -492,6 +493,37 @@ end;
 if (isfield(zef_data,'non_source_ind')); 
     zef.non_source_ind = zef_data.non_source_ind; 
 end;
+
+          if (isfield(zef_data,'inv_multires_dec'));
+          zef.inv_multires_dec = zef_data.inv_multires_dec; 
+          else
+          zef.inv_multires_dec = [];
+          end
+          if (isfield(zef_data,'inv_multires_ind'));
+          zef.inv_multires_ind = zef_data.inv_multires_ind; 
+          else
+          zef.inv_multires_ind = [];
+          end
+           if (isfield(zef_data,'inv_multires_count'));
+          zef.inv_multires_count = zef_data.inv_multires_count; 
+          else
+          zef.inv_multires_count = [];
+          end
+          if (isfield(zef_data,'inv_multires_n_levels'));
+          zef.inv_multires_n_levels = zef_data.inv_multires_n_levels; 
+          else
+          zef.inv_multires_n_levels = [3];
+          end
+          if (isfield(zef_data,'inv_multires_sparsity'));
+          zef.inv_multires_sparsity = zef_data.inv_multires_sparsity; 
+          else
+          zef.inv_multires_sparsity = [4];
+          end
+          if (isfield(zef_data,'inv_multires_n_iter'));
+          zef.inv_multires_n_iter = zef_data.inv_multires_n_iter; 
+          else
+          zef.inv_multires_n_iter = [10 3 3];
+          end   
 
 clear zef_data;
 zef_update;

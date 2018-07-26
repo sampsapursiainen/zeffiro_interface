@@ -128,7 +128,6 @@ end
 if strcmp(hypermodel,'Gamma')
 
         for j = 1 : n_dimensions
-
             xj = abs(x(j));
             p_max_th = theta0*(eta +sqrt((1/(2*theta0))*xj^2 + eta^2));
             thmin = eps;
@@ -212,11 +211,17 @@ x_history = x_history(:,burn_in+1:end);
 x_cm = x_cm/(n_iter - burn_in);
 z_vec = x_cm;
 
+if source_direction_mode == 2 || source_direction_mode == 3
+z_vec = [z_vec.*source_directions(roi_aux_ind,1); z_vec.*source_directions(roi_aux_ind,2);  z_vec.*source_directions(roi_aux_ind,3)];
+%z_vec = z_vec(:);
+end
+
+
 if roi_mode == 1
 
 rec_size = length(roi_ind_vec);
 for j = 1 : size(roi_sphere,1)
-  r_aux = find(roi_ind_vec==j);
+    r_aux = find(roi_ind_vec==j);
     w_vec = (sum([z_vec(r_aux) z_vec(rec_size+r_aux) z_vec(2*rec_size +r_aux)].^2,2));
     rec_pos = [w_vec.*source_positions(roi_aux_ind(r_aux),1) w_vec.*source_positions(roi_aux_ind(r_aux),2) w_vec.*source_positions(roi_aux_ind(r_aux),3)];
     rec_pos = sum(rec_pos)./sum([w_vec w_vec w_vec]);

@@ -1,5 +1,5 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [z] = ias_iteration(void)
+function [z] = ias_iteration_multires(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
@@ -16,7 +16,6 @@ number_of_frames = evalin('base','zef.number_of_frames');
 time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
-
 
 if source_direction_mode == 2
 
@@ -239,21 +238,44 @@ if evalin('base','zef.use_gpu') == 1
 f = gpuArray(f);
 end
 
+n_multires = evalin('base','zef.inv_multires_n_levels'); 
+multires_dec =  evalin('base','zef.inv_multires_dec');
+multires_ind =  evalin('base','zef.inv_multires_ind');
+n_iter = evalin('base','zef.inv_multires_n_iter');
 
-for i = 1 : n_ias_map_iter
+for j = 1 : n_multires
+n_mr_dec = length(multires_dec{j});
+
+if source_direction_mode == 1
+mr_dec = [multires_dec{j}; multires_dec{j}+n_interp ; multires_dec{j} + 2*n_interp];
+mr_dec = mr_dec(:);
+mr_ind = [multires_ind{j} ; multires_ind{j} + n_mr_dec ; multires_ind{j} + 2*n_mr_dec];
+mr_ind = mr_ind(:);
+end
+
+if source_direction_mode == 2 || source_direction_mode == 3
+mr_dec = multires_dec{j}; 
+mr_dec = mr_dec(:);
+mr_ind = multires_ind{j}; 
+mr_ind = mr_ind(:);
+end
+
+if n_iter(j) > 0
+L_aux_2 = L_aux(:,mr_dec);
+theta = theta(mr_dec);
+end
+
+for i = 1 : n_iter(j)
 if f_ind > 1;    
 waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
 else
 waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
-m_max = sqrt(size(L,2));
-u = zeros(length(z_vec),1);
-z_vec = zeros(length(z_vec),1);
 d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1
 d_sqrt = gpuArray(d_sqrt);
 end
-L = L_aux.*repmat(d_sqrt',size(L,1),1); 
+L = L_aux_2.*repmat(d_sqrt',size(L,1),1); 
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
 if evalin('base','zef.use_gpu') == 1
@@ -266,8 +288,15 @@ theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
 end;
 
+if n_iter(j) > 0
+theta = theta(mr_ind);
+z_vec = z_vec(mr_ind);
+end
+
+end;
+
 if source_direction_mode == 2 || source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2);  z_vec.*source_directions(:,3)];
+z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';
 %z_vec = z_vec(:);
 end
 

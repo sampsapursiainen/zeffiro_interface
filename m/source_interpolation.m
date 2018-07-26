@@ -222,8 +222,8 @@ close(h)
 
 source_direction_mode = evalin('base','zef.source_direction_mode');
 
-if source_direction_mode == 2
-
+%if source_direction_mode == 2
+    
 source_interpolation_ind{3} = zeros(length(source_positions),1);
 source_interpolation_aux = source_interpolation_ind{3};
 
@@ -271,7 +271,7 @@ waitbar(i/size_source_positions,h,['Interpolation 3. Ready approx. ' datestr(dat
 end
 end
 
-source_interpolation_ind{3} = s_ind_1(gather(source_interpolation_aux));
+source_interpolation_ind{3} = gather(source_interpolation_aux);
 
 % if not(isempty(rand_perm_aux))
 % source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
@@ -283,4 +283,4 @@ waitbar(1,h,['Interpolation 3. Ready approx. ' datestr(datevec(now+(size_source_
 
 close(h)
 
-end
+%end

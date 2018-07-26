@@ -1,4 +1,11 @@
 %Copyright © 2018, Sampsa Pursiainen  
+          
+          zef.inv_multires_dec = []; 
+          zef.inv_multires_ind = []; 
+          zef.inv_multires_count = [];
+          zef.inv_multires_n_levels = [3];
+          zef.inv_multires_sparsity = 4;
+          zef.inv_multires_n_iter = [10 3 3];
           zef.h_rec_source = [];
           zef.h_synth_source = [];
           zef.h_roi_sphere = [];

@@ -128,7 +128,7 @@ source_directions = n_vec_aux(s_ind_3,:);
 
 end
 
-if source_direction_mode == 2 || source_direction_mode == 3
+if  source_direction_mode == 3
 source_directions = source_directions(s_ind_1,:);
 end
 
@@ -146,9 +146,9 @@ L = L(:,s_ind_1);
 
 if source_direction_mode == 2
 
-L_1 = L(:,1:3:end);
-L_2 = L(:,2:3:end);
-L_3 = L(:,3:3:end);
+L_1 = L(:,1:n_interp);
+L_2 = L(:,n_interp+1:2*n_interp);
+L_3 = L(:,2*n_interp+1:3*n_interp);
 s_1 = source_directions(:,1)';
 s_2 = source_directions(:,2)';
 s_3 = source_directions(:,3)';
@@ -309,8 +309,9 @@ end;
 end;
 
 if source_direction_mode == 2 || source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1) z_vec.*source_directions(:,2)  z_vec.*source_directions(:,3)]';
-z_vec = z_vec(:);
+z_vec = [z_vec.*source_directions(roi_aux_ind,1); z_vec.*source_directions(roi_aux_ind,2);  z_vec.*source_directions(roi_aux_ind,3)];
+roi_aux_ind = [roi_aux_ind(:) ; n_interp + roi_aux_ind(:) ; 2*n_interp + roi_aux_ind(:)];
+%z_vec = z_vec(:);
 end
 
 
@@ -329,7 +330,11 @@ for j = 1 : size(roi_sphere,1)
 rec_source(j,1:7) = [rec_pos rec_dir rec_norm];
 end
 
+if source_direction_mode == 1
 z_vec_aux = zeros(n_lead_field,1);
+else 
+  z_vec_aux = zeros(3*n_lead_field,1); 
+end
 z_vec_aux(roi_aux_ind) = z_vec;
 z_vec = z_vec_aux;
 

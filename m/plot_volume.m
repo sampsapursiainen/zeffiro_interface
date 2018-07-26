@@ -413,6 +413,13 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
+if evalin('base','zef.reconstruction_type') == 5 
+aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
+I_aux_rec = find(aux_rec <= 0);
+reconstruction(I_aux_rec) = 0;
+%reconstruction = reconstruction./max(abs(reconstruction(:)));
+end
+
 if evalin('base','zef.reconstruction_type') > 1
 reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
 end
@@ -678,6 +685,13 @@ end
 if evalin('base','zef.reconstruction_type') == 4
 aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
 I_aux_rec = find(aux_rec > 0);
+reconstruction(I_aux_rec) = 0;
+%reconstruction = reconstruction./max(abs(reconstruction(:)));
+end
+
+if evalin('base','zef.reconstruction_type') == 5 
+aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
+I_aux_rec = find(aux_rec <= 0);
 reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
