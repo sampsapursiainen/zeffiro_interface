@@ -267,9 +267,9 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;    
-waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
+waitbar(i/n_iter(j),h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
 else
-waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar(i/n_iter(j),h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
