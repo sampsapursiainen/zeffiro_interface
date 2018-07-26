@@ -129,6 +129,7 @@ s_ind_1 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 end
 if  source_direction_mode == 3
 s_ind_2 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
+s_ind_2 = s_ind_2(:);
 end
 
 s_ind_1 = s_ind_1(:);
@@ -267,7 +268,7 @@ end;
 end;
 
 if source_direction_mode == 2 || source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2);  z_vec.*source_directions(:,3)];
+z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2); z_vec.*source_directions(:,3)];
 %z_vec = z_vec(:);
 end
 

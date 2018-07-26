@@ -787,10 +787,11 @@ end
 source_nonzero_ind = intersect(source_nonzero_ind,source_ind);
 M2 = size(source_nonzero_ind,1);
 else
-dipole_directions = fi_source_directions;
-dipole_locations = fi_source_locations;
-L_eeg = L_eeg_fi;
-
+aux_rand_perm = randperm(length(fi_source_locations));
+aux_rand_perm = aux_rand_perm(1:evalin('base','zef.n_sources'));    
+dipole_directions = fi_source_directions(aux_rand_perm,:);
+dipole_locations = fi_source_locations(aux_rand_perm,:);
+L_eeg = L_eeg_fi(:,aux_rand_perm);
 end
 
 
