@@ -80,10 +80,13 @@ open(h_aviobj);
 end
 
 sensors = evalin('base','zef.sensors');
+surface_triangles = evalin('base','zef.surface_triangles');
+nodes = evalin('base','zef.nodes');
 [X_s, Y_s, Z_s] = sphere(20);
-
-if evalin('base','zef.attach_electrodes') & evalin('base','zef.imaging_method') == 1 
-sensors = attach_sensors_volume([]); 
+if size(sensors,2) == 6
+    electrode_model = 2;
+else
+    electrode_model = 1;
 end
 
 aux_ind = []; 
@@ -123,6 +126,13 @@ end
 end
 aux_ind = [];
 
+if electrode_model==1 & evalin('base','zef.attach_electrodes') & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3 
+sensors = attach_sensors_volume(sensors); 
+elseif electrode_model==2  & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
+sensors = attach_sensors_volume(sensors);
+end
+
+if electrode_model == 1
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
 set(h,'facecolor',evalin('base','zef.s_color'));
@@ -131,6 +141,16 @@ set(h,'specularstrength',0.1);
 set(h,'diffusestrength',0.3);
 set(h,'ambientstrength',0.3);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
+end
+else
+h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
+set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'edgecolor',evalin('base','zef.s_color')); 
+set(h,'specularstrength',0.1);
+set(h,'diffusestrength',0.3);
+set(h,'ambientstrength',0.3);
+set(h,'facealpha',evalin('base','zef.layer_transparency'));
+set(h,'edgealpha',evalin('base','zef.layer_transparency'));    
 end
 if evalin('base','zef.imaging_method')==2
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
@@ -143,10 +163,6 @@ set(h,'ambientstrength',0.3);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
-
-surface_triangles = evalin('base','zef.surface_triangles');
-   
-nodes = evalin('base','zef.nodes');
 
 i = 0;
 length_reuna = 0;
@@ -1238,15 +1254,41 @@ triangle_c = cell(1,length(reuna_t));
 
 [X_s, Y_s, Z_s] = sphere(20);
 
-if evalin('base','zef.attach_electrodes') & evalin('base','zef.imaging_method') == 1
+if evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3 & size(sensors,2) == 6
+    electrode_model = 2;
+elseif evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
+    electrode_model = 1;
+else
+    electrode_model = 0;
+end
+
+if evalin('base','zef.attach_electrodes') & electrode_model == 1
 for i = 1 : size(sensors,1)
 [min_val, min_ind] = min(sqrt(sum((reuna_p{end} - repmat(sensors(i,1:3),size(reuna_p{end},1),1)).^2,2)));
 sensors(i,1:3) = reuna_p{end}(min_ind,:);
 end
 end
 
+if evalin('base','zef.attach_electrodes') & electrode_model == 2
+   center_points_aux = (1/3)*(reuna_p{end}(reuna_t{end}(:,1),:) + ...
+                       reuna_p{end}(reuna_t{end}(:,2),:) + ...
+                       reuna_p{end}(reuna_t{end}(:,3),:));
+for i = 1 : size(sensors,1)
+[min_val, min_ind] = min(sqrt(sum((reuna_p{end} - repmat(sensors(i,1:3),size(reuna_p{end},1),1)).^2,2)));
+sensors(i,1:3) = reuna_p{end}(min_ind,:);
+end
+ sensors_aux = []; 
+ for i = 1 : size(sensors,1)
+ [dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
+ dist_ind = find(dist_val <= sensors(i,4) & dist_val >= sensors(i,5)); 
+ sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) reuna_t{end}(dist_ind,:)];
+ end
+ sensors = sensors_aux;
+end
+
 
 if evalin('base','zef.s_visible')
+if electrode_model == 1 | not(evalin('base','zef.attach_electrodes'))
 sphere_scale = 3.7;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
@@ -1260,6 +1302,17 @@ set(h,'diffusestrength',0.3);
 set(h,'ambientstrength',0.3);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
+elseif electrode_model == 2  
+h = trisurf(sensors(:,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
+set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'edgecolor',evalin('base','zef.s_color')); 
+set(h,'specularstrength',0.1);
+set(h,'diffusestrength',0.3);
+set(h,'ambientstrength',0.3);
+set(h,'facealpha',evalin('base','zef.layer_transparency'));
+set(h,'edgealpha',evalin('base','zef.layer_transparency'));
+end
+
 if evalin('base','zef.imaging_method')==2
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');

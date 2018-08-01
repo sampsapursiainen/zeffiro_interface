@@ -1,5 +1,4 @@
 %Copyright © 2018, Sampsa Pursiainen  
-          
           zef.inv_multires_dec = []; 
           zef.inv_multires_ind = []; 
           zef.inv_multires_count = [];

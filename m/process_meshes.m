@@ -8,7 +8,6 @@ reuna_t = cell(0);
 
 for k = 1 : 9
 
-    
 switch k
     case 1
         var_0 = 'zef.d1_on';
