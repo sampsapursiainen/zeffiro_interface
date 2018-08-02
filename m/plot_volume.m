@@ -43,7 +43,7 @@ sensors = evalin('base','zef.sensors');
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 [X_s, Y_s, Z_s] = sphere(20);
-if size(sensors,2) == 6
+if size(sensors,2) == 6 & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
     electrode_model = 2;
 else
     electrode_model = 1;
