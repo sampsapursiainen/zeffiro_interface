@@ -43,7 +43,7 @@ sensors = evalin('base','zef.sensors');
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 [X_s, Y_s, Z_s] = sphere(20);
-if size(sensors,2) == 6 & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
+if size(sensors,2) == 6 & ismember(evalin('base','zef.imaging_method'), [1 3 4])
     electrode_model = 2;
 else
     electrode_model = 1;
@@ -86,9 +86,9 @@ end
 end
 aux_ind = [];
 
-if electrode_model==1 & evalin('base','zef.attach_electrodes') & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3 
+if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 3 4]) 
 sensors = attach_sensors_volume(sensors); 
-elseif electrode_model==2  & evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
+elseif electrode_model==2  & ismember(evalin('base','zef.imaging_method'),[1 3 4]) 
 sensors = attach_sensors_volume(sensors);
 end
 

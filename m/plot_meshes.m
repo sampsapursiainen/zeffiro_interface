@@ -295,9 +295,9 @@ triangle_c = cell(1,length(reuna_t));
 
 [X_s, Y_s, Z_s] = sphere(20);
 
-if evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3 & size(sensors,2) == 6
+if ismember(evalin('base','zef.imaging_method'), [1 3 4])  & size(sensors,2) == 6 
     electrode_model = 2;
-elseif evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3
+elseif ismember(evalin('base','zef.imaging_method'), [1 3 4])
     electrode_model = 1;
 else
     electrode_model = 0;
