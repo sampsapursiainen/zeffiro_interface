@@ -21,6 +21,10 @@ the interface for academic research.
 The essential mathematical techniques used in the interface have been
 reviewed and validated in:
 
+Miinalainen, T., Rezaei, A., Us, D., Nüßing, A., Engwer, C., Wolters, C.
+H., & Pursiainen, S. (2019). A realistic, accurate and fast source
+modeling approach for the EEG forward problem. NeuroImage, 184, 56-67.
+
 Pursiainen, S. (2012). Raviart–Thomas-type sources adapted to applied EEG
 and MEG: implementation and results. Inverse Problems, 28(6), 065013.
 
