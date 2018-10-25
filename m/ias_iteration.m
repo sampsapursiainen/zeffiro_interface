@@ -124,10 +124,10 @@ if source_direction_mode == 3
 source_directions = source_directions(s_ind_1,:);
 end
 
-if source_direction_mode == 1  || source_direction_mode == 2
+if ismember(source_direction_mode,[1 2])
 s_ind_1 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 end
-if  source_direction_mode == 3
+if ismember(source_direction_mode,[3])
 s_ind_2 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 s_ind_2 = s_ind_2(:);
 end
@@ -267,15 +267,14 @@ theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
 end;
 
-if source_direction_mode == 2 || source_direction_mode == 3
+if ismember(source_direction_mode,[2 3 4])
 z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2); z_vec.*source_directions(:,3)];
-%z_vec = z_vec(:);
 end
 
-if source_direction_mode == 1 || source_direction_mode == 2
+if ismember(source_direction_mode,[1 2])
 z_aux(s_ind_1) = z_vec;
 end
-if source_direction_mode == 3
+if ismember(source_direction_mode,[3])
 z_aux(s_ind_2) = z_vec;
 end
 
@@ -287,7 +286,7 @@ end;
 end;
 if number_of_frames > 1;
 aux_norm_vec = 0;
-for f_ind = 1 : number_of_frames;
+for f_ind = 1 : number_of_frames;    
 aux_norm_vec = max(sqrt(sum(reshape(z{f_ind}, 3, length(z{f_ind})/3).^2)),aux_norm_vec);
 end;
 for f_ind = 1 : number_of_frames;

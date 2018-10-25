@@ -124,8 +124,6 @@ set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
 
-
-
 i = 0;
 length_reuna = 0;
 sigma_vec = [];
@@ -308,9 +306,13 @@ for f_ind = frame_start : frame_step : frame_stop
 reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+if ismember(evalin('base','zef.reconstruction_type'), 6)
+reconstruction = (1/3)*sum(reconstruction)';
+else    
 reconstruction = sqrt(sum(reconstruction.^2))';
+end
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
-max_abs_reconstruction = max([max_abs_reconstruction ; abs(reconstruction(:))]);
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 end
@@ -329,9 +331,13 @@ s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
 reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+if ismember(evalin('base','zef.reconstruction_type'), 6)
+reconstruction = (1/3)*sum(reconstruction)';
+else    
 reconstruction = sqrt(sum(reconstruction.^2))';
+end
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
-max_abs_reconstruction = max([max_abs_reconstruction ; abs(reconstruction(:))]);
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 if evalin('base','zef.inv_scale') == 1
@@ -377,6 +383,10 @@ reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
+elseif evalin('base','zef.reconstruction_type') == 6
+reconstruction = (1/3)*sum(reconstruction)';
+end
+if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
@@ -390,7 +400,7 @@ I_1_rec = I_1;
 reconstruction = reconstruction(I_2(I_1));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
@@ -416,7 +426,7 @@ nodes(surface_triangles(I_3,3),:)' - nodes(surface_triangles(I_3,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end 
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
@@ -438,7 +448,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
 end
 
@@ -672,12 +682,16 @@ reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
+elseif evalin('base','zef.reconstruction_type') == 6
+reconstruction = (1/3)*sum(reconstruction)';
+end
+if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2_b_rec);
 reconstruction = reconstruction(I_2_rec(I_1_rec));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
@@ -692,7 +706,7 @@ rec_y = rec_y(I_2_rec(I_1_rec));
 rec_z = rec_z(I_2_rec(I_1_rec));
 end 
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
@@ -714,7 +728,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
 end
 

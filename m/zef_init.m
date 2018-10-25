@@ -1,4 +1,9 @@
 %Copyright © 2018, Sampsa Pursiainen  
+          zef.inv_eit_noise = [];
+          zef.inv_bg_data = [];
+          zef.inv_roi_perturbation = 0.1;
+          zef.current_pattern = [];
+          zef.background_data = [];
           zef.inv_multires_dec = []; 
           zef.inv_multires_ind = []; 
           zef.inv_multires_count = [];

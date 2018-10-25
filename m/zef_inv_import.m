@@ -38,4 +38,13 @@ if not(isequal(zef.file,0));
     end
     end
 end
-
+if zef.inv_import_type == 3;
+if not(isequal(zef.file,0));
+    if zef.file_type == 1
+    [zef.current_pattern] = struct2cell(load([zef.file_path zef.file]));
+    zef.current_pattern = zef.current_pattern{1};
+    else
+[zef.current_pattern] = load([zef.file_path zef.file]);
+    end
+    end
+end

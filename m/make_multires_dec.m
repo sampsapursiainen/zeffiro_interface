@@ -26,7 +26,7 @@ h = waitbar(1/size_center_points,['Level ' int2str(1) '/' int2str(n_levels) '.']
 
 for k = 1 : n_levels-1
 
-size_source_points = floor(size_center_points/multires_sparsity^(n_levels - k + 1));
+size_source_points = floor(size_center_points/multires_sparsity^(n_levels - k));
 source_interpolation_aux = zeros(size_source_points,1);
 
 aux_ind = randperm(size_center_points);

@@ -1,11 +1,15 @@
 %Copyright © 2018, Sampsa Pursiainen
 [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
 
-
+if ismember(evalin('base','zef.imaging_method'), [2 3])
 zef.s_points = zef.sensors(:,1:3);
-if size(zef.sensors,2) == 6
-zef.s_directions = zef.sensors(:,4:6);
+if size(zef.sensors,2) > 3
+zef.s_directions = zef.sensors(:,4:end);
 end
+else 
+zef.s_points = zef.sensors;
+end
+
 
 zef.s_scaling= 1.0;
 zef.s_zx_rotation= 0;

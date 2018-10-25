@@ -147,10 +147,15 @@ end
 end
 
 s_points = evalin('base','zef.s_points');
-if evalin('base','zef.imaging_method') == 1
+if ismember(evalin('base','zef.imaging_method'), [2 3]) 
+s_directions = evalin('base','zef.s_directions(:,1:3)');
+if size(evalin('base','zef.s_directions'),2) == 6
+s_directions_g = evalin('base','zef.s_directions(:,4:6)');
+else 
+s_directions_g = [];
+end
+else 
 s_directions = [];
-else
-s_directions = evalin('base','zef.s_directions');
 end
 s_scaling = evalin('base','zef.s_scaling');
 s_x_correction = evalin('base','zef.s_x_correction');
@@ -162,7 +167,11 @@ s_zx_rotation = evalin('base','zef.s_zx_rotation');
 if isempty(s_directions)
 sensors = [s_points];
 else
+if isempty(s_directions_g)
 sensors = [s_points s_directions./repmat(sqrt(sum(s_directions.^2,2)),1,3)];    
+else
+sensors = [s_points s_directions./repmat(sqrt(sum(s_directions.^2,2)),1,3) s_directions_g./repmat(sqrt(sum(s_directions_g.^2,2)),1,3)];
+end
 end
 scaling_val = s_scaling;    
 translation_vec = [s_x_correction s_y_correction s_z_correction];     
@@ -176,12 +185,15 @@ switch j
     case 1
         axes_ind_1 = [1 2];
         axes_ind_2 = [4 5];
+        axes_ind_3 = [7 8];
     case 2
         axes_ind_1 = [2 3];
         axes_ind_2 = [5 6];
+        axes_ind_3 = [8 9];
     case 3
         axes_ind_1 = [3 1];
         axes_ind_2 = [6 4];
+        axes_ind_3 = [9 7];
 end
 if theta_angle_vec(j) ~= 0
 theta_angle = theta_angle_vec(j)*pi/180;
@@ -189,6 +201,9 @@ R_mat = [cos(theta_angle) -sin(theta_angle); sin(theta_angle) cos(theta_angle)];
 sensors(:,axes_ind_1) = (sensors(:,axes_ind_1) - mean_vec(:,axes_ind_1))*R_mat' + mean_vec(:,axes_ind_1);
 if not(isempty(s_directions))
 sensors(:,axes_ind_2) = sensors(:,axes_ind_2)*R_mat';
+end
+if not(isempty(s_directions_g))
+sensors(:,axes_ind_3) = sensors(:,axes_ind_3)*R_mat';
 end
 end
 end

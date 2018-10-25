@@ -289,6 +289,10 @@ end;
 end;
 
 if n_iter(j) > 0
+theta_aux = sqrt(theta(1:length(z_vec)/3).^2 + theta(length(z_vec)/3 +1 :2*length(z_vec)/3).^2 + theta(2*length(z_vec)/3 +1 :3*length(z_vec)/3).^2);
+theta(1:length(z_vec)/3) = theta_aux;
+theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux;
+theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux;
 theta = theta(mr_ind);
 z_vec = z_vec(mr_ind);
 end

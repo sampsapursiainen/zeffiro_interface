@@ -44,9 +44,9 @@ zef.n_sources_mod = 0;
 end
 zef.sensors_aux = zef.sensors;
 zef.nodes_aux = zef.nodes/1000;
-if zef.imaging_method == 1 |  zef.imaging_method == 3 & size(zef.sensors,2) == 3
+if ismember(zef.imaging_method,[1,4]) & size(zef.sensors,2) == 3
 zef.sensors_aux = zef.sensors_attached_volume(:,1:3)/1000;
-elseif zef.imaging_method == 2
+elseif ismember(zef.imaging_method,[2,3])
 zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3)/1000;
 else
 zef.sensors_aux = zef.sensors_attached_volume;
@@ -54,7 +54,7 @@ end
 
 zef.lf_param.dipole_mode = 1;
 
-if zef.imaging_method == 1 |  zef.imaging_method == 3;
+if zef.imaging_method == 1 
 if size(zef.sensors,2) == 6
 zef.lf_param.impedances = zef.sensors(:,6);
 end
@@ -70,6 +70,25 @@ if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
 [zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
 else
 [zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+end
+end
+
+if zef.imaging_method == 3;
+if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+else
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+end
+end
+
+if zef.imaging_method == 4
+if size(zef.sensors,2) == 6
+zef.lf_param.impedances = zef.sensors(:,6);
+end
+if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
+[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions] = lead_field_eit_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+else
+[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions] = lead_field_eit_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
 end
 

@@ -29,9 +29,13 @@ for f_ind = frame_start : frame_step : frame_stop
 reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+if ismember(evalin('base','zef.reconstruction_type'), 6)
+reconstruction = (1/3)*sum(reconstruction)';
+else    
 reconstruction = sqrt(sum(reconstruction.^2))';
+end
 reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
-max_abs_reconstruction = max([max_abs_reconstruction ; abs(reconstruction(:))]);
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 end
@@ -53,9 +57,13 @@ number_of_frames = 1;
 reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
+if ismember(evalin('base','zef.reconstruction_type'), 6)
+reconstruction = (1/3)*sum(reconstruction)';
+else    
 reconstruction = sqrt(sum(reconstruction.^2))';
+end
 reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
-max_abs_reconstruction = max([max_abs_reconstruction ; abs(reconstruction(:))]);
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 if evalin('base','zef.inv_scale') == 1
@@ -547,21 +555,25 @@ colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 end
-    
+  
 if iscell(evalin('base','zef.reconstruction')) 
 reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
 else
 reconstruction = evalin('base','zef.reconstruction');
 end
-reconstruction = reconstruction(:);  
+reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
+elseif evalin('base','zef.reconstruction_type') == 6
+reconstruction = (1/3)*sum(reconstruction)';
+end
+if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
@@ -573,7 +585,7 @@ reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,3),:)' - reuna_p{aux_brain_ind}(
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
@@ -595,7 +607,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
 end
 
@@ -669,10 +681,14 @@ reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
+elseif evalin('base','zef.reconstruction_type') == 6
+reconstruction = (1/3)*sum(reconstruction)';
+end
+if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
@@ -684,7 +700,7 @@ n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
@@ -706,10 +722,9 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
 end
-
 
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -742,8 +757,6 @@ set(h_axes_text,'layer','bottom');
 drawnow;
 
 end
-
-
     
 else
     
@@ -828,6 +841,3 @@ rotate3d on;
 if evalin('base','zef.visualization_type')==3 & iscell(evalin('base','zef.reconstruction'))
 close(h_waitbar);
 end
-
-
-

@@ -524,7 +524,27 @@ end;
           else
           zef.inv_multires_n_iter = [10 3 3];
           end   
-
+          if (isfield(zef_data,'inv_bg_data'));
+          zef.inv_bg_data = zef_data.inv_bg_data;
+          else
+           zef.inv_bg_data = [];
+          end
+          if (isfield(zef_data,'inv_roi_perturbation'));
+          zef.inv_roi_perturbation = zef_data.inv_roi_perturbation;
+          else
+          zef.inv_roi_perturbation = 0.1;
+          end
+          if (isfield(zef_data,'current_pattern'));
+          zef.current_pattern = zef_data.current_pattern;
+          else
+          zef.current_pattern = [];
+          end 
+          if (isfield(zef_data,'inv_eit_noise'));
+          zef.inv_eit_noise = zef_data.inv_eit_noise;
+          else
+          zef.inv_eit_noise = 0;
+          end 
+          
 clear zef_data;
 zef_update;
 end;

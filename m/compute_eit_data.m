@@ -1,39 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [L_eeg, dipole_locations, dipole_directions] = lead_field_eeg_fem(nodes,elements,sigma,electrodes,varargin) 
-% function [L_eeg, source_locations, source_directions] = lead_field_eeg_fem(nodes,elements,sigma,electrodes,brain_ind,source_ind,additional_options)
-% 
-% Input:
-% ------
-% - nodes              = N x 3
-% - elements           = M x 4
-% - sigma              = M x 1 (or M x 6, one row: sigma_11 sigma_22 sigma_33 sigma_12 sigma_13 sigma_23)
-% - electrodes         = L x 3
-% - brain_ind          = P x 1 (The set of elements that potentially contain source currents, by default contains all elements)
-% - source_ind         = R x 1 (The set of elements that are allowed to contain source currents, a subset of brain_ind, by default equal to brain_ind)
-% - additional_options = Struct, see below
-% 
-% Fields of additional_options: 
-% -----------------------------
-%
-% - additional_options.direction_mode: Source directions; Values: 'mesh based' (default) or 'Cartesian' (optional).
-%   Note: If Cartesian directions are used, the columns of the lead field matrix correspond 
-%   to directions x y z x y z x y z ..., respectively.
-% - additional_options.precond: Preconditioner type; Values: 'cholinc' (Incomplete Cholesky, default) or 'ssor' (SSOR, optional)
-% - additional_options.cholinc_tol: Tolerance of the Incomplete Cholesky; Values: Numeric (default is 0.001) or '0' (complete Cholesky)
-% - additional_options.pcg_tol: Tolerance of the PCG iteration; Values: Numeric (default is 1e-6) 
-% - additional_options.maxit: Maximum number of PCG iteration steps; Values: Numeric (default is 3*floor(sqrt(N)))
-% - additional_options.dipole_mode: Element-wise source direction mode; Values: '1' (direction of the dipole moment, default) or '2' (line segment between nodes 4 and 5 with the numbering given in Pursiainen et al 2011)
-% - additional_options.permutation: Permutation of the linear system; Values: 'symamd' (default), 'symmmd' (optional), 'symrcm' (optional), or 'none' (optional) 
-%
-% Output:
-% -------
-% - L_eeg              = L x K 
-% - source_locations   = K x 3 (or K/3 x 3, if Cartesian are used)
-% - source_directions  = K x 3 
-%
+function [eit_data_vec] = compute_eit_data(nodes,elements,sigma,electrodes,varargin) 
 
 N = size(nodes,1);
-source_model = evalin('base','zef.source_model');
 
 if iscell(elements)
         tetrahedra = elements{1};
@@ -150,8 +118,10 @@ if iscell(elements)
     end
     end
     K = length(brain_ind);
+    K3 = length(source_ind);
     clear electrodes;
-A = spalloc(N,N,0);
+    A = spalloc(N,N,0);
+    D_A = zeros(K,10);
 
 Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1); 
 ind_m = [1 4 7; 2 5 8 ; 3 6 9];
@@ -159,21 +129,39 @@ tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3)
                 - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
                 + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
 clear Aux_mat;
+      
+roi_ind_vec = [];
+  
+roi_sphere = evalin('base', 'zef.inv_roi_sphere');
+roi_perturbation = evalin('base', 'zef.inv_roi_perturbation');
+center_points = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
+r_roi = roi_sphere(:,4); 
+c_roi = roi_sphere(:,1:3)';
+
+for j = 1 : size(roi_sphere,1)
+
+r_aux = find(sqrt(sum((center_points'-c_roi(:,j*ones(1,size(center_points,1)))).^2))<=r_roi(j));
+sigma(r_aux,1:3) =  sigma(r_aux,1:3) + roi_perturbation(j);
+
+end
 
 ind_m = [ 2 3 4 ;
           3 4 1 ;
           4 1 2 ; 
           1 2 3 ];
-  
+
 h=waitbar(0,'System matrices.');     
 waitbar_ind = 0;
 
+D_A_count = 0;
 for i = 1 : 4 
     
 grad_1 = cross(nodes(tetrahedra(:,ind_m(i,2)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)', nodes(tetrahedra(:,ind_m(i,3)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)')/2;  
 grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(:,i),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)'))),3,1).*grad_1;   
 
 for j = i : 4
+    
+D_A_count = D_A_count + 1;    
     
 if i == j
 grad_2 = grad_1;
@@ -183,6 +171,7 @@ grad_2 = repmat(sign(dot(grad_2,(nodes(tetrahedra(:,j),:)'-nodes(tetrahedra(:,in
 end
 
 entry_vec = zeros(1,size(tetrahedra,1));
+entry_vec_2 = zeros(1,size(tetrahedra,1));
 for k = 1 : 6
    switch k 
        case 1
@@ -207,11 +196,16 @@ end
 
 if k <= 3
 entry_vec = entry_vec + sigma_tetrahedra(k,:).*grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
+entry_vec_2 = entry_vec_2 + grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
+
 else
 entry_vec = entry_vec + sigma_tetrahedra(k,:).*(grad_1(k_1,:).*grad_2(k_2,:) + grad_1(k_2,:).*grad_2(k_1,:))./(9*tilavuus);
+entry_vec_2 = entry_vec_2 + grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
 end
 
 end
+
+D_A(:, D_A_count) = D_A(:, D_A_count) + entry_vec_2(brain_ind)'; 
 
 A_part = sparse(tetrahedra(:,i),tetrahedra(:,j), entry_vec',N,N);
 clear entry_vec;
@@ -379,18 +373,17 @@ end
 
 if isequal(electrode_model,'CEM')
 
-ala = sqrt(sum(cross(nodes(ele_ind(:,3),:)'-nodes(ele_ind(:,2),:)', nodes(ele_ind(:,4),:)'-nodes(ele_ind(:,2),:)').^2))/2;    
-    
+ala = sqrt(sum(cross(nodes(ele_ind(:,3),:)'-nodes(ele_ind(:,2),:)', nodes(ele_ind(:,4),:)'-nodes(ele_ind(:,2),:)').^2))/2;
+
 for i  = 1 : L    
 I = find(ele_ind(:,1) == i);
 impedance_vec(i)= i*sum(ala(I)); 
-end
+end    
 
 B = spalloc(N,L,0);    
 C = spalloc(L,L,0); 
 
 entry_vec = (1./impedance_vec(ele_ind(:,1))).*ala';
-
 
 for i = 1 : 3
 
@@ -445,15 +438,6 @@ C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
 
 end 
 
-
-if isequal(electrode_model,'PEM')
-
-A(ele_ind(1),:) = 0;
-A(:,ele_ind(1)) = 0;
-A(ele_ind(1),ele_ind(1)) = 1;
-
-end
-
 if isequal(permutation,'symamd')
 perm_vec = symamd(A)';
 elseif isequal(permutation,'symmmd')
@@ -468,108 +452,6 @@ iperm_vec = iperm_vec(:,2);
 A_aux = A(perm_vec,perm_vec);
 A = A_aux;
 clear A_aux A_part;
-
-%Form G_fi and T_fi
-%*******************************
-%*******************************
-
-%An auxiliary matrix for picking up the correct nodes from tetrahedra
-ind_m = [ 2 3 4 ;
-    3 4 1 ;
-    4 1 2 ;
-    1 2 3 ];
-
-% Next find nodes that share a face 
-Ind_cell = cell(1,3);
-
-for i = 1 : 4
-    % Find the global node indices for each tetrahedra
-    % that correspond to indices ind_m(i,:) and set them to increasing order 
-    Ind_mat_fi_1 = sort(tetrahedra(brain_ind,ind_m(i,:)),2);
-    for j = i + 1 : 4
-        % The same for indices ind_m(j,:)
-        Ind_mat_fi_2 = sort(tetrahedra(brain_ind,ind_m(j,:)),2);
-        % Set both matrices in one variable, including element index and which node it corresponds
-        Ind_mat = sortrows([ Ind_mat_fi_1 brain_ind(:) i*ones(K,1) ; Ind_mat_fi_2 brain_ind(:) j*ones(K,1) ]);
-        % Find the rows that have the same node indices, i.e. share a face
-        I = find(sum(abs(Ind_mat(1:end-1,1:3)-Ind_mat(2:end,1:3)),2)==0);
-        Ind_cell{i}{j} = [ Ind_mat(I,4) Ind_mat(I+1,4)  Ind_mat(I,5) Ind_mat(I+1,5) ]; %% Make this better
-        
-    end
-end
-
-clear Ind_mat_fi_1 Ind_mat_fi_2;
-% Set the node indices and element indices in one matrix
-Ind_mat = [ Ind_cell{1}{2} ; Ind_cell{1}{3} ; Ind_cell{1}{4} ; Ind_cell{2}{3} ; Ind_cell{2}{4} ; Ind_cell{3}{4} ];
-clear Ind_cell;
-% Drop the double and triple rows 
-[Ind_mat_fi_2,I] = unique(Ind_mat(:,1:2),'rows'); 
-clear Ind_mat_fi_2;
-Ind_mat = Ind_mat(I,:);
-% Here we check that all of the elements were from brain layer
-Ind_mat = Ind_mat(find(sum(ismember(Ind_mat(:,1:2),brain_ind),2)),:);
-
-M_fi = size(Ind_mat,1);
-%D = sparse([Ind_mat(:,1) ; Ind_mat(:,2)], repmat([1:M]',2,1), [ones(M,1) ; -ones(M,1)], K2, M);
-
-% Set nodes that share the face 
-tetrahedra_aux_ind_1 = sub2ind([K2 4], Ind_mat(:,1), Ind_mat(:,3));
-nodes_aux_vec_1 = nodes(tetrahedra(tetrahedra_aux_ind_1),:);
-tetrahedra_aux_ind_2 = sub2ind([K2 4], Ind_mat(:,2), Ind_mat(:,4));
-nodes_aux_vec_2 = nodes(tetrahedra(tetrahedra_aux_ind_2),:);
-
-%fi_source locations, moments and directions
-fi_source_directions = (nodes_aux_vec_2 - nodes_aux_vec_1);
-fi_source_moments = sqrt(sum(fi_source_directions.^2,2));
-fi_source_directions = fi_source_directions./repmat(sqrt(sum(fi_source_directions.^2,2)),1,3);
-fi_source_locations = (1/2)*(nodes_aux_vec_1 + nodes_aux_vec_2);
-
-clear nodes_aux_vec_1 nodes_aux_vec_2;
-
-% Formulate matrix G
-G_fi = sparse([tetrahedra(tetrahedra_aux_ind_1) ; tetrahedra(tetrahedra_aux_ind_2)], ...
-    repmat([1:M_fi]',2,1),[1./fi_source_moments(:) ; -1./fi_source_moments(:)],N,M_fi);
-T_fi = sparse(repmat([1:M_fi]',2,1),[Ind_mat(:,1);Ind_mat(:,2)],ones(2*M_fi,1), M_fi, K2);   
-
-clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
-
-%Form G_ew and T_ew
-if source_model == 2
-%*******************************
-%*******************************
-
-for i = 1 : 4 
-for j = i + 1 : 4
-Ind_cell{i}{j} = [ brain_ind(:) tetrahedra(brain_ind(:),i)  tetrahedra(brain_ind(:),j) ];
-end 
-end
-
-Ind_mat = [ Ind_cell{1}{2} ; Ind_cell{1}{3} ; Ind_cell{1}{4} ; Ind_cell{2}{3} ; Ind_cell{2}{4} ; Ind_cell{3}{4} ];
-clear Ind_cell;
-%[Ind_mat] = unique(Ind_mat,'rows'); 
-%Ind_mat = Ind_mat(find(ismember(Ind_mat(:,1),brain_ind)),:);  
-
-Ind_mat(:,2:3) = sort(Ind_mat(:,2:3), 2);
-[edge_ind, edge_ind_aux_1, edge_ind_aux_2] = unique(Ind_mat(:,2:3),'rows');
-
-ew_source_directions = nodes(edge_ind(:,2),:) - nodes(edge_ind(:,1),:);
-ew_source_moments = sqrt(sum(ew_source_directions.^2,2));
-ew_source_directions = ew_source_directions./repmat(sqrt(sum(ew_source_directions.^2,2)),1,3);
-
-ew_source_locations = (1/2)*(nodes(edge_ind(:,1),:) + nodes(edge_ind(:,2),:));
-
-clear nodes_aux_vec_1 nodes_aux_vec_2;
-
-ones_aux = ones(size(ew_source_moments)); 
-M_ew = size(edge_ind,1);
-G_ew = sparse([edge_ind(:,1)  ; edge_ind(:,2)],repmat([1:M_ew]',2,1),[1./(ew_source_moments) ; -1./(ew_source_moments)],N,M_ew);
-
-T_ew = sparse(edge_ind_aux_2, Ind_mat(:,1), ones(length(edge_ind_aux_2),1), M_ew, K2);
-clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
-
-%*******************************
-%*******************************
-end
 
 close(h);
 h = waitbar(0,'PCG iteration.');
@@ -587,23 +469,11 @@ else
 relres_vec = gpuArray(zeros(1,L-1));
 end
 
-
-L_eeg_fi = zeros(L,M_fi);
-
-if source_model == 2
-L_eeg_ew = zeros(L,M_ew);
-end
+L_eit = zeros(L,N);
 
 tic;
 
 for i = 1 : L
-if isequal(electrode_model,'PEM')
-if i == L
-    break
-end
-b = zeros(length(A),1);
-b(ele_ind(i+1)) = 1;
-end
 if isequal(electrode_model,'CEM')    
 b = full(B(:,i));
 tol_val = min(impedance_vec(i),1)*tol_val_eff;
@@ -635,17 +505,9 @@ end
 relres_vec(i) = gather(norm(r)/norm_b);
 r = gather(x(iperm_vec));
 x = r;
-if isequal(electrode_model,'PEM')
-L_eeg_fi(i+1,:) = - x'*G_fi;
-if source_model == 2
-L_eeg_ew(i+1,:) = - x'*G_ew;
-end
-end
+
 if isequal(electrode_model,'CEM')
-L_eeg_fi(i,:) = - x'*G_fi;
-if source_model == 2
-L_eeg_ew(i,:) = - x'*G_ew;
-end
+L_eit(i,:) = - x;
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
@@ -657,7 +519,7 @@ end
 if tol_val < relres_vec(i)
     close(h);
     'Error: PCG iteration did not converge.'
-    L_eeg = [];
+    L_eit = [];
     return
 end
 time_val = toc; 
@@ -686,19 +548,11 @@ relres_vec = zeros(1,L);
 else
 relres_vec = zeros(1,L-1);
 end
-L_eeg_fi = zeros(L,M_fi);
-if source_model == 2
-L_eeg_ew = zeros(L,M_ew);
-end
+
+L_eit = zeros(L,N);
+
 tic;
 for i = 1 : L
-if isequal(electrode_model,'PEM')
-if i == L
-    break
-end
-b = zeros(length(A),1);
-b(ele_ind(i+1)) = 1;
-end
 if isequal(electrode_model,'CEM')    
 b = full(B(:,i));
 tol_val = min(impedance_vec(i),1)*tol_val_eff;
@@ -727,17 +581,8 @@ end
 relres_vec(i) = norm(r)/norm_b;
 r = x(iperm_vec);
 x = r;
-if isequal(electrode_model,'PEM')
-L_eeg_fi(i+1,:) = - x'*G_fi;
-if source_model == 2
-L_eeg_ew(i+1,:) = - x'*G_ew;  
-end
-end
 if isequal(electrode_model,'CEM')
-L_eeg_fi(i,:) = - x'*G_fi;
-if source_model == 2
-L_eeg_ew(i,:) = - x'*G_ew;  
-end
+L_eit(i,:) = - x';
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
@@ -749,7 +594,7 @@ end
 if tol_val < relres_vec(i)
     close(h);
     'Error: PCG iteration did not converge.'
-    L_eeg = [];
+    L_eit = [];
     return
 end
 time_val = toc; 
@@ -766,99 +611,17 @@ end
 clear S r p x aux_vec inv_M_r a b;
 close(h);
 
-h = waitbar(0,'Interpolation.');
-
+Current_pattern = evalin('base','zef.current_pattern');
 
 if isequal(electrode_model,'CEM')
-Aux_mat = inv(Aux_mat);
-L_eeg_fi = Aux_mat*L_eeg_fi;
-if source_model == 2
-L_eeg_ew = Aux_mat*L_eeg_ew;
-end
+eit_data_vec = - Aux_mat \ Current_pattern;
 end
 
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
-L_eeg_fi = Aux_mat_2*L_eeg_fi;
-if source_model == 2
-L_eeg_ew = Aux_mat_2*L_eeg_ew;  
+eit_data_vec = Aux_mat_2 * eit_data_vec;
+
+eit_data_vec = eit_data_vec(:);
+bg_data = evalin('base','zef.inv_bg_data'); 
+eit_data_vec = eit_data_vec - bg_data;
+
 end
-
-
-if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
-
-if evalin('base','zef.surface_sources')
-source_nonzero_ind = full(find(sum(T_fi)>=0))';
-else
-source_nonzero_ind = full(find(sum(T_fi)>=4))';
-end
-source_nonzero_ind = intersect(source_nonzero_ind,source_ind);
-M2 = size(source_nonzero_ind,1);
-else
-aux_rand_perm = randperm(length(fi_source_locations));
-aux_rand_perm = aux_rand_perm(1:evalin('base','zef.n_sources'));    
-dipole_directions = fi_source_directions(aux_rand_perm,:);
-dipole_locations = fi_source_locations(aux_rand_perm,:);
-L_eeg = L_eeg_fi(:,aux_rand_perm);
-end
-
-
-
-if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
-
-c_tet = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
-dipole_locations = c_tet(source_nonzero_ind,:);
-dipole_directions = [];
-L_eeg = zeros(L,3*M2);
-
-if source_model == 2
-tic;
- for i = 1 : M2
-
-        ind_vec_aux_fi = full(find(T_fi(:,source_nonzero_ind(i))));
-        ind_vec_aux_ew = full(find(T_ew(:,source_nonzero_ind(i))));
-        n_coeff_fi = length(ind_vec_aux_fi);
-        n_coeff_ew = length(ind_vec_aux_ew);
-        n_coeff = n_coeff_fi + n_coeff_ew;
-        Aux_mat_1 = [fi_source_directions(ind_vec_aux_fi,:) ; ew_source_directions(ind_vec_aux_ew,:)];
-        Aux_mat_2 = [fi_source_locations(ind_vec_aux_fi,:) ; ew_source_locations(ind_vec_aux_ew,:)];
-        omega_vec = sqrt(sum((Aux_mat_2 - c_tet(source_nonzero_ind(i)*ones(n_coeff,1),:)).^2,2));
-        PBO_mat = [diag(omega_vec) Aux_mat_1; Aux_mat_1' zeros(3,3)];
-        Coeff_mat = PBO_mat\[zeros(n_coeff,3); eye(3)];
-        L_eeg(:,3*(i-1)+1:3*i) = L_eeg_fi(:,ind_vec_aux_fi)*Coeff_mat(1:n_coeff_fi,:) + L_eeg_ew(:,ind_vec_aux_ew)*Coeff_mat(n_coeff_fi+1:n_coeff,:) ;
-
-if mod(i,floor(M2/50))==0 
-time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready approx: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
-end
-end
-end
-
-
-if source_model == 1
-tic;
- for i = 1 : M2
-
-        ind_vec_aux_fi = full(find(T_fi(:,source_nonzero_ind(i))));
-        n_coeff_fi = length(ind_vec_aux_fi);
-        n_coeff = n_coeff_fi;
-        Aux_mat_1 = [fi_source_directions(ind_vec_aux_fi,:)];
-        Aux_mat_2 = [fi_source_locations(ind_vec_aux_fi,:)];
-        omega_vec = sqrt(sum((Aux_mat_2 - c_tet(source_nonzero_ind(i)*ones(n_coeff,1),:)).^2,2));
-        PBO_mat = [diag(omega_vec) Aux_mat_1; Aux_mat_1' zeros(3,3)];
-        Coeff_mat = PBO_mat\[zeros(n_coeff,3); eye(3)];
-        L_eeg(:,3*(i-1)+1:3*i) = L_eeg_fi(:,ind_vec_aux_fi)*Coeff_mat(1:n_coeff_fi,:);
-
-if mod(i,floor(M2/50))==0 
-time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready approx: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
-end
-end
-end    
-
-    end
-
-waitbar(1,h);
-
-close(h);
-
-
