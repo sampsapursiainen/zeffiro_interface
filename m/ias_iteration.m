@@ -192,7 +192,7 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
-if source_direction_mode == 1
+if ismember(source_direction_mode, [1])
 z_aux = zeros(size(L,2),1); 
 end
 if source_direction_mode == 2 || source_direction_mode == 3
@@ -267,7 +267,7 @@ theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
 end;
 
-if ismember(source_direction_mode,[2 3 4])
+if ismember(source_direction_mode,[2 3])
 z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2); z_vec.*source_directions(:,3)];
 end
 

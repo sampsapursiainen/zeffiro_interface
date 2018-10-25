@@ -303,9 +303,9 @@ triangle_c = cell(1,length(reuna_t));
 
 [X_s, Y_s, Z_s] = sphere(20);
 
-if ismember(evalin('base','zef.imaging_method'), [1 3 4])  & size(sensors,2) == 6 
+if ismember(evalin('base','zef.imaging_method'), [1 4 5])  & size(sensors,2) == 6 
     electrode_model = 2;
-elseif ismember(evalin('base','zef.imaging_method'), [1 3 4])
+elseif ismember(evalin('base','zef.imaging_method'), [1 4 5])
     electrode_model = 1;
 else
     electrode_model = 0;
@@ -362,7 +362,7 @@ set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
 end
 
-if evalin('base','zef.imaging_method')==2
+if ismember(evalin('base','zef.imaging_method'),[2 3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base','zef.s_color'));

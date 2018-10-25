@@ -1,7 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
 function  [sensors_attached_volume] = attach_sensors_volume(sensors) 
 
-if evalin('base','zef.imaging_method') == 1 | evalin('base','zef.imaging_method') == 3 & not(isempty(evalin('base','zef.tetra')))  
+if ismember(evalin('base','zef.imaging_method'),[1,4,5]) & not(isempty(evalin('base','zef.tetra')))  
     
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');

@@ -2,7 +2,6 @@
 %[zef.sigma,zef.brain_ind] = zef_sigma([]);
 tic;
 
-
 if zef.source_direction_mode == 1
 zef.lf_param.direction_mode = 'cartesian';
 end
@@ -44,7 +43,7 @@ zef.n_sources_mod = 0;
 end
 zef.sensors_aux = zef.sensors;
 zef.nodes_aux = zef.nodes/1000;
-if ismember(zef.imaging_method,[1,4]) & size(zef.sensors,2) == 3
+if ismember(zef.imaging_method,[1,4,5]) & size(zef.sensors,2) == 3
 zef.sensors_aux = zef.sensors_attached_volume(:,1:3)/1000;
 elseif ismember(zef.imaging_method,[2,3])
 zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3)/1000;

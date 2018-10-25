@@ -128,14 +128,14 @@ source_directions = n_vec_aux(s_ind_3,:);
 
 end
 
-if  source_direction_mode == 3
+if source_direction_mode == 3
 source_directions = source_directions(s_ind_1,:);
 end
 
 if source_direction_mode == 1  || source_direction_mode == 2
 s_ind_1 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 end
-if  source_direction_mode == 3
+if source_direction_mode == 3
 s_ind_2 = [3*s_ind_1-2 ; 3*s_ind_1-1 ; 3*s_ind_1];
 end
 
@@ -234,7 +234,7 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
-if source_direction_mode == 1
+if source_direction_mode == 1 
 z_aux = zeros(size(L,2),1); 
 end
 if source_direction_mode == 2 || source_direction_mode == 3
@@ -333,15 +333,14 @@ end
 if source_direction_mode == 1
 z_vec_aux = zeros(n_lead_field,1);
 else 
-  z_vec_aux = zeros(3*n_lead_field,1); 
+z_vec_aux = zeros(3*n_lead_field,1); 
 end
 z_vec_aux(roi_aux_ind) = z_vec;
 z_vec = z_vec_aux;
 
-
 end
 
-if source_direction_mode == 1 || source_direction_mode == 2
+if ismember(source_direction_mode, [1,2])
 z_aux(s_ind_1) = z_vec;
 end
 if source_direction_mode == 3
