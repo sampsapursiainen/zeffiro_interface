@@ -1,12 +1,12 @@
-Zeffiro Interface is a simple tool for finite element based EEG and MEG
-forward and inverse simulations. With Zeffiro, one can segment  a
-realistic multilayer geometry and generate a finite element mesh, if
-triangular surface grids (in ASCII DAT file format) are available. As a
-special feature one can generate a time-lapse of inverse estimates for a
-given data sequence. An example can be found in ./data/media folder. The
-current version also allows using a graphics card to speed up the mesh
-segmentation as well as forward (lead field) and inversion computations. A
-spherical model has been included as an example
+Zeffiro Interface is a simple tool for finite element based forward and
+inverse simulations in electromagnetic brain imaging applications. With
+Zeffiro, one can segment  a realistic multilayer geometry and generate a
+finite element mesh, if triangular surface grids (in ASCII DAT file
+format) are available. As a special feature one can generate a time-lapse
+of inverse estimates for a given data sequence. An example can be found in
+./data/media folder. The current version also allows using a graphics card
+to speed up the mesh segmentation as well as forward (lead field) and
+inversion computations. A spherical model has been included as an example
 (./data/spherical_example.mat). The name Zeffiro is Italian for 'a gentle
 breeze'. A more detailed introduction to the functions and scientific
 background of the interface can be found at:
