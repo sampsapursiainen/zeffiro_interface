@@ -316,6 +316,7 @@ max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 end
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -325,6 +326,7 @@ max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_r
 elseif evalin('base','zef.inv_scale') == 3
 min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 elseif  evalin('base','zef.visualization_type') == 2
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
@@ -340,6 +342,7 @@ reconstruction = sum(reconstruction(s_i_ind),2)/4;
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -349,6 +352,7 @@ max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_r
 elseif evalin('base','zef.inv_scale') == 3
 min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 end
 if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2
@@ -452,12 +456,14 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
 end
 
+if not(ismember(evalin('base','zef.reconstruction_type'),[6]))
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
 reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 
 
@@ -732,12 +738,14 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
 end
 
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
 reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 
 

@@ -16,6 +16,7 @@ number_of_frames = evalin('base','zef.number_of_frames');
 time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
+n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
 
 if source_direction_mode == 2
 
@@ -239,24 +240,36 @@ f = gpuArray(f);
 end
 
 n_multires = evalin('base','zef.inv_multires_n_levels'); 
+
 multires_dec =  evalin('base','zef.inv_multires_dec');
 multires_ind =  evalin('base','zef.inv_multires_ind');
 n_iter = evalin('base','zef.inv_multires_n_iter');
+mr_sparsity = evalin('base','zef.inv_multires_sparsity');
+
+z_vec_aux = zeros(size(L_aux,2),1);
+theta_vec_aux = zeros(size(L_aux,2),1);
+
+for n_rep = 1 : n_decompositions
+
+if evalin('base','zef.inv_init_guess_mode') == 2
+theta = theta0*ones(size(L_aux,2),1);
+end 
 
 for j = 1 : n_multires
-n_mr_dec = length(multires_dec{j});
+
+n_mr_dec = length(multires_dec{n_rep}{j});
 
 if source_direction_mode == 1
-mr_dec = [multires_dec{j}; multires_dec{j}+n_interp ; multires_dec{j} + 2*n_interp];
+mr_dec = [multires_dec{n_rep}{j}; multires_dec{n_rep}{j}+n_interp ; multires_dec{n_rep}{j} + 2*n_interp];
 mr_dec = mr_dec(:);
-mr_ind = [multires_ind{j} ; multires_ind{j} + n_mr_dec ; multires_ind{j} + 2*n_mr_dec];
+mr_ind = [multires_ind{n_rep}{j} ; multires_ind{n_rep}{j} + n_mr_dec ; multires_ind{n_rep}{j} + 2*n_mr_dec];
 mr_ind = mr_ind(:);
 end
 
 if source_direction_mode == 2 || source_direction_mode == 3
-mr_dec = multires_dec{j}; 
+mr_dec = multires_dec{n_rep}{j}; 
 mr_dec = mr_dec(:);
-mr_ind = multires_ind{j}; 
+mr_ind = multires_ind{n_rep}{j}; 
 mr_ind = mr_ind(:);
 end
 
@@ -286,18 +299,57 @@ theta = theta0*(eta + sqrt((1/(2*theta0))*z_vec.^2 + eta^2));
 else
 theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
+
 end;
 
+%if n_iter(j) > 0
+%theta_aux = sqrt(sum(reshape(theta.^2, length(theta)/3, 3),2));
+%theta = repmat(theta_aux, 3, 1);
+
+% theta_aux_2 = sqrt(theta(1:length(z_vec)/3).^2 + theta(length(z_vec)/3 +1 :2*length(z_vec)/3).^2 + theta(2*length(z_vec)/3 +1 :3*length(z_vec)/3).^2);
+% theta(1:length(z_vec)/3) = theta_aux_2;
+% theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux_2;
+% theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux_2;
+
 if n_iter(j) > 0
-theta_aux = sqrt(theta(1:length(z_vec)/3).^2 + theta(length(z_vec)/3 +1 :2*length(z_vec)/3).^2 + theta(2*length(z_vec)/3 +1 :3*length(z_vec)/3).^2);
-theta(1:length(z_vec)/3) = theta_aux;
-theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux;
-theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux;
 theta = theta(mr_ind);
 z_vec = z_vec(mr_ind);
 end
+%end
 
-end;
+%theta_aux(:,j) = theta_aux(:,j) + theta*mr_sparsity.^(j-n_multires);
+%z_vec_aux(:,j) = z_vec_aux(:,j) + z_vec*mr_sparsity.^(j-n_multires);
+
+%theta_aux(:,j) = theta;%*mr_sparsity.^(j-n_multires);
+%z_vec_aux(:,j) = z_vec_aux(:,j) + z_vec;%*mr_sparsity.^(j-n_multires);
+%w_vec_aux(:,j) = 1;%mr_sparsity.^(j-n_multires);
+
+%theta = sum(theta_aux(:,1:j),2)/sum(w_vec_aux(1:j),2);
+%z_vec = sum(z_vec_aux(:,1:j),2)/sum(w_vec_aux(1:j),2);
+
+
+
+%theta_aux(:,j) = theta;
+%z_vec_aux(:,j) = z_vec;
+
+%theta_aux = sqrt(theta(1:length(z_vec_aux)/3).^2 + theta(length(z_vec_aux)/3 +1 :2*length(z_vec_aux)/3).^2 + theta(2*length(z_vec_aux)/3 +1 :3*length(z_vec)/3).^2);
+%theta(1:length(z_vec)/3) = theta_aux;
+%theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux;
+%theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux;
+%theta = z_vec_aux;
+z_vec_aux = z_vec_aux + z_vec;
+theta_vec_aux = theta_vec_aux + theta;
+end
+
+theta = theta_vec_aux/n_multires;
+
+end
+
+z_vec = z_vec_aux/(n_multires*n_decompositions);
+
+
+%theta = mean(theta_aux,2);
+%z_vec = mean(z_vec_aux,2);
 
 if source_direction_mode == 2 || source_direction_mode == 3
 z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';

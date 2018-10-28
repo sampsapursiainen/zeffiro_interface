@@ -39,6 +39,7 @@ max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 end
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -48,6 +49,7 @@ max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_r
 elseif evalin('base','zef.inv_scale') == 3
 min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 else
 frame_start = 1;
@@ -66,6 +68,7 @@ reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -75,7 +78,8 @@ max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_r
 elseif evalin('base','zef.inv_scale') == 3
 min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end    
+end   
+end 
 end
 end
     
@@ -611,12 +615,14 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
 end
 
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
 reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 
 h_surf_2 = trisurf(reuna_t{aux_brain_ind},reuna_p{aux_brain_ind}(:,1),reuna_p{aux_brain_ind}(:,2),reuna_p{aux_brain_ind}(:,3),reconstruction,'edgecolor','none');
@@ -726,12 +732,14 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
 end
 
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
 reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
+end
 end
 
 delete(h_surf_2);

@@ -209,7 +209,7 @@ waitbar(waitbar_ind/waitbar_length,h);
 
 end
 
-clear A_part grad_1 grad_2 tilavuus ala sigma_tetrahedra;
+clear A_part grad_1 grad_2 ala sigma_tetrahedra;
 
 if not(isempty(prisms))
 
@@ -604,10 +604,11 @@ end
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
 L_eit = Aux_mat_2*L_eit;
 
-[eit_ind,eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+[eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
 
 Current_pattern = evalin('base','zef.current_pattern');
 bg_data = -Aux_mat*Current_pattern;
+bg_data = Aux_mat_2 * bg_data;
 bg_data = bg_data(:);
 
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
@@ -615,6 +616,9 @@ L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 h = waitbar(0,'Interpolation.');
 
 tic;
+
+tilavuus_vec_aux = zeros(length(source_ind),1);
+
  for i = 1 : K
 
 aux_vec = D_A(i,:);
@@ -627,10 +631,11 @@ Aux_mat_2 = [0 aux_vec(2) aux_vec(3) aux_vec(4);
            0 0          0 aux_vec(9);
            0 0 0 0];
 Aux_mat_3 = Aux_mat_1 + Aux_mat_2 + Aux_mat_2'; 
-Aux_mat_4 = L_eit(:,tetrahedra(brain_ind(i),:));
+Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
 Aux_mat_5 = Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
 
 L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:); 
+tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
 
 if mod(i,floor(K/50))==0 
 time_val = toc;
@@ -642,7 +647,12 @@ waitbar(1,h);
 
 close(h);
 
+for i = length(source_ind)
+L_eit_aux(:,i) = L_eit_aux(:,i)/tilavuus_vec_aux(i); 
+end
+
  L_eit = L_eit_aux;
+ 
  dipole_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  dipole_directions = ones(size(dipole_locations));
 

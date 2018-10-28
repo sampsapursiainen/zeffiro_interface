@@ -135,13 +135,13 @@ roi_ind_vec = [];
 roi_sphere = evalin('base', 'zef.inv_roi_sphere');
 roi_perturbation = evalin('base', 'zef.inv_roi_perturbation');
 center_points = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
-r_roi = roi_sphere(:,4); 
-c_roi = roi_sphere(:,1:3)';
+r_roi = (roi_sphere(:,4)/1000); 
+c_roi = (roi_sphere(:,1:3)/1000)';
 
 for j = 1 : size(roi_sphere,1)
 
 r_aux = find(sqrt(sum((center_points'-c_roi(:,j*ones(1,size(center_points,1)))).^2))<=r_roi(j));
-sigma(r_aux,1:3) =  sigma(r_aux,1:3) + roi_perturbation(j);
+sigma_tetrahedra(1:3,r_aux) =  sigma_tetrahedra(1:3,r_aux) + roi_perturbation(j);
 
 end
 

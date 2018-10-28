@@ -1,8 +1,12 @@
 
 function [multires_dec, multires_ind, multires_count] = make_multires_dec
 
+n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
+[n_levels] = evalin('base','zef.inv_multires_n_levels');
+
+for n_rep = 1 : n_decompositions
+
 [s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
-[n_levels] = unique(evalin('base','zef.inv_multires_n_levels'));
 source_points = evalin('base','zef.source_positions');
 
 source_points = source_points(s_ind,:);
@@ -11,9 +15,9 @@ source_points_aux = source_points;
 size_center_points = size(source_points,2); 
 center_points = source_points;
 
-multires_dec{n_levels} = [1:size_center_points]';
-multires_ind{n_levels} = [1:size_center_points]';
-multires_count{n_levels} = ones(size_center_points,1);
+multires_dec{n_rep}{n_levels} = [1:size_center_points]';
+multires_ind{n_rep}{n_levels} = [1:size_center_points]';
+multires_count{n_rep}{n_levels} = ones(size_center_points,1);
 
 par_num = evalin('base','zef.parallel_vectors');
 multires_sparsity = evalin('base','zef.inv_multires_sparsity');
@@ -40,7 +44,7 @@ source_points = gpuArray(source_points);
 source_interpolation_aux = gpuArray(source_interpolation_aux);
 end 
 
-multires_dec{k} = aux_ind(1:size_source_points)';
+multires_dec{n_rep}{k} = aux_ind(1:size_source_points)';
 
 i_ind = 0;
 tic
@@ -64,14 +68,16 @@ end
 end
 
 source_interpolation_aux = gather(source_interpolation_aux);
-multires_ind{k} = source_interpolation_aux;
+multires_ind{n_rep}{k} = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
-multires_count{k} = accumarray(i_c,1);
+multires_count{n_rep}{k} = accumarray(i_c,1);
 
 end
 
 close(h)
 
-multires_dec{n_levels} = [1:size_center_points]';
-multires_ind{n_levels} = [1:size_center_points]';
-multires_count = ones(size_center_points,1);
+multires_dec{n_rep}{n_levels} = [1:size_center_points]';
+multires_ind{n_rep}{n_levels} = [1:size_center_points]';
+multires_count{n_rep}{n_levels} = ones(size_center_points,1);
+
+end
