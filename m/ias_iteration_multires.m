@@ -17,6 +17,9 @@ time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
+n_multires = evalin('base','zef.inv_multires_n_levels');
+sparsity_factor = evalin('base','zef.inv_multires_sparsity');
+weight_vec_aux = sum(sparsity_factor.^[0:n_multires-1]');
 
 if source_direction_mode == 2
 
@@ -237,9 +240,7 @@ n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 f = gpuArray(f);
-end
-
-n_multires = evalin('base','zef.inv_multires_n_levels'); 
+end 
 
 multires_dec =  evalin('base','zef.inv_multires_dec');
 multires_ind =  evalin('base','zef.inv_multires_ind');
@@ -332,11 +333,12 @@ end
 %theta_aux(:,j) = theta;
 %z_vec_aux(:,j) = z_vec;
 
-%theta_aux = sqrt(theta(1:length(z_vec_aux)/3).^2 + theta(length(z_vec_aux)/3 +1 :2*length(z_vec_aux)/3).^2 + theta(2*length(z_vec_aux)/3 +1 :3*length(z_vec)/3).^2);
-%theta(1:length(z_vec)/3) = theta_aux;
-%theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux;
-%theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux;
-%theta = z_vec_aux;
+% theta_aux = sqrt(theta(1:length(z_vec_aux)/3).^2 + theta(length(z_vec_aux)/3 +1 :2*length(z_vec_aux)/3).^2 + theta(2*length(z_vec_aux)/3 +1 :3*length(z_vec)/3).^2);
+% theta(1:length(z_vec)/3) = theta_aux;
+% theta(length(z_vec)/3+1 : 2*length(z_vec)/3) = theta_aux;
+% theta(2*length(z_vec)/3+1 : 3*length(z_vec)/3) = theta_aux;
+% theta = z_vec_aux;
+
 z_vec_aux = z_vec_aux + z_vec;
 theta_vec_aux = theta_vec_aux + theta;
 end
@@ -345,8 +347,10 @@ theta = theta_vec_aux/n_multires;
 
 end
 
-z_vec = z_vec_aux/(n_multires*n_decompositions);
+z_vec = z_vec_aux/(n_multires*n_decompositions*weight_vec_aux);
 
+
+%assignin('base','reconstruction_aux',z_vec);
 
 %theta = mean(theta_aux,2);
 %z_vec = mean(z_vec_aux,2);
@@ -355,6 +359,7 @@ if source_direction_mode == 2 || source_direction_mode == 3
 z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';
 %z_vec = z_vec(:);
 end
+
 
 if source_direction_mode == 1 || source_direction_mode == 2
 z_aux(s_ind_1) = z_vec;
