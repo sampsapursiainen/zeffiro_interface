@@ -43,6 +43,7 @@
               zef.s_visible= 1;
                zef.s_points= [];
            zef.s_directions= [];
+           zef.s_directions_g = [];
            zef.d1_triangles=[];
               zef.d1_points=[];
             zef.d2_triangles= [];
