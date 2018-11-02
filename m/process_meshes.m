@@ -151,11 +151,10 @@ if ismember(evalin('base','zef.imaging_method'),[2 3])
 s_directions = evalin('base','zef.s_directions(:,1:3)');
 if size(evalin('base','zef.s_directions'),2) == 6
 s_directions_g = evalin('base','zef.s_directions(:,4:6)');
-else 
-s_directions_g = [];
 end
 else 
 s_directions = [];
+s_directions_g = [];
 end
 s_scaling = evalin('base','zef.s_scaling');
 s_x_correction = evalin('base','zef.s_x_correction');
