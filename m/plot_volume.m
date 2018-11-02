@@ -92,7 +92,7 @@ elseif electrode_model==2  & ismember(evalin('base','zef.imaging_method'),[1 4 5
 sensors = attach_sensors_volume(sensors);
 end
 
-if electrode_model == 1
+if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
 set(h,'facecolor',evalin('base','zef.s_color'));
@@ -121,6 +121,16 @@ set(h,'specularstrength',0.1);
 set(h,'diffusestrength',0.3);
 set(h,'ambientstrength',0.3);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
+if size(sensors,2) == 9
+sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
+h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
+set(h,'facecolor',[0 1 0]);
+set(h,'edgecolor','none'); 
+set(h,'specularstrength',0.1);
+set(h,'diffusestrength',0.3);
+set(h,'ambientstrength',0.3);
+set(h,'facealpha',evalin('base','zef.layer_transparency'));
+end
 end
 end
 
