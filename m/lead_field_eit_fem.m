@@ -492,11 +492,11 @@ r = gather(x(iperm_vec));
 x = r;
 
 if isequal(electrode_model,'CEM')
-L_eit(i,:) = - x;
+L_eit(i,:) = x;
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Aux_mat(:,i) = C(:,i) - B'*x;
 else
 Aux_mat(:,i) = - C(:,i);
 end
@@ -567,11 +567,11 @@ relres_vec(i) = norm(r)/norm_b;
 r = x(iperm_vec);
 x = r;
 if isequal(electrode_model,'CEM')
-L_eit(i,:) = - x';
+L_eit(i,:) = x';
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Aux_mat(:,i) = C(:,i) - B'*x;
 else
 Aux_mat(:,i) = - C(:,i);    
 end
@@ -607,7 +607,7 @@ L_eit = Aux_mat_2*L_eit;
 [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
 
 Current_pattern = evalin('base','zef.current_pattern');
-bg_data = -Aux_mat*Current_pattern;
+bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_2 * bg_data;
 bg_data = bg_data(:);
 
@@ -632,8 +632,8 @@ Aux_mat_2 = [0 aux_vec(2) aux_vec(3) aux_vec(4);
            0 0 0 0];
 Aux_mat_3 = Aux_mat_1 + Aux_mat_2 + Aux_mat_2'; 
 Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
-Aux_mat_5 = Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
-
+Aux_mat_5 = - Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
+ 
 L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:); 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
 
