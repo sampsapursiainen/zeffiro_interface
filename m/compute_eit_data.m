@@ -511,9 +511,9 @@ L_eit(i,:) = - x;
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Aux_mat(:,i) = C(:,i) - B'*x;
 else
-Aux_mat(:,i) = - C(:,i);
+Aux_mat(:,i) = C(:,i);
 end
 end
 if tol_val < relres_vec(i)
@@ -582,13 +582,13 @@ relres_vec(i) = norm(r)/norm_b;
 r = x(iperm_vec);
 x = r;
 if isequal(electrode_model,'CEM')
-L_eit(i,:) = - x';
+L_eit(i,:) = x';
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Aux_mat(:,i) = C(:,i) - B'*x;
 else
-Aux_mat(:,i) = - C(:,i);    
+Aux_mat(:,i) = C(:,i);    
 end
 end
 if tol_val < relres_vec(i)
@@ -614,7 +614,7 @@ close(h);
 Current_pattern = evalin('base','zef.current_pattern');
 
 if isequal(electrode_model,'CEM')
-eit_data_vec = - Aux_mat \ Current_pattern;
+eit_data_vec = Aux_mat \ Current_pattern;
 end
 
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
