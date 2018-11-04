@@ -1,6 +1,6 @@
 %Copyright © 2018, Sampsa Pursiainen  
           zef.inv_init_guess_mode = [1];
-          zef.inv_eit_noise = [];
+          zef.inv_eit_noise = 0;
           zef.inv_bg_data = [];
           zef.inv_roi_perturbation = 0.1;
           zef.current_pattern = [];

@@ -172,7 +172,7 @@ tic;
 for f_ind = 1 : number_of_frames
 time_val = toc; 
 if f_ind > 1; 
-date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
+date_str = datestr(datevec(now+(n_decompositions*number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
 if iscell(evalin('base','zef.measurements'));
@@ -281,9 +281,9 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;    
-waitbar(i/n_iter(j),h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
+waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
 else
-waitbar(i/n_iter(j),h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar(i/n_iter(j),h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
@@ -350,7 +350,7 @@ end
 z_vec = z_vec_aux/(n_multires*n_decompositions*weight_vec_aux);
 
 
-%assignin('base','reconstruction_aux',z_vec);
+assignin('base','reconstruction_aux',z_vec);
 
 %theta = mean(theta_aux,2);
 %z_vec = mean(z_vec_aux,2);

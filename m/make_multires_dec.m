@@ -4,6 +4,7 @@ function [multires_dec, multires_ind, multires_count] = make_multires_dec
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
 [n_levels] = evalin('base','zef.inv_multires_n_levels');
 
+
 for n_rep = 1 : n_decompositions
 
 [s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
@@ -15,6 +16,10 @@ source_points_aux = source_points;
 size_center_points = size(source_points,2); 
 center_points = source_points;
 
+if n_rep == 1
+h = waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']); 
+end
+
 multires_dec{n_rep}{n_levels} = [1:size_center_points]';
 multires_ind{n_rep}{n_levels} = [1:size_center_points]';
 multires_count{n_rep}{n_levels} = ones(size_center_points,1);
@@ -25,8 +30,6 @@ bar_ind = ceil(size_center_points/(50*par_num));
 
 use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
-
-h = waitbar(1/size_center_points,['Level ' int2str(1) '/' int2str(n_levels) '.']); 
 
 for k = 1 : n_levels-1
 
@@ -60,9 +63,9 @@ source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
 if i == 1 
-waitbar(i/size_center_points,h,['Level ' int2str(k) '/' int2str(n_levels) '.']); 
+waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']); 
 elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Level ' int2str(k) '/' int2str(n_levels) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
 end
@@ -74,10 +77,10 @@ multires_count{n_rep}{k} = accumarray(i_c,1);
 
 end
 
-close(h)
-
 multires_dec{n_rep}{n_levels} = [1:size_center_points]';
 multires_ind{n_rep}{n_levels} = [1:size_center_points]';
 multires_count{n_rep}{n_levels} = ones(size_center_points,1);
 
 end
+
+close(h)
