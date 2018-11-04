@@ -19,7 +19,7 @@
           zef.inv_synth_source = [0 0 0 1 0 0 10 0 3 1];
           zef.inv_roi_mode = 1;
           zef.inv_roi_threshold = 0.5;
-          zef.inv_roi_sphere = [0; 0; 0; 15];
+          zef.inv_roi_sphere = [0 0 0 15];
           zef.inv_n_sampler = 10000; 
           zef.inv_n_burn_in = 1000; 
           zef.reconstruction_type = 1;
