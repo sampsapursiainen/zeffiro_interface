@@ -623,5 +623,7 @@ eit_data_vec = Aux_mat_2 * eit_data_vec;
 eit_data_vec = eit_data_vec(:);
 bg_data = evalin('base','zef.inv_bg_data'); 
 eit_data_vec = eit_data_vec - bg_data;
+eit_noise = evalin('base','zef.inv_eit_noise');
+eit_data_vec = eit_data_vec + eit_noise*randn(size(eit_data_vec));
 
 end
