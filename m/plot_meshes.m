@@ -30,7 +30,7 @@ reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
-reconstruction = (1/3)*sum(reconstruction)';
+reconstruction = (1/sqrt(3))*sum(reconstruction)';
 else    
 reconstruction = sqrt(sum(reconstruction.^2))';
 end
@@ -60,7 +60,7 @@ reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
-reconstruction = (1/3)*sum(reconstruction)';
+reconstruction = (1/sqrt(3))*sum(reconstruction)';
 else    
 reconstruction = sqrt(sum(reconstruction.^2))';
 end
@@ -581,7 +581,7 @@ reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
-reconstruction = (1/3)*sum(reconstruction)';
+reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
 if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
@@ -698,7 +698,7 @@ reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
-reconstruction = (1/3)*sum(reconstruction)';
+reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
 if ismember(evalin('base','zef.reconstruction_type'), [1 6])
 reconstruction = sum(reconstruction(s_i_ind),2)/3;
