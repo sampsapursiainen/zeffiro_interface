@@ -350,7 +350,7 @@ end
 z_vec = z_vec_aux/(n_multires*n_decompositions*weight_vec_aux);
 
 
-assignin('base','reconstruction_aux',z_vec);
+%assignin('base','reconstruction_aux',z_vec);
 
 %theta = mean(theta_aux,2);
 %z_vec = mean(z_vec_aux,2);
