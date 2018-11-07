@@ -3,11 +3,10 @@ function [multires_dec, multires_ind, multires_count] = make_multires_dec
 
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
 [n_levels] = evalin('base','zef.inv_multires_n_levels');
-
+[s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 
 for n_rep = 1 : n_decompositions
 
-[s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 source_points = evalin('base','zef.source_positions');
 
 source_points = source_points(s_ind,:);
