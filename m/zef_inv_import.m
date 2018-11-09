@@ -18,12 +18,20 @@ if ishandle(zef.h_inv_data_segment)
     set(zef.h_inv_data_segment,'enable','on');
 end 
     end
+    if ismember(zef.imaging_method,[4])
+    for cell_ind_aux = 1 : length(zef.measurements)
+    zef.measurements{cell_ind_aux} = zef.measurements{cell_ind_aux} - zef.inv_bg_data;
+    end
+    end
 end
 if not(iscell(zef.measurements))
     if isfield(zef,'h_inv_data_segment')
 if ishandle(zef.h_inv_data_segment)
     set(zef.h_inv_data_segment,'enable','off');
 end 
+    end
+    if ismember(zef.imaging_method,[4])
+    zef.measurements = zef.measurements - zef.inv_bg_data;
     end
 end
 end
