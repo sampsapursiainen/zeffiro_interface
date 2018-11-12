@@ -1,3 +1,6 @@
+if not(license('test','distrib_computing_toolbox'))
+gpuDeviceCount = 0;
+end
 clear zef;
 zef.program_path = cd; 
 if not(isdeployed)
