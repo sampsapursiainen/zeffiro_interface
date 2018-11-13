@@ -80,7 +80,7 @@ end
 end
 end
 
-johtavuus_ind = evalin('base','zef.sigma_ind');
+johtavuus_ind = double(evalin('base','zef.sigma_ind'));
 [priority_val priority_ind] = min(priority_vec(johtavuus_ind),[],2);
 priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_ind);
 [johtavuus] = johtavuus_ind(priority_ind);
