@@ -172,6 +172,9 @@ surface_triangles = tetra(tetra_ind);
 
 nodes_b = nodes;
 
+tetra = single(tetra);
+johtavuus_ind = single(johtavuus_ind);
+
 %tetra = uint32(tetra);
 
 % trep = TriRep(zef.tetra, zef.nodes);
