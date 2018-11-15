@@ -167,7 +167,7 @@ B = sparse(N, N, 0);
 
 for i = 1 : 3
 for j = i+1 : 3
-A_part = sparse(surface_triangles(:,i),surface_triangles(:,j),ones(size(surface_triangles,1),1),N,N);
+A_part = sparse(surface_triangles(:,i),surface_triangles(:,j),double(ones(size(surface_triangles,1),1)),N,N);
 if i == j 
 A = A + A_part;
 else
