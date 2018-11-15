@@ -64,7 +64,7 @@ end
 
 end
 
-source_interpolation_ind{1} = single(gather(source_interpolation_aux));
+source_interpolation_ind{1} = (gather(source_interpolation_aux));
 
 if not(isempty(rand_perm_aux))
 source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
@@ -205,7 +205,7 @@ end
 
 end
 
-source_interpolation_ind{2} = single(s_ind_1(gather(source_interpolation_aux)));
+source_interpolation_ind{2} = (s_ind_1(gather(source_interpolation_aux)));
 
 if not(isempty(rand_perm_aux))
 source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
@@ -271,7 +271,7 @@ waitbar(i/size_source_positions,h,['Interpolation 3. Ready approx. ' datestr(dat
 end
 end
 
-source_interpolation_ind{3} = single(gather(source_interpolation_aux));
+source_interpolation_ind{3} = (gather(source_interpolation_aux));
 
 % if not(isempty(rand_perm_aux))
 % source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
