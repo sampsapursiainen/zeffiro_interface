@@ -661,9 +661,9 @@ set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
 set(h_surf,'ambientstrength',0.85);
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
-if not(evalin('base','zef.visualization_type')==3);
+%if not(evalin('base','zef.visualization_type')==3);
 lighting flat;
-end
+%end
 
 end
 end

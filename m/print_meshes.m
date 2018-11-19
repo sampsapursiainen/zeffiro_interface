@@ -309,15 +309,15 @@ aux_ind = [1:size(tetra,1)]';
 end;
 I_aux = I(aux_ind);
 
- ind_m = [ 2 4 3 ;
-           1 3 4 ;
-           1 4 2 ; 
-           1 2 3 ]; 
+ ind_m = [ 2 3 4;
+           1 4 3;
+           1 2 4; 
+           1 3 2]; 
 
-tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 2 3]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
+tetra_sort = [tetra(:,[2 3 4]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+              tetra(:,[1 4 3]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+              tetra(:,[1 2 4]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+              tetra(:,[1 3 2]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 tetra_sort = gpuArray(uint32(tetra_sort));
@@ -1299,9 +1299,9 @@ set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
 set(h_surf,'ambientstrength',0.85);
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
-if not(evalin('base','zef.visualization_type')==3);
+%if not(evalin('base','zef.visualization_type')==3);
 lighting flat;
-end
+%end
 
 end
 end
