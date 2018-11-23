@@ -195,12 +195,12 @@ end;
 f = f/data_norm;
 
 if source_direction_mode == 1
-z_aux = zeros(size(L,2),1); 
+z_aux = zeros(size(L_aux,2),1); 
 end
 if source_direction_mode == 2 || source_direction_mode == 3
-z_aux = zeros(3*size(L,2),1);
+z_aux = zeros(3*size(L_aux,2),1);
 end
-z_vec = ones(size(L,2),1); 
+z_vec = ones(size(L_aux,2),1); 
 theta = theta0*ones(length(z_vec),1);
 %aux_norm = (sum(L.^2))';
 %aux_norm = aux_norm./max(aux_norm(:));
