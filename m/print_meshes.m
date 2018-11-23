@@ -761,7 +761,7 @@ end
 
   if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
   end
   
@@ -830,10 +830,10 @@ hold on;
 
 
 %******************************************************
-if iscell(evalin('base','zef.reconstruction')) 
-reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
+if iscell(evalin('base','zef.reconstruction'))
+reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = evalin('base','zef.reconstruction');  
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -921,19 +921,17 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
-reconstruction = reconstruction(I_2_b_rec);
-reconstruction = reconstruction(I_2_rec(I_1_rec));
 
 h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
-set(h_axes_image,'CLim',[min_rec max_rec]); 
+set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'specularstrength',0.2);
 set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
 lighting phong;
-camorbit(frame_step*evalin('base','zef.orbit_1')/30,frame_step*evalin('base','zef.orbit_2')/30);
+camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
 set(h_bar,'facecolor',[0.5 0.5 0.5]);
@@ -946,7 +944,7 @@ set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 
   axes(h_axes_text);set(15843,'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
  
   if file_index == 1; 
@@ -1418,6 +1416,7 @@ end
 
 if evalin('base','zef.visualization_type') == 3
 
+f_ind = frame_start;
 
 i = 0;
 
@@ -1606,7 +1605,7 @@ end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 reconstruction = sqrt(sum(reconstruction.^2))';
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -1710,7 +1709,7 @@ axes(h_axes_image); set(15843,'visible','off');
 
 
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*0*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
 axes(h_axes_image); set(15843,'visible','off');
 
@@ -1812,7 +1811,7 @@ end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 reconstruction = sqrt(sum(reconstruction.^2))';
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -1894,7 +1893,7 @@ set(h_axes_hist,'ticklength',[0 0]);
 
 axes(h_axes_text);set(15843,'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on','fontsize',1500);
 set(h_axes_text,'layer','bottom');
 

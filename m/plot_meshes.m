@@ -391,6 +391,7 @@ end
 
 if evalin('base','zef.visualization_type') == 3
 
+f_ind = frame_start;
 
 i = 0;
 
@@ -649,7 +650,7 @@ lighting phong;
 
 h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + 0*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 axes(evalin('base','zef.h_axes1'));
@@ -769,7 +770,7 @@ lighting phong;
 
 h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 drawnow;

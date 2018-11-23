@@ -218,10 +218,18 @@ end
 
 johtavuus = evalin('base','zef.sigma');
 johtavuus = johtavuus(:,2);
- 
-I = find(ismember(johtavuus,visible_vec));
+
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+I = gpuArray(uint32(find(ismember(johtavuus,visible_vec))));
+tetra = gpuArray(uint32(evalin('base','zef.tetra')));
+nodes = gpuArray(nodes);
+else
+  I = uint32(find(ismember(johtavuus,visible_vec)));
+  tetra = uint32(evalin('base','zef.tetra'));  
+  uint32(find(ismember(johtavuus,visible_vec)));
+end
+
 johtavuus = johtavuus(I);
-tetra = evalin('base','zef.tetra');
 
 tetra = tetra(I,:);
 tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
@@ -272,20 +280,31 @@ I_aux = I(aux_ind);
            1 2 4; 
            1 3 2]; 
 
-tetra_sort = [tetra(:,[2 3 4]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+tetra_sort = uint32([tetra(:,[2 3 4]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
               tetra(:,[1 4 3]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
               tetra(:,[1 2 4]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 3 2]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
-tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
+              tetra(:,[1 3 2]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';]);
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
-tetra_sort = gpuArray(uint32(tetra_sort));
-tetra_sort = gather(sortrows(tetra_sort,[1 2 3])); 
-else
-tetra_sort = sortrows(tetra_sort,[1 2 3]);   
+    tetra_sort = gpuArray(tetra_sort);
 end
-tetra_ind = zeros(size(tetra_sort,1),1);
-I = find(sum(abs(tetra_sort(2:end,1:3)-tetra_sort(1:end-1,1:3)),2)==0);
+    
+tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
+
+%if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+%tetra_sort = gpuArray(uint32(tetra_sort));
+%tetra_sort = gather(sortrows(tetra_sort,[1 2 3])); 
+%else
+tetra_sort = sortrows(tetra_sort,[1 2 3]);   
+%end
+tetra_ind = uint32(zeros(size(tetra_sort,1),1));
+I = uint32(find(sum(abs(tetra_sort(2:end,1:3)-tetra_sort(1:end-1,1:3)),2)==0));
+
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+    tetra_ind = gpuArray(tetra_ind);
+    I = gpuArray(I);
+end
+
 tetra_ind(I) = 1;
 tetra_ind(I+1) = 1;
 I = find(tetra_ind == 0);
@@ -483,7 +502,6 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
-
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
 c_aux_1 = floor(colormap_size/3);
@@ -659,7 +677,7 @@ end
  if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
   set(h_axes_text,'tag','image_details');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
   set(h_text,'visible','on');
   set(h_axes_text,'layer','bottom');
 end
@@ -779,7 +797,7 @@ camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','ze
 
   h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
   set(h_axes_text,'tag','image_details');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind_aux - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
   set(h_text,'visible','on');
   set(h_axes_text,'layer','bottom');
   drawnow;
