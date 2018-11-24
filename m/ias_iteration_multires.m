@@ -172,7 +172,7 @@ tic;
 for f_ind = 1 : number_of_frames
 time_val = toc; 
 if f_ind > 1; 
-date_str = datestr(datevec(now+(n_decompositions*number_of_frames/(f_ind-1) - 1)*time_val/86400));
+date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
 if iscell(evalin('base','zef.measurements'));
