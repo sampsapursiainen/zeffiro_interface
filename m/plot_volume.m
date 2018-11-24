@@ -339,7 +339,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -414,7 +414,7 @@ brain_ind = evalin('base','zef.brain_ind');
 clear aux_vec;
 johtavuus(aux_ind(brain_ind))=0;
 if iscell(evalin('base','zef.reconstruction'))
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 else
 reconstruction = evalin('base','zef.reconstruction');  
 end
@@ -714,7 +714,7 @@ axes(evalin('base','zef.h_axes1'));
 hold on;
 
 if iscell(evalin('base','zef.reconstruction'))
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 else
 reconstruction = evalin('base','zef.reconstruction');  
 end
@@ -800,7 +800,7 @@ camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','ze
   h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.9f') ' s']);
   set(h_text,'visible','on');
   set(h_axes_text,'layer','bottom');
-  drawnow;
+  %drawnow;
  
 end
 

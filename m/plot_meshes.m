@@ -26,7 +26,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -186,6 +186,7 @@ reuna_p = evalin('base','zef.reuna_p');
 reuna_t = evalin('base','zef.reuna_t');  
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     for i = 1 : length(reuna_t)
+        reuna_t = uint32(reuna_t{i});
 triangle_c{i} = (1/3)*(reuna_p{i}(reuna_t{i}(:,1),:) + reuna_p{i}(reuna_t{i}(:,2),:) + reuna_p{i}(reuna_t{i}(:,3),:));
     end
 end
@@ -572,7 +573,7 @@ set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 end
   
 if iscell(evalin('base','zef.reconstruction')) 
-reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
 else
 reconstruction = evalin('base','zef.reconstruction');
 end
@@ -685,14 +686,14 @@ set(evalin('base','zef.h_axes1'),'xGrid','off');
 set(evalin('base','zef.h_axes1'),'yGrid','off');
 set(evalin('base','zef.h_axes1'),'zGrid','off');
 end
-drawnow;    
+%drawnow;    
     
 f_ind_aux = 1;
 for f_ind = frame_start + frame_step : frame_step : frame_stop
 pause(1/30);
 f_ind_aux = f_ind_aux + 1;
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
@@ -773,7 +774,7 @@ set(h_axes_text,'tag','image_details');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
-drawnow;
+%drawnow;
 
 end
     
@@ -849,7 +850,7 @@ set(evalin('base','zef.h_axes1'),'xGrid','off');
 set(evalin('base','zef.h_axes1'),'yGrid','off');
 set(evalin('base','zef.h_axes1'),'zGrid','off');
 end
-drawnow;
+%drawnow;
 
 
 end
