@@ -186,7 +186,7 @@ reuna_p = evalin('base','zef.reuna_p');
 reuna_t = evalin('base','zef.reuna_t');  
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     for i = 1 : length(reuna_t)
-        reuna_t = uint32(reuna_t{i});
+        reuna_t{i} = uint32(reuna_t{i});
 triangle_c{i} = (1/3)*(reuna_p{i}(reuna_t{i}(:,1),:) + reuna_p{i}(reuna_t{i}(:,2),:) + reuna_p{i}(reuna_t{i}(:,3),:));
     end
 end
