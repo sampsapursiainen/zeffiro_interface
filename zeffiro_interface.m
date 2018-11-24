@@ -192,8 +192,8 @@ set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Basis'});
 set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)'});
 set(zef.h_pushbutton31,'string','Visualize volume')
 zef.o_h = findall(zef.h_zeffiro);
-zef.h_axes2 = zef.o_h(366);
-zef.h_axes1 = zef.o_h(365);
+zef.h_axes2 = zef.o_h(368);
+zef.h_axes1 = zef.o_h(367);
 zef=rmfield(zef,'o_h');
 zef.clear_axes1 = 0;
 zef_update;
