@@ -159,7 +159,7 @@
                    zef.w_on= 0;
                  zef.cam_va= 10;
          zef.preconditioner= 1;
-      zef.solver_tolerance = 1e-8;
+      zef.solver_tolerance = 1e-6;
 zef.preconditioner_tolerance= 0.001;
                zef.sigma_ind=[];
                zef.sigma=[];
