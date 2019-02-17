@@ -4,7 +4,7 @@ if not(isfield(zef,'inv_multires_dec'));
     zef.inv_multires_dec = []; 
 end; 
 if not(isfield(zef,'inv_multires_n_decompositions')); 
-    zef.inv_multires_n_decompositions = []; 
+    zef.inv_multires_n_decompositions = [20]; 
 end; 
 if not(isfield(zef,'inv_multires_ind')); 
     zef.inv_multires_ind= []; 

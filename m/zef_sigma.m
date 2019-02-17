@@ -6,7 +6,7 @@ prisms = [];
 johtavuus_prisms = [];
 non_source_ind = []; 
 
-aux_brain_ind = [0 0];
+aux_brain_ind = [0 0 0 0 0 0];
 aux_skull_ind = [0 0];
 
 if evalin('base','zef.import_mode')
@@ -68,6 +68,18 @@ if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
+if k == 1;
+    aux_brain_ind(3) = i;
+end
+if k == 2;
+    aux_brain_ind(4) = i;
+end
+if k == 3;
+    aux_brain_ind(5) = i;
+end
+if k == 4;
+    aux_brain_ind(6) = i;
+end
 if k == 5;
     aux_brain_ind(1) = i;
 end
@@ -94,7 +106,27 @@ end
 if not(aux_brain_ind(2)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(2))];
 end
-if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0
+if evalin('base','zef.d1_sources')
+if not(aux_brain_ind(3)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(3))];
+end
+end
+if evalin('base','zef.d2_sources')
+if not(aux_brain_ind(4)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(4))];
+end
+end
+if evalin('base','zef.d3_sources')
+if not(aux_brain_ind(5)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(5))];
+end
+end
+if evalin('base','zef.d4_sources')
+if not(aux_brain_ind(6)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(6))];
+end
+end
+if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0  && aux_brain_ind(3) == 0 && aux_brain_ind(4) == 0 && aux_brain_ind(5) == 0 && aux_brain_ind(6) == 0
 brain_ind = find(johtavuus);
 end
 
@@ -287,6 +319,10 @@ J_c = [];
 tetra = evalin('base','zef.tetra_aux');
      I = find(johtavuus_aux==aux_brain_ind(1));
   I = [I ; find(johtavuus_aux==aux_brain_ind(2))];
+  I = [I ; find(johtavuus_aux==aux_brain_ind(3))];
+  I = [I ; find(johtavuus_aux==aux_brain_ind(4))];
+  I = [I ; find(johtavuus_aux==aux_brain_ind(5))];
+  I = [I ; find(johtavuus_aux==aux_brain_ind(6))];
 tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
@@ -539,7 +575,27 @@ end
 if not(aux_brain_ind(2)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(2))];
 end
-if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0
+if evalin('base','zef.d1_sources')
+if not(aux_brain_ind(3)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(3))];
+end
+end
+if evalin('base','zef.d2_sources')
+if not(aux_brain_ind(4)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(4))];
+end
+end
+if evalin('base','zef.d3_sources')
+if not(aux_brain_ind(5)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(5))];
+end
+end
+if evalin('base','zef.d4_sources')
+if not(aux_brain_ind(6)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(6))];
+end
+end
+if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0 && aux_brain_ind(3) == 0 && aux_brain_ind(4) == 0 && aux_brain_ind(5) == 0 && aux_brain_ind(6) == 0
 brain_ind = find(johtavuus_aux);
 end
 

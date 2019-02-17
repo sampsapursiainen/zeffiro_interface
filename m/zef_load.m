@@ -295,6 +295,18 @@ end;
 if (isfield(zef_data,'wm_sources'));
 zef.wm_sources = zef_data.wm_sources; 
 end;
+if (isfield(zef_data,'d1_sources'));
+zef.d1_sources = zef_data.d1_sources; 
+end;
+if (isfield(zef_data,'d2_sources'));
+zef.d2_sources = zef_data.d2_sources; 
+end;
+if (isfield(zef_data,'d3_sources'));
+zef.d3_sources = zef_data.d3_sources; 
+end;
+if (isfield(zef_data,'d4_sources'));
+zef.d4_sources = zef_data.d4_sources; 
+end;
 if (isfield(zef_data,'tetra_aux'));
 zef.tetra_aux = zef_data.tetra_aux; 
 end;
@@ -439,6 +451,22 @@ if (isfield(zef_data,'wm_sources_old'));
     zef.wm_sources_old = zef_data.wm_sources_old; 
 end;
 
+if (isfield(zef_data,'d1_sources_old')); 
+    zef.d1_sources_old = zef_data.d1_sources_old; 
+end;
+
+if (isfield(zef_data,'d2_sources_old')); 
+    zef.d2_sources_old = zef_data.d2_sources_old; 
+end;
+
+if (isfield(zef_data,'d3_sources_old')); 
+    zef.d3_sources_old = zef_data.d3_sources_old; 
+end;
+
+if (isfield(zef_data,'d4_sources_old')); 
+    zef.d4_sources_old = zef_data.d4_sources_old; 
+end;
+
 if (isfield(zef_data,'layer_transparency')); 
     zef.layer_transparency = zef_data.layer_transparency; 
 end;
@@ -513,6 +541,11 @@ end;
           zef.inv_multires_n_levels = zef_data.inv_multires_n_levels; 
           else
           zef.inv_multires_n_levels = [3];
+          end
+          if (isfield(zef_data,'inv_multires_n_decompositions'));
+          zef.inv_multires_n_decompositions = zef_data.inv_multires_n_decompositions; 
+          else
+          zef.inv_multires_n_decompositions = [20];
           end
           if (isfield(zef_data,'inv_multires_sparsity'));
           zef.inv_multires_sparsity = zef_data.inv_multires_sparsity; 
