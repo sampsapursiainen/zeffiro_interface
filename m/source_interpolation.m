@@ -83,6 +83,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
+aux_brain_ind = [];
 for k = 1 : 9   
 switch k
     case 1
@@ -150,24 +151,41 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if k == 6;
-    aux_brain_ind = i;
+
+if k == 1 && evalin('base','zef.d1_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
-if k == 5;
-    aux_wm_ind = i;
+if k == 2 && evalin('base','zef.d2_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 3 && evalin('base','zef.d3_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 4 && evalin('base','zef.d4_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 5 && evalin('base','zef.wm_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 6;
+    aux_brain_ind = [aux_brain_ind i];
 end
 end
 end
 
-s_ind_1 = unique(gather(source_interpolation_ind{1}));
-source_positions = source_positions(:,s_ind_1);
+for ab_ind = 1 : length(aux_brain_ind)
+
+aux_point_ind = unique(gather(source_interpolation_ind{1}));
+source_positions = source_positions(:,aux_point_ind);
 ones_vec = ones(size(source_positions,2),1);
 
-center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind) '}']);
+s_ind_1{ab_ind} = aux_point_ind;
+
+center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
 center_points = center_points';
 
-source_interpolation_ind{2} = zeros(length(center_points),1);
-source_interpolation_aux = source_interpolation_ind{2};
+source_interpolation_ind{2}{ab_ind} = zeros(length(center_points),1);
+source_interpolation_aux = source_interpolation_ind{2}{ab_ind};
 
 size_center_points = size(center_points,2); 
 
@@ -198,25 +216,27 @@ source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
 if i == 1
-h = waitbar(i/size_center_points,['Interpolation 2.']);    
+h = waitbar(i/size_center_points,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);    
 elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Interpolation 2. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(i/size_center_points,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
 end
 
-source_interpolation_ind{2} = (s_ind_1(gather(source_interpolation_aux)));
+source_interpolation_ind{2}{ab_ind} = (s_ind_1{ab_ind}(gather(source_interpolation_aux)));
 
 if not(isempty(rand_perm_aux))
-source_interpolation_ind{2} = rand_perm_aux(source_interpolation_ind{2});
+source_interpolation_ind{2}{ab_ind} = rand_perm_aux(source_interpolation_ind{2});
 end
-triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
-source_interpolation_ind{2} = source_interpolation_ind{2}(triangles); 
+triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
+source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triangles); 
 
 
-waitbar(1,h,['Interpolation 2. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
 close(h)
+
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -227,8 +247,15 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 source_interpolation_ind{3} = zeros(length(source_positions),1);
 source_interpolation_aux = source_interpolation_ind{3};
 
-aux_p = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind) '}']);
-aux_t = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
+aux_p = [];
+aux_t = [];
+
+for ab_ind = 1 : aux_brain_ind
+
+aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+
+end
 
 center_points = (1/3)*(aux_p(aux_t(:,1),:) + aux_p(aux_t(:,2),:) + aux_p(aux_t(:,3),:));
 center_points = center_points';
@@ -265,9 +292,9 @@ source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
 if i == 1
-h = waitbar(i/size_source_positions,['Interpolation 3.']);    
+h = waitbar(i/size_source_positions,['Interp. 3:']);    
 elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_source_positions,h,['Interpolation 3. Ready approx. ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
+waitbar(i/size_source_positions,h,['Interp. 3: Ready approx. ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
 end
 end
 
@@ -279,7 +306,7 @@ source_interpolation_ind{3} = (gather(source_interpolation_aux));
 % triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
 % source_interpolation_ind{2} = source_interpolation_ind{2}(triangles); 
 
-waitbar(1,h,['Interpolation 3. Ready approx. ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interp. 3: Ready approx. ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
 
 close(h)
 

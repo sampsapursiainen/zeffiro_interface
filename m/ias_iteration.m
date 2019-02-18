@@ -28,6 +28,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
+aux_brain_ind = [];
 for k = 1 : 9   
 switch k
     case 1
@@ -95,17 +96,36 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if k == 6;
-    aux_brain_ind = i;
+if k == 1 && evalin('base','zef.d1_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
-if k == 5;
-    aux_wm_ind = i;
+if k == 2 && evalin('base','zef.d2_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 3 && evalin('base','zef.d3_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 4 && evalin('base','zef.d4_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 5 && evalin('base','zef.wm_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 6;
+    aux_brain_ind = [aux_brain_ind i];
 end
 end
 end
 
-aux_p = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind) '}']);
-aux_t = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
+aux_p = [];
+aux_t = [];
+
+for ab_ind = 1 : aux_brain_ind
+
+aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+
+end
 
 n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);

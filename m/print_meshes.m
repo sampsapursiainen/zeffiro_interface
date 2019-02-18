@@ -1055,7 +1055,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -1118,6 +1118,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
+aux_brain_ind = [];
 for k = 1 : 9   
 switch k
     case 1
@@ -1185,11 +1186,24 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if k == 6;
-    aux_brain_ind = i;
+
+if k == 1 && evalin('base','zef.d1_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
-if k == 5;
-    aux_wm_ind = i;
+if k == 2 && evalin('base','zef.d2_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 3 && evalin('base','zef.d3_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 4 && evalin('base','zef.d4_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 5 && evalin('base','zef.wm_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 6;
+    aux_brain_ind = [aux_brain_ind i];
 end
 end
 end
@@ -1211,6 +1225,7 @@ reuna_p = evalin('base','zef.reuna_p');
 reuna_t = evalin('base','zef.reuna_t');  
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     for i = 1 : length(reuna_t)
+        reuna_t{i} = uint32(reuna_t{i});
 triangle_c{i} = (1/3)*(reuna_p{i}(reuna_t{i}(:,1),:) + reuna_p{i}(reuna_t{i}(:,2),:) + reuna_p{i}(reuna_t{i}(:,3),:));
     end
 end
@@ -1297,26 +1312,28 @@ for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 if evalin('base','zef.visualization_type') == 3
-if i == aux_brain_ind;
-s_i_ind = s_i_ind(aux_ind_2{i},:);
+if ismember(i, aux_brain_ind)
+ab_ind = find(aux_brain_ind==i);
+s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 end;
 end
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);   
 if evalin('base','zef.visualization_type') == 3
-if i == aux_brain_ind;
-s_i_ind = s_i_ind(aux_ind_2{i},:);
+if ismember(i, aux_brain_ind)
+ab_ind = find(aux_brain_ind==i);
+s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 end;
 end
 elseif evalin('base','zef.cp_mode') == 3
-if i == aux_brain_ind
+if ismember(i, aux_brain_ind)
 aux_ind_2{i} = reuna_t{i};
 else
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 end
 elseif evalin('base','zef.cp_mode') == 4
-if i == aux_brain_ind
+if ismember(i, aux_brain_ind)
 aux_ind_2{i} = reuna_t{i};
 else  
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
@@ -1462,12 +1479,16 @@ switch k
 if on_val  
 i = i + 1;    
 if visible_val
-if  i == aux_brain_ind    
+if ismember(i, aux_brain_ind)
+ab_ind = find(aux_brain_ind==i);
     
+
+if ab_ind == 1
 if  iscell(evalin('base','zef.reconstruction')) 
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
-end   
+end    
+end  
     
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
@@ -1620,7 +1641,7 @@ length_reconstruction = length(reconstruction);
     
 
 if iscell(evalin('base','zef.reconstruction')) 
-reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
 else
 reconstruction = evalin('base','zef.reconstruction');
 end
@@ -1633,18 +1654,18 @@ elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
 if ismember(evalin('base','zef.reconstruction_type'), [1 6])
-reconstruction = sum(reconstruction(s_i_ind),2)/3;
+reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
 end
 
 if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
-rec_x = sum(rec_x(s_i_ind),2)/3;
-rec_y = sum(rec_y(s_i_ind),2)/3;
-rec_z = sum(rec_z(s_i_ind),2)/3;
-n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)',...
-reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,3),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)')';
+rec_x = sum(rec_x(s_i_ind{ab_ind}),2)/3;
+rec_y = sum(rec_y(s_i_ind{ab_ind}),2)/3;
+rec_z = sum(rec_z(s_i_ind{ab_ind}),2)/3;
+n_vec_aux = cross(reuna_p{i}(reuna_t{i}(:,2),:)' - reuna_p{i}(reuna_t{i}(:,1),:)',...
+reuna_p{i}(reuna_t{i}(:,3),:)' - reuna_p{i}(reuna_t{i}(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
@@ -1671,7 +1692,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
-reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
+reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
 if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
@@ -1685,15 +1706,16 @@ end
 end
 
 axes(h_axes_image); set(15843,'visible','off');
-h_surf_2 = trisurf(reuna_t{aux_brain_ind},reuna_p{aux_brain_ind}(:,1),reuna_p{aux_brain_ind}(:,2),reuna_p{aux_brain_ind}(:,3),reconstruction,'edgecolor','none');
-set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2,'specularstrength',0.2);
-set(h_surf_2,'specularexponent',0.8);
-set(h_surf_2,'SpecularColorReflectance',0.8);
-set(h_surf_2,'diffusestrength',1);
-set(h_surf_2,'ambientstrength',1);
-lighting phong;
+set(h_surf_2{ab_ind},'specularstrength',0.2);
+set(h_surf_2{ab_ind},'specularexponent',0.8);
+set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
+set(h_surf_2{ab_ind},'diffusestrength',1);
+set(h_surf_2{ab_ind},'ambientstrength',1);
+
+if i == max(aux_brain_ind)
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
@@ -1706,12 +1728,17 @@ set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 axes(h_axes_image); set(15843,'visible','off');
+end
+%set(h_colorbar,'layer','bottom');
+lighting phong;
 
-
-  h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+if ab_ind == 1
+h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
+set(h_axes_text,'tag','image_details');
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
 axes(h_axes_image); set(15843,'visible','off');
+end
 
 else
     
@@ -1720,9 +1747,9 @@ set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
 set(h_surf,'ambientstrength',0.85);
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
-if not(evalin('base','zef.visualization_type')==3);
+%if not(evalin('base','zef.visualization_type')==3);
 lighting flat;
-end
+%end
 
 end
 end
@@ -1742,7 +1769,7 @@ set(gca,'visible','off');
 set(gca,'xGrid','off');
 set(gca,'yGrid','off');
 set(gca,'zGrid','off');
-end
+end  
 
 if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3
 
@@ -1824,28 +1851,34 @@ a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
 %******************************************************
 
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+for i = aux_brain_ind
+ab_ind = find(aux_brain_ind == i);
+reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
 if evalin('base','zef.reconstruction_type') == 1
 reconstruction = sqrt(sum(reconstruction.^2))';
-reconstruction = sum(reconstruction(s_i_ind),2)/3;
+elseif evalin('base','zef.reconstruction_type') == 6
+reconstruction = (1/sqrt(3))*sum(reconstruction)';
+end
+if ismember(evalin('base','zef.reconstruction_type'), [1 6])
+reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
-rec_x = sum(rec_x(s_i_ind),2)/3;
-rec_y = sum(rec_y(s_i_ind),2)/3;
-rec_z = sum(rec_z(s_i_ind),2)/3;
-n_vec_aux = cross(reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,2),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)',... 
- reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,3),:)' - reuna_p{aux_brain_ind}(reuna_t{aux_brain_ind}(:,1),:)')';
+rec_x = sum(rec_x(s_i_ind{ab_ind}),2)/3;
+rec_y = sum(rec_y(s_i_ind{ab_ind}),2)/3;
+rec_z = sum(rec_z(s_i_ind{ab_ind}),2)/3;
+n_vec_aux = cross(reuna_p{i}(reuna_t{i}(:,2),:)' - reuna_p{i}(reuna_t{i}(:,1),:)',... 
+ reuna_p{i}(reuna_t{i}(:,3),:)' - reuna_p{i}(reuna_t{i}(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 end
 
-if evalin('base','zef.reconstruction_type') > 1
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
 end
 
@@ -1853,10 +1886,25 @@ if evalin('base','zef.reconstruction_type') == 3
 reconstruction = sqrt((rec_x - rec_x.*abs(n_vec_aux(:,1))).^2 + (rec_y - rec_y.*abs(n_vec_aux(:,2))).^2 + (rec_z - rec_z.*abs(n_vec_aux(:,3))).^2);
 end
 
-if evalin('base','zef.reconstruction_type') > 1
-reconstruction = smooth_field(reuna_t{aux_brain_ind}, reconstruction, size(reuna_p{aux_brain_ind}(:,1),1),3);
+if evalin('base','zef.reconstruction_type') == 4
+aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
+I_aux_rec = find(aux_rec > 0);
+reconstruction(I_aux_rec) = 0;
+%reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
+if evalin('base','zef.reconstruction_type') == 5 
+aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
+I_aux_rec = find(aux_rec <= 0);
+reconstruction(I_aux_rec) = 0;
+%reconstruction = reconstruction./max(abs(reconstruction(:)));
+end
+
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
+reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+end
+
+if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
 if evalin('base','zef.inv_scale') == 1
 reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 elseif evalin('base','zef.inv_scale') == 2
@@ -1864,23 +1912,34 @@ reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef
 elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
+end
 
-delete(h_surf_2);
-delete(h_text);
-delete(h_bar);
+delete(h_surf_2{ab_ind});
 
 axes(h_axes_image); set(15843,'visible','off');
-h_surf_2 = trisurf(reuna_t{aux_brain_ind},reuna_p{aux_brain_ind}(:,1),reuna_p{aux_brain_ind}(:,2),reuna_p{aux_brain_ind}(:,3),reconstruction,'edgecolor','none');
-set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2,'specularstrength',0.2);
-set(h_surf_2,'specularexponent',0.8);
-set(h_surf_2,'SpecularColorReflectance',0.8);
-set(h_surf_2,'diffusestrength',1);
-set(h_surf_2,'ambientstrength',1);
+set(h_surf_2{ab_ind},'specularstrength',0.2);
+set(h_surf_2{ab_ind},'specularexponent',0.8);
+set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
+set(h_surf_2{ab_ind},'diffusestrength',1);
+set(h_surf_2{ab_ind},'ambientstrength',1);
+camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 lighting phong;
-camorbit(frame_step*evalin('base','zef.orbit_1')/30,frame_step*evalin('base','zef.orbit_2')/30);
 
+end
+
+
+delete(h_text);
+axes(h_axes_text);set(15843,'visible','off');
+set(h_axes_text,'tag','image_details');
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+set(h_text,'visible','on');
+set(h_axes_text,'layer','bottom');
+%drawnow;
+
+delete(h_bar);
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
 set(h_bar,'facecolor',[0.5 0.5 0.5]);
 set(h_axes_hist,'ytick',[]);
@@ -1891,11 +1950,6 @@ set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 
-axes(h_axes_text);set(15843,'visible','off');
-set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
-set(h_text,'visible','on','fontsize',1500);
-set(h_axes_text,'layer','bottom');
 
   if file_index == 1; 
   print(15843,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
