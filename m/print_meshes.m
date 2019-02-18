@@ -1728,17 +1728,16 @@ set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 axes(h_axes_image); set(15843,'visible','off');
-end
-%set(h_colorbar,'layer','bottom');
-lighting phong;
 
-if ab_ind == 1
 h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-set(h_axes_text,'tag','image_details');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
 axes(h_axes_image); set(15843,'visible','off');
 end
+%set(h_colorbar,'layer','bottom');
+lighting phong;
+
+
 
 else
     
@@ -1935,6 +1934,7 @@ delete(h_text);
 axes(h_axes_text);set(15843,'visible','off');
 set(h_axes_text,'tag','image_details');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+set(h_text,'visible','on','fontsize',1500);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 %drawnow;
