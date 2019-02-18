@@ -173,10 +173,12 @@ end
 end
 end
 
+source_positions_aux = source_positions;
+
 for ab_ind = 1 : length(aux_brain_ind)
 
 aux_point_ind = unique(gather(source_interpolation_ind{1}));
-source_positions = source_positions(:,aux_point_ind);
+source_positions = source_positions_aux(:,aux_point_ind);
 ones_vec = ones(size(source_positions,2),1);
 
 s_ind_1{ab_ind} = aux_point_ind;
