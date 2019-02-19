@@ -252,7 +252,7 @@ source_interpolation_aux = source_interpolation_ind{3};
 aux_p = [];
 aux_t = [];
 
-for ab_ind = 1 : aux_brain_ind
+for ab_ind = 1 : length(aux_brain_ind)
 
 aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
 aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
