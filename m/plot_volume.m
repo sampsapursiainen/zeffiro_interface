@@ -140,6 +140,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
+aux_brain_ind = [];
 for k = 1 : 9   
 switch k
     case 1
@@ -207,11 +208,24 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if k == 6;
-    aux_brain_ind = i;
+
+if k == 1 && evalin('base','zef.d1_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
-if k == 5;
-    aux_wm_ind = i;
+if k == 2 && evalin('base','zef.d2_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 3 && evalin('base','zef.d3_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 4 && evalin('base','zef.d4_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 5 && evalin('base','zef.wm_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 6;
+    aux_brain_ind = [aux_brain_ind i];
 end
 end
 end

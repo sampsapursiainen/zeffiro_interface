@@ -151,11 +151,11 @@ zef.h = evalin('base','zef.h_checkbox_mesh_smoothing_on'); set(zef.h,'value',(ze
 
 zef.h = evalin('base','zef.h_source_interpolation_on'); set(zef.h,'value',(zef.source_interpolation_on));
 
-zef.h = evalin('base','zef.h_wm_sources'); set(zef.h,'value',(zef.wm_sources));
-zef.h = evalin('base','zef.h_d1_sources'); set(zef.h,'value',(zef.d1_sources));
-zef.h = evalin('base','zef.h_d2_sources'); set(zef.h,'value',(zef.d2_sources));
-zef.h = evalin('base','zef.h_d3_sources'); set(zef.h,'value',(zef.d3_sources));
-zef.h = evalin('base','zef.h_d4_sources'); set(zef.h,'value',(zef.d4_sources));
+zef.h = evalin('base','zef.h_wm_sources'); set(zef.h,'value',(zef.wm_sources+1));
+zef.h = evalin('base','zef.h_d1_sources'); set(zef.h,'value',(zef.d1_sources+1));
+zef.h = evalin('base','zef.h_d2_sources'); set(zef.h,'value',(zef.d2_sources+1));
+zef.h = evalin('base','zef.h_d3_sources'); set(zef.h,'value',(zef.d3_sources+1));
+zef.h = evalin('base','zef.h_d4_sources'); set(zef.h,'value',(zef.d4_sources+1));
 
 zef.h = evalin('base','zef.h_refinement_on'); set(zef.h,'value',(zef.refinement_on));
 

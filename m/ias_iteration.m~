@@ -1,8 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [z,rec_source] = mcmc_sampler(void)
+function [z] = ias_iteration(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
-n_interp = length(s_ind_1(:));
+n_interp = length(s_ind_1);
 
 beta = evalin('base','zef.inv_beta');
 theta0 = evalin('base','zef.inv_theta0');
@@ -12,18 +12,11 @@ std_lhood = evalin('base','zef.inv_likelihood_std');
 sampling_freq = evalin('base','zef.inv_sampling_frequency');
 high_pass = evalin('base','zef.inv_low_cut_frequency');
 low_pass = evalin('base','zef.inv_high_cut_frequency');
-roi_mode = evalin('base','zef.inv_roi_mode');
-roi_threshold = evalin('base','zef.inv_roi_threshold');
-roi_sphere = evalin('base', 'zef.inv_roi_sphere');
-rec_source = evalin('base', 'zef.inv_rec_source');
-n_sampler = evalin('base','zef.inv_n_sampler'); 
-n_burn_in = evalin('base','zef.inv_n_burn_in');
-
 number_of_frames = evalin('base','zef.number_of_frames');
 time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
-source_positions = evalin('base','zef.source_positions');
+
 
 if source_direction_mode == 2
 
@@ -135,7 +128,7 @@ a_d_i_vec = [];
 aux_p = [];
 aux_t = [];
 
-for ab_ind = 1 : length(aux_brain_ind)
+for ab_ind = 1 : aux_brain_ind
 
 aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
 aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
@@ -191,14 +184,14 @@ clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
 
 end
 
-%if evalin('base','zef.use_gpu') == 1
-%L = gpuArray(L);
-%end
-%L_aux = L;
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+L = gpuArray(L);
+end
+L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-%if evalin('base','zef.use_gpu') == 1
-%S_mat = gpuArray(S_mat);
-%end
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+S_mat = gpuArray(S_mat);
+end
 
 if number_of_frames > 1
 z = cell(number_of_frames,1);
@@ -232,14 +225,14 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
-if source_direction_mode == 1 || source_direction_mode == 2
+if ismember(source_direction_mode, [1])
 z_aux = zeros(size(L,2),1); 
 end
-if source_direction_mode == 3 
+if source_direction_mode == 2 || source_direction_mode == 3
 z_aux = zeros(3*size(L,2),1);
 end
-z_vec = zeros(size(L,2),1); 
-%theta = theta0*ones(length(z_vec),1);
+z_vec = ones(size(L,2),1); 
+theta = theta0*ones(length(z_vec),1);
 %aux_norm = (sum(L.^2))';
 %aux_norm = aux_norm./max(aux_norm(:));
 %theta = theta0*aux_norm;
@@ -271,33 +264,50 @@ end
 low_pass_ind = max(high_pass_ind,low_pass_ind);
 f = sum(f(:,high_pass_ind:low_pass_ind),2)/(low_pass_ind - high_pass_ind + 1);
 end
-%if f_ind == 1
-%h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
-%end
+if f_ind == 1
+h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+end
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
-%if evalin('base','zef.use_gpu') == 1
-%f = gpuArray(f);
-%end
-
-gibbs_sampler;
-
-if source_direction_mode == 2
-z_vec_aux = (z_vec(s_ind_4) + z_vec(n_interp+s_ind_4) + z_vec(2*n_interp+s_ind_4))/3;
-z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1); 
-z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2); 
-z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3); 
-%z_vec = z_vec(:);
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+f = gpuArray(f);
 end
 
-if source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2);  z_vec.*source_directions(:,3)];
+
+for i = 1 : n_ias_map_iter
+if f_ind > 1;    
+waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
+else
+waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+end;
+m_max = sqrt(size(L,2));
+u = zeros(length(z_vec),1);
+z_vec = zeros(length(z_vec),1);
+d_sqrt = sqrt(theta);
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+d_sqrt = gpuArray(d_sqrt);
+end
+L = L_aux.*repmat(d_sqrt',size(L,1),1); 
+z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
+
+if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+z_vec = gather(z_vec);
+end
+if evalin('base','zef.inv_hyperprior') == 1;
+theta = theta0*(eta + sqrt((1/(2*theta0))*z_vec.^2 + eta^2)); 
+else
+theta = (theta0+0.5*z_vec.^2)./kappa;
+end;
+end;
+
+if ismember(source_direction_mode,[2 3])
+z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2); z_vec.*source_directions(:,3)];
 end
 
-if source_direction_mode == 1 || source_direction_mode == 2
+if ismember(source_direction_mode,[1 2])
 z_aux(s_ind_1) = z_vec;
 end
-if source_direction_mode == 3
+if ismember(source_direction_mode,[3])
 z_aux(s_ind_2) = z_vec;
 end
 
@@ -309,7 +319,7 @@ end;
 end;
 if number_of_frames > 1;
 aux_norm_vec = 0;
-for f_ind = 1 : number_of_frames;
+for f_ind = 1 : number_of_frames;    
 aux_norm_vec = max(sqrt(sum(reshape(z{f_ind}, 3, length(z{f_ind})/3).^2)),aux_norm_vec);
 end;
 for f_ind = 1 : number_of_frames;
@@ -319,8 +329,4 @@ else
 aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2)); 
 z = z./max(aux_norm_vec);
 end;
-%close(h);
-
-z = z./max(abs(z(:)));
-
-end
+close(h);

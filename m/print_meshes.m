@@ -1111,7 +1111,9 @@ end
 end 
 end
 end
-    
+   
+
+cb_done = 0;
 i = 0;
 length_reuna = 0;
 sigma_vec = [];
@@ -1437,6 +1439,8 @@ f_ind = frame_start;
 
 i = 0;
 
+aux_brain_visible_ind = [];
+
 for k = 1 : 9
 switch k
     case 1
@@ -1481,7 +1485,7 @@ i = i + 1;
 if visible_val
 if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
-    
+aux_brain_visible_ind = [aux_brain_visible_ind i];
 
 if ab_ind == 1
 if  iscell(evalin('base','zef.reconstruction')) 
@@ -1715,7 +1719,8 @@ set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
 
-if i == max(aux_brain_ind)
+if ismember(i,aux_brain_ind) && cb_done == 0
+    cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
@@ -1850,7 +1855,7 @@ a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
 %******************************************************
 
-for i = aux_brain_ind
+for i = intersect(aux_brain_ind, aux_brain_visible_ind)
 ab_ind = find(aux_brain_ind == i);
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  

@@ -32,6 +32,7 @@ priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
+aux_dir_mode = [];
 for k = 1 : 9   
 switch k
     case 1
@@ -101,35 +102,44 @@ color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 if k == 1 && evalin('base','zef.d1_sources');
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d1_sources')-1];
 end
 if k == 2 && evalin('base','zef.d2_sources');
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d2_sources')-1];
 end
 if k == 3 && evalin('base','zef.d3_sources');
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d3_sources')-1];
 end
 if k == 4 && evalin('base','zef.d4_sources');
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d4_sources')-1];
 end
 if k == 5 && evalin('base','zef.wm_sources');
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.wm_sources')-1];
 end
 if k == 6;
     aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode 0];
 end
 end
 end
 
+a_d_i_vec = [];
 aux_p = [];
 aux_t = [];
 
-for ab_ind = 1 : aux_brain_ind
+for ab_ind = 1 : length(aux_brain_ind)
 
 aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
 aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
 
 end
 
+a_d_i_vec = a_d_i_vec(aux_t(:,1));
 n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
@@ -139,6 +149,7 @@ n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
 n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
+s_ind_4 = find(not(a_d_i_vec(s_ind_3)));
 source_directions = n_vec_aux(s_ind_3,:);
 
 end
@@ -168,8 +179,11 @@ s_1 = source_directions(:,1)';
 s_2 = source_directions(:,2)';
 s_3 = source_directions(:,3)';
 ones_vec = ones(size(L,1),1);
-L = L_1.*s_1(ones_vec,:) + L_2.*s_2(ones_vec,:) + L_3.*s_3(ones_vec,:);
-clear L_1 L_2 L_3 s_1 s_2 s_3;
+L_0 = L_1(:,s_ind_4).*s_1(ones_vec,s_ind_4) + L_2(:,s_ind_4).*s_2(ones_vec,s_ind_4) + L_3(:,s_ind_4).*s_3(ones_vec,s_ind_4);
+L(:,s_ind_4) = L_0;
+L(:,n_interp+s_ind_4) = L_0;
+L(:,2*n_interp+s_ind_4) = L_0;
+clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
 
 end
 
@@ -214,10 +228,10 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
-if source_direction_mode == 1
+if source_direction_mode == 1 || source_direction_mode == 2
 z_aux = zeros(size(L_aux,2),1); 
 end
-if source_direction_mode == 2 || source_direction_mode == 3
+if source_direction_mode == 3
 z_aux = zeros(3*size(L_aux,2),1);
 end
 z_vec = ones(size(L_aux,2),1); 
@@ -280,14 +294,14 @@ for j = 1 : n_multires
 
 n_mr_dec = length(multires_dec{n_rep}{j});
 
-if source_direction_mode == 1
+if source_direction_mode == 1 || source_direction_mode == 2
 mr_dec = [multires_dec{n_rep}{j}; multires_dec{n_rep}{j}+n_interp ; multires_dec{n_rep}{j} + 2*n_interp];
 mr_dec = mr_dec(:);
 mr_ind = [multires_ind{n_rep}{j} ; multires_ind{n_rep}{j} + n_mr_dec ; multires_ind{n_rep}{j} + 2*n_mr_dec];
 mr_ind = mr_ind(:);
 end
 
-if source_direction_mode == 2 || source_direction_mode == 3
+if source_direction_mode == 3 
 mr_dec = multires_dec{n_rep}{j}; 
 mr_dec = mr_dec(:);
 mr_ind = multires_ind{n_rep}{j}; 
@@ -375,7 +389,15 @@ z_vec = z_vec_aux/(n_multires*n_decompositions*weight_vec_aux);
 %theta = mean(theta_aux,2);
 %z_vec = mean(z_vec_aux,2);
 
-if source_direction_mode == 2 || source_direction_mode == 3
+if source_direction_mode == 2
+z_vec_aux = (z_vec(s_ind_4) + z_vec(n_interp+s_ind_4) + z_vec(2*n_interp+s_ind_4))/3;
+z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1); 
+z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2); 
+z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3); 
+%z_vec = z_vec(:);
+end
+
+if source_direction_mode == 3 
 z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';
 %z_vec = z_vec(:);
 end

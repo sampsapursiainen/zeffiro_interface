@@ -82,7 +82,8 @@ end
 end 
 end
 end
-    
+   
+cb_done = 0;
 i = 0;
 length_reuna = 0;
 sigma_vec = [];
@@ -412,6 +413,8 @@ f_ind = frame_start;
 
 i = 0;
 
+aux_brain_visible_ind = [];
+
 for k = 1 : 9
 switch k
     case 1
@@ -455,6 +458,7 @@ if on_val
 i = i + 1;    
 if visible_val
 if ismember(i, aux_brain_ind)
+    aux_brain_visible_ind = [aux_brain_visible_ind i];
 ab_ind = find(aux_brain_ind==i);
     
 
@@ -666,13 +670,9 @@ set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
 
-if i == max(aux_brain_ind)
+if ismember(i,aux_brain_ind) && cb_done == 0
+cb_done = 1;
 h_colorbar = colorbar('EastOutside','Position',[0.95 0.647 0.01 0.29]);
-end
-%set(h_colorbar,'layer','bottom');
-lighting phong;
-
-if ab_ind == 1
 h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
@@ -680,6 +680,8 @@ set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 axes(evalin('base','zef.h_axes1'));
 end
+
+lighting phong;
 
 else
     
@@ -719,7 +721,7 @@ pause(1/30);
 f_ind_aux = f_ind_aux + 1;
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
 
-for i = aux_brain_ind
+for i = intersect(aux_brain_ind,aux_brain_visible_ind)
 ab_ind = find(aux_brain_ind == i);
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
