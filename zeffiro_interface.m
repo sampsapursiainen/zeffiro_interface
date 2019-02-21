@@ -21,7 +21,7 @@ end
 zef.parallel_vectors = str2num(zef.ini_cell{1}{12});
 zef = rmfield(zef,'ini_cell');
 zef_init;
-zef.h_zeffiro_window_1 = open('zeffiro_interface_segmentation_tool.fig');
+zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 zef_init;
 zef.aux_handle_vec = [...
 zef.h_wm_sources;
@@ -160,11 +160,11 @@ zef.h_edit428;
 ];
 uistack(flipud(zef.aux_handle_vec),'bottom');
 rmfield(zef,'aux_handle_vec');
-zef.o_h = findall(zef.h_zeffiro_window_1);
+zef.o_h = findall(zef.h_zeffiro_window_main);
 zef.h_axes2 = zef.o_h(309);
 zef=rmfield(zef,'o_h');
 zef.clear_axes1 = 0;
-zef_figure_window;
+zef_figure_tool;
 zef_mesh_tool;
 zef_update;
 
