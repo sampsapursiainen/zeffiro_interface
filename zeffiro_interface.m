@@ -19,6 +19,8 @@ if gpuDeviceCount > 0 & zef.use_gpu == 1
 gpuDevice(zef.gpu_num);
 end
 zef.parallel_vectors = str2num(zef.ini_cell{1}{12});
+zef.snapshot_vertical_resolution = str2num(zef.ini_cell{1}{14});
+zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
 zef = rmfield(zef,'ini_cell');
 zef_init;
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
