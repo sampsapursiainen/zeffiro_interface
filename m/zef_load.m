@@ -8,6 +8,10 @@ end
 if not(isequal(zef.file,0));
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path; 
+zef_close_tools;
+zef_close_figs;
+zef_mesh_tool;
+zef_figure_tool;
 load([zef.file_path zef.file]);
  if (isfield(zef_data,'inv_rec_source'));
           zef.inv_rec_source = zef_data.inv_rec_source; 
@@ -577,6 +581,11 @@ end;
           else
           zef.inv_eit_noise = 0;
           end 
+          if (isfield(zef_data,'inv_init_guess_mode'));
+          zef.inv_init_guess_mode = zef_data.inv_init_guess_mode;
+          else
+          zef.inv_init_guess_mode = [1];
+          end
           
 clear zef_data;
 zef_update;

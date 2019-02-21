@@ -462,7 +462,7 @@ if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
     
 
-if ab_ind == 1
+if i == aux_brain_visible_ind
 if  iscell(evalin('base','zef.reconstruction')) 
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');

@@ -1,4 +1,4 @@
-zef.h_zeffiro_window_3 = open('zeffiro_interface_mesh_tool.fig');
+open('zeffiro_interface_mesh_tool.fig');
 zef.aux_handle_vec = [zef.h_pushbutton31;
 zef.h_pushbutton20;
 zef.h_pushbutton22; 
@@ -30,7 +30,6 @@ zef.h_popupmenu2;
 zef.h_edit76];
 uistack(flipud(zef.aux_handle_vec),'bottom');
 rmfield(zef,'aux_handle_vec');
-set(zef.h_text197,'foregroundcolor',[1 1 1]);
 set(zef.h_pushbutton21,'callback','[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));');
 set(zef.h_pushbutton34,'callback','[zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms]=zef_sigma([]);set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));');
 set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Basis'});

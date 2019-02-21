@@ -6,7 +6,7 @@ void = [];
 aux_wm_ind = -1;
 
 
-if ( evalin('base','zef.on_screen')==1 | evalin('base','zef.on_screen')==0 ) & not(evalin('base','zef.visualization_type')==3) 
+if ismember(evalin('base','zef.on_screen'), [0,1]) && not(evalin('base','zef.visualization_type')==3) 
     
 h_axes_text = [];    
     
@@ -21,15 +21,15 @@ c_ta = camtarget(evalin('base','zef.h_axes1'));
 c_p = camproj(evalin('base','zef.h_axes1')); 
 c_u = camup(evalin('base','zef.h_axes1'));
 
-figure(15843);set(15843,'visible','off'); 
+h_fig_aux = figure;set(h_fig_aux,'visible','on'); 
 clf;
-set(15843,'renderer','opengl');
-set(15843,'paperunits','inches');
-set(15843,'papersize',[1080 1920]);
-set(15843,'paperposition',[0 0 1920 1080]);
+set(h_fig_aux,'renderer','opengl');
+set(h_fig_aux,'paperunits','inches');
+set(h_fig_aux,'papersize',[1080 1920]);
+set(h_fig_aux,'paperposition',[0 0 1920 1080]);
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
-h_axes_image = get(15843,'currentaxes');
+h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
 
 cp_a = evalin('base','zef.cp_a');
@@ -586,7 +586,7 @@ colormap_vec = colormap_vec + [203*colormap_vec_aux(4,:) ; 203*colormap_vec_aux(
 clear colormap_vec_aux;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 2
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -599,7 +599,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 3
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -613,7 +613,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 4
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -627,7 +627,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 5
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -640,7 +640,7 @@ colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 6
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -652,7 +652,7 @@ colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 7
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -662,7 +662,7 @@ colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
 colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 8
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -672,7 +672,7 @@ colormap_vec(3,:) = colormap_vec(2,:) + colormap_vec(3,:);
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 9
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 2*[1: c_aux_1] 2*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -681,26 +681,26 @@ colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 10
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 8*[1: c_aux_1] 8*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 5*[1:colormap_size-c_aux_1]];
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 11
 colormap_vec = [(colormap_size/5)^3 + colormap_size^2*[1 : colormap_size] ; (colormap_size/2)^3 + ((colormap_size)/2)*[1:colormap_size].^2 ; ...
     (0.7*colormap_size)^3+(0.5*colormap_size)^2*[1:colormap_size]];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 end
 
-axes(h_axes_image); set(15843,'visible','off');
+axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(h_axes_image,'CLim',[min_rec max_rec]);
@@ -722,7 +722,7 @@ set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 end
-axes(h_axes_image);set(15843,'visible','off');
+axes(h_axes_image);set(h_fig_aux,'visible','on');
 
 for i = 1 : n_compartments
 
@@ -771,14 +771,14 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
 
   if is_video  
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==2; 
-  print(15843,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==3;
-  print(15843,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==4;
   bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(15843,'-dbmp','-r1',bmp_file_temp);
+  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
   [movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
@@ -786,11 +786,11 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
   end;
   else
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name]); 
   elseif file_index ==2; 
-  print(15843,'-dtiff','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name]); 
   elseif file_index==3; 
-  print(15843,'-dpng','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name]); 
   end;
   end;
  
@@ -802,11 +802,11 @@ camproj(c_p);
 camup(c_u);
 drawnow;
 if file_index == 1; 
-print(15843,[file_path file_name],'-djpeg95','-r1'); 
+print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
 elseif file_index ==2; 
-print(15843,[file_path file_name],'-dtiff','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dtiff','-r1'); 
 elseif file_index ==3; 
-print(15843,[file_path file_name],'-dpng','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dpng','-r1'); 
 end;
 end
 
@@ -824,7 +824,7 @@ set(h_waitbar,'handlevisibility','off');
 end
 delete(h_bar);
 delete(h_text);
-axes(h_axes_image);set(15843,'visible','off');
+axes(h_axes_image);set(h_fig_aux,'visible','on');
 delete(h_surf_2);
 hold on;
 
@@ -943,18 +943,18 @@ set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 
-  axes(h_axes_text);set(15843,'visible','off');
+  axes(h_axes_text);set(h_fig_aux,'visible','on');
   h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
  
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==2; 
-  print(15843,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==3; 
-  print(15843,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index == 4;
-  print(15843,'-dbmp','-r1',bmp_file_temp);
+  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
   [movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame); 
@@ -974,7 +974,7 @@ close(h_aviobj);
 warning off; delete('avi_file'); warning on
 movefile(avi_file_temp, avi_file, 'f');
 end
-close(15843);
+close(h_fig_aux);
 if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2    
 close(h_waitbar);     
 end
@@ -985,6 +985,7 @@ end
 %**************************************************************************
 %**************************************************************************
 %**************************************************************************
+
 else
 
 number_of_frames = evalin('base','zef.number_of_frames');    
@@ -1212,15 +1213,15 @@ end
 
 
 
-figure(15843);set(15843,'visible','off'); 
+h_fig_aux = figure;set(h_fig_aux,'visible','on'); 
 clf;
-set(15843,'renderer','opengl');
-set(15843,'paperunits','inches');
-set(15843,'papersize',[1080 1920]);
-set(15843,'paperposition',[0 0 1920 1080]);
+set(h_fig_aux,'renderer','opengl');
+set(h_fig_aux,'paperunits','inches');
+set(h_fig_aux,'papersize',[1080 1920]);
+set(h_fig_aux,'paperposition',[0 0 1920 1080]);
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
-h_axes_image = get(15843,'currentaxes');
+h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
 sensors = evalin('base','zef.sensors');
 reuna_p = evalin('base','zef.reuna_p');
@@ -1487,7 +1488,7 @@ if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 aux_brain_visible_ind = [aux_brain_visible_ind i];
 
-if ab_ind == 1
+if  i == aux_brain_visible_ind
 if  iscell(evalin('base','zef.reconstruction')) 
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
@@ -1507,7 +1508,7 @@ colormap_vec = colormap_vec + [203*colormap_vec_aux(4,:) ; 203*colormap_vec_aux(
 clear colormap_vec_aux;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 2
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -1520,7 +1521,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 3
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -1534,7 +1535,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 4
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -1548,7 +1549,7 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
 colormap_vec = colormap_vec/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 5
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -1561,7 +1562,7 @@ colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 6
 c_aux_1 = floor(colormap_size/3);
 c_aux_2 = floor(2*colormap_size/3);
@@ -1573,7 +1574,7 @@ colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 7
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -1583,7 +1584,7 @@ colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
 colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 8
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -1593,7 +1594,7 @@ colormap_vec(3,:) = colormap_vec(2,:) + colormap_vec(3,:);
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 9
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 2*[1: c_aux_1] 2*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
@@ -1602,23 +1603,23 @@ colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 10
 c_aux_1 = floor(colormap_size/2);    
 colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 8*[1: c_aux_1] 8*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 5*[1:colormap_size-c_aux_1]];
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 11
 colormap_vec = [(colormap_size/5)^3 + colormap_size^2*[1 : colormap_size] ; (colormap_size/2)^3 + ((colormap_size)/2)*[1:colormap_size].^2 ; ...
     (0.7*colormap_size)^3+(0.5*colormap_size)^2*[1:colormap_size]];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
-set(15843,'colormap',colormap_vec);
+set(h_fig_aux,'colormap',colormap_vec);
 end
 
 %******************************************************
@@ -1709,7 +1710,7 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
-axes(h_axes_image); set(15843,'visible','off');
+axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -1732,12 +1733,12 @@ set(h_axes_hist,'fontsize',1500);
 set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
-axes(h_axes_image); set(15843,'visible','off');
+axes(h_axes_image); set(h_fig_aux,'visible','on');
 
 h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
   set(h_text,'visible','on','fontsize',1500);
-axes(h_axes_image); set(15843,'visible','off');
+axes(h_axes_image); set(h_fig_aux,'visible','on');
 end
 %set(h_colorbar,'layer','bottom');
 lighting phong;
@@ -1779,14 +1780,14 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
 
   if is_video  
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
   elseif file_index ==2; 
-  print(15843,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
   elseif file_index ==3;
-  print(15843,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]); 
   elseif file_index ==4;
   bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(15843,'-dbmp','-r1',bmp_file_temp);
+  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
   [movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
@@ -1794,11 +1795,11 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
   end;
   else
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name]); 
   elseif file_index ==2; 
-  print(15843,'-dtiff','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name]); 
   elseif file_index==3; 
-  print(15843,'-dpng','-r1',[file_path  file_name]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name]); 
   end;
   end;
  
@@ -1810,11 +1811,11 @@ camproj(c_p);
 camup(c_u);
 drawnow;
 if file_index == 1; 
-print(15843,[file_path file_name],'-djpeg95','-r1'); 
+print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
 elseif file_index ==2; 
-print(15843,[file_path file_name],'-dtiff','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dtiff','-r1'); 
 elseif file_index ==3; 
-print(15843,[file_path file_name],'-dpng','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dpng','-r1'); 
 end;
 end
 
@@ -1920,7 +1921,7 @@ end
 
 delete(h_surf_2{ab_ind});
 
-axes(h_axes_image); set(15843,'visible','off');
+axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -1936,7 +1937,7 @@ end
 
 
 delete(h_text);
-axes(h_axes_text);set(15843,'visible','off');
+axes(h_axes_text);set(h_fig_aux,'visible','on');
 set(h_axes_text,'tag','image_details');
 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
 set(h_text,'visible','on','fontsize',1500);
@@ -1957,13 +1958,13 @@ set(h_axes_hist,'ticklength',[0 0]);
 
 
   if file_index == 1; 
-  print(15843,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==2;  
-  print(15843,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dtiff','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index ==3; 
-  print(15843,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
+  print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
   elseif file_index == 4;
-  print(15843,'-dbmp','-r1',bmp_file_temp);
+  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
   [movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
@@ -2057,11 +2058,11 @@ camup(c_u);
 drawnow;
 
 if file_index == 1; 
-print(15843,[file_path file_name],'-djpeg95','-r1'); 
+print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
 elseif file_index ==2; 
-print(15843,[file_path file_name],'-dtiff','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dtiff','-r1'); 
 elseif file_index ==3; 
-print(15843,[file_path file_name],'-dpng','-r1'); 
+print(h_fig_aux,[file_path file_name],'-dpng','-r1'); 
 end;
 
 
@@ -2073,12 +2074,11 @@ close(h_aviobj);
 warning off; delete('avi_file'); warning on
 movefile(avi_file_temp, avi_file, 'f');
 end
-close(15843);
+close(h_fig_aux);
 if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3    
 close(h_waitbar);     
 end
 %**************************************************************************
-
 
 end
 

@@ -6,6 +6,7 @@ zef.h_hb_sampler = open('hb_sampler_alt2.fig');
 else
 zef.h_hb_sampler = open('hb_sampler.fig');
 end
+set(zef.h_hb_sampler,'Name','ZEFFIRO Interface: MCMC sampler');
 zef_init_hb_sampler;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)

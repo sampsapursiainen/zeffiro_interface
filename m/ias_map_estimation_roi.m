@@ -6,6 +6,7 @@ zef.h_ias_map_estimation = open('ias_map_estimation_roi_alt2.fig');
 else
 zef.h_ias_map_estimation = open('ias_map_estimation_roi.fig');    
 end
+set(zef.h_ias_map_estimation,'Name','ZEFFIRO Interface: IAS MAP estimation ROI');
 zef_init_ias_roi;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)

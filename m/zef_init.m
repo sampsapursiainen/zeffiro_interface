@@ -1,4 +1,4 @@
-%Copyright © 2018, Sampsa Pursiainen  
+%Copyright © 2018, Sampsa Pursiainen
           zef.inv_init_guess_mode = [1];
           zef.inv_eit_noise = 0;
           zef.inv_bg_data = [];

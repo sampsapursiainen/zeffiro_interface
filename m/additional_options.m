@@ -7,6 +7,7 @@ zef.h_additional_options = open('additional_options_alt2.fig');
 else
 zef.h_additional_options = open('additional_options.fig');
 end
+set(zef.h_additional_options,'Name','ZEFFIRO Interface: Miscellaneous options');
 
 if zef.cp2_on
     set(zef.h_cp2_a,'enable','on');

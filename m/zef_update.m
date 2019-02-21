@@ -219,6 +219,7 @@ color_label('checkbox101','checkbox107','text1196');
 color_label('checkbox201','checkbox207','text2196');
 color_label('checkbox301','checkbox307','text3196');
 color_label('checkbox401','checkbox407','text4196');
+color_label('checkbox16','checkbox13','text195');
 color_label('checkbox1','checkbox7','text196');
 color_label('checkbox2','checkbox8','text197');
 color_label('checkbox3','checkbox9','text198');
@@ -246,7 +247,6 @@ switch_color('checkbox4','pushbutton7','sk_points');
 switch_color('checkbox4','pushbutton8','sk_triangles');
 switch_color('checkbox5','pushbutton9','sc_points');
 switch_color('checkbox5','pushbutton10','sc_triangles');
-
 
 switch_onoff;
 
