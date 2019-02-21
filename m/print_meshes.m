@@ -14,6 +14,7 @@ number_of_frames = evalin('base','zef.number_of_frames');
 file_index = evalin('base','zef.file_index');
 file_name = evalin('base','zef.file');
 file_path = evalin('base','zef.file_path');
+snapshot_resolution = round([evalin('base','zef.snapshot_vertical_resolution') evalin('base','zef.snapshot_horizontal_resolution')]);
     
 c_va = camva(evalin('base','zef.h_axes1'));
 c_pos = campos(evalin('base','zef.h_axes1'));
@@ -25,8 +26,8 @@ h_fig_aux = figure;set(h_fig_aux,'visible','on');
 clf;
 set(h_fig_aux,'renderer','opengl');
 set(h_fig_aux,'paperunits','inches');
-set(h_fig_aux,'papersize',[1080 1920]);
-set(h_fig_aux,'paperposition',[0 0 1920 1080]);
+set(h_fig_aux,'papersize',snapshot_resolution);
+set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
@@ -1212,13 +1213,14 @@ end
 end
 
 
+snapshot_resolution = round([evalin('base','zef.snapshot_vertical_resolution') evalin('base','zef.snapshot_horizontal_resolution')]);
 
 h_fig_aux = figure;set(h_fig_aux,'visible','on'); 
 clf;
 set(h_fig_aux,'renderer','opengl');
 set(h_fig_aux,'paperunits','inches');
-set(h_fig_aux,'papersize',[1080 1920]);
-set(h_fig_aux,'paperposition',[0 0 1920 1080]);
+set(h_fig_aux,'papersize',snapshot_resolution);
+set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
