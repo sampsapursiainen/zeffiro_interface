@@ -651,7 +651,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-h_colorbar = colorbar('EastOutside','Position',[0.95 0.647 0.01 0.29]);
+h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
 %set(h_colorbar,'layer','bottom');
 lighting phong;
 end
