@@ -10,4 +10,8 @@ zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: MCMC s
 close(zef.h_fig_aux);
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Miscellaneous options');
 close(zef.h_fig_aux);
+zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Find synthetic source');
+close(zef.h_fig_aux);
+zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Find synthetic EIT data');
+close(zef.h_fig_aux);
 rmfield(zef,'h_fig_aux');
