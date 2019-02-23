@@ -1,9 +1,9 @@
 %Copyright © 2018, Sampsa Pursiainen
 zef_init_options;
 if ismac
-zef.h_additional_options = open('additional_options_alt.fig');
+zef.h_additional_options = open('additional_options.fig');
 elseif ispc 
-zef.h_additional_options = open('additional_options_alt2.fig');
+zef.h_additional_options = open('additional_options.fig');
 else
 zef.h_additional_options = open('additional_options.fig');
 end

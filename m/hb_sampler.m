@@ -1,8 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
 if ismac
-zef.h_hb_sampler = open('hb_sampler_alt.fig');
+zef.h_hb_sampler = open('hb_sampler.fig');
 elseif ispc 
-zef.h_hb_sampler = open('hb_sampler_alt2.fig');
+zef.h_hb_sampler = open('hb_sampler.fig');
 else
 zef.h_hb_sampler = open('hb_sampler.fig');
 end

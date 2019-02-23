@@ -1,8 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
 if  ismac
-zef.h_ias_map_estimation = open('ias_map_estimation_multires_alt.fig');
+zef.h_ias_map_estimation = open('ias_map_estimation_multires.fig');
 elseif ispc 
-zef.h_ias_map_estimation = open('ias_map_estimation_multires_alt2.fig');
+zef.h_ias_map_estimation = open('ias_map_estimation_multires.fig');
 else
 zef.h_ias_map_estimation = open('ias_map_estimation_multires.fig');
 end
