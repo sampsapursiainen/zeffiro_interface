@@ -167,9 +167,19 @@ end
 if k == 5 && evalin('base','zef.wm_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 6;
+if k == 6 && evalin('base','zef.g_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
+if k == 7 && evalin('base','zef.c_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 8 && evalin('base','zef.sk_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 9 && evalin('base','zef.sc_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+
 end
 end
 

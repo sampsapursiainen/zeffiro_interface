@@ -86,6 +86,15 @@ end
 if k == 6;
     aux_brain_ind(2) = i;
 end
+if k == 7;
+    aux_brain_ind(7) = i;
+end
+if k == 8;
+    aux_brain_ind(8) = i;
+end
+if k == 9;
+    aux_brain_ind(9) = i;
+end
 if k == 8;
     aux_skull_ind = i;
 end
@@ -103,8 +112,10 @@ if not(aux_brain_ind(1)==0)
 [brain_ind]= find(johtavuus==aux_brain_ind(1));
 end
 end
+if evalin('base','zef.g_sources')
 if not(aux_brain_ind(2)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(2))];
+end
 end
 if evalin('base','zef.d1_sources')
 if not(aux_brain_ind(3)==0)
@@ -124,6 +135,21 @@ end
 if evalin('base','zef.d4_sources')
 if not(aux_brain_ind(6)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(6))];
+end
+end
+if evalin('base','zef.c_sources')
+if not(aux_brain_ind(7)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(7))];
+end
+end
+if evalin('base','zef.sk_sources')
+if not(aux_brain_ind(8)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(8))];
+end
+end
+if evalin('base','zef.sc_sources')
+if not(aux_brain_ind(9)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(9))];
 end
 end
 if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0  && aux_brain_ind(3) == 0 && aux_brain_ind(4) == 0 && aux_brain_ind(5) == 0 && aux_brain_ind(6) == 0
@@ -572,8 +598,10 @@ if not(aux_brain_ind(1)==0)
 [brain_ind]= find(johtavuus_aux==aux_brain_ind(1));
 end
 end
+if evalin('base','zef.g_sources')
 if not(aux_brain_ind(2)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(2))];
+end
 end
 if evalin('base','zef.d1_sources')
 if not(aux_brain_ind(3)==0)
@@ -593,6 +621,21 @@ end
 if evalin('base','zef.d4_sources')
 if not(aux_brain_ind(6)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(6))];
+end
+end
+if evalin('base','zef.c_sources')
+if not(aux_brain_ind(7)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(7))];
+end
+end
+if evalin('base','zef.sk_sources')
+if not(aux_brain_ind(8)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(8))];
+end
+end
+if evalin('base','zef.sc_sources')
+if not(aux_brain_ind(9)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(9))];
 end
 end
 if aux_brain_ind(1) == 0 && aux_brain_ind(2) == 0 && aux_brain_ind(3) == 0 && aux_brain_ind(4) == 0 && aux_brain_ind(5) == 0 && aux_brain_ind(6) == 0

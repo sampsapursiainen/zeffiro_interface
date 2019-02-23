@@ -311,6 +311,18 @@ end;
 if (isfield(zef_data,'d4_sources'));
 zef.d4_sources = zef_data.d4_sources; 
 end;
+if (isfield(zef_data,'g_sources'));
+zef.g_sources = zef_data.g_sources; 
+end;
+if (isfield(zef_data,'c_sources'));
+zef.c_sources = zef_data.c_sources; 
+end;
+if (isfield(zef_data,'sk_sources'));
+zef.sk_sources = zef_data.sk_sources; 
+end;
+if (isfield(zef_data,'sc_sources'));
+zef.sc_sources = zef_data.sc_sources; 
+end;
 if (isfield(zef_data,'tetra_aux'));
 zef.tetra_aux = zef_data.tetra_aux; 
 end;
@@ -470,6 +482,25 @@ end;
 if (isfield(zef_data,'d4_sources_old')); 
     zef.d4_sources_old = zef_data.d4_sources_old; 
 end;
+
+
+if (isfield(zef_data,'g_sources_old')); 
+    zef.g_sources_old = zef_data.g_sources_old; 
+end;
+
+if (isfield(zef_data,'c_sources_old')); 
+    zef.c_sources_old = zef_data.c_sources_old; 
+end;
+
+if (isfield(zef_data,'sk_sources_old')); 
+    zef.sk_sources_old = zef_data.sk_sources_old; 
+end;
+
+if (isfield(zef_data,'sc_sources_old')); 
+    zef.sc_sources_old = zef_data.sc_sources_old; 
+end;
+
+
 
 if (isfield(zef_data,'layer_transparency')); 
     zef.layer_transparency = zef_data.layer_transparency; 

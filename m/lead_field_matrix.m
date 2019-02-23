@@ -29,7 +29,7 @@ else
 zef.lf_param.pcg_tol = 1e-8;
 end
 zef.aux_vec = [];
-if isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || not(zef.wm_sources == zef.wm_sources_old) || not(zef.d1_sources == zef.d1_sources_old)  || not(zef.d2_sources == zef.d2_sources_old)  || not(zef.d3_sources == zef.d3_sources_old) || not(zef.d4_sources == zef.d4_sources_old) 
+if isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || not(zef.wm_sources == zef.wm_sources_old) || not(zef.d1_sources == zef.d1_sources_old)  || not(zef.d2_sources == zef.d2_sources_old)  || not(zef.d3_sources == zef.d3_sources_old) || not(zef.d4_sources == zef.d4_sources_old) || not(zef.g_sources == zef.g_sources_old)  || not(zef.c_sources == zef.c_sources_old)  || not(zef.sk_sources == zef.sk_sources_old) || not(zef.sc_sources == zef.sc_sources_old) 
 if isempty(zef.non_source_ind)
 zef.aux_vec = zef.brain_ind;
 else
@@ -42,6 +42,10 @@ zef.d1_sources_old = zef.d1_sources;
 zef.d2_sources_old = zef.d2_sources;
 zef.d3_sources_old = zef.d3_sources;
 zef.d4_sources_old = zef.d4_sources;
+zef.g_sources_old = zef.g_sources;
+zef.c_sources_old = zef.c_sources;
+zef.sk_sources_old = zef.sk_sources;
+zef.sc_sources_old = zef.sc_sources;
 zef.source_ind = zef.aux_vec(1:min(zef.n_sources,length(zef.aux_vec)));
 zef.n_sources_mod = 0;
 end

@@ -156,6 +156,11 @@ zef.h = evalin('base','zef.h_d1_sources'); set(zef.h,'value',(zef.d1_sources+1))
 zef.h = evalin('base','zef.h_d2_sources'); set(zef.h,'value',(zef.d2_sources+1));
 zef.h = evalin('base','zef.h_d3_sources'); set(zef.h,'value',(zef.d3_sources+1));
 zef.h = evalin('base','zef.h_d4_sources'); set(zef.h,'value',(zef.d4_sources+1));
+zef.h = evalin('base','zef.h_g_sources'); set(zef.h,'value',(zef.g_sources+1));
+zef.h = evalin('base','zef.h_c_sources'); set(zef.h,'value',(zef.c_sources+1));
+zef.h = evalin('base','zef.h_sk_sources'); set(zef.h,'value',(zef.sk_sources+1));
+zef.h = evalin('base','zef.h_sc_sources'); set(zef.h,'value',(zef.sc_sources+1));
+
 
 zef.h = evalin('base','zef.h_refinement_on'); set(zef.h,'value',(zef.refinement_on));
 
