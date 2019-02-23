@@ -682,9 +682,9 @@ set(h_surf_2{ab_ind},'ambientstrength',1);
 if ismember(i,aux_brain_ind) && cb_done == 0
 cb_done = 1;
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
-h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
+h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 axes(evalin('base','zef.h_axes1'));
@@ -812,9 +812,9 @@ end
 
 delete(h_text);
 delete(h_axes_text);
-h_axes_text = axes('position',[0.656 0.95 0.5 0.05],'visible','off');
+h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 %drawnow;

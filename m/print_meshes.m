@@ -762,7 +762,7 @@ end
 
   if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on','fontsize',1500);
   end
   
@@ -945,7 +945,7 @@ set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
 
   axes(h_axes_text);set(h_fig_aux,'visible','on');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on','fontsize',1500);
  
   if file_index == 1; 
@@ -1747,7 +1747,7 @@ set(h_axes_hist,'ticklength',[0 0]);
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 
 h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on','fontsize',1500);
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 end
@@ -1950,7 +1950,7 @@ end
 delete(h_text);
 axes(h_axes_text);set(h_fig_aux,'visible','on');
 set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s']);
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
 set(h_text,'visible','on','fontsize',1500);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
