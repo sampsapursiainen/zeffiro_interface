@@ -3,6 +3,8 @@ function [void] = print_meshes(void);
 
 void = [];
 
+length_reconstruction_cell = 1;
+
 aux_wm_ind = -1;
 
 

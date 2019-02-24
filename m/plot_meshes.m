@@ -3,6 +3,8 @@ function [void] = plot_meshes(void);
 
 void = [];
 
+length_reconstruction_cell = 1;
+
 if evalin('base','zef.visualization_type') == 3
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
 s_i_ind_2 =  evalin('base','zef.source_interpolation_ind{1}');
