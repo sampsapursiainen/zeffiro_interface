@@ -8,7 +8,7 @@ zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Mesh t
 close(zef.h_fig_aux); 
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: MCMC sampler');
 close(zef.h_fig_aux);
-zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Miscellaneous options');
+zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Options');
 close(zef.h_fig_aux);
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Find synthetic source');
 close(zef.h_fig_aux);
