@@ -25,6 +25,10 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 source_positions = evalin('base','zef.source_positions');
 
+filter_order = 9;
+[lp_f_1,lp_f_2] = butter(filter_order,low_pass/(sampling_freq/2));
+[hp_f_1,hp_f_2] = butter(filter_order,high_pass/(sampling_freq/2),'high');
+
 if source_direction_mode == 2
 
 [s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
@@ -244,6 +248,9 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
+f = filter(lp_f_1,lp_f_2,f);
+f = filter(hp_f_1,hp_f_2,f);
+
 if source_direction_mode == 1 || source_direction_mode == 2
 z_aux = zeros(size(L,2),1); 
 end
@@ -263,25 +270,9 @@ end
 end
 if size(f,2) > 1
 t = [1:size(f,2)];
-gaussian_window_param = 20;
-gaussian_window = exp(-((t-(length(t)/2)).^2./(2*(length(t)/gaussian_window_param)^2)))/(sqrt(2*pi)*(length(t)/gaussian_window_param))*length(t);
-gaussian_window = gaussian_window(ones(size(f,1),1),:);
-fft_f = fft(f.*gaussian_window,[],2);
-clear gaussian_window;
-f = fft_f.*conj(fft_f)/size(f,2);
-clear fft_f;
-f = f(:,1:floor(size(f,2)/2));
-low_pass_ind = 1 + floor((low_pass/(sampling_freq/2))*size(f,2));
-high_pass_ind = 1 + floor((high_pass/(sampling_freq/2))*size(f,2));
-low_pass_ind = min(low_pass_ind, size(f,2));
-high_pass_ind = min(high_pass_ind, size(f,2));
-if high_pass > 0; 
-   high_pass_ind = max(2,high_pass_ind);
-else
-   high_pass_ind = max(1,high_pass_ind);
-end
-low_pass_ind = max(high_pass_ind,low_pass_ind);
-f = sum(f(:,high_pass_ind:low_pass_ind),2)/(low_pass_ind - high_pass_ind + 1);
+gaussian_window = blackmanharris(length(t))';
+f = f.*gaussian_window;
+f = mean(f,2);
 end
 %if f_ind == 1
 %h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
