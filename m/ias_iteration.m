@@ -237,11 +237,11 @@ end;
 f = f/data_norm;
 
 filter_order = 9;
-if size(reconstruction,2) > 0 && low_pass > 0
+if size(f,2) > 0 && low_pass > 0
 [lp_f_1,lp_f_2] = butter(filter_order,low_pass/(sampling_freq/2));
 f = filter(lp_f_1,lp_f_2,f);
 end
-if size(reconstruction,2) > 0 && high_pass > 0
+if size(f,2) > 0 && high_pass > 0
 [hp_f_1,hp_f_2] = butter(filter_order,high_pass/(sampling_freq/2),'high');
 f = filter(hp_f_1,hp_f_2,f);
 end
