@@ -71,5 +71,18 @@ end
 if evalin('base','zef.reconstruction_type') == 6
     set(zef.h_text_part,'string','Value');
 end
+if evalin('base','zef.reconstruction_type') == 7
+    set(zef.h_text_part,'string','Amplitude');
+end
+
+if zef.clear_axes1
+%cla(zef.h_axes1);
+zef.h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','Colorbar');
+if not(isempty(zef.h_colorbar))
+colorbar(zef.h_colorbar,'delete'); 
+end
+else
+zef.clear_axes1 = 1;  
+end
 
 
