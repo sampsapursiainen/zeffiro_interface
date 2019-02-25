@@ -2,6 +2,8 @@
 function [void] = plot_volume(void);
 
 void = [];
+
+loop_movie = 1;
 length_reconstruction_cell = 1;
 
 aux_wm_ind = -1;
@@ -43,16 +45,28 @@ cp3_d = evalin('base','zef.cp3_d');
 sensors = evalin('base','zef.sensors');
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
-[X_s, Y_s, Z_s] = sphere(20);
+
 if size(sensors,2) == 6 & ismember(evalin('base','zef.imaging_method'), [1 4 5])
     electrode_model = 2;
 else
     electrode_model = 1;
 end
 
+[X_s, Y_s, Z_s] = sphere(20);  
+aux_scale_ind = evalin('base','zef.location_unit');
+switch aux_scale_ind 
+    case 1
+        aux_scale_val = 1;
+    case 2 
+        aux_scale_val = 0.01;
+    case 3 
+        aux_scale_val = 0.001;
+end
+
+
 aux_ind = []; 
 if evalin('base','zef.s_visible')
-sphere_scale = 3.7;    
+sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
@@ -98,18 +112,18 @@ for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none');
-set(h,'specularstrength',0.1);
-set(h,'diffusestrength',0.3);
-set(h,'ambientstrength',0.3);
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 else
 h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor',evalin('base','zef.s_color')); 
-set(h,'specularstrength',0.1);
-set(h,'diffusestrength',0.3);
-set(h,'ambientstrength',0.3);
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));    
 end
@@ -118,18 +132,18 @@ sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.1);
-set(h,'diffusestrength',0.3);
-set(h,'ambientstrength',0.3);
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
 set(h,'facecolor',0.9*[0 1 1]);
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.1);
-set(h,'diffusestrength',0.3);
-set(h,'ambientstrength',0.3);
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -415,16 +429,27 @@ max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynam
 end
 end
 end
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2
-h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
-set(h_waitbar,'handlevisibility','off');
-end
+%if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2
+%h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
+%set(h_waitbar,'handlevisibility','off');
+%end
+
+while loop_movie 
+    
+axes(evalin('base','zef.h_axes1'));
+cla(evalin('base','zef.h_axes1'));
+set(evalin('base','zef.h_axes1'),'layer','top');
+set(evalin('base','zef.h_axes1'),'YDir','normal');
+light('Position',[0 0 1],'Style','infinite');
+light('Position',[0 0 -1],'Style','infinite');
+hold on;
+
 f_ind_aux = 1;
 for f_ind = frame_start : frame_start
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
-waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);    
-set(h_waitbar,'handlevisibility','off');
-end
+%if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
+%waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);    
+%set(h_waitbar,'handlevisibility','off');
+%end
 axes(evalin('base','zef.h_axes1'));
 if not(isempty(h_colorbar))
 colorbar(h_colorbar,'delete'); 
@@ -726,12 +751,19 @@ end
 
 
 for f_ind = frame_start + frame_step : frame_step : frame_stop
-pause(1/30);
+
+pause(0.01);
+stop_movie = evalin('base','zef.stop_movie');
+pause(0.01);
+if stop_movie
+return;
+end    
+    
 f_ind_aux = f_ind_aux + 1;
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
-waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
-set(h_waitbar,'handlevisibility','off');
-end
+%if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
+%waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
+%set(h_waitbar,'handlevisibility','off');
+%end
 delete(h_text);
 delete(h_surf_2);
 axes(evalin('base','zef.h_axes1'));
@@ -828,6 +860,15 @@ camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','ze
  
 end
 
+if iscell(evalin('base','zef.reconstruction')) && evalin('base','zef.visualization_type') == 2
+loop_movie = evalin('base','zef.loop_movie');
+else
+loop_movie = 0;
+end
+
+hold off;
+
+end
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -835,8 +876,8 @@ end
 
 rotate3d on;
 
-if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2    
-close(h_waitbar);     
-end
+%if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2    
+%close(h_waitbar);     
+%end
 
 

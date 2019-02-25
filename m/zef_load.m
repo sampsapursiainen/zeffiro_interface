@@ -617,6 +617,16 @@ end;
           else
           zef.inv_init_guess_mode = [1];
           end
+          if (isfield(zef_data,'loop_movie'));
+          zef.loop_movie = zef_data.loop_movie;
+          else
+          zef.loop_movie = [1];
+          end
+          if (isfield(zef_data,'stop_movie'));
+          zef.stop_movie = zef_data.stop_movie;
+          else
+          zef.stop_movie = [0];
+          end
           
           
 clear zef_data;
