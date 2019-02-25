@@ -240,13 +240,13 @@ data_norm = sum((sum(abs(f).^2)))/size(f,2);
 end;
 f = f/data_norm;
 
-filter_order = 9;
+filter_order = 5;
 if size(f,2) > 0 && low_pass > 0
-[lp_f_1,lp_f_2] = butter(filter_order,low_pass/(sampling_freq/2));
+[lp_f_1,lp_f_2] = ellip(filter_order,3,30,low_pass/(sampling_freq/2));
 f = filter(lp_f_1,lp_f_2,f);
 end
 if size(f,2) > 0 && high_pass > 0
-[hp_f_1,hp_f_2] = butter(filter_order,high_pass/(sampling_freq/2),'high');
+[hp_f_1,hp_f_2] = ellip(filter_order,3,30,high_pass/(sampling_freq/2),'high');
 f = filter(hp_f_1,hp_f_2,f);
 end
 
