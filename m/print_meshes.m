@@ -506,12 +506,12 @@ end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
-if evalin('base','zef.reconstruction_type') == 1
+if ismember(evalin('base','zef.reconstruction_type'),[1 7])
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
-if ismember(evalin('base','zef.reconstruction_type'), [1 6])
+if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
@@ -573,7 +573,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
 end
 
@@ -874,12 +874,12 @@ end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
-if evalin('base','zef.reconstruction_type') == 1
+if ismember(evalin('base','zef.reconstruction_type'),[1 7])
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
-if ismember(evalin('base','zef.reconstruction_type'), [1 6])
+if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2_b_rec);
 reconstruction = reconstruction(I_2_rec(I_1_rec));
@@ -922,7 +922,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
 end
 
@@ -1689,12 +1689,12 @@ end
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
-if evalin('base','zef.reconstruction_type') == 1
+if ismember(evalin('base','zef.reconstruction_type'),[1 7])
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
-if ismember(evalin('base','zef.reconstruction_type'), [1 6])
+if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
 end
 
@@ -1732,7 +1732,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
@@ -1898,12 +1898,12 @@ reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
-if evalin('base','zef.reconstruction_type') == 1
+if ismember(evalin('base','zef.reconstruction_type'),[1 7])
 reconstruction = sqrt(sum(reconstruction.^2))';
 elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
-if ismember(evalin('base','zef.reconstruction_type'), [1 6])
+if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
 end
 
@@ -1941,7 +1941,7 @@ reconstruction(I_aux_rec) = 0;
 %reconstruction = reconstruction./max(abs(reconstruction(:)));
 end
 
-if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
+if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
