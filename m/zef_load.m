@@ -11,7 +11,6 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 zef_mesh_tool;
-zef_figure_tool;
 load([zef.file_path zef.file]);
  if (isfield(zef_data,'inv_rec_source'));
           zef.inv_rec_source = zef_data.inv_rec_source; 
@@ -631,7 +630,9 @@ end;
           
 clear zef_data;
 zef_update;
+zef_figure_tool;
 end;
+
 
 
 
