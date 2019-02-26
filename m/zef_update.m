@@ -188,7 +188,10 @@ zef.h = evalin('base','zef.h_edit82'); set(zef.h,'string',num2str(zef.cam_va));
 
 zef.h = evalin('base','zef.h_edit_meshing_accuracy'); set(zef.h,'string',num2str(zef.meshing_accuracy));
 
-
+switch_color('checkbox16','pushbutton16','s_points');
+if zef.imaging_method==2
+switch_color('checkbox17','pushbutton17','s_directions');
+end
 switch_color('checkbox1','pushbutton1','w_points');
 switch_color('checkbox1','pushbutton2','w_triangles');
 switch_color('checkbox101','pushbutton101','d1_points');
