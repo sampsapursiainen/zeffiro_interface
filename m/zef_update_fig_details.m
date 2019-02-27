@@ -55,3 +55,6 @@ end
 if evalin('base','zef.reconstruction_type') == 6
     set(zef.h_text_part,'string','Value');
 end
+if evalin('base','zef.reconstruction_type') == 7
+    set(zef.h_text_part,'string','Amplitude');
+end
