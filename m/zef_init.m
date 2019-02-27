@@ -24,7 +24,7 @@
           zef.inv_roi_sphere = [0 0 0 15];
           zef.inv_n_sampler = 10000; 
           zef.inv_n_burn_in = 1000; 
-          zef.reconstruction_type = 2;
+          zef.reconstruction_type = 7;
           zef.h_colorbar   = [];
           zef.location_unit= 1;
               zef.elevation= 0;
@@ -234,7 +234,7 @@ zef.sensors_attached_volume = [];
        zef.smoothing_steps_vol = 5;
        zef.refinement_type = 1;
        zef.surface_sources = 0; 
-       zef.visualization_type = 7;
+       zef.visualization_type = 1;
        zef.source_interpolation_on = 0;
        zef.measurements = [];
        zef.reconstruction = [];
