@@ -686,6 +686,15 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
 %set(h_colorbar,'layer','bottom');
 lighting phong;
@@ -848,6 +857,15 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 lighting phong;
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 

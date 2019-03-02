@@ -724,6 +724,15 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 lighting phong;
 h_colorbar = colorbar('EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
@@ -945,6 +954,15 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 lighting phong;
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 
@@ -1755,6 +1773,15 @@ set(h_surf_2{ab_ind},'specularexponent',0.8);
 set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 
 if ismember(i,aux_brain_ind) && cb_done == 0
     cb_done = 1;
@@ -1966,6 +1993,15 @@ set(h_surf_2{ab_ind},'specularexponent',0.8);
 set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
+if evalin('base','zef.layer_transparency') > 0
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + reconstruction/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + reconstruction/3;
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'), abs(f_alpha_aux)/max(abs(f_alpha_aux))));
+set(h_surf_2{ab_ind},'FaceAlpha','interp');
+set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+end
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 lighting phong;
 
