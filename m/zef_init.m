@@ -262,6 +262,7 @@ zef.sensors_attached_volume = [];
        zef.inv_dynamic_range = 1e3; 
        zef.inv_scale = 2;
        zef.inv_colormap = 1;
+       zef.brain_transparency = 1;
        zef.layer_transparency = 1;
        zef.meshing_threshold = 0.5;
        zef.clear_axes1 = 1;

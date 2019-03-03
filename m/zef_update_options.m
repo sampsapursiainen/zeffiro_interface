@@ -29,7 +29,8 @@ end
     zef.inv_scale = get(zef.h_inv_scale ,'value');
     zef.inv_colormap = get(zef.h_inv_colormap ,'value');
     zef.layer_transparency = 1 - str2num(get(zef.h_layer_transparency ,'string'));
-zef.meshing_threshold = str2num(get(zef.h_meshing_threshold,'string'));
+zef.brain_transparency = 1 - str2num(get(zef.h_brain_transparency ,'string'));
+    zef.meshing_threshold = str2num(get(zef.h_meshing_threshold,'string'));
 zef.frame_start = str2num(get(zef.h_frame_start,'string'));
 zef.frame_stop = str2num(get(zef.h_frame_stop,'string'));
 zef.frame_step = str2num(get(zef.h_frame_step,'string'));

@@ -686,7 +686,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.layer_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
@@ -698,7 +698,7 @@ r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
 f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
 f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
 f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'),f_alpha_aux));
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
 set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end
@@ -864,7 +864,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.layer_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
@@ -876,7 +876,7 @@ r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
 f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
 f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
 f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.layer_transparency'),f_alpha_aux));
+set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
 set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end

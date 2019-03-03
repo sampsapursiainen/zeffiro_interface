@@ -626,6 +626,11 @@ end;
           else
           zef.stop_movie = [0];
           end
+          if (isfield(zef_data,'brain_transparency'));
+          zef.brain_transparency = zef_data.brain_transparency; 
+          else
+          zef.brain_transparency = 0;
+          end
           
           
 clear zef_data;

@@ -82,6 +82,10 @@ if not(isfield(zef,'inv_colormap'));
     zef.inv_colormap = 1; 
 end;
 
+if not(isfield(zef,'brain_transparency')); 
+    zef.brain_transparency = 1; 
+end;
+
 if not(isfield(zef,'layer_transparency')); 
     zef.layer_transparency = 1; 
 end;
