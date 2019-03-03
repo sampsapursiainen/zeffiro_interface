@@ -56,7 +56,7 @@
                zef.d4_points= [];  
             zef.w_triangles= [];
                zef.w_points= [];
- zef.source_direction_mode = 1;
+ zef.source_direction_mode = 2;
              zef.sc_visible= 1;
              zef.sk_visible= 1;
               zef.c_visible= 1;
