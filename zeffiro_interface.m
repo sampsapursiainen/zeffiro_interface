@@ -6,6 +6,7 @@ zef.program_path = cd;
 if not(isdeployed)
 zef.code_path = '/m';
 addpath([zef.program_path '/fig']); 
+addpath(genpath([zef.program_path '/plugins'])); 
 addpath([zef.program_path zef.code_path]); 
 end;
 zef.h_zeffiro = fopen('zeffiro_interface.ini');
@@ -24,6 +25,7 @@ zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
 zef = rmfield(zef,'ini_cell');
 zef_init;
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
+zef_plugin;
 zef_init;
 zef.aux_handle_vec = [...
 zef.h_wm_sources;
