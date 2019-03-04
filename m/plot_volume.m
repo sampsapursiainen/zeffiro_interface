@@ -770,7 +770,6 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
 
 pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
-pause(0.01);
 if stop_movie
 return;
 end    
@@ -780,8 +779,8 @@ f_ind_aux = f_ind_aux + 1;
 %waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
 %set(h_waitbar,'handlevisibility','off');
 %end
-delete(h_text);
-delete(h_surf_2);
+%delete(h_text);
+%delete(h_surf_2);
 axes(evalin('base','zef.h_axes1'));
 hold on;
 
@@ -856,7 +855,10 @@ end
 end
 
 
-h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+%h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+set(h_surf_2,'CData',reconstruction);
+
+set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'specularstrength',0.2);
@@ -883,11 +885,12 @@ end
 lighting phong;
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 
-  h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
-  set(h_axes_text,'tag','image_details');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+  axes(h_axes_text);% = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
+  %set(h_axes_text,'tag','image_details');
+  set(h_text, 'string', ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on');
   set(h_axes_text,'layer','bottom');
+  drawnow limitrate;
   %drawnow;
  
 end

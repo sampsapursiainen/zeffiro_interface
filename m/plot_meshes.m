@@ -772,7 +772,7 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
 
 pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
-pause(0.01);
+%pause(0.01);
 if stop_movie
 return;
 end
@@ -842,10 +842,12 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
-delete(h_surf_2{ab_ind});
+%delete(h_surf_2{ab_ind});
 
 axes(evalin('base','zef.h_axes1'));
-h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+%h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'CData',reconstruction);
+
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2{ab_ind},'specularstrength',0.2);
@@ -875,15 +877,14 @@ lighting phong;
 end
 
 
-delete(h_text);
-delete(h_axes_text);
-h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
-set(h_axes_text,'tag','image_details');
-h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+%delete(h_text);
+%delete(h_axes_text);
+axes(h_axes_text);% = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
+%set(h_axes_text,'tag','image_details');
+set(h_text,'string', ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
-
-
+drawnow limitrate;
 end
     
 else
