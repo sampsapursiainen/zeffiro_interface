@@ -108,7 +108,7 @@ priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_i
 johtavuus_aux = johtavuus;
 brain_ind = [];
 if evalin('base','zef.wm_sources')
-if not(aux_brain_ind(1)==0)
+if not(aux_brain_ind(1)==0) && not(aux_brain_ind(1)==3)
 [brain_ind]= find(johtavuus==aux_brain_ind(1));
 end
 end
