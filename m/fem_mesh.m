@@ -11,7 +11,7 @@ sensors = evalin('base','zef.sensors');
 i = 0;
 sigma_vec = [];
 priority_vec = [];
-for k = 1 : 9   
+for k = 1 : 18   
 switch k
     case 1
         var_0 = 'zef.d1_on';
@@ -29,23 +29,59 @@ switch k
         var_0 = 'zef.d4_on';
         var_1 = 'zef.d4_sigma';   
         var_2 = 'zef.d4_priority';
-    case 5
+   case 5
+        var_0 = 'zef.d5_on';
+        var_1 = 'zef.d5_sigma';
+        var_2 = 'zef.d5_priority';
+     case 6
+        var_0 = 'zef.d6_on';
+        var_1 = 'zef.d6_sigma';   
+        var_2 = 'zef.d6_priority';
+     case 7
+        var_0 = 'zef.d7_on';
+        var_1 = 'zef.d7_sigma';   
+        var_2 = 'zef.d7_priority';
+     case 8
+        var_0 = 'zef.d8_on';
+        var_1 = 'zef.d8_sigma';   
+        var_2 = 'zef.d8_priority';
+   case 9
+        var_0 = 'zef.d9_on';
+        var_1 = 'zef.d9_sigma';
+        var_2 = 'zef.d9_priority';
+     case 10
+        var_0 = 'zef.d10_on';
+        var_1 = 'zef.d10_sigma';   
+        var_2 = 'zef.d10_priority';
+     case 11
+        var_0 = 'zef.d11_on';
+        var_1 = 'zef.d11_sigma';   
+        var_2 = 'zef.d11_priority';
+     case 12
+        var_0 = 'zef.d12_on';
+        var_1 = 'zef.d12_sigma';   
+        var_2 = 'zef.d12_priority';
+ case 13
+        var_0 = 'zef.d13_on';
+        var_1 = 'zef.d13_sigma';   
+        var_2 = 'zef.d13_priority';
+    case 14
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-    case 6
+    case 15
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
-    case 7
+    case 16
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
-     case 8
+     case 17
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
-     case 9
+     case 18
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';

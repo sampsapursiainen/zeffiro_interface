@@ -6,114 +6,105 @@ sensors = [];
 reuna_p = cell(0);
 reuna_t = cell(0);
 
-for k = 1 : 9
+for k = 1 : 18
 
 switch k
     case 1
         var_0 = 'zef.d1_on';
-        var_1 = 'zef.d1_scaling';
-        var_2 = 'zef.d1_x_correction';
-        var_3 = 'zef.d1_y_correction';
-        var_4 = 'zef.d1_z_correction';
-        var_5 = 'zef.d1_xy_rotation';
-        var_6 = 'zef.d1_yz_rotation';
-        var_7 = 'zef.d1_zx_rotation';   
+        var_1 = 'zef.d1_scaling';   
         var_8 = 'zef.d1_points';
         var_9 = 'zef.d1_triangles';
     case 2
         var_0 = 'zef.d2_on';
-        var_1 = 'zef.d2_scaling';
-        var_2 = 'zef.d2_x_correction';
-        var_3 = 'zef.d2_y_correction';
-        var_4 = 'zef.d2_z_correction';
-        var_5 = 'zef.d2_xy_rotation';
-        var_6 = 'zef.d2_yz_rotation';
-        var_7 = 'zef.d2_zx_rotation';   
+        var_1 = 'zef.d2_scaling'; 
         var_8 = 'zef.d2_points';
         var_9 = 'zef.d2_triangles';
     case 3
         var_0 = 'zef.d3_on';
-        var_1 = 'zef.d3_scaling';
-        var_2 = 'zef.d3_x_correction';
-        var_3 = 'zef.d3_y_correction';
-        var_4 = 'zef.d3_z_correction';
-        var_5 = 'zef.d3_xy_rotation';
-        var_6 = 'zef.d3_yz_rotation';
-        var_7 = 'zef.d3_zx_rotation';   
+        var_1 = 'zef.d3_scaling';  
         var_8 = 'zef.d3_points';
         var_9 = 'zef.d3_triangles';
     case 4
         var_0 = 'zef.d4_on';
         var_1 = 'zef.d4_scaling';
-        var_2 = 'zef.d4_x_correction';
-        var_3 = 'zef.d4_y_correction';
-        var_4 = 'zef.d4_z_correction';
-        var_5 = 'zef.d4_xy_rotation';
-        var_6 = 'zef.d4_yz_rotation';
-        var_7 = 'zef.d4_zx_rotation';   
         var_8 = 'zef.d4_points';
-        var_9 = 'zef.d4_triangles';     
-    case 5
+        var_9 = 'zef.d4_triangles';   
+            case 5
+        var_0 = 'zef.d5_on';
+        var_1 = 'zef.d5_scaling';   
+        var_8 = 'zef.d5_points';
+        var_9 = 'zef.d5_triangles';
+    case 6
+        var_0 = 'zef.d6_on';
+        var_1 = 'zef.d6_scaling'; 
+        var_8 = 'zef.d6_points';
+        var_9 = 'zef.d6_triangles';
+    case 7
+        var_0 = 'zef.d7_on';
+        var_1 = 'zef.d7_scaling';  
+        var_8 = 'zef.d7_points';
+        var_9 = 'zef.d7_triangles';
+    case 8
+        var_0 = 'zef.d8_on';
+        var_1 = 'zef.d8_scaling';
+        var_8 = 'zef.d8_points';
+        var_9 = 'zef.d8_triangles';     
+    case 9
+        var_0 = 'zef.d9_on';
+        var_1 = 'zef.d9_scaling';   
+        var_8 = 'zef.d9_points';
+        var_9 = 'zef.d9_triangles';
+    case 10
+        var_0 = 'zef.d10_on';
+        var_1 = 'zef.d10_scaling'; 
+        var_8 = 'zef.d10_points';
+        var_9 = 'zef.d10_triangles';
+    case 11
+        var_0 = 'zef.d11_on';
+        var_1 = 'zef.d11_scaling';  
+        var_8 = 'zef.d11_points';
+        var_9 = 'zef.d11_triangles';
+    case 12
+        var_0 = 'zef.d12_on';
+        var_1 = 'zef.d12_scaling';
+        var_8 = 'zef.d12_points';
+        var_9 = 'zef.d12_triangles'; 
+    case 13
+        var_0 = 'zef.d13_on';
+        var_1 = 'zef.d13_scaling';
+        var_8 = 'zef.d13_points';
+        var_9 = 'zef.d13_triangles'; 
+    case 14
         var_0 = 'zef.w_on';
-        var_1 = 'zef.w_scaling';
-        var_2 = 'zef.w_x_correction';
-        var_3 = 'zef.w_y_correction';
-        var_4 = 'zef.w_z_correction';
-        var_5 = 'zef.w_xy_rotation';
-        var_6 = 'zef.w_yz_rotation';
-        var_7 = 'zef.w_zx_rotation';   
+        var_1 = 'zef.w_scaling';  
         var_8 = 'zef.w_points';
         var_9 = 'zef.w_triangles';
-    case 6
+    case 15
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_scaling';
-        var_2 = 'zef.g_x_correction';
-        var_3 = 'zef.g_y_correction';
-        var_4 = 'zef.g_z_correction';
-        var_5 = 'zef.g_xy_rotation';
-        var_6 = 'zef.g_yz_rotation';
-        var_7 = 'zef.g_zx_rotation';   
         var_8 = 'zef.g_points';
         var_9 = 'zef.g_triangles';
-    case 7
+    case 16
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_scaling';
-        var_2 = 'zef.c_x_correction';
-        var_3 = 'zef.c_y_correction';
-        var_4 = 'zef.c_z_correction';
-        var_5 = 'zef.c_xy_rotation';
-        var_6 = 'zef.c_yz_rotation';
-        var_7 = 'zef.c_zx_rotation';
         var_8 = 'zef.c_points';
         var_9 = 'zef.c_triangles';
-     case 8
+     case 17
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_scaling';
-        var_2 = 'zef.sk_x_correction';
-        var_3 = 'zef.sk_y_correction';
-        var_4 = 'zef.sk_z_correction';
-        var_5 = 'zef.sk_xy_rotation';
-        var_6 = 'zef.sk_yz_rotation';
-        var_7 = 'zef.sk_zx_rotation';
         var_8 = 'zef.sk_points';
         var_9 = 'zef.sk_triangles';
-     case 9
+     case 18
         var_0 = 'zef.sc_on';
-        var_1 = 'zef.sc_scaling';
-        var_2 = 'zef.sc_x_correction';
-        var_3 = 'zef.sc_y_correction';
-        var_4 = 'zef.sc_z_correction';
-        var_5 = 'zef.sc_xy_rotation';
-        var_6 = 'zef.sc_yz_rotation';
-        var_7 = 'zef.sc_zx_rotation';      
+        var_1 = 'zef.sc_scaling';     
         var_8 = 'zef.sc_points';
         var_9 = 'zef.sc_triangles';
      end
 
 on_val = evalin('base',var_0);      
 scaling_val = evalin('base',var_1);    
-translation_vec = [evalin('base',var_2) evalin('base',var_3) evalin('base',var_4)];     
-theta_angle_vec = [evalin('base',var_5) evalin('base',var_6) evalin('base',var_7)];   
+translation_vec = [0 0 0];     
+theta_angle_vec = [0 0 0];   
 
 if on_val
 i = i + 1;

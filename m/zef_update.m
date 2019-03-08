@@ -1,73 +1,68 @@
 %Copyright © 2018, Sampsa Pursiainen
+
+zef.h = evalin('base','zef.h_w_merge'); set(zef.h,'value',(zef.w_merge));
+zef.h = evalin('base','zef.h_g_merge'); set(zef.h,'value',(zef.g_merge));
+zef.h = evalin('base','zef.h_c_merge'); set(zef.h,'value',(zef.c_merge));
+zef.h = evalin('base','zef.h_sk_merge'); set(zef.h,'value',(zef.sk_merge));
+zef.h = evalin('base','zef.h_sc_merge'); set(zef.h,'value',(zef.sc_merge));
+zef.h = evalin('base','zef.h_d1_merge'); set(zef.h,'value',(zef.d1_merge));
+zef.h = evalin('base','zef.h_d2_merge'); set(zef.h,'value',(zef.d2_merge));
+zef.h = evalin('base','zef.h_d3_merge'); set(zef.h,'value',(zef.d3_merge));
+zef.h = evalin('base','zef.h_d4_merge'); set(zef.h,'value',(zef.d4_merge));
+zef.h = evalin('base','zef.h_d5_merge'); set(zef.h,'value',(zef.d5_merge));
+zef.h = evalin('base','zef.h_d6_merge'); set(zef.h,'value',(zef.d6_merge));
+zef.h = evalin('base','zef.h_d7_merge'); set(zef.h,'value',(zef.d7_merge));
+zef.h = evalin('base','zef.h_d8_merge'); set(zef.h,'value',(zef.d8_merge));
+zef.h = evalin('base','zef.h_d9_merge'); set(zef.h,'value',(zef.d9_merge));
+zef.h = evalin('base','zef.h_d10_merge'); set(zef.h,'value',(zef.d10_merge));
+zef.h = evalin('base','zef.h_d11_merge'); set(zef.h,'value',(zef.d11_merge));
+zef.h = evalin('base','zef.h_d12_merge'); set(zef.h,'value',(zef.d12_merge));
+zef.h = evalin('base','zef.h_d13_merge'); set(zef.h,'value',(zef.d13_merge));
+
+zef.h = evalin('base','zef.h_w_invert'); set(zef.h,'value',(zef.w_invert));
+zef.h = evalin('base','zef.h_g_invert'); set(zef.h,'value',(zef.g_invert));
+zef.h = evalin('base','zef.h_c_invert'); set(zef.h,'value',(zef.c_invert));
+zef.h = evalin('base','zef.h_sk_invert'); set(zef.h,'value',(zef.sk_invert));
+zef.h = evalin('base','zef.h_sc_invert'); set(zef.h,'value',(zef.sc_invert));
+zef.h = evalin('base','zef.h_d1_invert'); set(zef.h,'value',(zef.d1_invert));
+zef.h = evalin('base','zef.h_d2_invert'); set(zef.h,'value',(zef.d2_invert));
+zef.h = evalin('base','zef.h_d3_invert'); set(zef.h,'value',(zef.d3_invert));
+zef.h = evalin('base','zef.h_d4_invert'); set(zef.h,'value',(zef.d4_invert));
+zef.h = evalin('base','zef.h_d5_invert'); set(zef.h,'value',(zef.d5_invert));
+zef.h = evalin('base','zef.h_d6_invert'); set(zef.h,'value',(zef.d6_invert));
+zef.h = evalin('base','zef.h_d7_invert'); set(zef.h,'value',(zef.d7_invert));
+zef.h = evalin('base','zef.h_d8_invert'); set(zef.h,'value',(zef.d8_invert));
+zef.h = evalin('base','zef.h_d9_invert'); set(zef.h,'value',(zef.d9_invert));
+zef.h = evalin('base','zef.h_d10_invert'); set(zef.h,'value',(zef.d10_invert));
+zef.h = evalin('base','zef.h_d11_invert'); set(zef.h,'value',(zef.d11_invert));
+zef.h = evalin('base','zef.h_d12_invert'); set(zef.h,'value',(zef.d12_invert));
+zef.h = evalin('base','zef.h_d13_invert'); set(zef.h,'value',(zef.d13_invert));
+
+zef.h = evalin('base','zef.h_w_name'); set(zef.h,'string',(zef.w_name));
+zef.h = evalin('base','zef.h_g_name'); set(zef.h,'string',(zef.g_name));
+zef.h = evalin('base','zef.h_c_name'); set(zef.h,'string',(zef.c_name));
+zef.h = evalin('base','zef.h_sk_name'); set(zef.h,'string',(zef.sk_name));
+zef.h = evalin('base','zef.h_sc_name'); set(zef.h,'string',(zef.sc_name));
+zef.h = evalin('base','zef.h_d1_name'); set(zef.h,'string',(zef.d1_name));
+zef.h = evalin('base','zef.h_d2_name'); set(zef.h,'string',(zef.d2_name));
+zef.h = evalin('base','zef.h_d3_name'); set(zef.h,'string',(zef.d3_name));
+zef.h = evalin('base','zef.h_d4_name'); set(zef.h,'string',(zef.d4_name));
+zef.h = evalin('base','zef.h_d5_name'); set(zef.h,'string',(zef.d5_name));
+zef.h = evalin('base','zef.h_d6_name'); set(zef.h,'string',(zef.d6_name));
+zef.h = evalin('base','zef.h_d7_name'); set(zef.h,'string',(zef.d7_name));
+zef.h = evalin('base','zef.h_d8_name'); set(zef.h,'string',(zef.d8_name));
+zef.h = evalin('base','zef.h_d9_name'); set(zef.h,'string',(zef.d9_name));
+zef.h = evalin('base','zef.h_d10_name'); set(zef.h,'string',(zef.d10_name));
+zef.h = evalin('base','zef.h_d11_name'); set(zef.h,'string',(zef.d11_name));
+zef.h = evalin('base','zef.h_d12_name'); set(zef.h,'string',(zef.d12_name));
+zef.h = evalin('base','zef.h_d13_name'); set(zef.h,'string',(zef.d13_name));
+
 zef.h = evalin('base','zef.h_edit3'); set(zef.h,'string',num2str(zef.s_x_correction));
 zef.h = evalin('base','zef.h_edit6'); set(zef.h,'string',num2str(zef.s_y_correction));
 zef.h = evalin('base','zef.h_edit7'); set(zef.h,'string',num2str(zef.s_z_correction));
 zef.h = evalin('base','zef.h_edit12'); set(zef.h,'string',num2str(zef.s_xy_rotation));
 zef.h = evalin('base','zef.h_edit13'); set(zef.h,'string',num2str(zef.s_yz_rotation));
 zef.h = evalin('base','zef.h_edit14'); set(zef.h,'string',num2str(zef.s_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit123'); set(zef.h,'string',num2str(zef.d1_x_correction));
-zef.h = evalin('base','zef.h_edit124'); set(zef.h,'string',num2str(zef.d1_y_correction));
-zef.h = evalin('base','zef.h_edit125'); set(zef.h,'string',num2str(zef.d1_z_correction));
-zef.h = evalin('base','zef.h_edit126'); set(zef.h,'string',num2str(zef.d1_xy_rotation));
-zef.h = evalin('base','zef.h_edit127'); set(zef.h,'string',num2str(zef.d1_yz_rotation));
-zef.h = evalin('base','zef.h_edit128'); set(zef.h,'string',num2str(zef.d1_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit223'); set(zef.h,'string',num2str(zef.d2_x_correction));
-zef.h = evalin('base','zef.h_edit224'); set(zef.h,'string',num2str(zef.d2_y_correction));
-zef.h = evalin('base','zef.h_edit225'); set(zef.h,'string',num2str(zef.d2_z_correction));
-zef.h = evalin('base','zef.h_edit226'); set(zef.h,'string',num2str(zef.d2_xy_rotation));
-zef.h = evalin('base','zef.h_edit227'); set(zef.h,'string',num2str(zef.d2_yz_rotation));
-zef.h = evalin('base','zef.h_edit228'); set(zef.h,'string',num2str(zef.d2_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit323'); set(zef.h,'string',num2str(zef.d3_x_correction));
-zef.h = evalin('base','zef.h_edit324'); set(zef.h,'string',num2str(zef.d3_y_correction));
-zef.h = evalin('base','zef.h_edit325'); set(zef.h,'string',num2str(zef.d3_z_correction));
-zef.h = evalin('base','zef.h_edit326'); set(zef.h,'string',num2str(zef.d3_xy_rotation));
-zef.h = evalin('base','zef.h_edit327'); set(zef.h,'string',num2str(zef.d3_yz_rotation));
-zef.h = evalin('base','zef.h_edit328'); set(zef.h,'string',num2str(zef.d3_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit423'); set(zef.h,'string',num2str(zef.d4_x_correction));
-zef.h = evalin('base','zef.h_edit424'); set(zef.h,'string',num2str(zef.d4_y_correction));
-zef.h = evalin('base','zef.h_edit425'); set(zef.h,'string',num2str(zef.d4_z_correction));
-zef.h = evalin('base','zef.h_edit426'); set(zef.h,'string',num2str(zef.d4_xy_rotation));
-zef.h = evalin('base','zef.h_edit427'); set(zef.h,'string',num2str(zef.d4_yz_rotation));
-zef.h = evalin('base','zef.h_edit428'); set(zef.h,'string',num2str(zef.d4_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit23'); set(zef.h,'string',num2str(zef.w_x_correction));
-zef.h = evalin('base','zef.h_edit24'); set(zef.h,'string',num2str(zef.w_y_correction));
-zef.h = evalin('base','zef.h_edit25'); set(zef.h,'string',num2str(zef.w_z_correction));
-zef.h = evalin('base','zef.h_edit26'); set(zef.h,'string',num2str(zef.w_xy_rotation));
-zef.h = evalin('base','zef.h_edit27'); set(zef.h,'string',num2str(zef.w_yz_rotation));
-zef.h = evalin('base','zef.h_edit28'); set(zef.h,'string',num2str(zef.w_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit30'); set(zef.h,'string',num2str(zef.g_x_correction));
-zef.h = evalin('base','zef.h_edit31'); set(zef.h,'string',num2str(zef.g_y_correction));
-zef.h = evalin('base','zef.h_edit32'); set(zef.h,'string',num2str(zef.g_z_correction));
-zef.h = evalin('base','zef.h_edit33'); set(zef.h,'string',num2str(zef.g_xy_rotation));
-zef.h = evalin('base','zef.h_edit34'); set(zef.h,'string',num2str(zef.g_yz_rotation));
-zef.h = evalin('base','zef.h_edit35'); set(zef.h,'string',num2str(zef.g_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit44'); set(zef.h,'string',num2str(zef.c_x_correction));
-zef.h = evalin('base','zef.h_edit45'); set(zef.h,'string',num2str(zef.c_y_correction));
-zef.h = evalin('base','zef.h_edit46'); set(zef.h,'string',num2str(zef.c_z_correction));
-zef.h = evalin('base','zef.h_edit47'); set(zef.h,'string',num2str(zef.c_xy_rotation));
-zef.h = evalin('base','zef.h_edit48'); set(zef.h,'string',num2str(zef.c_yz_rotation));
-zef.h = evalin('base','zef.h_edit49'); set(zef.h,'string',num2str(zef.c_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit51'); set(zef.h,'string',num2str(zef.sk_x_correction));
-zef.h = evalin('base','zef.h_edit52'); set(zef.h,'string',num2str(zef.sk_y_correction));
-zef.h = evalin('base','zef.h_edit53'); set(zef.h,'string',num2str(zef.sk_z_correction));
-zef.h = evalin('base','zef.h_edit54'); set(zef.h,'string',num2str(zef.sk_xy_rotation));
-zef.h = evalin('base','zef.h_edit55'); set(zef.h,'string',num2str(zef.sk_yz_rotation));
-zef.h = evalin('base','zef.h_edit56'); set(zef.h,'string',num2str(zef.sk_zx_rotation));
-
-zef.h = evalin('base','zef.h_edit58'); set(zef.h,'string',num2str(zef.sc_x_correction));
-zef.h = evalin('base','zef.h_edit59'); set(zef.h,'string',num2str(zef.sc_y_correction));
-zef.h = evalin('base','zef.h_edit60'); set(zef.h,'string',num2str(zef.sc_z_correction));
-zef.h = evalin('base','zef.h_edit61'); set(zef.h,'string',num2str(zef.sc_xy_rotation));
-zef.h = evalin('base','zef.h_edit62'); set(zef.h,'string',num2str(zef.sc_yz_rotation));
-zef.h = evalin('base','zef.h_edit63'); set(zef.h,'string',num2str(zef.sc_zx_rotation));
 
 zef.h = evalin('base','zef.h_edit9001'); set(zef.h,'string',num2str(zef.w_priority));
 zef.h = evalin('base','zef.h_edit9002'); set(zef.h,'string',num2str(zef.g_priority));
@@ -78,6 +73,15 @@ zef.h = evalin('base','zef.h_edit9006'); set(zef.h,'string',num2str(zef.d1_prior
 zef.h = evalin('base','zef.h_edit9007'); set(zef.h,'string',num2str(zef.d2_priority));
 zef.h = evalin('base','zef.h_edit9008'); set(zef.h,'string',num2str(zef.d3_priority));
 zef.h = evalin('base','zef.h_edit9009'); set(zef.h,'string',num2str(zef.d4_priority));
+zef.h = evalin('base','zef.h_edit9006'); set(zef.h,'string',num2str(zef.d5_priority));
+zef.h = evalin('base','zef.h_edit9007'); set(zef.h,'string',num2str(zef.d6_priority));
+zef.h = evalin('base','zef.h_edit9008'); set(zef.h,'string',num2str(zef.d7_priority));
+zef.h = evalin('base','zef.h_edit9009'); set(zef.h,'string',num2str(zef.d8_priority));
+zef.h = evalin('base','zef.h_edit9006'); set(zef.h,'string',num2str(zef.d9_priority));
+zef.h = evalin('base','zef.h_edit9007'); set(zef.h,'string',num2str(zef.d10_priority));
+zef.h = evalin('base','zef.h_edit9008'); set(zef.h,'string',num2str(zef.d11_priority));
+zef.h = evalin('base','zef.h_edit9009'); set(zef.h,'string',num2str(zef.d12_priority));
+zef.h = evalin('base','zef.h_edit9009'); set(zef.h,'string',num2str(zef.d13_priority));
 
 zef.h = evalin('base','zef.h_checkbox_cp_on'); set(zef.h,'value',zef.cp_on);
 zef.h = evalin('base','zef.h_edit_cp_a'); set(zef.h,'string',num2str(zef.cp_a));
@@ -99,6 +103,33 @@ zef.h = evalin('base','zef.h_edit370'); set(zef.h,'string',num2str(zef.d3_sigma)
 zef.h = evalin('base','zef.h_edit429'); set(zef.h,'string',num2str(zef.d4_scaling));
 zef.h = evalin('base','zef.h_edit470'); set(zef.h,'string',num2str(zef.d4_sigma));
 
+zef.h = evalin('base','zef.h_edit129'); set(zef.h,'string',num2str(zef.d5_scaling));
+zef.h = evalin('base','zef.h_edit170'); set(zef.h,'string',num2str(zef.d5_sigma));
+
+zef.h = evalin('base','zef.h_edit229'); set(zef.h,'string',num2str(zef.d6_scaling));
+zef.h = evalin('base','zef.h_edit270'); set(zef.h,'string',num2str(zef.d6_sigma));
+
+zef.h = evalin('base','zef.h_edit329'); set(zef.h,'string',num2str(zef.d7_scaling));
+zef.h = evalin('base','zef.h_edit370'); set(zef.h,'string',num2str(zef.d7_sigma));
+
+zef.h = evalin('base','zef.h_edit429'); set(zef.h,'string',num2str(zef.d8_scaling));
+zef.h = evalin('base','zef.h_edit470'); set(zef.h,'string',num2str(zef.d8_sigma));
+
+zef.h = evalin('base','zef.h_edit129'); set(zef.h,'string',num2str(zef.d9_scaling));
+zef.h = evalin('base','zef.h_edit170'); set(zef.h,'string',num2str(zef.d9_sigma));
+
+zef.h = evalin('base','zef.h_edit229'); set(zef.h,'string',num2str(zef.d10_scaling));
+zef.h = evalin('base','zef.h_edit270'); set(zef.h,'string',num2str(zef.d10_sigma));
+
+zef.h = evalin('base','zef.h_edit329'); set(zef.h,'string',num2str(zef.d11_scaling));
+zef.h = evalin('base','zef.h_edit370'); set(zef.h,'string',num2str(zef.d11_sigma));
+
+zef.h = evalin('base','zef.h_edit329'); set(zef.h,'string',num2str(zef.d12_scaling));
+zef.h = evalin('base','zef.h_edit370'); set(zef.h,'string',num2str(zef.d12_sigma));
+
+zef.h = evalin('base','zef.h_edit429'); set(zef.h,'string',num2str(zef.d13_scaling));
+zef.h = evalin('base','zef.h_edit470'); set(zef.h,'string',num2str(zef.d13_sigma));
+
 zef.h = evalin('base','zef.h_edit29'); set(zef.h,'string',num2str(zef.w_scaling));
 zef.h = evalin('base','zef.h_edit70'); set(zef.h,'string',num2str(zef.w_sigma));
 
@@ -114,34 +145,61 @@ zef.h = evalin('base','zef.h_edit73'); set(zef.h,'string',num2str(zef.sk_sigma))
 zef.h = evalin('base','zef.h_edit64'); set(zef.h,'string',num2str(zef.sc_scaling));
 zef.h = evalin('base','zef.h_edit74'); set(zef.h,'string',num2str(zef.sc_sigma));
 
-zef.h = evalin('base','zef.h_checkbox13'); set(zef.h,'value',(zef.s_visible));
+zef.h = evalin('base','zef.h_s_visible'); set(zef.h,'value',(zef.s_visible));
 
-zef.h = evalin('base','zef.h_checkbox101'); set(zef.h,'value',(zef.d1_on));
-zef.h = evalin('base','zef.h_checkbox107'); set(zef.h,'value',(zef.d1_visible));
+zef.h = evalin('base','zef.h_d1_on'); set(zef.h,'value',(zef.d1_on));
+zef.h = evalin('base','zef.h_d1_visible'); set(zef.h,'value',(zef.d1_visible));
 
-zef.h = evalin('base','zef.h_checkbox201'); set(zef.h,'value',(zef.d2_on));
-zef.h = evalin('base','zef.h_checkbox207'); set(zef.h,'value',(zef.d2_visible));
+zef.h = evalin('base','zef.h_d2_on'); set(zef.h,'value',(zef.d2_on));
+zef.h = evalin('base','zef.h_d2_visible'); set(zef.h,'value',(zef.d2_visible));
 
-zef.h = evalin('base','zef.h_checkbox301'); set(zef.h,'value',(zef.d3_on));
-zef.h = evalin('base','zef.h_checkbox307'); set(zef.h,'value',(zef.d3_visible));
+zef.h = evalin('base','zef.h_d3_on'); set(zef.h,'value',(zef.d3_on));
+zef.h = evalin('base','zef.h_d3_visible'); set(zef.h,'value',(zef.d3_visible));
 
-zef.h = evalin('base','zef.h_checkbox401'); set(zef.h,'value',(zef.d4_on));
-zef.h = evalin('base','zef.h_checkbox407'); set(zef.h,'value',(zef.d4_visible));
+zef.h = evalin('base','zef.h_d4_on'); set(zef.h,'value',(zef.d4_on));
+zef.h = evalin('base','zef.h_d4_visible'); set(zef.h,'value',(zef.d4_visible));
 
-zef.h = evalin('base','zef.h_checkbox1'); set(zef.h,'value',(zef.w_on));
-zef.h = evalin('base','zef.h_checkbox7'); set(zef.h,'value',(zef.w_visible));
+zef.h = evalin('base','zef.h_d5_on'); set(zef.h,'value',(zef.d5_on));
+zef.h = evalin('base','zef.h_d5_visible'); set(zef.h,'value',(zef.d5_visible));
 
-zef.h = evalin('base','zef.h_checkbox2'); set(zef.h,'value',(zef.g_on));
-zef.h = evalin('base','zef.h_checkbox8'); set(zef.h,'value',(zef.g_visible));
+zef.h = evalin('base','zef.h_d6_on'); set(zef.h,'value',(zef.d6_on));
+zef.h = evalin('base','zef.h_d6_visible'); set(zef.h,'value',(zef.d6_visible));
 
-zef.h = evalin('base','zef.h_checkbox3'); set(zef.h,'value',(zef.c_on));
-zef.h = evalin('base','zef.h_checkbox9'); set(zef.h,'value',(zef.c_visible));
+zef.h = evalin('base','zef.h_d7_on'); set(zef.h,'value',(zef.d7_on));
+zef.h = evalin('base','zef.h_d7_visible'); set(zef.h,'value',(zef.d7_visible));
 
-zef.h = evalin('base','zef.h_checkbox4'); set(zef.h,'value',(zef.sk_on));
-zef.h = evalin('base','zef.h_checkbox10'); set(zef.h,'value',(zef.sk_visible));
+zef.h = evalin('base','zef.h_d8_on'); set(zef.h,'value',(zef.d8_on));
+zef.h = evalin('base','zef.h_d8_visible'); set(zef.h,'value',(zef.d8_visible));
 
-zef.h = evalin('base','zef.h_checkbox5'); set(zef.h,'value',(zef.sc_on));
-zef.h = evalin('base','zef.h_checkbox11'); set(zef.h,'value',(zef.sc_visible));
+zef.h = evalin('base','zef.h_d9_on'); set(zef.h,'value',(zef.d9_on));
+zef.h = evalin('base','zef.h_d9_visible'); set(zef.h,'value',(zef.d9_visible));
+
+zef.h = evalin('base','zef.h_d10_on'); set(zef.h,'value',(zef.d10_on));
+zef.h = evalin('base','zef.h_d10_visible'); set(zef.h,'value',(zef.d10_visible));
+
+zef.h = evalin('base','zef.h_d11_on'); set(zef.h,'value',(zef.d11_on));
+zef.h = evalin('base','zef.h_d11_visible'); set(zef.h,'value',(zef.d11_visible));
+
+zef.h = evalin('base','zef.h_d12_on'); set(zef.h,'value',(zef.d12_on));
+zef.h = evalin('base','zef.h_d12_visible'); set(zef.h,'value',(zef.d12_visible));
+
+zef.h = evalin('base','zef.h_d13_on'); set(zef.h,'value',(zef.d13_on));
+zef.h = evalin('base','zef.h_d13_visible'); set(zef.h,'value',(zef.d13_visible));
+
+zef.h = evalin('base','zef.h_w_on'); set(zef.h,'value',(zef.w_on));
+zef.h = evalin('base','zef.h_w_visible'); set(zef.h,'value',(zef.w_visible));
+
+zef.h = evalin('base','zef.h_g_on'); set(zef.h,'value',(zef.g_on));
+zef.h = evalin('base','zef.h_g_visible'); set(zef.h,'value',(zef.g_visible));
+
+zef.h = evalin('base','zef.h_c_on'); set(zef.h,'value',(zef.c_on));
+zef.h = evalin('base','zef.h_c_visible'); set(zef.h,'value',(zef.c_visible));
+
+zef.h = evalin('base','zef.h_sk_on'); set(zef.h,'value',(zef.sk_on));
+zef.h = evalin('base','zef.h_sk_visible'); set(zef.h,'value',(zef.sk_visible));
+
+zef.h = evalin('base','zef.h_sc_on'); set(zef.h,'value',(zef.sc_on));
+zef.h = evalin('base','zef.h_sc_visible'); set(zef.h,'value',(zef.sc_visible));
 
 zef.h = evalin('base','zef.h_checkbox14'); set(zef.h,'value',(zef.attach_electrodes));
 
@@ -156,6 +214,15 @@ zef.h = evalin('base','zef.h_d1_sources'); set(zef.h,'value',(zef.d1_sources+1))
 zef.h = evalin('base','zef.h_d2_sources'); set(zef.h,'value',(zef.d2_sources+1));
 zef.h = evalin('base','zef.h_d3_sources'); set(zef.h,'value',(zef.d3_sources+1));
 zef.h = evalin('base','zef.h_d4_sources'); set(zef.h,'value',(zef.d4_sources+1));
+zef.h = evalin('base','zef.h_d5_sources'); set(zef.h,'value',(zef.d5_sources+1));
+zef.h = evalin('base','zef.h_d6_sources'); set(zef.h,'value',(zef.d6_sources+1));
+zef.h = evalin('base','zef.h_d7_sources'); set(zef.h,'value',(zef.d7_sources+1));
+zef.h = evalin('base','zef.h_d8_sources'); set(zef.h,'value',(zef.d8_sources+1));
+zef.h = evalin('base','zef.h_d9_sources'); set(zef.h,'value',(zef.d9_sources+1));
+zef.h = evalin('base','zef.h_d10_sources'); set(zef.h,'value',(zef.d10_sources+1));
+zef.h = evalin('base','zef.h_d11_sources'); set(zef.h,'value',(zef.d11_sources+1));
+zef.h = evalin('base','zef.h_d12_sources'); set(zef.h,'value',(zef.d12_sources+1));
+zef.h = evalin('base','zef.h_d13_sources'); set(zef.h,'value',(zef.d13_sources+1));
 zef.h = evalin('base','zef.h_g_sources'); set(zef.h,'value',(zef.g_sources+1));
 zef.h = evalin('base','zef.h_c_sources'); set(zef.h,'value',(zef.c_sources+1));
 zef.h = evalin('base','zef.h_sk_sources'); set(zef.h,'value',(zef.sk_sources+1));
@@ -188,28 +255,5 @@ zef.h = evalin('base','zef.h_edit82'); set(zef.h,'string',num2str(zef.cam_va));
 
 zef.h = evalin('base','zef.h_edit_meshing_accuracy'); set(zef.h,'string',num2str(zef.meshing_accuracy));
 
-switch_color('checkbox16','pushbutton16','s_points');
-if zef.imaging_method==2
-switch_color('checkbox17','pushbutton17','s_directions');
-end
-switch_color('checkbox1','pushbutton1','w_points');
-switch_color('checkbox1','pushbutton2','w_triangles');
-switch_color('checkbox101','pushbutton101','d1_points');
-switch_color('checkbox101','pushbutton102','d1_triangles');
-switch_color('checkbox201','pushbutton201','d2_points');
-switch_color('checkbox201','pushbutton202','d2_triangles');
-switch_color('checkbox301','pushbutton301','d3_points');
-switch_color('checkbox301','pushbutton302','d3_triangles');
-switch_color('checkbox401','pushbutton401','d4_points');
-switch_color('checkbox401','pushbutton402','d4_triangles');
-switch_color('checkbox2','pushbutton3','g_points');
-switch_color('checkbox2','pushbutton4','g_triangles');
-switch_color('checkbox3','pushbutton5','c_points');
-switch_color('checkbox3','pushbutton6','c_triangles');
-switch_color('checkbox4','pushbutton7','sk_points');
-switch_color('checkbox4','pushbutton8','sk_triangles');
-switch_color('checkbox5','pushbutton9','sc_points');
-switch_color('checkbox5','pushbutton10','sc_triangles');
-
-switch_onoff;
+zef_pushbutton_switch;
 

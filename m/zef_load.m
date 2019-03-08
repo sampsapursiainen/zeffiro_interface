@@ -94,33 +94,9 @@ load([zef.file_path zef.file]);
              zef.d3_on     =          zef_data.d3_on;
              zef.d4_on     =          zef_data.d4_on;
              zef.d1_scaling=         zef_data.d1_scaling  ;
-         zef.d1_zx_rotation=     zef_data.d1_zx_rotation  ;
-         zef.d1_yz_rotation=     zef_data.d1_yz_rotation  ;
-         zef.d1_xy_rotation=     zef_data.d1_xy_rotation  ;
-        zef.d1_z_correction=    zef_data.d1_z_correction  ;
-        zef.d1_y_correction=    zef_data.d1_y_correction  ;
-        zef.d1_x_correction=    zef_data.d1_x_correction  ;
          zef.d2_scaling=         zef_data.d2_scaling  ;
-         zef.d2_zx_rotation=     zef_data.d2_zx_rotation  ;
-         zef.d2_yz_rotation=     zef_data.d2_yz_rotation  ;
-         zef.d2_xy_rotation=     zef_data.d2_xy_rotation  ;
-        zef.d2_z_correction=    zef_data.d2_z_correction  ;
-        zef.d2_y_correction=    zef_data.d2_y_correction  ;
-        zef.d2_x_correction=    zef_data.d2_x_correction  ; 
-             zef.d3_scaling=         zef_data.d3_scaling  ;
-         zef.d3_zx_rotation=     zef_data.d3_zx_rotation  ;
-         zef.d3_yz_rotation=     zef_data.d3_yz_rotation  ;
-         zef.d3_xy_rotation=     zef_data.d3_xy_rotation  ;
-        zef.d3_z_correction=    zef_data.d3_z_correction  ;
-        zef.d3_y_correction=    zef_data.d3_y_correction  ;
-        zef.d3_x_correction=    zef_data.d3_x_correction  ;  
-             zef.d4_scaling=         zef_data.d4_scaling  ;
-         zef.d4_zx_rotation=     zef_data.d4_zx_rotation  ;
-         zef.d4_yz_rotation=     zef_data.d4_yz_rotation  ;
-         zef.d4_xy_rotation=     zef_data.d4_xy_rotation  ;
-        zef.d4_z_correction=    zef_data.d4_z_correction  ;
-        zef.d4_y_correction=    zef_data.d4_y_correction  ;
-        zef.d4_x_correction=    zef_data.d4_x_correction  ;   
+             zef.d3_scaling=         zef_data.d3_scaling  ; 
+             zef.d4_scaling=         zef_data.d4_scaling  ;  
         zef.mesh_resolution=    zef_data.mesh_resolution  ;
       zef.attach_electrodes=  zef_data.attach_electrodes  ;
               zef.s_visible=          zef_data.s_visible  ;
@@ -142,40 +118,10 @@ load([zef.file_path zef.file]);
               zef.g_visible=          zef_data.g_visible  ;
               zef.w_visible=          zef_data.w_visible  ;
              zef.sc_scaling=         zef_data.sc_scaling  ;
-         zef.sc_zx_rotation=     zef_data.sc_zx_rotation  ;
-         zef.sc_yz_rotation=     zef_data.sc_yz_rotation  ;
-         zef.sc_xy_rotation=     zef_data.sc_xy_rotation  ;
-        zef.sc_z_correction=    zef_data.sc_z_correction  ;
-        zef.sc_y_correction=    zef_data.sc_y_correction  ;
-        zef.sc_x_correction=    zef_data.sc_x_correction  ;
              zef.sk_scaling=   zef_data.sk_scaling        ;
-         zef.sk_zx_rotation=     zef_data.sk_zx_rotation  ;
-         zef.sk_yz_rotation=     zef_data.sk_yz_rotation  ;
-         zef.sk_xy_rotation=     zef_data.sk_xy_rotation  ;
-        zef.sk_z_correction=    zef_data.sk_z_correction  ;
-        zef.sk_y_correction=    zef_data.sk_y_correction  ;
-        zef.sk_x_correction=    zef_data.sk_x_correction  ;
               zef.c_scaling=          zef_data.c_scaling  ;
-          zef.c_zx_rotation=      zef_data.c_zx_rotation  ;
-          zef.c_yz_rotation=      zef_data.c_yz_rotation  ;
-          zef.c_xy_rotation=      zef_data.c_xy_rotation  ;
-         zef.c_z_correction=     zef_data.c_z_correction  ;
-         zef.c_y_correction=     zef_data.c_y_correction  ;
-         zef.c_x_correction=     zef_data.c_x_correction  ;
               zef.g_scaling=          zef_data.g_scaling  ;
-          zef.g_zx_rotation=      zef_data.g_zx_rotation  ;
-          zef.g_yz_rotation=      zef_data.g_yz_rotation  ;
-          zef.g_xy_rotation=      zef_data.g_xy_rotation  ;
-         zef.g_z_correction=     zef_data.g_z_correction  ;
-         zef.g_y_correction=     zef_data.g_y_correction  ;
-         zef.g_x_correction=     zef_data.g_x_correction  ;
               zef.w_scaling=          zef_data.w_scaling  ;
-          zef.w_zx_rotation=      zef_data.w_zx_rotation  ;
-          zef.w_yz_rotation=      zef_data.w_yz_rotation  ;
-          zef.w_xy_rotation=      zef_data.w_xy_rotation  ;
-         zef.w_z_correction=     zef_data.w_z_correction  ;
-         zef.w_y_correction=     zef_data.w_y_correction  ;
-         zef.w_x_correction=     zef_data.w_x_correction  ;
               zef.s_scaling=          zef_data.s_scaling  ;
           zef.s_zx_rotation=      zef_data.s_zx_rotation  ;
           zef.s_yz_rotation=      zef_data.s_yz_rotation  ;
@@ -632,7 +578,138 @@ end;
           zef.brain_transparency = 0;
           end
           
+          if isfield(zef_data,'s_name')
+            zef.s_name = zef_data.s_name;
+          zef.w_name =  zef_data.w_name;
+          zef.g_name =  zef_data.g_name;
+          zef.c_name =  zef_data.c_name;
+          zef.sk_name =  zef_data.sk_name;
+          zef.sc_name =  zef_data.sc_name;
+          zef.d1_name =  zef_data.d1_name;
+          zef.d2_name =  zef_data.d2_name;
+          zef.d3_name =  zef_data.d3_name;
+          zef.d4_name =  zef_data.d4_name;
+          zef.d5_name =  zef_data.d5_name;
+          zef.d6_name =  zef_data.d6_name;
+          zef.d7_name =  zef_data.d7_name;
+          zef.d8_name =  zef_data.d8_name;
+          zef.d9_name =  zef_data.d9_name;
+          zef.d10_name =  zef_data.d10_name;
+          zef.d11_name =  zef_data.d11_name;
+          zef.d12_name =  zef_data.d12_name;
+          zef.d13_name =  zef_data.d13_name;
           
+          zef.s_merge = zef_data.s_merge;
+          zef.w_merge = zef_data.w_merge;
+          zef.g_merge = zef_data.g_merge;
+          zef.c_merge = zef_data.c_merge;
+          zef.sk_merge = zef_data.sk_merge;
+          zef.sc_merge = zef_data.sc_merge;
+          zef.d1_merge = zef_data.d1_merge;
+          zef.d2_merge = zef_data.d2_merge;
+          zef.d3_merge = zef_data.d3_merge;
+          zef.d4_merge = zef_data.d4_merge;
+          zef.d5_merge = zef_data.d5_merge;
+          zef.d6_merge = zef_data.d6_merge;
+          zef.d7_merge = zef_data.d7_merge;
+          zef.d8_merge = zef_data.d8_merge;
+          zef.d9_merge = zef_data.d9_merge;
+          zef.d10_merge = zef_data.d10_merge;
+          zef.d11_merge = zef_data.d11_merge;
+          zef.d12_merge = zef_data.d12_merge;
+          zef.d13_merge = zef_data.d13_merge;
+          
+          zef.s_invert = zef_data.s_invert;
+          zef.w_invert = zef_data.w_invert;
+          zef.g_invert = zef_data.g_invert;
+          zef.c_invert = zef_data.c_invert;
+          zef.sk_invert = zef_data.sk_invert;
+          zef.sc_invert = zef_data.sc_invert;
+          zef.d1_invert = zef_data.d1_invert;
+          zef.d2_invert = zef_data.d2_invert;
+          zef.d3_invert = zef_data.d3_invert;
+          zef.d4_invert = zef_data.d4_invert;
+          zef.d5_invert = zef_data.d5_invert;
+          zef.d6_invert = zef_data.d6_invert;
+          zef.d7_invert = zef_data.d7_invert;
+          zef.d8_invert = zef_data.d8_invert;
+          zef.d9_invert = zef_data.d9_invert;
+          zef.d10_invert = zef_data.d10_invert;
+          zef.d11_invert = zef_data.d11_invert;
+          zef.d12_invert = zef_data.d12_invert;
+          zef.d13_invert = zef_data.d13_invert;
+          
+          zef.d5_sigma=            zef_data.d5_sigma ;
+          zef.d6_sigma=           zef_data.d6_sigma ;
+          zef.d7_sigma=           zef_data.d7_sigma ;
+          zef.d8_sigma=           zef_data.d8_sigma ;
+           zef.d9_sigma=            zef_data.d9_sigma ;
+          zef.d10_sigma=           zef_data.d10_sigma ;
+          zef.d11_sigma=           zef_data.d11_sigma ;
+          zef.d12_sigma=           zef_data.d12_sigma ; 
+          zef.d13_sigma=           zef_data.d13_sigma ; 
+          
+          zef.d5_visible=          zef_data.d5_visible  ;
+             zef.d6_visible=          zef_data.d6_visible  ; 
+             zef.d7_visible=          zef_data.d7_visible  ;
+             zef.d8_visible=          zef_data.d8_visible  ; 
+             zef.d9_visible=          zef_data.d9_visible  ;
+             zef.d10_visible=          zef_data.d10_visible  ; 
+             zef.d11_visible=          zef_data.d11_visible  ;
+             zef.d12_visible=          zef_data.d12_visible  ; 
+             zef.d13_visible=          zef_data.d13_visible  ;
+
+             zef.d5_on     =          zef_data.d5_on;    
+             zef.d6_on     =          zef_data.d6_on;    
+             zef.d7_on     =          zef_data.d7_on;
+             zef.d8_on     =          zef_data.d8_on;    
+             zef.d9_on     =          zef_data.d9_on;    
+             zef.d10_on     =          zef_data.d10_on;    
+             zef.d11_on     =          zef_data.d11_on;
+             zef.d12_on     =          zef_data.d12_on;
+             zef.d13_on     =          zef_data.d13_on;
+             
+             zef.d5_scaling=         zef_data.d5_scaling  ;
+             zef.d6_scaling=         zef_data.d6_scaling  ;
+             zef.d7_scaling=         zef_data.d7_scaling  ; 
+             zef.d8_scaling=         zef_data.d8_scaling  ;  
+             zef.d9_scaling=         zef_data.d9_scaling  ;
+             zef.d10_scaling=         zef_data.d10_scaling  ;
+             zef.d11_scaling=         zef_data.d11_scaling  ; 
+             zef.d12_scaling=         zef_data.d12_scaling  ;  
+             zef.d13_scaling=         zef_data.d13_scaling  ; 
+             
+            zef.d5_triangles=        zef_data.d5_triangles  ;
+               zef.d5_points=           zef_data.d5_points  ;
+            zef.d6_triangles=        zef_data.d6_triangles  ;
+               zef.d6_points=           zef_data.d6_points  ;
+            zef.d7_triangles=        zef_data.d7_triangles  ;
+               zef.d7_points=           zef_data.d7_points  ;
+            zef.d8_triangles=        zef_data.d8_triangles  ;
+               zef.d8_points=           zef_data.d8_points  ;
+            zef.d9_triangles=        zef_data.d9_triangles  ;
+          zef.d9_points=           zef_data.d9_points  ;
+           zef.d10_triangles=        zef_data.d10_triangles  ;
+               zef.d10_points=           zef_data.d10_points  ;
+            zef.d11_triangles=        zef_data.d11_triangles  ;
+               zef.d11_points=           zef_data.d11_points  ;
+            zef.d12_triangles=        zef_data.d12_triangles  ;
+               zef.d12_points=           zef_data.d12_points  ;
+            zef.d13_triangles=        zef_data.d13_triangles  ;
+          zef.d13_points=           zef_data.d13_points  ;  
+          
+           zef.d5_priority = zef_data.d5_priority;
+           zef.d6_priority = zef_data.d6_priority;
+           zef.d7_priority = zef_data.d7_priority;
+           zef.d8_priority = zef_data.d8_priority;
+           zef.d9_priority = zef_data.d9_priority;
+           zef.d10_priority = zef_data.d10_priority;
+           zef.d11_priority = zef_data.d11_priority;
+           zef.d12_priority = zef_data.d12_priority;
+           zef.d13_priority = zef_data.d13_priority;
+           
+end
+                    
 clear zef_data;
 zef_update;
 zef_figure_tool;
@@ -640,37 +717,6 @@ end;
 
 
 
-
-
-
-
-%color_label('checkbox1','checkbox7','text196');
-%color_label('checkbox101','checkbox107','text1196');
-%color_label('checkbox201','checkbox207','text2196');
-%color_label('checkbox301','checkbox307','text3196');
-%color_label('checkbox2','checkbox8','text197');
-%color_label('checkbox3','checkbox9','text198');
-%color_label('checkbox4','checkbox10','text199');
-%color_label('checkbox5','checkbox11','text200');
-%switch_color('checkbox16','pushbutton16','s_points');
-%if zef.imaging_method==2
-%switch_color('checkbox17','pushbutton17','s_directions');
-%end
-%switch_color('checkbox1','pushbutton1','w_points');
-%switch_color('checkbox101','pushbutton101','d1_points');
-%switch_color('checkbox201','pushbutton201','d2_points');
-%switch_color('checkbox301','pushbutton301','d3_points');
-%switch_color('checkbox2','pushbutton3','g_points');
-%switch_color('checkbox2','pushbutton4','g_triangles');
-%switch_color('checkbox3','pushbutton5','c_points');
-%switch_color('checkbox3','pushbutton6','c_triangles');
-%switch_color('checkbox4','pushbutton7','sk_points');
-%switch_color('checkbox4','pushbutton8','sk_triangles');
-%switch_color('checkbox5','pushbutton9','sc_points');
-%switch_color('checkbox5','pushbutton10','sc_triangles');
-%
-%switch_onoff;
-%end
 
 
 

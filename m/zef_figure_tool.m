@@ -1,18 +1,27 @@
 zef.h_zeffiro = open('zeffiro_interface_figure_tool.fig');
 zef.o_h = findall(zef.h_zeffiro);
-zef.h_axes1 = zef.o_h(25);
+zef.h_axes1 = zef.o_h(34);
 zef=rmfield(zef,'o_h');
 
-color_label('checkbox101','checkbox107','text1196');
-color_label('checkbox201','checkbox207','text2196');
-color_label('checkbox301','checkbox307','text3196');
-color_label('checkbox401','checkbox407','text4196');
-color_label('checkbox16','checkbox13','text195');
-color_label('checkbox1','checkbox7','text196');
-color_label('checkbox2','checkbox8','text197');
-color_label('checkbox3','checkbox9','text198');
-color_label('checkbox4','checkbox10','text199');
-color_label('checkbox5','checkbox11','text200');
+color_label('s');
+color_label('w');
+color_label('g');
+color_label('c');
+color_label('sk');
+color_label('sc');
+color_label('d1');
+color_label('d2');
+color_label('d3');
+color_label('d4');
+color_label('d5');
+color_label('d6');
+color_label('d7');
+color_label('d8');
+color_label('d9');
+color_label('d10');
+color_label('d11');
+color_label('d12');
+color_label('d13');
 
 if evalin('base','zef.prism_layers');
     if isfield(zef,'prisms')
