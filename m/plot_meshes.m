@@ -469,9 +469,9 @@ end
  sensors = sensors_aux;
 end
 
-
+loop_count = 0;
 while loop_movie 
-    
+loop_count = loop_count + 1;    
 
 axes(evalin('base','zef.h_axes1')); 
 cla(evalin('base','zef.h_axes1'));  
@@ -917,9 +917,12 @@ end
 end
 end
 
+if loop_count == 1
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 axis('image');
 camva(evalin('base','zef.cam_va'));
+end 
+
 if evalin('base','zef.axes_visible')
 set(evalin('base','zef.h_axes1'),'visible','on');
 set(evalin('base','zef.h_axes1'),'xGrid','on');
@@ -942,7 +945,11 @@ pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
 %pause(0.01);
 if stop_movie
+    if get(evalin('base','zef.h_pause_movie'),'value') == 1
+    waitfor(evalin('base','zef.h_pause_movie'),'value');    
+    else
 return;
+    end
 end
 f_ind_aux = f_ind_aux + 1;
 %waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])

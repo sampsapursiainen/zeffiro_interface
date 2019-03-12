@@ -523,8 +523,9 @@ end
 %set(h_waitbar,'handlevisibility','off');
 %end
 
+loop_count = 0;
 while loop_movie 
-    
+loop_count = loop_count + 1;    
 axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
@@ -855,9 +856,12 @@ end
 end
 end
 
+if loop_count == 1
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 axis('image');
 camva(evalin('base','zef.cam_va'));
+end
+
 if not(isempty(h_axes_text))
 delete(h_axes_text); 
 h_axes_text = [];
