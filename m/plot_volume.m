@@ -859,8 +859,8 @@ end
 if loop_count == 1
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 axis('image');
-camva(evalin('base','zef.cam_va'));
 end
+camva(evalin('base','zef.cam_va'));
 
 if not(isempty(h_axes_text))
 delete(h_axes_text); 

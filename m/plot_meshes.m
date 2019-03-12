@@ -920,8 +920,8 @@ end
 if loop_count == 1
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 axis('image');
-camva(evalin('base','zef.cam_va'));
 end 
+camva(evalin('base','zef.cam_va'));
 
 if evalin('base','zef.axes_visible')
 set(evalin('base','zef.h_axes1'),'visible','on');
