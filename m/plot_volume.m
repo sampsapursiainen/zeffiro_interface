@@ -898,9 +898,14 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
 
 pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
+%pause(0.01);
 if stop_movie
+    if get(evalin('base','zef.h_pause_movie'),'value') == 1
+    waitfor(evalin('base','zef.h_pause_movie'),'value');    
+    else
 return;
-end    
+    end
+end   
     
 f_ind_aux = f_ind_aux + 1;
 %if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
