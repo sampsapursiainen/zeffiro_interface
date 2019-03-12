@@ -542,10 +542,11 @@ end
 end
 end
 
-
+if ismember(evalin('base','zef.visualization_type'),[2])
 if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
+end
 end
 
 f_ind_aux = 1;
@@ -1853,12 +1854,14 @@ if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 aux_brain_visible_ind = [aux_brain_visible_ind i];
 
+if ismember(evalin('base','zef.visualization_type'),[3])
 if  i == aux_brain_visible_ind
 if  iscell(evalin('base','zef.reconstruction')) 
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
 end    
 end  
+end
     
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
