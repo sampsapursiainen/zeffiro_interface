@@ -7,11 +7,11 @@ switch_val = get(evalin('base',['zef.h_' tag_str_1]),'value');
 h=evalin('base',['zef.h_' tag_str_2]); 
 if switch_val 
 if  isempty(evalin('base',['zef.' variable_name]));  
-    set(h,'backgroundcolor',[1 0 0]); 
+    set(h,'foregroundcolor',[1 0 0]); 
 else
-set(h,'backgroundcolor',[0.941176470588235   0.941176470588235   0.941176470588235]);    
+set(h,'foregroundcolor',[0 0 0]);    
 end; 
 else
-set(h,'backgroundcolor',[0.941176470588235   0.941176470588235   0.941176470588235]); 
+set(h,'foregroundcolor',[0 0 0]); 
 end
     

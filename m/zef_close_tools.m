@@ -14,4 +14,6 @@ zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Find s
 close(zef.h_fig_aux);
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Find synthetic EIT data');
 close(zef.h_fig_aux);
+zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Parcellation tool');
+close(zef.h_fig_aux);
 rmfield(zef,'h_fig_aux');

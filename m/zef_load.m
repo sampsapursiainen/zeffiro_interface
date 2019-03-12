@@ -11,67 +11,58 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 zef_mesh_tool;
+zef_init;
 load([zef.file_path zef.file]);
- if (isfield(zef_data,'inv_rec_source'));
+          if (isfield(zef_data,'parcellation_tolerance'));
+          zef.parcellation_tolerance = zef_data.parcellation_tolerance; 
+          end
+          if (isfield(zef_data,'parcellation_selected'));
+          zef.parcellation_selected = zef_data.parcellation_selected; 
+          end
+ if (isfield(zef_data,'parcellation_colormap'));
+          zef.inv_parcellation_colormap = zef_data.parcellation_colormap; 
+ end
+           if (isfield(zef_data,'parcellation_interp_ind'));
+          zef.inv_parcellation_interp_ind = zef_data.parcellation_interp_ind; 
+          end
+if (isfield(zef_data,'inv_rec_source'));
           zef.inv_rec_source = zef_data.inv_rec_source; 
-          else
-          zef.inv_rec_source = [0 0 0 1 0 0 0 3 1];
           end
  if (isfield(zef_data,'inv_synth_source'));
           zef.inv_synth_source = zef_data.inv_synth_source; 
-          else
-          zef.inv_synth_source = [0 0 0 1 0 0 10 0 3 1];
           end
           if (isfield(zef_data,'inv_roi_sphere'));
           zef.inv_roi_sphere = zef_data.inv_roi_sphere; 
-          else
-          zef.inv_roi_sphere = [0 0 0 15];
           end
           if (isfield(zef_data,'inv_roi_threshold'));
           zef.inv_roi_threshold = zef_data.inv_roi_threshold; 
-          else
-          zef.inv_roi_threshold = 0.5;
           end
           if (isfield(zef_data,'inv_roi_mode'));
           zef.inv_roi_mode = zef_data.inv_roi_mode; 
-          else
-          zef.inv_roi_mode = 1;
           end
           if (isfield(zef_data,'inv_n_sampler'));
           zef.inv_n_sampler = zef_data.inv_n_sampler; 
-          else
-          zef.inv_n_sampler = 10000;
           end
           if (isfield(zef_data,'inv_n_burn_in'));
           zef.inv_n_burn_in = zef_data.inv_n_burn_in; 
-          else
-          zef.inv_n_burn_in = 1000;
           end
           if (isfield(zef_data,'use_depth_electrodes'));
           zef.use_depth_electrodes = zef_data.use_depth_electrodes; 
-          else
-          zef.use_depth_electrodes = 0;
           end;
           if (isfield(zef_data,'source_model'));
           zef.source_model = zef_data.source_model; 
-          else
-          zef.source_model = 2;
           end;
           if isfield(zef_data,'reconstruction_type')
           zef.reconstruction_type      =      zef_data.reconstruction_type;
-          else
-          zef.reconstruction_type = 1;
           end
           if isfield(zef_data,'use_gpu')
           zef.use_gpu      =      zef_data.use_gpu;
-          else
-          zef.use_gpu = 1;
           end
           if isfield(zef_data,'gpu_num') 
           zef.gpu_num      =      zef_data.gpu_num;
-          else 
-          zef.gpu_num = 1;
           end
+          
+          
           zef.cam_va       =      zef_data.cam_va;
           zef.location_unit=      zef_data.location_unit  ;
               zef.elevation=          zef_data.elevation  ;
@@ -504,79 +495,75 @@ end;
 
           if (isfield(zef_data,'inv_multires_dec'));
           zef.inv_multires_dec = zef_data.inv_multires_dec; 
-          else
-          zef.inv_multires_dec = [];
           end
           if (isfield(zef_data,'inv_multires_ind'));
           zef.inv_multires_ind = zef_data.inv_multires_ind; 
-          else
-          zef.inv_multires_ind = [];
           end
            if (isfield(zef_data,'inv_multires_count'));
           zef.inv_multires_count = zef_data.inv_multires_count; 
-          else
-          zef.inv_multires_count = [];
           end
           if (isfield(zef_data,'inv_multires_n_levels'));
           zef.inv_multires_n_levels = zef_data.inv_multires_n_levels; 
-          else
-          zef.inv_multires_n_levels = [3];
           end
           if (isfield(zef_data,'inv_multires_n_decompositions'));
           zef.inv_multires_n_decompositions = zef_data.inv_multires_n_decompositions; 
-          else
-          zef.inv_multires_n_decompositions = [20];
           end
           if (isfield(zef_data,'inv_multires_sparsity'));
           zef.inv_multires_sparsity = zef_data.inv_multires_sparsity; 
-          else
-          zef.inv_multires_sparsity = [4];
           end
           if (isfield(zef_data,'inv_multires_n_iter'));
           zef.inv_multires_n_iter = zef_data.inv_multires_n_iter; 
-          else
-          zef.inv_multires_n_iter = [10 3 3];
           end   
           if (isfield(zef_data,'inv_bg_data'));
           zef.inv_bg_data = zef_data.inv_bg_data;
-          else
-           zef.inv_bg_data = [];
           end
           if (isfield(zef_data,'inv_roi_perturbation'));
           zef.inv_roi_perturbation = zef_data.inv_roi_perturbation;
-          else
-          zef.inv_roi_perturbation = 0.1;
           end
           if (isfield(zef_data,'current_pattern'));
           zef.current_pattern = zef_data.current_pattern;
-          else
-          zef.current_pattern = [];
           end 
           if (isfield(zef_data,'inv_eit_noise'));
           zef.inv_eit_noise = zef_data.inv_eit_noise;
-          else
-          zef.inv_eit_noise = 0;
           end 
           if (isfield(zef_data,'inv_init_guess_mode'));
           zef.inv_init_guess_mode = zef_data.inv_init_guess_mode;
-          else
-          zef.inv_init_guess_mode = [1];
           end
           if (isfield(zef_data,'loop_movie'));
           zef.loop_movie = zef_data.loop_movie;
-          else
-          zef.loop_movie = [1];
           end
           if (isfield(zef_data,'stop_movie'));
           zef.stop_movie = zef_data.stop_movie;
-          else
-          zef.stop_movie = [0];
           end
           if (isfield(zef_data,'brain_transparency'));
           zef.brain_transparency = zef_data.brain_transparency; 
-          else
-          zef.brain_transparency = 0;
           end
+          if (isfield(zef_data,'parcellation_interp_ind'));
+          zef.parcellation_interp_ind = zef_data.parcellation_interp_ind; 
+          end
+          if (isfield(zef_data,'parcellation_colormap'));
+          zef.parcellation_colormap = zef_data.parcellation_colormap; 
+          end
+          if (isfield(zef_data,'parcellation_name'));
+          zef.parcellation_name = zef_data.parcellation_name; 
+          end
+          if (isfield(zef_data,'parcellation_colortable'));
+          zef.parcellation_colortable = zef_data.parcellation_colortable; 
+          end
+          if (isfield(zef_data,'use_parcellation'));
+          zef.use_parcellation = zef_data.use_parcellation; 
+          end
+          if (isfield(zef_data,'parcellation_points'));
+          zef.parcellation_points = zef_data.parcellation_points; 
+          end
+          if (isfield(zef_data,'parcellation_segment'));
+          zef.parcellation_segment = zef_data.parcellation_segment; 
+          end
+          if (isfield(zef_data,'parcellation_merge'));
+          zef.parcellation_merge = zef_data.parcellation_merge; 
+          end
+          
+          
           
           if isfield(zef_data,'s_name')
             zef.s_name = zef_data.s_name;

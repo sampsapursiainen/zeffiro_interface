@@ -72,10 +72,11 @@ zef.surface_mesh_nodes = zef.reuna_p;
 zef.surface_mesh_triangles = zef.reuna_t;
 if zef.imaging_method== 1
 zef.sensors_attached_surface = zef.sensors;
-for i = 1 : size(zef.sensors,1)
-[zef.min_val, zef.min_ind] = min(sqrt(sum((zef.surface_mesh_nodes{end} - repmat(zef.sensors(i,1:3),size(zef.surface_mesh_nodes{end},1),1)).^2,2)));
-zef.sensors_attached_surface(i,1:3) = zef.surface_mesh_nodes{end}(zef.min_ind,:);
+for zef_i = 1 : size(zef.sensors,1)
+[zef.min_val, zef.min_ind] = min(sqrt(sum((zef.surface_mesh_nodes{end} - repmat(zef.sensors(zef_i,1:3),size(zef.surface_mesh_nodes{end},1),1)).^2,2)));
+zef.sensors_attached_surface(zef_i,1:3) = zef.surface_mesh_nodes{end}(zef.min_ind,:);
 end
+clear zef_i;
 save([zef.file_path zef.file],'-struct','zef','sensors','surface_mesh_nodes','surface_mesh_triangles','sensors_attached_surface','-v7.3');
 zef = rmfield(zef,{'min_val','min_ind','sensors_attached_surface'});
 else

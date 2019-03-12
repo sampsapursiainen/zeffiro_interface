@@ -196,6 +196,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
+aux_brain_ind = [];
 for k = 1 : 18   
 switch k
     case 1
@@ -317,11 +318,60 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if k == 6;
-    aux_brain_ind = i;
+
+if k == 1 && evalin('base','zef.d1_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
-if k == 5;
-    aux_wm_ind = i;
+if k == 2 && evalin('base','zef.d2_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 3 && evalin('base','zef.d3_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 4 && evalin('base','zef.d4_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 5 && evalin('base','zef.d5_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 6 && evalin('base','zef.d6_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 7 && evalin('base','zef.d7_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 8 && evalin('base','zef.d8_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 9 && evalin('base','zef.d9_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 10 && evalin('base','zef.d10_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 11 && evalin('base','zef.d11_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 12 && evalin('base','zef.d12_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 13 && evalin('base','zef.d13_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 14 && evalin('base','zef.wm_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 15 && evalin('base','zef.g_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 16 && evalin('base','zef.c_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 17 && evalin('base','zef.sk_sources');
+    aux_brain_ind = [aux_brain_ind i];
+end
+if k == 18 && evalin('base','zef.sc_sources');
+    aux_brain_ind = [aux_brain_ind i];
 end
 end
 end
@@ -412,9 +462,18 @@ max_rec = -Inf;
 frame_start = 1;
 frame_stop = 1;
 frame_step = 1;
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+
+if ismember(evalin('base','zef.visualization_type'), [2,4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
+end
+
+if evalin('base','zef.use_parcellation')
+selected_list = evalin('base','zef.parcellation_selected');
+p_i_ind = evalin('base','zef.parcellation_interp_ind');
+end
+
+if iscell(evalin('base','zef.reconstruction')) &&  evalin('base','zef.visualization_type') == 2
+length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
 frame_start = evalin('base','zef.frame_start');
 frame_stop = evalin('base','zef.frame_stop');
 frame_step = evalin('base','zef.frame_step');
@@ -456,7 +515,7 @@ max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynam
 end
 end
 elseif  evalin('base','zef.visualization_type') == 2
-s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
+%s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
 reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -488,6 +547,7 @@ if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualizati
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
 end
+
 f_ind_aux = 1;
 for f_ind = frame_start : frame_start
 if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
@@ -501,11 +561,34 @@ end
 %end
 hold on;
 %**************************************************************************
-if evalin('base','zef.visualization_type') == 2
-brain_ind = evalin('base','zef.brain_ind');
+if ismember(evalin('base','zef.visualization_type'),[2,4])
+brain_ind_aux = evalin('base','zef.brain_ind');
+brain_ind = brain_ind_aux;
 [aux_vec, brain_ind, I_2] = intersect(I_aux,brain_ind);
 clear aux_vec;
 johtavuus(aux_ind(brain_ind))=0;
+I_3 = find(ismember(tetra_ind,brain_ind));
+
+if evalin('base','zef.use_parcellation')
+reconstruction_p_1 = ones(size(I_3,1),1);
+reconstruction_p_2 = zeros(size(I_3,1),1);
+for p_ind = selected_list
+p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
+[p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
+[p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
+reconstruction_p_1(p_ind_aux) = p_ind+1;
+reconstruction_p_2(p_ind_aux) = 1;
+end
+end
+end
+
+if ismember(evalin('base','zef.visualization_type'),[4])
+reconstruction = reconstruction_p_1;
+min_rec = 1; 
+max_rec = size(evalin('base','zef.parcellation_colormap'),1);
+end
+
+if ismember(evalin('base','zef.visualization_type'),[2])
 
 %******************************************************
 if iscell(evalin('base','zef.reconstruction')) 
@@ -569,7 +652,6 @@ if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
-I_3 = find(ismember(tetra_ind,brain_ind));
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
 I_2(brain_ind) = [1:length(brain_ind)]';
@@ -590,7 +672,6 @@ rec_x = rec_x(I_2);
 rec_y = rec_y(I_2);
 rec_z = rec_z(I_2);
 I_2_b_rec = I_2;
-I_3 = find(ismember(tetra_ind,brain_ind));
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
 I_2(brain_ind) = [1:length(brain_ind)]';
@@ -640,7 +721,13 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
-%T
+end
+
+if ismember(evalin('base','zef.visualization_type'),[2,4])
+
+if evalin('base','zef.use_parcellation')
+reconstruction = reconstruction.*reconstruction_p_2;
+end
 
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
@@ -767,6 +854,8 @@ elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 set(h_fig_aux,'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 13
+set(h_fig_aux,'colormap',evalin('base','zef.parcellation_colormap'));
 end
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
@@ -779,7 +868,8 @@ set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1
-f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux = zeros(size(nodes,1),1);
+I_tr = I_3;
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
 else
@@ -787,15 +877,22 @@ r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
 end
 r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
 r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
-f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
-set(h_surf_2{ab_ind},'FaceAlpha','interp');
-set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+set(h_surf_2,'FaceAlpha','interp');
+set(h_surf_2,'AlphaDataMapping','none'); 
 end
+
+if ismember(evalin('base','zef.visualization_type'),[2])
+h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
+end
+
 lighting phong;
-h_colorbar = colorbar('EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
+
+if evalin('base','zef.visualization_type') == 2
+%h_colorbar = colorbar('EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
 set(h_bar,'facecolor',[0.5 0.5 0.5]);
@@ -806,6 +903,7 @@ set(h_axes_hist,'fontsize',1500);
 set(h_axes_hist,'xlim',[min_rec max_rec]);
 set(h_axes_hist,'linewidth',200);
 set(h_axes_hist,'ticklength',[0 0]);
+end
 end
 axes(h_axes_image);set(h_fig_aux,'visible','on');
 
@@ -1006,6 +1104,9 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
+if evalin('base','zef.use_parcellation')
+reconstruction = reconstruction.*reconstruction_p_2;
+end
 
 h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -1016,7 +1117,7 @@ set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1
-f_alpha_aux = zeros(size(reuna_p{i},1),1);
+%f_alpha_aux = zeros(size(nodes,1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
 else
@@ -1024,16 +1125,17 @@ r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
 end
 r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
 r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
-f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
-set(h_surf_2{ab_ind},'FaceAlpha','interp');
-set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+set(h_surf_2,'FaceAlpha','interp');
+set(h_surf_2,'AlphaDataMapping','none'); 
 end
 lighting phong;
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
 
+if evalin('base','zef.visualization_type') == 2
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
 set(h_bar,'facecolor',[0.5 0.5 0.5]);
 set(h_axes_hist,'ytick',[]);
@@ -1047,6 +1149,8 @@ set(h_axes_hist,'ticklength',[0 0]);
   axes(h_axes_text);set(h_fig_aux,'visible','on');
   h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on','fontsize',1500);
+  
+end
  
   if file_index == 1; 
   print(h_fig_aux,'-djpeg95','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]); 
@@ -1134,9 +1238,17 @@ h_aviobj.Quality = video_quality;
 open(h_aviobj);
 end
 
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'),[3, 4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
 s_i_ind_2 =  evalin('base','zef.source_interpolation_ind{1}');
+end
+
+if evalin('base','zef.use_parcellation')
+selected_list = evalin('base','zef.parcellation_selected');
+p_i_ind = evalin('base','zef.parcellation_interp_ind');
+end
+
+if ismember(evalin('base','zef.visualization_type'),[3])
 max_abs_reconstruction = 0;
 min_rec = Inf;
 max_rec = -Inf;
@@ -1506,19 +1618,31 @@ end
 for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'), [3,4])
 if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
+if evalin('base','zef.use_parcellation')
+for p_ind = selected_list
+[aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
+p_i_ind{p_ind}{2}{ab_ind}= aux_is_3;
+end
+end
 end;
 end
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);   
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'), [3,4])
 if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
+if evalin('base','zef.use_parcellation')
+for p_ind = selected_list
+[aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
+p_i_ind{p_ind}{2}{ab_ind}= aux_is_3;
+end
+end
 end;
 end
 elseif evalin('base','zef.cp_mode') == 3
@@ -1637,9 +1761,11 @@ end
 end
 
 
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'),[3,4]) 
 
+    if ismember(evalin('base','zef.visualization_type'),[3])
 f_ind = frame_start;
+end
 
 i = 0;
 
@@ -1859,7 +1985,24 @@ elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 set(h_fig_aux,'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 13
+set(h_fig_aux,'colormap',evalin('base','zef.parcellation_colormap'));
 end
+
+if ismember(evalin('base','zef.visualization_type'),[4])
+    
+
+if evalin('base','zef.use_parcellation')
+reconstruction = ones(size(reuna_t{i},1),1);
+for p_ind = selected_list
+reconstruction(p_i_ind{p_ind}{2}{ab_ind}) = p_ind+1;
+end
+end
+min_rec = 1; 
+max_rec = size(evalin('base','zef.parcellation_colormap'),1);
+
+
+else
 
 %******************************************************
 if iscell(evalin('base','zef.reconstruction')) 
@@ -1948,6 +2091,15 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
+end
+
+if evalin('base','zef.use_parcellation')
+reconstruction_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+end
+reconstruction = reconstruction_aux;
+end
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
@@ -1975,8 +2127,8 @@ set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end
 
-if ismember(i,aux_brain_ind) && cb_done == 0
-    cb_done = 1;
+if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
+cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
@@ -2078,6 +2230,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if ismember(evalin('base','zef.visualization_type'),[3])
+
 tic;
 f_ind_aux = 1;
 for f_ind = frame_start + frame_step : frame_step : frame_stop
@@ -2174,6 +2329,14 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
+if evalin('base','zef.use_parcellation')
+reconstruction_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+end
+reconstruction = reconstruction_aux;
+end
+
 delete(h_surf_2{ab_ind});
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
@@ -2244,6 +2407,7 @@ set(h_axes_hist,'ticklength',[0 0]);
 
 end
 
+end
 
     
 else
@@ -2389,6 +2553,6 @@ end
 
 end
 
-
+ 
 
 

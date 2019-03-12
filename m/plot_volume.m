@@ -440,9 +440,17 @@ max_rec = -Inf;
 frame_start = 1;
 frame_stop = 1;
 frame_step = 1;
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+if ismember(evalin('base','zef.visualization_type'), [2,4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
+end
+
+if evalin('base','zef.use_parcellation')
+selected_list = evalin('base','zef.parcellation_selected');
+p_i_ind = evalin('base','zef.parcellation_interp_ind');
+end
+
+if iscell(evalin('base','zef.reconstruction')) &&  evalin('base','zef.visualization_type') == 2
+length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
 frame_start = evalin('base','zef.frame_start');
 frame_stop = evalin('base','zef.frame_stop');
 frame_step = evalin('base','zef.frame_step');
@@ -484,7 +492,7 @@ max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynam
 end
 end
 elseif  evalin('base','zef.visualization_type') == 2
-s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
+%s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
 reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -538,11 +546,34 @@ h_colorbar = [];
 end
 hold on;
 %**************************************************************************
-if evalin('base','zef.visualization_type') == 2
-brain_ind = evalin('base','zef.brain_ind');
+if ismember(evalin('base','zef.visualization_type'),[2,4])
+brain_ind_aux = evalin('base','zef.brain_ind');
+brain_ind = brain_ind_aux;
 [aux_vec, brain_ind, I_2] = intersect(I_aux,brain_ind);
 clear aux_vec;
 johtavuus(aux_ind(brain_ind))=0;
+I_3 = find(ismember(tetra_ind,brain_ind));
+
+if evalin('base','zef.use_parcellation')
+reconstruction_p_1 = ones(size(I_3,1),1);
+reconstruction_p_2 = zeros(size(I_3,1),1);
+for p_ind = selected_list
+p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
+[p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
+[p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
+reconstruction_p_1(p_ind_aux) = p_ind+1;
+reconstruction_p_2(p_ind_aux) = 1;
+end
+end
+end
+
+if ismember(evalin('base','zef.visualization_type'),[4])
+reconstruction = reconstruction_p_1;
+min_rec = 1; 
+max_rec = size(evalin('base','zef.parcellation_colormap'),1);
+end
+
+if ismember(evalin('base','zef.visualization_type'),[2])
 if iscell(evalin('base','zef.reconstruction'))
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 else
@@ -560,7 +591,6 @@ if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
 reconstruction = sum(reconstruction(s_i_ind),2)/4;
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
-I_3 = find(ismember(tetra_ind,brain_ind));
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
 I_2(brain_ind) = [1:length(brain_ind)]';
@@ -581,7 +611,6 @@ rec_x = rec_x(I_2);
 rec_y = rec_y(I_2);
 rec_z = rec_z(I_2);
 I_2_b_rec = I_2;
-I_3 = find(ismember(tetra_ind,brain_ind));
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
 I_2(brain_ind) = [1:length(brain_ind)]';
@@ -631,7 +660,15 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
+end
 
+
+if ismember(evalin('base','zef.visualization_type'),[2,4])
+
+if evalin('base','zef.use_parcellation')
+reconstruction = reconstruction.*reconstruction_p_2;
+end
+    
 colormap_size = 4096;
 if evalin('base','zef.inv_colormap') == 1
 c_aux_1 = floor(colormap_size/3);
@@ -757,6 +794,8 @@ elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 13
+set(evalin('base','zef.h_zeffiro'),'colormap',evalin('base','zef.parcellation_colormap'));
 end
 
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
@@ -768,7 +807,8 @@ set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1
-f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux = zeros(size(nodes,1),1);
+I_tr = I_3;
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
 else
@@ -776,14 +816,17 @@ r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
 end
 r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
 r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
-f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
-set(h_surf_2{ab_ind},'FaceAlpha','interp');
-set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+set(h_surf_2,'FaceAlpha','interp');
+set(h_surf_2,'AlphaDataMapping','none'); 
 end
+
+if ismember(evalin('base','zef.visualization_type'),[2])
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
+end
 %set(h_colorbar,'layer','bottom');
 lighting phong;
 end
@@ -935,6 +978,10 @@ reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base',
 end
 end
 
+if evalin('base','zef.use_parcellation')
+reconstruction = reconstruction.*reconstruction_p_2;
+end
+
 
 %h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'CData',reconstruction);
@@ -948,7 +995,7 @@ set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1
-f_alpha_aux = zeros(size(reuna_p{i},1),1);
+f_alpha_aux = zeros(size(nodes,1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
 else
@@ -956,12 +1003,12 @@ r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
 end
 r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
 r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
-f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
-f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
-set(h_surf_2{ab_ind},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
-set(h_surf_2{ab_ind},'FaceAlpha','interp');
-set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
+f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
+f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+set(h_surf_2,'FaceAlpha','interp');
+set(h_surf_2,'AlphaDataMapping','none'); 
 end
 lighting phong;
 camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);

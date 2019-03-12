@@ -33,7 +33,7 @@ rmfield(zef,'aux_handle_vec');
 set(zef.h_pushbutton21,'callback','[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));');
 set(zef.h_pushbutton34,'callback','[zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms]=zef_sigma([]);set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));');
 set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Basis'});
-set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)'});
+set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation'});
 set(zef.h_pushbutton31,'string','Visualize volume');
 set(zef.h_checkbox14,'value',zef.attach_electrodes); 
 set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);

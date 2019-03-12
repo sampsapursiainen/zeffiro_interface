@@ -403,4 +403,4 @@ waitbar(1,h,['Interp. 3: Ready approx. ' datestr(datevec(now+(size_source_positi
 
 close(h)
 
-%end
+end

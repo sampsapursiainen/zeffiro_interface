@@ -6,9 +6,18 @@ void = [];
 loop_movie = 1;
 length_reconstruction_cell = 1;
 
-if evalin('base','zef.visualization_type') == 3
+
+if ismember(evalin('base','zef.visualization_type'), [3,4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
 s_i_ind_2 =  evalin('base','zef.source_interpolation_ind{1}');
+end
+
+if evalin('base','zef.use_parcellation')
+selected_list = evalin('base','zef.parcellation_selected');
+p_i_ind = evalin('base','zef.parcellation_interp_ind');
+end
+
+if ismember(evalin('base','zef.visualization_type'), [3])
 max_abs_reconstruction = 0;
 min_rec = Inf;
 max_rec = -Inf;
@@ -379,20 +388,32 @@ end
 for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'),[3 4])
 if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
+if evalin('base','zef.use_parcellation')
+for p_ind = selected_list
+[aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
+p_i_ind{p_ind}{2}{ab_ind}= aux_is_3;
+end
+end
 end;
 end
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);   
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'),[3 4])
 if ismember(i, aux_brain_ind)
 ab_ind = find(aux_brain_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
-end;
+if evalin('base','zef.use_parcellation')
+for p_ind = selected_list
+[aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
+p_i_ind{p_ind}{2}{ab_ind}= aux_is_3;
+end
+end
+end
 end
 elseif evalin('base','zef.cp_mode') == 3
 if ismember(i, aux_brain_ind)
@@ -522,10 +543,11 @@ end
 
 
     
-if evalin('base','zef.visualization_type') == 3
+if ismember(evalin('base','zef.visualization_type'),[3,4]) 
     
-
+    if ismember(evalin('base','zef.visualization_type'),[3])
 f_ind = frame_start;
+    end
 
 i = 0;
 
@@ -746,8 +768,26 @@ elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 13
+set(evalin('base','zef.h_zeffiro'),'colormap',evalin('base','zef.parcellation_colormap'));
 end
-  
+
+if ismember(evalin('base','zef.visualization_type'),[4])
+    
+
+if evalin('base','zef.use_parcellation')
+reconstruction = ones(size(reuna_t{i},1),1);
+for p_ind = selected_list
+reconstruction(p_i_ind{p_ind}{2}{ab_ind}) = p_ind+1;
+end
+end
+min_rec = 1; 
+max_rec = size(evalin('base','zef.parcellation_colormap'),1);
+
+
+else
+
+
 if iscell(evalin('base','zef.reconstruction')) 
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
 else
@@ -812,6 +852,15 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
+end
+
+if evalin('base','zef.use_parcellation')
+reconstruction_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+end
+reconstruction = reconstruction_aux;
+end
 
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -838,7 +887,7 @@ set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end
 
-if ismember(i,aux_brain_ind) && cb_done == 0
+if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
 cb_done = 1;
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
 h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
@@ -884,6 +933,8 @@ set(evalin('base','zef.h_axes1'),'zGrid','off');
 end
 %drawnow;    
     
+if ismember(evalin('base','zef.visualization_type'),[3])
+
 f_ind_aux = 1;
 for f_ind = frame_start + frame_step : frame_step : frame_stop
 
@@ -961,6 +1012,14 @@ end
 
 %delete(h_surf_2{ab_ind});
 
+if evalin('base','zef.use_parcellation')
+reconstruction_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+end
+reconstruction = reconstruction_aux;
+end
+
 axes(evalin('base','zef.h_axes1'));
 %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'CData',reconstruction);
@@ -1002,6 +1061,8 @@ set(h_text,'string', ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin(
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 drawnow limitrate;
+end
+
 end
     
 else

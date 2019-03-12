@@ -1,4 +1,14 @@
 %Copyright © 2018, Sampsa Pursiainen
+          zef.parcellation_colormap = [];
+          zef.parcellation_interp_ind = cell(0);
+          zef.parcellation_name = '';
+          zef.parcellation_colortable = cell(0);
+          zef.use_parcellation = 0;
+          zef.parcellation_merge = 1;
+          zef.parcellation_points = cell(0);
+          zef.parcellation_segment = 'LH';
+          zef.parcellation_tolerance = 5;
+          zef.parcellation_selected = [];
           zef.s_name = 'Sensors';
           zef.w_name = 'White matter';
           zef.g_name = 'Grey matter';
