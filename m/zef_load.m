@@ -10,7 +10,6 @@ zef.save_file = zef.file;
 zef.save_file_path = zef.file_path; 
 zef_close_tools;
 zef_close_figs;
-zef_mesh_tool;
 zef_init;
 load([zef.file_path zef.file]);
           if (isfield(zef_data,'parcellation_tolerance'));
@@ -699,6 +698,7 @@ end
                     
 clear zef_data;
 zef_update;
+zef_mesh_tool;
 zef_figure_tool;
 end;
 
