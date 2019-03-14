@@ -58,6 +58,9 @@ set(zef.h_visualization_type,'value',zef.visualization_type);
 set(zef.h_smoothing_strength,'string',num2str(zef.smoothing_strength));
 set(zef.h_edit76,'string', num2str(zef.inv_pcg_tol));
 set(zef.h_loop_movie,'value',zef.loop_movie);
-switch_onoff;    
+set(zef.h_edit76,'string',num2str(zef.solver_tolerance));
+
+
+   
 
    
