@@ -9,7 +9,7 @@ length_reconstruction_cell = 1;
 aux_wm_ind = -1;
 
 number_of_frames = evalin('base','zef.number_of_frames');
-axes(evalin('base','zef.h_axes1'));
+axes(evalin('base','zef.h_axes1')); 
 cla(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
 set(evalin('base','zef.h_axes1'),'YDir','normal');
@@ -527,7 +527,6 @@ loop_count = 0;
 while loop_movie 
 loop_count = loop_count + 1;    
 axes(evalin('base','zef.h_axes1'));
-cla(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
 set(evalin('base','zef.h_axes1'),'YDir','normal');
 light('Position',[0 0 1],'Style','infinite');
