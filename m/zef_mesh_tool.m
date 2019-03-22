@@ -2,7 +2,7 @@ open('zeffiro_interface_mesh_tool.fig');
 zef.aux_handle_vec = [zef.h_pushbutton31;
 zef.h_pushbutton20;
 zef.h_pushbutton22; 
-zef.h_checkbox14;
+zef.h_checkbox14; 
 zef.h_checkbox15;
 zef.h_checkbox_cp_on;
 zef.h_edit_cp_a;
@@ -59,6 +59,7 @@ set(zef.h_smoothing_strength,'string',num2str(zef.smoothing_strength));
 set(zef.h_edit76,'string', num2str(zef.inv_pcg_tol));
 set(zef.h_loop_movie,'value',zef.loop_movie);
 set(zef.h_edit76,'string',num2str(zef.solver_tolerance));
+zef_update_mesh_tool;
 
 
    
