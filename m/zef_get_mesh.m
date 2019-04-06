@@ -3,8 +3,6 @@ function [mesh_data] = zef_get_mesh(file_str,field_id,file_type)
 merge_on = evalin('base',['zef.' field_id '_merge']);
 invert_on = evalin('base',['zef.' field_id '_invert']);
 
-invert_on
-
 if isequal(file_type,'points')
 
 if merge_on    

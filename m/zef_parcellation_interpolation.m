@@ -34,10 +34,19 @@ if evalin('base','zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
+[center_points I center_points_ind] = unique(tetra(brain_ind,:));
+source_interpolation_ind = zeros(length(center_points),1);
+source_interpolation_aux = source_interpolation_ind;
+center_points = nodes(center_points,:)';
+size_center_points = size(center_points,2); 
+
+h = waitbar(i/size_center_points,['Interp. 1.']); 
 p_counter = 0;
 for p_ind = p_selected + 1 
 p_counter = p_counter + 1;    
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
+parcellation_interpolation_ind{p_ind-1}{1} = [];
+
 
 %rand_perm_aux = [];
 %if evalin('base','zef.n_sources') < size(source_positions,1)
@@ -46,15 +55,12 @@ source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
 %source_positions = source_positions(rand_perm_aux,:);
 %end
 
-[center_points I center_points_ind] = unique(tetra(brain_ind,:));
-source_interpolation_ind = zeros(length(center_points),1);
-source_interpolation_aux = source_interpolation_ind;
-center_points = nodes(center_points,:)';
+if not(isempty(source_positions))
+
 
 source_positions = source_positions';
 ones_vec = ones(size(source_positions,2),1);
 
-size_center_points = size(center_points,2); 
 
 use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
@@ -81,9 +87,7 @@ norm_vec = sum((source_positions(:,:,ones(1,length(block_ind))) - aux_vec(:,ones
 source_interpolation_aux(block_ind) = min_val(:);
 
 time_val = toc;
-if i == 1 && p_ind == p_selected(1)+1
-h = waitbar(i/size_center_points,['Interp. 1.']);    
-elseif mod(i_ind,bar_ind)==0 
+if mod(i_ind,bar_ind)==0 
 waitbar(i/size_center_points,h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
@@ -94,13 +98,15 @@ source_interpolation_ind = (gather(source_interpolation_aux));
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
 %end
+
+
 parcellation_interpolation_ind{p_ind-1}{1} = find(mean(sqrt(reshape(source_interpolation_ind(center_points_ind), length(brain_ind), 4)),2)<p_tolerance); 
 
 waitbar(1,h,['Interp. 1. '  num2str(p_counter) '/' num2str(length(p_selected)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
 end
 
-close(h)
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -298,6 +304,10 @@ for p_ind = p_selected + 1
 p_counter = p_counter + 1;    
     
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:)';    
+parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = []; 
+
+
+if not(isempty(source_positions))
 
 %aux_point_ind = unique(gather(source_interpolation_ind{1}));
 %source_positions = source_positions_aux(:,aux_point_ind);
@@ -340,7 +350,7 @@ source_interpolation_aux(block_ind) = min_val(:);
 
 time_val = toc;
 if i == 1 && p_ind == p_selected(1) + 1
-h = waitbar(i/size_center_points,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);    
+waitbar(i/size_center_points,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);    
 elseif mod(i_ind,bar_ind)==0 
 waitbar(i/size_center_points,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
@@ -355,12 +365,16 @@ source_interpolation_ind = gather(source_interpolation_aux);
 triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(source_interpolation_ind(triangles)),2)<p_tolerance); 
 
+
 waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
+end
 
 end
+
+
+end
+
 
 close(h)
-end
-
 end

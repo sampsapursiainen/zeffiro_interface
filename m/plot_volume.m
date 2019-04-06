@@ -557,12 +557,14 @@ I_3 = find(ismember(tetra_ind,brain_ind));
 if evalin('base','zef.use_parcellation')
 reconstruction_p_1 = ones(size(I_3,1),1);
 reconstruction_p_2 = zeros(size(I_3,1),1);
+p_rec_aux = ones(size(nodes,1),1)*evalin('base','zef.layer_transparency'); 
 for p_ind = selected_list
 p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
 [p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
 [p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
 reconstruction_p_1(p_ind_aux) = p_ind+1;
 reconstruction_p_2(p_ind_aux) = 1;
+p_rec_aux(unique(surface_triangles(I_3(p_ind_aux),:))) = evalin('base','zef.brain_transparency');
 end
 end
 end
@@ -819,7 +821,11 @@ r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
 f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
 f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
 f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+if evalin('base','zef.use_parcellation')
+set(h_surf_2,'FaceVertexAlpha',max(p_rec_aux,f_alpha_aux));
+else
 set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
@@ -847,7 +853,7 @@ h_surf = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),'edge
 set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
 set(h_surf,'ambientstrength',0.85);
-if not(evalin('base','zef.visualization_type') == 2) || not(i == aux_wm_ind )
+if not(ismember(evalin('base','zef.visualization_type'),[2,4])) || not(ismember(i,aux_brain_ind))
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 end
 lighting phong;
@@ -1014,7 +1020,11 @@ r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
 f_alpha_aux(surface_triangles(I_tr,1)) = r_alpha_aux/3;
 f_alpha_aux(surface_triangles(I_tr,2)) = f_alpha_aux(surface_triangles(I_tr,2)) + r_alpha_aux/3;
 f_alpha_aux(surface_triangles(I_tr,3)) = f_alpha_aux(surface_triangles(I_tr,3)) + r_alpha_aux/3; 
+if evalin('base','zef.use_parcellation')
+set(h_surf_2,'FaceVertexAlpha',max(p_rec_aux,f_alpha_aux));
+else
 set(h_surf_2,'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
