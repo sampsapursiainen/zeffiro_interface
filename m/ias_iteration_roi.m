@@ -3,6 +3,7 @@ function [z,rec_source] = ias_iteration_roi(void)
 
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
 
 source_positions = evalin('base','zef.source_positions');
@@ -320,6 +321,20 @@ reconstruction = reconstruction/max(reconstruction(:));
 I_aux = find(reconstruction >= roi_threshold);
 end
 
+if roi_mode == 3
+source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
+p_ind_aux_1 = [];
+p_selected = evalin('base','zef.parcellation_selected');
+for p_ind = 1 : length(p_selected)
+p_ind_aux_2 = evalin('base',['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
+p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
+end
+p_ind_aux_1 = unique(p_ind_aux_1);
+I_aux = unique(source_ind_aux(p_ind_aux_1,:));
+I_aux = find(ismember(s_ind_0,I_aux));
+end
+
+
 if source_direction_mode == 2
     roi_length = length(I_aux(:));
     s_ind_5 = intersect(s_ind_4,I_aux(:));
@@ -471,6 +486,7 @@ for j = 1 : size(roi_sphere,1)
     rec_dir = rec_dir/rec_norm;
 rec_source(j,1:7) = [rec_pos rec_dir rec_norm];
 end
+end
 
 if ismember(source_direction_mode, [1,2])
 z_vec_aux = zeros(n_lead_field,1);
@@ -480,7 +496,7 @@ end
 z_vec_aux(roi_aux_ind) = z_vec;
 z_vec = z_vec_aux;
 
-end
+
 
 if ismember(source_direction_mode, [1,2])
     z_aux(s_ind_1) = z_vec;
