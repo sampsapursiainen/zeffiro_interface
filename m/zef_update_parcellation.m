@@ -42,6 +42,9 @@ else
     set(zef.h_use_parcellation,'string','Active');
 end
 
+
+zef.parcellation_colormap = 0.5*zef.parcellation_colormap;
+
 if isfield(zef,'parcellation_aux')
 rmfield(zef,'parcellation_aux');
 end
