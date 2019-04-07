@@ -35,7 +35,7 @@ if zef.use_parcellation == 0;
     
     
     
-    set(zef.h_use_parcellation,'string','Inactive');
+    set(zef.h_use_parcellation,'string','Activate');
 else
     set(zef.h_use_parcellation,'foregroundcolor',[1 0 0]); 
     set(zef.h_parcellation_list,'enable','off'); 

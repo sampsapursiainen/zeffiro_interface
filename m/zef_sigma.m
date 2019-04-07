@@ -6,7 +6,7 @@ prisms = [];
 johtavuus_prisms = [];
 non_source_ind = []; 
 
-aux_brain_ind = [0 0 0 0 0 0];
+aux_brain_ind = zeros(1,18);
 aux_skull_ind = [0 0];
 
 if evalin('base','zef.import_mode')
@@ -170,8 +170,8 @@ priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_i
 [johtavuus] = johtavuus_ind(priority_ind);
 johtavuus_aux = johtavuus;
 brain_ind = [];
-if evalin('base','zef.wm_sources')
-if not(aux_brain_ind(1)==0) && not(aux_brain_ind(1)==3)
+if evalin('base','zef.wm_sources') && not(evalin('base','zef.wm_sources')==3)
+if not(aux_brain_ind(1)==0) 
 [brain_ind]= find(johtavuus==aux_brain_ind(1));
 end
 end

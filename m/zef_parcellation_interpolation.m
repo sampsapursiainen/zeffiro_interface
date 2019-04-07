@@ -13,6 +13,7 @@ p_colormap = [];
 p_points_ind_aux = [];
 parcellation_p = [];
 for i = 1 : length(p_points)
+    min_aux = min(p_colortable{i}{4});
     c_ind_aux_1 = [1: size(p_colortable{i}{3},1)]' + c_length;
     c_length = c_length + size(p_colortable{i}{3},1);
     c_ind_aux_2 = zeros(max(p_colortable{i}{4})+1,1);
