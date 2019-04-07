@@ -2,6 +2,7 @@
 function [z,rec_source] = mcmc_sampler(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
 
 beta = evalin('base','zef.inv_beta');
