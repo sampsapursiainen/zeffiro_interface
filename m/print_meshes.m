@@ -1,7 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [void] = print_meshes(void);
 
-void = [];
+void = []; 
 
 length_reconstruction_cell = 1;
 
@@ -870,7 +870,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(nodes,1),1);
 I_tr = I_3;
 if evalin('base','zef.inv_scale') == 1
@@ -1123,7 +1123,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 %f_alpha_aux = zeros(size(nodes,1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
@@ -2126,7 +2126,7 @@ set(h_surf_2{ab_ind},'specularexponent',0.8);
 set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
@@ -2370,7 +2370,7 @@ set(h_surf_2{ab_ind},'specularexponent',0.8);
 set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
 set(h_surf_2{ab_ind},'diffusestrength',1);
 set(h_surf_2{ab_ind},'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));

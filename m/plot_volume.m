@@ -1,6 +1,6 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [void] = plot_volume(void);
-
+ 
 void = [];
 
 loop_movie = 1;
@@ -808,7 +808,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(nodes,1),1);
 I_tr = I_3;
 if evalin('base','zef.inv_scale') == 1
@@ -1008,7 +1008,7 @@ set(h_surf_2,'specularexponent',0.8);
 set(h_surf_2,'SpecularColorReflectance',0.8);
 set(h_surf_2,'diffusestrength',1);
 set(h_surf_2,'ambientstrength',1);
-if evalin('base','zef.brain_transparency') < 1
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(nodes,1),1);
 if evalin('base','zef.inv_scale') == 1
 r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
