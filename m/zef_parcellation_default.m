@@ -175,6 +175,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.w_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.w_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(1);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(1);
 c_table{t_ind}{4}(J) =  aux_brain_ind(1);
 end
 end
@@ -186,6 +187,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.g_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.g_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(2);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(2);
 c_table{t_ind}{4}(J) =  aux_brain_ind(2);
 end
 end
@@ -197,6 +199,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d1_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d1_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(3);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(3);
 c_table{t_ind}{4}(J) =  aux_brain_ind(3);
 end
 end
@@ -208,6 +211,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d2_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d2_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(4);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(4);
 c_table{t_ind}{4}(J) =  aux_brain_ind(4);
 end
 end
@@ -219,6 +223,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d3_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d3_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(5);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(5);
 c_table{t_ind}{4}(J) =  aux_brain_ind(5);
 end
 end
@@ -230,6 +235,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d4_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d4_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(6);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(6);
 c_table{t_ind}{4}(J) =  aux_brain_ind(6);
 end
 end
@@ -241,6 +247,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d5_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d5_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(7);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(7);
 c_table{t_ind}{4}(J) =  aux_brain_ind(7);
 end
 end
@@ -252,6 +259,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d6_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d6_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(8);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(8);
 c_table{t_ind}{4}(J) =  aux_brain_ind(8);
 end
 end
@@ -263,6 +271,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d7_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d7_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(9);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(9);
 c_table{t_ind}{4}(J) =  aux_brain_ind(9);
 end
 end
@@ -274,6 +283,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d8_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d8_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(10);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(10);
 c_table{t_ind}{4}(J) =  aux_brain_ind(10);
 end
 end
@@ -285,6 +295,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d9_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d9_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(11);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(11);
 c_table{t_ind}{4}(J) =  aux_brain_ind(11);
 end
 end
@@ -296,6 +307,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d10_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d10_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(12);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(12);
 c_table{t_ind}{4}(J) =  aux_brain_ind(12);
 end
 end
@@ -307,6 +319,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d11_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d11_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(13);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(13);
 c_table{t_ind}{4}(J) =  aux_brain_ind(13);
 end
 end
@@ -318,6 +331,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d12_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d12_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(14);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(14);
 c_table{t_ind}{4}(J) =  aux_brain_ind(14);
 end
 end
@@ -329,6 +343,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d13_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d13_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(15);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(15);
 c_table{t_ind}{4}(J) =  aux_brain_ind(15);
 end
 end
@@ -340,6 +355,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.c_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.c_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(16);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(16);
 c_table{t_ind}{4}(J) =  aux_brain_ind(16);
 end
 end
@@ -351,6 +367,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.sk_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.sk_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(17);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(17);
 c_table{t_ind}{4}(J) =  aux_brain_ind(17);
 end
 end
@@ -362,6 +379,7 @@ J = unique(s_interp_ind(I,:));
 c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.sc_name');
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.sc_color');
 c_table{t_ind}{3}(c_ind,5) =  aux_brain_ind(18);
+c_table{t_ind}{5}(c_ind,1) =  aux_brain_ind(18);
 c_table{t_ind}{4}(J) =  aux_brain_ind(18);
 end
 end

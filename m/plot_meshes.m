@@ -395,7 +395,7 @@ s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 if evalin('base','zef.use_parcellation')
 for p_ind = selected_list
 [aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
-p_i_ind{p_ind}{2}{ab_ind}= aux_is_3;
+p_i_ind{p_ind}{2}{ab_ind} = aux_is_3;
 end
 end
 end;

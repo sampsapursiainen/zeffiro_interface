@@ -1,6 +1,155 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
 
+
+i = 0;
+length_reuna = 0;
+sigma_vec = [];
+priority_vec = [];
+for k = 1 : 18  
+switch k
+    case 1
+        var_0 = 'zef.d1_on';
+        var_1 = 'zef.d1_sigma';
+        var_2 = 'zef.d1_priority';
+     case 2
+        var_0 = 'zef.d2_on';
+        var_1 = 'zef.d2_sigma';   
+        var_2 = 'zef.d2_priority';
+     case 3
+        var_0 = 'zef.d3_on';
+        var_1 = 'zef.d3_sigma';   
+        var_2 = 'zef.d3_priority';
+     case 4
+        var_0 = 'zef.d4_on';
+        var_1 = 'zef.d4_sigma';   
+        var_2 = 'zef.d4_priority';
+  case 5
+        var_0 = 'zef.d5_on';
+        var_1 = 'zef.d5_sigma';
+        var_2 = 'zef.d5_priority';
+     case 6
+        var_0 = 'zef.d6_on';
+        var_1 = 'zef.d6_sigma';   
+        var_2 = 'zef.d6_priority';
+     case 7
+        var_0 = 'zef.d7_on';
+        var_1 = 'zef.d7_sigma';   
+        var_2 = 'zef.d7_priority';
+     case 8
+        var_0 = 'zef.d8_on';
+        var_1 = 'zef.d8_sigma';   
+        var_2 = 'zef.d8_priority';
+    case 9
+        var_0 = 'zef.d9_on';
+        var_1 = 'zef.d9_sigma';
+        var_2 = 'zef.d9_priority';
+     case 10
+        var_0 = 'zef.d10_on';
+        var_1 = 'zef.d10_sigma';   
+        var_2 = 'zef.d10_priority';
+     case 11
+        var_0 = 'zef.d11_on';
+        var_1 = 'zef.d11_sigma';   
+        var_2 = 'zef.d11_priority';
+     case 12
+        var_0 = 'zef.d12_on';
+        var_1 = 'zef.d12_sigma';   
+        var_2 = 'zef.d12_priority';
+      case 13
+        var_0 = 'zef.d13_on';
+        var_1 = 'zef.d13_sigma';   
+        var_2 = 'zef.d13_priority';
+    case 14
+        var_0 = 'zef.w_on';
+        var_1 = 'zef.w_sigma';    
+        var_2 = 'zef.w_priority';
+    case 15
+        var_0 = 'zef.g_on';
+        var_1 = 'zef.g_sigma';
+        var_2 = 'zef.g_priority';
+    case 16
+        var_0 = 'zef.c_on';
+        var_1 = 'zef.c_sigma';
+        var_2 = 'zef.c_priority';
+     case 17
+        var_0 = 'zef.sk_on';
+        var_1 = 'zef.sk_sigma';
+        var_2 = 'zef.sk_priority';
+     case 18
+        var_0 = 'zef.sc_on';
+        var_1 = 'zef.sc_sigma';
+        var_2 = 'zef.sc_priority';
+     end
+on_val = evalin('base',var_0);      
+sigma_val = evalin('base',var_1);  
+priority_val = evalin('base',var_2);  
+if on_val
+i = i + 1;
+sigma_vec(i,1) = sigma_val;
+priority_vec(i,1) = priority_val;
+if k == 1;
+    aux_brain_ind(3) = i;
+end
+if k == 2;
+    aux_brain_ind(4) = i;
+end
+if k == 3;
+    aux_brain_ind(5) = i;
+end
+if k == 4;
+    aux_brain_ind(6) = i;
+end
+if k == 5;
+    aux_brain_ind(7) = i;
+end
+if k == 6;
+    aux_brain_ind(8) = i;
+end
+if k == 7;
+    aux_brain_ind(9) = i;
+end
+if k == 8;
+    aux_brain_ind(10) = i;
+end
+if k == 9;
+    aux_brain_ind(11) = i;
+end
+if k == 10;
+    aux_brain_ind(12) = i;
+end
+if k == 11;
+    aux_brain_ind(13) = i;
+end
+if k == 12;
+    aux_brain_ind(14) = i;
+end
+if k == 13;
+    aux_brain_ind(15) = i;
+end
+if k == 14;
+    aux_brain_ind(1) = i;
+end
+if k == 15;
+    aux_brain_ind(2) = i;
+end
+if k == 16;
+    aux_brain_ind(16) = i;
+end
+if k == 17;
+    aux_brain_ind(17) = i;
+end
+if k == 18;
+    aux_brain_ind(18) = i;
+end
+if k == 17;
+    aux_skull_ind = i;
+end
+end
+end
+
+cortex_ind_aux = aux_brain_ind(2);
+
 p_colortable = evalin('base','zef.parcellation_colortable');
 p_points = evalin('base','zef.parcellation_points');
 p_tolerance = evalin('base','zef.parcellation_tolerance');
@@ -12,6 +161,8 @@ c_max = [];
 p_colormap = [];
 p_points_ind_aux = [];
 parcellation_p = [];
+p_compartment = [];
+p_cortex = [];
 for i = 1 : length(p_points)
     min_aux = min(p_colortable{i}{4});
     c_ind_aux_1 = [1: size(p_colortable{i}{3},1)]' + c_length;
@@ -21,6 +172,13 @@ for i = 1 : length(p_points)
     p_colortable_aux = c_ind_aux_2(p_colortable{i}{4}+1);
     p_points_ind_aux = [p_points_ind_aux ; p_colortable_aux(p_points{i}(:,1)+1)];
     parcellation_p = [parcellation_p ; p_points{i}(:,2:4)];
+    if length(p_colortable{i}) > 4
+        p_compartment= [p_compartment ; p_colortable{i}{5}];
+        p_cortex = [p_cortex ; zeros(length(p_colortable{i}{3}(:,5)),1)];
+    else
+    p_compartment = [p_compartment ; cortex_ind_aux*ones(length(p_colortable{i}{3}(:,5)),1)];
+    p_cortex = [p_cortex ; ones(length(p_colortable{i}{3}(:,5)),1)];
+    end
 end
 
 brain_ind = evalin('base','zef.brain_ind');
@@ -35,7 +193,10 @@ if evalin('base','zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
-[center_points I center_points_ind] = unique(tetra(brain_ind,:));
+I_compartment = find(evalin('base','zef.sigma(:,2)')==cortex_ind_aux);
+cortex_ind = brain_ind(find(ismember(brain_ind,I_compartment)));
+
+[center_points I center_points_ind] = unique(tetra(cortex_ind,:));
 source_interpolation_ind = zeros(length(center_points),1);
 source_interpolation_aux = source_interpolation_ind;
 center_points = nodes(center_points,:)';
@@ -49,6 +210,12 @@ source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
 parcellation_interpolation_ind{p_ind-1}{1} = [];
 
 
+if not(p_cortex(p_ind-1) == 1)
+    
+I_compartment = find(evalin('base','zef.sigma(:,2)')==p_compartment(p_ind-1));
+parcellation_interpolation_ind{p_ind-1}{1} = find(ismember(brain_ind,I_compartment));
+    
+else
 %rand_perm_aux = [];
 %if evalin('base','zef.n_sources') < size(source_positions,1)
 %rand_perm_aux = randperm(size(source_positions,1));
@@ -75,7 +242,7 @@ end
 par_num = evalin('base','zef.parallel_vectors');
 bar_ind = ceil(size_center_points/(50*par_num));
 i_ind = 0;
-
+    
 tic;
 for i = 1 : par_num : size_center_points
 
@@ -101,11 +268,16 @@ source_interpolation_ind = (gather(source_interpolation_aux));
 %end
 
 
-parcellation_interpolation_ind{p_ind-1}{1} = find(mean(sqrt(reshape(source_interpolation_ind(center_points_ind), length(brain_ind), 4)),2)<p_tolerance); 
+parcellation_interpolation_ind{p_ind-1}{1} = find(mean(sqrt(reshape(source_interpolation_ind(center_points_ind), length(cortex_ind), 4)),2)<p_tolerance); 
 
-waitbar(1,h,['Interp. 1. '  num2str(p_counter) '/' num2str(length(p_selected)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
 end
+
+
+
+end
+
+waitbar(1,h,['Interp. 1.']);
 
 end
 
@@ -301,11 +473,22 @@ end
 for ab_ind = 1 : length(aux_brain_ind)
     
 p_counter = 0;
-for p_ind = p_selected + 1 
+for p_ind = p_selected + 1
 p_counter = p_counter + 1;    
+
+parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = []; 
+triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
+
+
+if not(ab_ind == cortex_ind_aux) || not(p_cortex(p_ind-1) == 1)
+    
+    if ab_ind == p_compartment(p_ind-1)    
+    parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [1:size(triangles,1)]'; 
+    end
+    
+else
     
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:)';    
-parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = []; 
 
 
 if not(isempty(source_positions))
@@ -363,17 +546,14 @@ source_interpolation_ind = gather(source_interpolation_aux);
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{2}{ab_ind} = rand_perm_aux(source_interpolation_ind{2});
 %end
-triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(source_interpolation_ind(triangles)),2)<p_tolerance); 
 
 
 waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
 end
-
 end
-
-
+end
 end
 
 
