@@ -194,7 +194,8 @@ zef.parcellation_p = 1000*parcellation_p;
 end
 
 I_compartment = find(evalin('base','zef.sigma(:,2)')==cortex_ind_aux);
-cortex_ind = brain_ind(find(ismember(brain_ind,I_compartment)));
+brain_cortex_ind = find(ismember(brain_ind,I_compartment));
+cortex_ind = brain_ind(brain_cortex_ind);
 
 [center_points I center_points_ind] = unique(tetra(cortex_ind,:));
 source_interpolation_ind = zeros(length(center_points),1);
@@ -267,8 +268,8 @@ source_interpolation_ind = (gather(source_interpolation_aux));
 %source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
 %end
 
-
 parcellation_interpolation_ind{p_ind-1}{1} = find(mean(sqrt(reshape(source_interpolation_ind(center_points_ind), length(cortex_ind), 4)),2)<p_tolerance); 
+parcellation_interpolation_ind{p_ind-1}{1} = brain_cortex_ind(parcellation_interpolation_ind{p_ind-1}{1});
 
 
 end
