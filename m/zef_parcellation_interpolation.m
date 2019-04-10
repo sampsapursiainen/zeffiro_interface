@@ -277,7 +277,6 @@ end
 
 end
 
-waitbar(1,h,['Interp. 1.']);
 
 end
 
