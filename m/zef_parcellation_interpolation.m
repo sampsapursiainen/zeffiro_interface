@@ -325,7 +325,7 @@ p_counter = p_counter + 1;
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = []; 
 triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 
-if not(p_cortex(p_ind-1) == 1)
+if not(ab_ind == cortex_ind_aux) || not(p_cortex(p_ind-1) == 1)
     
     if aux_brain_ind(ab_ind) == p_compartment(p_ind-1)    
     parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [1:size(triangles,1)]'; 
