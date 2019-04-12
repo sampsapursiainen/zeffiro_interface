@@ -317,7 +317,7 @@ end
 
 for ab_ind = 1 : length(aux_brain_ind)
 
-
+ 
 p_counter = 0;
 for p_ind = p_selected + 1
 p_counter = p_counter + 1;    
@@ -325,13 +325,15 @@ p_counter = p_counter + 1;
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = []; 
 triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 
-if not(ab_ind == cortex_ind_aux) || not(p_cortex(p_ind-1) == 1)
+if not(p_cortex(p_ind-1) == 1)
     
     if aux_brain_ind(ab_ind) == p_compartment(p_ind-1)    
     parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [1:size(triangles,1)]'; 
     end
     
 else
+
+if ab_ind == cortex_ind_aux
     
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:)';    
 
@@ -395,6 +397,7 @@ parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(source_inter
 
 waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
+end
 end
 end
 end
