@@ -333,7 +333,7 @@ if not(p_cortex(p_ind-1) == 1)
     
 else
 
-if ab_ind == cortex_ind_aux
+if aux_brain_ind(ab_ind) == cortex_ind_aux
     
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:)';    
 
