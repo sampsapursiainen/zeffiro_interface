@@ -16,6 +16,8 @@ zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldna
 zef_data = rmfield(zef_data,{'fieldnames','h'});
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
+zef_mesh_tool;
+zef_figure_tool;
 end
 end
 if zef.save_switch == 2
@@ -115,6 +117,8 @@ zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldna
 zef_data = rmfield(zef_data,{'fieldnames','h'});
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
+zef_mesh_tool;
+zef_figure_tool;
 else
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
