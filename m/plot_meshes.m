@@ -1037,12 +1037,10 @@ if evalin('base','zef.use_parcellation')
 reconstruction_aux = zeros(size(reconstruction));
 p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
 for p_ind = selected_list   
-    if evalin('base','zef.parcellation_type') == 1
+ if evalin('base','zef.parcellation_type') == 1
         reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
     elseif evalin('base','zef.parcellation_type') == 2
-        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind})).*ones(size(p_i_ind{p_ind}{2}{ab_ind}),0.9);
-    elseif  evalin('base','zef.parcellation_type') == 3
-        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = max(reconstruction(p_i_ind{p_ind}{2}{ab_ind})).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
     end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
