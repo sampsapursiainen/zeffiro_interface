@@ -7,11 +7,6 @@ length_reconstruction_cell = 1;
 
 aux_wm_ind = -1;
 
-
-if ismember(evalin('base','zef.on_screen'), [0,1]) && not(evalin('base','zef.visualization_type')==3) 
-    
-h_axes_text = [];    
-    
 number_of_frames = evalin('base','zef.number_of_frames');
 file_index = evalin('base','zef.file_index');
 file_name = evalin('base','zef.file');
@@ -24,6 +19,9 @@ c_ta = camtarget(evalin('base','zef.h_axes1'));
 c_p = camproj(evalin('base','zef.h_axes1')); 
 c_u = camup(evalin('base','zef.h_axes1'));
 
+if ismember(evalin('base','zef.on_screen'), [0,1]) && not(evalin('base','zef.visualization_type')==3) 
+    
+h_axes_text = [];    
 h_fig_aux = figure;set(h_fig_aux,'visible','on'); 
 clf;
 set(h_fig_aux,'renderer','opengl');
@@ -574,12 +572,14 @@ if evalin('base','zef.use_parcellation')
 reconstruction_p_1 = ones(size(I_3,1),1);
 reconstruction_p_2 = zeros(size(I_3,1),1);
 p_rec_aux = ones(size(nodes,1),1)*evalin('base','zef.layer_transparency'); 
+p_cell = cell(0);
 for p_ind = selected_list
 p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
 [p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
 [p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
 reconstruction_p_1(p_ind_aux) = p_ind+1;
 reconstruction_p_2(p_ind_aux) = 1;
+p_cell{p_ind+1} = p_ind_aux;
 p_rec_aux(unique(surface_triangles(I_3(p_ind_aux),:))) = evalin('base','zef.brain_transparency');
 end
 end
@@ -729,6 +729,15 @@ end
 if ismember(evalin('base','zef.visualization_type'),[2,4])
 
 if evalin('base','zef.use_parcellation')
+    
+if evalin('base','zef.parcellation_type') == 2
+rec_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
+end 
+reconstruction = rec_aux;
+end
+    
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 
@@ -898,6 +907,8 @@ end
 
 if ismember(evalin('base','zef.visualization_type'),[2])
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
+h_colorbar_axes = get(h_colorbar,'axes');
+set(h_colorbar_axes,'fontsize',1500);
 end
 
 lighting phong;
@@ -937,30 +948,42 @@ end
 end
 end
 
-
+if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
+else
+view(get(evalin('base','zef.h_axes1'),'view'));
+end 
+
 axis('image');
 camva(evalin('base','zef.cam_va'));
 if evalin('base','zef.axes_visible')
-set(h_axes_image,'visible','on');
-set(h_axes_image,'xGrid','on');
-set(h_axes_image,'yGrid','on');
-set(h_axes_image,'zGrid','on');
+set(gca,'visible','on');
+set(gca,'xGrid','on');
+set(gca,'yGrid','on');
+set(gca,'zGrid','on');
 else
-set(h_axes_image,'visible','off');
-set(h_axes_image,'xGrid','off');
-set(h_axes_image,'yGrid','off');
-set(h_axes_image,'zGrid','off');
-end
+set(gca,'visible','off');
+set(gca,'xGrid','off');
+set(gca,'yGrid','off');
+set(gca,'zGrid','off');
+end    
+
 
   if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.03 0.94 0.01 0.05],'visible','off');
   h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
   set(h_text,'visible','on','fontsize',1500);
   end
+ 
   
-  drawnow;
-      
+camva(c_va);
+campos(c_pos);
+camtarget(c_ta);
+camproj(c_p); 
+camup(c_u);
+    
+drawnow;
+  
 if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
 
   if is_video  
@@ -989,12 +1012,7 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
   end;
  
 else
-camva(c_va);
-campos(c_pos);
-camtarget(c_ta);
-camproj(c_p); 
-camup(c_u);
-drawnow;
+
 if file_index == 1; 
 print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
 elseif file_index ==2; 
@@ -1116,6 +1134,15 @@ end
 end
 
 if evalin('base','zef.use_parcellation')
+    
+if evalin('base','zef.parcellation_type') == 2
+rec_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
+end 
+reconstruction = rec_aux;
+end
+    
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 
@@ -1211,18 +1238,6 @@ end
 %**************************************************************************
 
 else
-
-number_of_frames = evalin('base','zef.number_of_frames');    
-file_index = evalin('base','zef.file_index');
-file_name = evalin('base','zef.file');
-file_path = evalin('base','zef.file_path');    
-    
-c_va = camva(evalin('base','zef.h_axes1'));
-c_pos = campos(evalin('base','zef.h_axes1'));
-c_ta = camtarget(evalin('base','zef.h_axes1'));
-c_p = camproj(evalin('base','zef.h_axes1')); 
-c_u = camup(evalin('base','zef.h_axes1'));
-
 
 if iscell(evalin('base','zef.reconstruction'))
 length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
@@ -2119,7 +2134,11 @@ if evalin('base','zef.use_parcellation')
 reconstruction_aux = zeros(size(reconstruction));
 p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
 for p_ind = selected_list   
-reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+ if evalin('base','zef.parcellation_type') == 1
+        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+    elseif evalin('base','zef.parcellation_type') == 2
+        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+    end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
 reconstruction = reconstruction_aux;
@@ -2162,6 +2181,8 @@ end
 if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
 cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
+h_colorbar_axes = get(h_colorbar,'axes');
+set(h_colorbar_axes,'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
 set(h_bar,'facecolor',[0.5 0.5 0.5]);
@@ -2200,7 +2221,13 @@ end
 end
 end
 
+if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
+else
+view(get(evalin('base','zef.h_axes1'),'view'));
+end 
+view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
+view(get(evalin('base','zef.h_axes1'),'view'));
 axis('image');
 camva(evalin('base','zef.cam_va'));
 if evalin('base','zef.axes_visible')
@@ -2214,6 +2241,14 @@ set(gca,'xGrid','off');
 set(gca,'yGrid','off');
 set(gca,'zGrid','off');
 end  
+
+camva(c_va);
+campos(c_pos);
+camtarget(c_ta);
+camproj(c_p); 
+camup(c_u);
+
+drawnow;
 
 if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3
 
@@ -2243,12 +2278,7 @@ if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualizati
   end;
  
 else
-camva(c_va);
-campos(c_pos);
-camtarget(c_ta);
-camproj(c_p); 
-camup(c_u);
-drawnow;
+
 if file_index == 1; 
 print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
 elseif file_index ==2; 
@@ -2365,7 +2395,11 @@ if evalin('base','zef.use_parcellation')
 reconstruction_aux = zeros(size(reconstruction));
 p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
 for p_ind = selected_list
-reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+ if evalin('base','zef.parcellation_type') == 1
+        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+    elseif evalin('base','zef.parcellation_type') == 2
+        reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+    end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
 reconstruction = reconstruction_aux;
@@ -2546,7 +2580,8 @@ end
 end
 end
 
-view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
+%view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
+view(get(evalin('base','zef.h_axes1'),'view'));
 axis('image');
 camva(evalin('base','zef.cam_va'));
 if evalin('base','zef.axes_visible')
@@ -2560,7 +2595,6 @@ set(gca,'xGrid','off');
 set(gca,'yGrid','off');
 set(gca,'zGrid','off');
 end
-drawnow;
 
 camva(c_va);
 campos(c_pos);

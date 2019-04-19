@@ -3,6 +3,12 @@
 if not(isfield(zef,'reconstruction_type')); 
     zef.reconstruction_type = 1; 
 end; 
+if not(isfield(zef,'parcellation_type')); 
+    zef.parcellation_type = 1; 
+end; 
+if not(isfield(zef,'parcellation_quantile')); 
+    zef.parcellation_quantile = 0.98; 
+end; 
 if not(isfield(zef,'use_depth_electrodes')); 
     zef.use_depth_electrodes = 0; 
 end; 

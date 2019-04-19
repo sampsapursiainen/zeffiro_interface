@@ -9,6 +9,8 @@
           zef.parcellation_segment = 'LH';
           zef.parcellation_tolerance = 5;
           zef.parcellation_selected = [];
+          zef.parcellation_type = [1];
+          zef.parcellation_quantile = [0.98];
           zef.s_name = 'Sensors';
           zef.w_name = 'White matter';
           zef.g_name = 'Grey matter';

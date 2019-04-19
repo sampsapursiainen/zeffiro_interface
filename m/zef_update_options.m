@@ -1,5 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
 zef.reconstruction_type = get(zef.h_reconstruction_type,'value');
+zef.parcellation_type = get(zef.h_parcellation_type,'value');
+zef.parcellation_quantile = str2num(get(zef.h_parcellation_quantile,'string'));
 zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'value');
 zef.source_model = get(zef.h_source_model,'value');
 zef.use_gpu = get(zef.h_use_gpu,'value');

@@ -529,8 +529,6 @@ loop_count = loop_count + 1;
 axes(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
 set(evalin('base','zef.h_axes1'),'YDir','normal');
-light('Position',[0 0 1],'Style','infinite');
-light('Position',[0 0 -1],'Style','infinite');
 hold on;
 
 f_ind_aux = 1;
@@ -558,12 +556,14 @@ if evalin('base','zef.use_parcellation')
 reconstruction_p_1 = ones(size(I_3,1),1);
 reconstruction_p_2 = zeros(size(I_3,1),1);
 p_rec_aux = ones(size(nodes,1),1)*evalin('base','zef.layer_transparency'); 
+p_cell = cell(0);
 for p_ind = selected_list
 p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
 [p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
 [p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
 reconstruction_p_1(p_ind_aux) = p_ind+1;
 reconstruction_p_2(p_ind_aux) = 1;
+p_cell{p_ind+1} = p_ind_aux;
 p_rec_aux(unique(surface_triangles(I_3(p_ind_aux),:))) = evalin('base','zef.brain_transparency');
 end
 end
@@ -667,7 +667,18 @@ end
 
 if ismember(evalin('base','zef.visualization_type'),[2,4])
 
+
+    
 if evalin('base','zef.use_parcellation')
+
+if evalin('base','zef.parcellation_type') == 2
+rec_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
+end 
+reconstruction = rec_aux;
+end
+    
 reconstruction = reconstruction.*reconstruction_p_2;
 end
     
@@ -997,6 +1008,15 @@ end
 end
 
 if evalin('base','zef.use_parcellation')
+    
+if evalin('base','zef.parcellation_type') == 2
+rec_aux = zeros(size(reconstruction));
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
+end 
+reconstruction = rec_aux;
+end
+    
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 

@@ -54,6 +54,12 @@ if (isfield(zef_data,'inv_rec_source'));
           if isfield(zef_data,'reconstruction_type')
           zef.reconstruction_type      =      zef_data.reconstruction_type;
           end
+          if isfield(zef_data,'parcellation_type')
+          zef.parcellation_type      =      zef_data.parcellation_type;
+          end
+          if isfield(zef_data,'parcellation_quantile')
+          zef.parcellation_quantile      =      zef_data.parcellation_quantile;
+          end
           if isfield(zef_data,'use_gpu')
           zef.use_gpu      =      zef_data.use_gpu;
           end
