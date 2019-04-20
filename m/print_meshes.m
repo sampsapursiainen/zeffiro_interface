@@ -2253,8 +2253,6 @@ view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 else
 view(get(evalin('base','zef.h_axes1'),'view'));
 end 
-view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
-view(get(evalin('base','zef.h_axes1'),'view'));
 axis('image');
 camva(evalin('base','zef.cam_va'));
 if evalin('base','zef.axes_visible')
