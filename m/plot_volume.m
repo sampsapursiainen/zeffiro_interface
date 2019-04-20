@@ -672,11 +672,21 @@ if ismember(evalin('base','zef.visualization_type'),[2,4])
     
 if evalin('base','zef.use_parcellation')
 
-if evalin('base','zef.parcellation_type') == 2
+if evalin('base','zef.parcellation_type') > 1
 rec_aux = zeros(size(reconstruction));
+if evalin('base','zef.parcellation_type') == 2
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
-end 
+end
+elseif evalin('base','zef.parcellation_type') == 3
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(sqrt(reconstruction(p_cell{p_ind+1})),evalin('base','zef.parcellation_quantile'));
+end
+elseif evalin('base','zef.parcellation_type') == 4
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
+end
+end
 reconstruction = rec_aux;
 end
     
@@ -1010,11 +1020,21 @@ end
 
 if evalin('base','zef.use_parcellation')
     
-if evalin('base','zef.parcellation_type') == 2
+if evalin('base','zef.parcellation_type') > 1
 rec_aux = zeros(size(reconstruction));
+if evalin('base','zef.parcellation_type') == 2
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),evalin('base','zef.parcellation_quantile'));
-end 
+end
+elseif evalin('base','zef.parcellation_type') == 3
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile(sqrt(reconstruction(p_cell{p_ind+1})),evalin('base','zef.parcellation_quantile'));
+end
+elseif evalin('base','zef.parcellation_type') == 4
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
+end
+end
 reconstruction = rec_aux;
 end
     

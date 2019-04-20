@@ -862,6 +862,10 @@ for p_ind = selected_list
         reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
     elseif evalin('base','zef.parcellation_type') == 2
         reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+    elseif evalin('base','zef.parcellation_type') == 3
+    reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(sqrt(reconstruction(p_i_ind{p_ind}{2}{ab_ind})),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind})); 
+   elseif evalin('base','zef.parcellation_type') == 4
+      reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile((reconstruction(p_i_ind{p_ind}{2}{ab_ind}).^(1/3)),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
     end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
@@ -1041,7 +1045,11 @@ for p_ind = selected_list
         reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
     elseif evalin('base','zef.parcellation_type') == 2
         reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
-    end
+  elseif evalin('base','zef.parcellation_type') == 3
+      reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(sqrt(reconstruction(p_i_ind{p_ind}{2}{ab_ind})),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+elseif evalin('base','zef.parcellation_type') == 4
+      reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile((reconstruction(p_i_ind{p_ind}{2}{ab_ind}).^(1/3)),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+ end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
 reconstruction = reconstruction_aux;
