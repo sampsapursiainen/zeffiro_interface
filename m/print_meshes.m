@@ -7,6 +7,8 @@ length_reconstruction_cell = 1;
 
 aux_wm_ind = -1;
 
+movie_fps = evalin('base','zef.movie_fps');
+
 number_of_frames = evalin('base','zef.number_of_frames');
 file_index = evalin('base','zef.file_index');
 file_name = evalin('base','zef.file');
@@ -1179,7 +1181,7 @@ set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
 lighting phong;
-camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
+camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
 if evalin('base','zef.visualization_type') == 2
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
@@ -1269,6 +1271,7 @@ avi_file = [file_path file_name];
 video_quality = str2num(evalin('base','zef.video_codec'));
 h_aviobj = VideoWriter(avi_file_temp); 
 h_aviobj.Quality = video_quality;
+h_aviobj.FrameRate = movie_fps;
 open(h_aviobj);
 end
 
@@ -2440,10 +2443,12 @@ end
 set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end
-camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
-lighting phong;
+
 
 end
+
+camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
+lighting phong;
 
 
 delete(h_text);

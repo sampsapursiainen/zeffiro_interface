@@ -5,6 +5,7 @@ void = [];
 
 loop_movie = 1;
 length_reconstruction_cell = 1;
+movie_fps = evalin('base','zef.movie_fps');
 
 aux_wm_ind = -1;
 
@@ -1057,7 +1058,7 @@ set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
 lighting phong;
-camorbit(frame_step*evalin('base','zef.orbit_1')/15,frame_step*evalin('base','zef.orbit_2')/15);
+camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
   axes(h_axes_text);% = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
   %set(h_axes_text,'tag','image_details');
