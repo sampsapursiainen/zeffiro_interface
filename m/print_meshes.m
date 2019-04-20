@@ -994,7 +994,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
     
-drawnow;
+%drawnow;
   
 if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
 
@@ -2273,7 +2273,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-drawnow;
+%drawnow;
 
 if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3
 
@@ -2633,7 +2633,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-drawnow;
+%drawnow;
 
 if file_index == 1; 
 print(h_fig_aux,[file_path file_name],'-djpeg95','-r1'); 
