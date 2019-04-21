@@ -83,7 +83,7 @@ axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 hold(evalin('base','zef.h_axes1'),'off');
 for i = 1 : length(selected_list)
-bar(x_vals(i),y_vals(i),0.7,'facecolor',parcellation_colormap(selected_list(i)+1,:),'Parent',evalin('base','zef.h_axes1'));
+bar(x_vals(i),y_vals(i),0.7,'facecolor',2*parcellation_colormap(selected_list(i)+1,:),'Parent',evalin('base','zef.h_axes1'));
 if i == 1
 hold(evalin('base','zef.h_axes1'),'on');
 end
@@ -94,7 +94,7 @@ set(evalin('base','zef.h_axes1'),'xlim',[1 length(selected_list)+1]);
 set(evalin('base','zef.h_axes1'),'ylim',[0 1.05*max(y_vals)]);
 set(evalin('base','zef.h_axes1'),'ygrid','on');
 x_labels = text(x_vals-0.5,-0.02*max(y_vals)*ones(size(x_vals)),parcellation_list(selected_list),'Parent',evalin('base','zef.h_axes1'));
-y_label = text(1.02*(length(x_vals)+1),1.05*max(y_vals)/2,y_string,'Parent',evalin('base','zef.h_axes1'));
+y_label = text(1.01*(length(x_vals)+1),1.05*max(y_vals)/2,y_string,'Parent',evalin('base','zef.h_axes1'));
 set(x_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',90, 'Fontsize', 8);
 hold(evalin('base','zef.h_axes1'),'off');
 set(x_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',90, 'Fontsize', 8);
