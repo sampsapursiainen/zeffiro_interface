@@ -27,7 +27,7 @@ set(zef.h_parcellation_merge,'value',zef.parcellation_merge);
 
 if zef.use_parcellation == 0; 
     set(zef.h_use_parcellation,'foregroundcolor',[0 0 0]); 
-    set(zef.h_parcellation_list,'enable','on');
+    %set(zef.h_parcellation_list,'enable','on');
     
     
     
@@ -37,7 +37,7 @@ if zef.use_parcellation == 0;
     set(zef.h_use_parcellation,'string','Activate');
 else
     set(zef.h_use_parcellation,'foregroundcolor',[1 0 0]); 
-    set(zef.h_parcellation_list,'enable','off'); 
+    %set(zef.h_parcellation_list,'enable','off'); 
     set(zef.h_use_parcellation,'string','Active');
 end
 
