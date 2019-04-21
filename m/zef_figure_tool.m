@@ -1,6 +1,10 @@
 zef.h_zeffiro = open('zeffiro_interface_figure_tool.fig');
 zef.o_h = findall(zef.h_zeffiro);
-zef.h_axes1 = zef.o_h(34);
+zef.h_axes1 = zef.o_h(43);
+set(zef.h_zeffiro,'paperunits','inches');
+set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
+set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
+set(zef.h_zeffiro,'papersize',[zef.snapshot_vertical_resolution/200 zef.snapshot_horizontal_resolution/200]);
 zef=rmfield(zef,'o_h');
 
 color_label('s');
@@ -22,6 +26,15 @@ color_label('d10');
 color_label('d11');
 color_label('d12');
 color_label('d13');
+color_label('d14');
+color_label('d15');
+color_label('d16');
+color_label('d17');
+color_label('d18');
+color_label('d19');
+color_label('d20');
+color_label('d21');
+color_label('d22');
 
 if evalin('base','zef.prism_layers');
     if isfield(zef,'prisms')

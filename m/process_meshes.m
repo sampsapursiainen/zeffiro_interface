@@ -6,7 +6,7 @@ sensors = [];
 reuna_p = cell(0);
 reuna_t = cell(0);
 
-for k = 1 : 18
+for k = 1 : 27
 
 switch k
     case 1
@@ -29,7 +29,7 @@ switch k
         var_1 = 'zef.d4_scaling';
         var_8 = 'zef.d4_points';
         var_9 = 'zef.d4_triangles';   
-            case 5
+    case 5
         var_0 = 'zef.d5_on';
         var_1 = 'zef.d5_scaling';   
         var_8 = 'zef.d5_points';
@@ -75,26 +75,71 @@ switch k
         var_8 = 'zef.d13_points';
         var_9 = 'zef.d13_triangles'; 
     case 14
+        var_0 = 'zef.d14_on';
+        var_1 = 'zef.d14_scaling';   
+        var_8 = 'zef.d14_points';
+        var_9 = 'zef.d14_triangles';
+    case 15
+        var_0 = 'zef.d15_on';
+        var_1 = 'zef.d15_scaling'; 
+        var_8 = 'zef.d15_points';
+        var_9 = 'zef.d15_triangles';
+    case 16
+        var_0 = 'zef.d16_on';
+        var_1 = 'zef.d16_scaling';  
+        var_8 = 'zef.d16_points';
+        var_9 = 'zef.d16_triangles';
+    case 17
+        var_0 = 'zef.d17_on';
+        var_1 = 'zef.d17_scaling';
+        var_8 = 'zef.d17_points';
+        var_9 = 'zef.d17_triangles';     
+    case 18
+        var_0 = 'zef.d18_on';
+        var_1 = 'zef.d18_scaling';   
+        var_8 = 'zef.d18_points';
+        var_9 = 'zef.d18_triangles';
+    case 19
+        var_0 = 'zef.d19_on';
+        var_1 = 'zef.d19_scaling'; 
+        var_8 = 'zef.d19_points';
+        var_9 = 'zef.d19_triangles';
+    case 20
+        var_0 = 'zef.d20_on';
+        var_1 = 'zef.d20_scaling';  
+        var_8 = 'zef.d20_points';
+        var_9 = 'zef.d20_triangles';
+    case 21
+        var_0 = 'zef.d21_on';
+        var_1 = 'zef.d21_scaling';
+        var_8 = 'zef.d21_points';
+        var_9 = 'zef.d21_triangles'; 
+    case 22
+        var_0 = 'zef.d22_on';
+        var_1 = 'zef.d22_scaling';
+        var_8 = 'zef.d22_points';
+        var_9 = 'zef.d22_triangles';
+    case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_scaling';  
         var_8 = 'zef.w_points';
         var_9 = 'zef.w_triangles';
-    case 15
+    case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_scaling';
         var_8 = 'zef.g_points';
         var_9 = 'zef.g_triangles';
-    case 16
+    case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_scaling';
         var_8 = 'zef.c_points';
         var_9 = 'zef.c_triangles';
-     case 17
+     case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_scaling';
         var_8 = 'zef.sk_points';
         var_9 = 'zef.sk_triangles';
-     case 18
+     case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_scaling';     
         var_8 = 'zef.sc_points';

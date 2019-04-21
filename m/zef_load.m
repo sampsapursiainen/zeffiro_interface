@@ -18,6 +18,9 @@ load([zef.file_path zef.file]);
           if (isfield(zef_data,'parcellation_selected'));
           zef.parcellation_selected = zef_data.parcellation_selected; 
           end
+          if (isfield(zef_data,'parcellation_plot_type'));
+          zef.parcellation_plot_type = zef_data.parcellation_plot_type; 
+          end
  if (isfield(zef_data,'parcellation_colormap'));
           zef.inv_parcellation_colormap = zef_data.parcellation_colormap; 
  end
@@ -279,6 +282,35 @@ end;
 if (isfield(zef_data,'d13_sources'));
 zef.d13_sources = zef_data.d13_sources; 
 end;
+
+if (isfield(zef_data,'d14_sources'));
+zef.d14_sources = zef_data.d14_sources; 
+end;
+if (isfield(zef_data,'d15_sources'));
+zef.d15_sources = zef_data.d15_sources; 
+end;
+if (isfield(zef_data,'d16_sources'));
+zef.d16_sources = zef_data.d16_sources; 
+end;
+if (isfield(zef_data,'d17_sources'));
+zef.d17_sources = zef_data.d17_sources; 
+end;
+if (isfield(zef_data,'d18_sources'));
+zef.d18_sources = zef_data.d18_sources; 
+end;
+if (isfield(zef_data,'d19_sources'));
+zef.d19_sources = zef_data.d19_sources; 
+end;
+if (isfield(zef_data,'d20_sources'));
+zef.d20_sources = zef_data.d20_sources; 
+end;
+if (isfield(zef_data,'d21_sources'));
+zef.d21_sources = zef_data.d21_sources; 
+end;
+if (isfield(zef_data,'d22_sources'));
+zef.d22_sources = zef_data.d22_sources; 
+end;
+
 if (isfield(zef_data,'g_sources'));
 zef.g_sources = zef_data.g_sources; 
 end;
@@ -582,6 +614,9 @@ end;
           if (isfield(zef_data,'parcellation_colortable'));
           zef.parcellation_colortable = zef_data.parcellation_colortable; 
           end
+          if (isfield(zef_data,'parcellation_time_series'));
+          zef.parcellation_time_series = zef_data.parcellation_time_series; 
+          end
           if (isfield(zef_data,'use_parcellation'));
           zef.use_parcellation = zef_data.use_parcellation; 
           end
@@ -617,6 +652,7 @@ end;
           zef.d11_name =  zef_data.d11_name;
           zef.d12_name =  zef_data.d12_name;
           zef.d13_name =  zef_data.d13_name;
+          
           
           zef.s_merge = zef_data.s_merge;
           zef.w_merge = zef_data.w_merge;
@@ -658,6 +694,8 @@ end;
           zef.d12_invert = zef_data.d12_invert;
           zef.d13_invert = zef_data.d13_invert;
           
+          
+          
           zef.d5_sigma=            zef_data.d5_sigma ;
           zef.d6_sigma=           zef_data.d6_sigma ;
           zef.d7_sigma=           zef_data.d7_sigma ;
@@ -668,6 +706,8 @@ end;
           zef.d12_sigma=           zef_data.d12_sigma ; 
           zef.d13_sigma=           zef_data.d13_sigma ; 
           
+          
+          
           zef.d5_visible=          zef_data.d5_visible  ;
              zef.d6_visible=          zef_data.d6_visible  ; 
              zef.d7_visible=          zef_data.d7_visible  ;
@@ -677,6 +717,8 @@ end;
              zef.d11_visible=          zef_data.d11_visible  ;
              zef.d12_visible=          zef_data.d12_visible  ; 
              zef.d13_visible=          zef_data.d13_visible  ;
+             
+             
 
              zef.d5_on     =          zef_data.d5_on;    
              zef.d6_on     =          zef_data.d6_on;    
@@ -688,6 +730,8 @@ end;
              zef.d12_on     =          zef_data.d12_on;
              zef.d13_on     =          zef_data.d13_on;
              
+            
+             
              zef.d5_scaling=         zef_data.d5_scaling  ;
              zef.d6_scaling=         zef_data.d6_scaling  ;
              zef.d7_scaling=         zef_data.d7_scaling  ; 
@@ -697,6 +741,7 @@ end;
              zef.d11_scaling=         zef_data.d11_scaling  ; 
              zef.d12_scaling=         zef_data.d12_scaling  ;  
              zef.d13_scaling=         zef_data.d13_scaling  ; 
+             
              
             zef.d5_triangles=        zef_data.d5_triangles  ;
                zef.d5_points=           zef_data.d5_points  ;
@@ -726,9 +771,114 @@ end;
            zef.d11_priority = zef_data.d11_priority;
            zef.d12_priority = zef_data.d12_priority;
            zef.d13_priority = zef_data.d13_priority;
+          
+           
+          end
+
+          if isfield(zef_data,'d14_name')
+          
+           zef.d14_name =  zef_data.d14_name;
+          zef.d15_name =  zef_data.d15_name;
+          zef.d16_name =  zef_data.d16_name;
+          zef.d17_name =  zef_data.d17_name;
+          zef.d18_name =  zef_data.d18_name;
+          zef.d19_name =  zef_data.d19_name;
+          zef.d20_name =  zef_data.d20_name;
+          zef.d21_name =  zef_data.d21_name;
+          zef.d22_name =  zef_data.d22_name;
+          
+          zef.d14_merge = zef_data.d14_merge;
+          zef.d15_merge = zef_data.d15_merge;
+          zef.d16_merge = zef_data.d16_merge;
+          zef.d17_merge = zef_data.d17_merge;
+          zef.d18_merge = zef_data.d18_merge;
+          zef.d19_merge = zef_data.d19_merge;
+          zef.d20_merge = zef_data.d20_merge;
+          zef.d21_merge = zef_data.d21_merge;
+          zef.d22_merge = zef_data.d22_merge;
+          
+          zef.d14_invert = zef_data.d14_invert;
+          zef.d15_invert = zef_data.d15_invert;
+          zef.d16_invert = zef_data.d16_invert;
+          zef.d17_invert = zef_data.d17_invert;
+          zef.d18_invert = zef_data.d18_invert;
+          zef.d19_invert = zef_data.d19_invert;
+          zef.d20_invert = zef_data.d20_invert;
+          zef.d21_invert = zef_data.d21_invert;
+          zef.d22_invert = zef_data.d22_invert; 
+          
+          zef.d14_sigma=            zef_data.d14_sigma ;
+          zef.d15_sigma=           zef_data.d15_sigma ;
+          zef.d16_sigma=           zef_data.d16_sigma ;
+          zef.d17_sigma=           zef_data.d17_sigma ;
+           zef.d18_sigma=            zef_data.d18_sigma ;
+          zef.d19_sigma=           zef_data.d19_sigma ;
+          zef.d20_sigma=           zef_data.d20_sigma ;
+          zef.d21_sigma=           zef_data.d21_sigma ; 
+          zef.d22_sigma=           zef_data.d22_sigma ; 
+             
+              zef.d14_visible=          zef_data.d14_visible  ;
+             zef.d15_visible=          zef_data.d15_visible  ; 
+             zef.d16_visible=          zef_data.d16_visible  ;
+             zef.d17_visible=          zef_data.d17_visible  ; 
+             zef.d18_visible=          zef_data.d18_visible  ;
+             zef.d19_visible=          zef_data.d19_visible  ; 
+             zef.d20_visible=          zef_data.d20_visible  ;
+             zef.d21_visible=          zef_data.d21_visible  ; 
+             zef.d22_visible=          zef_data.d22_visible  ;
+             
+             zef.d14_on     =          zef_data.d14_on;    
+             zef.d15_on     =          zef_data.d15_on;    
+             zef.d16_on     =          zef_data.d16_on;
+             zef.d17_on     =          zef_data.d17_on;    
+             zef.d18_on     =          zef_data.d18_on;    
+             zef.d19_on     =          zef_data.d19_on;    
+             zef.d20_on     =          zef_data.d20_on;
+             zef.d21_on     =          zef_data.d21_on;
+             zef.d22_on     =          zef_data.d22_on;
+             
+             zef.d14_scaling=         zef_data.d14_scaling  ;
+             zef.d15_scaling=         zef_data.d15_scaling  ;
+             zef.d16_scaling=         zef_data.d16_scaling  ; 
+             zef.d17_scaling=         zef_data.d17_scaling  ;  
+             zef.d18_scaling=         zef_data.d18_scaling  ;
+             zef.d19_scaling=         zef_data.d19_scaling  ;
+             zef.d20_scaling=         zef_data.d20_scaling  ; 
+             zef.d21_scaling=         zef_data.d21_scaling  ;  
+             zef.d22_scaling=         zef_data.d22_scaling  ; 
+             
+              zef.d14_triangles=        zef_data.d14_triangles  ;
+               zef.d14_points=           zef_data.d14_points  ;
+            zef.d15_triangles=        zef_data.d15_triangles  ;
+               zef.d15_points=           zef_data.d15_points  ;
+            zef.d16_triangles=        zef_data.d16_triangles  ;
+               zef.d16_points=           zef_data.d16_points  ;
+            zef.d17_triangles=        zef_data.d17_triangles  ;
+               zef.d17_points=           zef_data.d17_points  ;
+            zef.d18_triangles=        zef_data.d18_triangles  ;
+          zef.d18_points=           zef_data.d18_points  ;
+           zef.d19_triangles=        zef_data.d19_triangles  ;
+               zef.d19_points=           zef_data.d19_points  ;
+            zef.d20_triangles=        zef_data.d20_triangles  ;
+               zef.d20_points=           zef_data.d20_points  ;
+            zef.d21_triangles=        zef_data.d21_triangles  ;
+               zef.d21_points=           zef_data.d21_points  ;
+            zef.d22_triangles=        zef_data.d22_triangles  ;
+          zef.d22_points=           zef_data.d22_points  ;  
+          
+                      zef.d14_priority = zef_data.d14_priority;
+           zef.d15_priority = zef_data.d15_priority;
+           zef.d16_priority = zef_data.d16_priority;
+           zef.d17_priority = zef_data.d17_priority;
+           zef.d18_priority = zef_data.d18_priority;
+           zef.d19_priority = zef_data.d19_priority;
+           zef.d20_priority = zef_data.d20_priority;
+           zef.d21_priority = zef_data.d21_priority;
+           zef.d22_priority = zef_data.d22_priority;
            
 end
-                    
+          
+          
 clear zef_data;
 zef_update;
 zef_mesh_tool;

@@ -64,7 +64,7 @@ time_val = toc;
 if i == 1 
 waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']); 
 elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
 end

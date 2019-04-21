@@ -62,12 +62,12 @@ time_val = toc;
 if i == 1
 h = waitbar(i/length_I,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '.']);    
 elseif  mod(i_ind,bar_ind)==0 
-waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready approx. ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 end
 
 end
 
-waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready approx. ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 
 close(h)
 

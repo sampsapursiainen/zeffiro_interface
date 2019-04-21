@@ -27,7 +27,7 @@ priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
-for k = 1 : 18   
+for k = 1 : 27   
 switch k
     case 1
         var_0 = 'zef.d1_on';
@@ -107,31 +107,85 @@ switch k
         var_2 = 'zef.d13_priority';
         var_3 = 'zef.d13_visible';
         color_str = evalin('base','zef.d13_color');
- case 14
+   case 14
+        var_0 = 'zef.d14_on';
+        var_1 = 'zef.d14_sigma';
+        var_2 = 'zef.d14_priority';
+        var_3 = 'zef.d14_visible';
+    color_str = evalin('base','zef.d14_color');
+     case 15
+        var_0 = 'zef.d15_on';
+        var_1 = 'zef.d15_sigma';   
+        var_2 = 'zef.d15_priority';
+        var_3 = 'zef.d15_visible';
+        color_str = evalin('base','zef.d15_color');
+     case 16
+        var_0 = 'zef.d16_on';
+        var_1 = 'zef.d16_sigma';   
+        var_2 = 'zef.d16_priority';
+        var_3 = 'zef.d16_visible';
+        color_str = evalin('base','zef.d16_color');
+     case 17
+        var_0 = 'zef.d17_on';
+        var_1 = 'zef.d17_sigma';   
+        var_2 = 'zef.d17_priority';
+        var_3 = 'zef.d17_visible';
+        color_str = evalin('base','zef.d17_color');
+ case 18
+        var_0 = 'zef.d18_on';
+        var_1 = 'zef.d18_sigma';
+        var_2 = 'zef.d18_priority';
+        var_3 = 'zef.d18_visible';
+        color_str = evalin('base','zef.d18_color');
+     case 19
+        var_0 = 'zef.d19_on';
+        var_1 = 'zef.d19_sigma';   
+        var_2 = 'zef.d19_priority';
+        var_3 = 'zef.d19_visible';
+        color_str = evalin('base','zef.d19_color');
+     case 20
+        var_0 = 'zef.d20_on';
+        var_1 = 'zef.d20_sigma';   
+        var_2 = 'zef.d20_priority';
+        var_3 = 'zef.d20_visible';
+        color_str = evalin('base','zef.d20_color');
+     case 21
+        var_0 = 'zef.d21_on';
+        var_1 = 'zef.d21_sigma';   
+        var_2 = 'zef.d21_priority';
+        var_3 = 'zef.d21_visible';
+        color_str = evalin('base','zef.d21_color');
+  case 22
+        var_0 = 'zef.d22_on';
+        var_1 = 'zef.d22_sigma';   
+        var_2 = 'zef.d22_priority';
+        var_3 = 'zef.d22_visible';
+        color_str = evalin('base','zef.d22_color');
+ case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
         var_3 = 'zef.w_visible';
         color_str = evalin('base','zef.w_color');
-    case 15
+    case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
         var_3 = 'zef.g_visible';
         color_str = evalin('base','zef.g_color');
-    case 16
+    case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
         var_3 = 'zef.c_visible';
         color_str = evalin('base','zef.c_color');
-     case 17
+     case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
         var_3 = 'zef.sk_visible';
         color_str = evalin('base','zef.sk_color');
-     case 18
+     case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';
@@ -272,7 +326,97 @@ c_table{t_ind}{3}(c_ind,5) =  i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) = i;
 end
-if k == 14 && evalin('base','zef.wm_sources') && not(evalin('base','zef.wm_sources')==3)
+if k == 14 && evalin('base','zef.d14_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d14_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d14_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 15 && evalin('base','zef.d15_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d15_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d15_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 16 && evalin('base','zef.d16_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d16_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d16_color');
+c_table{t_ind}{3}(c_ind,5) = i;
+c_table{t_ind}{5}(c_ind,1) = i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 17 && evalin('base','zef.d17_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d17_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d17_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 18 && evalin('base','zef.d18_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d18_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d18_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 19 && evalin('base','zef.d19_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d19_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d19_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) =  i;
+end
+if k == 20 && evalin('base','zef.d20_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d20_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d20_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 21 && evalin('base','zef.d21_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d21_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d21_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) =  i;
+end
+if k == 22 && evalin('base','zef.d22_sources');
+c_ind = c_ind + 1;
+I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+J = unique(s_interp_ind(I,:));
+c_table{t_ind}{2}{c_ind,1} = evalin('base','zef.d22_name');
+c_table{t_ind}{3}(c_ind,1:3) = evalin('base','zef.d22_color');
+c_table{t_ind}{3}(c_ind,5) =  i;
+c_table{t_ind}{5}(c_ind,1) =  i;
+c_table{t_ind}{4}(J) = i;
+end
+if k == 23 && evalin('base','zef.wm_sources') && not(evalin('base','zef.wm_sources')==3)
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));
@@ -282,7 +426,7 @@ c_table{t_ind}{3}(c_ind,5) = i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) = i;
 end
-if k == 15 && evalin('base','zef.g_sources')
+if k == 24 && evalin('base','zef.g_sources')
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));
@@ -292,7 +436,7 @@ c_table{t_ind}{3}(c_ind,5) =  i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) =  i;
 end
-if k == 16 && evalin('base','zef.c_sources');
+if k == 25 && evalin('base','zef.c_sources');
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));
@@ -302,7 +446,7 @@ c_table{t_ind}{3}(c_ind,5) =  i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) =  i;
 end
-if k == 17 && evalin('base','zef.sk_sources');
+if k == 26 && evalin('base','zef.sk_sources');
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));
@@ -312,7 +456,7 @@ c_table{t_ind}{3}(c_ind,5) =  i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) =  i;
 end
-if k == 18 && evalin('base','zef.sc_sources');
+if k == 27 && evalin('base','zef.sc_sources');
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));

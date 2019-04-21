@@ -2,12 +2,20 @@ if not(isfield(zef,'parcellation_name'));
     zef.parcellation_name = ''; 
 end;
 
+if not(isfield(zef,'parcellation_plot_type')); 
+    zef.parcellation_plot_type = 1; 
+end;
+
 if not(isfield(zef,'parcellation_colortable')); 
     zef.parcellation_colortable = cell(0); 
 end;
 
 if not(isfield(zef,'parcellation_segment')); 
     zef.parcellation_segment = 'LH'; 
+end;
+
+if not(isfield(zef,'parcellation_plot_type')); 
+    zef.parcellation_plot_type = 1; 
 end;
 
 if not(isfield(zef,'parcellation_points')); 

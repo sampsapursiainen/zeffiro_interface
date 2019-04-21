@@ -201,6 +201,124 @@ h = evalin('base','zef.h_d13_scaling'); set(h,'string',num2str(zef.d13_scaling))
 
 end
 
+if zef.d14_on
+
+zef.i = zef.i + 1;
+
+zef.d14_points = zef.reuna_p{zef.i};
+zef.d14_tetra = zef.reuna_t{zef.i};
+
+zef.d14_scaling = 1.0;
+
+h = evalin('base','zef.h_d14_scaling'); set(h,'string',num2str(zef.d14_scaling));
+
+end
+
+if zef.d15_on
+
+zef.i = zef.i + 1;
+
+zef.d15_points = zef.reuna_p{zef.i};
+zef.d15_tetra = zef.reuna_t{zef.i};
+
+zef.d15_scaling = 1.0;
+
+h = evalin('base','zef.h_d15_scaling'); set(h,'string',num2str(zef.d15_scaling));
+
+end
+
+if zef.d16_on
+
+zef.i = zef.i + 1;
+
+zef.d16_points = zef.reuna_p{zef.i};
+zef.d16_tetra = zef.reuna_t{zef.i};
+
+zef.d16_scaling = 1.0;
+
+h = evalin('base','zef.h_d16_scaling'); set(h,'string',num2str(zef.d16_scaling));
+
+end
+
+if zef.d17_on
+
+zef.i = zef.i + 1;
+
+zef.d17_points = zef.reuna_p{zef.i};
+zef.d17_tetra = zef.reuna_t{zef.i};
+
+zef.d17_scaling = 1.0;
+
+h = evalin('base','zef.h_d17_scaling'); set(h,'string',num2str(zef.d17_scaling));
+
+end
+
+if zef.d18_on
+
+zef.i = zef.i + 1;
+
+zef.d18_points = zef.reuna_p{zef.i};
+zef.d18_tetra = zef.reuna_t{zef.i};
+
+zef.d18_scaling = 1.0;
+
+h = evalin('base','zef.h_d18_scaling'); set(h,'string',num2str(zef.d18_scaling));
+
+end
+
+if zef.d19_on
+
+zef.i = zef.i + 1;
+
+zef.d19_points = zef.reuna_p{zef.i};
+zef.d19_tetra = zef.reuna_t{zef.i};
+
+zef.d19_scaling = 1.0;
+
+h = evalin('base','zef.h_d19_scaling'); set(h,'string',num2str(zef.d19_scaling));
+
+end
+
+if zef.d20_on
+
+zef.i = zef.i + 1;
+
+zef.d20_points = zef.reuna_p{zef.i};
+zef.d20_tetra = zef.reuna_t{zef.i};
+
+zef.d20_scaling = 1.0;
+
+h = evalin('base','zef.h_d20_scaling'); set(h,'string',num2str(zef.d20_scaling));
+
+end
+
+
+if zef.d21_on
+
+zef.i = zef.i + 1;
+
+zef.d21_points = zef.reuna_p{zef.i};
+zef.d21_tetra = zef.reuna_t{zef.i};
+
+zef.d21_scaling = 1.0;
+
+h = evalin('base','zef.h_d21_scaling'); set(h,'string',num2str(zef.d21_scaling));
+
+end
+
+if zef.d22_on
+
+zef.i = zef.i + 1;
+
+zef.d22_points = zef.reuna_p{zef.i};
+zef.d22_tetra = zef.reuna_t{zef.i};
+
+zef.d22_scaling = 1.0;
+
+h = evalin('base','zef.h_d22_scaling'); set(h,'string',num2str(zef.d22_scaling));
+
+end
+
 if zef.w_on
 
 zef.i = zef.i + 1;

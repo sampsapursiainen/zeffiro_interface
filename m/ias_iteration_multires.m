@@ -33,7 +33,7 @@ visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
-for k = 1 : 18   
+for k = 1 : 27
 switch k
     case 1
         var_0 = 'zef.d1_on';
@@ -59,7 +59,7 @@ switch k
         var_2 = 'zef.d4_priority';
         var_3 = 'zef.d4_visible';
         color_str = evalin('base','zef.d4_color');
-    case 5
+     case 5
         var_0 = 'zef.d5_on';
         var_1 = 'zef.d5_sigma';
         var_2 = 'zef.d5_priority';
@@ -83,12 +83,12 @@ switch k
         var_2 = 'zef.d8_priority';
         var_3 = 'zef.d8_visible';
         color_str = evalin('base','zef.d8_color');
-            case 9
+    case 9
         var_0 = 'zef.d9_on';
-        var_1 = 'zef.d9_sigma';
+        var_1 = 'zef.d9_sigma';   
         var_2 = 'zef.d9_priority';
         var_3 = 'zef.d9_visible';
-    color_str = evalin('base','zef.d9_color');
+        color_str = evalin('base','zef.d9_color');
      case 10
         var_0 = 'zef.d10_on';
         var_1 = 'zef.d10_sigma';   
@@ -113,31 +113,85 @@ switch k
         var_2 = 'zef.d13_priority';
         var_3 = 'zef.d13_visible';
         color_str = evalin('base','zef.d13_color');
-    case 14
+  case 14
+        var_0 = 'zef.d14_on';
+        var_1 = 'zef.d14_sigma';
+        var_2 = 'zef.d14_priority';
+        var_3 = 'zef.d14_visible';
+    color_str = evalin('base','zef.d14_color');
+  case 15
+        var_0 = 'zef.d15_on';
+        var_1 = 'zef.d15_sigma';   
+        var_2 = 'zef.d15_priority';
+        var_3 = 'zef.d15_visible';
+        color_str = evalin('base','zef.d15_color');
+     case 16
+        var_0 = 'zef.d16_on';
+        var_1 = 'zef.d16_sigma';   
+        var_2 = 'zef.d16_priority';
+        var_3 = 'zef.d16_visible';
+        color_str = evalin('base','zef.d16_color');
+     case 17
+        var_0 = 'zef.d17_on';
+        var_1 = 'zef.d17_sigma';   
+        var_2 = 'zef.d17_priority';
+        var_3 = 'zef.d17_visible';
+        color_str = evalin('base','zef.d17_color');
+    case 18
+        var_0 = 'zef.d18_on';
+        var_1 = 'zef.d18_sigma';   
+        var_2 = 'zef.d18_priority';
+        var_3 = 'zef.d18_visible';
+        color_str = evalin('base','zef.d18_color');
+     case 19
+        var_0 = 'zef.d19_on';
+        var_1 = 'zef.d19_sigma';   
+        var_2 = 'zef.d19_priority';
+        var_3 = 'zef.d19_visible';
+        color_str = evalin('base','zef.d19_color');
+     case 20
+        var_0 = 'zef.d20_on';
+        var_1 = 'zef.d20_sigma';   
+        var_2 = 'zef.d20_priority';
+        var_3 = 'zef.d20_visible';
+        color_str = evalin('base','zef.d20_color');
+     case 21
+        var_0 = 'zef.d21_on';
+        var_1 = 'zef.d21_sigma';   
+        var_2 = 'zef.d21_priority';
+        var_3 = 'zef.d21_visible';
+        color_str = evalin('base','zef.d21_color');
+     case 22
+        var_0 = 'zef.d22_on';
+        var_1 = 'zef.d22_sigma';   
+        var_2 = 'zef.d22_priority';
+        var_3 = 'zef.d22_visible';
+        color_str = evalin('base','zef.d22_color');
+    case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
         var_3 = 'zef.w_visible';
         color_str = evalin('base','zef.w_color');
-    case 15
+    case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
         var_3 = 'zef.g_visible';
         color_str = evalin('base','zef.g_color');
-    case 16
+    case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
         var_3 = 'zef.c_visible';
         color_str = evalin('base','zef.c_color');
-     case 17
+     case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
         var_3 = 'zef.sk_visible';
         color_str = evalin('base','zef.sk_color');
-     case 18
+     case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';
@@ -206,23 +260,59 @@ if k == 13 && evalin('base','zef.d13_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.d13_sources')-1];
 end
-if k == 14 && evalin('base','zef.wm_sources');
+if k == 14 && evalin('base','zef.d14_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d14_sources')-1];
+end
+if k == 15 && evalin('base','zef.d15_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d15_sources')-1];
+end
+if k == 16 && evalin('base','zef.d16_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d16_sources')-1];
+end
+if k == 17 && evalin('base','zef.d17_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d17_sources')-1];
+end
+if k == 18 && evalin('base','zef.d18_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d18_sources')-1];
+end
+if k == 19 && evalin('base','zef.d10_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d19_sources')-1];
+end
+if k == 20 && evalin('base','zef.d20_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d20_sources')-1];
+end
+if k == 21 && evalin('base','zef.d21_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d21_sources')-1];
+end
+if k == 22 && evalin('base','zef.d22_sources');
+    aux_brain_ind = [aux_brain_ind i];
+    aux_dir_mode = [aux_dir_mode evalin('base','zef.d22_sources')-1];
+end
+if k == 23 && evalin('base','zef.wm_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.wm_sources')-1];
 end
-if k == 15 && evalin('base','zef.g_sources');
+if k == 24 && evalin('base','zef.g_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.g_sources')-1];
 end
-if k == 16 && evalin('base','zef.c_sources');
+if k == 25 && evalin('base','zef.c_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.c_sources')-1];
 end
-if k == 17 && evalin('base','zef.sk_sources');
+if k == 26 && evalin('base','zef.sk_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.sk_sources')-1];
 end
-if k == 18 && evalin('base','zef.sc_sources');
+if k == 27 && evalin('base','zef.sc_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.sc_sources')-1];
 end
@@ -411,7 +501,7 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;    
-waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready approx: ' date_str '.' ]);
+waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
 waitbar(i/n_iter(j),h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;

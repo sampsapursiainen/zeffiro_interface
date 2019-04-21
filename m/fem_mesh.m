@@ -11,7 +11,7 @@ sensors = evalin('base','zef.sensors');
 i = 0;
 sigma_vec = [];
 priority_vec = [];
-for k = 1 : 18   
+for k = 1 : 27   
 switch k
     case 1
         var_0 = 'zef.d1_on';
@@ -61,27 +61,63 @@ switch k
         var_0 = 'zef.d12_on';
         var_1 = 'zef.d12_sigma';   
         var_2 = 'zef.d12_priority';
- case 13
+     case 13
         var_0 = 'zef.d13_on';
         var_1 = 'zef.d13_sigma';   
         var_2 = 'zef.d13_priority';
-    case 14
+     case 14
+        var_0 = 'zef.d14_on';
+        var_1 = 'zef.d14_sigma';
+        var_2 = 'zef.d14_priority';
+     case 15
+        var_0 = 'zef.d15_on';
+        var_1 = 'zef.d15_sigma';   
+        var_2 = 'zef.d15_priority';
+     case 16
+        var_0 = 'zef.d16_on';
+        var_1 = 'zef.d16_sigma';   
+        var_2 = 'zef.d16_priority';
+     case 17
+        var_0 = 'zef.d17_on';
+        var_1 = 'zef.d17_sigma';   
+        var_2 = 'zef.d17_priority';
+   case 18
+        var_0 = 'zef.d18_on';
+        var_1 = 'zef.d18_sigma';
+        var_2 = 'zef.d18_priority';
+     case 19
+        var_0 = 'zef.d19_on';
+        var_1 = 'zef.d19_sigma';   
+        var_2 = 'zef.d19_priority';
+     case 20
+        var_0 = 'zef.d20_on';
+        var_1 = 'zef.d20_sigma';   
+        var_2 = 'zef.d20_priority';
+     case 21
+        var_0 = 'zef.d21_on';
+        var_1 = 'zef.d21_sigma';   
+        var_2 = 'zef.d21_priority';
+     case 22
+        var_0 = 'zef.d22_on';
+        var_1 = 'zef.d22_sigma';   
+        var_2 = 'zef.d22_priority';
+     case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-    case 15
+     case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
-    case 16
+    case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
-     case 17
+     case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
-     case 18
+     case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';

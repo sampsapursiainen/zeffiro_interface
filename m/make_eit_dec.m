@@ -42,7 +42,7 @@ time_val = toc;
 if i == 1 
 waitbar(i/size_center_points,h,['Source decomposition.']); 
 elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Source decomposition. Ready approx. ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(i/size_center_points,h,['Source decomposition. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
 end

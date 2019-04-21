@@ -1,4 +1,6 @@
 %Copyright © 2018, Sampsa Pursiainen
+          zef.parcellation_plot_type = 1;
+          zef.parcellation_time_series = [];
           zef.parcellation_colormap = [];
           zef.parcellation_interp_ind = cell(0);
           zef.parcellation_name = '';
@@ -31,6 +33,16 @@
           zef.d12_name = 'Detail 12';
           zef.d13_name = 'Detail 13';
           
+          zef.d14_name = 'Detail 14';
+          zef.d15_name = 'Detail 15';
+          zef.d16_name = 'Detail 16';
+          zef.d17_name = 'Detail 17';
+          zef.d18_name = 'Detail 18';
+          zef.d19_name = 'Detail 19';
+          zef.d20_name = 'Detail 20';
+          zef.d21_name = 'Detail 21';
+          zef.d22_name = 'Detail 22';
+          
           zef.s_merge = 1;
           zef.w_merge = 1;
           zef.g_merge = 1;
@@ -51,6 +63,16 @@
           zef.d12_merge = 1;
           zef.d13_merge = 1;
           
+          zef.d14_merge = 1;
+          zef.d15_merge = 1;
+          zef.d16_merge = 1;
+          zef.d17_merge = 1;
+          zef.d18_merge = 1;
+          zef.d19_merge = 1;
+          zef.d20_merge = 1;
+          zef.d21_merge = 1;
+          zef.d22_merge = 1;
+          
           zef.s_invert = 0;
           zef.w_invert = 0;
           zef.g_invert = 0;
@@ -70,6 +92,16 @@
           zef.d11_invert = 0;
           zef.d12_invert = 0;
           zef.d13_invert = 0;
+          
+          zef.d14_invert = 0;
+          zef.d15_invert = 0;
+          zef.d16_invert = 0;
+          zef.d17_invert = 0;
+          zef.d18_invert = 0;
+          zef.d19_invert = 0;
+          zef.d20_invert = 0;
+          zef.d21_invert = 0;
+          zef.d22_invert = 0;
           
           zef.loop_movie = [0];
           zef.stop_movie = [0];
@@ -121,6 +153,17 @@
                zef.d11_sigma= 0.33;
                zef.d12_sigma= 0.33;
                zef.d13_sigma= 0.33;
+               
+               zef.d14_sigma= 0.33;
+               zef.d15_sigma= 0.33;
+               zef.d16_sigma= 0.33;
+               zef.d17_sigma= 0.33;
+               zef.d18_sigma= 0.33;
+               zef.d19_sigma= 0.33;
+               zef.d20_sigma= 0.33;
+               zef.d21_sigma= 0.33;
+               zef.d22_sigma= 0.33;
+               
         zef.mesh_resolution= 2;
       zef.attach_electrodes= 0;
               zef.s_visible= 1;
@@ -153,6 +196,26 @@
                zef.d12_points= [];
             zef.d13_triangles= [];
                zef.d13_points= []; 
+               
+               zef.d14_triangles=[];
+              zef.d14_points=[];
+            zef.d15_triangles= [];
+               zef.d15_points= [];
+            zef.d16_triangles= [];
+               zef.d16_points= [];
+            zef.d17_triangles= [];
+               zef.d17_points= []; 
+               zef.d18_triangles= [];
+               zef.d18_points= []; 
+              zef.d19_triangles=[];
+              zef.d19_points=[];
+            zef.d20_triangles= [];
+               zef.d20_points= [];
+            zef.d21_triangles= [];
+               zef.d21_points= [];
+            zef.d22_triangles= [];
+               zef.d22_points= []; 
+               
             zef.w_triangles= [];
                zef.w_points= [];
  zef.source_direction_mode = 2;
@@ -174,6 +237,17 @@
                zef.d11_visible=1;
                zef.d12_visible=1;
                zef.d13_visible=1;
+               
+               zef.d14_visible= 1;
+               zef.d15_visible=1;
+               zef.d16_visible=1;
+               zef.d17_visible=1;
+               zef.d18_visible=1;
+               zef.d19_visible= 1;
+               zef.d20_visible=1;
+               zef.d21_visible=1;
+               zef.d22_visible=1;
+               
                zef.d1_scaling=1.0;
                zef.d2_scaling=1.0;
                zef.d3_scaling=1.0;
@@ -187,6 +261,17 @@
                zef.d11_scaling=1.0;
                zef.d12_scaling=1.0;
                zef.d13_scaling=1.0;
+               
+               zef.d14_scaling=1.0;
+               zef.d15_scaling=1.0;
+               zef.d16_scaling=1.0;
+               zef.d17_scaling=1.0;
+               zef.d18_scaling=1.0;
+               zef.d19_scaling=1.0;
+               zef.d20_scaling=1.0;
+               zef.d21_scaling=1.0;
+               zef.d22_scaling=1.0;
+               
              zef.sc_scaling= 1.0;
              zef.sk_scaling= 1.0;
               zef.c_scaling= 1.0;
@@ -213,6 +298,17 @@
                   zef.d11_on= 0;
                   zef.d12_on= 0; 
                   zef.d13_on= 0;
+                  
+                  zef.d14_on= 0;
+                  zef.d15_on= 0;
+                  zef.d16_on= 0; 
+                  zef.d17_on= 0;
+                  zef.d18_on= 0;
+                  zef.d19_on= 0;
+                  zef.d20_on= 0;
+                  zef.d21_on= 0; 
+                  zef.d22_on= 0;
+                  
                   zef.sc_on= 0;
                   zef.sk_on= 0;
                    zef.c_on= 0;
@@ -267,6 +363,17 @@ zef.sensors_attached_volume = [];
             zef.d11_priority = 16;
             zef.d12_priority = 17;
             zef.d13_priority = 18;
+            
+            zef.d14_priority = 19;
+            zef.d15_priority = 20;
+            zef.d16_priority = 21;
+            zef.d17_priority = 22;
+            zef.d18_priority = 23;
+            zef.d19_priority = 24;
+            zef.d20_priority = 25;
+            zef.d21_priority = 26;
+            zef.d22_priority = 27;
+            
             zef.cp_on       = 0;
             zef.cp_a        = 1;
             zef.cp_b        = 0;
@@ -289,6 +396,17 @@ zef.sensors_attached_volume = [];
        zef.d11_color =  [0 1 0.8];
        zef.d12_color = [1 0.85 0];
        zef.d13_color = [0.8 0.3 0.6];
+       
+       zef.d14_color = [0.5000 0 1.0000];
+       zef.d15_color = [0.4000 0.6000 0.1000];
+       zef.d16_color = [0 1 0];
+       zef.d17_color = [1 0 0];
+       zef.d18_color = [0 0.3 1];
+       zef.d19_color = [0.35 0.75 1];
+       zef.d20_color =  [0 1 0.8];
+       zef.d21_color = [1 0.85 0];
+       zef.d22_color = [0.8 0.3 0.6];
+       
        zef.w_color = [0.8 0.8 0.8];
        zef.g_color = [0.35 0.35 0.35];
        zef.c_color = 0.6*[0.7 0.8 0.7];
@@ -309,6 +427,18 @@ zef.sensors_attached_volume = [];
        zef.d11_sources = 0;
        zef.d12_sources = 0;
        zef.d13_sources = 0;
+       
+       
+       zef.d14_sources = 0;
+       zef.d15_sources = 0;
+       zef.d16_sources = 0;
+       zef.d17_sources = 0;
+       zef.d18_sources = 0;
+       zef.d19_sources = 0;
+       zef.d20_sources = 0;
+       zef.d21_sources = 0;
+       zef.d22_sources = 0;
+       
        zef.g_sources = 1;
        zef.c_sources = 0;
        zef.sk_sources = 0;
@@ -327,6 +457,17 @@ zef.sensors_attached_volume = [];
        zef.d11_sources_old = -1;
        zef.d12_sources_old = -1;
        zef.d13_sources_old = -1;
+       
+       zef.d14_sources_old = -1;
+       zef.d15_sources_old = -1;
+       zef.d16_sources_old = -1;
+       zef.d17_sources_old = -1;
+       zef.d18_sources_old = -1;
+       zef.d19_sources_old = -1;
+       zef.d20_sources_old = -1;
+       zef.d21_sources_old = -1;
+       zef.d22_sources_old = -1;
+       
        zef.g_sources_old = -1;
        zef.c_sources_old = -1;
        zef.sk_sources_old = -1;

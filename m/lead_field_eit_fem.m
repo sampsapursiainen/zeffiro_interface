@@ -509,10 +509,10 @@ if tol_val < relres_vec(i)
 end
 time_val = toc; 
 if isequal(electrode_model,'PEM')
-waitbar(i/(L-1),h,['PCG iteration. Ready approx: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
 end
 if isequal(electrode_model,'CEM')
-waitbar(i/L,h,['PCG iteration. Ready approx: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 end
 
@@ -584,10 +584,10 @@ if tol_val < relres_vec(i)
 end
 time_val = toc; 
 if isequal(electrode_model,'PEM')
-waitbar(i/(L-1),h,['PCG iteration. Ready approx: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
 end
 if isequal(electrode_model,'CEM')
-waitbar(i/L,h,['PCG iteration. Ready approx: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 end
 
@@ -639,7 +639,7 @@ L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:);
 
 if mod(i,floor(K/50))==0 
 time_val = toc;
-waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+waitbar(i/K,h,['Interpolation. Ready: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
  end
 

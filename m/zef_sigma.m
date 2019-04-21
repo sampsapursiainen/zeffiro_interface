@@ -22,7 +22,7 @@ i = 0;
 length_reuna = 0;
 sigma_vec = [];
 priority_vec = [];
-for k = 1 : 18  
+for k = 1 : 27  
 switch k
     case 1
         var_0 = 'zef.d1_on';
@@ -76,23 +76,59 @@ switch k
         var_0 = 'zef.d13_on';
         var_1 = 'zef.d13_sigma';   
         var_2 = 'zef.d13_priority';
-    case 14
+      case 14
+        var_0 = 'zef.d14_on';
+        var_1 = 'zef.d14_sigma';
+        var_2 = 'zef.d14_priority';
+     case 15
+        var_0 = 'zef.d15_on';
+        var_1 = 'zef.d15_sigma';   
+        var_2 = 'zef.d15_priority';
+     case 16
+        var_0 = 'zef.d16_on';
+        var_1 = 'zef.d16_sigma';   
+        var_2 = 'zef.d16_priority';
+     case 17
+        var_0 = 'zef.d17_on';
+        var_1 = 'zef.d17_sigma';   
+        var_2 = 'zef.d17_priority';
+    case 18
+        var_0 = 'zef.d18_on';
+        var_1 = 'zef.d18_sigma';
+        var_2 = 'zef.d18_priority';
+     case 19
+        var_0 = 'zef.d19_on';
+        var_1 = 'zef.d19_sigma';   
+        var_2 = 'zef.d19_priority';
+     case 20
+        var_0 = 'zef.d20_on';
+        var_1 = 'zef.d20_sigma';   
+        var_2 = 'zef.d20_priority';
+     case 21
+        var_0 = 'zef.d21_on';
+        var_1 = 'zef.d21_sigma';   
+        var_2 = 'zef.d21_priority';
+      case 22
+        var_0 = 'zef.d22_on';
+        var_1 = 'zef.d22_sigma';   
+        var_2 = 'zef.d22_priority';
+    case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-    case 15
+    case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
-    case 16
+    case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
-     case 17
+     case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
-     case 18
+     case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';
@@ -144,21 +180,48 @@ if k == 13;
     aux_brain_ind(15) = i;
 end
 if k == 14;
-    aux_brain_ind(1) = i;
-end
-if k == 15;
-    aux_brain_ind(2) = i;
-end
-if k == 16;
     aux_brain_ind(16) = i;
 end
-if k == 17;
+if k == 15;
     aux_brain_ind(17) = i;
 end
-if k == 18;
+if k == 16;
     aux_brain_ind(18) = i;
 end
 if k == 17;
+    aux_brain_ind(19) = i;
+end
+if k == 18;
+    aux_brain_ind(20) = i;
+end
+if k == 19;
+    aux_brain_ind(21) = i;
+end
+if k == 20;
+    aux_brain_ind(22) = i;
+end
+if k == 21;
+    aux_brain_ind(1) = i;
+end
+if k == 22;
+    aux_brain_ind(2) = i;
+end
+if k == 23;
+    aux_brain_ind(23) = i;
+end
+if k == 24;
+    aux_brain_ind(24) = i;
+end
+if k == 25;
+    aux_brain_ind(25) = i;
+end
+if k == 26;
+    aux_brain_ind(26) = i;
+end
+if k == 27;
+    aux_brain_ind(27) = i;
+end
+if k == 26;
     aux_skull_ind = i;
 end
 end
@@ -245,19 +308,64 @@ if not(aux_brain_ind(15)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(15))];
 end
 end
-if evalin('base','zef.c_sources')
+if evalin('base','zef.d14_sources')
 if not(aux_brain_ind(16)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(16))];
 end
 end
-if evalin('base','zef.sk_sources')
+if evalin('base','zef.d15_sources')
 if not(aux_brain_ind(17)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(17))];
 end
 end
-if evalin('base','zef.sc_sources')
+if evalin('base','zef.d16_sources')
 if not(aux_brain_ind(18)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(18))];
+end
+end
+if evalin('base','zef.d17_sources')
+if not(aux_brain_ind(19)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(19))];
+end
+end
+if evalin('base','zef.d18_sources')
+if not(aux_brain_ind(20)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(20))];
+end
+end
+if evalin('base','zef.d19_sources')
+if not(aux_brain_ind(21)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(21))];
+end
+end
+if evalin('base','zef.d20_sources')
+if not(aux_brain_ind(22)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(22))];
+end
+end
+if evalin('base','zef.d21_sources')
+if not(aux_brain_ind(23)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(23))];
+end
+end
+if evalin('base','zef.d22_sources')
+if not(aux_brain_ind(24)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(24))];
+end
+end
+if evalin('base','zef.c_sources')
+if not(aux_brain_ind(25)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(25))];
+end
+end
+if evalin('base','zef.sk_sources')
+if not(aux_brain_ind(26)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(26))];
+end
+end
+if evalin('base','zef.sc_sources')
+if not(aux_brain_ind(27)==0)
+[brain_ind]= [brain_ind ; find(johtavuus==aux_brain_ind(27))];
 end
 end
 if sum(aux_brain_ind) == 0 
@@ -776,19 +884,64 @@ if not(aux_brain_ind(15)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(15))];
 end
 end
-if evalin('base','zef.c_sources')
+if evalin('base','zef.d14_sources')
 if not(aux_brain_ind(16)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(16))];
 end
 end
-if evalin('base','zef.sk_sources')
+if evalin('base','zef.d15_sources')
 if not(aux_brain_ind(17)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(17))];
 end
 end
-if evalin('base','zef.sc_sources')
+if evalin('base','zef.d16_sources')
 if not(aux_brain_ind(18)==0)
 [brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(18))];
+end
+end
+if evalin('base','zef.d17_sources')
+if not(aux_brain_ind(19)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(19))];
+end
+end
+if evalin('base','zef.d18_sources')
+if not(aux_brain_ind(20)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(20))];
+end
+end
+if evalin('base','zef.d19_sources')
+if not(aux_brain_ind(21)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(21))];
+end
+end
+if evalin('base','zef.d20_sources')
+if not(aux_brain_ind(22)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(22))];
+end
+end
+if evalin('base','zef.d21_sources')
+if not(aux_brain_ind(23)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(23))];
+end
+end
+if evalin('base','zef.d22_sources')
+if not(aux_brain_ind(24)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(24))];
+end
+end
+if evalin('base','zef.c_sources')
+if not(aux_brain_ind(25)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(25))];
+end
+end
+if evalin('base','zef.sk_sources')
+if not(aux_brain_ind(26)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(26))];
+end
+end
+if evalin('base','zef.sc_sources')
+if not(aux_brain_ind(27)==0)
+[brain_ind]= [brain_ind ; find(johtavuus_aux==aux_brain_ind(27))];
 end
 end
 if sum(aux_brain_ind) == 0 

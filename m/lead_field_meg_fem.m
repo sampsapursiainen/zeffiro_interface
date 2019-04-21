@@ -153,14 +153,14 @@ B(:,j) = B(:,j) + b_vec;
 load_vec_count = load_vec_count + 1;
 if mod(load_vec_count, floor(4*L/50))==0
 time_val = toc;
-waitbar(load_vec_count/(4*L),h,['MEG load vectors. Ready approx: ' datestr(datevec(now+(4*L/load_vec_count - 1)*time_val/86400)) '.']);
+waitbar(load_vec_count/(4*L),h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/load_vec_count - 1)*time_val/86400)) '.']);
 end
 
 end
 end
 
 time_val = toc;
-waitbar(1,h,['MEG load vectors. Ready approx: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
 
 close(h);
 h=waitbar(0,'System matrices.')
@@ -618,7 +618,7 @@ if tol_val < relres_vec(i)
     return
 end
 time_val = toc; 
-waitbar(i/L,h,['PCG iteration. Ready approx: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 
 %**************************************************************************
@@ -671,7 +671,7 @@ if tol_val < relres_vec(i)
     return
 end
 time_val = toc; 
-waitbar(i/L,h,['PCG iteration. Ready approx: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 end
 clear S r p x aux_vec inv_M_r a b;
@@ -730,7 +730,7 @@ tic;
 
 if mod(i,floor(M2/50))==0 
 time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready approx: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
+waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
 end
 end
 end 
@@ -751,7 +751,7 @@ tic;
 
 if mod(i,floor(M2/50))==0 
 time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready approx: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
+waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
 end
 end
 end
