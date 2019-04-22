@@ -811,6 +811,7 @@ end
 
 if ismember(evalin('base','zef.visualization_type'),[2,4])
 
+if not(ismember(evalin('base','zef.visualization_type'),[4]))   
 if evalin('base','zef.use_parcellation')
     
 if evalin('base','zef.parcellation_type') > 1
@@ -832,6 +833,7 @@ reconstruction = rec_aux;
 end
     
 reconstruction = reconstruction.*reconstruction_p_2;
+end
 end
 
 colormap_size = 4096;
@@ -2349,7 +2351,7 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
-end
+
 
 if evalin('base','zef.use_parcellation')
 reconstruction_aux = zeros(size(reconstruction));
@@ -2367,6 +2369,7 @@ for p_ind = selected_list
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
 reconstruction = reconstruction_aux;
+end
 end
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');

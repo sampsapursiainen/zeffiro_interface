@@ -750,7 +750,7 @@ end
 if ismember(evalin('base','zef.visualization_type'),[2,4])
 
 
-    
+if not(ismember(evalin('base','zef.visualization_type'),[4]))    
 if evalin('base','zef.use_parcellation')
 
 if evalin('base','zef.parcellation_type') > 1
@@ -772,6 +772,7 @@ reconstruction = rec_aux;
 end
     
 reconstruction = reconstruction.*reconstruction_p_2;
+end
 end
     
 colormap_size = 4096;

@@ -969,7 +969,6 @@ elseif evalin('base','zef.inv_scale') == 3
 reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end
 end
-end
 
 if evalin('base','zef.use_parcellation')
 reconstruction_aux = zeros(size(reconstruction));
@@ -987,6 +986,7 @@ for p_ind = selected_list
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
 reconstruction = reconstruction_aux;
+end
 end
 
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
