@@ -256,6 +256,7 @@ if k == 23 && evalin('base','zef.wm_sources');
 end
 if k == 24 && evalin('base','zef.g_sources');
     aux_brain_ind = [aux_brain_ind i];
+    cortex_ind_aux = i;
 end
 if k == 25 && evalin('base','zef.c_sources');
     aux_brain_ind = [aux_brain_ind i];

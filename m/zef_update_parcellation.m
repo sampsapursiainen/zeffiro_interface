@@ -9,8 +9,16 @@ zef.parcellation_colormap = [100 100 100]/255;
 for zef_i = 1 : size(zef.parcellation_colortable{zef_j}{2},1)
     zef_k = zef_k + 1; 
     if not(isempty(find(ismember(zef.parcellation_colortable{zef_j}{4},zef.parcellation_colortable{zef_j}{3}(zef_i,5)))))
+   if length(zef.parcellation_interp_ind) >= zef_k
+       if not(isempty(zef.parcellation_interp_ind{zef_k}))
     zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:green">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];   
- else
+       else
+             zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:yellow">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];       
+       end
+   else
+        zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:yellow">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];       
+    end
+       else
     zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:red">X</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];   
     end
     end
@@ -42,7 +50,3 @@ else
 end
 
 zef.parcellation_colormap = 0.5*zef.parcellation_colormap;
-
-if isfield(zef,'parcellation_list')
-rmfield(zef,'parcellation_list');
-end
