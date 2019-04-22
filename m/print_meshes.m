@@ -828,6 +828,10 @@ elseif evalin('base','zef.parcellation_type') == 4
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
 end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = mean(reconstruction(p_cell{p_ind+1}));
+end
 end
 reconstruction = rec_aux;
 end
@@ -1243,6 +1247,10 @@ end
 elseif evalin('base','zef.parcellation_type') == 4
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
+end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = mean(reconstruction(p_cell{p_ind+1}));
 end
 end
 reconstruction = rec_aux;
@@ -2365,6 +2373,8 @@ for p_ind = selected_list
     reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(sqrt(reconstruction(p_i_ind{p_ind}{2}{ab_ind})),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind})); 
    elseif evalin('base','zef.parcellation_type') == 4
       reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile((reconstruction(p_i_ind{p_ind}{2}{ab_ind}).^(1/3)),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+    elseif evalin('base','zef.parcellation_type') == 5
+      reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = mean(reconstruction(p_i_ind{p_ind}{2}{ab_ind}));
     end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end
@@ -2629,6 +2639,8 @@ for p_ind = selected_list
     reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile(sqrt(reconstruction(p_i_ind{p_ind}{2}{ab_ind})),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind})); 
    elseif evalin('base','zef.parcellation_type') == 4
       reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = quantile((reconstruction(p_i_ind{p_ind}{2}{ab_ind}).^(1/3)),evalin('base','zef.parcellation_quantile')).*ones(size(p_i_ind{p_ind}{2}{ab_ind}));
+    elseif evalin('base','zef.parcellation_type') == 5
+      reconstruction_aux(p_i_ind{p_ind}{2}{ab_ind}) = mean(reconstruction(p_i_ind{p_ind}{2}{ab_ind}));
     end
 p_rec_aux(unique(reuna_t{i}(p_i_ind{p_ind}{2}{ab_ind},:))) = evalin('base','zef.brain_transparency');
 end

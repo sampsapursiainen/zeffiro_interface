@@ -539,6 +539,11 @@ for p_ind = selected_list
 p_counter = p_counter + 1;
 time_series(p_counter,f_ind_aux) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
 end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+p_counter = p_counter + 1;
+time_series(p_counter,f_ind_aux) = mean(reconstruction(p_cell{p_ind+1}));
+end
 end
 end
 
@@ -646,6 +651,11 @@ elseif evalin('base','zef.parcellation_type') == 4
 for p_ind = selected_list
 p_counter = p_counter + 1;
 time_series(p_counter,f_ind_aux) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
+end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+p_counter = p_counter + 1;
+time_series(p_counter,f_ind_aux) = mean(reconstruction(p_cell{p_ind+1}));
 end
 end
 end

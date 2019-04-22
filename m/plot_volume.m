@@ -767,6 +767,10 @@ elseif evalin('base','zef.parcellation_type') == 4
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
 end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = mean(reconstruction(p_cell{p_ind+1}));
+end
 end
 reconstruction = rec_aux;
 end
@@ -1115,6 +1119,10 @@ end
 elseif evalin('base','zef.parcellation_type') == 4
 for p_ind = selected_list
 rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),evalin('base','zef.parcellation_quantile'));
+end
+elseif evalin('base','zef.parcellation_type') == 5
+for p_ind = selected_list
+rec_aux(p_cell{p_ind+1}) = mean(reconstruction(p_cell{p_ind+1}));
 end
 end
 reconstruction = rec_aux;
