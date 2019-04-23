@@ -1,22 +1,28 @@
-Zeffiro Interface is a simple tool for finite element based forward and
-inverse simulations in EEG/MEG and other electromagnetic brain imaging
-applications. With Zeffiro, one can segment  a realistic multilayer
-geometry and generate a finite element mesh, if triangular surface grids
-(in ASCII DAT file format) are available. As a special feature one can
-generate a time-lapse of inverse estimates for a given data sequence. An
-example can be found in ./data/media folder. The current version also
-allows using a graphics card to speed up the mesh segmentation as well as
-forward (lead field) and inversion computations. A spherical model has
-been included as an example (./data/spherical_example.mat). The name
-Zeffiro is Italian for 'a gentle breeze'. A more detailed introduction to
-the functions and scientific background of the interface can be found at:
+Zeffiro Interface (ZI), Sampsa Pursiainen © 2018, is an open source code
+package constituting an accessible tool for finite element (FE) based
+forward and inverse simulations in EEG/MEG and can be used also in other
+bioelectromagnetical imaging applications targeting the brain. With ZI,
+one can segment a realistic multilayer geometry and generate a
+multi-compartment FE mesh, if triangular surface grids (in ASCII DAT file
+format) are available. A suitable surface segmentation can be produced,
+for example, with the FreeSurfer software suite (Copyright © FreeSurfer,
+2013). ZI allows also importing a parcellation created with FreeSurfer to
+enable distinguishing different brain regions and, thereby, analysing the
+connectivity of the brain function over a time series. Different
+compartments can be defined as active, allowing the analysis of the
+sub-cortical strucures. In each compartment, the orientation of the
+activity can be either normally constrained or unconstrained. The main
+routines of ZI can be accelerated significantly in a computer equipped
+with a graphics computing unit (GPU). It is especially recommendable to
+perform the forward simulation process, i.e., to generate the FE mesh, the
+lead field matrix and to interpolate between different point sets,
+utilizing a GPU. After the forward simulation phase, the model can be
+processed also without GPU acceleration.
+
+A brief introduction to the essential features of the interface can be
+found at:
 
 https://github.com/sampsapursiainen/zeffiro_interface/wiki
-
-If you want to learn more about the interface, apply it for research or
-education, or are interested to develop it further please contact
-sampsa.pursiainen@tut.fi. Please refer to the studies below, if you use
-the interface for academic research.
 
 The essential mathematical techniques used in the interface have been
 reviewed and validated in:
@@ -57,8 +63,4 @@ Electroencephalography (EEG) forward modeling via H (div) finite element
 sources with focal interpolation. Physics in Medicine & Biology, 61(24),
 8502.
 
-Pursiainen, S., Sorrentino, A., Campi, C., & Piana, M. (2011). Forward
-simulation and inverse dipole localization with the lowest order
-Raviart—Thomas elements for electroencephalography. Inverse Problems,
-27(4), 045003.
 
