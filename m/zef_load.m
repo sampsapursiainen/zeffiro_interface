@@ -240,8 +240,8 @@ end;
 if (isfield(zef_data,'mesh_smoothing_on'));
 zef.mesh_smoothing_on = zef_data.mesh_smoothing_on; 
 end;
-if (isfield(zef_data,'wm_sources'));
-zef.wm_sources = zef_data.wm_sources; 
+if (isfield(zef_data,'w_sources'));
+zef.w_sources = zef_data.w_sources; 
 end;
 if (isfield(zef_data,'d1_sources'));
 zef.d1_sources = zef_data.d1_sources; 
@@ -463,8 +463,8 @@ if (isfield(zef_data,'project_file_path'));
     zef.project_file_path = zef_data.project_file_path; 
 end;
 
-if (isfield(zef_data,'wm_sources_old')); 
-    zef.wm_sources_old = zef_data.wm_sources_old; 
+if (isfield(zef_data,'w_sources_old')); 
+    zef.w_sources_old = zef_data.w_sources_old; 
 end;
 
 if (isfield(zef_data,'d1_sources_old')); 

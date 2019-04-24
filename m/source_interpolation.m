@@ -44,7 +44,7 @@ par_num = evalin('base','zef.parallel_vectors');
 bar_ind = ceil(size_center_points/(50*par_num));
 i_ind = 0;
 
-tic;
+tic; 
 for i = 1 : par_num : size_center_points
 
 i_ind = i_ind + 1;
@@ -326,7 +326,7 @@ end
 if k == 22 && evalin('base','zef.d22_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 23 && evalin('base','zef.wm_sources');
+if k == 23 && evalin('base','zef.w_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
 if k == 24 && evalin('base','zef.g_sources');

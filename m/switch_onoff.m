@@ -8,7 +8,7 @@ end;
 set(zef.h_edit9001, 'enable', zef.enable_str);   
 set(zef.h_edit29, 'enable', zef.enable_str);     
 set(zef.h_edit70, 'enable', zef.enable_str); 
-set(zef.h_wm_sources,'enable', zef.enable_str); 
+set(zef.h_w_sources,'enable', zef.enable_str); 
 set(zef.h_w_visible,'enable', zef.enable_str); 
 set(zef.h_w_merge,'enable', zef.enable_str); 
 set(zef.h_w_invert,'enable', zef.enable_str); 

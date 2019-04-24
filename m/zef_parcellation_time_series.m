@@ -157,7 +157,7 @@ switch k
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-        var_3 = 'zef.wm_sources';
+        var_3 = 'zef.w_sources';
         if var_3 == 3
             var_3 = 0;
         end
@@ -263,7 +263,7 @@ end
 if k == 22 && evalin('base','zef.d22_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 23 && evalin('base','zef.wm_sources');
+if k == 23 && evalin('base','zef.w_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
 if k == 24 && evalin('base','zef.g_sources');

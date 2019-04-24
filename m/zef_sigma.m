@@ -233,7 +233,7 @@ priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_i
 [johtavuus] = johtavuus_ind(priority_ind);
 johtavuus_aux = johtavuus;
 brain_ind = [];
-if evalin('base','zef.wm_sources') && not(evalin('base','zef.wm_sources')==3)
+if evalin('base','zef.w_sources') && not(evalin('base','zef.w_sources')==3)
 if not(aux_brain_ind(1)==0) 
 [brain_ind]= find(johtavuus==aux_brain_ind(1));
 end
@@ -809,7 +809,7 @@ tetra(I,:) = tetra(I,[2 1 3 4]);
 clear tilavuus I;
 
 brain_ind = []; 
-if evalin('base','zef.wm_sources')
+if evalin('base','zef.w_sources')
 if not(aux_brain_ind(1)==0)
 [brain_ind]= find(johtavuus_aux==aux_brain_ind(1));
 end

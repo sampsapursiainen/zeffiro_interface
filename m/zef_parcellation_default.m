@@ -416,7 +416,7 @@ c_table{t_ind}{3}(c_ind,5) =  i;
 c_table{t_ind}{5}(c_ind,1) =  i;
 c_table{t_ind}{4}(J) = i;
 end
-if k == 23 && evalin('base','zef.wm_sources') && not(evalin('base','zef.wm_sources')==3)
+if k == 23 && evalin('base','zef.w_sources') && not(evalin('base','zef.w_sources')==3)
 c_ind = c_ind + 1;
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 J = unique(s_interp_ind(I,:));

@@ -345,7 +345,7 @@ end
 if k == 22 && evalin('base','zef.d22_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 23 && evalin('base','zef.wm_sources');
+if k == 23 && evalin('base','zef.w_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
 if k == 24 && evalin('base','zef.g_sources');

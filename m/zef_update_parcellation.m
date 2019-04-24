@@ -50,3 +50,19 @@ else
 end
 
 zef.parcellation_colormap = 0.5*zef.parcellation_colormap;
+
+if isfield(zef,'parcellation_list')
+zef = rmfield(zef,'parcellation_list');
+end
+
+if  isempty(evalin('base','zef.parcellation_colortable'))  
+    set(evalin('base','zef.h_import_parcellation_colortable'),'foregroundcolor',[1 0 0]); 
+else
+set(evalin('base','zef.h_import_parcellation_colortable'),'foregroundcolor',[0 0 0]);    
+end; 
+
+if  isempty(evalin('base','zef.parcellation_points')) 
+    set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[1 0 0]); 
+else
+set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);    
+end; 

@@ -291,7 +291,7 @@ zef.h = evalin('base','zef.h_sk_visible'); set(zef.h,'value',(zef.sk_visible));
 
 zef.h = evalin('base','zef.h_sc_on'); set(zef.h,'value',(zef.sc_on));
 zef.h = evalin('base','zef.h_sc_visible'); set(zef.h,'value',(zef.sc_visible));
-zef.h = evalin('base','zef.h_wm_sources'); set(zef.h,'value',(zef.wm_sources+1));
+zef.h = evalin('base','zef.h_w_sources'); set(zef.h,'value',(zef.w_sources+1));
 zef.h = evalin('base','zef.h_d1_sources'); set(zef.h,'value',(zef.d1_sources+1));
 zef.h = evalin('base','zef.h_d2_sources'); set(zef.h,'value',(zef.d2_sources+1));
 zef.h = evalin('base','zef.h_d3_sources'); set(zef.h,'value',(zef.d3_sources+1));
