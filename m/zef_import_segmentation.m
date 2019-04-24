@@ -175,7 +175,7 @@ fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
 
 triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
-triangle_data = cell2mat(triangle_data);
+triangle_data = cell2mat(triangle_data)+1;
 
 else 
       
