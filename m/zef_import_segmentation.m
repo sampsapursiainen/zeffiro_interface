@@ -16,7 +16,7 @@ compartment_cell = {'detail_1', 'detail_2', 'detail_3', 'detail_4', 'detail_5', 
 
 name_cell = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','w','g','c','sk','sc'};
 
-compartment_count_vec = zeros(length(compartment_cell), 1);
+compartment_count_vec = zeros(2+length(compartment_cell), 1);
 
 n_segmentation = length(ini_cell{:})/n_columns;
 
@@ -204,14 +204,14 @@ for j = 1 : length(compartment_cell)
     
 if isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{j})
     
-compartment_count_vec(j) = compartment_count_vec(j) + 1;
+compartment_count_vec(j+2) = compartment_count_vec(j+2) + 1;
 if isequal(ini_cell{1}{n_columns*(i-1)+8},'0')
 invert_on = 0;
 else
 invert_on = 1;
 end
     
-if compartment_count_vec(j) == 1
+if compartment_count_vec(j+2) == 1
 merge_on = 0;
 else
 merge_on = 1;
@@ -250,7 +250,7 @@ evalin('base',['zef.' name_cell{j} '_points = reshape([' num2str(point_data(:)')
 evalin('base',['zef.' name_cell{j} '_triangles = reshape([' num2str(triangle_data(:)') '],' num2str(n_triangles) ',3);']);
 
 
-if compartment_count_vec(j) == 1
+if compartment_count_vec(j+2) == 1
     
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0'))
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
