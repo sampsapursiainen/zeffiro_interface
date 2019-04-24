@@ -38,8 +38,7 @@ if compartment_count_vec(1) == 1
 
 file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
 
-sensor_points = readtable(file_name_1);
-sensor_points = table2array(sensor_points);
+sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
 sensor_points = sensor_points(:,1:3);
 
@@ -99,8 +98,8 @@ if compartment_count_vec(2) == 1
 
 file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
 
-sensor_directions = readtable(file_name_1);
-sensor_directions = table2array(sensor_directions);
+
+sensor_directions = load(file_name_1);
 sensor_directions = double(sensor_directions);
 sensor_directions = sensor_directions(:,1:3);
 
@@ -157,37 +156,52 @@ else
 if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') || isequal(ini_cell{1}{n_columns*(i-1)+9},'asc')
 
 file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.asc'];  
-file_name_2 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat'];  
-copyfile(file_name_1,file_name_2);
-mesh_data = readtable(file_name_2);
-delete(file_name_2);
 
-mesh_data = table2array(mesh_data);
-mesh_data = double(mesh_data);
-mesh_data = mesh_data(:,1:3);
+fid = fopen(file_name_1);
+aux_dim = textscan(fid,'%s',1,'delimiter','\n', 'headerlines',1);
+aux_dim = str2num(aux_dim{1}{1});
+aux_dim = aux_dim(1:2);
 
-n_points = max(mesh_data(find(mesh_data - round(mesh_data) == 0))) + 1;
+point_data = zeros(aux_dim(1),3);
+triangle_data = zeros(aux_dim(1),3);
 
-point_data = mesh_data(1:n_points,1:3);
-triangle_data = mesh_data(n_points + 1 : end, 1:3) + 1;
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
+
+for k = 1 : aux_dim(1)
+aux_vec = str2num(aux_data{1}{k});
+point_data(k,:) = aux_vec(1:3);
+end
+
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
+
+for k = 1 : aux_dim(2)
+aux_vec = str2num(aux_data{1}{k});
+triangle_data(k,:) = aux_vec(1:3)+1;
+end
+
 
 else 
       
 file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '_points.dat']; 
 
-mesh_data = readtable(file_name_1);
-mesh_data = table2array(mesh_data);
+mesh_data = load(file_name_1);
 mesh_data = double(mesh_data);
 point_data = mesh_data(:,1:3);
 point_data = mesh_data(:,1:3);
 
 file_name_2 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '_triangles.dat']; 
 
-mesh_data = readtable(file_name_2);
-mesh_data = table2array(mesh_data);
+fid = fopen(file_name_2);
+
+mesh_data = load(file_name_2);
 mesh_data = double(mesh_data);
 triangle_data = mesh_data(:,1:3);
 triangle_data = mesh_data(:,1:3);
+if min(triangle_data(:)) == 0
+    triangle_data = triangle_data + 1;
+end
 
 end
 
