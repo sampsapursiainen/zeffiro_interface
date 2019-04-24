@@ -41,10 +41,11 @@ file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 sensor_points = readtable(file_name_1);
 sensor_points = table2array(sensor_points);
 sensor_points = double(sensor_points);
+sensor_points = sensor_points(:,1:3);
 
 n_s_points = size(sensor_points,1);
 
-evalin('base',['zef.s_points = reshape([' num2str(sensor_points(:)') '],' num2str(n_s_points) ',3);']);
+evalin('base',['zef.s_points = reshape([' num2str(sensor_points(:)')  '],' num2str(n_s_points) ',3);']);
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0')) && s_details(3) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
@@ -101,6 +102,7 @@ file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 sensor_directions = readtable(file_name_1);
 sensor_directions = table2array(sensor_directions);
 sensor_directions = double(sensor_directions);
+sensor_directions = sensor_directions(:,1:3);
 
 n_s_directions = size(sensor_directions,1);
 
@@ -148,11 +150,7 @@ evalin('base', ['zef.s_zx_correction =' num2str(aux_var) ';']);
 s_details(9) = 1;
 end
 
-end
-
-elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'parcellation_colortable')
-    
-elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'parcellation_points')    
+end   
 
 else
 
@@ -166,6 +164,7 @@ delete(file_name_2);
 
 mesh_data = table2array(mesh_data);
 mesh_data = double(mesh_data);
+mesh_data = mesh_data(:,1:3);
 
 n_points = max(mesh_data(find(mesh_data - round(mesh_data) == 0))) + 1;
 
