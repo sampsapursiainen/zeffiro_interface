@@ -2,7 +2,7 @@ function zef_import_segmentation(void)
 
 void = [];
 
-[file_name folder_name] = uigetfile({'*.dat'},'Segmentation data file and folder',evalin('base','zef.save_file_path'));
+[file_name folder_name] = uigetfile({'*.zef'},'ASCII segmentation data file and folder',evalin('base','zef.save_file_path'));
 
 if not(isequal(file_name,0));
 
