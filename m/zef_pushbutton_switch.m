@@ -104,12 +104,12 @@ switch_color('d19_on','d19_button_2','d19_triangles');
 color_label('d19'); 
 
 switch_color('d20_on','d20_button_1','d20_points'); 
+switch_color('d20_on','d20_button_2','d20_triangles'); 
+color_label('d20'); 
+
+switch_color('d21_on','d21_button_1','d21_points'); 
 switch_color('d21_on','d21_button_2','d21_triangles'); 
 color_label('d21'); 
-
-switch_color('d12_on','d12_button_1','d12_points'); 
-switch_color('d12_on','d12_button_2','d12_triangles'); 
-color_label('d12'); 
  
 switch_color('d22_on','d22_button_1','d22_points'); 
 switch_color('d22_on','d22_button_2','d22_triangles'); 

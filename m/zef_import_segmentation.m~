@@ -168,14 +168,22 @@ triangle_data = zeros(aux_dim(1),3);
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
 
-point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
-point_data = cell2mat(point_data);
+aux_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+aux_data = cell2mat(aux_data)
+
+for k = 1 : aux_dim(1)
+aux_vec = str2num(aux_data{1}{k});
+point_data(k,:) = aux_vec(1:3);
+end
 
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
 
-triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
-triangle_data = cell2mat(triangle_data);
+for k = 1 : aux_dim(2)
+aux_vec = str2num(aux_data{1}{k});
+triangle_data(k,:) = aux_vec(1:3)+1;
+end
+
 
 else 
       
