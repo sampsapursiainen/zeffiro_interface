@@ -73,7 +73,6 @@ source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_
 
 waitbar(1,h,['Interpolation 1. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 
-close(h)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -388,9 +387,7 @@ norm_vec = sum((source_positions(:,:,ones(1,length(block_ind))) - aux_vec(:,ones
 source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
-if i == 1
-h = waitbar(i/size_center_points,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);    
-elseif mod(i_ind,bar_ind)==0 
+if mod(i_ind,bar_ind)==0 
 waitbar(i/size_center_points,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
@@ -406,8 +403,6 @@ source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triang
 
 
 waitbar(1,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
-
-close(h)
 
 end
 
@@ -464,9 +459,7 @@ norm_vec = sum((center_points(:,:,ones(1,length(block_ind))) - aux_vec(:,ones_ve
 source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
-if i == 1
-h = waitbar(i/size_source_positions,['Interp. 3:']);    
-elseif mod(i_ind,bar_ind)==0 
+if mod(i_ind,bar_ind)==0 
 waitbar(i/size_source_positions,h,['Interp. 3: Ready: ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
 end
 end
