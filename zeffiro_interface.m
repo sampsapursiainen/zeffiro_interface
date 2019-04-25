@@ -29,7 +29,7 @@ zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 zef_plugin;
 zef_init;
 zef.aux_handle_vec = [...
-zef.h_wm_sources;
+zef.h_w_sources;
 zef.h_d1_sources;
 zef.h_d2_sources;
 zef.h_d3_sources;
