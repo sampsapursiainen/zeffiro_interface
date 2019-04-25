@@ -162,8 +162,7 @@ end
 time_val = toc;
 waitbar(1,h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
 
-close(h);
-h=waitbar(0,'System matrices.')
+waitbar(0,h,'System matrices.')
 
 for i = 1 : 4 
     
