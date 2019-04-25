@@ -96,7 +96,7 @@ compartment_count_vec(2) = compartment_count_vec(2) + 1;
 
 if compartment_count_vec(2) == 1
 
-file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
+file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
 
 
 sensor_directions = load(file_name_1);
@@ -155,7 +155,7 @@ else
 
 if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') || isequal(ini_cell{1}{n_columns*(i-1)+9},'asc')
 
-file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.asc'];  
+file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.asc'];  
 
 fid = fopen(file_name_1);
 aux_dim = textscan(fid,'%s',1,'delimiter','\n', 'headerlines',1);
