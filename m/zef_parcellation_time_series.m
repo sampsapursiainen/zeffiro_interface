@@ -241,7 +241,10 @@ switch k
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-        var_3 = 0;
+        var_3 = 'zef.w_sources';
+        if var_3 == 3
+            var_3 = 0;
+        end
         color_str = evalin('base','zef.w_color');
     case 24
         var_0 = 'zef.g_on';
