@@ -165,7 +165,7 @@
                zef.d22_sigma= 0.33;
                
         zef.mesh_resolution= 2;
-      zef.attach_electrodes= 0;
+      zef.attach_electrodes= 1;
               zef.s_visible= 1;
                zef.s_points= [];
            zef.s_directions= [];

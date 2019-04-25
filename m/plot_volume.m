@@ -104,8 +104,10 @@ aux_ind = [];
 
 if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors); 
-elseif electrode_model==2  & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
+elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors);
+else
+    electrode_model = 1;
 end
 
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))

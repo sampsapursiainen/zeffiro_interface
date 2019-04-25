@@ -144,8 +144,10 @@ aux_ind = [];
 
 if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors); 
-elseif electrode_model==2  & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
+elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors);
+else
+    electrode_model = 1;
 end
 
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
@@ -1911,7 +1913,7 @@ sensors(i,1:3) = reuna_p{end}(min_ind,:);
 end
 end
 
-if evalin('base','zef.attach_electrodes') & electrode_model == 2
+if  evalin('base','zef.attach_electrodes') & electrode_model == 2
    center_points_aux = (1/3)*(reuna_p{end}(reuna_t{end}(:,1),:) + ...
                        reuna_p{end}(reuna_t{end}(:,2),:) + ...
                        reuna_p{end}(reuna_t{end}(:,3),:));
@@ -1926,6 +1928,8 @@ end
  sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) reuna_t{end}(dist_ind,:)];
  end
  sensors = sensors_aux;
+else 
+    electrode_model = 1;
 end
 
 [X_s, Y_s, Z_s] = sphere(20);  

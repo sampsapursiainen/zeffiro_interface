@@ -183,13 +183,18 @@ end
 end
 
 s_points = evalin('base','zef.s_points');
+s_data_aux = [];
 if ismember(evalin('base','zef.imaging_method'),[2 3]) 
 s_directions = evalin('base','zef.s_directions(:,1:3)');
 s_directions_g = [];
 if size(evalin('base','zef.s_directions'),2) == 6
 s_directions_g = evalin('base','zef.s_directions(:,4:6)');
 end
-else 
+else
+if size(s_points,2)==6
+s_data_aux = s_points(:,4:6);
+s_points = s_points(:,1:3);
+end
 s_directions = [];
 s_directions_g = [];
 end
@@ -247,5 +252,9 @@ for j = 1 : 3
 if translation_vec(j) ~= 0
 sensors(:,j) = sensors(:,j) + translation_vec(j);
 end
+end
+
+if not(isempty(s_data_aux))
+sensors = [sensors s_data_aux];
 end
 

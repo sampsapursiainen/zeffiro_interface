@@ -533,7 +533,7 @@ sensors(i,1:3) = reuna_p{end}(min_ind,:);
 end
 end
 
-if evalin('base','zef.attach_electrodes') & electrode_model == 2
+if  evalin('base','zef.attach_electrodes') & electrode_model == 2
    center_points_aux = (1/3)*(reuna_p{end}(reuna_t{end}(:,1),:) + ...
                        reuna_p{end}(reuna_t{end}(:,2),:) + ...
                        reuna_p{end}(reuna_t{end}(:,3),:));
@@ -548,6 +548,8 @@ end
  sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) reuna_t{end}(dist_ind,:)];
  end
  sensors = sensors_aux;
+else
+    electrode_model = 1;
 end
 
 loop_count = 0;
