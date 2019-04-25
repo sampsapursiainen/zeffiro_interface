@@ -42,8 +42,9 @@ sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
 
 n_s_points = size(sensor_points,1);
+m_s_points = size(sensor_points,2);
 
-evalin('base',['zef.s_points = reshape([' num2str(sensor_points(:)')  '],' num2str(n_s_points) ',3);']);
+evalin('base',['zef.s_points = reshape([' num2str(sensor_points(:)')  '],' num2str(n_s_points) ',' num2str(m_s_points) ');']);
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0')) && s_details(3) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
@@ -102,8 +103,9 @@ sensor_directions = load(file_name_1);
 sensor_directions = double(sensor_directions);
 
 n_s_directions = size(sensor_directions,1);
+m_s_directions = size(sensor_directions,2);
 
-evalin('base',['zef.s_points = reshape([' num2str(sensor_points(:)') '],' num2str(n_s_directions) ',3);']);
+evalin('base',['zef.s_directions = reshape([' num2str(sensor_directions(:)') '],' num2str(n_s_directions) ',' num2str(m_s_directions) ');']);
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0')) && s_details(3) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
