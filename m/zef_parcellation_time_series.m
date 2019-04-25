@@ -109,163 +109,163 @@ switch k
         var_0 = 'zef.d1_on';
         var_1 = 'zef.d1_sigma';
         var_2 = 'zef.d1_priority';
-        var_3 = 'zef.d1_visible';
+        var_3 = 'zef.d1_sources';
     color_str = evalin('base','zef.d1_color');
      case 2
         var_0 = 'zef.d2_on';
         var_1 = 'zef.d2_sigma';   
         var_2 = 'zef.d2_priority';
-        var_3 = 'zef.d2_visible';
+        var_3 = 'zef.d2_sources';
         color_str = evalin('base','zef.d2_color');
      case 3
         var_0 = 'zef.d3_on';
         var_1 = 'zef.d3_sigma';   
         var_2 = 'zef.d3_priority';
-        var_3 = 'zef.d3_visible';
+        var_3 = 'zef.d3_sources';
         color_str = evalin('base','zef.d3_color');
      case 4
         var_0 = 'zef.d4_on';
         var_1 = 'zef.d4_sigma';   
         var_2 = 'zef.d4_priority';
-        var_3 = 'zef.d4_visible';
+        var_3 = 'zef.d4_sources';
         color_str = evalin('base','zef.d4_color');
      case 5
         var_0 = 'zef.d5_on';
         var_1 = 'zef.d5_sigma';
         var_2 = 'zef.d5_priority';
-        var_3 = 'zef.d5_visible';
+        var_3 = 'zef.d5_sources';
     color_str = evalin('base','zef.d5_color');
      case 6
         var_0 = 'zef.d6_on';
         var_1 = 'zef.d6_sigma';   
         var_2 = 'zef.d6_priority';
-        var_3 = 'zef.d6_visible';
+        var_3 = 'zef.d6_sources';
         color_str = evalin('base','zef.d6_color');
      case 7
         var_0 = 'zef.d7_on';
         var_1 = 'zef.d7_sigma';   
         var_2 = 'zef.d7_priority';
-        var_3 = 'zef.d7_visible';
+        var_3 = 'zef.d7_sources';
         color_str = evalin('base','zef.d7_color');
      case 8
         var_0 = 'zef.d8_on';
         var_1 = 'zef.d8_sigma';   
         var_2 = 'zef.d8_priority';
-        var_3 = 'zef.d8_visible';
+        var_3 = 'zef.d8_sources';
         color_str = evalin('base','zef.d8_color');
     case 9
         var_0 = 'zef.d9_on';
         var_1 = 'zef.d9_sigma';   
         var_2 = 'zef.d9_priority';
-        var_3 = 'zef.d9_visible';
+        var_3 = 'zef.d9_sources';
         color_str = evalin('base','zef.d9_color');
      case 10
         var_0 = 'zef.d10_on';
         var_1 = 'zef.d10_sigma';   
         var_2 = 'zef.d10_priority';
-        var_3 = 'zef.d10_visible';
+        var_3 = 'zef.d10_sources';
         color_str = evalin('base','zef.d10_color');
      case 11
         var_0 = 'zef.d11_on';
         var_1 = 'zef.d11_sigma';   
         var_2 = 'zef.d11_priority';
-        var_3 = 'zef.d11_visible';
+        var_3 = 'zef.d11_sources';
         color_str = evalin('base','zef.d11_color');
      case 12
         var_0 = 'zef.d12_on';
         var_1 = 'zef.d12_sigma';   
         var_2 = 'zef.d12_priority';
-        var_3 = 'zef.d12_visible';
+        var_3 = 'zef.d12_sources';
         color_str = evalin('base','zef.d12_color');
      case 13
         var_0 = 'zef.d13_on';
         var_1 = 'zef.d13_sigma';   
         var_2 = 'zef.d13_priority';
-        var_3 = 'zef.d13_visible';
+        var_3 = 'zef.d13_sources';
         color_str = evalin('base','zef.d13_color');
   case 14
         var_0 = 'zef.d14_on';
         var_1 = 'zef.d14_sigma';
         var_2 = 'zef.d14_priority';
-        var_3 = 'zef.d14_visible';
+        var_3 = 'zef.d14_sources';
     color_str = evalin('base','zef.d14_color');
   case 15
         var_0 = 'zef.d15_on';
         var_1 = 'zef.d15_sigma';   
         var_2 = 'zef.d15_priority';
-        var_3 = 'zef.d15_visible';
+        var_3 = 'zef.d15_sources';
         color_str = evalin('base','zef.d15_color');
      case 16
         var_0 = 'zef.d16_on';
         var_1 = 'zef.d16_sigma';   
         var_2 = 'zef.d16_priority';
-        var_3 = 'zef.d16_visible';
+        var_3 = 'zef.d16_sources';
         color_str = evalin('base','zef.d16_color');
      case 17
         var_0 = 'zef.d17_on';
         var_1 = 'zef.d17_sigma';   
         var_2 = 'zef.d17_priority';
-        var_3 = 'zef.d17_visible';
+        var_3 = 'zef.d17_sources';
         color_str = evalin('base','zef.d17_color');
     case 18
         var_0 = 'zef.d18_on';
         var_1 = 'zef.d18_sigma';   
         var_2 = 'zef.d18_priority';
-        var_3 = 'zef.d18_visible';
+        var_3 = 'zef.d18_sources';
         color_str = evalin('base','zef.d18_color');
      case 19
         var_0 = 'zef.d19_on';
         var_1 = 'zef.d19_sigma';   
         var_2 = 'zef.d19_priority';
-        var_3 = 'zef.d19_visible';
+        var_3 = 'zef.d19_sources';
         color_str = evalin('base','zef.d19_color');
      case 20
         var_0 = 'zef.d20_on';
         var_1 = 'zef.d20_sigma';   
         var_2 = 'zef.d20_priority';
-        var_3 = 'zef.d20_visible';
+        var_3 = 'zef.d20_sources';
         color_str = evalin('base','zef.d20_color');
      case 21
         var_0 = 'zef.d21_on';
         var_1 = 'zef.d21_sigma';   
         var_2 = 'zef.d21_priority';
-        var_3 = 'zef.d21_visible';
+        var_3 = 'zef.d21_sources';
         color_str = evalin('base','zef.d21_color');
      case 22
         var_0 = 'zef.d22_on';
         var_1 = 'zef.d22_sigma';   
         var_2 = 'zef.d22_priority';
-        var_3 = 'zef.d22_visible';
+        var_3 = 'zef.d22_sources';
         color_str = evalin('base','zef.d22_color');
     case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
-        var_3 = 'zef.w_visible';
+        var_3 = 0;
         color_str = evalin('base','zef.w_color');
     case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
-        var_3 = 'zef.g_visible';
+        var_3 = 'zef.g_sources';
         color_str = evalin('base','zef.g_color');
     case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
-        var_3 = 'zef.c_visible';
+        var_3 = 'zef.c_sources';
         color_str = evalin('base','zef.c_color');
      case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
-        var_3 = 'zef.sk_visible';
+        var_3 = 'zef.sk_sources';
         color_str = evalin('base','zef.sk_color');
      case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';
-        var_3 = 'zef.sc_visible';
+        var_3 = 'zef.sc_sources';
         color_str = evalin('base','zef.sc_color');
      end
 on_val = evalin('base',var_0);      
