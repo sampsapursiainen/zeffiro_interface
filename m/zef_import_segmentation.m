@@ -36,7 +36,7 @@ compartment_count_vec(1) = compartment_count_vec(1) + 1;
 
 if compartment_count_vec(1) == 1
 
-file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
+file_name_1 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '.dat']; 
 
 sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
@@ -179,14 +179,14 @@ triangle_data = cell2mat(triangle_data)+1;
 
 else 
       
-file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '_points.dat']; 
+file_name_1 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '_points.dat']; 
 
 mesh_data = load(file_name_1);
 mesh_data = double(mesh_data);
 point_data = mesh_data(:,1:3);
 point_data = mesh_data(:,1:3);
 
-file_name_2 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '_triangles.dat']; 
+file_name_2 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '_triangles.dat']; 
 
 fid = fopen(file_name_2);
 
