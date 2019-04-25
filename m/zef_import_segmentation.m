@@ -40,7 +40,6 @@ file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 
 sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
-sensor_points = sensor_points(:,1:3);
 
 n_s_points = size(sensor_points,1);
 
@@ -101,7 +100,6 @@ file_name_1 = [folder_name '/' ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 
 sensor_directions = load(file_name_1);
 sensor_directions = double(sensor_directions);
-sensor_directions = sensor_directions(:,1:3);
 
 n_s_directions = size(sensor_directions,1);
 
