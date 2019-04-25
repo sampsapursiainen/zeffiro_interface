@@ -59,17 +59,13 @@ aux_vec_6 = sum(aux_vec_2./aux_vec_3)/(4*pi);
 ind_vec_aux(block_ind) = aux_vec_6(:);
 
 time_val = toc;
-if i == 1
-h = waitbar(i/length_I,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '.']);    
-elseif  mod(i_ind,bar_ind)==0 
-waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+if  mod(i_ind,bar_ind)==0 
+waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 end
 
 end
 
-waitbar(i/length_I,h,['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
-
-close(h)
+waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 
 ind_vec(I) = gather(ind_vec_aux);
 I = find(ind_vec > evalin('base','zef.meshing_threshold')*meshing_accuracy);

@@ -194,7 +194,6 @@ clear X Y Z;
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
 
-close(h);
 
 for i = 1 : n_compartments
    
@@ -243,6 +242,10 @@ tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4
 surface_triangles = tetra(tetra_ind);
 
 nodes_b = nodes;
+
+close(h);
+
+end
 
 %tetra = single(tetra);
 %johtavuus_ind = single(johtavuus_ind);
