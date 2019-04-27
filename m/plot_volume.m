@@ -389,7 +389,7 @@ end
 if k == 18 && evalin('base','zef.d18_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 19 && evalin('base','zef.d10_sources');
+if k == 19 && evalin('base','zef.d19_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
 if k == 20 && evalin('base','zef.d20_sources');

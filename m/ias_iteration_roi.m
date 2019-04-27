@@ -286,7 +286,7 @@ if k == 18 && evalin('base','zef.d18_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.d18_sources')-1];
 end
-if k == 19 && evalin('base','zef.d10_sources');
+if k == 19 && evalin('base','zef.d19_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.d19_sources')-1];
 end

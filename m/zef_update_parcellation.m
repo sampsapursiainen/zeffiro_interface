@@ -14,19 +14,29 @@ for zef_i = 1 : size(zef.parcellation_colortable{zef_j}{2},1)
     zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:green">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];   
        else
              zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:orange">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];       
+       
+             if ismember(zef_k,zef.parcellation_selected)
+    set(zef.h_parcellation_interpolation,'foregroundcolor',[1 0.5 0]); 
+             end
+       
        end
    else
         zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:orange">V</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];       
-    end
+                 if ismember(zef_k,zef.parcellation_selected)
+    set(zef.h_parcellation_interpolation,'foregroundcolor',[1 0.5 0]); 
+             end
+   
+   end
        else
     zef.parcellation_list{zef_k} = ['<HTML><BODY>'   '&nbsp <SPAN bgcolor="rgb(' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,1)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,2)) ',' num2str(zef.parcellation_colortable{zef_j}{3}(zef_i,3))  ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp <SPAN style="color:red">X</SPAN> &nbsp ' [zef.parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ' '  ': ' zef.parcellation_colortable{zef_j}{2}{zef_i}] '</BODY></HTML>'  ];   
     end
     end
-end
-set(zef.h_parcellation_list,'string',zef.parcellation_list,'value',zef.parcellation_selected,'max',zef_k,'min',1)
+ end
+ if isempty(zef.parcellation_list)
+     zef.parcellation_list = 1;
+ end
+ set(zef.h_parcellation_list,'string',zef.parcellation_list,'value',zef.parcellation_selected,'max',zef_k,'min',1)
 clear zef_i zef_j zef_k;
-else
-set(zef.h_parcellation_list, 'string', '','max',10,'min',1)
 end
 set(zef.h_use_parcellation,'value',zef.use_parcellation);
 set(zef.h_parcellation_plot_type,'value',zef.parcellation_plot_type);
@@ -66,3 +76,9 @@ if  isempty(evalin('base','zef.parcellation_points'))
 else
 set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);    
 end; 
+
+if isempty(get(zef.h_parcellation_list,'string'))
+ set(zef.h_parcellation_list,'value',1);
+else
+ set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);   
+end

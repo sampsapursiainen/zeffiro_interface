@@ -333,7 +333,7 @@ end
 if k == 18 && evalin('base','zef.d18_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
-if k == 19 && evalin('base','zef.d10_sources');
+if k == 19 && evalin('base','zef.d19_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
 if k == 20 && evalin('base','zef.d20_sources');
@@ -904,7 +904,6 @@ end
 end
 min_rec = 1; 
 max_rec = size(evalin('base','zef.parcellation_colormap'),1);
-
 else
 
 if iscell(evalin('base','zef.reconstruction')) 

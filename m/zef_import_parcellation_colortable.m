@@ -17,6 +17,9 @@ zef.parcellation_colortable{length(zef.parcellation_colortable)+1} = {zef.parcel
     
 zef = rmfield(zef,'parcellation_aux');
 zef.parcellation_selected = [1:length(get(zef.h_parcellation_list,'string'))];
+if isempty(zef.parcellation_selected) 
+    zef.parcellation_selected = 1;
+end
 zef_update_parcellation;
 end
 

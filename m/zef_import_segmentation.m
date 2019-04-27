@@ -235,10 +235,12 @@ else
     max_val = max(l1_triangles(:));
 end
 triangle_data = [l1_triangles; l2_triangles+max_val];
+evalin('base',['zef.' name_cell{j} '_submesh_ind = [' num2str(evalin('base',['zef.' name_cell{j} '_submesh_ind'])) ' ' num2str(size(triangle_data,1)) '];']);
 else
 if invert_on
     triangle_data = triangle_data(:,[2 1 3]);
 end
+evalin('base',['zef.' name_cell{j} '_submesh_ind = [' num2str(size(triangle_data,1)) '];']);
 end
 
 n_points = size(point_data,1);
@@ -288,6 +290,7 @@ end
 end
 
 close(h_waitbar);
+
 end
 
 end
