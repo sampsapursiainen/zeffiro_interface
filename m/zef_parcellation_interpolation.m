@@ -1,7 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
 
-sigma_ind_vec = evalin('base','zef.sigma(zef.brain_ind,2)');
+sigma_ind_vec = evalin('base','zef.sigma(:,2)');
 submesh_ind_vec = evalin('base','zef.submesh_ind');
 if isempty(submesh_ind_vec)
     submesh_ind_vec = ones(size(sigma_ind_vec));
