@@ -232,7 +232,7 @@ for k = 1 : max(1,length(submesh_cell{i}))
 compartment_counter = compartment_counter + 1;
 
 if isempty(submesh_cell(i)) 
-reuna_t_aux = reuna_p{i};   
+reuna_t_aux = reuna_t{i};   
 else
 if k == 1
 reuna_t_aux = reuna_t{i}(1:submesh_cell{i},:);     
