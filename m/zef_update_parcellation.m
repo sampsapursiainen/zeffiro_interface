@@ -68,7 +68,8 @@ end;
 if isempty(get(zef.h_parcellation_list,'string'))
  set(zef.h_parcellation_list,'value',1);
 else
- set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);   
+ set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);
+ zef.parcellation_selected = [1:length(get(zef.h_parcellation_list,'string'))];
 end
 
 if isfield(zef,'parcellation_status')
