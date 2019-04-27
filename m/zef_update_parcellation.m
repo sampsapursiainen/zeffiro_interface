@@ -71,8 +71,12 @@ else
  set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);   
 end
 
+if isfield(zef,'parcellation_status')
+
 if ismember(1,zef.parcellation_status)
     set(zef.h_parcellation_interpolation,'foregroundcolor',[1 0.5 0]); 
+end
+
 end
     
 if isfield(zef,'parcellation_list')
