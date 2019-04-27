@@ -33,17 +33,17 @@ switch k
         var_0 = 'zef.d4_on';
         var_1 = 'zef.d4_sigma';   
         var_2 = 'zef.d4_priority';
-        var_4 = 'zef.d4_submesh_ind';
+        var_3 = 'zef.d4_submesh_ind';
    case 5
         var_0 = 'zef.d5_on';
         var_1 = 'zef.d5_sigma';
         var_2 = 'zef.d5_priority';
-        var_4 = 'zef.d5_submesh_ind';
+        var_3 = 'zef.d5_submesh_ind';
      case 6
         var_0 = 'zef.d6_on';
         var_1 = 'zef.d6_sigma';   
         var_2 = 'zef.d6_priority';
-        var_4 = 'zef.d6_submesh_ind';
+        var_3 = 'zef.d6_submesh_ind';
      case 7
         var_0 = 'zef.d7_on';
         var_1 = 'zef.d7_sigma';   
