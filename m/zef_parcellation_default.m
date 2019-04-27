@@ -269,7 +269,11 @@ for ell_ind = 1 : length(submesh_ind_aux)
 c_ind = c_ind + 1;
 I_aux = find(submesh_ind(I)==submesh_ind_aux(ell_ind));
 J = unique(s_interp_ind(I(I_aux),:));
+if length(submesh_ind_aux) > 1
 c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name']) ' ' num2str(submesh_ind_aux(ell_ind))];
+else
+c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name'])];    
+end
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base',['zef.' c_str '_color']);
 c_table{t_ind}{3}(c_ind,5) =  c_ind;
 c_table{t_ind}{5}(c_ind,:) = [i submesh_ind_aux(ell_ind)];
