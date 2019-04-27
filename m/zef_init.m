@@ -43,6 +43,35 @@
           zef.d21_name = 'Detail 21';
           zef.d22_name = 'Detail 22';
           
+            zef.submesh_ind = [];
+            zef.w_submesh_ind = [];
+            zef.g_submesh_ind = [];
+            zef.c_submesh_ind = [];
+           zef.sk_submesh_ind = [];
+           zef.sc_submesh_ind = [];
+           zef.d1_submesh_ind = [];
+           zef.d2_submesh_ind = [];
+           zef.d3_submesh_ind = [];
+           zef.d4_submesh_ind = [];
+           zef.d5_submesh_ind = [];
+           zef.d6_submesh_ind = [];
+           zef.d7_submesh_ind = [];
+           zef.d8_submesh_ind = [];
+           zef.d9_submesh_ind = [];
+          zef.d10_submesh_ind = [];
+          zef.d11_submesh_ind = [];
+          zef.d12_submesh_ind = [];
+          zef.d13_submesh_ind = [];
+          zef.d14_submesh_ind = [];
+          zef.d15_submesh_ind = [];
+          zef.d16_submesh_ind = [];
+          zef.d17_submesh_ind = [];
+          zef.d18_submesh_ind = [];
+          zef.d19_submesh_ind = [];
+          zef.d20_submesh_ind = [];
+          zef.d21_submesh_ind = [];
+          zef.d22_submesh_ind = [];
+          
           zef.s_merge = 1;
           zef.w_merge = 1;
           zef.g_merge = 1;

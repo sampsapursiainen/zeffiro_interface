@@ -159,6 +159,91 @@ if (isfield(zef_data,'inv_rec_source'));
            zef.cp_d        = zef_data.cp_d;
       zef.meshing_accuracy = zef_data.meshing_accuracy;
       zef.on_screen        = 0;
+      
+       if isfield(zef_data,'submesh_ind')      
+              zef.submesh_ind = zef_data.submesh_ind  ;
+                end;
+              if isfield(zef_data,'w_submesh_ind')      
+              zef.w_submesh_ind = zef_data.w_submesh_ind  ;
+                end;
+        if isfield(zef_data,'g_submesh_ind')          
+          zef.g_submesh_ind = zef_data.g_submesh_ind  ; 
+           end;
+        if isfield(zef_data,'c_submesh_ind')            
+        zef.c_submesh_ind = zef_data.c_submesh_ind ;  
+         end;
+        if isfield(zef_data,'sk_submesh_ind')          
+         zef.sk_submesh_ind = zef_data.sk_submesh_ind ; 
+         end;
+        if isfield(zef_data,'sc_submesh_ind')          
+         zef.sc_submesh_ind = zef_data.sc_submesh_ind ;
+         end;
+        if isfield(zef_data,'d1_submesh_ind')          
+         zef.d1_submesh_ind = zef_data.d1_submesh_ind ;
+         end;
+        if isfield(zef_data,'d2_submesh_ind')         
+          zef.d2_submesh_ind = zef_data.d2_submesh_ind ;
+          end;
+        if isfield(zef_data,'d3_submesh_ind')        
+            zef.d3_submesh_ind = zef_data.d3_submesh_ind ;
+            end;
+        if isfield(zef_data,'d4_submesh_ind')       
+            zef.d4_submesh_ind = zef_data.d4_submesh_ind ;
+            end;
+        if isfield(zef_data,'d5_submesh_ind')          
+         zef.d5_submesh_ind = zef_data.d5_submesh_ind ;
+         end;
+        if isfield(zef_data,'d6_submesh_ind')        
+           zef.d6_submesh_ind = zef_data.d6_submesh_ind ;
+           end;
+        if isfield(zef_data,'d7_submesh_ind')           
+        zef.d7_submesh_ind = zef_data.d7_submesh_ind ;
+        end;
+        if isfield(zef_data,'d8_submesh_ind')        
+           zef.d8_submesh_ind = zef_data.d8_submesh_ind ;
+           end;
+        if isfield(zef_data,'d9_submesh_ind')          
+         zef.d9_submesh_ind = zef_data.d9_submesh_ind ;
+         end;
+        if isfield(zef_data,'d10_submesh_ind')        
+          zef.d10_submesh_ind = zef_data.d10_submesh_ind ;
+          end;
+        if isfield(zef_data,'d11_submesh_ind')       
+           zef.d11_submesh_ind = zef_data.d11_submesh_ind ;
+           end;
+        if isfield(zef_data,'d12_submesh_ind')       
+           zef.d12_submesh_ind = zef_data.d12_submesh_ind ;
+           end;
+        if isfield(zef_data,'d13_submesh_ind')       
+           zef.d13_submesh_ind = zef_data.d13_submesh_ind ;
+           end;
+        if isfield(zef_data,'d14_submesh_ind')        
+          zef.d14_submesh_ind = zef_data.d14_submesh_ind ;
+          end;
+        if isfield(zef_data,'d15_submesh_ind')        
+          zef.d15_submesh_ind = zef_data.d15_submesh_ind ;
+          end;
+        if isfield(zef_data,'d16_submesh_ind')       
+           zef.d16_submesh_ind = zef_data.d16_submesh_ind ;
+           end;
+        if isfield(zef_data,'d17_submesh_ind')     
+             zef.d17_submesh_ind = zef_data.d17_submesh_ind ;
+             end;
+        if isfield(zef_data,'d18_submesh_ind')       
+           zef.d18_submesh_ind = zef_data.d18_submesh_ind ;
+           end;
+        if isfield(zef_data,'d19_submesh_ind')        
+          zef.d19_submesh_ind = zef_data.d19_submesh_ind ;
+          end;
+        if isfield(zef_data,'d20_submesh_ind')     
+             zef.d20_submesh_ind = zef_data.d20_submesh_ind ;
+             end;
+        if isfield(zef_data,'d21_submesh_ind')      
+            zef.d21_submesh_ind = zef_data.d21_submesh_ind ;
+            end;
+        if isfield(zef_data,'d22_submesh_ind')      
+            zef.d22_submesh_ind = zef_data.d22_submesh_ind ;
+            end;
 if isfield(zef_data,'reuna_p')
             zef.reuna_p = zef_data.reuna_p;
 end
