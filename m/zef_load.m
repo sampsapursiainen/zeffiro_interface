@@ -262,6 +262,9 @@ end
 if isfield(zef_data,'brain_ind')
 zef.brain_ind = zef_data.brain_ind;
 end
+if not(isfield(zef_data,'submesh_ind'))    
+zef.submesh_ind = ones(size(zef_data.brain_ind));
+end;
 if isfield(zef_data,'source_ind')
 zef.source_ind = zef_data.source_ind;
 end
