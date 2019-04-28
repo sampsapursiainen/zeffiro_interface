@@ -427,9 +427,9 @@ I = gpuArray(uint32(find(ismember(johtavuus,visible_vec))));
 tetra = gpuArray(uint32(evalin('base','zef.tetra')));
 nodes = gpuArray(nodes);
 else
+    %tässä
   I = uint32(find(ismember(johtavuus,visible_vec)));
   tetra = uint32(evalin('base','zef.tetra'));  
-  uint32(find(ismember(johtavuus,visible_vec)));
 end
 
 johtavuus = johtavuus(I);
