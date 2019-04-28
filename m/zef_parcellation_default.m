@@ -12,6 +12,9 @@ end
 if evalin('base','zef.parcellation_merge')
 c_table = evalin('base','zef.parcellation_colortable');
 c_points = evalin('base','zef.parcellation_points');
+else
+evalin('base','zef.parcellation_selected = []');
+evalin('base','set(zef.h_parcellation_list,''value'',[])');
 end
 
 s_interp_ind = evalin('base','zef.source_interpolation_ind{1}');

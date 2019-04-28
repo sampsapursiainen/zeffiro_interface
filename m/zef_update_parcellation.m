@@ -65,11 +65,14 @@ else
 set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);    
 end; 
 
+
 if isempty(get(zef.h_parcellation_list,'string'))
- set(zef.h_parcellation_list,'value',1);
+   set(zef.h_parcellation_list,'value',1);
 else
+if isempty(zef.parcellation_selected)
  set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);
  zef.parcellation_selected = [1:length(get(zef.h_parcellation_list,'string'))];
+end
 end
 
 if isfield(zef,'parcellation_status')

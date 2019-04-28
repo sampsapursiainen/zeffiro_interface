@@ -1,11 +1,8 @@
 %Copyright © 2018, Sampsa Pursiainen
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
 
-sigma_ind_vec = evalin('base','zef.sigma(:,2)');
+sigma_ind_vec = evalin('base','zef.sigma(zef.brain_ind,2)');
 submesh_ind_vec = evalin('base','zef.submesh_ind');
-if isempty(submesh_ind_vec)
-    submesh_ind_vec = ones(size(sigma_ind_vec));
-end
 
 cortex_ind_aux = 0;
 i = 0;
@@ -349,7 +346,7 @@ if evalin('base','zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
-I_compartment = find(sigma_ind_vec==cortex_ind_aux);
+I_compartment = find(evalin('base','zef.sigma(:,2)')==cortex_ind_aux);
 brain_cortex_ind = find(ismember(brain_ind,I_compartment));
 cortex_ind = brain_ind(brain_cortex_ind);
 
