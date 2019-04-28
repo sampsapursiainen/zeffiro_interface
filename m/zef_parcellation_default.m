@@ -20,7 +20,7 @@ s_interp_ind = evalin('base','zef.source_interpolation_ind{1}');
 
 t_ind = 1 + length(c_table);
 
-c_table{t_ind}{1} = 'BM';
+c_table{t_ind}{1} = 'SG';
 c_points_aux = evalin('base','zef.source_positions');
 c_points_aux = [[0:size(c_points_aux,1)-1]' c_points_aux];
 c_table{t_ind}{4} = zeros(size(c_points,1),1);
