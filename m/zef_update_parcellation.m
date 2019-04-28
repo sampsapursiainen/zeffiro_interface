@@ -1,9 +1,9 @@
 
 set(zef.h_parcellation_name,'string',zef.parcellation_name);
 set(zef.h_parcellation_tolerance,'string',zef.parcellation_tolerance);
+zef.parcellation_list = cell(0);
 if size(zef.parcellation_colortable,1) > 0
 zef_k = 0; 
-zef.parcellation_list = cell(0);
 zef.parcellation_status = [];
 zef.parcellation_colormap = [100 100 100]/255;
  for zef_j = 1 : length(zef.parcellation_colortable)
@@ -66,18 +66,15 @@ set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0
 end; 
 
 
-if isempty(get(zef.h_parcellation_list,'string'))
-   set(zef.h_parcellation_list,'value',1);
-else
-if isempty(zef.parcellation_selected)
+if isempty(zef.parcellation_selected) && not(isempty(zef.parcellation_list))
  set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);
  zef.parcellation_selected = [1:length(get(zef.h_parcellation_list,'string'))];
 end
-end
+
 
 if isfield(zef,'parcellation_status')
 
-if ismember(1,zef.parcellation_status)
+if ismember(1,zef.parcellation_status(zef.parcellation_selected))
     set(zef.h_parcellation_interpolation,'foregroundcolor',[1 0.5 0]); 
 end
 
