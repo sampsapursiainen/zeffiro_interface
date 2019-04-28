@@ -763,9 +763,8 @@ end
 end
 
 clear S r p x aux_vec inv_M_r a b;
-close(h);
 
-h = waitbar(0,'Interpolation.');
+waitbar(0,h,'Interpolation.');
 
 
 if isequal(electrode_model,'CEM')

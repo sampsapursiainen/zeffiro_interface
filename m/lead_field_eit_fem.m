@@ -593,7 +593,6 @@ end
 end
 
 clear S r p x aux_vec inv_M_r a b;
-close(h);
 
 if isequal(electrode_model,'CEM')
 Aux_mat = inv(Aux_mat);
@@ -612,7 +611,7 @@ bg_data = bg_data(:);
 
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 
-h = waitbar(0,'Interpolation.');
+waitbar(0,h,'Interpolation.');
 
 tic;
 

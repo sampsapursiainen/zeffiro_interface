@@ -567,8 +567,7 @@ end
 
 clear cross_mat;
 
-close(h);
-h = waitbar(0,'PCG iteration.');
+waitbar(0,h,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 precond_vec = gpuArray(1./full(diag(A)));
@@ -674,11 +673,10 @@ waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/8
 end
 end
 clear S r p x aux_vec inv_M_r a b;
-close(h);
 
 waitbar_ind = 0;
 
-h = waitbar(waitbar_ind/waitbar_length,'Interpolation.');
+waitbar(waitbar_ind/waitbar_length,h,'Interpolation.');
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
 L_meg_fi = Aux_mat_2*L_meg_fi/(4*pi);
 if source_model == 2
