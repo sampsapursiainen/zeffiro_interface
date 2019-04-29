@@ -49,8 +49,8 @@ value will be used.
 Any compartment-specific parameter can be imported only once. In case
 there are multiple definitions in the list for a single compartment, only
 the first one counts. The parcellation tool will distinguish the meshes 
-merged into a single compartment displaying them as part 1, 2, 3, etc.
-corresponding to the import order.
+merged into a single compartment displaying them as part 1, 2, etc. in
+the respective order.
 
 The segmentation list starts after the header and can be edited freely by
 the user. 
