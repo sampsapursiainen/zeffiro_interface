@@ -3,7 +3,7 @@ Do not change or remove this header. This file allows one to import a
 surface segmentation consisting of a set of ASCII files to the Zeffiro
 Interface (ZI), Copyright (c) Sampsa Pursiainen, 2018. For importing, this
 file should be placed in the folder containing the files and opened via
-ZI's import menu item 'Import segmentation from folder (ASCII)'. The files
+ZI's import menu item 'Import ASCII segmentation from folder'. The files
 can be either DAT files containing either points or triangles, or ASC
 files exported from the FreeSurfer Software Suite, Copyright (c)
 Freesufer, 2013.
