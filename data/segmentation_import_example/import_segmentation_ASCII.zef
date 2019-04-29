@@ -25,7 +25,6 @@ comma-separated line of the following form:
 filename, compartment name, scaling, sigma, priority, activity, name,
 invert, extension
 
-
 Here, the filename appears without any extensions; compartment_name is as
 in the list above, scaling, sigma and priority parameters are as in ZI's
 segmentation window with 0 corresponding to the default value; activity is
@@ -38,7 +37,7 @@ and other meshes, respectively.
 
 In the special case of sensor_points and sensor_directions, it is only
 possible to use the DAT format. Each one of these is imported via a single
-file (filename.dat), and the line for importing is of the form
+file (filename.dat), and the line for importing is of the form:
 
 filename, compartment name, scaling, x-translation, y-translation,
 z-translation, xy-rotation, yz-rotation, zx-rotation
@@ -49,8 +48,9 @@ value will be used.
 
 Any compartment-specific parameter can be imported only once. In case
 there are multiple definitions in the list for a single compartment, only
-the first one counts.
-
+the first one counts. The parcellation tool will distinguish the meshes 
+merged into a single compartment displaying them as part 1, 2, 3, etc.
+corresponding to the import order.
 
 The segmentation list starts after the header and can be edited freely by
 the user. 
