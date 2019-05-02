@@ -15,7 +15,7 @@ bar_ind = ceil(size_center_points/(50*par_num));
 use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
 
-h = waitbar(1/size_center_points,['Source decomposition.']); 
+waitbar(1/size_center_points,evalin('caller','h'),['Source decomposition.']); 
 
 source_interpolation_aux = zeros(size_center_points,1);
 ones_vec = ones(size(source_points,2),1);
