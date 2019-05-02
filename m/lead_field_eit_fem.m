@@ -1,5 +1,5 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [L_eit, bg_data, dipole_locations, dipole_directions] = lead_field_eit_fem(nodes,elements,sigma,electrodes,varargin) 
+function [L_eit, bg_data, dipole_locations, dipole_directions, eit_ind, eit_count] = lead_field_eit_fem(nodes,elements,sigma,electrodes,varargin) 
 
 N = size(nodes,1);
 
@@ -602,7 +602,18 @@ end
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
 L_eit = Aux_mat_2*L_eit;
 
+
+if isfield(evalin('base','zef'),'redo_eit_dec')
+if evalin('base','zef.redo_eit_dec') == 1
 [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+else
+eit_ind = evalin('base','zef.eit_ind');
+eit_count = evalin('base','zef.eit_count');
+end
+else
+[eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+end
+
 
 Current_pattern = evalin('base','zef.current_pattern');
 bg_data = Aux_mat*Current_pattern;

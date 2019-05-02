@@ -111,9 +111,9 @@ if size(zef.sensors,2) == 6
 zef.lf_param.impedances = zef.sensors(:,6);
 end
 if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
-[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions] = lead_field_eit_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = lead_field_eit_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 else
-[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions] = lead_field_eit_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+[zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = lead_field_eit_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
 end
 
