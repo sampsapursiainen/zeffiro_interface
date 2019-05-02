@@ -54,7 +54,6 @@ eit_ind = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
 eit_count = accumarray(i_c,1);
 
-close(h);
 
 end
 
