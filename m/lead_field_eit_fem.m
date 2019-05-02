@@ -438,7 +438,7 @@ A_aux = A(perm_vec,perm_vec);
 A = A_aux;
 clear A_aux A_part;
 
-h = waitbar(0,h,'PCG iteration.');
+waitbar(0,h,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 gpuDevice(evalin('base','zef.gpu_num'));
