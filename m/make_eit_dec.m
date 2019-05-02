@@ -1,6 +1,8 @@
 
 function [eit_ind,eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind)
 
+h = evalin('caller','h');
+
 center_points = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
 center_points = center_points';
 source_points = center_points(:,source_ind);
@@ -15,7 +17,7 @@ bar_ind = ceil(size_center_points/(50*par_num));
 use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
 
-waitbar(1/size_center_points,evalin('caller','h'),['Source decomposition.']); 
+waitbar(1/size_center_points,h,['Source decomposition.']); 
 
 source_interpolation_aux = zeros(size_center_points,1);
 ones_vec = ones(size(source_points,2),1);
