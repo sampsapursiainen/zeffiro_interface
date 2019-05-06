@@ -16,7 +16,6 @@ selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 time_series = zeros(length(selected_list), number_of_frames);
 
-if ismember(evalin('base','zef.visualization_type'), [3])
 max_abs_reconstruction = 0;
 min_rec = Inf;
 max_rec = -Inf;
@@ -91,7 +90,6 @@ min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynam
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end   
 end 
-end
 end
    
 cb_done = 0;
