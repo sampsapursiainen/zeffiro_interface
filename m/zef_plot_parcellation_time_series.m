@@ -23,31 +23,58 @@ end
 
 if plot_type == 1
 
+time_series = time_series./sum(time_series);
+y_vals = max(time_series,[],2); 
+
+plot_mode = 1;
+
+end
+
+if plot_type == 2
+
 y_vals = max(time_series,[],2); 
 
 plot_mode = 1;
 
 end
    
-if plot_type == 2
-
-y_vals = sqrt(mean(time_series.^2,2)); 
-
-plot_mode = 1;
-
-end
-
 if plot_type == 3
-    
-y_vals = std(time_series'); 
+
+time_series = time_series./sum(time_series);
+y_vals = mean(time_series,2); 
 
 plot_mode = 1;
 
 end
 
 if plot_type == 4
-  
-    
+
+y_vals = mean(time_series,2); 
+
+plot_mode = 1;
+
+end
+
+if plot_type == 5
+
+time_series = time_series./sum(time_series);
+y_vals = std(time_series'); 
+
+plot_mode = 1;
+
+end
+
+if plot_type == 6
+
+y_vals = std(time_series'); 
+
+plot_mode = 1;
+
+end
+
+if plot_type == 7
+
+time_series = time_series./sum(time_series);    
 y_vals = corr(time_series'); 
 
 plot_mode = 2;
@@ -55,8 +82,18 @@ plot_mode = 2;
 end
 
 
-if plot_type == 5
+if plot_type == 8
   
+y_vals = corr(time_series'); 
+
+plot_mode = 2;
+
+end
+
+
+if plot_type == 9
+
+time_series = time_series./sum(time_series);      
 y_vals = cov(time_series'); 
 
 plot_mode = 2;
@@ -64,7 +101,30 @@ plot_mode = 2;
 end
 
 
-if plot_type == 6
+if plot_type == 10
+     
+y_vals = cov(time_series'); 
+
+plot_mode = 2;
+
+end
+
+
+if plot_type == 11
+
+time_series = time_series./sum(time_series);     
+y_vals = zeros(size(time_series,1), size(time_series,1));    
+for i = 1 : size(time_series,1)
+    for j = 1 : size(time_series,1)
+y_vals(i,j) = dtw(time_series(i,:),time_series(j,:)); 
+    end
+end
+
+plot_mode = 2;
+
+end
+
+if plot_type == 12
   
 y_vals = zeros(size(time_series,1), size(time_series,1));    
 for i = 1 : size(time_series,1)
@@ -76,6 +136,7 @@ end
 plot_mode = 2;
 
 end
+
 
 if plot_mode == 1
 x_vals = [1:length(selected_list)]+0.5;

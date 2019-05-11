@@ -16,6 +16,9 @@ selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 time_series = zeros(length(selected_list), number_of_frames);
 
+h_waitbar = waitbar(0,['Time series.']); 
+
+
 max_abs_reconstruction = 0;
 min_rec = Inf;
 max_rec = -Inf;
@@ -35,31 +38,15 @@ frame_start = min(length_reconstruction_cell,frame_start);
 frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
-for f_ind = frame_start : frame_step : frame_stop
+for f_ind = frame_start : frame_step : frame_stop; 
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);  
-reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
-if ismember(evalin('base','zef.reconstruction_type'), 6)
-reconstruction = (1/sqrt(3))*sum(reconstruction)';
-else    
+reconstruction = reshape(reconstruction,3,length(reconstruction)/3);   
 reconstruction = sqrt(sum(reconstruction.^2))';
-end
 reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
-end
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
-if evalin('base','zef.inv_scale') == 1
-min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 2
-min_rec = (max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 3
-min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end
 end
 else
 frame_start = 1;
@@ -68,28 +55,12 @@ frame_step = 1;
 number_of_frames = 1;    
 reconstruction = evalin('base','zef.reconstruction');
 reconstruction = reconstruction(:);  
-reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
-if ismember(evalin('base','zef.reconstruction_type'), 6)
-reconstruction = (1/sqrt(3))*sum(reconstruction)';
-else    
+reconstruction = reshape(reconstruction,3,length(reconstruction)/3);  
 reconstruction = sqrt(sum(reconstruction.^2))';
-end
 reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
-if evalin('base','zef.inv_scale') == 1
-min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 2
-min_rec = (max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-max_rec = (max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 3
-min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end   
-end 
 end
    
 cb_done = 0;
@@ -363,16 +334,14 @@ end
 end
 end
 
-
 sensors = evalin('base','zef.sensors');
 reuna_p = evalin('base','zef.reuna_p');
 reuna_t = evalin('base','zef.reuna_t');  
 
-
 f_ind = frame_start;
 f_ind_aux = 1;
 tic;
-h_waitbar = waitbar(0,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
+waitbar(0,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
 
 
 i = 0;
@@ -553,15 +522,8 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
-if evalin('base','zef.inv_scale') == 1
-reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 2
-reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-elseif evalin('base','zef.inv_scale') == 3
-reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end
-end
+reconstruction = (max(reconstruction/max_abs_reconstruction,0));    
+
 
 p_counter = 0;
 for p_ind = selected_list 
@@ -657,15 +619,9 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
 reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
-if evalin('base','zef.inv_scale') == 1
-reconstruction = 10*log10(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
-elseif evalin('base','zef.inv_scale') == 2
-reconstruction = (max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-elseif evalin('base','zef.inv_scale') == 3
-reconstruction = sqrt(max(reconstruction/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
-end
-end
+
+reconstruction = (max(reconstruction/max_abs_reconstruction,0));    
+
 
 p_counter = 0;
 for p_ind = selected_list  
@@ -696,6 +652,7 @@ end
 waitbar(1,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
 
 time_series(find(isnan(time_series))) = 0;
+time_series = time_series.^2;
 close(h_waitbar);
 
 end
