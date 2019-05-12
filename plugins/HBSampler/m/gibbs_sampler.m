@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 %Region of interest (ROI):
 r_roi = roi_sphere(:,4); 
 c_roi = roi_sphere(:,1:3)';
