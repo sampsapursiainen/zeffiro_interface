@@ -90,8 +90,34 @@ plot_mode = 2;
 
 end
 
-
 if plot_type == 9
+
+time_series = time_series./sum(time_series);    
+D = diag(sqrt(mean(time_series,2)));
+D = D./max(D(:));
+y_vals = corr(time_series'); 
+y_vals = D*y_vals*D;
+
+
+plot_mode = 2;
+
+end
+
+if plot_type == 10
+
+time_series = time_series./sum(time_series);    
+D = diag(sqrt(max(time_series,[],2)));
+D = D./max(D(:));
+y_vals = corr(time_series'); 
+y_vals = D*y_vals*D;
+
+
+plot_mode = 2;
+
+end
+
+
+if plot_type == 11
 
 time_series = time_series./sum(time_series);      
 y_vals = cov(time_series'); 
@@ -101,7 +127,7 @@ plot_mode = 2;
 end
 
 
-if plot_type == 10
+if plot_type == 12
      
 y_vals = cov(time_series'); 
 
@@ -110,7 +136,7 @@ plot_mode = 2;
 end
 
 
-if plot_type == 11
+if plot_type == 13
 
 time_series = time_series./sum(time_series);     
 y_vals = zeros(size(time_series,1), size(time_series,1));    
@@ -124,7 +150,7 @@ plot_mode = 2;
 
 end
 
-if plot_type == 12
+if plot_type == 14
   
 y_vals = zeros(size(time_series,1), size(time_series,1));    
 for i = 1 : size(time_series,1)
