@@ -1,26 +1,25 @@
-Zeffiro Interface (ZI), © 2018, Sampsa Pursiainen & Zeffiro Interface
-Development Team is an open source code package constituting an accessible
-tool for finite element (FE) based forward and inverse simulations in
-EEG/MEG and can be used also in other bioelectromagnetical imaging
-applications targeting the brain. With ZI, one can segment a realistic
-multilayer geometry and generate a multi-compartment FE mesh, if
-triangular ASCII surface grids (in DAT or ASC file format) are available.
-A suitable surface segmentation can be produced, for example, with the
-FreeSurfer software suite (Copyright © FreeSurfer, 2013). Such a
-segmentation can be imported at once from a folder containing a set of
-ASCII files. An example folder can be found in the repository.  ZI allows
-also importing a parcellation created with FreeSurfer to enable
-distinguishing different brain regions and, thereby, analysing the
-connectivity of the brain function over a time series. Different
-compartments can be defined as active, allowing the analysis of the
-sub-cortical strucures. In each compartment, the orientation of the
-activity can be either normally constrained or unconstrained. The main
-routines of ZI can be accelerated significantly in a computer equipped
-with a graphics computing unit (GPU). It is especially recommendable to
-perform the forward simulation process, i.e., to generate the FE mesh, the
-lead field matrix and to interpolate between different point sets,
-utilizing a GPU. After the forward simulation phase, the model can be
-processed also without GPU acceleration.
+Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team,
+is an open source code package constituting an accessible tool for finite
+element (FE) based forward and inverse simulations in EEG/MEG and can be
+used also in other bioelectromagnetical imaging applications targeting the
+brain. With ZI, one can segment a realistic multilayer geometry and
+generate a multi-compartment FE mesh, if triangular ASCII surface grids
+(in DAT or ASC file format) are available. A suitable surface segmentation
+can be produced, for example, with the FreeSurfer software suite
+(Copyright © FreeSurfer, 2013). Such a segmentation can be imported at
+once from a folder containing a set of ASCII files. An example folder can
+be found in the repository.  ZI allows also importing a parcellation
+created with FreeSurfer to enable distinguishing different brain regions
+and, thereby, analysing the connectivity of the brain function over a time
+series. Different compartments can be defined as active, allowing the
+analysis of the sub-cortical strucures. In each compartment, the
+orientation of the activity can be either normally constrained or
+unconstrained. The main routines of ZI can be accelerated significantly in
+a computer equipped with a graphics computing unit (GPU). It is especially
+recommendable to perform the forward simulation process, i.e., to generate
+the FE mesh, the lead field matrix and to interpolate between different
+point sets, utilizing a GPU. After the forward simulation phase, the model
+can be processed also without GPU acceleration.
 
 A brief introduction to the essential features of the interface can be
 found at:
