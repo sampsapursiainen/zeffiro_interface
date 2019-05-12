@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
     zef.inv_sampling_frequency = str2num(get(zef.h_inv_sampling_frequency,'string')); 
     zef.inv_low_cut_frequency = str2num(get(zef.h_inv_low_cut_frequency,'string')); 
     zef.inv_high_cut_frequency = str2num(get(zef.h_inv_high_cut_frequency,'string')); 

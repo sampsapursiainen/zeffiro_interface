@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [nodes,nodes_b,tetra,johtavuus_ind,surface_triangles] = fem_mesh(void)
 
 h = waitbar(0,'Initial mesh.');

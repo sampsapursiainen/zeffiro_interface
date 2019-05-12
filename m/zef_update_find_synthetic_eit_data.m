@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.inv_roi_sphere(:,1) = str2num(get(zef.h_inv_roi_sphere_1,'string'))'; 
 zef.inv_roi_sphere(:,2) = str2num(get(zef.h_inv_roi_sphere_2,'string'))';
 zef.inv_roi_sphere(:,3) = str2num(get(zef.h_inv_roi_sphere_3,'string'))';

@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [sensors,reuna_p,reuna_t] = process_meshes(void);
 
 i = 0;

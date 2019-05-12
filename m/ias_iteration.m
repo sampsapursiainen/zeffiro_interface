@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = ias_iteration(void)
 
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));

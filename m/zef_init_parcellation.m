@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'parcellation_name')); 
     zef.parcellation_name = ''; 
 end;

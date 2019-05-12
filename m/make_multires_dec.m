@@ -1,4 +1,5 @@
-
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [multires_dec, multires_ind, multires_count] = make_multires_dec
 
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');

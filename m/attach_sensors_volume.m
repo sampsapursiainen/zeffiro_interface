@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function  [sensors_attached_volume] = attach_sensors_volume(sensors) 
 
 if ismember(evalin('base','zef.imaging_method'),[1,4,5]) & not(isempty(evalin('base','zef.tetra')))  

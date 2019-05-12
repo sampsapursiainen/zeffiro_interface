@@ -1,5 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
-
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h = evalin('base','zef.h_w_merge'); set(zef.h,'value',(zef.w_merge));
 zef.h = evalin('base','zef.h_g_merge'); set(zef.h,'value',(zef.g_merge));
 zef.h = evalin('base','zef.h_c_merge'); set(zef.h,'value',(zef.c_merge));

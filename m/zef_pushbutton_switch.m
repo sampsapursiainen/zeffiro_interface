@@ -1,4 +1,5 @@
- 
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface 
 switch_color('s_on','pushbutton16','s_points');
 if zef.imaging_method==2
 switch_color('s_on','pushbutton17','s_directions');

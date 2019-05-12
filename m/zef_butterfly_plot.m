@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 if  ismac
 zef.h_butterfly_plot = open('zeffiro_interface_butterfly_plot.fig');
 elseif ispc 

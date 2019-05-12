@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [mesh_data] = zef_get_mesh(file_str,field_id,file_type)
 
 merge_on = evalin('base',['zef.' field_id '_merge']);

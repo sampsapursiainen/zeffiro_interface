@@ -1,5 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
-%[zef.sigma,zef.brain_ind] = zef_sigma([]);
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 tic;
 
 if zef.source_direction_mode == 1

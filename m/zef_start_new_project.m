@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef_close_tools; 
 zef_close_figs; 
 zef_init; 

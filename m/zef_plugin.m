@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h_plugin = fopen('zeffiro_plugins.ini');
 zef.ini_cell = textscan(zef.h_plugin,'%s','HeaderLines',17,'Delimiter',',');
 for zef_i = 1 : length(zef.ini_cell{:})/3

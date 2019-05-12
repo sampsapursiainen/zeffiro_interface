@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h_zeffiro = open('zeffiro_interface_figure_tool.fig');
 zef.o_h = findall(zef.h_zeffiro);
 zef.h_axes1 = zef.o_h(43);

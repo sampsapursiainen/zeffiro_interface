@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 if evalin('base','zef.prism_layers');
     if isfield(zef,'prisms')
         zef.size_prisms = size(zef.prisms,1);

@@ -1,5 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
-
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'inv_rec_source')); 
     zef.inv_rec_source = [0 0 0 0 0 0 0 3 1]; 
 end; 

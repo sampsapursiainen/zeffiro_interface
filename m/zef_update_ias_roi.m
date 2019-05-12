@@ -1,5 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
-
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.inv_roi_mode = get(zef.h_inv_roi_mode ,'value'); 
 if zef.inv_roi_mode == 1
 zef.inv_roi_sphere = str2num(get(zef.h_inv_roi_sphere_1 ,'string')); 

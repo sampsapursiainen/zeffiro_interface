@@ -1,4 +1,5 @@
-
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 set(zef.h_parcellation_name,'string',zef.parcellation_name);
 set(zef.h_parcellation_tolerance,'string',zef.parcellation_tolerance);
 zef.parcellation_list = cell(0);

@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
 
 sigma_ind_vec = evalin('base','zef.sigma(zef.brain_ind,2)');

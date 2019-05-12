@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
 
 if ismember(evalin('base','zef.imaging_method'), [2 3])

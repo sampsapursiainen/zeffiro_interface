@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
           zef.parcellation_plot_type = 1;
           zef.parcellation_time_series = [];
           zef.parcellation_colormap = [];

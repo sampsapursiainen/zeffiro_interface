@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [eit_data_vec] = compute_eit_data(nodes,elements,sigma,electrodes,varargin) 
 
 N = size(nodes,1);

@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [L_eit, bg_data, dipole_locations, dipole_directions, eit_ind, eit_count] = lead_field_eit_fem(nodes,elements,sigma,electrodes,varargin) 
 
 N = size(nodes,1);

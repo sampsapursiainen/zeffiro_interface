@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
     zef.inv_multires_n_levels = str2num(get(zef.h_inv_multires_n_levels,'string')); 
     zef.inv_multires_sparsity = str2num(get(zef.h_inv_multires_sparsity,'string'));
     zef.inv_multires_n_decompositions = str2num(get(zef.h_inv_multires_n_decompositions,'string'));

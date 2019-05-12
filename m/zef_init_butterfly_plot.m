@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'inv_sampling_frequency')); 
     zef.inv_sampling_frequency = 1025; 
 end;

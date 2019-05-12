@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [I] = tetra_in_compartment(reuna_p,reuna_t,nodes,compartment_info)
 
 max_x = max(reuna_p(:,1));

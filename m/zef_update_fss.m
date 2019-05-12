@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.inv_synth_source = str2num(get(zef.h_inv_synth_source_1 ,'string')); 
 zef.inv_synth_source = zef.inv_synth_source(:);
 zef.inv_synth_source = [ zef.inv_synth_source ...

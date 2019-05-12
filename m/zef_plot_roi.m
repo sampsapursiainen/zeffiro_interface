@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [inv_roi_sphere,h_roi_sphere] = zef_plot_roi
 h_inv_roi_sphere_1 = evalin('base','zef.h_inv_roi_sphere_1');
 h_inv_roi_sphere_2 = evalin('base','zef.h_inv_roi_sphere_2');

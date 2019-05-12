@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [meas_data] = find_source
 source_positions = evalin('base','zef.source_positions');
 noise_level = evalin('base','zef.inv_synth_source(1,8)');

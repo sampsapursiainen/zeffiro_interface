@@ -1,3 +1,5 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [c_table,c_points] = zef_parcellation_default(void)
 
 c_table = cell(0);

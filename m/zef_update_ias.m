@@ -1,4 +1,5 @@
-%Copyright © 2018, Sampsa Pursiainen
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
     zef.inv_hyperprior = get(zef.h_inv_hyperprior ,'value'); 
     zef.inv_beta = str2num(get(zef.h_inv_beta,'string')); 
     zef.inv_theta0 = str2num(get(zef.h_inv_theta0,'string')); 
