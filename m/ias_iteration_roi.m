@@ -486,11 +486,13 @@ f = f/data_norm;
 filter_order = 3;
 if size(f,2) > 0 && low_pass > 0
 [lp_f_1,lp_f_2] = ellip(filter_order,3,60,low_pass/(sampling_freq/2));
-f = filter(lp_f_1,lp_f_2,f')';
+f = filter(lp_f_1,lp_f_2,[zeros(size(f)) f zeros(size(f))]')';
+f = f(:,size(f,2)/3+1:2*size(f,2)/3);
 end
 if size(f,2) > 0 && high_pass > 0
 [hp_f_1,hp_f_2] = ellip(filter_order,3,60,high_pass/(sampling_freq/2),'high');
-f = filter(hp_f_1,hp_f_2,f')';
+f = filter(hp_f_1,hp_f_2,[zeros(size(f)) f zeros(size(f))]')';
+f = f(:,size(f,2)/3+1:2*size(f,2)/3);
 end
 
 if source_direction_mode == 1 || source_direction_mode == 2 
