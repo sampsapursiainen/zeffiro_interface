@@ -78,6 +78,7 @@ if plot_type == 7
 
 time_series = time_series./sum(time_series);    
 y_vals = corr(time_series'); 
+y_vals(find(isnan(y_vals))) = 1;
 
 plot_mode = 2;
 
@@ -87,6 +88,7 @@ end
 if plot_type == 8
   
 y_vals = corr(time_series'); 
+y_vals(find(isnan(y_vals))) = 1;
 
 plot_mode = 2;
 
@@ -97,7 +99,8 @@ if plot_type == 9
 time_series = time_series./sum(time_series);    
 D = diag(sqrt(mean(time_series,2)));
 D = D./max(D(:));
-y_vals = corr(time_series'); 
+y_vals = corr(time_series');
+y_vals(find(isnan(y_vals))) = 1;
 y_vals = D*y_vals*D;
 
 
@@ -110,7 +113,8 @@ if plot_type == 10
 time_series = time_series./sum(time_series);    
 D = diag(sqrt(max(time_series,[],2)));
 D = D./max(D(:));
-y_vals = corr(time_series'); 
+y_vals = corr(time_series');
+y_vals(find(isnan(y_vals))) = 1;
 y_vals = D*y_vals*D;
 
 
@@ -342,7 +346,7 @@ y_labels = text((-0.01*(length(x_vals)+1)+0.5)*ones(1,length(x_vals(2:2:end))),x
 set(y_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',0, 'Fontsize', 8);
 set(evalin('base','zef.h_axes1'),'xlim',[0 length(x_vals)+1]);
 set(evalin('base','zef.h_axes1'),'ylim',[0 length(x_vals)+1]);
-y_label = text((length(x_vals)+1)/2,-0.01*(length(x_vals)+1),y_string,'Parent',evalin('base','zef.h_axes1'));
+y_label = text((length(x_vals)+1)/2,-0.03*(length(x_vals)+1),y_string,'Parent',evalin('base','zef.h_axes1'));
 set(y_label,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',0, 'Fontsize', 8);
 hold(evalin('base','zef.h_axes1'),'off');
 
