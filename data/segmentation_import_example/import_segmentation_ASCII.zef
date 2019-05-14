@@ -1,12 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Do not change or remove this header. This file allows one to import a
 surface segmentation consisting of a set of ASCII files to the Zeffiro
-Interface (ZI), Copyright (c) Sampsa Pursiainen, 2018. For importing, this
+Interface (ZI), (c) 2018- Sampsa Pursiainen & ZI Team. For importing, this
 file should be placed in the folder containing the files and opened via
 ZI's import menu item 'Import ASCII segmentation from folder'. The files
 can be either DAT files containing either points or triangles, or ASC
-files exported from the FreeSurfer Software Suite, Copyright (c)
-Freesufer, 2013.
+files exported from the FreeSurfer Software Suite, (c) Freesufer, 2013.
 
 In the former case, the folder must contain two files per each triangular
 tissue surface mesh (filename_points.dat and filename_triangles.dat),
@@ -23,7 +22,7 @@ Of these, a mesh for each tissue compartment is specified by a single
 comma-separated line of the following form:
 
 filename, compartment name, scaling, sigma, priority, activity, name,
-invert, extension
+invert, extension, xcorr, ycorr, zcorr
 
 Here, the filename appears without any extensions; compartment_name is as
 in the list above, scaling, sigma and priority parameters are as in ZI's
@@ -33,14 +32,14 @@ constrained activity, 2 = unconstrained activity, or 3 = inner cortex [for
 white_matter only]); name is the compartment name as it appears in ZI;
 invert is for inverting an inward-pointing surface normal (0=not inverted,
 1=inverted); and extension is either ASC (asc) or DAT (dat) for FreeSurfer
-and other meshes, respectively.
+and other meshes, respectively. xcorr, ycorr, and zcorr shift x, y and z.
 
 In the special case of sensor_points and sensor_directions, it is only
 possible to use the DAT format. Each one of these is imported via a single
 file (filename.dat), and the line for importing is of the form:
 
 filename, compartment name, scaling, x-translation, y-translation,
-z-translation, xy-rotation, yz-rotation, zx-rotation
+z-translation, xy-rotation, yz-rotation, zx-rotation, xcorr, ycorr, zcorr
 
 The scaling, translating and rotation parameters are as they appear in
 ZI's segmentation tool, and selecting 0 for them, means that the default
@@ -55,16 +54,16 @@ the respective order.
 The segmentation list starts after the header and can be edited freely by
 the user. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-outer_skin, scalp, 1, 0.33, 0, 0, Scalp, 0, DAT
-outer_skull, skull, 1, 0.0064, 0, 0, Skull, 0, DAT
-inner_skull, csf, 1, 1.79, 0, 0, Cerebrospinal fluid, 0, DAT
-lh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum Cortex, 0, ASC
-rh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum Cortex, 0, ASC
-lh_pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC
-rh_pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC
-lh_white, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC
-rh_white, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC
-cem_electrodes, sensor_points, 0, 0, 0, 0, 0, 0, 0
+outer_skin,scalp,1,0.33,0,0,Scalp,0,DAT,0,0,0
+outer_skull,skull,1,0.0064,0,0,Skull,0,DAT,0,0,0
+inner_skull, csf, 1, 1.79, 0, 0,Cerebrospinal fluid,0,DAT,0,0,0
+lh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
+rh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
+lh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
+rh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
+lh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
+rh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
+cem_electrodes, sensor_points,0,0,0,0,0,0,0,0,0,0
 
 
 
