@@ -22,7 +22,7 @@ Of these, a mesh for each tissue compartment is specified by a single
 comma-separated line of the following form:
 
 filename, compartment name, scaling, sigma, priority, activity, name,
-invert, extension, xcorr, ycorr, zcorr
+invert, extension, xcorr, ycorr, zcorr 
 
 Here, the filename appears without any extensions; compartment_name is as
 in the list above, scaling, sigma and priority parameters are as in ZI's
@@ -32,7 +32,8 @@ constrained activity, 2 = unconstrained activity, or 3 = inner cortex [for
 white_matter only]); name is the compartment name as it appears in ZI;
 invert is for inverting an inward-pointing surface normal (0=not inverted,
 1=inverted); and extension is either ASC (asc) or DAT (dat) for FreeSurfer
-and other meshes, respectively. xcorr, ycorr, and zcorr shift x, y and z.
+and other meshes, respectively. xcorr, ycorr, and zcorr are x-, y-, and z-
+pre-shifts (translations) which can be used to fine-tune the mesh points.
 
 In the special case of sensor_points and sensor_directions, it is only
 possible to use the DAT format. Each one of these is imported via a single
