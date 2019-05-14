@@ -7,6 +7,7 @@ void = [];
 loop_movie = 1;
 length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
+submesh_num = evalin('base','zef.submesh_num');
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
@@ -105,6 +106,7 @@ visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
+submesh_cell = cell(0);
 for k = 1 : 27
 switch k
     case 1
@@ -112,174 +114,203 @@ switch k
         var_1 = 'zef.d1_sigma';
         var_2 = 'zef.d1_priority';
         var_3 = 'zef.d1_visible';
+        var_4 = 'zef.d1_submesh_ind';
     color_str = evalin('base','zef.d1_color');
      case 2
         var_0 = 'zef.d2_on';
         var_1 = 'zef.d2_sigma';   
         var_2 = 'zef.d2_priority';
         var_3 = 'zef.d2_visible';
+        var_4 = 'zef.d2_submesh_ind';
         color_str = evalin('base','zef.d2_color');
      case 3
         var_0 = 'zef.d3_on';
         var_1 = 'zef.d3_sigma';   
         var_2 = 'zef.d3_priority';
         var_3 = 'zef.d3_visible';
+        var_4 = 'zef.d3_submesh_ind';
         color_str = evalin('base','zef.d3_color');
      case 4
         var_0 = 'zef.d4_on';
         var_1 = 'zef.d4_sigma';   
         var_2 = 'zef.d4_priority';
         var_3 = 'zef.d4_visible';
+        var_4 = 'zef.d4_submesh_ind';
         color_str = evalin('base','zef.d4_color');
      case 5
         var_0 = 'zef.d5_on';
         var_1 = 'zef.d5_sigma';
         var_2 = 'zef.d5_priority';
         var_3 = 'zef.d5_visible';
+        var_4 = 'zef.d5_submesh_ind';
     color_str = evalin('base','zef.d5_color');
      case 6
         var_0 = 'zef.d6_on';
         var_1 = 'zef.d6_sigma';   
         var_2 = 'zef.d6_priority';
         var_3 = 'zef.d6_visible';
+        var_4 = 'zef.d6_submesh_ind';
         color_str = evalin('base','zef.d6_color');
      case 7
         var_0 = 'zef.d7_on';
         var_1 = 'zef.d7_sigma';   
         var_2 = 'zef.d7_priority';
         var_3 = 'zef.d7_visible';
+        var_4 = 'zef.d7_submesh_ind';
         color_str = evalin('base','zef.d7_color');
      case 8
         var_0 = 'zef.d8_on';
         var_1 = 'zef.d8_sigma';   
         var_2 = 'zef.d8_priority';
         var_3 = 'zef.d8_visible';
+        var_4 = 'zef.d8_submesh_ind';
         color_str = evalin('base','zef.d8_color');
     case 9
         var_0 = 'zef.d9_on';
         var_1 = 'zef.d9_sigma';   
         var_2 = 'zef.d9_priority';
         var_3 = 'zef.d9_visible';
+        var_4 = 'zef.d9_submesh_ind';
         color_str = evalin('base','zef.d9_color');
      case 10
         var_0 = 'zef.d10_on';
         var_1 = 'zef.d10_sigma';   
         var_2 = 'zef.d10_priority';
         var_3 = 'zef.d10_visible';
+        var_4 = 'zef.d10_submesh_ind';
         color_str = evalin('base','zef.d10_color');
      case 11
         var_0 = 'zef.d11_on';
         var_1 = 'zef.d11_sigma';   
         var_2 = 'zef.d11_priority';
         var_3 = 'zef.d11_visible';
+        var_4 = 'zef.d11_submesh_ind';
         color_str = evalin('base','zef.d11_color');
      case 12
         var_0 = 'zef.d12_on';
         var_1 = 'zef.d12_sigma';   
         var_2 = 'zef.d12_priority';
         var_3 = 'zef.d12_visible';
+        var_4 = 'zef.d12_submesh_ind';
         color_str = evalin('base','zef.d12_color');
      case 13
         var_0 = 'zef.d13_on';
         var_1 = 'zef.d13_sigma';   
         var_2 = 'zef.d13_priority';
         var_3 = 'zef.d13_visible';
+        var_4 = 'zef.d13_submesh_ind';
         color_str = evalin('base','zef.d13_color');
   case 14
         var_0 = 'zef.d14_on';
         var_1 = 'zef.d14_sigma';
         var_2 = 'zef.d14_priority';
         var_3 = 'zef.d14_visible';
+        var_4 = 'zef.d14_submesh_ind';
     color_str = evalin('base','zef.d14_color');
   case 15
         var_0 = 'zef.d15_on';
         var_1 = 'zef.d15_sigma';   
         var_2 = 'zef.d15_priority';
         var_3 = 'zef.d15_visible';
+        var_4 = 'zef.d15_submesh_ind';
         color_str = evalin('base','zef.d15_color');
      case 16
         var_0 = 'zef.d16_on';
         var_1 = 'zef.d16_sigma';   
         var_2 = 'zef.d16_priority';
         var_3 = 'zef.d16_visible';
+        var_4 = 'zef.d16_submesh_ind';
         color_str = evalin('base','zef.d16_color');
      case 17
         var_0 = 'zef.d17_on';
         var_1 = 'zef.d17_sigma';   
         var_2 = 'zef.d17_priority';
         var_3 = 'zef.d17_visible';
+        var_4 = 'zef.d17_submesh_ind';
         color_str = evalin('base','zef.d17_color');
     case 18
         var_0 = 'zef.d18_on';
         var_1 = 'zef.d18_sigma';   
         var_2 = 'zef.d18_priority';
         var_3 = 'zef.d18_visible';
+        var_4 = 'zef.d18_submesh_ind';
         color_str = evalin('base','zef.d18_color');
      case 19
         var_0 = 'zef.d19_on';
         var_1 = 'zef.d19_sigma';   
         var_2 = 'zef.d19_priority';
         var_3 = 'zef.d19_visible';
+        var_4 = 'zef.d19_submesh_ind';
         color_str = evalin('base','zef.d19_color');
      case 20
         var_0 = 'zef.d20_on';
         var_1 = 'zef.d20_sigma';   
         var_2 = 'zef.d20_priority';
         var_3 = 'zef.d20_visible';
+        var_4 = 'zef.d20_submesh_ind';
         color_str = evalin('base','zef.d20_color');
      case 21
         var_0 = 'zef.d21_on';
         var_1 = 'zef.d21_sigma';   
         var_2 = 'zef.d21_priority';
         var_3 = 'zef.d21_visible';
+        var_4 = 'zef.d21_submesh_ind';
         color_str = evalin('base','zef.d21_color');
      case 22
         var_0 = 'zef.d22_on';
         var_1 = 'zef.d22_sigma';   
         var_2 = 'zef.d22_priority';
         var_3 = 'zef.d22_visible';
+        var_4 = 'zef.d22_submesh_ind';
         color_str = evalin('base','zef.d22_color');
     case 23
         var_0 = 'zef.w_on';
         var_1 = 'zef.w_sigma';    
         var_2 = 'zef.w_priority';
         var_3 = 'zef.w_visible';
+        var_4 = 'zef.w_submesh_ind';
         color_str = evalin('base','zef.w_color');
     case 24
         var_0 = 'zef.g_on';
         var_1 = 'zef.g_sigma';
         var_2 = 'zef.g_priority';
         var_3 = 'zef.g_visible';
+        var_4 = 'zef.g_submesh_ind';
         color_str = evalin('base','zef.g_color');
     case 25
         var_0 = 'zef.c_on';
         var_1 = 'zef.c_sigma';
         var_2 = 'zef.c_priority';
         var_3 = 'zef.c_visible';
+        var_4 = 'zef.c_submesh_ind';
         color_str = evalin('base','zef.c_color');
      case 26
         var_0 = 'zef.sk_on';
         var_1 = 'zef.sk_sigma';
         var_2 = 'zef.sk_priority';
         var_3 = 'zef.sk_visible';
+        var_4 = 'zef.sk_submesh_ind';
         color_str = evalin('base','zef.sk_color');
      case 27
         var_0 = 'zef.sc_on';
         var_1 = 'zef.sc_sigma';
         var_2 = 'zef.sc_priority';
         var_3 = 'zef.sc_visible';
+        var_4 = 'zef.sc_submesh_ind';
         color_str = evalin('base','zef.sc_color');
      end
 on_val = evalin('base',var_0);      
 sigma_val = evalin('base',var_1);  
 priority_val = evalin('base',var_2);
 visible_val = evalin('base',var_3);
+submesh_ind = evalin('base',var_4);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
+submesh_cell{i} = submesh_ind;
 if k == 1 && evalin('base','zef.d1_sources');
     aux_brain_ind = [aux_brain_ind i];
 end
@@ -392,6 +423,17 @@ end
 
 aux_ind_1 = [];
 aux_ind_2 = cell(1,length(reuna_t));
+if submesh_num > 0 
+    for i = 1 : length(reuna_t)
+    if submesh_num <= length(submesh_cell{i})
+        if submesh_num == 1
+        aux_ind_2{i} = [1:submesh_cell{i}(submesh_num)]';
+        else
+        aux_ind_2{i} = [submesh_cell{i}(submesh_num-1)+1:submesh_cell{i}(submesh_num)]';
+    end
+    end
+    end
+end
 
 if evalin('base','zef.cp_on')
 cp_a = evalin('base','zef.cp_a');
@@ -407,7 +449,7 @@ else
 aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d);
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
+if not(isempty(aux_ind_2{i}))
 aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d));
 else
 aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d);
@@ -468,7 +510,7 @@ aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
 sensors = sensors(aux_ind_1,:);   
 end
 for i = 1 : length(reuna_t)
-if evalin('base','zef.cp_mode') == 1
+if evalin('base','zef.cp_mode') == 1 
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 if ismember(evalin('base','zef.visualization_type'),[3 4])
 if ismember(i, aux_brain_ind)
@@ -512,7 +554,25 @@ reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 end
 end
 end
+elseif submesh_num > 0
+for i = 1 : length(reuna_t)
+    if not(isempty(aux_ind_2{i}))
+reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
+if ismember(evalin('base','zef.visualization_type'),[3 4])
+if ismember(i, aux_brain_ind)
+ab_ind = find(aux_brain_ind==i);
+s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
+if evalin('base','zef.use_parcellation')
+for p_ind = selected_list
+[aux_is_1, aux_is_2, aux_is_3] = intersect(p_i_ind{p_ind}{2}{ab_ind},aux_ind_2{i});
+p_i_ind{p_ind}{2}{ab_ind} = aux_is_3;
 end
+end
+end;
+end
+end
+end
+    end
 
 aux_ind_1 = [];
 aux_ind_2 = cell(1,length(reuna_t));

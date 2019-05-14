@@ -12,6 +12,9 @@ zef_close_tools;
 zef_close_figs;
 zef_init;
 load([zef.file_path zef.file]);
+if (isfield(zef_data,'submesh_num'));
+          zef.submesh_num = zef_data.submesh_num; 
+          end
           if (isfield(zef_data,'parcellation_tolerance'));
           zef.parcellation_tolerance = zef_data.parcellation_tolerance; 
           end

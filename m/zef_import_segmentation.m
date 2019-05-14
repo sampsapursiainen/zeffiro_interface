@@ -10,7 +10,7 @@ if not(isequal(file_name,0));
     
 h_import = fopen([folder_name file_name]);
 ini_cell = textscan(h_import,'%s','HeaderLines',57,'Delimiter',',');
-n_columns = 9;
+n_columns = 12;
 
 compartment_cell = {'detail_1', 'detail_2', 'detail_3', 'detail_4', 'detail_5', 'detail_6', 'detail_7','detail_8','detail_9', ...
     'detail_10', 'detail_11', 'detail_12', 'detail_13', 'detail_14', 'detail_15', 'detail_16','detail_17','detail_18',...
@@ -42,6 +42,9 @@ file_name_1 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 
 sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
+sensor_points(:,1) = sensor_points(:,1) + ini_cell{1}{n_columns*(i-1)+10};
+sensor_points(:,2) = sensor_points(:,2) + ini_cell{1}{n_columns*(i-1)+11};
+sensor_points(:,3) = sensor_points(:,3) + ini_cell{1}{n_columns*(i-1)+12};
 
 n_s_points = size(sensor_points,1);
 m_s_points = size(sensor_points,2);
@@ -172,6 +175,9 @@ aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
 
 point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
 point_data = cell2mat(point_data);
+point_data(:,1) = point_data(:,1) + ini_cell{1}{n_columns*(i-1)+10};
+point_data(:,2) = point_data(:,2) + ini_cell{1}{n_columns*(i-1)+11};
+point_data(:,3) = point_data(:,3) + ini_cell{1}{n_columns*(i-1)+12};
 
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
@@ -187,6 +193,9 @@ mesh_data = load(file_name_1);
 mesh_data = double(mesh_data);
 point_data = mesh_data(:,1:3);
 point_data = mesh_data(:,1:3);
+point_data(:,1) = point_data(:,1) + ini_cell{1}{n_columns*(i-1)+10};
+point_data(:,2) = point_data(:,2) + ini_cell{1}{n_columns*(i-1)+11};
+point_data(:,3) = point_data(:,3) + ini_cell{1}{n_columns*(i-1)+12};
 
 file_name_2 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '_triangles.dat']; 
 

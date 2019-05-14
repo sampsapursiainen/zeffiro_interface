@@ -1,5 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+zef.submesh_num = str2num(get(zef.h_submesh_num,'string'));
 zef.reconstruction_type = get(zef.h_reconstruction_type,'value');
 zef.parcellation_type = get(zef.h_parcellation_type,'value');
 zef.parcellation_quantile = str2num(get(zef.h_parcellation_quantile,'string'));
