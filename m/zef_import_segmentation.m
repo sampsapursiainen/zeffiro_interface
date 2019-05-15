@@ -42,9 +42,9 @@ file_name_1 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '.dat'];
 
 sensor_points = load(file_name_1);
 sensor_points = double(sensor_points);
-sensor_points(:,1) = sensor_points(:,1) + ini_cell{1}{n_columns*(i-1)+10};
-sensor_points(:,2) = sensor_points(:,2) + ini_cell{1}{n_columns*(i-1)+11};
-sensor_points(:,3) = sensor_points(:,3) + ini_cell{1}{n_columns*(i-1)+12};
+sensor_points(:,1) = sensor_points(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
+sensor_points(:,2) = sensor_points(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
+sensor_points(:,3) = sensor_points(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
 
 n_s_points = size(sensor_points,1);
 m_s_points = size(sensor_points,2);
@@ -175,9 +175,9 @@ aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
 
 point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
 point_data = cell2mat(point_data);
-point_data(:,1) = point_data(:,1) + ini_cell{1}{n_columns*(i-1)+10};
-point_data(:,2) = point_data(:,2) + ini_cell{1}{n_columns*(i-1)+11};
-point_data(:,3) = point_data(:,3) + ini_cell{1}{n_columns*(i-1)+12};
+point_data(:,1) = point_data(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
+point_data(:,2) = point_data(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
+point_data(:,3) = point_data(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
 
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
@@ -193,9 +193,9 @@ mesh_data = load(file_name_1);
 mesh_data = double(mesh_data);
 point_data = mesh_data(:,1:3);
 point_data = mesh_data(:,1:3);
-point_data(:,1) = point_data(:,1) + ini_cell{1}{n_columns*(i-1)+10};
-point_data(:,2) = point_data(:,2) + ini_cell{1}{n_columns*(i-1)+11};
-point_data(:,3) = point_data(:,3) + ini_cell{1}{n_columns*(i-1)+12};
+point_data(:,1) = point_data(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
+point_data(:,2) = point_data(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
+point_data(:,3) = point_data(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
 
 file_name_2 = [folder_name  ini_cell{1}{n_columns*(i-1)+1} '_triangles.dat']; 
 
@@ -214,6 +214,12 @@ end
 for j = 1 : length(compartment_cell)
     
 if isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{j})
+    
+if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') && j < 23
+   
+    [point_data] = zef_smooth_surface(point_data,triangle_data,0.5,50);
+    
+end
     
 compartment_count_vec(j+2) = compartment_count_vec(j+2) + 1;
 if isequal(ini_cell{1}{n_columns*(i-1)+8},'0')
