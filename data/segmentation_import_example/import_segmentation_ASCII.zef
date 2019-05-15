@@ -57,14 +57,14 @@ the user.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 outer_skin,scalp,1,0.33,0,0,Scalp,0,DAT,0,0,0
 outer_skull,skull,1,0.0064,0,0,Skull,0,DAT,0,0,0
-inner_skull, csf, 1, 1.79, 0, 0,Cerebrospinal fluid,0,DAT,0,0,0
+inner_skull,csf,1,1.79,0,0,Cerebrospinal fluid,0,DAT,0,0,0
 lh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
 rh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
 lh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
 rh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
 lh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
 rh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
-cem_electrodes, sensor_points,0,0,0,0,0,0,0,0,0,0
+cem_electrodes,sensor_points,0,0,0,0,0,0,0,0,0,0
 
 
 
