@@ -217,7 +217,7 @@ if isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{j})
     
 if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') && j < 23
    
-    [point_data] = zef_smooth_surface(point_data,triangle_data,0.5,50);
+    [point_data] = zef_smooth_surface(point_data,triangle_data,0.5,20);
     
 end
     
