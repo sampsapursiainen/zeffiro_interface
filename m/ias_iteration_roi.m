@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,rec_source] = ias_iteration_roi(void)
 
-
+h = waitbar(0,['IAS MAP iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
@@ -486,13 +486,11 @@ f = f/data_norm;
 filter_order = 3;
 if size(f,2) > 0 && low_pass > 0
 [lp_f_1,lp_f_2] = ellip(filter_order,3,80,low_pass/(sampling_freq/2));
-f = filter(lp_f_1,lp_f_2,[zeros(size(f)) f zeros(size(f))]')';
-f = f(:,size(f,2)/3+1:2*size(f,2)/3);
+f = filter(lp_f_1,lp_f_2,f')';
 end
 if size(f,2) > 0 && high_pass > 0
 [hp_f_1,hp_f_2] = ellip(filter_order,3,80,high_pass/(sampling_freq/2),'high');
-f = filter(hp_f_1,hp_f_2,[zeros(size(f)) f zeros(size(f))]')';
-f = f(:,size(f,2)/3+1:2*size(f,2)/3);
+f = filter(hp_f_1,hp_f_2,f')';
 end
 
 if source_direction_mode == 1 || source_direction_mode == 2 
@@ -519,7 +517,7 @@ f = f.*gaussian_window;
 f = mean(f,2);
 end
 if f_ind == 1
-h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
