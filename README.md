@@ -37,7 +37,7 @@ Pursiainen, S. (2012). Raviart–Thomas-type sources adapted to applied EEG
 and MEG: implementation and results. Inverse Problems, 28(6), 065013.
 
 The IAS MAP (iterative alternating sequential maximum a posteriori)
-inversion method is based on:
+inversion method and the hierarchical Bayesian sampler are based on:
 
 Calvetti, D., Hakula, H., Pursiainen, S., & Somersalo, E. (2009).
 Conditionally Gaussian hypermodels for cerebral source localization. SIAM
