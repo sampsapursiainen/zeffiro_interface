@@ -2,10 +2,23 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,rec_source] = mcmc_sampler(void)
 
+h = waitbar(0,['Sampling.']); 
+
+n_sampler = evalin('base','zef.inv_n_sampler'); 
+n_burn_in = evalin('base','zef.inv_n_burn_in');
+
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
 
+source_positions = evalin('base','zef.source_positions');
+source_positions = source_positions(s_ind_1,:);
+roi_mode = evalin('base','zef.inv_roi_mode');
+roi_threshold = evalin('base','zef.inv_roi_threshold');
+roi_sphere = evalin('base', 'zef.inv_roi_sphere');
+rec_source = evalin('base', 'zef.inv_rec_source');
+r_roi = roi_sphere(:,4); 
+c_roi = roi_sphere(:,1:3)';
 beta = evalin('base','zef.inv_beta');
 theta0 = evalin('base','zef.inv_theta0');
 eta = beta - 1.5;
@@ -14,18 +27,10 @@ std_lhood = evalin('base','zef.inv_likelihood_std');
 sampling_freq = evalin('base','zef.inv_sampling_frequency');
 high_pass = evalin('base','zef.inv_low_cut_frequency');
 low_pass = evalin('base','zef.inv_high_cut_frequency');
-roi_mode = evalin('base','zef.inv_roi_mode');
-roi_threshold = evalin('base','zef.inv_roi_threshold');
-roi_sphere = evalin('base', 'zef.inv_roi_sphere');
-rec_source = evalin('base', 'zef.inv_rec_source');
-n_sampler = evalin('base','zef.inv_n_sampler'); 
-n_burn_in = evalin('base','zef.inv_n_burn_in');
-
 number_of_frames = evalin('base','zef.number_of_frames');
 time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
-source_positions = evalin('base','zef.source_positions');
 
 if source_direction_mode == 2
 
@@ -286,7 +291,7 @@ if k == 18 && evalin('base','zef.d18_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.d18_sources')-1];
 end
-if k == 19 && evalin('base','zef.d10_sources');
+if k == 19 && evalin('base','zef.d19_sources');
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base','zef.d19_sources')-1];
 end
@@ -324,6 +329,7 @@ if k == 27 && evalin('base','zef.sc_sources');
 end
 end
 end
+
 a_d_i_vec = [];
 aux_p = [];
 aux_t = [];
@@ -384,12 +390,68 @@ clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
 
 end
 
-%if evalin('base','zef.use_gpu') == 1
+
+I_aux = [];
+roi_ind_vec = [];
+
+if roi_mode == 1
+
+    
+for j = 1 : size(roi_sphere,1)
+
+r_aux = find(sqrt(sum((source_positions'-c_roi(:,j*ones(1,size(source_positions,1)))).^2))<=r_roi(j));
+I_aux = [I_aux r_aux];
+roi_ind_vec = [roi_ind_vec j*ones(1,size(r_aux,2))];
+
+end
+roi_ind_vec = roi_ind_vec(:);
+end
+
+if roi_mode == 2
+reconstruction = evalin('base','zef.reconstruction');
+reconstruction = reconstruction(s_ind_1);
+reconstruction = reshape(reconstruction,length(reconstruction)/3,3);
+reconstruction = sqrt(sum(reconstruction.^2,2));
+reconstruction = reconstruction/max(reconstruction(:));
+I_aux = find(reconstruction >= roi_threshold);
+end
+
+if roi_mode == 3
+source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
+p_ind_aux_1 = [];
+p_selected = evalin('base','zef.parcellation_selected');
+for p_ind = 1 : length(p_selected)
+p_ind_aux_2 = evalin('base',['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
+p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
+end
+p_ind_aux_1 = unique(p_ind_aux_1);
+I_aux = unique(source_ind_aux(p_ind_aux_1,:));
+I_aux = find(ismember(s_ind_0,I_aux));
+end
+
+
+if source_direction_mode == 2
+    roi_length = length(I_aux(:));
+    s_ind_5 = intersect(s_ind_4,I_aux(:));
+    s_ind_5 = find(ismember(I_aux(:),s_ind_5));
+end
+
+if source_direction_mode == 1 || source_direction_mode == 2
+roi_aux_ind = [I_aux(:) ; n_interp + I_aux(:) ; 2*n_interp + I_aux(:)];
+else
+roi_aux_ind = I_aux(:);
+end
+roi_aux_ind = roi_aux_ind(:);
+
+n_lead_field = size(L,2);
+L = L(:,roi_aux_ind);
+
+%if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 %L = gpuArray(L);
 %end
 %L_aux = L;
-S_mat = std_lhood^2*eye(size(L,1));
-%if evalin('base','zef.use_gpu') == 1
+%S_mat = std_lhood^2*eye(size(L,1));
+%if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 %S_mat = gpuArray(S_mat);
 %end
 
@@ -435,14 +497,14 @@ if size(f,2) > 0 && high_pass > 0
 f = filter(hp_f_1,hp_f_2,f')';
 end
 
-if source_direction_mode == 1 || source_direction_mode == 2
+if source_direction_mode == 1 || source_direction_mode == 2 
 z_aux = zeros(size(L,2),1); 
 end
 if source_direction_mode == 3 
 z_aux = zeros(3*size(L,2),1);
 end
-z_vec = zeros(size(L,2),1); 
-%theta = theta0*ones(length(z_vec),1);
+z_vec = ones(size(L,2),1); 
+theta = theta0*ones(length(z_vec),1);
 %aux_norm = (sum(L.^2))';
 %aux_norm = aux_norm./max(aux_norm(:));
 %theta = theta0*aux_norm;
@@ -459,30 +521,29 @@ f = f.*gaussian_window;
 f = mean(f,2);
 end
 %if f_ind == 1
-%h = waitbar(0,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+%waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 %end
-n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
+%n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
-%if evalin('base','zef.use_gpu') == 1
+%if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 %f = gpuArray(f);
 %end
 
 gibbs_sampler;
 
-if source_direction_mode == 2
-z_vec_aux = (z_vec(s_ind_4) + z_vec(n_interp+s_ind_4) + z_vec(2*n_interp+s_ind_4))/3;
-z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1); 
-z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2); 
-z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3); 
-%z_vec = z_vec(:);
-end
 
-if source_direction_mode == 3
-z_vec = [z_vec.*source_directions(:,1); z_vec.*source_directions(:,2);  z_vec.*source_directions(:,3)];
+if ismember(source_direction_mode, [1,2])
+z_vec_aux = zeros(n_lead_field,1);
+else 
+z_vec_aux = zeros(3*n_lead_field,1); 
 end
+z_vec_aux(roi_aux_ind) = z_vec;
+z_vec = z_vec_aux;
 
-if source_direction_mode == 1 || source_direction_mode == 2
-z_aux(s_ind_1) = z_vec;
+
+
+if ismember(source_direction_mode, [1,2])
+    z_aux(s_ind_1) = z_vec;
 end
 if source_direction_mode == 3
 z_aux(s_ind_2) = z_vec;
@@ -506,8 +567,4 @@ else
 aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2)); 
 z = z./max(aux_norm_vec);
 end;
-%close(h);
-
-z = z./max(abs(z(:)));
-
-end
+close(h);

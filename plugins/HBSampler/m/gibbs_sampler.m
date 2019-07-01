@@ -15,50 +15,6 @@ t_res = 20;
 %One-dimensional sampling tolerance (constant c in the slides).
 t_tol = 7;
 
-I_aux = [];
-roi_ind_vec = [];
-
-if roi_mode == 1
-
-    
-for j = 1 : size(roi_sphere,1)
-
-r_aux = find(sqrt(sum((source_positions'-c_roi(:,j*ones(1,size(source_positions,1)))).^2))<=r_roi(j));
-I_aux = [I_aux r_aux];
-roi_ind_vec = [roi_ind_vec j*ones(1,size(r_aux,2))];
-
-end
-roi_ind_vec = roi_ind_vec(:);
-end
-
-if roi_mode == 2
-reconstruction = evalin('base','zef.reconstruction');
-reconstruction = reconstruction(s_ind_1);
-reconstruction = reshape(reconstruction,length(reconstruction)/3,3);
-reconstruction = sqrt(sum(reconstruction.^2,2));
-reconstruction = reconstruction/max(reconstruction(:));
-I_aux = find(reconstruction >= roi_threshold);
-end
-
-if roi_mode == 3
-source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
-p_ind_aux_1 = [];
-p_selected = evalin('base','zef.parcellation_selected');
-for p_ind = 1 : length(p_selected)
-p_ind_aux_2 = evalin('base',['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
-p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
-end
-p_ind_aux_1 = unique(p_ind_aux_1);
-I_aux = unique(source_ind_aux(p_ind_aux_1,:));
-I_aux = find(ismember(s_ind_0,I_aux));
-end
-
-if source_direction_mode == 1
-roi_aux_ind = [I_aux(:) ; n_interp + I_aux(:) ; 2*n_interp + I_aux(:)];
-else
-roi_aux_ind = I_aux(:);
-end
-roi_aux_ind = roi_aux_ind(:);
 
 if evalin('base','zef.inv_hyperprior') == 1
 hypermodel = 'Gamma';
@@ -71,7 +27,7 @@ kappa = beta + 1.5;
 
 decay_val_hyperprior = t_tol;
 nbins_hyperprior = t_res;
-A_aux = L(:,roi_aux_ind);
+A_aux = L;
 y = f;
 n_dimensions = size(A_aux,2);
 
@@ -85,7 +41,7 @@ size_A_aux = size(A_aux,1);
 size_x = size(x,1);
 
 i = 0;
-h = waitbar(i/n_iter,['Sampling.']); 
+
 
 tic;
 for i = 1 : n_iter
@@ -225,11 +181,18 @@ x_history = x_history(:,burn_in+1:end);
 x_cm = x_cm/(n_iter - burn_in);
 z_vec = x_cm;
 
-if source_direction_mode == 2 || source_direction_mode == 3
-z_vec = [z_vec.*source_directions(roi_aux_ind,1); z_vec.*source_directions(roi_aux_ind,2);  z_vec.*source_directions(roi_aux_ind,3)];
-%z_vec = z_vec(:);
+if ismember(source_direction_mode,[2])
+z_vec_aux = (z_vec(s_ind_5) + z_vec(roi_length+s_ind_5) + z_vec(2*roi_length+s_ind_5))/3;
+z_vec(s_ind_5) = z_vec_aux.*source_directions(I_aux(s_ind_5),1); 
+z_vec(roi_length+s_ind_5) = z_vec_aux.*source_directions(I_aux(s_ind_5),2); 
+z_vec(2*roi_length+s_ind_5) = z_vec_aux.*source_directions(I_aux(s_ind_5),3); 
 end
 
+if source_direction_mode == 3
+z_vec = [z_vec.*source_directions(roi_aux_ind,1); z_vec.*source_directions(roi_aux_ind,2);  z_vec.*source_directions(roi_aux_ind,3)];
+roi_aux_ind = [roi_aux_ind(:) ; n_interp + roi_aux_ind(:) ; 2*n_interp + roi_aux_ind(:)];
+%z_vec = z_vec(:);
+end
 
 if roi_mode == 1
 
@@ -244,10 +207,9 @@ for j = 1 : size(roi_sphere,1)
     rec_dir = rec_dir/rec_norm;
 rec_source(j,1:7) = [rec_pos rec_dir rec_norm];
 end
-
 end
 
-z_vec = zeros(size(L,2),1);
-z_vec(roi_aux_ind) = x_cm./max(abs(x_cm(:)));
+%z_vec = zeros(size(L,2),1);
+%z_vec(roi_aux_ind) = x_cm./max(abs(x_cm(:)));
 
-close(h);
+%close(h);
