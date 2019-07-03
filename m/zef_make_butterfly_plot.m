@@ -27,11 +27,11 @@ end;
 f = f/data_norm;
 
 filter_order = 3;
-if size(f,2) > 0 && low_pass > 0
+if size(f,2) > 1 && low_pass > 0
 [lp_f_1,lp_f_2] = ellip(filter_order,3,80,low_pass/(sampling_freq/2));
 f = filter(lp_f_1,lp_f_2,f')';
 end
-if size(f,2) > 0 && high_pass > 0
+if size(f,2) > 1 && high_pass > 0
 [hp_f_1,hp_f_2] = ellip(filter_order,3,80,high_pass/(sampling_freq/2),'high');
 f = filter(hp_f_1,hp_f_2,f')';
 end
