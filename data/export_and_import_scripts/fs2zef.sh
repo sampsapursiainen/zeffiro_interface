@@ -1,10 +1,10 @@
-#Commands needed for extracting data from Freesurefer to Zeffiro. 
+#Commands needed for extracting data of MikJo from Freesurefer to Zeffiro. 
 #Atena Rezaei, 2019.
 #System specific variable definitions
 
-SUBJECT_DIR="<Substitute the subject directory path here>"
-SUBJECT="<Substitute the subject name here>"
-OUT_DIR="<Substitute the output directory here>"
+SUBJECT_DIR="/media/datadisk/atena/freesurfer_subjects"
+SUBJECT="EskSa"
+OUT_DIR="/media/datadisk/atena/freesurfer_subjects/fs2zef"
 
 #Reconstructing the data out of T1-weighted data including subcortical 
 #structures.
@@ -42,7 +42,7 @@ mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 15 $OUT_DIR/4th-Ventricle.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 16 $OUT_DIR/Brainstem.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 17 $OUT_DIR/lh.Hippocampus.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 18 $OUT_DIR/lh.Amygdala.asc
-mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 26 $OUT_DIR/lh.Accumbence.asc
+mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 26 $OUT_DIR/lh.Accumbens.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 28 $OUT_DIR/LVentral_DC.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 30 $OUT_DIR/LVessel.asc
 mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 31 $OUT_DIR/LChoroid_plexus.asc
