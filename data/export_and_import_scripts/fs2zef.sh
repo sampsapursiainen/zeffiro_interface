@@ -102,7 +102,7 @@ mri_annotation2label  --subject $SUBJECT --annotation aparc --hemi rh --ctab apa
 #The data in the .annot files can be read using the matlab script
 #Command 7:
 
-matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/$SUBJECT/'; create_colortable; exit;";
+matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/$SUBJECT/';[vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.a2009s.annot']);save color_table_lh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.a2009s.annot']); save color_table_rh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.annot']); save color_table_lh_36.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.annot']); save color_table_rh_36.mat colortable label vertices;exit;";
 #Create matlab version colortables.
 
 #Merging labels 
