@@ -107,10 +107,10 @@ matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/$SUBJECT/';[
 
 #Merging labels 
 #Comamnd 8:
-mri_mergelabels -d $SUBJECT_DIR/$SUBJECT/lh.aparc_76/ -o $OUT_DIR/lh_labels_76.asc
-mri_mergelabels -d $SUBJECT_DIR/$SUBJECT/rh.aparc_76/ -o $OUT_DIR/rh_labels_76.asc
-mri_mergelabels -d $SUBJECT_DIR/$SUBJECT/lh.aparc_36/ -o $OUT_DIR/lh_labels_36.asc
-mri_mergelabels -d $SUBJECT_DIR/$SUBJECT/rh.aparc_36/ -o $OUT_DIR/rh_labels_36.asc
+mri_mergelabels -d $OUT_DIR/lh.aparc_76/ -o $OUT_DIR/lh_labels_76.asc
+mri_mergelabels -d $OUT_DIR/rh.aparc_76/ -o $OUT_DIR/rh_labels_76.asc
+mri_mergelabels -d $OUT_DIR/lh.aparc_36/ -o $OUT_DIR/lh_labels_36.asc
+mri_mergelabels -d $OUT_DIR/rh.aparc_36/ -o $OUT_DIR/rh_labels_36.asc
 
 #matlab -nodisplay -nosplash -nodesktop -r "create_points";
 
