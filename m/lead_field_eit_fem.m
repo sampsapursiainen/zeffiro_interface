@@ -660,6 +660,8 @@ close(h);
 %for i = length(source_ind)
 %L_eit_aux(:,i) = L_eit_aux(:,i)/tilavuus_vec_aux(i); 
 %end
+
+L_eit = L_eit_aux;
  
  dipole_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  dipole_directions = ones(size(dipole_locations));
