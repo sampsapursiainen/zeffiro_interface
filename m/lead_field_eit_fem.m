@@ -618,7 +618,9 @@ bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_6 * bg_data;
 bg_data = bg_data(:);
 
-L_eit_aux = Aux_mat*C*Aux_mat*Current_pattern;
+L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
+
+Aux_mat_7 = Aux_mat*C*Aux_mat*Current_pattern;
 
 waitbar(0,h,'Interpolation.');
 
@@ -641,8 +643,8 @@ Aux_mat_3 = Aux_mat_1 + Aux_mat_2 + Aux_mat_2';
 Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
 Aux_mat_5 = Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
  
-L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:);
-L_eit = - Aux_mat_6*L_eit_aux;
+L_eit_aux(:,eit_ind(i)) = Aux_mat_7(:) + Aux_mat_5(:);
+L_eit = -Aux_mat_6*L_eit_aux;
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
 
@@ -650,7 +652,7 @@ if mod(i,floor(K/50))==0
 time_val = toc;
 waitbar(i/K,h,['Interpolation. Ready: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
-end
+ end
 
 waitbar(1,h);
 
@@ -664,4 +666,3 @@ close(h);
  dipole_directions = ones(size(dipole_locations));
 
 end
-
