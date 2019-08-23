@@ -620,7 +620,7 @@ bg_data = bg_data(:);
 
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 
-Aux_mat_7 = Aux_mat*C*Aux_mat*Current_pattern;
+Aux_mat_7 = - Aux_mat_6*(Aux_mat*C*Aux_mat*Current_pattern);
 
 waitbar(0,h,'Interpolation.');
 
@@ -641,10 +641,9 @@ Aux_mat_2 = [0 aux_vec(2) aux_vec(3) aux_vec(4);
            0 0 0 0];
 Aux_mat_3 = Aux_mat_1 + Aux_mat_2 + Aux_mat_2'; 
 Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
-Aux_mat_5 = Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
+Aux_mat_5 = - Aux_mat_6*(Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern)));
  
 L_eit_aux(:,eit_ind(i)) = Aux_mat_7(:) + Aux_mat_5(:);
-L_eit = -Aux_mat_6*L_eit_aux;
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
 
