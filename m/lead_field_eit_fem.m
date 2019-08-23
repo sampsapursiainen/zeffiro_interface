@@ -642,7 +642,7 @@ Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
 Aux_mat_5 = Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern));
  
 L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:);
-L_eit = Aux_mat_6*L_eit_aux;
+L_eit = - Aux_mat_6*L_eit_aux;
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
 
@@ -650,7 +650,7 @@ if mod(i,floor(K/50))==0
 time_val = toc;
 waitbar(i/K,h,['Interpolation. Ready: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
- end
+end
 
 waitbar(1,h);
 
@@ -659,8 +659,6 @@ close(h);
 %for i = length(source_ind)
 %L_eit_aux(:,i) = L_eit_aux(:,i)/tilavuus_vec_aux(i); 
 %end
-
- L_eit = L_eit_aux;
  
  dipole_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  dipole_directions = ones(size(dipole_locations));
