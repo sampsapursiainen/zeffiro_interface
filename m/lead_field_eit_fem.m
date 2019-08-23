@@ -618,7 +618,7 @@ bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_6 * bg_data;
 bg_data = bg_data(:);
 
-L_eit_aux = Aux_mat*C*Aux_mat;
+L_eit_aux = Aux_mat*C*Aux_mat*Current_pattern;
 
 waitbar(0,h,'Interpolation.');
 
