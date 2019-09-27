@@ -112,6 +112,6 @@ mri_mergelabels -d $OUT_DIR/rh.aparc_76/ -o $OUT_DIR/rh_labels_76.asc
 mri_mergelabels -d $OUT_DIR/lh.aparc_36/ -o $OUT_DIR/lh_labels_36.asc
 mri_mergelabels -d $OUT_DIR/rh.aparc_36/ -o $OUT_DIR/rh_labels_36.asc
 
-matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/';a = dlmread('lh_labels_76.asc',' ',2,0);a = a(:,[1,3,5,7]);save -ascii lh_points_76.dat a; a = dlmread('rh_labels_76.asc',' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_76.dat a; a = dlmread('lh_labels_36.asc',' ',2,0);a = a(:,[1,3,5,7]);  save -ascii  lh_points_36.dat a; a = dlmread('rh_labels_36.asc',' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_36.dat a";
+matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/';a = dlmread([dir_name 'lh_labels_76.asc'],' ',2,0);a = a(:,[1,3,5,7]);save -ascii lh_points_76.dat a; a = dlmread([dir_name 'rh_labels_76.asc'],' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_76.dat a; a = dlmread([dir_name 'lh_labels_36.asc'],' ',2,0);a = a(:,[1,3,5,7]);  save -ascii  lh_points_36.dat a; a = dlmread([dir_name 'rh_labels_36.asc'],' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_36.dat a";
 
  
