@@ -75,9 +75,9 @@ mri_mc $SUBJECT_DIR/$SUBJECT/mri/aseg.mgz 255 $OUT_DIR/CC_Anterior.asc
 #Comamnd 5: 
 mri_watershed -useSRAS -surf  $SUBJECT_DIR/$SUBJECT/surf  $SUBJECT_DIR/$SUBJECT/mri/orig_nu.mgz  $SUBJECT_DIR/$SUBJECT/trash/trash.mgz 
 
-mris_convert $SUBJECT_DIR/$SUBJECT/outer_outer_skin_surface $OUT_DIR/outer_skin.asc
-mris_convert $SUBJECT_DIR/$SUBJECT/outer_outer_skull_surface $OUT_DIR/outer_skull.asc
-mris_convert $SUBJECT_DIR/$SUBJECT/outer_inner_skull_surface $OUT_DIR/inner_skull.asc
+mris_convert $SUBJECT_DIR/$SUBJECT/surf_outer_skin_surface $OUT_DIR/outer_skin.asc
+mris_convert $SUBJECT_DIR/$SUBJECT/surf_outer_skull_surface $OUT_DIR/outer_skull.asc
+mris_convert $SUBJECT_DIR/$SUBJECT/surf_inner_skull_surface $OUT_DIR/inner_skull.asc
  
 #.annot files
 # After Freesurfer processes a subject, in the subject's /label directory, 
