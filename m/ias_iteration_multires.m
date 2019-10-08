@@ -475,6 +475,7 @@ mr_sparsity = evalin('base','zef.inv_multires_sparsity');
 
 z_vec_aux = zeros(size(L_aux,2),1);
 theta_vec_aux = zeros(size(L_aux,2),1);
+iter_ind = 0;
 
 for n_rep = 1 : n_decompositions
 
@@ -484,6 +485,8 @@ end
 
 for j = 1 : n_multires
 
+iter_ind = iter_ind + 1;    
+    
 n_mr_dec = length(multires_dec{n_rep}{j});
 
 if source_direction_mode == 1 || source_direction_mode == 2
@@ -567,9 +570,9 @@ end
 
 z_vec_aux = z_vec_aux + z_vec;
 theta_vec_aux = theta_vec_aux + theta;
+theta = theta_vec_aux/iter_ind;
 end
 
-theta = theta_vec_aux/n_multires;
 
 end
 
