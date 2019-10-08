@@ -566,7 +566,7 @@ theta = theta_vec_aux/iter_ind;
 
 end
 
-acceptance_counter/iter_counter
+%acceptance_counter/iter_counter
 z_vec = z_vec_aux/(n_iterations-n_burn_in);
 
 
