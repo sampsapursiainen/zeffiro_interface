@@ -542,8 +542,12 @@ theta = theta(mr_ind);
 z_vec = z_vec(mr_ind);
 
 resid_vec = f - L_aux*z_vec;
-exp_arg_new = - 0.5*resid_vec'*resid_vec/(std_lhood.^2) - 0.5*z_vec'*(z_vec./theta) - sum(theta0./theta) - kappa*sum(log(theta));
-iter_counter = iter_counter + 1;
+if evalin('base','zef.inv_hyperprior') == 1;
+    exp_arg_new = - 0.5*resid_vec'*resid_vec/(std_lhood.^2) - 0.5*z_vec'*(z_vec./theta) - sum(theta./theta0) + (kappa-3)*sum(log(theta));
+else
+    exp_arg_new = - 0.5*resid_vec'*resid_vec/(std_lhood.^2) - 0.5*z_vec'*(z_vec./theta) - sum(theta0./theta) - kappa*sum(log(theta));
+end
+    iter_counter = iter_counter + 1;
 
 if exp_arg_new - exp_arg_old >= log(rand(1))
     exp_arg_old = exp_arg_new;
@@ -562,7 +566,7 @@ theta = theta_vec_aux/iter_ind;
 
 end
 
-%acceptance_counter/iter_counter
+acceptance_counter/iter_counter
 z_vec = z_vec_aux/(n_iterations-n_burn_in);
 
 
