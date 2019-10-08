@@ -488,7 +488,7 @@ theta = theta0*ones(size(L_aux,2),1);
 end 
 
 if iter_ind == 1
-j = 1
+j = 1;
 else
 j = randperm(n_multires,1);
 end
@@ -562,7 +562,7 @@ theta = theta_vec_aux/iter_ind;
 
 end
 
-
+%acceptance_counter/iter_counter
 z_vec = z_vec_aux/(n_iterations-n_burn_in);
 
 
