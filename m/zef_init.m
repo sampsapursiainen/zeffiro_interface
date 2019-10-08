@@ -157,8 +157,8 @@
           zef.inv_roi_mode = 3;
           zef.inv_roi_threshold = 0.5;
           zef.inv_roi_sphere = [0 0 0 15];
-          zef.inv_n_sampler = 10000; 
-          zef.inv_n_burn_in = 1000; 
+          zef.inv_n_sampler = 100; 
+          zef.inv_n_burn_in = 10; 
           zef.reconstruction_type = 7;
           zef.h_colorbar   = [];
           zef.location_unit= 1;
