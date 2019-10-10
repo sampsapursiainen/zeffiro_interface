@@ -570,7 +570,7 @@ end
 
 z_vec_aux = z_vec_aux + z_vec;
 theta_vec_aux = theta_vec_aux + theta;
-theta = theta_vec_aux/iter_ind;
+%theta = theta_vec_aux/iter_ind;
 end
 
 
