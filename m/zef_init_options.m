@@ -36,6 +36,9 @@ end;
 if not(isfield(zef,'surface_sources')); 
     zef.surface_sources = 0; 
 end;
+if not(isfield(zef,'colortune_param')); 
+    zef.colortune_param = 1; 
+end;
 
 if not(isfield(zef,'use_gpu')); 
     zef.use_gpu = 0; 

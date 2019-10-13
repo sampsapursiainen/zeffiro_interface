@@ -824,9 +824,10 @@ ab_ind = find(aux_brain_ind==i);
 %end
     
 colormap_size = 4096;
+colortune_param = evalin('base','zef.colortune_param');
 if evalin('base','zef.inv_colormap') == 1
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
 colormap_vec_aux = [([20*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1)]); ([15*[1: c_aux_1] 15*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*[1:c_aux_2-c_aux_1] 6*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 7.5*[1:colormap_size-c_aux_2]])];
 colormap_vec = zeros(3,size(colormap_vec_aux,2));
 colormap_vec = colormap_vec + 0.52*[50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:)];
@@ -838,8 +839,8 @@ colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = colormap_vec(:,1:3);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 2
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
 colormap_vec = zeros(3,colormap_size);
 colormap_vec(1,:) =10*([colormap_size:-1:1]/colormap_size);
 colormap_vec(2,:) = [10*( (3/2)*[c_aux_2:-1:1]/colormap_size) zeros(1,colormap_size-c_aux_2)];
@@ -851,8 +852,8 @@ colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1
 colormap_vec = colormap_vec/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 3
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
 colormap_vec = zeros(3,colormap_size);
 colormap_vec(2,:) = 10*([colormap_size:-1:1]/colormap_size);
 colormap_vec(1,:) = [10*(3/2)*[c_aux_2:-1:1]/colormap_size zeros(1,colormap_size-c_aux_2)];
@@ -865,8 +866,8 @@ colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1
 colormap_vec = colormap_vec/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 4
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
 colormap_vec = zeros(3,colormap_size);
 colormap_vec(3,:) = 10*([colormap_size:-1:1]/colormap_size);
 colormap_vec(2,:) = [10*(3/2)*[c_aux_2:-1:1]/colormap_size zeros(1,colormap_size-c_aux_2)];
@@ -879,9 +880,9 @@ colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1
 colormap_vec = colormap_vec/max(colormap_vec(:));
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 5
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
-colormap_vec = [([20*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1)]); ([15*[1: c_aux_1] 15*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*[1:c_aux_2-c_aux_1] 6*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 7.5*[1:colormap_size-c_aux_2]])];
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size - colortune_param*colormap_size/3);
+colormap_vec = [([20*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1)]); ([15*(colormap_size/3)*[1: c_aux_1]/c_aux_1 15*(colormap_size/3)*[c_aux_2-c_aux_1:-1:1]/(c_aux_2-c_aux_1) zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*(colormap_size/3)*[1:c_aux_2-c_aux_1]/(c_aux_2-c_aux_1) 6*(colormap_size/3)*[colormap_size-c_aux_2:-1:1]/(colormap_size-c_aux_2)]);([zeros(1,c_aux_2) 7.5*(colormap_size/3)*[1:colormap_size-c_aux_2]/(colormap_size-c_aux_2)])];
 colormap_vec([1 2],:) = colormap_vec([2 1],:);
 colormap_vec(1,:) = colormap_vec(1,:) + colormap_vec(2,:);
 colormap_vec(3,:) = colormap_vec(4,:) + colormap_vec(3,:);
@@ -892,10 +893,10 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 6
-c_aux_1 = floor(colormap_size/3);
-c_aux_2 = floor(2*colormap_size/3);
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size - colortune_param*colormap_size/3);
 c_aux_3 = floor(colormap_size/2);
-colormap_vec = [([20*[c_aux_3:-1:1] zeros(1,colormap_size-c_aux_3)]); ([15*[1: c_aux_1] 15*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 7*[1:c_aux_2-c_aux_1] 7*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 10.5*[1:colormap_size-c_aux_2]])];
+colormap_vec = [([20*[c_aux_3:-1:1] zeros(1,colormap_size-c_aux_3)]); ([15*(colormap_size/3)*[1: c_aux_1]/c_aux_1 15*(colormap_size/3)*[c_aux_2-c_aux_1:-1:1]/(c_aux_2-c_aux_1) zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 7*(colormap_size/3)*[1:c_aux_2-c_aux_1]/(c_aux_2-c_aux_1) 7*(colormap_size/3)*[colormap_size-c_aux_2:-1:1]/(colormap_size-c_aux_2)]);([zeros(1,c_aux_2) 10.5*(colormap_size/3)*[1:colormap_size-c_aux_2]/(colormap_size-c_aux_2)])];
 colormap_vec(3,:) = colormap_vec(4,:) + colormap_vec(3,:);
 colormap_vec(2,:) = colormap_vec(4,:) + colormap_vec(2,:);
 colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
@@ -904,8 +905,8 @@ colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 7
-c_aux_1 = floor(colormap_size/2);    
-colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);     
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 3*(colormap_size/3)*[1: c_aux_1]/c_aux_1 3*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
 colormap_vec([1 2],:) = colormap_vec([2 1],:);
 colormap_vec(1,:) = colormap_vec(1,:) + colormap_vec(2,:);
 colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
@@ -914,8 +915,8 @@ colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 8
-c_aux_1 = floor(colormap_size/2);    
-colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 3*[1: c_aux_1] 3*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);     
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 3*(colormap_size/3)*[1: c_aux_1]/c_aux_1 3*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
 colormap_vec([2 3],:) = colormap_vec([3 2],:);
 colormap_vec(1,:) = colormap_vec(2,:) + colormap_vec(1,:);
 colormap_vec(3,:) = colormap_vec(2,:) + colormap_vec(3,:);
@@ -924,8 +925,8 @@ colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 9
-c_aux_1 = floor(colormap_size/2);    
-colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 2*[1: c_aux_1] 2*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 3.8*[1:colormap_size-c_aux_1]];
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);    
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 2*(colormap_size/3)*[1: c_aux_1]/c_aux_1 2*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
 colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
 colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
 colormap_vec = colormap_vec+100;
@@ -933,20 +934,23 @@ colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 10
-c_aux_1 = floor(colormap_size/2);    
-colormap_vec = [10*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1); 8*[1: c_aux_1] 8*[colormap_size-c_aux_1:-1:1]; zeros(1,c_aux_1) 5*[1:colormap_size-c_aux_1]];
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);    
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 8*(colormap_size/3)*[1: c_aux_1]/c_aux_1 8*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 5*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
 colormap_vec = colormap_vec+100;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 11
-colormap_vec = [(colormap_size/5)^3 + colormap_size^2*[1 : colormap_size] ; (colormap_size/2)^3 + ((colormap_size)/2)*[1:colormap_size].^2 ; ...
+colormap_vec = [(colormap_size/5)^3 + (colormap_size)^2*[1 : colormap_size] ; (colormap_size/2)^3 + ((colormap_size)/2)*[1:colormap_size].^2 ; ...
     (0.7*colormap_size)^3+(0.5*colormap_size)^2*[1:colormap_size]];
 colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = colormap_vec.^(colortune_param);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 12
 colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
+colormap_vec = colormap_vec + 1;
 colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = colormap_vec.^(colortune_param);
 set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
 elseif evalin('base','zef.inv_colormap') == 13
 set(evalin('base','zef.h_zeffiro'),'colormap',evalin('base','zef.parcellation_colormap'));

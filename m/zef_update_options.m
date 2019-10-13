@@ -25,6 +25,8 @@ zef.cp3_a = str2num(get(zef.h_cp3_a,'string'));
 zef.cp3_b = str2num(get(zef.h_cp3_b,'string'));
 zef.cp3_c = str2num(get(zef.h_cp3_c,'string'));
 zef.cp3_d = str2num(get(zef.h_cp3_d,'string'));
+zef.colortune_param = str2num(get(zef.h_colortune_param,'string'));
+
 if str2num(get(zef.h_inv_dynamic_range,'string'))== 0
     zef.inv_dynamic_range = Inf; 
 else
