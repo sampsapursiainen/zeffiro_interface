@@ -477,6 +477,8 @@ z_vec_aux = zeros(size(L_aux,2),1);
 theta_vec_aux = zeros(size(L_aux,2),1);
 iter_ind = 0;
 
+theta0_0 = theta0;
+
 for n_rep = 1 : n_decompositions
 
 if evalin('base','zef.inv_init_guess_mode') == 2
@@ -486,7 +488,7 @@ end
 for j = 1 : n_multires
 
 iter_ind = iter_ind + 1;    
-    
+
 n_mr_dec = length(multires_dec{n_rep}{j});
 
 if source_direction_mode == 1 || source_direction_mode == 2
@@ -506,6 +508,7 @@ end
 if n_iter(j) > 0
 L_aux_2 = L_aux(:,mr_dec);
 theta = theta(mr_dec);
+theta0 = sparsity_factor^((n_multires-j))*theta0_0;
 end
 
 for i = 1 : n_iter(j)
