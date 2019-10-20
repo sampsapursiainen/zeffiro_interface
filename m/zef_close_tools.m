@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: IAS MAP estimation ROI');
 close(zef.h_fig_aux); 
-zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: IAS MAP multiresolution');
+zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: IAS MAP multiresolution (RAMUS)');
 close(zef.h_fig_aux); 
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: IAS MAP estimation');
 close(zef.h_fig_aux); 
