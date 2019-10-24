@@ -7,8 +7,10 @@ h = waitbar(0,['IAS MAP iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
+n_multires = evalin('base','zef.inv_multires_n_levels');
+sparsity_factor = evalin('base','zef.inv_multires_sparsity');
 beta = evalin('base','zef.inv_beta');
-theta0 = evalin('base','zef.inv_theta0');
+theta0 = sparsity_factor^((n_multires-1))*evalin('base','zef.inv_theta0');
 eta = beta - 1.5;
 kappa = beta + 1.5;
 std_lhood = evalin('base','zef.inv_likelihood_std');
@@ -20,8 +22,6 @@ time_step = evalin('base','zef.inv_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
-n_multires = evalin('base','zef.inv_multires_n_levels');
-sparsity_factor = evalin('base','zef.inv_multires_sparsity');
 weight_vec_aux = sum(sparsity_factor.^[0:n_multires-1]');
 
 if source_direction_mode == 2
@@ -482,7 +482,7 @@ theta0_0 = theta0;
 for n_rep = 1 : n_decompositions
 
 if evalin('base','zef.inv_init_guess_mode') == 2
-theta = sparsity_factor^(2*(n_multires-1))*theta0*ones(size(L_aux,2),1);
+theta = theta0*ones(size(L_aux,2),1);
 end 
 
 for j = 1 : n_multires
