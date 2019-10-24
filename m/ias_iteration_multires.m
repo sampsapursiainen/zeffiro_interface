@@ -508,7 +508,7 @@ end
 if n_iter(j) > 0
 L_aux_2 = L_aux(:,mr_dec);
 theta = theta(mr_dec);
-theta0 = sparsity_factor^((n_multires-j))*theta0_0;
+%theta0 = sparsity_factor^((n_multires-j))*theta0_0;
 end
 
 for i = 1 : n_iter(j)
