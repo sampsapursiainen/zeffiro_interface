@@ -482,7 +482,7 @@ theta0_0 = theta0;
 for n_rep = 1 : n_decompositions
 
 if evalin('base','zef.inv_init_guess_mode') == 2
-theta = theta0*ones(size(L_aux,2),1);
+theta = sparsity_factor^(2*(n_multires-1))*theta0*ones(size(L_aux,2),1);
 end 
 
 for j = 1 : n_multires
