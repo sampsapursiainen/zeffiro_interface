@@ -1,7 +1,12 @@
+clear zef;
+zef.ver = ver;
+if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
+gpuDeviceCount = 0;
+end
+zef = rmfield(zef, 'v');
 if not(license('test','distrib_computing_toolbox'))
 gpuDeviceCount = 0;
 end
-clear zef;
 zef.program_path = cd; 
 if not(isdeployed)
 zef.code_path = '/m';
