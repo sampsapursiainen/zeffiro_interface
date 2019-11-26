@@ -3,7 +3,7 @@ zef.ver = ver;
 if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
 gpuDeviceCount = 0;
 end
-zef = rmfield(zef, 'v');
+zef = rmfield(zef, 'ver');
 if not(license('test','distrib_computing_toolbox'))
 gpuDeviceCount = 0;
 end
