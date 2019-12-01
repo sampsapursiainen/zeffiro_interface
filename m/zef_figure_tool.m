@@ -2,7 +2,12 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h_zeffiro = open('zeffiro_interface_figure_tool.fig');
 zef.o_h = findall(zef.h_zeffiro);
+if isequal(version('-release'),'2019b')
+zef.h_axes1 = zef.o_h(44);
+else 
 zef.h_axes1 = zef.o_h(43);
+end
+
 set(zef.h_zeffiro,'paperunits','inches');
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
