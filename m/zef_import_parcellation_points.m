@@ -30,9 +30,13 @@ end
 
 if zef.file_type == 2
 [zef.parcellation_points{length(zef.parcellation_points)+1}] = load([zef.file_path zef.file]);
-zef_update_parcellation;
 end
 
+if  isempty(evalin('base','zef.parcellation_points')) 
+set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[1 0 0]); 
+else
+set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);    
+end; 
 
 end
 
