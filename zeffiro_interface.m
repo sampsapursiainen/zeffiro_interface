@@ -4,9 +4,6 @@ if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(ch
 gpuDeviceCount = 0;
 end
 zef = rmfield(zef, 'ver');
-if not(license('test','distrib_computing_toolbox'))
-gpuDeviceCount = 0;
-end
 zef.program_path = cd; 
 if not(isdeployed)
 zef.code_path = '/m';
@@ -29,10 +26,10 @@ zef.snapshot_vertical_resolution = str2num(zef.ini_cell{1}{14});
 zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
 zef.movie_fps = str2num(zef.ini_cell{1}{18});
 zef = rmfield(zef,'ini_cell');
+zef_data = zef;
 zef_init;
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 zef_plugin;
-zef_init;
 zef.aux_handle_vec = [...
 zef.h_w_sources;
 zef.h_d1_sources;
@@ -117,7 +114,8 @@ zef.h_edit9009;
 uistack(flipud(zef.aux_handle_vec),'bottom');
 rmfield(zef,'aux_handle_vec');
 zef.o_h = findall(zef.h_zeffiro_window_main);
-zef.h_axes2 = zef.o_h(290);
+zef.h_axes2 = findobj(zef.o_h,'Type','Axes');
+zef.h_axes2  = zef.h_axes2(1); 
 zef=rmfield(zef,'o_h');
 zef.clear_axes1 = 0;
 
