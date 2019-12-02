@@ -2,14 +2,11 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef.h_zeffiro = open('zeffiro_interface_figure_tool.fig');
 zef.o_h = findall(zef.h_zeffiro);
-zef.ver = version('-release');
-zef.ver = str2num(zef.ver(1:4)) + double(zef.ver(5))/128;
-if zef.ver > 2019.76
+if zef.matlab_release > 2019.76
 zef.h_axes1 = zef.o_h(44);
 else 
 zef.h_axes1 = zef.o_h(43);
 end
-zef = rmfield(zef,'ver');
 
 set(zef.h_zeffiro,'paperunits','inches');
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);

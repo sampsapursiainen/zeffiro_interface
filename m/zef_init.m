@@ -1,6 +1,8 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+zef.matlab_release = version('-release');
+zef.matlab_release = str2num(zef.matlab_release(1:4)) + double(zef.matlab_release(5))/128;
 zef_data.code_path = zef.code_path;
 zef_data.program_path = zef.program_path;
 zef_data.save_file_path = zef.save_file_path;
