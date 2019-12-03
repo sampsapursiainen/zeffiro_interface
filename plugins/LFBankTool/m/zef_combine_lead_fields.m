@@ -25,6 +25,12 @@ end
 if isempty(zef.source_directions)
 zef.source_directions = [zef.lf_bank_storage{zef_i}.source_directions];
 end
+if isempty(zef.source_interpolation_ind)
+zef.source_interpolation_ind = [zef.lf_bank_storage{zef_i}.source_interpolation_ind];
+end
+if isempty(zef.parcellation_interp_ind)
+zef.parcellation_interp_ind = [zef.lf_bank_storage{zef_i}.parcellation_interp_ind];
+end
 end
 if zef.lf_normalization == 2
 zef.measurements = sqrt(zef.lf_n_aux)*zef.measurements/sqrt(zef.lf_size_aux);

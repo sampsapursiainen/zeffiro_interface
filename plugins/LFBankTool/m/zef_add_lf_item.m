@@ -3,6 +3,8 @@
 
 
 zef_i = length(zef.lf_bank_storage)+1;
+zef.lf_bank_storage{zef_i}.source_interpolation_ind = zef.source_interpolation_ind;
+zef.lf_bank_storage{zef_i}.parcellation_interp_ind = zef.parcellation_interp_ind;
 zef.lf_bank_storage{zef_i}.source_positions = zef.source_positions;
 zef.lf_bank_storage{zef_i}.source_directions = zef.source_directions;
 zef.lf_bank_storage{zef_i}.L = zef.L;
