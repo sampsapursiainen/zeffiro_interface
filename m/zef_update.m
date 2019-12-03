@@ -323,7 +323,9 @@ zef.h = evalin('base','zef.h_sc_sources'); set(zef.h,'value',(zef.sc_sources+1))
 
 zef.h = evalin('base','zef.h_save_file'); set(zef.h,'string',zef.save_file);
 zef.h = evalin('base','zef.h_save_file_path'); set(zef.h,'string',zef.save_file_path);
-zef.h = evalin('base','zef.h_project_size'); set(zef.h,'string',round(whos('zef').bytes/1e4)/100);
+zef.whos_aux = whos('zef');
+zef.h = evalin('base','zef.h_project_size'); set(zef.h,'string',round(zef.whos_aux.bytes/1e4)/100);
+
 
 zef_pushbutton_switch;
 
