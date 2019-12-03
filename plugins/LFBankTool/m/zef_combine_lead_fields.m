@@ -40,3 +40,5 @@ zef = rmfield(zef,'lf_n_aux');
 zef = rmfield(zef,'lf_size_aux');
 
 clear zef_i;
+
+zef_update;

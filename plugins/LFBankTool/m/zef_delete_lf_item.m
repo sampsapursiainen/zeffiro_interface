@@ -16,3 +16,4 @@ zef.lf_bank_storage(zef_j+1:zef_i) = [];
 clear zef_i zef_j;
 
 zef_update_lf_bank_tool;
+zef_update;

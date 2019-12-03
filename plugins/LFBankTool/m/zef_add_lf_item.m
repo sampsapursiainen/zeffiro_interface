@@ -28,3 +28,4 @@ zef.lf_bank_storage{zef_i}.lf_tag = zef.lf_tag;
 clear zef_i;
 
 zef_update_lf_bank_tool;
+zef_update;
