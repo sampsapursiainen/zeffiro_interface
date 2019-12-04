@@ -9,7 +9,8 @@ zef.source_directions = [];
 
 zef.lf_n_aux = 0;
 zef.lf_size_aux = 0;
-for zef_i = zef.lf_item_selected
+for zef_i = 1:length(zef.lf_bank_storage) 
+    if ismember(zef.lf_item_list{zef_i},zef.lf_item_selected)
 if zef.lf_normalization == 1
 zef.measurements = [zef.measurements ; zef.lf_bank_storage{zef_i}.measurements];
 zef.L = [zef.L ; zef.lf_bank_storage{zef_i}.L];
@@ -31,6 +32,7 @@ end
 if isempty(zef.parcellation_interp_ind)
 zef.parcellation_interp_ind = [zef.lf_bank_storage{zef_i}.parcellation_interp_ind];
 end
+    end
 end
 if zef.lf_normalization == 2
 zef.measurements = sqrt(zef.lf_n_aux)*zef.measurements/sqrt(zef.lf_size_aux);

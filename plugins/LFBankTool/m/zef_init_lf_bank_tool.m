@@ -16,10 +16,16 @@ if not(isfield(zef,'lf_bank_storage'));
    zef.lf_bank_storage = cell(0); 
 end;
 
-if not(isfield(zef,'lf_item_selected')); 
-   zef.lf_item_selected = []; 
+if not(isfield(zef,'lf_bank_storage')); 
+zef.lf_item_list = cell(0);
 end;
 
-set(zef.h_lf_tag,'string',zef.lf_tag);
+if not(isfield(zef,'lf_item_selected')); 
+   zef.lf_item_selected = cell(0); 
+end;
+
+set(zef.h_lf_tag,'Value',zef.lf_tag);
+zef.aux_field = get(zef.h_lf_normalization,'items');
+set(zef.h_lf_normalization,'Value',zef.aux_field(zef.lf_normalization));
 
 zef_update_lf_bank_tool;
