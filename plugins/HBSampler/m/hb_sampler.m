@@ -8,6 +8,8 @@ else
 zef.h_hb_sampler = open('hb_sampler.fig');
 end
 set(zef.h_hb_sampler,'Name','ZEFFIRO Interface: MCMC sampler');
+set(findobj(zef.h_hb_sampler.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_hb_sampler.Children,'-property','FontSize'),'FontSize',zef.font_size);
 zef_init_hb_sampler;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)
