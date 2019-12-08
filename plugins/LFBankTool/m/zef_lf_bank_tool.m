@@ -7,6 +7,8 @@ zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end        
 clear zef_i zef_data;
 set(zef.h_lf_bank_tool,'Name','ZEFFIRO Interface: LF bank tool');
+set(findobj(zef.h_lf_bank_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_lf_bank_tool.Children,'-property','FontSize'),'FontSize',9);
 zef.h_lf_item_list.ValueChangedFcn = 'zef.lf_item_selected = get(zef.h_lf_item_list,''value'');';
 zef.h_add_lf_item.ButtonPushedFcn = '[zef.yesno] = questdlg(''Add current lead field?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_add_lf_item; end;';
 zef.h_lf_tag.ValueChangedFcn = 'zef.lf_tag = get(zef.h_lf_tag, ''Value'');';
