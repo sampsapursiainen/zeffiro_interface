@@ -8,6 +8,8 @@ else
 zef.h_ias_map_estimation = open('ramus_sampler.fig');
 end
 set(zef.h_ias_map_estimation,'Name','ZEFFIRO Interface: Metropolized RAMUS Sampler');
+set(findobj(zef.h_ias_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_ias_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
 zef_init_ramus_sampler;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)
