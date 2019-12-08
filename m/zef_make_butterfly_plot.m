@@ -3,12 +3,12 @@
 function zef_make_butterfly_plot(void)
 
 
-sampling_freq = evalin('base','zef.inv_sampling_frequency');
-high_pass = evalin('base','zef.inv_low_cut_frequency');
-low_pass = evalin('base','zef.inv_high_cut_frequency');
+sampling_freq = evalin('base','zef.bf_sampling_frequency');
+high_pass = evalin('base','zef.bf_low_cut_frequency');
+low_pass = evalin('base','zef.bf_high_cut_frequency');
 
 if iscell(evalin('base','zef.measurements'));
-f = evalin('base',['zef.measurements{' int2str(evalin('base','zef.inv_data_segment')) '}']);
+f = evalin('base',['zef.measurements{' int2str(evalin('base','zef.bf_data_segment')) '}']);
 else
 f = evalin('base','zef.measurements');
 end
@@ -38,9 +38,9 @@ end
 
 
 if size(f,2) > 1  
-if evalin('base','zef.inv_time_2') >=0 0 && evalin('base','zef.inv_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.inv_time_1') <= size(f,2);
-t_vec = [max(1, 1 + floor(sampling_freq*evalin('base','zef.inv_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2'))))];
-f = f(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.inv_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')))));
+if evalin('base','zef.bf_time_2') >=0 0 && evalin('base','zef.bf_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.bf_time_1') <= size(f,2);
+t_vec = [max(1, 1 + floor(sampling_freq*evalin('base','zef.bf_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.bf_time_1') + evalin('base','zef.bf_time_2'))))];
+f = f(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.bf_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.bf_time_1') + evalin('base','zef.bf_time_2')))));
 t_vec = (double(t_vec)-1)./sampling_freq;
 t = [1:size(f,2)];
 %gaussian_window = blackmanharris(length(t))';
