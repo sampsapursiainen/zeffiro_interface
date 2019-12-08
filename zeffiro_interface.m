@@ -25,10 +25,13 @@ zef.parallel_vectors = str2num(zef.ini_cell{1}{12});
 zef.snapshot_vertical_resolution = str2num(zef.ini_cell{1}{14});
 zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
 zef.movie_fps = str2num(zef.ini_cell{1}{18});
+zef.font_size = str2num(zef.ini_cell{1}{20});
 zef = rmfield(zef,'ini_cell');
 zef_data = zef;
 zef_init;
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
+set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
 zef_plugin;
 zef.aux_handle_vec = [...
 zef.h_w_sources;
