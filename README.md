@@ -26,6 +26,13 @@ found at:
 
 https://github.com/sampsapursiainen/zeffiro_interface/wiki
 
+The interface itself has been introduced in:
+
+He, Q., Rezaei, A. & Pursiainen, S. (2019). Zeffiro User Interface for 
+Electromagnetic Brain Imaging: a GPU Accelerated FEM Tool for Forward and 
+Inverse Computations in Matlab. Neuroinformatics, 
+doi:10.1007/s12021-019-09436-9
+
 The essential mathematical techniques used in the interface have been
 reviewed and validated in:
 
