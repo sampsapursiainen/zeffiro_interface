@@ -23,7 +23,7 @@ if not(isfield(zef,'filter_save_file'));
 end
 
 if not(isfield(zef,'filter_list_selected'));
-    zef.filter_list_selected = '';
+    zef.filter_list_selected = cell(0);
 end
 
 if not(isfield(zef,'filter_sampling_rate'));
@@ -68,6 +68,8 @@ zef.aux_field = help(zef.filter_file_list{zef_i});
 zef.aux_field = zef.aux_field(strfind(zef.aux_field,'Description:'):strfind(zef.aux_field,'Input:'));
 zef.filter_name_list{zef_i} = strtrim(zef.aux_field(13:end-1));
 end
+[zef.filter_name_list zef.aux_field] = sort(zef.filter_name_list);
+zef.filter_file_list = zef.filter_file_list(zef.aux_field);
 
 if isempty(zef.filter_list_selected)
 zef.filter_list_selected = zef.filter_name_list{end};
