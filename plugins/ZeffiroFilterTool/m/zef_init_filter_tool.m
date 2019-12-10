@@ -5,6 +5,14 @@ zef.filter_name_list = cell(0);
 zef.filter_file_list = cell(0);
 zef.filter_parameter_list = cell(0);
 
+if not(isfield(zef,'filter_zoom'));
+    zef.filter_zoom = 1;
+end
+
+if not(isfield(zef,'filter_epoch_points'));
+    zef.filter_epoch_points = [];
+end
+
 if not(isfield(zef,'filter_save_file_path'));
     zef.filter_save_file_path = './data';
 end
@@ -46,6 +54,7 @@ end;
 set(zef.h_filter_tag,'Value',zef.filter_tag);
 set(zef.h_filter_data_segment,'Value',num2str(zef.filter_data_segment));
 set(zef.h_filter_sampling_rate,'Value',num2str(zef.filter_sampling_rate));
+set(zef.h_filter_zoom,'Value',num2str(round(100/zef.filter_zoom)));
 
 zef.filter_dir = which('zef_init_filter_tool.m');
 zef.filter_dir = [fileparts(zef.filter_dir) '/' 'filter_bank/*.m'];

@@ -7,10 +7,12 @@ else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
 if not(isequal(zef.file,0));
-    
+
 zef.filter_save_file_path = zef.file_path;
 zef.filter_save_file = zef.file;
+zef_data.filter_zoom = zef.filter_zoom;
 zef_data.raw_data = zef.raw_data;
+zef_data.filter_epoch_points =  zef.filter_epoch_points;
 zef_data.filter_name_list = zef.filter_name_list;
 zef_data.filter_file_list = zef.filter_name_list;
 zef_data.filter_parameter_list = zef.filter_parameter_list;

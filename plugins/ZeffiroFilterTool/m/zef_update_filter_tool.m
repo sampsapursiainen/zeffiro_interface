@@ -20,7 +20,7 @@ end
 
 clear zef_i;
 
-zef.filtert_tag = get(zef.h_filter_tag,'value');
+zef.filter_tag = get(zef.h_filter_tag,'value');
 zef.filter_data_segment = get(zef.h_filter_data_segment,'value');
-
-
+zef.filter_sampling_rate = str2num(get(zef.h_filter_sampling_rate,'value'));
+zef.filter_zoom = 100/str2num(get(zef.h_filter_zoom,'value'));

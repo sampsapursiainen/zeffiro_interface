@@ -1,3 +1,4 @@
+ zef.filter_epoch_points = [];
 zef.filter_save_file_path = './data';
 zef.filter_save_file = '';
 zef.filter_name_list = cell(0);

@@ -9,6 +9,7 @@ if size(f,2) > 1
 t_vec = double([1:size(f,2)]-1)./sampling_freq;
 end
 
+
 axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 hold(evalin('base','zef.h_axes1'),'off');
@@ -21,5 +22,8 @@ set(evalin('base','zef.h_axes1'),'ygrid','on');
 set(evalin('base','zef.h_axes1'),'xgrid','on');
 set(evalin('base','zef.h_axes1'),'fontsize',14);
 set(evalin('base','zef.h_axes1'),'linewidth',2);
+
+set(evalin('base','zef.h_axes1'),'xlim',get(evalin('base','zef.h_axes1'),'xlim')*evalin('base','zef.filter_zoom'));
+
 
 end
