@@ -1,4 +1,4 @@
-function [processed_data] = zef_ellip_low_pass_filter(f, start_time, end_time, sampling_frequency)
+function [processed_data] = zef_define_time_interval(f, start_time, end_time, sampling_frequency)
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 %This function processes the N-by-M data array f for N channels and M time
@@ -23,7 +23,7 @@ end
 
 length_f = size(f,2);
 
-start_time_ind = min(max(1,1 + floor(start_time*sampling_frequency)),length_f);
-end_time_ind =   min(max(1,1 + floor(end_time*sampling_frequency)),length_f);
+start_time_ind = min(max(1,1 + round(start_time*sampling_frequency)),length_f);
+end_time_ind =   min(max(1,1 + round(end_time*sampling_frequency)),length_f);
 
 processed_data = f(:,start_time_ind:end_time_ind);
