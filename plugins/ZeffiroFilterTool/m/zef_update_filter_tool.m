@@ -11,6 +11,9 @@ if not(isempty(zef_i))
     if isempty(zef.filter_pipeline_selected) 
  zef.filter_pipeline_selected = zef.filter_pipeline_list{end};
     end
+    if isstr(zef.filter_pipeline_selected)
+    zef.filter_pipeline_selected = {zef.filter_pipeline_selected};
+end
 set(zef.h_filter_parameter_list,'data',zef.filter_pipeline{find(ismember(zef.filter_pipeline_list,zef.filter_pipeline_selected),1)}.parameters);
 set(zef.h_filter_pipeline_list,'items',zef.filter_pipeline_list,'value',zef.filter_pipeline_selected,'multiselect','on');
 else

@@ -12,6 +12,8 @@ clear zef_i zef_data;
 
 zef_init_filter_tool;
 
+zef.h_filter_load_epoch_points.ButtonPushedFcn = 'zef_load_epoch_points;';
+zef.h_filter_reset.ButtonPushedFcn = '[zef.yesno] = questdlg(''Reset filter tool?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_filter_reset; zef_init_filter_tool; zef_update_filter_tool; end;';
 zef.h_zef_filter_tool.DeleteFcn = 'if isfield(zef,''h_scroll_bar''); delete(zef.h_scroll_bar);end;';
 zef.h_filter_get_epoch_points.ButtonPushedFcn = 'zef.aux_field = getpts(zef.h_axes1); zef.filter_epoch_points = [zef.filter_epoch_points(:) ; zef.aux_field]'';';
 zef.h_filter_reset_epoch_points.ButtonPushedFcn = '[zef.yesno] = questdlg(''Reset epoch points?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.filter_epoch_points = []; end;';
