@@ -43,12 +43,18 @@ band_pass = (band_width/sampling_frequency)*[-1 1] + center_frequency/(sampling_
 [bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
 f = filter(bp_f_1,bp_f_2,f')';
 
-if harmonic_filtering
 
+if harmonic_filtering   
+    
 k = 2; 
+
+h = waitbar(0,['Harmonic band-stop filter.']);
+
 band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(sampling_frequency/2); 
    
 while band_pass(2) < 1
+    
+waitbar(k*center_frequency/(sampling_frequency/2),h,['Harmonic band-stop filter.']);     
 
 [bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
 f = filter(bp_f_1,bp_f_2,f')';
@@ -57,6 +63,9 @@ band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(samplin
  
 
 end
+
+close(h);
+
 end
 end
 

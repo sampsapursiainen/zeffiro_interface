@@ -5,7 +5,7 @@ function [processed_data] = zef_exclude_channels(f, exclude_channels)
 %steps. The other arguments can be controlled via the ZI user interface.
 %The desctiption and argument definitions shown in ZI are listed below. 
 %Description: Exclude channels
-%Input: 1 Exclude channels [Default: '']
+%Input: 1 Exclude channels [Default: ]
 %Output: Data without the excluded channels.
 
 %Conversion between string and numeric data types.
