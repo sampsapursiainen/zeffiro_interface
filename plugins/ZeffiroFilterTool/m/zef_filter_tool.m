@@ -13,7 +13,7 @@ clear zef_i zef_data;
 zef_init_filter_tool;
 
 zef.h_zef_filter_tool.DeleteFcn = 'if isfield(zef,''h_scroll_bar''); delete(zef.h_scroll_bar);end;';
-zef.h_filter_get_epoch_points.ButtonPushedFcn = 'zef.aux_field = getpts(zef.h_axes1); zef.filter_epoch_points = [zef.filter_epoch_points ; zef.aux_field];';
+zef.h_filter_get_epoch_points.ButtonPushedFcn = 'zef.aux_field = getpts(zef.h_axes1); zef.filter_epoch_points = [zef.filter_epoch_points(:) ; zef.aux_field]'';';
 zef.h_filter_reset_epoch_points.ButtonPushedFcn = '[zef.yesno] = questdlg(''Reset epoch points?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.filter_epoch_points = []; end;';
 zef.h_filter_save_as.ButtonPushedFcn = 'zef_filter_save_as;';
 zef.h_filter_load.ButtonPushedFcn = 'zef_filter_load;';
@@ -25,6 +25,7 @@ zef.h_del_filter.ButtonPushedFcn = '[zef.yesno] = questdlg(''Delete selected fil
 zef.h_move_up_filter.ButtonPushedFcn = 'zef_move_up_filter_item;';
 zef.h_move_down_filter.ButtonPushedFcn = 'zef_move_down_filter_item;';
 zef.h_filter_tag.ValueChangedFcn = 'zef.filter_tag = get(zef.h_filter_tag,''value'');';
+zef.h_filter_sampling_rate.ValueChangedFcn = 'zef.filter_sampling_rate = str2num(get(zef.h_filter_sampling_rate,''value''));';
 zef.h_filter_pipeline_list.ValueChangedFcn = 'zef.filter_pipeline_selected = get(zef.h_filter_pipeline_list,''value'');zef_update_filter_tool;';
 zef.h_filter_parameter_list.DisplayDataChangedFcn = 'zef.filter_pipeline{find(ismember(zef.filter_pipeline_list,zef.filter_pipeline_selected),1)}.parameters = zef.h_filter_parameter_list.Data;';
 zef.h_filter_list.ValueChangedFcn = 'zef.filter_list_selected = get(zef.h_filter_list,''value'');';
