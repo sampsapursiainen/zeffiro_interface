@@ -1,6 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.code_path = zef.code_path;
