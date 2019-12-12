@@ -5,6 +5,10 @@ zef.o_h = findall(zef.h_zeffiro);
 zef.h_axes1 = findobj(zef.o_h,'Type','Axes');
 zef.h_axes1  = zef.h_axes1(1); 
 
+set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+
 set(zef.h_zeffiro,'paperunits','inches');
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);

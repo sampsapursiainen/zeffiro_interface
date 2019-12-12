@@ -1,6 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-open('zeffiro_interface_mesh_tool.fig');
+zef.h_mesh_tool = open('zeffiro_interface_mesh_tool.fig');
+set(findobj(zef.h_mesh_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+
 zef.aux_handle_vec = [zef.h_pushbutton31;
 zef.h_pushbutton20;
 zef.h_pushbutton22; 

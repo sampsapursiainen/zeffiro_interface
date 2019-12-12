@@ -9,6 +9,9 @@ else
 zef.h_additional_options = open('additional_options.fig');
 end
 set(zef.h_additional_options,'Name','ZEFFIRO Interface: Options');
+set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_additional_options.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
 
 if zef.cp2_on
     set(zef.h_cp2_a,'enable','on');

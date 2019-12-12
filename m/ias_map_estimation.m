@@ -8,6 +8,9 @@ else
 zef.h_ias_map_estimation = open('ias_map_estimation.fig');
 end
 set(zef.h_ias_map_estimation,'Name','ZEFFIRO Interface: IAS MAP estimation');
+set(findobj(zef.h_ias_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_ias_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
 zef_init_ias;
 if isfield(zef,'measurements')
 if iscell(zef.measurements)
