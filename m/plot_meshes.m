@@ -19,6 +19,7 @@ selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 end
 
+
 if ismember(evalin('base','zef.visualization_type'), [3])
 max_abs_reconstruction = 0;
 min_rec = Inf;
@@ -41,7 +42,7 @@ frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
-reconstruction = reconstruction(:);  
+reconstruction = reconstruction(:); 
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
@@ -53,7 +54,7 @@ max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
 end
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
+if not(ismember(evalin('base','zef.reconstruction_type'), [6])) 
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -82,7 +83,7 @@ reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
-if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
+if not(ismember(evalin('base','zef.reconstruction_type'), [6])) 
 if evalin('base','zef.inv_scale') == 1
 min_rec = 10*log10(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
 max_rec = 10*log10(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));
@@ -94,6 +95,47 @@ min_rec = sqrt(max(min_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynam
 max_rec = sqrt(max(max_rec/max_abs_reconstruction,1/evalin('base','zef.inv_dynamic_range')));    
 end   
 end 
+end
+end
+   
+
+if ismember(evalin('base','zef.visualization_type'), [5])
+max_abs_reconstruction = 0;
+min_rec = Inf;
+max_rec = -Inf;
+if iscell(evalin('base','zef.top_reconstruction'))
+length_reconstruction_cell = length(evalin('base','zef.top_reconstruction'));
+frame_start = evalin('base','zef.frame_start');
+frame_stop = evalin('base','zef.frame_stop');
+frame_step = evalin('base','zef.frame_step');
+if frame_start == 0
+frame_start = 1;
+end
+if frame_stop == 0
+frame_stop = length_reconstruction_cell;
+end
+frame_start = max(frame_start,1);
+frame_start = min(length_reconstruction_cell,frame_start);
+frame_stop = max(frame_stop,1);
+frame_stop = min(length_reconstruction_cell,frame_stop);
+number_of_frames = length([frame_start : frame_step : frame_stop]);
+for f_ind = frame_start : frame_step : frame_stop
+reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(f_ind) '}']));
+reconstruction = reconstruction(:); 
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
+min_rec = min([min_rec ; (reconstruction(:))]);
+max_rec = max_abs_reconstruction;
+end
+else
+frame_start = 1;
+frame_stop = 1;
+frame_step = 1;
+number_of_frames = 1;    
+reconstruction = evalin('base','zef.top_reconstruction');
+reconstruction = reconstruction(:);  
+max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
+min_rec = min([min_rec ; (reconstruction(:))]);
+max_rec = max_abs_reconstruction; 
 end
 end
    
@@ -687,9 +729,9 @@ end
 
 
     
-if ismember(evalin('base','zef.visualization_type'),[3,4]) 
+if ismember(evalin('base','zef.visualization_type'),[3,4,5]) 
     
-    if ismember(evalin('base','zef.visualization_type'),[3])
+    if ismember(evalin('base','zef.visualization_type'),[3,5])
 f_ind = frame_start;
     end
 
@@ -811,7 +853,7 @@ switch k
 if on_val  
 i = i + 1;    
 if visible_val
-if ismember(i, aux_brain_ind)
+if ismember(i, aux_brain_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
     aux_brain_visible_ind = [aux_brain_visible_ind i];
 ab_ind = find(aux_brain_ind==i);
     
@@ -969,7 +1011,7 @@ end
 end
 min_rec = 1; 
 max_rec = size(evalin('base','zef.parcellation_colormap'),1);
-else
+elseif ismember(evalin('base','zef.visualization_type'),[3])
 
 if iscell(evalin('base','zef.reconstruction')) 
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
@@ -1057,6 +1099,8 @@ reconstruction = reconstruction_aux;
 end
 end
 
+if ismember(evalin('base','zef.visualization_type'),[3,4])
+
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -1101,11 +1145,203 @@ set(h_axes_text,'layer','bottom');
 axes(evalin('base','zef.h_axes1'));
 end
 
+end
+
 lighting phong;
 
 
 else
-    
+
+if ismember(evalin('base','zef.visualization_type'),[5]) && i == length(reuna_p)
+%%%%%Topography reconstruction.
+
+colormap_size = 4096;
+colortune_param = evalin('base','zef.colortune_param');
+if evalin('base','zef.inv_colormap') == 1
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
+colormap_vec_aux = [([20/colortune_param*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1)]); ([15/colortune_param*[1: c_aux_1] 15*(1-2/3)/(1-2*colortune_param/3)*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*(1-2/3)/(1-2*colortune_param/3)*[1:c_aux_2-c_aux_1] 6/colortune_param*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 7.5/colortune_param*[1:colormap_size-c_aux_2]])];
+colormap_vec = zeros(3,size(colormap_vec_aux,2));
+colormap_vec = colormap_vec + 0.52*[50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:)];
+colormap_vec = colormap_vec + 0.5*[85*colormap_vec_aux(3,:) ; 197*colormap_vec_aux(3,:) ; 217*colormap_vec_aux(3,:)];
+colormap_vec = colormap_vec + 0.1*[2*colormap_vec_aux(2,:) ; 118*colormap_vec_aux(2,:) ; 132*colormap_vec_aux(2,:)];
+colormap_vec = colormap_vec + [203*colormap_vec_aux(4,:) ; 203*colormap_vec_aux(4,:) ; 100*colormap_vec_aux(4,:)];
+clear colormap_vec_aux;
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = colormap_vec(:,1:3);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 2
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
+colormap_vec = zeros(3,colormap_size);
+colormap_vec(1,:) =10*([colormap_size:-1:1]/colormap_size);
+colormap_vec(2,:) = [10*(3*(1  - 1/3)/(2*(1- colortune_param/3)))*[c_aux_2:-1:1]/colormap_size zeros(1,colormap_size-c_aux_2)];
+colormap_vec(3,:) = [10*((3/colortune_param)*[c_aux_1:-1:1]/colormap_size) zeros(1,colormap_size-c_aux_1)];  
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+colormap_vec = colormap_vec(:,1:3);
+colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
+colormap_vec = colormap_vec/max(colormap_vec(:));
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 3
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
+colormap_vec = zeros(3,colormap_size);
+colormap_vec(2,:) = 10*([colormap_size:-1:1]/colormap_size);
+colormap_vec(1,:) = [10*(3*(1  - 1/3)/(2*(1- colortune_param/3)))*[c_aux_2:-1:1]/colormap_size zeros(1,colormap_size-c_aux_2)];
+colormap_vec(3,:) = [10*((3/colortune_param)*[c_aux_1:-1:1]/colormap_size) zeros(1,colormap_size-c_aux_1)];
+%colormap_vec([1 3 2],:) = 0.75*colormap_vec([1 3 2],:) + 0.25*colormap_vec([1 2 3],:);
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+colormap_vec = colormap_vec(:,1:3);
+colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
+colormap_vec = colormap_vec/max(colormap_vec(:));
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 4
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
+colormap_vec = zeros(3,colormap_size);
+colormap_vec(3,:) = 10*([colormap_size:-1:1]/colormap_size);
+colormap_vec(2,:) = [10*(3*(1  - 1/3)/(2*(1- colortune_param/3)))*[c_aux_2:-1:1]/colormap_size zeros(1,colormap_size-c_aux_2)];
+colormap_vec(1,:) = [10*((3/colortune_param)*[c_aux_1:-1:1]/colormap_size) zeros(1,colormap_size-c_aux_1)];
+%colormap_vec([1 3 2],:) = 0.75*colormap_vec([1 3 2],:) + 0.25*colormap_vec([1 2 3],:);
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+colormap_vec = colormap_vec(:,1:3);
+colormap_vec = colormap_vec + repmat(0.2*([colormap_size:-1:1]'/colormap_size),1,3);
+colormap_vec = colormap_vec/max(colormap_vec(:));
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 5
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size - colortune_param*colormap_size/3);
+colormap_vec = [([20*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1)]); ([15*(colormap_size/3)*[1: c_aux_1]/c_aux_1 15*(colormap_size/3)*[c_aux_2-c_aux_1:-1:1]/(c_aux_2-c_aux_1) zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*(colormap_size/3)*[1:c_aux_2-c_aux_1]/(c_aux_2-c_aux_1) 6*(colormap_size/3)*[colormap_size-c_aux_2:-1:1]/(colormap_size-c_aux_2)]);([zeros(1,c_aux_2) 7.5*(colormap_size/3)*[1:colormap_size-c_aux_2]/(colormap_size-c_aux_2)])];
+colormap_vec([1 2],:) = colormap_vec([2 1],:);
+colormap_vec(1,:) = colormap_vec(1,:) + colormap_vec(2,:);
+colormap_vec(3,:) = colormap_vec(4,:) + colormap_vec(3,:);
+colormap_vec(2,:) = colormap_vec(4,:) + colormap_vec(2,:);
+colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+colormap_vec = colormap_vec(:,1:3);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 6
+c_aux_1 = floor(colortune_param*colormap_size/3);
+c_aux_2 = floor(colormap_size - colortune_param*colormap_size/3);
+c_aux_3 = floor(colormap_size/2);
+colormap_vec = [([20*[c_aux_3:-1:1] zeros(1,colormap_size-c_aux_3)]); ([15*(colormap_size/3)*[1: c_aux_1]/c_aux_1 15*(colormap_size/3)*[c_aux_2-c_aux_1:-1:1]/(c_aux_2-c_aux_1) zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 7*(colormap_size/3)*[1:c_aux_2-c_aux_1]/(c_aux_2-c_aux_1) 7*(colormap_size/3)*[colormap_size-c_aux_2:-1:1]/(colormap_size-c_aux_2)]);([zeros(1,c_aux_2) 10.5*(colormap_size/3)*[1:colormap_size-c_aux_2]/(colormap_size-c_aux_2)])];
+colormap_vec(3,:) = colormap_vec(4,:) + colormap_vec(3,:);
+colormap_vec(2,:) = colormap_vec(4,:) + colormap_vec(2,:);
+colormap_vec(1,:) = colormap_vec(4,:) + colormap_vec(1,:);
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+colormap_vec = colormap_vec(:,1:3);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 7
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);     
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 3*(colormap_size/3)*[1: c_aux_1]/c_aux_1 3*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
+colormap_vec([1 2],:) = colormap_vec([2 1],:);
+colormap_vec(1,:) = colormap_vec(1,:) + colormap_vec(2,:);
+colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
+colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 8
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);     
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 3*(colormap_size/3)*[1: c_aux_1]/c_aux_1 3*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
+colormap_vec([2 3],:) = colormap_vec([3 2],:);
+colormap_vec(1,:) = colormap_vec(2,:) + colormap_vec(1,:);
+colormap_vec(3,:) = colormap_vec(2,:) + colormap_vec(3,:);
+colormap_vec = colormap_vec+100;
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 9
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);    
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 2*(colormap_size/3)*[1: c_aux_1]/c_aux_1 2*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 3.8*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
+colormap_vec(1,:) = colormap_vec(3,:) + colormap_vec(1,:);
+colormap_vec(2,:) = colormap_vec(3,:) + colormap_vec(2,:);
+colormap_vec = colormap_vec+100;
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 10
+c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);    
+colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 8*(colormap_size/3)*[1: c_aux_1]/c_aux_1 8*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 5*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
+colormap_vec = colormap_vec+100;
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = flipud(colormap_vec);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 11
+colormap_vec = [(colormap_size/5)^3 + (colormap_size)^2*[1 : colormap_size] ; (colormap_size/2)^3 + ((colormap_size)/2)*[1:colormap_size].^2 ; ...
+    (0.7*colormap_size)^3+(0.5*colormap_size)^2*[1:colormap_size]];
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = colormap_vec.^(colortune_param);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 12
+colormap_vec = [[1:colormap_size] ; 0.5*[1:colormap_size] ; 0.5*[colormap_size:-1:1] ];
+colormap_vec = colormap_vec + 1;
+colormap_vec = colormap_vec'/max(colormap_vec(:));
+colormap_vec = colormap_vec.^(colortune_param);
+set(evalin('base','zef.h_zeffiro'),'colormap',colormap_vec);
+elseif evalin('base','zef.inv_colormap') == 13
+set(evalin('base','zef.h_zeffiro'),'colormap',evalin('base','zef.parcellation_colormap'));
+end
+
+if iscell(evalin('base','zef.top_reconstruction')) 
+reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(frame_start) '}']));
+else
+reconstruction = evalin('base','zef.top_reconstruction');
+end
+reconstruction = reconstruction(:);    
+
+h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+set(gca,'CLim',[min_rec max_rec]); 
+set(h_surf_2{i},'specularstrength',0.2);
+set(h_surf_2{i},'specularexponent',0.8);
+set(h_surf_2{i},'SpecularColorReflectance',0.8);
+set(h_surf_2{i},'diffusestrength',1);
+set(h_surf_2{i},'ambientstrength',1);
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+if evalin('base','zef.inv_scale') == 1
+r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
+else
+r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
+end
+r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
+r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
+if evalin('base','zef.use_parcellation')
+if evalin('base','zef.inv_colormap') == 13 
+set(h_surf_2{i},'FaceVertexAlpha',p_rec_aux);
+else
+set(h_surf_2{i},'FaceVertexAlpha',max(p_rec_aux,f_alpha_aux));
+end
+else
+set(h_surf_2{i},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+end
+set(h_surf_2{i},'FaceAlpha','interp');
+set(h_surf_2{i},'AlphaDataMapping','none'); 
+end
+
+cb_done = 1;
+h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
+h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
+set(h_axes_text,'tag','image_details');
+h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+set(h_text,'visible','on');
+set(h_axes_text,'layer','bottom');
+axes(evalin('base','zef.h_axes1'));
+
+lighting phong;
+
+%%%% End of topography reconstruction
+
+else    
 h_surf = trimesh(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),'edgecolor','none','facecolor',color_str);
 set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
@@ -1114,6 +1350,7 @@ set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 %if not(evalin('base','zef.visualization_type')==3);
 lighting phong;
 %end
+end
 
 end
 end
@@ -1139,7 +1376,7 @@ set(evalin('base','zef.h_axes1'),'zGrid','off');
 end
 %drawnow;    
     
-if ismember(evalin('base','zef.visualization_type'),[3])
+if ismember(evalin('base','zef.visualization_type'),[3,5])
 
 f_ind_aux = 1;
 for f_ind = frame_start + frame_step : frame_step : frame_stop
@@ -1157,6 +1394,8 @@ end
 f_ind_aux = f_ind_aux + 1;
 %waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
 
+
+if ismember(evalin('base','zef.visualization_type'),[3])
 for i = intersect(aux_brain_ind,aux_brain_visible_ind)
 ab_ind = find(aux_brain_ind == i);
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
@@ -1279,6 +1518,51 @@ set(h_surf_2{ab_ind},'AlphaDataMapping','none');
 end
 
 end
+elseif ismember(evalin('base','zef.visualization_type'),[5]) 
+%Topography reconstruction.    
+   
+
+reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(f_ind) '}']));
+reconstruction = reconstruction(:);  
+
+axes(evalin('base','zef.h_axes1'));
+%h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{i},'CData',reconstruction);
+
+set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+set(gca,'CLim',[min_rec max_rec]); 
+set(h_surf_2{i},'specularstrength',0.2);
+set(h_surf_2{i},'specularexponent',0.8);
+set(h_surf_2{i},'SpecularColorReflectance',0.8);
+set(h_surf_2{i},'diffusestrength',1);
+set(h_surf_2{i},'ambientstrength',1);
+if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
+f_alpha_aux = zeros(size(reuna_p{i},1),1);
+if evalin('base','zef.inv_scale') == 1
+r_alpha_aux = (reconstruction-min(reconstruction))/(max(reconstruction)-min(reconstruction));
+else
+r_alpha_aux = abs(reconstruction)/max(abs(reconstruction));
+end
+r_alpha_aux= max(0,r_alpha_aux-min(r_alpha_aux));
+r_alpha_aux = r_alpha_aux/max(r_alpha_aux);
+f_alpha_aux(reuna_t{i}(:,1)) = f_alpha_aux(reuna_t{i}(:,1)) + r_alpha_aux/3;
+f_alpha_aux(reuna_t{i}(:,2)) = f_alpha_aux(reuna_t{i}(:,2)) + r_alpha_aux/3;
+f_alpha_aux(reuna_t{i}(:,3)) = f_alpha_aux(reuna_t{i}(:,3)) + r_alpha_aux/3; 
+if evalin('base','zef.use_parcellation')
+if evalin('base','zef.inv_colormap') == 13
+set(h_surf_2{i},'FaceVertexAlpha',p_rec_aux);
+else
+set(h_surf_2{i},'FaceVertexAlpha',max(p_rec_aux,f_alpha_aux));
+end
+else
+set(h_surf_2{i},'FaceVertexAlpha',max(evalin('base','zef.brain_transparency'),f_alpha_aux));
+end
+set(h_surf_2{i},'FaceAlpha','interp');
+set(h_surf_2{i},'AlphaDataMapping','none'); 
+end
+
+%End of topography reconstruction.
+end
 
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
@@ -1288,7 +1572,12 @@ lighting phong;
 %delete(h_axes_text);
 axes(h_axes_text);% = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
 %set(h_axes_text,'tag','image_details');
+if ismember(evalin('base','zef.visualization_type'),[3]) 
 set(h_text,'string', ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+elseif ismember(evalin('base','zef.visualization_type'),[5]) 
+set(h_text,'string', ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+end
+
 set(h_text,'visible','on');
 set(h_axes_text,'layer','bottom');
 drawnow limitrate;

@@ -20,5 +20,5 @@ if not(iscell(zef.measurements))
 end
 end
 uistack(flipud([zef.h_bf_sampling_frequency ; zef.h_bf_low_cut_frequency ; 
-    zef.h_bf_high_cut_frequency ; zef.h_bf_time_1 ; zef.h_bf_time_2; zef.h_bf_data_segment ; zef.h_bf_cancel ; 
+    zef.h_bf_high_cut_frequency ; zef.h_bf_time_1 ; zef.h_bf_time_2; zef.h_bf_data_segment ; zef.h_bf_cancel ; zef.h_bf_normalize_data; 
     zef.h_bf_apply; zef.h_bf_plot  ]),'top'); 
