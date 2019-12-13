@@ -10,3 +10,5 @@ set(zef.h_edit_cp_a, 'enable', zef.enable_str);
 set(zef.h_edit_cp_b, 'enable', zef.enable_str);
 set(zef.h_edit_cp_c, 'enable', zef.enable_str);
 set(zef.h_edit_cp_d, 'enable', zef.enable_str);
+
+set(zef.h_popupmenu1,'value',zef.imaging_method);

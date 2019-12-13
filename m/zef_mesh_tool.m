@@ -54,6 +54,7 @@ set(zef.h_edit_cp_b,'string',num2str(zef.cp_b));
 set(zef.h_edit_cp_c,'string',num2str(zef.cp_c));
 set(zef.h_edit_cp_d,'string',num2str(zef.cp_d));
 set(zef.h_edit65,'string',num2str(zef.mesh_resolution));
+set(zef.h_popupmenu1,'string',zef.imaging_method_cell);
 set(zef.h_popupmenu1,'value',zef.imaging_method);
 set(zef.h_edit80,'string',num2str(zef.azimuth));
 set(zef.h_edit81,'string',num2str(zef.elevation));

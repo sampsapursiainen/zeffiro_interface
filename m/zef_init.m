@@ -1,6 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
@@ -16,6 +17,7 @@ zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
 zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
 zef_data.movie_fps = zef.movie_fps;
 
+          zef_data.imaging_method_cell = {'EEG'; 'MEG magnetometers'; 'MEG gradiometers'; 'EIT'}; 
           zef_data.colortune_param = 1;
           zef_data.submesh_num = 0;
           zef_data.parcellation_plot_type = 1;
