@@ -12,7 +12,10 @@ set(findobj(zef.h_lf_bank_tool.Children,'-property','FontSize'),'FontSize',9);
 zef.h_lf_item_list.ValueChangedFcn = 'zef.lf_item_selected = get(zef.h_lf_item_list,''value'');';
 zef.h_add_lf_item.ButtonPushedFcn = '[zef.yesno] = questdlg(''Add current lead field?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_add_lf_item; end;';
 zef.h_lf_tag.ValueChangedFcn = 'zef.lf_tag = get(zef.h_lf_tag, ''Value'');';
-zef.merge_lead_fields.ButtonPushedFcn = '[zef.yesno] = questdlg(''Merge selected lead fields?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_combine_lead_fields; end;';
-zef.delete_selected.ButtonPushedFcn = '[zef.yesno] = questdlg(''Delete selected lead field items?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_delete_lf_item; end;';
+zef.h_merge_lead_fields.ButtonPushedFcn = '[zef.yesno] = questdlg(''Merge selected lead fields?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_combine_lead_fields; end;';
+zef.h_delete_selected.ButtonPushedFcn = '[zef.yesno] = questdlg(''Delete selected lead field items?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_delete_lf_item; end;';
 zef.h_lf_normalization.ValueChangedFcn = 'zef.lf_normalization = find(ismember(get(zef.h_lf_normalization,''items''),get(zef.h_lf_normalization,''value'')));';
+zef.h_lf_bank_compute_lead_fields.ButtonPushedFcn = '[zef.yesno] = questdlg(''Re-compute the selected lead field matrices?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_lf_bank_compute_lead_fields; end;';
+zef.h_lf_bank_update_measurements.ButtonPushedFcn = '[zef.yesno] = questdlg(''Substitute the measurement data of the selected lead field items with the current measurement dataset?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_lf_bank_update_measurements; end;';
+
 zef_init_lf_bank_tool;
