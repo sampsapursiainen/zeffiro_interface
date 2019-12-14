@@ -15,9 +15,9 @@ end
 zef.lf_bank_storage(zef_j+1:zef_i) = [];
 zef.lf_item_list(zef_j+1:zef_i) = [];
 
-zef.lf_item_selected = get(zef.h_lf_item_list,'value');
-
 clear zef_i zef_j;
 
 zef_update_lf_bank_tool;
 zef_update;
+
+zef.lf_item_selected = get(zef.h_lf_item_list,'value');

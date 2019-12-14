@@ -9,7 +9,9 @@ for zef_i = 1:length(zef.lf_bank_storage)
     if ismember(zef.lf_item_list{zef_i},zef.lf_item_selected)
         zef.imaging_method = find(ismember(zef.imaging_method_cell, zef.lf_bank_storage{zef_i}.imaging_method),1);
         zef.sensors = zef.lf_bank_storage{zef_i}.sensors;
+        if isvalid(zef.h_mesh_tool)
         zef_update_mesh_tool; 
+        end
         if size(zef.sensors,2) >= 3
         zef.s_points = zef.sensors(:,1:3);
         end
@@ -25,13 +27,18 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef.s_zx_rotation = 0;
         zef_update;
         
-        eval(get(zef.h_pushbutton14,'Callback'))
+        [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
+        [zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);
+        lead_field_matrix;    
         
         zef.lf_bank_storage{zef_i}.source_interpolation_ind = zef.source_interpolation_ind;
 zef.lf_bank_storage{zef_i}.parcellation_interp_ind = zef.parcellation_interp_ind;
 zef.lf_bank_storage{zef_i}.source_positions = zef.source_positions;
 zef.lf_bank_storage{zef_i}.source_directions = zef.source_directions;
 zef.lf_bank_storage{zef_i}.L = zef.L;
+
+zef_update_lf_bank_tool;
+zef_update;
 
     end
 
@@ -41,3 +48,4 @@ end
 clear zef_i;
 
 zef_update_lf_bank_tool;
+zef_update;

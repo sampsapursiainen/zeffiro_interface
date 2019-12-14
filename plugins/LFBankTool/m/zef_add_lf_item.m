@@ -1,6 +1,8 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes;
+
 zef_i = length(zef.lf_bank_storage)+1;
 
 zef.lf_bank_storage{zef_i}.source_interpolation_ind = zef.source_interpolation_ind;
@@ -19,5 +21,8 @@ clear zef_i;
 zef_update_lf_bank_tool;
 zef_update;
 zef.lf_item_selected = zef.lf_item_list;
+if isfield(zef,'h_lf_bank_tool')
+        if isvalid(zef.h_lf_bank_tool)
 set(zef.h_lf_item_list,'Items',zef.lf_item_list,'Value',zef.lf_item_selected,'Multiselect','on');
-
+        end
+        end
