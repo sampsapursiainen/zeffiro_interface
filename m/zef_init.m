@@ -17,6 +17,7 @@ zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
 zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
 zef_data.movie_fps = zef.movie_fps;
 
+          zef_data.multi_lead_field = 0;
           zef_data.imaging_method_cell = {'EEG'; 'MEG magnetometers'; 'MEG gradiometers'; 'EIT'}; 
           zef_data.colortune_param = 1;
           zef_data.submesh_num = 0;
