@@ -7,6 +7,7 @@ zef = rmfield(zef, 'ver');
 zef.program_path = cd; 
 if not(isdeployed)
 zef.code_path = '/m';
+addpath(genpath([zef.program_path '/m']));
 addpath([zef.program_path '/fig']); 
 addpath(genpath([zef.program_path '/plugins'])); 
 addpath([zef.program_path zef.code_path]); 
