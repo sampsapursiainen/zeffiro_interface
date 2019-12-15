@@ -25,28 +25,21 @@ zef.lf_item_selected{zef_j} = zef.lf_item_list{zef_i};
      end
  
  if isfield(zef,'h_lf_bank_tool')
-         if isvalid(zef.h_lf_bank_tool)
+         if isvalid(zef.h_lf_bank_tool) 
  if not(isempty(zef_i))
-     zef.lf_item_selected = zef.lf_item_list;
-set(zef.h_lf_item_list,'Items',zef.lf_item_list,'Value',zef.lf_item_selected,'Multiselect','on');
- end
+if not(ismember(zef.lf_item_selected,zef.lf_item_list))
+    zef.lf_item_selected = zef.lf_item_list;
+ set(zef.h_lf_item_list,'Items',zef.lf_item_list,'Value',zef.lf_item_selected,'Multiselect','on');   
+end
+         end
          end
  end
 
-if not(isempty(zef_i))
-if isempty(zef.lf_item_selected) 
- zef.lf_item_selected = zef.lf_item_list;
- if isfield(zef,'h_lf_bank_tool')
-         if isvalid(zef.h_lf_bank_tool)
- set(zef.h_lf_item_list,'Items',zef.lf_item_list,'Value',zef.lf_item_selected,'Multiselect','on');
-         end
-         end
- end
-end
 clear zef_i zef_j;
 
 if isfield(zef,'h_lf_bank_tool')
         if isvalid(zef.h_lf_bank_tool)
 zef.lf_tag = get(zef.h_lf_tag,'value');
+zef.lf_bank_scaling_factor = str2num(get(zef.h_lf_bank_scaling_factor,'value'));
         end
 end
