@@ -69,15 +69,7 @@ zef.sc_sources_old = zef.sc_sources;
 zef.source_ind = zef.aux_vec(1:min(zef.n_sources,length(zef.aux_vec)));
 zef.n_sources_mod = 0;
 end
-zef.sensors_aux = zef.sensors;
-zef.nodes_aux = zef.nodes/1000;
-if ismember(zef.imaging_method, [1 3 4]) & size(zef.sensors,2) == 3
-zef.sensors_aux = zef.sensors_attached_volume(:,1:3)/1000;
-elseif zef.imaging_method == 2
-zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3)/1000;
-else
 zef.sensors_aux = zef.sensors_attached_volume;
-end
 
 zef.lf_param.dipole_mode = 1;
 
@@ -87,6 +79,17 @@ zef.lf_param.impedances = zef.sensors(:,6);
 end
 [zef.measurements] = compute_eit_data(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
+
+if zef.location_unit == 1
+zef.aux_field = 1/1000;
+end
+if zef.location_unit == 2
+zef.aux_field = 1/100;
+end
+if zef.location_unit == 3
+zef.aux_field = 1;
+end
+zef.measurements = zef.aux_field*zef.measurements;
 
 zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec'});
 

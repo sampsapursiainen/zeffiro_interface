@@ -108,6 +108,17 @@ else
 end
 end
 
+if zef.location_unit == 1
+zef.aux_field = 1/1000;
+end
+if zef.location_unit == 2
+zef.aux_field = 1/100;
+end
+if zef.location_unit == 3
+zef.aux_field = 1;
+end
+zef.L = zef.aux_field*zef.L;
+
 zef = rmfield(zef,{'aux_vec'});
 
 zef.lead_field_time = toc;
