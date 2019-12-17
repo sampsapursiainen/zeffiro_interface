@@ -63,8 +63,8 @@ end
 end
 if size(f,2) > 1
 t = [1:size(f,2)];
-gaussian_window = blackmanharris(length(t))';
-f = f.*gaussian_window;
+%gaussian_window = blackmanharris(length(t))';
+%f = f.*gaussian_window;
 f = mean(f,2);
 end
 
