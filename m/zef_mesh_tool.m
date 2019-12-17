@@ -59,7 +59,7 @@ set(zef.h_popupmenu1,'value',zef.imaging_method);
 set(zef.h_edit80,'string',num2str(zef.azimuth));
 set(zef.h_edit81,'string',num2str(zef.elevation));
 set(zef.h_edit_meshing_accuracy,'string',num2str(zef.meshing_accuracy));
-set(zef.h_popupmenu6,'value',zef.location_unit);
+%set(zef.h_popupmenu6,'value',zef.location_unit);
 set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_edit75,'string',num2str(zef.n_sources));
 set(zef.h_popupmenu2,'value',zef.source_direction_mode);

@@ -666,17 +666,8 @@ light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 hold on;
 
-
-[X_s, Y_s, Z_s] = sphere(20);  
-aux_scale_ind = evalin('base','zef.location_unit');
-switch aux_scale_ind 
-    case 1
-        aux_scale_val = 1;
-    case 2 
-        aux_scale_val = 0.01;
-    case 3 
-        aux_scale_val = 0.001;
-end
+[X_s, Y_s, Z_s] = sphere(50);
+aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
 
 if evalin('base','zef.s_visible')
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
