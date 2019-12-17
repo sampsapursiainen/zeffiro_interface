@@ -108,7 +108,7 @@ else
 end
 end
 
-zef = rmfield(zef,{'nodes','sensors','aux_vec'});
+zef = rmfield(zef,{'aux_vec'});
 
 zef.lead_field_time = toc;
 
