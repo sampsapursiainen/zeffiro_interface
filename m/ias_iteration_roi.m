@@ -471,6 +471,7 @@ f = evalin('base','zef.measurements');
 end
 
 
+
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
 data_norm = max(abs(f(:))); 
