@@ -166,13 +166,13 @@ if zef.save_switch == 10
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.png';'*.jpg';'*.tiff'},'Print figure to file as...',zef.save_file_path); 
 if not(isequal(zef.file,0)); 
     if zef.file_index == 1
-print(zef.h_zeffiro,'-dpng','-r200',[zef.save_file_path zef.file]); 
+print(zef.h_zeffiro,'-dpng','-r200',[zef.file_path zef.file]); 
     end
         if zef.file_index == 2
 print(zef.h_zeffiro,['-djpeg' zef.video_codec],'-r200',[zef.save_file_path zef.file]); 
     end
 if zef.file_index == 3
-print(zef.h_zeffiro,'-dtiff','-r200',[zef.save_file_path zef.file]); 
+print(zef.h_zeffiro,'-dtiff','-r200',[zef.file_path zef.file]); 
     end    
 end;
 end;
