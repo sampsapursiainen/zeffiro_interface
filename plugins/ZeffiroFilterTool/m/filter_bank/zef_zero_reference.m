@@ -8,4 +8,5 @@ function [processed_data] = zef_zero_reference(f)
 %Input:
 %Output: Data with zero reference (average) level
 
-processed_data = f - mean(f(ones(size(f,1)),:));
+mean_f = mean(f);
+processed_data = f - mean_f(ones(size(f,1),1),:);

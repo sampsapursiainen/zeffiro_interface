@@ -5,7 +5,7 @@ function [processed_data] = zef_constant_epoching(f, first_epoch_point, epoch_st
 %steps. The other arguments can be controlled via the ZI user interface.
 %The desctiption and argument definitions shown in ZI are listed below. 
 %Description: Averaging over epochs with constant length
-%Input: 1 First epoch point [Default: filter_epoch_points],
+%Input: 1 First epoch point [Default: 0],
 %2 Epoch step (s) [Default: 0], 
 %3 Number of epochs [Default: 0], 
 %4 Start time w.r.t. point (s) [Default: -0.18], 
@@ -16,6 +16,9 @@ function [processed_data] = zef_constant_epoching(f, first_epoch_point, epoch_st
 %Conversion between string and numeric data types.
 if isstr(first_epoch_point)
 first_epoch_point = str2num(first_epoch_point);
+end
+if isstr(number_of_epochs)
+number_of_epochs = str2num(number_of_epochs);
 end
 if isstr(epoch_step)
 epoch_step = str2num(epoch_step);
