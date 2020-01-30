@@ -6,4 +6,4 @@
     zef.bf_data_segment = str2num(get(zef.h_bf_data_segment,'string')); 
     zef.bf_time_1 = str2num(get(zef.h_bf_time_1,'string')); 
     zef.bf_time_2 = str2num(get(zef.h_bf_time_2,'string')); 
-    zef.normalize_data = get(zef.h_bf_normalize_data ,'value');
+    zef.bf_normalize_data = get(zef.h_bf_normalize_data ,'value');
