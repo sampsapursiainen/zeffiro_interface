@@ -58,7 +58,162 @@ zef.h = evalin('base','zef.h_d20_invert'); set(zef.h,'value',(zef.d20_invert));
 zef.h = evalin('base','zef.h_d21_invert'); set(zef.h,'value',(zef.d21_invert));
 zef.h = evalin('base','zef.h_d22_invert'); set(zef.h,'value',(zef.d22_invert));
 
+if zef.mlapp == 1
 
+zef.h = evalin('base','zef.h_w_name'); set(zef.h,'Text',(zef.w_name));
+zef.h = evalin('base','zef.h_g_name'); set(zef.h,'Text',(zef.g_name));
+zef.h = evalin('base','zef.h_c_name'); set(zef.h,'Text',(zef.c_name));
+zef.h = evalin('base','zef.h_sk_name'); set(zef.h,'Text',(zef.sk_name));
+zef.h = evalin('base','zef.h_sc_name'); set(zef.h,'Text',(zef.sc_name));
+zef.h = evalin('base','zef.h_d1_name'); set(zef.h,'Value',(zef.d1_name));
+zef.h = evalin('base','zef.h_d2_name'); set(zef.h,'Value',(zef.d2_name));
+zef.h = evalin('base','zef.h_d3_name'); set(zef.h,'Value',(zef.d3_name));
+zef.h = evalin('base','zef.h_d4_name'); set(zef.h,'Value',(zef.d4_name));
+zef.h = evalin('base','zef.h_d5_name'); set(zef.h,'Value',(zef.d5_name));
+zef.h = evalin('base','zef.h_d6_name'); set(zef.h,'Value',(zef.d6_name));
+zef.h = evalin('base','zef.h_d7_name'); set(zef.h,'Value',(zef.d7_name));
+zef.h = evalin('base','zef.h_d8_name'); set(zef.h,'Value',(zef.d8_name));
+zef.h = evalin('base','zef.h_d9_name'); set(zef.h,'Value',(zef.d9_name));
+zef.h = evalin('base','zef.h_d10_name'); set(zef.h,'Value',(zef.d10_name));
+zef.h = evalin('base','zef.h_d11_name'); set(zef.h,'Value',(zef.d11_name));
+zef.h = evalin('base','zef.h_d12_name'); set(zef.h,'Value',(zef.d12_name));
+zef.h = evalin('base','zef.h_d13_name'); set(zef.h,'Value',(zef.d13_name));
+zef.h = evalin('base','zef.h_d14_name'); set(zef.h,'Value',(zef.d14_name));
+zef.h = evalin('base','zef.h_d15_name'); set(zef.h,'Value',(zef.d15_name));
+zef.h = evalin('base','zef.h_d16_name'); set(zef.h,'Value',(zef.d16_name));
+zef.h = evalin('base','zef.h_d17_name'); set(zef.h,'Value',(zef.d17_name));
+zef.h = evalin('base','zef.h_d18_name'); set(zef.h,'Value',(zef.d18_name));
+zef.h = evalin('base','zef.h_d19_name'); set(zef.h,'Value',(zef.d19_name));
+zef.h = evalin('base','zef.h_d20_name'); set(zef.h,'Value',(zef.d20_name));
+zef.h = evalin('base','zef.h_d21_name'); set(zef.h,'Value',(zef.d21_name));
+zef.h = evalin('base','zef.h_d22_name'); set(zef.h,'Value',(zef.d22_name));
+
+zef.h = evalin('base','zef.h_edit3'); set(zef.h,'Value',num2str(zef.s_x_correction));
+zef.h = evalin('base','zef.h_edit6'); set(zef.h,'Value',num2str(zef.s_y_correction));
+zef.h = evalin('base','zef.h_edit7'); set(zef.h,'Value',num2str(zef.s_z_correction));
+zef.h = evalin('base','zef.h_edit12'); set(zef.h,'Value',num2str(zef.s_xy_rotation));
+zef.h = evalin('base','zef.h_edit13'); set(zef.h,'Value',num2str(zef.s_yz_rotation));
+zef.h = evalin('base','zef.h_edit14'); set(zef.h,'Value',num2str(zef.s_zx_rotation));
+
+zef.h = evalin('base','zef.h_edit9001'); set(zef.h,'Value',num2str(zef.w_priority));
+zef.h = evalin('base','zef.h_edit9002'); set(zef.h,'Value',num2str(zef.g_priority));
+zef.h = evalin('base','zef.h_edit9003'); set(zef.h,'Value',num2str(zef.c_priority));
+zef.h = evalin('base','zef.h_edit9004'); set(zef.h,'Value',num2str(zef.sk_priority));
+zef.h = evalin('base','zef.h_edit9005'); set(zef.h,'Value',num2str(zef.sc_priority));
+zef.h = evalin('base','zef.h_edit9006'); set(zef.h,'Value',num2str(zef.d1_priority));
+zef.h = evalin('base','zef.h_edit9007'); set(zef.h,'Value',num2str(zef.d2_priority));
+zef.h = evalin('base','zef.h_edit9008'); set(zef.h,'Value',num2str(zef.d3_priority));
+zef.h = evalin('base','zef.h_edit9009'); set(zef.h,'Value',num2str(zef.d4_priority));
+zef.h = evalin('base','zef.h_d5_priority'); set(zef.h,'Value',num2str(zef.d5_priority));
+zef.h = evalin('base','zef.h_d6_priority'); set(zef.h,'Value',num2str(zef.d6_priority));
+zef.h = evalin('base','zef.h_d7_priority'); set(zef.h,'Value',num2str(zef.d7_priority));
+zef.h = evalin('base','zef.h_d8_priority'); set(zef.h,'Value',num2str(zef.d8_priority));
+zef.h = evalin('base','zef.h_d9_priority'); set(zef.h,'Value',num2str(zef.d9_priority));
+zef.h = evalin('base','zef.h_d10_priority'); set(zef.h,'Value',num2str(zef.d10_priority));
+zef.h = evalin('base','zef.h_d11_priority'); set(zef.h,'Value',num2str(zef.d11_priority));
+zef.h = evalin('base','zef.h_d12_priority'); set(zef.h,'Value',num2str(zef.d12_priority));
+zef.h = evalin('base','zef.h_d13_priority'); set(zef.h,'Value',num2str(zef.d13_priority));
+zef.h = evalin('base','zef.h_d14_priority'); set(zef.h,'Value',num2str(zef.d14_priority));
+zef.h = evalin('base','zef.h_d15_priority'); set(zef.h,'Value',num2str(zef.d15_priority));
+zef.h = evalin('base','zef.h_d16_priority'); set(zef.h,'Value',num2str(zef.d16_priority));
+zef.h = evalin('base','zef.h_d17_priority'); set(zef.h,'Value',num2str(zef.d17_priority));
+zef.h = evalin('base','zef.h_d18_priority'); set(zef.h,'Value',num2str(zef.d18_priority));
+zef.h = evalin('base','zef.h_d19_priority'); set(zef.h,'Value',num2str(zef.d19_priority));
+zef.h = evalin('base','zef.h_d20_priority'); set(zef.h,'Value',num2str(zef.d20_priority));
+zef.h = evalin('base','zef.h_d21_priority'); set(zef.h,'Value',num2str(zef.d21_priority));
+zef.h = evalin('base','zef.h_d22_priority'); set(zef.h,'Value',num2str(zef.d22_priority));
+
+zef.h = evalin('base','zef.h_edit15'); set(zef.h,'Value',num2str(zef.s_scaling));
+
+zef.h = evalin('base','zef.h_edit129'); set(zef.h,'Value',num2str(zef.d1_scaling));
+zef.h = evalin('base','zef.h_edit170'); set(zef.h,'Value',num2str(zef.d1_sigma));
+
+zef.h = evalin('base','zef.h_edit229'); set(zef.h,'Value',num2str(zef.d2_scaling));
+zef.h = evalin('base','zef.h_edit270'); set(zef.h,'Value',num2str(zef.d2_sigma));
+
+zef.h = evalin('base','zef.h_edit329'); set(zef.h,'Value',num2str(zef.d3_scaling));
+zef.h = evalin('base','zef.h_edit370'); set(zef.h,'Value',num2str(zef.d3_sigma));
+
+zef.h = evalin('base','zef.h_edit429'); set(zef.h,'Value',num2str(zef.d4_scaling));
+zef.h = evalin('base','zef.h_edit470'); set(zef.h,'Value',num2str(zef.d4_sigma));
+
+zef.h = evalin('base','zef.h_d5_scaling'); set(zef.h,'Value',num2str(zef.d5_scaling));
+zef.h = evalin('base','zef.h_d5_sigma'); set(zef.h,'Value',num2str(zef.d5_sigma));
+
+zef.h = evalin('base','zef.h_d6_scaling'); set(zef.h,'Value',num2str(zef.d6_scaling));
+zef.h = evalin('base','zef.h_d6_sigma'); set(zef.h,'Value',num2str(zef.d6_sigma));
+
+zef.h = evalin('base','zef.h_d7_scaling'); set(zef.h,'Value',num2str(zef.d7_scaling));
+zef.h = evalin('base','zef.h_d7_sigma'); set(zef.h,'Value',num2str(zef.d7_sigma));
+
+zef.h = evalin('base','zef.h_d8_scaling'); set(zef.h,'Value',num2str(zef.d8_scaling));
+zef.h = evalin('base','zef.h_d8_sigma'); set(zef.h,'Value',num2str(zef.d8_sigma));
+
+zef.h = evalin('base','zef.h_d9_scaling'); set(zef.h,'Value',num2str(zef.d9_scaling));
+zef.h = evalin('base','zef.h_d9_sigma'); set(zef.h,'Value',num2str(zef.d9_sigma));
+
+zef.h = evalin('base','zef.h_d10_scaling'); set(zef.h,'Value',num2str(zef.d10_scaling));
+zef.h = evalin('base','zef.h_d10_sigma'); set(zef.h,'Value',num2str(zef.d10_sigma));
+
+zef.h = evalin('base','zef.h_d11_scaling'); set(zef.h,'Value',num2str(zef.d11_scaling));
+zef.h = evalin('base','zef.h_d11_sigma'); set(zef.h,'Value',num2str(zef.d11_sigma));
+
+zef.h = evalin('base','zef.h_d12_scaling'); set(zef.h,'Value',num2str(zef.d12_scaling));
+zef.h = evalin('base','zef.h_d12_sigma'); set(zef.h,'Value',num2str(zef.d12_sigma));
+
+zef.h = evalin('base','zef.h_d13_scaling'); set(zef.h,'Value',num2str(zef.d13_scaling));
+zef.h = evalin('base','zef.h_d13_sigma'); set(zef.h,'Value',num2str(zef.d13_sigma));
+
+zef.h = evalin('base','zef.h_d14_scaling'); set(zef.h,'Value',num2str(zef.d14_scaling));
+zef.h = evalin('base','zef.h_d14_sigma'); set(zef.h,'Value',num2str(zef.d14_sigma));
+
+zef.h = evalin('base','zef.h_d15_scaling'); set(zef.h,'Value',num2str(zef.d15_scaling));
+zef.h = evalin('base','zef.h_d15_sigma'); set(zef.h,'Value',num2str(zef.d15_sigma));
+
+zef.h = evalin('base','zef.h_d16_scaling'); set(zef.h,'Value',num2str(zef.d16_scaling));
+zef.h = evalin('base','zef.h_d16_sigma'); set(zef.h,'Value',num2str(zef.d16_sigma));
+
+zef.h = evalin('base','zef.h_d17_scaling'); set(zef.h,'Value',num2str(zef.d17_scaling));
+zef.h = evalin('base','zef.h_d17_sigma'); set(zef.h,'Value',num2str(zef.d17_sigma));
+
+zef.h = evalin('base','zef.h_d18_scaling'); set(zef.h,'Value',num2str(zef.d18_scaling));
+zef.h = evalin('base','zef.h_d18_sigma'); set(zef.h,'Value',num2str(zef.d18_sigma));
+
+zef.h = evalin('base','zef.h_d19_scaling'); set(zef.h,'Value',num2str(zef.d19_scaling));
+zef.h = evalin('base','zef.h_d19_sigma'); set(zef.h,'Value',num2str(zef.d19_sigma));
+
+zef.h = evalin('base','zef.h_d20_scaling'); set(zef.h,'Value',num2str(zef.d20_scaling));
+zef.h = evalin('base','zef.h_d20_sigma'); set(zef.h,'Value',num2str(zef.d20_sigma));
+
+zef.h = evalin('base','zef.h_d21_scaling'); set(zef.h,'Value',num2str(zef.d21_scaling));
+zef.h = evalin('base','zef.h_d21_sigma'); set(zef.h,'Value',num2str(zef.d21_sigma));
+
+zef.h = evalin('base','zef.h_d22_scaling'); set(zef.h,'Value',num2str(zef.d22_scaling));
+zef.h = evalin('base','zef.h_d22_sigma'); set(zef.h,'Value',num2str(zef.d22_sigma));
+
+
+zef.h = evalin('base','zef.h_edit29'); set(zef.h,'Value',num2str(zef.w_scaling));
+zef.h = evalin('base','zef.h_edit70'); set(zef.h,'Value',num2str(zef.w_sigma));
+
+zef.h = evalin('base','zef.h_edit36'); set(zef.h,'Value',num2str(zef.g_scaling));
+zef.h = evalin('base','zef.h_edit71'); set(zef.h,'Value',num2str(zef.g_sigma));
+
+zef.h = evalin('base','zef.h_edit50'); set(zef.h,'Value',num2str(zef.c_scaling));
+zef.h = evalin('base','zef.h_edit72'); set(zef.h,'Value',num2str(zef.c_sigma));
+
+zef.h = evalin('base','zef.h_edit57'); set(zef.h,'Value',num2str(zef.sk_scaling));
+zef.h = evalin('base','zef.h_edit73'); set(zef.h,'Value',num2str(zef.sk_sigma));
+
+zef.h = evalin('base','zef.h_edit64'); set(zef.h,'Value',num2str(zef.sc_scaling));
+zef.h = evalin('base','zef.h_edit74'); set(zef.h,'Value',num2str(zef.sc_sigma));
+
+zef.h = evalin('base','zef.h_save_file'); set(zef.h,'text',zef.save_file);
+zef.h = evalin('base','zef.h_save_file_path'); set(zef.h,'text',zef.save_file_path);
+zef.aux_field = whos('zef');
+zef.h = evalin('base','zef.h_project_size'); set(zef.h,'text',num2str(round(zef.aux_field.bytes/1e4)/100));
+
+else
+    
 zef.h = evalin('base','zef.h_w_name'); set(zef.h,'string',(zef.w_name));
 zef.h = evalin('base','zef.h_g_name'); set(zef.h,'string',(zef.g_name));
 zef.h = evalin('base','zef.h_c_name'); set(zef.h,'string',(zef.c_name));
@@ -77,7 +232,6 @@ zef.h = evalin('base','zef.h_d10_name'); set(zef.h,'string',(zef.d10_name));
 zef.h = evalin('base','zef.h_d11_name'); set(zef.h,'string',(zef.d11_name));
 zef.h = evalin('base','zef.h_d12_name'); set(zef.h,'string',(zef.d12_name));
 zef.h = evalin('base','zef.h_d13_name'); set(zef.h,'string',(zef.d13_name));
-
 zef.h = evalin('base','zef.h_d14_name'); set(zef.h,'string',(zef.d14_name));
 zef.h = evalin('base','zef.h_d15_name'); set(zef.h,'string',(zef.d15_name));
 zef.h = evalin('base','zef.h_d16_name'); set(zef.h,'string',(zef.d16_name));
@@ -113,7 +267,6 @@ zef.h = evalin('base','zef.h_d10_priority'); set(zef.h,'string',num2str(zef.d10_
 zef.h = evalin('base','zef.h_d11_priority'); set(zef.h,'string',num2str(zef.d11_priority));
 zef.h = evalin('base','zef.h_d12_priority'); set(zef.h,'string',num2str(zef.d12_priority));
 zef.h = evalin('base','zef.h_d13_priority'); set(zef.h,'string',num2str(zef.d13_priority));
-
 zef.h = evalin('base','zef.h_d14_priority'); set(zef.h,'string',num2str(zef.d14_priority));
 zef.h = evalin('base','zef.h_d15_priority'); set(zef.h,'string',num2str(zef.d15_priority));
 zef.h = evalin('base','zef.h_d16_priority'); set(zef.h,'string',num2str(zef.d16_priority));
@@ -207,6 +360,14 @@ zef.h = evalin('base','zef.h_edit73'); set(zef.h,'string',num2str(zef.sk_sigma))
 
 zef.h = evalin('base','zef.h_edit64'); set(zef.h,'string',num2str(zef.sc_scaling));
 zef.h = evalin('base','zef.h_edit74'); set(zef.h,'string',num2str(zef.sc_sigma));
+
+zef.h = evalin('base','zef.h_save_file'); set(zef.h,'string',zef.save_file);
+zef.h = evalin('base','zef.h_save_file_path'); set(zef.h,'string',zef.save_file_path);
+zef.aux_field = whos('zef');
+zef.h = evalin('base','zef.h_project_size'); set(zef.h,'string',round(zef.aux_field.bytes/1e4)/100);
+
+
+end
 
 zef.h = evalin('base','zef.h_s_visible'); set(zef.h,'value',(zef.s_visible));
 
@@ -321,10 +482,6 @@ zef.h = evalin('base','zef.h_c_sources'); set(zef.h,'value',(zef.c_sources+1));
 zef.h = evalin('base','zef.h_sk_sources'); set(zef.h,'value',(zef.sk_sources+1));
 zef.h = evalin('base','zef.h_sc_sources'); set(zef.h,'value',(zef.sc_sources+1));
 
-zef.h = evalin('base','zef.h_save_file'); set(zef.h,'string',zef.save_file);
-zef.h = evalin('base','zef.h_save_file_path'); set(zef.h,'string',zef.save_file_path);
-zef.aux_field = whos('zef');
-zef.h = evalin('base','zef.h_project_size'); set(zef.h,'string',round(zef.aux_field.bytes/1e4)/100);
 
 
 zef_pushbutton_switch;

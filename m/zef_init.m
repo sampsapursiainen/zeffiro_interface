@@ -1,7 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
-
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
@@ -16,6 +15,7 @@ zef_data.parallel_vectors = zef.parallel_vectors;
 zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
 zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
 zef_data.movie_fps = zef.movie_fps;
+zef_data.mlapp = zef.mlapp;
 
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
