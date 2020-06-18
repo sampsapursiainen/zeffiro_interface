@@ -237,6 +237,8 @@ axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 hold(evalin('base','zef.h_axes1'),'off');
 [color_sort, color_perm] = sortrows(2*parcellation_colormap(selected_list+1,:));
+y_vals = y_vals(color_perm,:);
+
 [~,~,color_unique] = unique(color_sort,'rows');
 line_style_cell = {'-','--','-.',':','o-','o--','o-.','o:','s-','s--','s-.','s:','d-','d--','d-.','d:','*-','*--','*-.','*:'};
 color_unique = [1;color_unique];
@@ -249,7 +251,7 @@ else
 end
   line_ind = min(line_ind,length(line_style_cell));
   line_ind = max(line_ind,1);
-h_plot = plot(x_vals,y_vals(color_perm(i),:),line_style_cell{line_ind});
+h_plot = plot(x_vals,y_vals(i,:),line_style_cell{line_ind});
 set(h_plot, 'color',color_sort(i,:),'linewidth',2);
 if i == 1
 hold(evalin('base','zef.h_axes1'),'on');
@@ -260,7 +262,7 @@ set(evalin('base','zef.h_axes1'),'ticklength',[0 0]);
 set(evalin('base','zef.h_axes1'),'xlim',[x_vals(1) x_vals(end)]);
 set(evalin('base','zef.h_axes1'),'ylim',[0 1.05*max(y_vals(:))]);
 set(evalin('base','zef.h_axes1'),'ygrid','on');
-legend(parcellation_list(selected_list))
+legend(parcellation_list(selected_list(color_perm)))
 %x_labels = text(x_vals-0.25,-0.01*max(y_vals)*ones(size(x_vals)),parcellation_list(selected_list),'Parent',evalin('base','zef.h_axes1'));
 %y_label = text(1.01*(length(x_vals)+1),1.05*max(y_vals)/2,y_string,'Parent',evalin('base','zef.h_axes1'));
 %set(x_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',90, 'Fontsize', 8);
