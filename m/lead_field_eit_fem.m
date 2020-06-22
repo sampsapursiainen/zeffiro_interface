@@ -363,7 +363,7 @@ ala = sqrt(sum(cross(nodes(ele_ind(:,3),:)'-nodes(ele_ind(:,2),:)', nodes(ele_in
 
 for i  = 1 : L    
 I = find(ele_ind(:,1) == i);
-impedance_vec(i)= i*sum(ala(I)); 
+impedance_vec(i)=impedance_vec(i)*sum(ala(I)); 
 end    
     
 B = spalloc(N,L,0);    
