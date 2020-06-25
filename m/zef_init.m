@@ -1,4 +1,4 @@
-%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%Copyright Â© 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 zef_data.font_size = zef.font_size;
