@@ -479,11 +479,20 @@ z_aux = zeros(3*size(L,2),1);
 end
 z_vec = ones(size(L,2),1); 
 
-if length(theta0) > 1
-theta = theta0;
+if ismember(ias_hyperprior,[1:8])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0./(beta-1);
 else
-theta = theta0*ones(size(L,2),1);
+theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
 end
+elseif ismember(ias_hyperprior,[9:16])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0.*beta;
+else
+theta = (theta0.*beta)*ones(size(L_aux_2,2),1);
+end
+end
+
 
 %aux_norm = (sum(L.^2))';
 %aux_norm = aux_norm./max(aux_norm(:));
