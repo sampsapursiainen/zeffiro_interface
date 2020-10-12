@@ -1,10 +1,17 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [multires_dec, multires_ind, multires_count] = make_multires_dec
+function [multires_dec, multires_ind, multires_count] = make_multires_dec(varargin)
 
+if not(isempty(varargin))
+n_decompositions = varargin{1};
+n_levels = varargin{2};
+multires_sparsity = varargin{3};
+else
 n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
-[n_levels] = evalin('base','zef.inv_multires_n_levels');
-[s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+n_levels = evalin('base','zef.inv_multires_n_levels');
+multires_sparsity = evalin('base','zef.inv_multires_sparsity');
+end
+s_ind = unique(evalin('base','zef.source_interpolation_ind{1}'));
 
 for n_rep = 1 : n_decompositions
 
@@ -25,7 +32,6 @@ multires_ind{n_rep}{n_levels} = [1:size_center_points]';
 multires_count{n_rep}{n_levels} = ones(size_center_points,1);
 
 par_num = evalin('base','zef.parallel_vectors');
-multires_sparsity = evalin('base','zef.inv_multires_sparsity');
 bar_ind = ceil(size_center_points/(50*par_num));
 
 use_gpu  = evalin('base','zef.use_gpu');
