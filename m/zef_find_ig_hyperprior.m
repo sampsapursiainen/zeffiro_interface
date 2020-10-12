@@ -6,7 +6,7 @@ L = [];
 
 source_space_size = 1;
 normalize_data = 'maximum';
-eps_val = 1e-9;
+eps_val = 1e-12;
 delta_val = 0.1;
 
 balance_snr = 1;
@@ -57,7 +57,7 @@ scale_param = zeros(size(snr_vec));
 
 relative_noise_std = 10.^(-snr_vec_limited/20);
     
-a = (1.5+1e-6)*ones(size(relative_noise_std));
+a = 1*ones(size(relative_noise_std));
 b = 200*ones(size(relative_noise_std));
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
