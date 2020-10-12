@@ -545,10 +545,18 @@ end
 z_vec = ones(size(L,2),1); 
 
 
-if length(theta0) > 1
-theta = theta0;
+if ismember(iasroi_hyperprior,[1:8])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0./(beta-1);
 else
-theta = theta0*ones(size(L,2),1);
+theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
+end
+elseif ismember(iasroi_hyperprior,[9:16])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0.*beta;
+else
+theta = (theta0.*beta)*ones(size(L_aux_2,2),1);
+end
 end
 
 
