@@ -536,13 +536,22 @@ elseif ramus_hyperprior == 16
 elseif ramus_hyperprior == 15
 [beta, theta0] = zef_find_g_hyperprior_scale(snr_val,4.4,L_aux_2,source_count,normalize_data,0);
 end
+
 if n_rep == 1 || evalin('base','zef.ramus_init_guess_mode') == 2
-if length(theta0) > 1
-theta = theta0;
+if ismember(ramus_hyperprior,[1:8])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0./(beta-1);
 else
-theta = theta0*ones(size(L_aux_2,2),1);
+theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
 end
-else 
+elseif ismember(ramus_hyperprior,[9:16])
+if length(theta0) > 1  || length(beta) > 1
+theta = theta0.*beta;
+else
+theta = (theta0.*beta)*ones(size(L_aux_2,2),1);
+end
+end
+else
 theta = theta(mr_dec);
 end
 end
@@ -572,7 +581,6 @@ end
 
 end;
 
-if n_iter(j) > 0
 if length(theta0) > 1
 theta0 = theta0(mr_ind);
 end
@@ -581,7 +589,6 @@ beta = beta(mr_ind);
 end
 theta = theta(mr_ind);
 z_vec = z_vec(mr_ind);
-end
 
 
 z_vec_aux = z_vec_aux + z_vec;
@@ -640,3 +647,5 @@ aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2));
 z = z./max(aux_norm_vec);
 end;
 close(h);
+
+
