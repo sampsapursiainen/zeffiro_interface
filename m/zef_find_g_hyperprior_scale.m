@@ -7,6 +7,7 @@ normalize_data = 'maximum';
 
 source_space_size = 1;
 source_strength = 1E-2;
+balance_snr = 1;
 
 if length(varargin) > 0
 L = varargin{1};
