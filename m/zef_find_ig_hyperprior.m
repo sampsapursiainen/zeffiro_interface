@@ -6,7 +6,7 @@ L = [];
 
 source_space_size = 1;
 normalize_data = 'maximum';
-eps_val = 1e-8;
+eps_val = 1e-10;
 delta_val = 0.1;
 
 balance_snr = 1;
