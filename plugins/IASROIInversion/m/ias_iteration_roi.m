@@ -448,25 +448,25 @@ else
     normalize_data = 'average';
 end
 if iasroi_hyperprior == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,0);
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,0);
 elseif iasroi_hyperprior == 2
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,1);
 elseif iasroi_hyperprior == 3
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,0);
+[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L,source_count,normalize_data,0);
 elseif iasroi_hyperprior == 4
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L,source_count,normalize_data,1);
 elseif iasroi_hyperprior == 5
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,0);
+[beta, theta0] = zef_find_g_hyperprior(snr_val,L,source_count,normalize_data,0);
 elseif iasroi_hyperprior == 6
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_g_hyperprior(snr_val,L,source_count,normalize_data,1);
 elseif iasroi_hyperprior == 7
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,0);
+[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L,source_count,normalize_data,0);
 elseif iasroi_hyperprior == 8
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L,source_count,normalize_data,1);
 elseif iasroi_hyperprior == 9
-[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L_aux_2,source_count,normalize_data,0);
+[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L,source_count,normalize_data,0);
 elseif iasroi_hyperprior == 10
-[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L,source_count,normalize_data,1);
 end
 
 
@@ -538,13 +538,13 @@ if ismember(iasroi_hyperprior,inverse_gamma_ind)
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0./(beta-1);
 else
-theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
+theta = (theta0./(beta-1))*ones(size(L,2),1);
 end
 elseif ismember(iasroi_hyperprior,gamma_ind)
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0.*beta;
 else
-theta = (theta0.*beta)*ones(size(L_aux_2,2),1);
+theta = (theta0.*beta)*ones(size(L,2),1);
 end
 end
 
