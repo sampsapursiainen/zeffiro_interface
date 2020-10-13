@@ -6,9 +6,10 @@ L = [];
 
 source_space_size = 1;
 normalize_data = 'maximum';
-eps_val = 1e-10;
+eps_val = 1e-9;
 delta_val = 0.1;
 balance_snr = 1;
+snr_val = snr_val;
 
 if length(varargin) > 0
 L = varargin{1};
@@ -56,7 +57,7 @@ scale_param = zeros(size(snr_vec));
 
 relative_noise_std = 10.^(-snr_vec_limited/20);
     
-a = 0*ones(size(relative_noise_std));
+a = zeros(size(relative_noise_std));
 b = 200*ones(size(relative_noise_std));
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
@@ -65,7 +66,7 @@ if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
     b = gpuArray(b);
 end
 
-for j = 1 : 5
+for j = 1 : 10
 
 shape_param_vec = a + (b-a).*[0:delta_val:1];
 

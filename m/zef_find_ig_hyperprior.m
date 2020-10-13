@@ -6,7 +6,7 @@ L = [];
 
 source_space_size = 1;
 normalize_data = 'maximum';
-eps_val = 1e-10;
+eps_val = 1e-9;
 delta_val = 0.1;
 
 balance_snr = 1;
@@ -66,11 +66,11 @@ if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
     b = gpuArray(b);
 end
 
-for j = 1 : 5
+for j = 1 : 10
 
 shape_param_vec = a + (b-a).*[0:delta_val:1];
 
-p_val_vec = zef_gamma_gpu(1,shape_param_vec,1./( relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 .* (shape_param_vec - 1)));
+p_val_vec = zef_inverse_gamma_gpu(1,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 .* (shape_param_vec - 1));
 
 [m_aux,i_aux] = min(abs(p_val_vec - eps_val), [], 2);
 
