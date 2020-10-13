@@ -83,6 +83,6 @@ a = shape_param_vec((i_aux-2)*size(p_val_vec,1)+[1:size(p_val_vec,1)]');
 end
 
 shape_param = (a+b)/2;
-scale_param = source_strength.^2 * relative_noise_std.^2 ./ (source_space_size.*shape_param);
+scale_param = source_strength.^2 .* relative_noise_std.^2 ./ (source_space_size.*shape_param);
 
 end
