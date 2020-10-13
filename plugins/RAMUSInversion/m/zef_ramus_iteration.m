@@ -2,7 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = zef_ramus_iteration(void)
 
-
+inverse_gamma_ind = [1:4];
+gamma_ind = [5:10];
 h = waitbar(0,['RAMUS iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
@@ -503,48 +504,36 @@ if evalin('base','zef.ramus_normalize_data')==1;
 else
     normalize_data = 'average';
 end
-if ramus_hyperprior == 2
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 1
+if ramus_hyperprior == 1
 [beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 4
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,1.5,L_aux_2,source_count,normalize_data,1);
+elseif ramus_hyperprior == 2
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
 elseif ramus_hyperprior == 3
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,1.5,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 6
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3.0,L_aux_2,source_count,normalize_data,1);
+[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,0);
+elseif ramus_hyperprior == 4
+[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,1);
 elseif ramus_hyperprior == 5
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3.0,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 8
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,4.4,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 7
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,4.4,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 10
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 9
 [beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 12
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,1.5,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 11
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,1.5,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 14
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3.0,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 13
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3.0,L_aux_2,source_count,normalize_data,0);
-elseif ramus_hyperprior == 16
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,4.4,L_aux_2,source_count,normalize_data,1);
-elseif ramus_hyperprior == 15
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,4.4,L_aux_2,source_count,normalize_data,0);
+elseif ramus_hyperprior == 6
+[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,1);
+elseif ramus_hyperprior == 7
+[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,0);
+elseif ramus_hyperprior == 8
+[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L_aux_2,source_count,normalize_data,1);
+elseif ramus_hyperprior == 9
+[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L_aux_2,source_count,normalize_data,0);
+elseif ramus_hyperprior == 10
+[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L_aux_2,source_count,normalize_data,1);
 end
 
 if n_rep == 1 || evalin('base','zef.ramus_init_guess_mode') == 2
-if ismember(ramus_hyperprior,[1:8])
+if ismember(ramus_hyperprior,inverse_gamma_ind)
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0./(beta-1);
 else
 theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
 end
-elseif ismember(ramus_hyperprior,[9:16])
+elseif ismember(ramus_hyperprior,gamma_ind)
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0.*beta;
 else
@@ -573,9 +562,9 @@ if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 z_vec = gather(z_vec);
 end
 
-if ismember(ramus_hyperprior,[1:8])
+if ismember(ramus_hyperprior,inverse_gamma_ind)
 theta = (theta0+0.5*z_vec.^2)./(beta + 1.5);
-elseif ismember(ramus_hyperprior,[9:16])
+elseif ismember(ramus_hyperprior,gamma_ind)
 theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2)); 
 end
 
