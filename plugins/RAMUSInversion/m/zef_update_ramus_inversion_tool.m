@@ -16,3 +16,7 @@
     zef.ramus_init_guess_mode = get(zef.h_ramus_init_guess_mode ,'value');
     zer.ramus_initial_guess_mode = get(zef.h_ramus_normalize_data ,'value');
     zer.ramus_hyperprior = get(zef.h_ramus_hyperprior ,'value');
+    zef.inv_time_1 = str2num(get(zef.h_ramus_time_1,'string')); 
+    zef.inv_time_2 = str2num(get(zef.h_ramus_time_2,'string')); 
+    zef.inv_time_3 = str2num(get(zef.h_ramus_time_3,'string')); 
+    zef.number_of_frames = str2num(get(zef.h_ramus_number_of_frames,'string')); 
