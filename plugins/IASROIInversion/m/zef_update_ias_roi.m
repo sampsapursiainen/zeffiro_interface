@@ -23,6 +23,11 @@ zef.iasroi_roi_threshold = str2num(get(zef.h_iasroi_roi_threshold ,'string'));
     zef.iasroi_time_3 = str2num(get(zef.h_iasroi_time_3,'string')); 
     zef.iasroi_number_of_frames = str2num(get(zef.h_iasroi_number_of_frames,'string')); 
     zef.iasroi_normalize_data = get(zef.h_iasroi_normalize_data ,'value');
+    zef.inv_time_1 = str2num(get(zef.h_iasroi_time_1,'string')); 
+    zef.inv_time_2 = str2num(get(zef.h_iasroi_time_2,'string')); 
+    zef.inv_time_3 = str2num(get(zef.h_iasroi_time_3,'string')); 
+    zef.number_of_frames = str2num(get(zef.h_iasroi_number_of_frames,'string')); 
+    
     
     if not(size(zef.iasroi_rec_source,1) == size(zef.iasroi_roi_sphere,1)) 
    zef.iasroi_rec_source = zeros(size(zef.iasroi_roi_sphere,1),9);
