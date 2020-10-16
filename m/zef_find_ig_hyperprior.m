@@ -36,9 +36,9 @@ if isempty(L)
 else
     
 if isequal(normalize_data,'maximum')
-   signal_strength = size(L,2)*max(abs(L))'./sum(max(abs(L))');
+   signal_strength = size(L,2)*sqrt(max(abs(L))')./sum(max(abs(L))');
 else
-   signal_strength = size(L,2).*sqrt(sum(L.^2))'./sum(sqrt(sum(L.^2))');
+   signal_strength = size(L,2).*sqrt(sqrt(sum(L.^2))')./sum(sqrt(sum(L.^2))');
 end
    source_strength = size(L,2)./sum(max(abs(L))');
 
