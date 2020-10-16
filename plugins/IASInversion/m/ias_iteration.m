@@ -422,12 +422,6 @@ else
 number_of_frames = 1;
 end
 
-tic;
-for f_ind = 1 : number_of_frames
-time_val = toc; 
-if f_ind > 1; 
-date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
-end;
 
 if iscell(evalin('base','zef.measurements'));
 f = evalin('base',['zef.measurements{' int2str(evalin('base','zef.ias_data_segment')) '}']);
@@ -458,6 +452,14 @@ if size(f,2) > 1 && high_pass > 0
 [hp_f_1,hp_f_2] = ellip(filter_order,3,80,high_pass/(sampling_freq/2),'high');
 f = filter(hp_f_1,hp_f_2,f')';
 end
+
+
+tic;
+for f_ind = 1 : number_of_frames
+time_val = toc; 
+if f_ind > 1; 
+date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
+end;
 
 
 if ismember(source_direction_mode, [1,2]) 
