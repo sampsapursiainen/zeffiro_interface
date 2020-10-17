@@ -2,11 +2,11 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 zef_i = length(zef.filter_pipeline_list)+1;
-zef.filter_pipeline{zef_i}.name = zef.filter_name_list{find(ismember(zef.filter_name_list,zef.filter_list_selected),1)};
-zef.filter_pipeline{zef_i}.file = zef.filter_file_list{find(ismember(zef.filter_name_list,zef.filter_list_selected),1)};
+zef.filter_pipeline{zef_i}.name = zef.filter_name_list{zef.filter_list_selected};
+zef.filter_pipeline{zef_i}.file = zef.filter_file_list{zef.filter_list_selected};
 zef.filter_pipeline{zef_i}.filter_tag = zef.filter_tag;
 
-zef.aux_field = help(zef.filter_file_list{find(ismember(zef.filter_name_list,zef.filter_list_selected),1)});
+zef.aux_field = help(zef.filter_file_list{zef.filter_list_selected});
 zef.aux_field = zef.aux_field(strfind(zef.aux_field,'Input:')+6:strfind(zef.aux_field,'Output:')-1);
 zef.aux_field = textscan(zef.aux_field,'%s','Delimiter',',');
 zef.aux_field = zef.aux_field{:};
@@ -24,7 +24,7 @@ end
 
 zef.filter_pipeline{zef_i}.parameters = zef.filter_parameter_list;
 
-zef.filter_pipeline_selected = cell(0);
+zef.filter_pipeline_selected = [];
 
 clear zef_i zef_j;
 

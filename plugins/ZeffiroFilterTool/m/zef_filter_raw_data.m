@@ -4,7 +4,7 @@ if isstr(zef.filter_pipeline_selected)
     zef.filter_pipeline_selected = {zef.filter_pipeline_selected};
 end
 for zef_j = 1 : length(zef.filter_pipeline_list)
-    zef_i = find(ismember(zef.filter_pipeline_selected,zef.filter_pipeline_list{zef_j}),1);
+    zef_i = find(ismember(zef.filter_pipeline_selected,zef_j),1);
     if not(isempty(zef_i))
     zef.aux_field = str2func(zef.filter_pipeline{zef_j}.file);
     zef.filter_parameters = zef.filter_pipeline{zef_j}.parameters(:,2);

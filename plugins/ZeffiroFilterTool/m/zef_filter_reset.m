@@ -10,4 +10,4 @@ zef.filter_tag = 'Default tag';
 zef.filter_data_segment = '0';
 zef.filter_pipeline = cell(0); 
 zef.filter_pipeline_list = cell(0);
-zef.filter_pipeline_selected = cell(0); 
+zef.filter_pipeline_selected = []; 

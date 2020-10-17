@@ -10,8 +10,6 @@ set(findobj(zef.h_zef_filter_tool.Children,'-property','FontUnits'),'FontUnits',
 set(findobj(zef.h_zef_filter_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 clear zef_i zef_data;
 
-zef_init_filter_tool;
-
 zef.h_filter_load_epoch_points.ButtonPushedFcn = 'zef_load_epoch_points;';
 zef.h_filter_reset.ButtonPushedFcn = '[zef.yesno] = questdlg(''Reset filter tool?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_filter_reset; zef_init_filter_tool; zef_update_filter_tool; end;';
 zef.h_zef_filter_tool.DeleteFcn = 'if isfield(zef,''h_scroll_bar''); delete(zef.h_scroll_bar);end;';
@@ -34,3 +32,6 @@ zef.h_filter_sampling_rate.ValueChangedFcn = 'zef.filter_sampling_rate = str2num
 zef.h_filter_pipeline_list.ValueChangedFcn = 'zef.filter_pipeline_selected = get(zef.h_filter_pipeline_list,''value'');zef_update_filter_tool;';
 zef.h_filter_parameter_list.DisplayDataChangedFcn = 'zef.filter_pipeline{find(ismember(zef.filter_pipeline_list,zef.filter_pipeline_selected),1)}.parameters = zef.h_filter_parameter_list.Data;';
 zef.h_filter_list.ValueChangedFcn = 'zef.filter_list_selected = get(zef.h_filter_list,''value'');';
+zef.h_filter_list.ItemsData=1;
+
+zef_init_filter_tool;
