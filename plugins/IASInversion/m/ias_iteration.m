@@ -378,7 +378,7 @@ clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
 end
 
 
-source_count = size(L,2);
+source_count = n_interp;
 if evalin('base','zef.ias_normalize_data')==1;
     normalize_data = 'maximum';
 else
@@ -390,10 +390,10 @@ if ias_hyperprior == 1
 else
     balance_spatially = 0;
 end
-if evalin('base',zef.inv_hyperprior) == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-elseif evalin('base',zef.inv_hyperprior) == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+if evalin('base','zef.inv_hyperprior') == 1
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+elseif evalin('base','zef.inv_hyperprior') == 2 
+[beta, theta0] = zef_find_g_hyperprior(snr_val,[],source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
