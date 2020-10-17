@@ -67,7 +67,6 @@ set(zef.h_iasroi_n_map_iterations ,'string',num2str(zef.iasroi_n_map_iterations 
 set(zef.h_iasroi_sampling_frequency ,'string',num2str(zef.iasroi_sampling_frequency));
 set(zef.h_iasroi_low_cut_frequency ,'string',num2str(zef.iasroi_low_cut_frequency));
 set(zef.h_iasroi_high_cut_frequency ,'string',num2str(zef.iasroi_high_cut_frequency));
-set(zef.h_iasroi_data_segment ,'string',num2str(zef.iasroi_data_segment));
 set(zef.h_iasroi_normalize_data ,'value',zef.iasroi_normalize_data);
 set(zef.h_iasroi_time_1 ,'string',num2str(zef.iasroi_time_1));
 set(zef.h_iasroi_time_2 ,'string',num2str(zef.iasroi_time_2));

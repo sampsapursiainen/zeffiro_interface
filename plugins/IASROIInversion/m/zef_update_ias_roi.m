@@ -17,7 +17,6 @@ zef.iasroi_roi_threshold = str2num(get(zef.h_iasroi_roi_threshold ,'string'));
     zef.iasroi_sampling_frequency = str2num(get(zef.h_iasroi_sampling_frequency,'string')); 
     zef.iasroi_low_cut_frequency = str2num(get(zef.h_iasroi_low_cut_frequency,'string')); 
     zef.iasroi_high_cut_frequency = str2num(get(zef.h_iasroi_high_cut_frequency,'string')); 
-    zef.iasroi_data_segment = str2num(get(zef.h_iasroi_data_segment,'string')); 
     zef.iasroi_time_1 = str2num(get(zef.h_iasroi_time_1,'string')); 
     zef.iasroi_time_2 = str2num(get(zef.h_iasroi_time_2,'string')); 
     zef.iasroi_time_3 = str2num(get(zef.h_iasroi_time_3,'string')); 

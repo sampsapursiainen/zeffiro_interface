@@ -441,7 +441,7 @@ n_lead_field = size(L,2);
 L = L(:,roi_aux_ind);
 
 
-source_count = size(L,2);
+source_count = n_interp;
 if evalin('base','zef.iasroi_normalize_data')==1;
     normalize_data = 'maximum';
 else
@@ -452,10 +452,10 @@ if iasroi_hyperprior == 1
 else
     balance_spatially = 0;
 end
-if evalin('base',zef.inv_hyperprior) == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-elseif evalin('base',zef.inv_hyperprior) == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+if evalin('base','zef.inv_hyperprior') == 1
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+elseif evalin('base','zef.inv_hyperprior') == 2 
+[beta, theta0] = zef_find_g_hyperprior(snr_val,[],source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
