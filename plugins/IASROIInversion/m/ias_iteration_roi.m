@@ -448,25 +448,14 @@ else
     normalize_data = 'average';
 end
 if iasroi_hyperprior == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,0);
-elseif iasroi_hyperprior == 2
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L,source_count,normalize_data,1);
-elseif iasroi_hyperprior == 3
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L,source_count,normalize_data,0);
-elseif iasroi_hyperprior == 4
-[beta, theta0] = zef_find_ig_hyperprior_scale(snr_val,3,L,source_count,normalize_data,1);
-elseif iasroi_hyperprior == 5
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L,source_count,normalize_data,0);
-elseif iasroi_hyperprior == 6
-[beta, theta0] = zef_find_g_hyperprior(snr_val,L,source_count,normalize_data,1);
-elseif iasroi_hyperprior == 7
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L,source_count,normalize_data,0);
-elseif iasroi_hyperprior == 8
-[beta, theta0] = zef_find_g_hyperprior_scale(snr_val,3,L,source_count,normalize_data,1);
-elseif iasroi_hyperprior == 9
-[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L,source_count,normalize_data,0);
-elseif iasroi_hyperprior == 10
-[beta, theta0] = zef_find_g_hyperprior_ig(snr_val,L,source_count,normalize_data,1);
+    balance_spatially = 1;
+else
+    balance_spatially = 0;
+end
+if evalin('base',zef.inv_hyperprior) == 1
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+elseif evalin('base',zef.inv_hyperprior) == 2 
+[beta, theta0] = zef_find_g_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
@@ -519,6 +508,8 @@ if size(f,2) > 1 && high_pass > 0
 f = filter(hp_f_1,hp_f_2,f')';
 end
 
+size_f = size(f,2);
+f_data = f;
 
 tic;
 for f_ind = 1 : number_of_frames
@@ -526,7 +517,6 @@ time_val = toc;
 if f_ind > 1; 
 date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
-
 
 
 if source_direction_mode == 1 || source_direction_mode == 2 
@@ -538,13 +528,13 @@ end
 z_vec = ones(size(L,2),1); 
 
 
-if ismember(iasroi_hyperprior,inverse_gamma_ind)
+if evalin('base','zef.inv_hyperprior') == 1
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0./(beta-1);
 else
 theta = (theta0./(beta-1))*ones(size(L,2),1);
 end
-elseif ismember(iasroi_hyperprior,gamma_ind)
+elseif evalin('base','zef.inv_hyperprior') == 2
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0.*beta;
 else
@@ -557,13 +547,13 @@ end
 %aux_norm = aux_norm./max(aux_norm(:));
 %theta = theta0*aux_norm;
 
-if size(f,2) > 1  
-if evalin('base','zef.iasroi_time_2') >=0 0 && evalin('base','zef.iasroi_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.iasroi_time_1') <= size(f,2);
-f = f(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.iasroi_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.iasroi_time_3'))) : min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.iasroi_time_1') + evalin('base','zef.iasroi_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.iasroi_time_3'))));
+if size_f > 1  
+if evalin('base','zef.iasroi_time_2') >=0 0 && evalin('base','zef.iasroi_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.iasroi_time_1') <= size_f;
+f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.iasroi_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.iasroi_time_3'))) : min(size_f, 1 + floor(sampling_freq*(evalin('base','zef.iasroi_time_1') + evalin('base','zef.iasroi_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.iasroi_time_3'))));
 end
 end
-if size(f,2) > 1
-t = [1:size(f,2)];
+if size_f > 1
+t = [1:size_f];
 %gaussian_window = blackmanharris(length(t))';
 %f = f.*gaussian_window;
 f = mean(f,2);
@@ -596,9 +586,9 @@ z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 z_vec = gather(z_vec);
 end
-if ismember(iasroi_hyperprior,inverse_gamma_ind)
+if evalin('base','zef.inv_hyperprior') == 1
 theta = (theta0+0.5*z_vec.^2)./(beta + 1.5);
-elseif ismember(iasroi_hyperprior,gamma_ind)
+elseif evalin('base','zef.inv_hyperprior') == 2
 theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2)); 
 end
 end;
