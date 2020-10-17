@@ -26,7 +26,7 @@ zef.lf_item_list = cell(0);
 end;
 
 if not(isfield(zef,'lf_item_selected')); 
-   zef.lf_item_selected = cell(0); 
+   zef.lf_item_selected = []; 
 end;
 
 if isfield(zef,'h_lf_bank_tool')

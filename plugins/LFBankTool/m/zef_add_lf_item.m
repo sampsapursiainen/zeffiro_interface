@@ -23,9 +23,4 @@ clear zef_i;
 
 zef_update_lf_bank_tool;
 zef_update;
-zef.lf_item_selected = zef.lf_item_list;
-if isfield(zef,'h_lf_bank_tool')
-        if isvalid(zef.h_lf_bank_tool)
-set(zef.h_lf_item_list,'Items',zef.lf_item_list,'Value',zef.lf_item_selected,'Multiselect','on');
-        end
-        end
+

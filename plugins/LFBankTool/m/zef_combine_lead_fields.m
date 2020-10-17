@@ -15,7 +15,7 @@ for zef_i = 1:length(zef.lf_bank_storage)
 zef_j = zef_j + 1;
 zef.lf_n_aux = zef.lf_n_aux + norm(zef.lf_bank_storage{zef_i}.L,'fro').^2;  
 zef.aux_field = str2func(zef.lf_normalization_functions_file_list{zef.lf_normalization});
-[zef.measurements_aux, zef.L_aux] = zef.aux_field(zef_i);
+[zef.L_aux, zef.measurements_aux] = zef.aux_field(zef_i);
 zef.measurements = [zef.measurements ; zef.measurements_aux];
 zef.L = [zef.L ; zef.L_aux];
 

@@ -10,6 +10,7 @@ set(zef.h_lf_bank_tool,'Name','ZEFFIRO Interface: Multi lead field tool');
 set(findobj(zef.h_lf_bank_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_lf_bank_tool.Children,'-property','FontSize'),'FontSize',9);
 zef.h_lf_item_list.ValueChangedFcn = 'zef.lf_item_selected = get(zef.h_lf_item_list,''value'');';
+zef.h_lf_item_list.ItemsData=1;
 zef.h_add_lf_item.ButtonPushedFcn = 'zef_add_lf_item;';
 zef.h_lf_tag.ValueChangedFcn = 'zef.lf_tag = get(zef.h_lf_tag, ''Value'');';
 zef.h_lf_bank_scaling_factor.ValueChangedFcn = 'zef.lf_bank_scaling_factor = str2num(get(zef.h_lf_bank_scaling_factor, ''Value''));';
