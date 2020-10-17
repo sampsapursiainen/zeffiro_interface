@@ -26,6 +26,9 @@ zef.cp3_b = str2num(get(zef.h_cp3_b,'string'));
 zef.cp3_c = str2num(get(zef.h_cp3_c,'string'));
 zef.cp3_d = str2num(get(zef.h_cp3_d,'string'));
 zef.colortune_param = str2num(get(zef.h_colortune_param,'string'));
+zef.surface_sources = get(zef.h_as_opt_6,'value');
+zef.inv_hyperprior = get(zef.h_inv_hyperprior,'value');
+zef.inv_hyperprior_weight = get(zef.h_inv_hyperprior_weight,'value');
 
 if str2num(get(zef.h_inv_dynamic_range,'string'))== 0
     zef.inv_dynamic_range = Inf; 

@@ -545,6 +545,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.measurements = [];
        zef_data.reconstruction = [];
        zef_data.inv_hyperprior = [1]; 
+       zef_data.inv_hyperprior_weight = [1]; 
        zef_data.inv_beta = [1.5];
        zef_data.inv_theta0 = [1e-12];
        zef_data.inv_likelihood_std = 0.03;
