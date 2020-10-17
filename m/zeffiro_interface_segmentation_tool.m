@@ -691,10 +691,7 @@ zef.h_menu_reset_lead_field                       =zef_data.h_menu_reset_lead_fi
 zef.h_menu_reset_volume_data                      =zef_data.h_menu_reset_volume_data;    
 zef.h_menu_reset_measurement_data                 =zef_data.h_menu_reset_measurement_data;         
 zef.h_menu_reset_reconstruction                   =zef_data.h_menu_reset_reconstruction;
-zef.h_menu_merge_lead_field                       =zef_data.h_menu_merge_lead_field;    
-zef.h_menu_ias_map_estimation                     =zef_data.h_menu_ias_map_estimation;
-zef.h_menu_ias_map_estimation_roi                 =zef_data.h_menu_ias_map_estimation_roi;    
-zef.h_menu_ias_map_multiresolution                =zef_data.h_menu_ias_map_multiresolution;    
+zef.h_menu_merge_lead_field                       =zef_data.h_menu_merge_lead_field;       
 zef.h_menu_butterfly_plot                         =zef_data.h_menu_butterfly_plot;
 zef.h_menu_find_synthetic_source                  =zef_data.h_menu_find_synthetic_source;   
 zef.h_menu_generate_eit_data                      =zef_data.h_menu_generate_eit_data; 
@@ -734,9 +731,6 @@ set(zef.h_menu_reset_volume_data                     ,'MenuSelectedFcn','[zef.ye
 set(zef.h_menu_reset_measurement_data                ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the measurement data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.measurements = []; end;');
 set(zef.h_menu_reset_reconstruction                  ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the reconstruction?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.reconstruction = []; end;');
 set(zef.h_menu_merge_lead_field                      ,'MenuSelectedFcn','merge_lead_field;');
-set(zef.h_menu_ias_map_estimation                    ,'MenuSelectedFcn','ias_map_estimation;');
-set(zef.h_menu_ias_map_estimation_roi                ,'MenuSelectedFcn','ias_map_estimation_roi;');
-set(zef.h_menu_ias_map_multiresolution               ,'MenuSelectedFcn','ias_map_estimation_multires;');
 set(zef.h_menu_butterfly_plot                        ,'MenuSelectedFcn','zef_butterfly_plot;');
 set(zef.h_menu_find_synthetic_source                 ,'MenuSelectedFcn','find_synthetic_source;');
 set(zef.h_menu_generate_eit_data                     ,'MenuSelectedFcn','find_synthetic_eit_data;');
