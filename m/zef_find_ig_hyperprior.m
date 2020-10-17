@@ -8,8 +8,8 @@ source_space_size = 1;
 normalize_data = 'maximum';
 eps_val = 1e-9;
 delta_val = 0.1;
-
 balance_snr = 1;
+w_param = 0.5;
 
 if length(varargin) > 0
 L = varargin{1};
@@ -28,6 +28,14 @@ if length(varargin) > 3
 balance_snr = varargin{4};
 end
 
+if length(varargin) > 4
+    if varargin{5} == 2
+w_param = 1/3;
+    else
+        w_param = 1/2;
+    end
+end
+
 
 if isempty(L)
     snr_vec = snr_val;
@@ -36,9 +44,9 @@ if isempty(L)
 else
     
 if isequal(normalize_data,'maximum')
-   signal_strength = size(L,2)*sqrt(max(abs(L))')./sum(max(abs(L))');
+   signal_strength = size(L,2)*(max(abs(L))').^(w_param)./sum(max(abs(L))');
 else
-   signal_strength = size(L,2).*sqrt(sqrt(sum(L.^2))')./sum(sqrt(sum(L.^2))');
+   signal_strength = size(L,2).*(sqrt(sum(L.^2))').^(w_param)./sum(sqrt(sum(L.^2))');
 end
    source_strength = size(L,2)./sum(max(abs(L))');
 
