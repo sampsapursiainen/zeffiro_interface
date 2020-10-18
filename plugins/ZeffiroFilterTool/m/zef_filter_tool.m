@@ -30,7 +30,7 @@ zef.h_move_down_filter.ButtonPushedFcn = 'zef_move_down_filter_item;';
 zef.h_filter_tag.ValueChangedFcn = 'zef.filter_tag = get(zef.h_filter_tag,''value'');';
 zef.h_filter_sampling_rate.ValueChangedFcn = 'zef.filter_sampling_rate = str2num(get(zef.h_filter_sampling_rate,''value''));';
 zef.h_filter_pipeline_list.ValueChangedFcn = 'zef.filter_pipeline_selected = get(zef.h_filter_pipeline_list,''value'');zef_update_filter_tool;';
-zef.h_filter_parameter_list.DisplayDataChangedFcn = 'zef.filter_pipeline{find(ismember(zef.filter_pipeline_list,zef.filter_pipeline_selected),1)}.parameters = zef.h_filter_parameter_list.Data;';
+zef.h_filter_parameter_list.DisplayDataChangedFcn = 'zef.filter_pipeline{zef.filter_pipeline_selected(1)}.parameters = zef.h_filter_parameter_list.Data;';
 zef.h_filter_list.ValueChangedFcn = 'zef.filter_list_selected = get(zef.h_filter_list,''value'');';
 zef.h_filter_list.ItemsData=1;
 

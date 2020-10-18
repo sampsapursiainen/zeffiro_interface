@@ -8,13 +8,19 @@ for zef_i = 1 : length(zef.filter_pipeline)
 zef.filter_pipeline_list{zef_i} = ['Tag: ' zef.filter_pipeline{zef_i}.filter_tag  ', Type: ' zef.filter_pipeline{zef_i}.name ];
 end
  
-
-if isempty(zef.filter_pipeline_selected)
-zef.filter_pipeline_selected = 1;
-end
+if isempty(zef.filter_pipeline)
+        set(zef.h_filter_parameter_list,'data',cell(0));
+else
+    if isempty(zef.filter_pipeline_selected)
+        zef.filter_pipeline_selected = 1;
+    end
     set(zef.h_filter_parameter_list,'data',zef.filter_pipeline{zef.filter_pipeline_selected(1)}.parameters);
-set(zef.h_filter_pipeline_list,'Items',zef.filter_pipeline_list,'ItemsData',[1:length(zef.filter_pipeline_list)],'Value',zef.filter_pipeline_selected,'Multiselect','on');
-
+end
+if isempty(zef.filter_pipeline_list)
+    set(zef.h_filter_pipeline_list,'Items',cell(0),'ItemsData',1,'Value',cell(0),'Multiselect','on');
+else
+    set(zef.h_filter_pipeline_list,'Items',zef.filter_pipeline_list,'ItemsData',[1:length(zef.filter_pipeline_list)],'Value',zef.filter_pipeline_selected,'Multiselect','on');
+end
 
 clear zef_i;
 

@@ -23,7 +23,7 @@ if not(isfield(zef,'filter_save_file'));
 end
 
 if not(isfield(zef,'filter_list_selected'));
-    zef.filter_list_selected = [];
+    zef.filter_list_selected = cell(0);
 end
 
 if not(isfield(zef,'filter_sampling_rate'));
@@ -78,10 +78,10 @@ set(zef.h_filter_list,'Items',zef.filter_name_list,'ItemsData',[1:length(zef.fil
 set(zef.h_filter_pipeline_list,'Multiselect','on');
 
 if not(isempty(zef.filter_pipeline_selected))
-zef.aux_field = help(zef.filter_pipeline{zef.filter_pipeline_selected}.file);
+zef.aux_field = help(zef.filter_pipeline{zef.filter_pipeline_selected(1)}.file);
 zef.aux_field = zef.aux_field(strfind(zef.aux_field,'Input:'):strfind(zef.aux_field,'Output:'));
 zef.filter_parameter_list(:,1) = textscan(zef.aux_field,'%s','Delimiter',',');
-zef.aux_field = zef.filter_pipeline{zef.filter_pipeline_selected}.parameters;
+zef.aux_field = zef.filter_pipeline{zef.filter_pipeline_selected(1)}.parameters;
 end
 
 set(zef.h_filter_parameter_list,'columneditable',[false true]);
