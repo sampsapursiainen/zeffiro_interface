@@ -47,7 +47,11 @@ if isempty(L)
 else
     
 
-   source_strength = size(L,2)./sum(max(abs(L))');
+     if isequal(normalize_data,'maximum')
+   source_strength = (size(L,2))./sum(max(abs(L))');
+else
+   source_strength = (size(L,2))./sum(sqrt(sum(L.^2))');
+     end
 
 if balance_snr 
       if isequal(normalize_data,'maximum')

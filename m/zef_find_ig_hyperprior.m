@@ -45,9 +45,14 @@ if isempty(L)
     source_strength = 1e-2;
 else
     
-
-   source_strength = size(L,2)./sum(max(abs(L))');
-
+    
+     if isequal(normalize_data,'maximum')
+   source_strength = (size(L,2))./sum(max(abs(L))');
+else
+   source_strength = (size(L,2))./sum(sqrt(sum(L.^2))');
+end
+ 
+   
 if balance_snr 
     if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
