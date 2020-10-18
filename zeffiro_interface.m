@@ -9,9 +9,9 @@ if not(isdeployed)
 zef.code_path = '/m';
 addpath(genpath([zef.program_path '/m']));
 addpath(genpath([zef.program_path '/mlapp']));
-addpath([zef.program_path '/fig']); 
-addpath(genpath([zef.program_path '/plugins'])); 
+addpath([zef.program_path '/fig']);  
 addpath([zef.program_path zef.code_path]); 
+addpath(genpath([zef.program_path '/plugins']));
 end;
 zef.h_zeffiro = fopen('zeffiro_interface.ini');
 zef.ini_cell = textscan(zef.h_zeffiro,'%s');
