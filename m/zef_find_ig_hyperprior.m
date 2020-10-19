@@ -41,9 +41,9 @@ else
     
     
      if isequal(normalize_data,'maximum')
-   source_strength = (size(L,2))./sum(max(abs(L))');
+   source_strength = mean(1./max(abs(L))');
 else
-   source_strength = (size(L,2))./sum(sqrt(sum(L.^2))');
+   source_strength = mean(1./sqrt(sum(L.^2))');
 end
  
    
