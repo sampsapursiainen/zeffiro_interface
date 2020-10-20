@@ -501,7 +501,7 @@ end
 if n_iter(j) > 0
 L_aux_2 = L_aux(:,mr_dec);
 if source_count_aux == 0
-source_count = evalin('base',['length(zef.ramus_multires_dec{1}{' int2str(j) '})']);
+source_count = size(L,2);
 source_count_aux = 1;
 end
 if evalin('base','zef.ramus_normalize_data')==1;
@@ -516,9 +516,9 @@ else
     balance_spatially = 0;
 end
 if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_ig_hyperprior(snr_val,L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 elseif evalin('base','zef.inv_hyperprior') == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val,[],size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_g_hyperprior(snr_val,[],source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
