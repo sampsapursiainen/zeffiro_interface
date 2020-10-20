@@ -32,7 +32,6 @@ if length(varargin) > 4
 w_param = 0.5 - 0.05*(varargin{5}-1);
 end
 
-
 if isempty(L)
     snr_vec = snr_val;
     snr_vec_limited = snr_vec;
@@ -41,9 +40,10 @@ else
     
     
      if isequal(normalize_data,'maximum')
-   source_strength = mean(1./max(abs(L))');
+         
+   source_strength = mean(1./((max(abs(L))').^w_param));
 else
-   source_strength = mean(1./sqrt(sum(L.^2))');
+   source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
 end
  
    

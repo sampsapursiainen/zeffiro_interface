@@ -41,12 +41,14 @@ if isempty(L)
 else
     
 
-    if isequal(normalize_data,'maximum')
-   source_strength = mean(1./max(abs(L))');
+     if isequal(normalize_data,'maximum')
+         
+   source_strength = mean(1./((max(abs(L))').^w_param));
 else
-   source_strength = mean(1./sqrt(sum(L.^2))');
-end
+   source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
+     end
 
+     
 if balance_snr 
       if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
