@@ -501,7 +501,7 @@ end
 if n_iter(j) > 0
 L_aux_2 = L_aux(:,mr_dec);
 if source_count_aux == 0
-source_count = size(L,2);
+source_count = size(L_aux_2,2);
 source_count_aux = 1;
 end
 if evalin('base','zef.ramus_normalize_data')==1;
