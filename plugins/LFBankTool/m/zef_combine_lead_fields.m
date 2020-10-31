@@ -10,8 +10,7 @@ zef.source_directions = [];
 zef.lf_n_aux = 0;
 zef.lf_size_aux = 0;
 zef_j = 0;
-for zef_i = 1:length(zef.lf_bank_storage) 
-    if ismember(zef.lf_item_list{zef_i},zef.lf_item_selected)
+for zef_i = 1:sort(zef.lf_item_selected)
 zef_j = zef_j + 1;
 zef.lf_n_aux = zef.lf_n_aux + norm(zef.lf_bank_storage{zef_i}.L,'fro').^2;  
 zef.aux_field = str2func(zef.lf_normalization_functions_file_list{zef.lf_normalization});
@@ -47,7 +46,7 @@ zef.imaging_method = find(ismember(zef.imaging_method_cell, zef.lf_bank_storage{
 
 end
     end
-end
+
 if zef.lf_normalization == 2
 zef.aux_field = norm(zef.L,'fro');
 zef.measurements = sqrt(zef.lf_n_aux)*zef.measurements/norm(zef.L,'fro');
