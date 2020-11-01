@@ -1,3 +1,13 @@
+
+if not(exist('zef'))
+    zef = [];
+end
+
+if isfield(zef,'h_zeffiro_window_main')
+    if isvalid(zef.h_zeffiro_window_main)
+        error('Another instance of Zeffiro interface already open.')
+    end
+end
 clear zef;
 zef.ver = ver;
 if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
@@ -196,4 +206,5 @@ end
 zef_figure_tool;
 zef_mesh_tool;
 zef_update;
+
 
