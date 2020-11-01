@@ -1,0 +1,54 @@
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+if not(isfield(zef,'mne_prior')); 
+    zef.mne_prior = 1; 
+end; 
+if not(isfield(zef,'mne_type')); 
+    zef.mne_type = 1; 
+end; 
+if not(isfield(zef,'mne_snr')); 
+    zef.mne_snr = 30; 
+end;
+if not(isfield(zef,'mne_pcg_tol')); 
+    zef.mne_pcg_tol = 1e-8; 
+end;
+if not(isfield(zef,'mne_sampling_frequency')); 
+    zef.mne_sampling_frequency = 1025; 
+end;
+if not(isfield(zef,'mne_low_cut_frequency')); 
+    zef.mne_low_cut_frequency = 7; 
+end;
+if not(isfield(zef,'mne_high_cut_frequency')); 
+    zef.mne_high_cut_frequency = 9; 
+end;
+if not(isfield(zef,'mne_normalize_data')); 
+    zef.mne_normalize_data = 1; 
+end;
+
+if not(isfield(zef,'mne_time_1')); 
+    zef.mne_time_1 = 0; 
+end;
+if not(isfield(zef,'mne_time_2')); 
+    zef.mne_time_2 = 0; 
+end;
+if not(isfield(zef,'mne_time_3')); 
+    zef.mne_time_3 = 0; 
+end;
+if not(isfield(zef,'mne_number_of_frames')); 
+    zef.mne_number_of_frames = 1; 
+end;
+if not(isfield(zef,'mne_data_segment')); 
+    zef.mne_data_segment = 1; 
+end;
+
+set(zef.h_mne_prior ,'value',zef.mne_prior);
+set(zef.h_mne_type ,'value',zef.mne_type);
+set(zef.h_mne_snr ,'string',num2str(zef.mne_snr));
+set(zef.h_mne_sampling_frequency ,'string',num2str(zef.mne_sampling_frequency));
+set(zef.h_mne_low_cut_frequency ,'string',num2str(zef.mne_low_cut_frequency));
+set(zef.h_mne_high_cut_frequency ,'string',num2str(zef.mne_high_cut_frequency));
+set(zef.h_mne_normalize_data ,'value',zef.mne_normalize_data);
+set(zef.h_mne_time_1 ,'string',num2str(zef.mne_time_1));
+set(zef.h_mne_time_2 ,'string',num2str(zef.mne_time_2));
+set(zef.h_mne_time_3 ,'string',num2str(zef.mne_time_3));
+set(zef.h_mne_number_of_frames ,'string',num2str(zef.mne_number_of_frames));
