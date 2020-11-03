@@ -1,4 +1,4 @@
-%Copyright © 2020- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function h_source = zef_plot_source(source_type)
 
