@@ -9,8 +9,10 @@ L = evalin('base',['zef.lf_bank_storage{' num2str(lf_bank_index) '}.L']);
 measurements = evalin('base',['zef.lf_bank_storage{' num2str(lf_bank_index) '}.measurements']);
 noise_data = evalin('base',['zef.lf_bank_storage{' num2str(lf_bank_index) '}.noise_data']);
 
-
-inv_C = inv(sqrtm(cov(noise_data')));
+aux_mat_1 = cov(noise_data');
+aux_mat_2 = inv(diag(sqrt(diag(aux_mat_1))));
+aux_mat_1 = aux_mat_2*aux_mat_1*aux_mat_2;
+inv_C = inv(sqrtm(aux_mat_1));
 
 L = inv_C*L;
 measurements = inv_C*measurements;
