@@ -29,14 +29,7 @@ if not(isfield(zef,'lf_item_selected'));
    zef.lf_item_selected = []; 
 end;
 
-if isfield(zef,'h_lf_bank_tool')
-    if isvalid(zef.h_lf_bank_tool)
-set(zef.h_lf_tag,'Value',zef.lf_tag);
-set(zef.h_lf_bank_scaling_factor,'Value',num2str(zef.lf_bank_scaling_factor));
-zef.aux_field = get(zef.h_lf_normalization,'items');
-set(zef.h_lf_normalization,'Value',zef.aux_field(zef.lf_normalization));
-    end
-end
+
     
 zef.lf_normalization_functions_dir = which('zef_init_lf_bank_tool.m');
 zef.lf_normalization_functions_dir = [fileparts(zef.lf_normalization_functions_dir) '/' 'lead_field_normalization_functions/*.m'];
@@ -58,6 +51,15 @@ zef.lf_normalization_functions_file_list = zef.lf_normalization_functions_file_l
 
 if not(isempty(zef.lf_normalization_functions_name_list))
 set(zef.h_lf_normalization,'items',zef.lf_normalization_functions_name_list);
+end
+
+if isfield(zef,'h_lf_bank_tool')
+    if isvalid(zef.h_lf_bank_tool)
+set(zef.h_lf_tag,'Value',zef.lf_tag);
+set(zef.h_lf_bank_scaling_factor,'Value',num2str(zef.lf_bank_scaling_factor));
+zef.aux_field = get(zef.h_lf_normalization,'items');
+set(zef.h_lf_normalization,'Value',zef.aux_field(zef.lf_normalization));
+    end
 end
 
 zef_update_lf_bank_tool;
