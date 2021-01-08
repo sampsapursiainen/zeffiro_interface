@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [shape_param, scale_param, snr_vec] = zef_find_ig_hyperprior(snr_val,tail_length_db,snr_decay, varargin)
+function [shape_param, scale_param, snr_vec] = zef_find_ig_hyperprior(snr_val,tail_length_db,varargin)
 
 L = [];
 
