@@ -446,7 +446,7 @@ z_vec = ones(size(L_aux,2),1);
 
 if size_f > 1  
 if evalin('base','zef.ramus_time_2') >=0 && evalin('base','zef.ramus_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.ramus_time_1') <= size_f;
-f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.ramus_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))) : min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.ramus_time_1') + evalin('base','zef.ramus_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))));
+f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.ramus_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))) : min(size_f, 1 + floor(sampling_freq*(evalin('base','zef.ramus_time_1') + evalin('base','zef.ramus_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))));
 end
 end
 if size_f > 1
