@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [shape_param, scale_param, snr_vec] = zef_find_g_hyperprior(snr_val, varargin)
+function [shape_param, scale_param, snr_vec] = zef_find_g_hyperprior(snr_val, tail_length_db, varargin)
 
 L = [];
 
@@ -64,10 +64,8 @@ snr_vec_limited = max(1,snr_vec);
 
 end
 
-shape_param = zeros(size(snr_vec));
-scale_param = zeros(size(snr_vec));
-
 relative_noise_std = 10.^(-snr_vec_limited/20);
+tail_length = 10.^(tail_length_db/20);
     
 a = zeros(size(relative_noise_std));
 b = 200*ones(size(relative_noise_std));
@@ -82,7 +80,7 @@ for j = 1 : 10
 
 shape_param_vec = a + (b-a).*[0:delta_val:1];
 
-p_val_vec = zef_gamma_gpu(1,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 ./ (shape_param_vec));
+p_val_vec = zef_gamma_gpu(tail_length.^2,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 ./ (shape_param_vec));
 
 [m_aux,i_aux] = min(abs(p_val_vec - eps_val), [], 2);
 
