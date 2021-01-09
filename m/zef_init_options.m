@@ -10,7 +10,7 @@ if not(isfield(zef,'parcellation_type'));
     zef.parcellation_type = 1; 
 end; 
 if not(isfield(zef,'inv_hyperprior_tail_length_db')); 
-    zef.inv_hyperprior_tail_length_db = 0; 
+    zef.inv_hyperprior_tail_length_db = 10; 
 end; 
 if not(isfield(zef,'parcellation_quantile')); 
     zef.parcellation_quantile = 0.98; 

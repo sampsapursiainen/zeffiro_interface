@@ -587,7 +587,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.non_source_ind = [];
        zef_data.source_model = 2;
        zef_data.use_depth_electrodes = 0;
-       zef_data.inv_hyperprior_tail_length_db = 0;
+       zef_data.inv_hyperprior_tail_length_db = 10;
        
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
