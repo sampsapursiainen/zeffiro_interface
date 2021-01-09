@@ -6,10 +6,11 @@ L = [];
 
 source_space_size = 1;
 normalize_data = 'maximum';
-eps_val = 1e-9;
+eps_val = 2e-3;
 delta_val = 0.1;
 balance_snr = 1;
 w_param = 1/2;
+tail_length_db = max(1,tail_length_db);
 
 if length(varargin) > 0
 L = varargin{1};
@@ -45,7 +46,6 @@ else
    source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
 end
  
-   
 if balance_snr 
     if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
@@ -65,7 +65,7 @@ relative_noise_std = 10.^(-snr_vec_limited/20);
 tail_length = 10.^(tail_length_db/20);
     
 a = 1*ones(size(relative_noise_std));
-b = 200*ones(size(relative_noise_std));
+b = 170*ones(size(relative_noise_std));
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
     relative_noise_std = gpuArray(relative_noise_std);
@@ -77,12 +77,14 @@ for j = 1 : 10
 
 shape_param_vec = a + (b-a).*[0:delta_val:1];
 
-p_val_vec = zef_inverse_gamma_gpu(tail_length.^2,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 .* (shape_param_vec - 1));
+p_val_vec = zef_inverse_gamma_gpu(relative_noise_std.^2.*tail_length.^2,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 .* (shape_param_vec - 1));
 
-[m_aux,i_aux] = min(abs(p_val_vec - eps_val), [], 2);
+eps_val_aux = eps_val/(relative_noise_std.^2*tail_length.^2);
 
-i_aux = min(size(p_val_vec,2)-1,i_aux);
-i_aux = max(2,i_aux);
+[m_aux,i_aux] = min(abs(p_val_vec(2:end) - eps_val_aux), [], 2);
+
+i_aux = i_aux + 1;
+i_aux = min(size(p_val_vec,2),i_aux);
 
 b = shape_param_vec((i_aux-1)*size(p_val_vec,1)+[1:size(p_val_vec,1)]');
 a = shape_param_vec((i_aux-2)*size(p_val_vec,1)+[1:size(p_val_vec,1)]');
