@@ -27,9 +27,6 @@ end;
 if not(isfield(zef,'ramus_hyperprior')); 
     zef.ramus_hyperprior = 1; 
 end; 
-if not(isfield(zef,'ramus_snr')); 
-    zef.ramus_snr = 30; 
-end;
 if not(isfield(zef,'ramus_n_map_iterations')); 
     zef.ramus_n_map_iterations = 25; 
 end;
@@ -69,6 +66,8 @@ end;
 if not(isfield(zef,'ramus_number_of_frames')); 
     zef.ramus_number_of_frames = 1; 
 end;
+
+zef.ramus_snr = zef.inv_snr;
 
 set(zef.h_ramus_multires_n_levels ,'string',num2str(zef.ramus_multires_n_levels));
 set(zef.h_ramus_multires_n_decompositions ,'string',num2str(zef.ramus_multires_n_decompositions));
