@@ -15,9 +15,6 @@ end;
 if not(isfield(zef,'iasroi_hyperprior')); 
     zef.iasroi_hyperprior = 1; 
 end; 
-if not(isfield(zef,'iasroi_snr')); 
-    zef.iasroi_snr = 30; 
-end;
 if not(isfield(zef,'iasroi_n_map_iterations')); 
     zef.iasroi_n_map_iterations = 25; 
 end;
@@ -53,6 +50,7 @@ if not(isfield(zef,'iasroi_number_of_frames'));
     zef.iasroi_number_of_frames = 1; 
 end;
 
+zef.iasroi_snr = zef.inv_snr;
 
 set(zef.h_iasroi_rec_source_8 ,'string',num2str(zef.iasroi_rec_source(1,8)));
 set(zef.h_iasroi_rec_source_9 ,'value',zef.iasroi_rec_source(1,9));
