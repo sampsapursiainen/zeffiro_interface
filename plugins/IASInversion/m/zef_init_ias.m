@@ -3,9 +3,6 @@
 if not(isfield(zef,'ias_hyperprior')); 
     zef.ias_hyperprior = 1; 
 end; 
-if not(isfield(zef,'ias_snr')); 
-    zef.ias_snr = 30; 
-end;
 if not(isfield(zef,'ias_n_map_iterations')); 
     zef.ias_n_map_iterations = 25; 
 end;
@@ -40,6 +37,8 @@ end;
 if not(isfield(zef,'ias_data_segment')); 
     zef.ias_data_segment = 1; 
 end;
+
+zef.ias_snr = zef.inv_snr;
 
 set(zef.h_ias_hyperprior ,'value',zef.ias_hyperprior);
 set(zef.h_ias_snr ,'string',num2str(zef.ias_snr));
