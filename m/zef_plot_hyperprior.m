@@ -15,13 +15,13 @@ eps_val = 1e-15;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
 if evalin('base','zef.inv_hyperprior') == 1
 [a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
-plot_vec = zef_inverse_gamma_gpu(t,a,b*1e4);
+plot_vec = gather(zef_inverse_gamma_gpu(t,a,b*1e4));
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4/(a-1));
 elseif evalin('base','zef.inv_hyperprior') == 2 
 [a,b] = zef_find_g_hyperprior(snr_val,tail_length);
-plot_vec = zef_gamma_gpu(t,a,b*1e4);
+plot_vec = gather(zef_gamma_gpu(t,a,b*1e4));
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
@@ -74,7 +74,6 @@ set(h_text,'fontsize',evalin('base','zef.font_size'));
 
 hold(evalin('base','zef.h_axes1'),'off');
 
-y_lim_vec
 set(evalin('base','zef.h_axes1'),'ylim',y_lim_vec); 
 set(evalin('base','zef.h_axes1'),'xlim',x_lim_vec);
 
