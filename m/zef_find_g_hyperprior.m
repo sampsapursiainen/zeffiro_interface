@@ -83,7 +83,7 @@ shape_param_vec = a + (b-a).*[0:delta_val:1];
 
 p_val_vec = zef_gamma_gpu(relative_noise_std.^2.*tail_length.^2,shape_param_vec,relative_noise_std(:, ones(size(shape_param_vec,2),1)).^2 ./ (shape_param_vec));
 
-eps_val_aux = eps_val/(relative_noise_std.^2*tail_length.^2);
+eps_val_aux = eps_val./(relative_noise_std.^2*tail_length.^2);
 
 [m_aux,i_aux] = min(abs(p_val_vec(2:end) - eps_val_aux), [], 2);
 
