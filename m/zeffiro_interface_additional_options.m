@@ -90,7 +90,7 @@ zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
 
 clear zef_data;
 
-zef.h_inv_dynamic_range.Value = num2str(zef.inv_dynamic_range);
+
 zef.h_orbit_1.Value = num2str(zef.orbit_1);
 zef.h_orbit_2.Value = num2str(zef.orbit_2);
 zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
@@ -112,6 +112,9 @@ zef.h_parcellation_quantile.Value = num2str(zef.parcellation_quantile);
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
 zef.h_source_model.ItemsData = [1:length(zef.h_source_model.Items)];
 zef.h_source_model.Value = zef.source_model;
+
+zef.h_inv_dynamic_range.Value = num2str(1/zef.inv_dynamic_range);
+
 zef.h_use_gpu.Value = zef.use_gpu;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
