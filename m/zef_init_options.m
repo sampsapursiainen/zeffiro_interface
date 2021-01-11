@@ -52,6 +52,9 @@ if not(isfield(zef,'gpu_num'));
     zef.gpu_num = 1; 
 end;
 
+if not(isfield(zef,'inv_snr')); 
+    zef.inv_snr = 30; 
+end;
 
 if not(isfield(zef,'cp2_on')); 
     zef.cp2_on = 0; 

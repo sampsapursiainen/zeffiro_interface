@@ -32,6 +32,7 @@ zef.colortune_param = str2num(get(zef.h_colortune_param,'Value'));
 zef.surface_sources = get(zef.h_as_opt_6,'Value');
 zef.inv_hyperprior = get(zef.h_inv_hyperprior,'Value');
 zef.inv_hyperprior_weight = get(zef.h_inv_hyperprior_weight,'Value');
+zef.inv_snr = str2num(get(zef.h_inv_snr,'Value'));
 
 if str2num(get(zef.h_inv_dynamic_range,'Value'))== 0
     zef.inv_dynamic_range = Inf; 
