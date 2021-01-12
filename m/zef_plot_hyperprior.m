@@ -15,20 +15,20 @@ eps_val = 1e-15;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
 if evalin('base','zef.inv_hyperprior') == 1
 [a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
-plot_vec = gather(zef_inverse_gamma_gpu(t,a,b*1e4));
+plot_vec = zef_inverse_gamma_gpu(t,a,b*1e4);
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4/(a-1));
-elseif evalin('base','zef.inv_hyperprior') == 2 
+elseif evalin('base','zef.inv_hyperprior') == 2
 [a,b] = zef_find_g_hyperprior(snr_val,tail_length);
-plot_vec = gather(zef_gamma_gpu(t,a,b*1e4));
+plot_vec = zef_gamma_gpu(t,a,b*1e4);
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
 
-h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k'); 
+h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
 y_lim_vec = [eps_val eps_val*10.^(1.05*(log10(max(plot_vec))-log10(eps_val)))];
 x_lim_vec = [10.^(-min_amp_exp/2) 10.^(max_amp_exp/2) ];
@@ -74,13 +74,29 @@ set(h_text,'fontsize',evalin('base','zef.font_size'));
 
 hold(evalin('base','zef.h_axes1'),'off');
 
-set(evalin('base','zef.h_axes1'),'ylim',y_lim_vec); 
+set(evalin('base','zef.h_axes1'),'ylim',y_lim_vec);
 set(evalin('base','zef.h_axes1'),'xlim',x_lim_vec);
 
-h_xlabel = xlabel(evalin('base','zef.h_axes1'),'Prior standard deviation');
-h_ylabel = ylabel(evalin('base','zef.h_axes1'),'Hyperprior density');
-h_xlabel.Position(2) = y_lim_vec(1)*10.^(0.03*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))); 
-h_ylabel.Position(1) = x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))); 
+h_xlabel = xlabel(evalin('base','zef.h_axes1'),'Prior standard deviation (dB)');
+h_ylabel = ylabel(evalin('base','zef.h_axes1'),'Hyperprior density (dB)');
+h_xlabel.Position(2) = y_lim_vec(1)*10.^(0.03*(log10(y_lim_vec(2))-log10(y_lim_vec(1))));
+h_ylabel.Position(1) = x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1))));
 
+h_axes = evalin('base','zef.h_axes1');
+h_axes.XTickLabelMode = 'manual';
+tick_label_vec = 10.^(round(20*[-min_amp_exp/2 : max_amp_exp/2])/20);
+tick_label_cell = cell(0);
+for i = 1 : length(tick_label_vec)
+tick_label_cell{i} = num2str(db(tick_label_vec(i)));
 end
- 
+h_axes.XTick = tick_label_vec;
+h_axes.XTickLabel = tick_label_cell;
+
+h_axes.YTickLabelMode = 'manual';
+tick_label_vec = 10.^(round(20*[log10(eps_val): log10(eps_val*10.^(1.05*(log10(max(plot_vec))-log10(eps_val))))])/20);
+tick_label_cell = cell(0);
+for i = 1 : length(tick_label_vec)
+tick_label_cell{i} = num2str(db(tick_label_vec(i)));
+end
+h_axes.YTick = tick_label_vec;
+h_axes.YTickLabel = tick_label_cell;
