@@ -10,6 +10,7 @@ n_multires = evalin('base','zef.ramus_multires_n_levels');
 ramus_hyperprior = evalin('base','zef.ramus_hyperprior');
 sparsity_factor = evalin('base','zef.ramus_multires_sparsity');
 snr_val = evalin('base','zef.ramus_snr');
+pm_val = evalin('base','zef.inv_prior_over_measurement_db');
 sampling_freq = evalin('base','zef.ramus_sampling_frequency');
 high_pass = evalin('base','zef.ramus_low_cut_frequency');
 low_pass = evalin('base','zef.ramus_high_cut_frequency');
@@ -446,11 +447,12 @@ z_vec = ones(size(L_aux,2),1);
 
 if size_f > 1  
 if evalin('base','zef.ramus_time_2') >=0 && evalin('base','zef.ramus_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.ramus_time_1') <= size_f;
-f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.ramus_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))) : min(size_f, 1 + floor(sampling_freq*(evalin('base','zef.ramus_time_1') + evalin('base','zef.ramus_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))));
+f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.ramus_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))) : min(size(f_data,2), 1 + floor(sampling_freq*(evalin('base','zef.ramus_time_1') + evalin('base','zef.ramus_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.ramus_time_3'))));
 end
 end
 if size_f > 1
 t = [1:size_f];
+f_aux = f;
 f = mean(f,2);
 end
 if f_ind == 1
@@ -516,9 +518,9 @@ else
     balance_spatially = 0;
 end
 if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_ig_hyperprior(snr_val+pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 elseif evalin('base','zef.inv_hyperprior') == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_g_hyperprior(snr_val+pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
@@ -580,12 +582,9 @@ z_vec_aux = z_vec_aux + z_vec;
 theta_vec_aux = theta_vec_aux + theta;
 
 end
-
-
 end
 
 z_vec = z_vec_aux/(n_multires*n_decompositions*weight_vec_aux);
-
 
 %assignin('base','reconstruction_aux',z_vec);
 
