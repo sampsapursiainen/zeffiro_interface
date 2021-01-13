@@ -28,6 +28,7 @@ zef.cp3_b = str2num(get(zef.h_cp3_b,'Value'));
 zef.cp3_c = str2num(get(zef.h_cp3_c,'Value'));
 zef.cp3_d = str2num(get(zef.h_cp3_d,'Value'));
 zef.inv_hyperprior_tail_length_db = str2num(get(zef.h_inv_hyperprior_tail_length_db,'Value'));
+zef.inv_prior_over_measurement_db = str2num(get(zef.h_inv_prior_over_measurement_db,'Value'));
 zef.colortune_param = str2num(get(zef.h_colortune_param,'Value'));
 zef.surface_sources = get(zef.h_as_opt_6,'Value');
 zef.inv_hyperprior = get(zef.h_inv_hyperprior,'Value');

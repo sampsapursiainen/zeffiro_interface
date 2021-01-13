@@ -2,14 +2,16 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef_plot_hyperprior
 
+axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 
 tail_length = evalin('base','zef.inv_hyperprior_tail_length_db');
 snr_val = evalin('base','zef.inv_snr');
+pm_val = evalin('base','zef.inv_prior_over_measurement_db');
 snr_val = max(1,snr_val);
 
 min_amp_exp = 10;
-max_amp_exp = 4;
+max_amp_exp = 10;
 dt = 0.01;
 eps_val = 1e-15;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
@@ -27,6 +29,7 @@ plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
+pm_val = 10.^(max(1,pm_val)/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
@@ -40,7 +43,7 @@ h_line = line(evalin('base','zef.h_axes1'),[mean_val mean_val],y_lim_vec);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-');
 h_line = line(evalin('base','zef.h_axes1'),[tail_val tail_val],y_lim_vec);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-.');
-h_line = line(evalin('base','zef.h_axes1'),[1 1],y_lim_vec);
+h_line = line(evalin('base','zef.h_axes1'),[pm_val pm_val],y_lim_vec);
 set(h_line,'color',[0 0 0],'linewidth',2,'linestyle',':');
 [min_val,min_ind] = min(abs(sqrt(t)-mean_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);
@@ -48,7 +51,7 @@ set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-');
 [min_val,min_ind] = min(abs(sqrt(t)-tail_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-.');
-[min_val,min_ind] = min(abs(sqrt(t)-1));
+[min_val,min_ind] = min(abs(sqrt(t)-pm_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);
 set(h_line,'color',[0 0 0],'linewidth',2,'linestyle',':');
 hold(evalin('base','zef.h_axes1'),'off');
