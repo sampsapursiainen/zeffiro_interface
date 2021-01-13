@@ -17,6 +17,7 @@ rec_source = evalin('base', 'zef.iasroi_rec_source');
 r_roi = roi_sphere(:,4); 
 c_roi = roi_sphere(:,1:3)';
 snr_val = evalin('base','zef.iasroi_snr');
+pm_val = evalin('base','zef.inv_prior_over_measurement_db');
 std_lhood = 10^(-snr_val/20);
 sampling_freq = evalin('base','zef.iasroi_sampling_frequency');
 high_pass = evalin('base','zef.iasroi_low_cut_frequency');
@@ -453,9 +454,9 @@ else
     balance_spatially = 0;
 end
 if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_ig_hyperprior(snr_val+pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 elseif evalin('base','zef.inv_hyperprior') == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+[beta, theta0] = zef_find_g_hyperprior(snr_val+pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
 
