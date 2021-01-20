@@ -22,7 +22,7 @@ h_axes_text = [];
 end
 h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','Colorbar');
 if not(isempty(h_colorbar))
-colorbar(h_colorbar,'delete'); 
+delete(h_colorbar(:));
 h_colorbar = [];
 end
 
@@ -617,7 +617,7 @@ for f_ind = frame_start : frame_start
 %end
 axes(evalin('base','zef.h_axes1'));
 if not(isempty(h_colorbar))
-colorbar(h_colorbar,'delete'); 
+delete(h_colorbar(:)); 
 h_colorbar = [];
 end
 hold on;

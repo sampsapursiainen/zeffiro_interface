@@ -448,7 +448,7 @@ h_axes_text = [];
 end
 h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','Colorbar');
 if not(isempty(h_colorbar))
-colorbar(h_colorbar,'delete'); 
+delete(h_colorbar(:)); 
 end
 hold on;
 light('Position',[0 0 1],'Style','infinite');
