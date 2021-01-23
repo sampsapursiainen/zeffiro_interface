@@ -96,7 +96,7 @@ zef_data.top_reconstruction = [];
           zef_data.d21_submesh_ind = [];
           zef_data.d22_submesh_ind = [];
           
-          zef_data.s_merge = 1;
+          zef_data.s_merge = 0;
           zef_data.w_merge = 1;
           zef_data.g_merge = 1;
           zef_data.c_merge = 1;
@@ -588,7 +588,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.source_model = 2;
        zef_data.use_depth_electrodes = 0;
        zef_data.inv_hyperprior_tail_length_db = 10;
-       zef_data.inv_prior_over_measurement_db = 10;
+       zef_data.inv_prior_over_measurement_db = 20;
        zef_data.inv_snr = 30;
        
        zef.fieldnames = fieldnames(zef);
