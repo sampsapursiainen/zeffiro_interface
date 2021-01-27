@@ -7,6 +7,12 @@ if ismember(evalin('base','zef.imaging_method'),[1,4,5]) & not(isempty(evalin('b
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 use_depth_electrodes = evalin('base','zef.use_depth_electrodes');
+tetra = evalin('base','zef.tetra');
+
+if evalin('base','zef.use_gpu')
+    nodes = gpuArray(nodes);
+    sensors = gpuArray(sensors);
+end
 
 if size(sensors,2) == 6
     electrode_model = 2;
@@ -18,31 +24,75 @@ if electrode_model == 1
 if use_depth_electrodes == 1
 ele_nodes = nodes;
 else
-ele_nodes = nodes(unique(surface_triangles),:);
+    unique_surface_triangles = unique(surface_triangles);
+ele_nodes = nodes(unique_surface_triangles,:);
 end
 sensors_attached_volume = sensors;
 for i = 1 : size(sensors,1)
 [min_val, min_ind] = min(sqrt(sum((ele_nodes - repmat(sensors(i,1:3),size(ele_nodes,1),1)).^2,2)));
 sensors_attached_volume(i,1:3) = ele_nodes(min_ind,:);
 end
+
 else
+    
  center_points_aux = (1/3)*(nodes(surface_triangles(:,1),:) + ...
                        nodes(surface_triangles(:,2),:) + ...
                        nodes(surface_triangles(:,3),:));
-ele_nodes = nodes(unique(surface_triangles),:);
+    unique_surface_triangles = unique(surface_triangles);
+ele_nodes = nodes(unique_surface_triangles,:);
+
+if not(isempty(find(sensors(:,4) == 0)))
+    diff_vec_1 = (nodes(tetra(:,2),:) - nodes(tetra(:,1),:));
+    diff_vec_2 = (nodes(tetra(:,3),:) - nodes(tetra(:,1),:));
+    diff_vec_3 = (nodes(tetra(:,4),:) - nodes(tetra(:,1),:));
+    det_system = zef_determinant(diff_vec_1,diff_vec_2,diff_vec_3);
+end
+
+sensors_aux = [];
+
 for i = 1 : size(sensors,1)
+       
+if sensors(i,4) == 0 && sensors(i,5) == 0
+
+    diff_vec_sensor = (repmat(sensors(i,1:3),size(tetra,1),1)- nodes(tetra(:,1),:));   
+    lambda_2 = zef_determinant(diff_vec_sensor,diff_vec_2,diff_vec_3);
+    lambda_3 = zef_determinant(diff_vec_1,diff_vec_sensor,diff_vec_3);
+    lambda_4 = zef_determinant(diff_vec_1,diff_vec_2,diff_vec_sensor);
+    lambda_2 = lambda_2./det_system;
+    lambda_3 = lambda_3./det_system;
+    lambda_4 = lambda_4./det_system;
+    lambda_1 = 1 - lambda_2 - lambda_3 - lambda_4;
+    sensor_index = find(lambda_1 <= 1 & lambda_2 <= 1 & lambda_3 <= 1  & lambda_4 <= 1 ...
+       &  lambda_1 >= 0 & lambda_2 >= 0 & lambda_3 >= 0  & lambda_4 >= 0,1);
+        lambda_vec = [lambda_1(sensor_index) ; lambda_2(sensor_index) ; lambda_3(sensor_index) ; lambda_4(sensor_index)];
+    sensors_aux = [sensors_aux ; i*ones(4,1)  tetra(sensor_index,:)' lambda_vec zeros(4,1)];     
+    
+    elseif sensors(i,4) == 0 && sensors(i,5) == 1
+
+    [min_val, min_ind] = min(sqrt(sum((ele_nodes - repmat(sensors(i,1:3),size(ele_nodes,1),1)).^2,2)));
+    min_ind = unique_surface_triangles(min_ind);
+    sensors_aux = [sensors_aux ; i min_ind 1 0]; 
+
+else   
+
 [min_val, min_ind] = min(sqrt(sum((ele_nodes - repmat(sensors(i,1:3),size(ele_nodes,1),1)).^2,2)));
 sensors(i,1:3) = ele_nodes(min_ind,:);
-end                 
- sensors_aux = []; 
- for i = 1 : size(sensors,1)
  [dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
- dist_ind = find(dist_val <= sensors(i,4) & dist_val >= sensors(i,5)); 
+ dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5)); 
  sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) surface_triangles(dist_ind,:)];
- end
- sensors_attached_volume = sensors_aux;   
+
+end
+end
+
+ sensors_attached_volume = sensors_aux; 
+
 end
 
 else
 sensors_attached_volume = [];    
 end
+
+sensors_attached_volume = gather(sensors_attached_volume);
+
+end
+

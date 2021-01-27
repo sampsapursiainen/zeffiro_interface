@@ -1,8 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [void] = print_meshes(void);
-
+ 
 void = []; 
+
+sensors_point_like = [];
 
 length_reconstruction_cell = 1;
 
@@ -85,6 +87,12 @@ end
 
 %T
 sensors = evalin('base','zef.sensors');
+aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+[X_s, Y_s, Z_s] = sphere(50); 
+sphere_scale = 3.2*aux_scale_val;    
+X_s = sphere_scale*X_s;
+Y_s = sphere_scale*Y_s;
+Z_s = sphere_scale*Z_s;
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 
@@ -94,17 +102,8 @@ else
     electrode_model = 1;
 end
 
-[X_s, Y_s, Z_s] = sphere(50);  
-if electrode_model == 1 | evalin('base','zef.attach_electrodes') == 0
-aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
-end
-
 aux_ind = []; 
 if evalin('base','zef.s_visible')
-sphere_scale = 3.2*aux_scale_val;    
-X_s = sphere_scale*X_s;
-Y_s = sphere_scale*Y_s;
-Z_s = sphere_scale*Z_s;
 if evalin('base','zef.cp_on');
 if not(isempty(aux_ind))
 aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
@@ -139,7 +138,16 @@ aux_ind = [];
 if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors); 
 elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
-sensors = attach_sensors_volume(sensors);
+sensors = attach_sensors_volume(sensors); 
+  sensors_point_like_index = find(sensors(:,4)==0);
+  unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
+  sensors_point_like = zeros(length(unique_sensors_point_like),3);
+  for spl_ind = 1 : length(unique_sensors_point_like)
+spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
+sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
+  end
+sensors_patch_like_index = setdiff(1:size(sensors,1),sensors_point_like_index);
+  sensors = sensors(sensors_patch_like_index,:);
 else
     electrode_model = 1;
 end
@@ -155,6 +163,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 else
+    if not(isempty(sensors))
 h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor',evalin('base','zef.s_color')); 
@@ -162,7 +171,19 @@ set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
-set(h,'edgealpha',evalin('base','zef.layer_transparency'));    
+set(h,'edgealpha',evalin('base','zef.layer_transparency'));
+    end
+if not(isempty(sensors_point_like))
+for i = 1 : size(sensors_point_like,1)
+h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
+set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'edgecolor','none'); 
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
+set(h,'facealpha',evalin('base','zef.layer_transparency'));
+end
+end
 end
 if ismember(evalin('base','zef.imaging_method'),[2,3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
@@ -1870,6 +1891,12 @@ light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
 sensors = evalin('base','zef.sensors');
+aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+[X_s, Y_s, Z_s] = sphere(50); 
+sphere_scale = 3.2*aux_scale_val;    
+X_s = sphere_scale*X_s;
+Y_s = sphere_scale*Y_s;
+Z_s = sphere_scale*Z_s;
 reuna_p = evalin('base','zef.reuna_p');
 reuna_t = evalin('base','zef.reuna_t');  
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
@@ -2047,44 +2074,25 @@ else
 end
 
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
-for i = 1 : size(sensors,1)
-[min_val, min_ind] = min(sqrt(sum((reuna_p{end} - repmat(sensors(i,1:3),size(reuna_p{end},1),1)).^2,2)));
-sensors(i,1:3) = reuna_p{end}(min_ind,:);
-end
-end
-
-if  evalin('base','zef.attach_electrodes') & electrode_model == 2
-   center_points_aux = (1/3)*(reuna_p{end}(reuna_t{end}(:,1),:) + ...
-                       reuna_p{end}(reuna_t{end}(:,2),:) + ...
-                       reuna_p{end}(reuna_t{end}(:,3),:));
-for i = 1 : size(sensors,1)
-[min_val, min_ind] = min(sqrt(sum((reuna_p{end} - repmat(sensors(i,1:3),size(reuna_p{end},1),1)).^2,2)));
-sensors(i,1:3) = reuna_p{end}(min_ind,:);
-end
- sensors_aux = []; 
- for i = 1 : size(sensors,1)
- [dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
- dist_ind = find(dist_val <= sensors(i,4) & dist_val >= sensors(i,5)); 
- sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) reuna_t{end}(dist_ind,:)];
- end
- sensors = sensors_aux;
-else 
+sensors = attach_sensors_volume(sensors); 
+elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
+  sensors = attach_sensors_volume(sensors); 
+  sensors_point_like_index = find(sensors(:,4)==0);
+  unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
+  sensors_point_like = zeros(length(unique_sensors_point_like),3);
+  for spl_ind = 1 : length(unique_sensors_point_like)
+spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
+sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
+  end
+sensors_patch_like_index = setdiff(1:size(sensors,1),sensors_point_like_index);
+  sensors = sensors(sensors_patch_like_index,:);
+else
     electrode_model = 1;
 end
-
-[X_s, Y_s, Z_s] = sphere(50);  
-if electrode_model == 1 | evalin('base','zef.attach_electrodes') == 0
-aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
-end
-
 
 
 if evalin('base','zef.s_visible')
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
-sphere_scale = 3.2*aux_scale_val;    
-X_s = sphere_scale*X_s;
-Y_s = sphere_scale*Y_s;
-Z_s = sphere_scale*Z_s;
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
 set(h,'facecolor',evalin('base','zef.s_color'));
@@ -2095,6 +2103,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 elseif electrode_model == 2  
+    if not(isempty(sensors))
 h = trisurf(sensors(:,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor',evalin('base','zef.s_color')); 
@@ -2103,6 +2112,18 @@ set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
+    end
+if not(isempty(sensors_point_like))
+for i = 1 : size(sensors_point_like,1)
+h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
+set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'edgecolor','none'); 
+set(h,'specularstrength',0.3);
+set(h,'diffusestrength',0.7);
+set(h,'ambientstrength',0.7);
+set(h,'facealpha',evalin('base','zef.layer_transparency'));
+end
+end
 end
 
 if ismember(evalin('base','zef.imaging_method'),[2 3])
