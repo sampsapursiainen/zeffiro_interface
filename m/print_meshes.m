@@ -139,10 +139,10 @@ if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(eval
 sensors = attach_sensors_volume(sensors); 
 elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors); 
-  sensors_point_like_index = find(sensors(:,4)==0);
-  unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
-  sensors_point_like = zeros(length(unique_sensors_point_like),3);
-  for spl_ind = 1 : length(unique_sensors_point_like)
+sensors_point_like_index = find(sensors(:,4)==0);
+unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
+sensors_point_like = zeros(length(unique_sensors_point_like),3);
+for spl_ind = 1 : length(unique_sensors_point_like)
 spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
 sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
   end
@@ -2074,16 +2074,19 @@ else
 end
 
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
-sensors = attach_sensors_volume(sensors); 
+sensors = attach_sensors_volume(sensors,'geometry'); 
 elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
-  sensors = attach_sensors_volume(sensors); 
-  sensors_point_like_index = find(sensors(:,4)==0);
-  unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
-  sensors_point_like = zeros(length(unique_sensors_point_like),3);
-  for spl_ind = 1 : length(unique_sensors_point_like)
-spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
-sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
+  sensors_aux = attach_sensors_volume(sensors,'geometry');
+  sensors_point_like_index = find(sensors_aux(:,4)==0);
+  sensors_point_like = zeros(length(sensors_point_like_index),3);
+for spl_ind = 1 : length(sensors_point_like_index)
+if sensors_aux(sensors_point_like_index(spl_ind),2) == 0
+sensors_point_like(spl_ind,:) = sensors(sensors_aux(sensors_point_like_index(spl_ind),1),1:3);
+else
+sensors_point_like(spl_ind,:) = reuna_p{end}(sensors_aux(sensors_point_like_index(spl_ind),2),:);
+end
   end
+sensors = sensors_aux;
 sensors_patch_like_index = setdiff(1:size(sensors,1),sensors_point_like_index);
   sensors = sensors(sensors_patch_like_index,:);
 else
