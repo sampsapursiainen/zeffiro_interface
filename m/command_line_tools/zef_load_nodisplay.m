@@ -1,5 +1,7 @@
-if not(isequal(zef_data.file,0));
-    
+
+zef_data.file = zef.file; 
+zef_data.file_path = zef.file_path;
+ 
 zef_init;
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path;     
@@ -28,4 +30,6 @@ zef_data.mlapp = zef.mlapp;
           
  
 clear zef_data;
+
+
 

@@ -1,5 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+
 if zef.save_switch == 1
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
@@ -9,11 +10,14 @@ zef_close_figs;
 zef_data = zef;
 zef_data.fieldnames = fieldnames(zef);
 zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+if isfield(zef_data,'fieldnames')
+zef_data = rmfield(zef_data,'fieldnames');
+end
+if isfield(zef_data,'h')
+    zef_data = rmfield(zef_data,'h');
+end
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
-zef_mesh_tool;
-zef_update;
 end
 end
 if zef.save_switch == 2
@@ -85,11 +89,14 @@ zef_close_figs;
 zef_data = zef;
 zef_data.fieldnames = fieldnames(zef);
 zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+if isfield(zef_data,'fieldnames')
+zef_data = rmfield(zef_data,'fieldnames');
+end
+if isfield(zef_data,'h')
+    zef_data = rmfield(zef_data,'h');
+end
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
-zef_mesh_tool;
-zef_update;
 else
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
@@ -99,7 +106,12 @@ zef_close_figs;
 zef_data = zef;
 zef_data.fieldnames = fieldnames(zef);
 zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+if isfield(zef_data,'fieldnames')
+zef_data = rmfield(zef_data,'fieldnames');
+end
+if isfield(zef_data,'h')
+    zef_data = rmfield(zef_data,'h');
+end
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 end
