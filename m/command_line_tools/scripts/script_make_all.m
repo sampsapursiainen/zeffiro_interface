@@ -1,19 +1,12 @@
-home_folder = ['../../../'];
+run('../zeffiro_interface_nodisplay');
 
-run([home_folder 'zeffiro_interface_nodisplay;']);
+zef.file_path = [zef.program_path '/data'];
+zef.file_name = 'sampsa_debug_version.mat';
 
-
-load(project_file_name);
-zef = zef_data;
-clear zef_data;
-
+zef_load_nodisplay;
 zef_make_all_nodisplay;
 
-zef_data = zef;
-zef_data.fieldnames = fieldnames(zef);
-zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-%zef_data = rmfield(zef_data,{'fieldnames','h'});
-save([file_name],'zef_data','-v7.3');
-clear zef_data;
+zef.save_switch = 7;
+zef_save_nodisplay;
 
 exit;
