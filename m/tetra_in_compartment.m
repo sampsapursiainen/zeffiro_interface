@@ -12,9 +12,22 @@ max_norm = max(sqrt(sum(reuna_p.^2,2)));
 nodes_norm_vec = sqrt(sum(nodes.^2,2));
 
 meshing_accuracy = evalin('base','zef.meshing_accuracy');
-I = randperm(size(reuna_t,1));
-I = I(1:ceil(meshing_accuracy*length(I)));
-reuna_t = reuna_t(I,:);
+
+if meshing_accuracy < 1 
+P.faces = reuna_t;
+P.vertices = reuna_p;
+P = reducepatch(P,meshing_accuracy);
+reuna_t = P.faces;
+reuna_p = P.vertices;
+end
+
+if meshing_accuracy > 1 
+P.faces = reuna_t;
+P.vertices = reuna_p;
+P = reducepatch(P,min(1,min(size(reuna_t,1), meshing_accuracy)/size(reuna_t,1)));
+reuna_t = P.faces;
+reuna_p = P.vertices;
+end
 
 aux_vec_1 = (1/3)*(reuna_p(reuna_t(:,1),:) + reuna_p(reuna_t(:,2),:) + reuna_p(reuna_t(:,3),:))';
 aux_vec_2 = reuna_p(reuna_t(:,2),:)'-reuna_p(reuna_t(:,1),:)';
@@ -26,6 +39,7 @@ ind_vec = zeros(size(nodes,1),1);
 I = find(nodes(:,1) <= max_x & nodes(:,1) >= min_x & nodes(:,2) <= max_y & nodes(:,2) >= min_y & nodes(:,3) <= max_z & nodes(:,3) >= min_z & nodes_norm_vec <= max_norm);    
 
 length_I = length(I);
+
 
 tic;
 ones_vec = ones(length(aux_vec_1),1);
@@ -69,7 +83,7 @@ end
 waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 
 ind_vec(I) = gather(ind_vec_aux);
-I = find(ind_vec > evalin('base','zef.meshing_threshold')*meshing_accuracy);
+I = find(ind_vec > evalin('base','zef.meshing_threshold'));
 
 end
 
