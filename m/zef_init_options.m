@@ -31,7 +31,7 @@ if not(isfield(zef,'downsample_surfaces'));
     zef.downsample_surfaces = 1; 
 end; 
 if not(isfield(zef,'max_surface_face_count')); 
-    zef.max_surface_face_count = 3000; 
+    zef.max_surface_face_count = 5000; 
 end; 
 if not(isfield(zef,'preconditioner_tolerance')); 
     zef.preconditioner_tolerance = 0.001; 
