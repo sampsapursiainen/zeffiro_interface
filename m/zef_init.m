@@ -436,7 +436,7 @@ zef_data.sensors_attached_volume = [];
             zef_data.cp_b        = 0;
             zef_data.cp_c        = 0;
             zef_data.cp_d        = 0;
-       zef_data.meshing_accuracy = 3000;
+       zef_data.meshing_accuracy = 5000;
        zef_data.on_screen        = 0;
        zef_data.import_mode      = 0;
        zef_data.s_color = [0.1 0.1 0.1];
@@ -590,6 +590,8 @@ zef_data.sensors_attached_volume = [];
        zef_data.inv_hyperprior_tail_length_db = 10;
        zef_data.inv_prior_over_measurement_db = 20;
        zef_data.inv_snr = 30;
+       zef_data.downsample_surfaces = 1;
+       zef_data.max_surface_face_count = 5000;
        
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));

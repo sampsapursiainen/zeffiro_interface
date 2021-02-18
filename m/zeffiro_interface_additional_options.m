@@ -44,6 +44,8 @@ zef.h_cp3_c = zef_data.h_cp3_c;
 zef.h_cp3_d = zef_data.h_cp3_d;
 zef.h_plot_hyperprior = zef_data.h_plot_hyperprior;
 zef.h_inv_snr = zef_data.h_inv_snr;
+zef.h_downsample_surfaces = zef_data.h_downsample_surfaces;
+zef.h_max_surface_face_count = zef_data.h_max_surface_face_count;
 
 zef.h_additional_options = zef_data.h_additional_options;
 zef.h_as_opt_2.ValueChangedFcn = 'zef_update_options;';
@@ -89,6 +91,8 @@ zef.h_cp3_c.ValueChangedFcn = 'zef_update_options;';
 zef.h_cp3_d.ValueChangedFcn = 'zef_update_options;';
 zef.h_inv_snr.ValueChangedFcn = 'zef_update_options;';
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
+zef.h_downsample_surfaces.ValueChangedFcn = 'zef_update_options;';
+zef.h_max_surface_face_count.ValueChangedFcn = 'zef_update_options;';
 
 clear zef_data;
 
@@ -148,6 +152,9 @@ zef.h_inv_hyperprior.Value = zef.inv_hyperprior;
 zef.h_inv_hyperprior_weight.ItemsData = [1:length(zef.h_inv_hyperprior_weight.Items)];
 zef.h_inv_hyperprior_weight.Value = zef.inv_hyperprior_weight;
 zef.h_inv_snr.Value = num2str(zef.inv_snr);
+
+zef.h_downsample_surfaces.Value = zef.downsample_surfaces;
+zef.h_max_surface_face_count.Value = num2str(zef.max_surface_face_count);
 
 zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');
