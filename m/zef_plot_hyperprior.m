@@ -8,6 +8,8 @@ cla(evalin('base','zef.h_axes1'));
 tail_length = evalin('base','zef.inv_hyperprior_tail_length_db');
 snr_val = evalin('base','zef.inv_snr');
 pm_val = evalin('base','zef.inv_prior_over_measurement_db');
+amplitude_db = 20;
+pm_val = pm_val - amplitude_db;
 snr_val = max(1,snr_val);
 
 min_amp_exp = 10;
@@ -31,7 +33,7 @@ plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
-pm_val = 10.^(-pm_val/20);
+pm_val = 10.^(-(pm_val+amplitude_db)/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
