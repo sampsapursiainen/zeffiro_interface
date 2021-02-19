@@ -17,19 +17,21 @@ eps_val = 1e-15;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
 if evalin('base','zef.inv_hyperprior') == 1
 [a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
+[~,d] = zef_find_ig_hyperprior(snr_val-pm_val,tail_length);
 plot_vec = zef_inverse_gamma_gpu(t,a,b*1e4);
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4/(a-1));
 elseif evalin('base','zef.inv_hyperprior') == 2
-[a,b] = zef_find_g_hyperprior(snr_val-pm_val,tail_length);
+[a,b] = zef_find_g_hyperprior(snr_val,tail_length);
+[~,d] = zef_find_g_hyperprior(snr_val-pm_val,tail_length);
 plot_vec = zef_gamma_gpu(t,a,b*1e4);
 plot_vec(isnan(plot_vec)) = -Inf;
 plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
-pm_val = 10.^(max(1,-pm_val)/20);
+pm_val = 10.^(-pm_val/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
@@ -72,11 +74,7 @@ y_lim_vec(1)*10.^(0.21*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
 set(h_text,'fontsize',evalin('base','zef.font_size'));
 h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
 y_lim_vec(1)*10.^(0.18*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Scale = ' num2str(b)]);
-set(h_text,'fontsize',evalin('base','zef.font_size'));
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.15*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-
+['Scale = ' num2str(d)]);
 
 hold(evalin('base','zef.h_axes1'),'off');
 
