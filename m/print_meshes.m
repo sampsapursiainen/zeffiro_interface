@@ -1,7 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [void] = print_meshes(void);
- 'moi'
 void = []; 
 sensors_point_like = [];
 
