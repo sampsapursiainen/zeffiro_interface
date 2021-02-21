@@ -7,6 +7,8 @@ zef.h_iasroi_map_estimation = open('ias_map_estimation_roi.fig');
 else
 zef.h_iasroi_map_estimation = open('ias_map_estimation_roi.fig');    
 end
+set(zef.h_iasroi_map_estimation,'Position',[ 0.5764    0.2944    0.15    0.50]);
+
 set(zef.h_iasroi_map_estimation,'Name','ZEFFIRO Interface: IAS ROI MAP estimation');
 set(findobj(zef.h_iasroi_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_iasroi_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
