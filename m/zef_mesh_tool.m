@@ -1,5 +1,11 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+
+if zef.mlapp == 1
+zeffiro_interface_mesh_tool; 
+else
+
+
 zef.h_mesh_tool = open('zeffiro_interface_mesh_tool.fig');
 set(findobj(zef.h_mesh_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -69,7 +75,10 @@ set(zef.h_smoothing_strength,'string',num2str(zef.smoothing_strength));
 set(zef.h_edit76,'string', num2str(zef.inv_pcg_tol));
 set(zef.h_loop_movie,'value',zef.loop_movie);
 set(zef.h_edit76,'string',num2str(zef.solver_tolerance));
+
 zef_update_mesh_tool;
+
+end
 
 
    
