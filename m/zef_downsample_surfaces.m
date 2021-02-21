@@ -60,26 +60,26 @@ switch zef_k
 end    
 
 if evalin('base',['zef.' zef.temp_var_0 '_on']) 
-if evalin('base',['isfield(zef,"' zef.temp_var_0 '_points_original")'])
-if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_points_original))'])
-    zef.temp_patch_data.vertices = evalin('base',['zef.' zef.temp_var_0 '_points_original;']);
-    zef.temp_patch_data.faces_all = evalin('base',['zef.' zef.temp_var_0 '_triangles_original;']);
-        zef.temp_patch_data.submesh_ind = evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original;']);
+if evalin('base',['isfield(zef,"' zef.temp_var_0 '_points_original_surface_mesh")'])
+if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_points_original_surface_mesh))'])
+    zef.temp_patch_data.vertices = evalin('base',['zef.' zef.temp_var_0 '_points_original_surface_mesh;']);
+    zef.temp_patch_data.faces_all = evalin('base',['zef.' zef.temp_var_0 '_triangles_original_surface_mesh;']);
+        zef.temp_patch_data.submesh_ind = evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original_surface_mesh;']);
 else
     zef.temp_patch_data.vertices = evalin('base',['zef.' zef.temp_var_0 '_points;']);
     zef.temp_patch_data.faces_all = evalin('base',['zef.' zef.temp_var_0 '_triangles;']);
     zef.temp_patch_data.submesh_ind = evalin('base',['zef.' zef.temp_var_0 '_submesh_ind;']);   
-    evalin('base',['zef.' zef.temp_var_0 '_points_original = zef.' zef.temp_var_0 '_points;']);
-    evalin('base',['zef.' zef.temp_var_0 '_triangles_original = zef.' zef.temp_var_0 '_triangles;']);
-    evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original = zef.' zef.temp_var_0 '_submesh_ind;']);
+    evalin('base',['zef.' zef.temp_var_0 '_points_original_surface_mesh = zef.' zef.temp_var_0 '_points;']);
+    evalin('base',['zef.' zef.temp_var_0 '_triangles_original_surface_mesh = zef.' zef.temp_var_0 '_triangles;']);
+    evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original_surface_mesh = zef.' zef.temp_var_0 '_submesh_ind;']);
 end
 else 
    zef.temp_patch_data.vertices = evalin('base',['zef.' zef.temp_var_0 '_points;']);
     zef.temp_patch_data.faces_all = evalin('base',['zef.' zef.temp_var_0 '_triangles;']);
         zef.temp_patch_data.submesh_ind = evalin('base',['zef.' zef.temp_var_0 '_submesh_ind;']);
-    evalin('base',['zef.' zef.temp_var_0 '_points_original = zef.' zef.temp_var_0 '_points;']);
-    evalin('base',['zef.' zef.temp_var_0 '_triangles_original = zef.' zef.temp_var_0 '_triangles;']);    
-evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original = zef.' zef.temp_var_0 '_submesh_ind;']);
+    evalin('base',['zef.' zef.temp_var_0 '_points_original_surface_mesh = zef.' zef.temp_var_0 '_points;']);
+    evalin('base',['zef.' zef.temp_var_0 '_triangles_original_surface_mesh = zef.' zef.temp_var_0 '_triangles;']);    
+evalin('base',['zef.' zef.temp_var_0 '_submesh_ind_original_surface_mesh = zef.' zef.temp_var_0 '_submesh_ind;']);
 
 end
 
