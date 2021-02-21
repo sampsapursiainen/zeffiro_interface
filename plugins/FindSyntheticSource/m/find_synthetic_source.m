@@ -89,4 +89,7 @@ zef.find_synth_source.h_plot_time_sequence.ButtonPushedFcn = 'zef_update_fss; ze
 zef.find_synth_source.h_plot_sources.ButtonPushedFcn = 'zef_update_fss; zef.h_synth_source = zef_plot_source(1);';
 zef.find_synth_source.h_plot_switch.ValueChangedFcn = 'zef.synth_source_updated_true = false;';
 
+set(findobj(zef.find_synth_source.h_find_synth_source.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+
 clear zef_i zef_j zef_n zef_N
