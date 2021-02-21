@@ -13,6 +13,8 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 load([zef.file_path zef.file]);
+zef_remove_object_fields;
+
 
 zef_data.save_file_path = zef.save_file_path;
 zef_data.save_file = zef.save_file;

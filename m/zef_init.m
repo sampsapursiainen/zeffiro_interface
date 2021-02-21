@@ -1,6 +1,9 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+zef_delete_original_surface_meshes;
+zef_delete_original_field;
+
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
@@ -157,6 +160,7 @@ zef_data.top_reconstruction = [];
           zef_data.d22_invert = 0;
           
           zef_data.loop_movie = [0];
+          zef_data.loop_movie_count = [5];
           zef_data.stop_movie = [0];
           zef_data.inv_init_guess_mode = [1];
           zef_data.inv_eit_noise = 0;
@@ -385,7 +389,7 @@ zef_data.top_reconstruction = [];
                 zef_data.nodes_b = [];
                    zef_data.w_on = 0;
                  zef_data.cam_va = 10;
-         zef_data.preconditioner = 1;
+         zef_data.preconditioner = 2;
       zef_data.solver_tolerance = 1e-6;
 zef_data.preconditioner_tolerance= 0.001;
                zef_data.sigma_ind=[];
@@ -592,7 +596,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.inv_snr = 30;
        zef_data.downsample_surfaces = 1;
        zef_data.max_surface_face_count = 5000;
-       
+              
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
  for zef_i = 1:length(zef.fieldnames)
