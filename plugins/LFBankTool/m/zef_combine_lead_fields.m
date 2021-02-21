@@ -6,6 +6,7 @@ zef.L = [];
 zef.measurements = [];
 zef.source_positions = [];
 zef.source_directions = [];
+zef_delete_original_field;
 
 zef.lf_n_aux = 0;
 zef.lf_size_aux = 0;
