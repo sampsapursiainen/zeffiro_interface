@@ -7,6 +7,9 @@ zef.h_ramus_ias_map_estimation = open('zeffiro_interface_ramus_inversion_tool.fi
 else
 zef.h_ramus_ias_map_estimation = open('zeffiro_interface_ramus_inversion_tool.fig');
 end
+
+set(zef.h_ramus_ias_map_estimation,'Position',[ 0.5764    0.2944    0.15    0.5])
+
 set(zef.h_ramus_ias_map_estimation,'Name','ZEFFIRO Interface: RAMUS Inversion');
 set(findobj(zef.h_ramus_ias_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_ramus_ias_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -16,3 +19,4 @@ uistack(flipud([zef.h_ramus_multires_n_levels; zef.h_ramus_multires_sparsity; ze
     zef.h_ramus_sampling_frequency; zef.h_ramus_low_cut_frequency; 
     zef.h_ramus_high_cut_frequency; zef.h_ramus_time_1 ; zef.h_ramus_time_2; zef.h_ramus_number_of_frames; zef.h_ramus_time_3; zef.h_ramus_normalize_data; zef.h_ramus_init_guess_mode; zef.h_ramus_cancel ; 
     zef.h_ramus_apply; zef.h_ramus_start  ]),'top'); 
+
