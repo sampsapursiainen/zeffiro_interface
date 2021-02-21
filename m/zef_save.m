@@ -12,12 +12,11 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 zef_data = zef;
-zef_data.fieldnames = fieldnames(zef);
-zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
+zeffiro_interface_mesh_visualization_tool;
 zef_update;
 end
 end
@@ -113,12 +112,11 @@ if not(isempty(zef.save_file)) & not(isempty(zef.save_file_path)) & not(zef.save
 zef_close_tools;
 zef_close_figs;
 zef_data = zef;
-zef_data.fieldnames = fieldnames(zef);
-zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
+zeffiro_interface_mesh_visualization_tool;
 zef_update;
 else
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
@@ -132,9 +130,7 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 zef_data = zef;
-zef_data.fieldnames = fieldnames(zef);
-zef_data = rmfield(zef_data,zef_data.fieldnames(find(startsWith(zef_data.fieldnames, 'h_'))));
-zef_data = rmfield(zef_data,{'fieldnames','h'});
+zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 end
