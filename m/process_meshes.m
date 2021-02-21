@@ -218,6 +218,7 @@ end
 scaling_val = s_scaling;    
 translation_vec = [s_x_correction s_y_correction s_z_correction];     
 theta_angle_vec = [s_xy_rotation s_yz_rotation s_zx_rotation]; 
+if not(isempty(sensors))
 mean_vec = repmat(mean(sensors(:,1:3)),size(sensors(:,1:3),1),1);    
 if scaling_val ~= 1 
 sensors(:,1:3) = s_scaling*sensors(:,1:3);
@@ -257,5 +258,8 @@ end
 
 if not(isempty(s_data_aux))
 sensors = [sensors s_data_aux];
+end
+else
+    sensors = [NaN NaN NaN];
 end
 
