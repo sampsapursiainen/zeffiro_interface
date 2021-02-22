@@ -25,12 +25,8 @@ zef.source_interpolation_ind_original_field = zef.source_interpolation_ind;
 
 end
 
-
-
-if zef.n_sources < size(zef.source_positions,1)
-
 zef.rand_vec_aux = randperm(size(zef.source_positions,1));
-zef.rand_vec_aux = zef.rand_vec_aux(1:zef.n_sources);
+zef.rand_vec_aux = zef.rand_vec_aux(1:min(zef.n_sources,size(zef.source_positions,1)));
 zef.source_positions = zef.source_positions(zef.rand_vec_aux,:);
 
 if ismember(zef.source_direction_mode,2)
@@ -43,10 +39,6 @@ zef.L = zef.L(zef.rand_vec_aux,:);
 if not(isempty(zef.source_directions))
 zef.source_directions = zef.source_directions(zef.rand_vec_aux,:);
 end
-end
-
-[zef.source_interpolation_ind] = source_interpolation([]);
-
 end
 
 zef = rmfield(zef,'rand_vec_aux');

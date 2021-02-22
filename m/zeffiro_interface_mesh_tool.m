@@ -28,7 +28,7 @@ set(zef.h_make_all,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downs
 set(zef.h_pushbutton21,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));');
 set(zef.h_pushbutton14,'ButtonPushedFcn','zef_delete_original_field;[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);[zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);lead_field_matrix;');
 set(zef.h_interpolate,'ButtonPushedFcn','[zef.source_interpolation_ind] = source_interpolation([]);');
-set(zef.h_field_downsampling,'ButtonPushedFcn','zef_field_downsampling;[zef.source_interpolation_ind] = source_interpolation([]);');
+set(zef.h_field_downsampling,'ButtonPushedFcn','zef_field_downsampling;');
 set(zef.h_surface_downsampling,'ButtonPushedFcn','zef_downsample_surfaces; [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);[zef.source_interpolation_ind] = source_interpolation([]);');
 
 set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
