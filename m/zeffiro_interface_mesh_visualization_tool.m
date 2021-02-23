@@ -39,6 +39,7 @@ zef.h_brain_transparency = zef_data.h_brain_transparency;
 zef.h_inv_dynamic_range = zef_data.h_inv_dynamic_range;
 zef.h_submesh_num = zef_data.h_submesh_num;
 zef.h_use_inflated_surfaces = zef_data.h_use_inflated_surfaces;
+zef.h_explode_everything = zef_data.h_explode_everything;
 
 %*******
 
