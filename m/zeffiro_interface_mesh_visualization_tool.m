@@ -73,6 +73,7 @@ set(zef.h_cp3_c,'value',num2str(zef.cp3_c));
 set(zef.h_cp3_d,'value',num2str(zef.cp3_d));
 set(zef.h_layer_transparency,'value',num2str(1 - zef.layer_transparency));
 set(zef.h_use_inflated_surfaces,'value',zef.use_inflated_surfaces);
+set(zef.h_explode_everything,'value',zef.explode_everything);
 
 set(zef.h_reconstruction_type,'Items',{'Amplitude','Normal','Tangential','Normal constraint (-)','Normal constraint (+)','Value','Amplitude smoothed'});
 zef.h_reconstruction_type.ItemsData = [1:length(zef.h_reconstruction_type.Items)];
@@ -142,6 +143,8 @@ set(zef.h_brain_transparency,'ValueChangedFcn','zef_update_mesh_visualization_to
 set(zef.h_inv_dynamic_range,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_submesh_num,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_use_inflated_surfaces,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
+set(zef.h_explode_everything,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
+
 
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 clear zef_data;

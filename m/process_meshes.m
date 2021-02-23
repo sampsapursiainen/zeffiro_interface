@@ -1,6 +1,13 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [sensors,reuna_p,reuna_t,reuna_p_inf,reuna_submesh_ind] = process_meshes(void);
+function [sensors,reuna_p,reuna_t,reuna_p_inf,reuna_submesh_ind] = process_meshes(varargin);
+
+explode_param = 1;
+if not(isempty(varargin))
+  if not(isempty(varargin{1}))
+explode_param = varargin{1}; 
+    end
+end
 
 i = 0;
 sensors = [];
@@ -226,6 +233,8 @@ switch j
     case 3
         axes_ind = [3 1];
 end
+
+
 if theta_angle_vec(j) ~= 0
 theta_angle = theta_angle_vec(j)*pi/180;
 R_mat = [cos(theta_angle) -sin(theta_angle); sin(theta_angle) cos(theta_angle)];
@@ -238,6 +247,22 @@ for j = 1 : 3
 if translation_vec(j) ~= 0
 reuna_p{i}(:,j) = reuna_p{i}(:,j) + translation_vec(j);
 reuna_p_inf{i}(:,j) = reuna_p_inf{i}(:,j) + translation_vec(j);
+end
+end
+if explode_param ~= 1
+reuna_p{i} = reuna_p{i} + explode_param*mean_vec;
+if not(isempty(reuna_p_inf{i}))
+for s_ind = 1 : length(reuna_submesh_ind{i})
+    if s_ind == 1 
+        t_ind_1 = 1;
+    else
+        t_ind_1 = reuna_submesh_ind{i}(s_ind-1)+1;
+    end
+    t_ind_2 = reuna_submesh_ind{i}(s_ind);
+    p_ind = unique(reuna_t{i}(t_ind_1:t_ind_2,:));
+    mean_aux = mean(reuna_p_inf{i}(p_ind,:));   
+reuna_p_inf{i}(p_ind,:) = reuna_p_inf{i}(p_ind,:) + explode_param*repmat(mean_aux,length(p_ind),1);
+end
 end
 end
 end
