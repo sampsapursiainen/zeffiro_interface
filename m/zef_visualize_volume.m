@@ -1,4 +1,4 @@
-[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); 
+[zef.sensors,zef.reuna_p,zef.reuna_t,zef.reuna_p_inf] = process_meshes([]); 
 zef.on_screen = 1;
 set(zef.h_text_image,'string','volume'); 
 zef_update_fig_details;plot_volume([]); 

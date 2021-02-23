@@ -15,6 +15,9 @@ zef.smoothing_strength = (zef.h_smoothing_strength.Value);
 zef.solver_tolerance = (zef.h_edit76.Value);
 zef.n_sources = (zef.h_edit75.Value);
 zef.max_surface_face_count = zef.h_max_surface_face_count.Value ;
+zef.inflate_n_iterations = (zef.h_inflate_n_iterations.Value);
+zef.inflate_strength = zef.h_inflate_strength.Value ;
+
 else
 
 if zef.cp_on
@@ -29,5 +32,6 @@ set(zef.h_edit_cp_c, 'enable', zef.enable_str);
 set(zef.h_edit_cp_d, 'enable', zef.enable_str);
 
 set(zef.h_popupmenu1,'value',zef.imaging_method);
+
 
 end

@@ -31,6 +31,7 @@ zef.inv_colormap = zef.h_inv_colormap.Value;
 zef.cp_mode = zef.h_cp_mode.Value;
 zef.brain_transparency = 1 - str2num(zef.h_brain_transparency.Value);
 zef.inv_dynamic_range = str2num(zef.h_inv_dynamic_range.Value);
+zef.use_inflated_surfaces = zef.h_use_inflated_surfaces.Value;
 
 if zef.inv_dynamic_range == 0
 zef.inv_dynamic_range = Inf;
