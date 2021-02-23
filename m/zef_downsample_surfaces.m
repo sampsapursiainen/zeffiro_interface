@@ -1,8 +1,8 @@
 
 zef.h = waitbar(0,'Downsampling surfaces.');
 zef.temp_time = now;
-number_of_compartments = 27;
-for zef_k = 1 : number_of_compartments
+zef.number_of_compartments = 27;
+for zef_k = 1 : zef.number_of_compartments
 switch zef_k
     case 1
         zef.temp_var_0 = 'd1';
@@ -100,8 +100,8 @@ if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_submesh_ind));'])
      zef.temp_patch_data.faces = zef.temp_patch_data.vertice_ind_aux(zef.temp_patch_data.faces);
       zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all(zef.temp_patch_data.unique_faces_ind,:);
       zef.temp_patch_data_aux = reducepatch(zef.temp_patch_data,min(1,zef.max_surface_face_count/size(zef.temp_patch_data.faces,1)));
-     if evalin('base',['zef.' zef.temp_var_0 '_sources'])
-     [zef.temp_patch_data_aux.vertices_inflated] = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
+      if evalin('base',['zef.' zef.temp_var_0 '_sources'])
+          [zef.temp_patch_data_aux.vertices_inflated] = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
        evalin('base',['zef.' zef.temp_var_0 '_points_inf = [zef.' zef.temp_var_0 '_points_inf ;  zef.temp_patch_data_aux.vertices_inflated];']);
     end
      evalin('base',['zef.' zef.temp_var_0 '_triangles = [zef.' zef.temp_var_0 '_triangles; zef.temp_patch_data_aux.faces+size(zef.' zef.temp_var_0 '_points,1)];']);
@@ -122,7 +122,7 @@ else
 end
 end
 
-waitbar(zef_k/number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
+waitbar(zef_k/zef.number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
 end
 close(zef.h);
 zef = rmfield(zef,'temp_patch_data');
