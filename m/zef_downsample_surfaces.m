@@ -122,7 +122,7 @@ else
 end
 end
 
-waitbar(zef_k/zef.number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
+waitbar(zef_k/zef.number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (zef.number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
 end
 close(zef.h);
 zef = rmfield(zef,'temp_patch_data');
