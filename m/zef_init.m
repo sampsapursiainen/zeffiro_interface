@@ -188,7 +188,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.inv_snr = 30;
        zef_data.downsample_surfaces = 1;
        zef_data.max_surface_face_count = 5000;
-       zef_data.inflate_n_iterations = 200;
+       zef_data.inflate_n_iterations = 2000;
        zef_data.inflate_strength = 0.8;
        
        zef.fieldnames = fieldnames(zef);
