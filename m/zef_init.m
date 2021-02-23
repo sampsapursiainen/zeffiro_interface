@@ -190,6 +190,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.max_surface_face_count = 5000;
        zef_data.inflate_n_iterations = 500;
        zef_data.inflate_strength = 0.8;
+       zef_data.use_inflated_surfaces = 0;
        
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
