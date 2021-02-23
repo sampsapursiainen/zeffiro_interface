@@ -38,6 +38,7 @@ zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visibl
 set(zef.h_loop_movie_count,'string',num2str(zef.loop_movie_count));
 
 imagesc(zef.h_axes1,imread('zeffiro_interface.jpg'));
+axis(zef.h_axes1,'equal');
 
 %***********************
 
