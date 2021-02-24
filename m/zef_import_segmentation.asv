@@ -11,13 +11,7 @@ end
 if not(isequal(file_name,0));   
     
 h_import = fopen([folder_name file_name]);
-
-line_counter = 1; 
-while not(isequal(fgetl(h_import),'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'))
-    line_counter = line_counter + 1; 
-end
-h_import = fopen([folder_name file_name]);
-ini_cell = textscan(h_import,'%s','HeaderLines',line_counter,'Delimiter',',');
+ini_cell = textscan(h_import,'%s','HeaderLines',57,'Delimiter',',');
 n_columns = 12;
 
 compartment_cell = {'detail_1', 'detail_2', 'detail_3', 'detail_4', 'detail_5', 'detail_6', 'detail_7','detail_8','detail_9', ...
@@ -164,7 +158,33 @@ end
 
 end   
 
-else
+elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'STL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'stl')
+
+file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.stl'];  
+
+fid = fopen(file_name_1);
+aux_dim = textscan(fid,'%s',1,'delimiter','\n', 'headerlines',1);
+aux_dim = str2num(aux_dim{1}{1});
+aux_dim = aux_dim(1:2);
+
+point_data = zeros(aux_dim(1),3);
+triangle_data = zeros(aux_dim(1),3);
+
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
+
+point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+point_data = cell2mat(point_data);
+point_data(:,1) = point_data(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
+point_data(:,2) = point_data(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
+point_data(:,3) = point_data(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
+
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
+
+triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+triangle_data = cell2mat(triangle_data)+1;
+
 if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') || isequal(ini_cell{1}{n_columns*(i-1)+9},'asc')
 
 file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.asc'];  
@@ -191,16 +211,6 @@ aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_di
 
 triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
 triangle_data = cell2mat(triangle_data)+1;
-
-elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'STL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'stl')
-
-file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.stl'];  
-
-stl_data = stlread(file_name_1);
-
-point_data = stl_data.Points;
-triangle_data = stl_data.ConnectivityList;
-
 
 else 
       
