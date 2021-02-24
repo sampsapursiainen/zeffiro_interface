@@ -677,7 +677,7 @@ uicontrol(...
 'FontWeight','bold');
 
 axis(zef.h_axes1,'tight');
-set(zef.h_axes1,'xtick',[]);
-set(zef.h_axes1,'ytick',[]);
-
+%set(zef.h_axes1,'xticklabel',[]);
+%set(zef.h_axes1,'yticklabels',[]);
+%set(zef.h_axes1,'visible','off');
 
