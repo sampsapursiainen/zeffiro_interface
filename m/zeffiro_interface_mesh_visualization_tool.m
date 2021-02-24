@@ -150,8 +150,8 @@ set(zef.h_explode_everything,'ValueChangedFcn','zef_update_mesh_visualization_to
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 set(zef.h_mesh_visualization_tool,'AutoResizeChildren','off');
-zef.h_mesh_visualization_tool_current_size = get(zef.h_mesh_visualization_tool,'Position');
-set(zef.h_mesh_visualization_tool,'SizeChangedFcn','zef.h_mesh_visualization_tool_current_size = zef_change_size_function(zef.h_mesh_visualization_tool,zef.h_mesh_visualization_tool_current_size);');
+zef.mesh_visualization_tool_current_size = get(zef.h_mesh_visualization_tool,'Position');
+set(zef.h_mesh_visualization_tool,'SizeChangedFcn','zef.mesh_visualization_tool_current_size = zef_change_size_function(zef.h_mesh_visualization_tool,zef.mesh_visualization_tool_current_size);');
 
 
 clear zef_data;

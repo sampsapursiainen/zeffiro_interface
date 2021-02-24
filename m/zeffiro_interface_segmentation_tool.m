@@ -703,5 +703,5 @@ zef.mlapp = 1;
 clear zef_data;
 
 set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
-zef.h_zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
-set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.h_zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.h_zeffiro_window_main_current_size);');
+zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
+set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.zeffiro_window_main_current_size);');
