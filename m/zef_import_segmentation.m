@@ -159,7 +159,6 @@ end
 end   
 
 else
-
 if isequal(ini_cell{1}{n_columns*(i-1)+9},'ASC') || isequal(ini_cell{1}{n_columns*(i-1)+9},'asc')
 
 file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.asc'];  
@@ -186,6 +185,16 @@ aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_di
 
 triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
 triangle_data = cell2mat(triangle_data)+1;
+
+elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'STL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'stl')
+
+file_name_1 = [folder_name ini_cell{1}{n_columns*(i-1)+1} '.stl'];  
+
+stl_data = stlread(file_name_1);
+
+point_data = stl_data.Points;
+triangle_data = stl_data.ConnectivityList;
+
 
 else 
       
@@ -303,6 +312,14 @@ end
 end
 
 end
+
+
+%*****************************
+
+
+%*****************************
+
+
 
 end
 
