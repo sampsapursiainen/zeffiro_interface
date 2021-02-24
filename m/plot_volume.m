@@ -625,7 +625,7 @@ end
 %end
 
 loop_count = 0;
-while loop_movie 
+while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
 loop_count = loop_count + 1;    
 axes(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
