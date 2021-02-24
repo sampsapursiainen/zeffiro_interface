@@ -22,6 +22,8 @@ zef.h_edit75 = zef_data.h_edit75;
 zef.h_max_surface_face_count = zef_data.h_max_surface_face_count;
 zef.h_pushbutton23 = zef_data.h_pushbutton23;
 zef.h_pushbutton34 = zef_data.h_pushbutton34;
+zef.h_inflate_n_iterations = zef_data.h_inflate_n_iterations;
+zef.h_inflate_strength = zef_data.h_inflate_strength;
 
 
 set(zef.h_make_all,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef.source_interpolation_on = 1; set(zef.h_source_interpolation_on,''value'',1); [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);[zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);lead_field_matrix;');
@@ -34,6 +36,10 @@ set(zef.h_surface_downsampling,'ButtonPushedFcn','zef_downsample_surfaces; [zef.
 set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
 set(zef.h_refinement_on,'value',zef.refinement_on);
 set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
+set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
+set(zef.h_inflate_n_iterations,'value',zef.inflate_n_iterations);
+set(zef.h_inflate_strength,'value',zef.inflate_strength);
+
 set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
 
 set(zef.h_popupmenu1,'Items',zef.imaging_method_cell);
@@ -70,6 +76,10 @@ set(zef.h_smoothing_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_edit76,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_edit75,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_max_surface_face_count,'ValueChangedFcn','zef_update_mesh_tool;');
+
+set(zef.h_inflate_n_iterations,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
+
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 clear zef_data;

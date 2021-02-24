@@ -39,6 +39,7 @@ zef_data.mlapp = zef.mlapp;
 clear zef_data;
 zef_update;
 zef_mesh_tool;
+zeffiro_interface_mesh_visualization_tool;
 end;
 
 
