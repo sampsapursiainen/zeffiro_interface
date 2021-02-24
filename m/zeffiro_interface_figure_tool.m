@@ -678,6 +678,6 @@ uicontrol(...
 
 axis(zef.h_axes1,'tight');
 set(zef.h_axes1,'xtick',[]);
-set(zef.h_axes1,'ytick',[]):
+set(zef.h_axes1,'ytick',[]);
 
 
