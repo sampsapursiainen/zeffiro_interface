@@ -79,8 +79,8 @@ set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnit
 set(findobj(zef.h_additional_options.Children,'-property','FontSize'), 'FontSize', zef.font_size);
 
 set(zef.h_additional_options,'AutoResizeChildren','off');
-zef.h_additional_options_current_size = get(zef.h_additional_options,'Position');
-set(zef.h_additional_options,'SizeChangedFcn','zef.h_additional_options_current_size = zef_change_size_function(zef.h_additional_options,zef.h_additional_options_current_size);');
+zef.additional_options_current_size = get(zef.h_additional_options,'Position');
+set(zef.h_additional_options,'SizeChangedFcn','zef.additional_options_current_size = zef_change_size_function(zef.h_additional_options,zef.additional_options_current_size);');
 
 
 clear zef_data;
