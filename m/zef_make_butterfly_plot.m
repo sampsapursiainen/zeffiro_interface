@@ -61,4 +61,5 @@ set(evalin('base','zef.h_axes1'),'ygrid','on');
 set(evalin('base','zef.h_axes1'),'xgrid','on');
 set(evalin('base','zef.h_axes1'),'fontsize',14);
 set(evalin('base','zef.h_axes1'),'linewidth',0.5);
+set(gca,'box','on');
 end
