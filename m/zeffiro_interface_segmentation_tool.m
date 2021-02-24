@@ -701,5 +701,5 @@ zef.mlapp = 1;
 
 clear zef_data;
 
-set(zef.h_zeffiro_window_main,'HandleVisibility','on');
+set(zef.h_zeffiro_window_main,'HandleVisibility','off');
 
