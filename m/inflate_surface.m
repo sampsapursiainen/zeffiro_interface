@@ -28,7 +28,7 @@ taubin_mu = -1;
 
 if evalin('base','zef.use_gpu') && gpuDeviceCount > 0 
     A = gpuArray(A);
-    sum_A = gpu_array(sum_A);
+    sum_A = gpuArray(sum_A);
     taubin_lambda = gpuArray(taubin_lambda); 
     smoothing_param = gpuArray(smoothing_param);
     nodes = gpuArray(nodes);
