@@ -37,7 +37,8 @@ zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible'
 zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.56 0.35 0.07 0.04],'String','Loop visualization','Callback','zef.loop_count = str2num(get(zef.h_loop_count,''string''));','HorizontalAlignment','right');
 set(zef.h_loop_movie_count,'string',num2str(zef.loop_movie_count));
 
-imagesc(zef.h_axes1,imread('zeffiro_interface.png'));
+imagesc(zef.h_axes1,flipud(imread('zeffiro_interface.png')));
+set(gca,'YDir','normal');
 
 axis(zef.h_axes1,'tight');
 
