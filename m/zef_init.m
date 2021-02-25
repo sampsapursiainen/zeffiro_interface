@@ -195,10 +195,17 @@ zef_data.sensors_attached_volume = [];
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
 
        
+       
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
  for zef_i = 1:length(zef.fieldnames)
  zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
  end        
  zef = zef_data;
+ 
+ if isfield(zef,'h_zeffiro_window_main')
+     if isvalid(zef.h_zeffiro_window_main)
+ zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
+     end
+ end
  clear zef_i zef_data;
