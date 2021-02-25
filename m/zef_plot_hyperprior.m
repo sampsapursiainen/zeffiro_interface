@@ -41,6 +41,9 @@ set(h_loglog,'linewidth',2);
 y_lim_vec = [eps_val eps_val*10.^(1.05*(log10(max(plot_vec))-log10(eps_val)))];
 x_lim_vec = [10.^(-min_amp_exp/2) 10.^(max_amp_exp/2) ];
 
+y_lim_vec = double(y_lim_vec);
+x_lim_vec = double(x_lim_vec);
+
 set(evalin('base','zef.h_axes1'),'xgrid','on');
 set(evalin('base','zef.h_axes1'),'ygrid','on');
 hold(evalin('base','zef.h_axes1'),'on');
