@@ -11,6 +11,7 @@ zeffiro_interface_figure_tool;
 
 set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','normalized')
 
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
 set(zef.h_zeffiro,'papersize',[zef.snapshot_vertical_resolution/200 zef.snapshot_horizontal_resolution/200]);
