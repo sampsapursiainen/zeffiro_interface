@@ -250,8 +250,6 @@ reuna_p_inf{i}(:,j) = reuna_p_inf{i}(:,j) + translation_vec(j);
 end
 end
 if explode_param ~= 1
-reuna_p{i} = reuna_p{i} + explode_param*mean_vec;
-if not(isempty(reuna_p_inf{i}))
 for s_ind = 1 : length(reuna_submesh_ind{i})
     if s_ind == 1 
         t_ind_1 = 1;
@@ -260,9 +258,12 @@ for s_ind = 1 : length(reuna_submesh_ind{i})
     end
     t_ind_2 = reuna_submesh_ind{i}(s_ind);
     p_ind = unique(reuna_t{i}(t_ind_1:t_ind_2,:));
-    mean_aux = mean(reuna_p_inf{i}(p_ind,:));   
-reuna_p_inf{i}(p_ind,:) = reuna_p_inf{i}(p_ind,:) + explode_param*repmat(mean_aux,length(p_ind),1);
-end
+    mean_aux = mean(reuna_p{i}(p_ind,:));
+            reuna_p{i}(p_ind,:) = reuna_p{i}(p_ind,:) + (explode_param-1)*repmat(mean_aux,length(p_ind),1);
+    if not(isempty(reuna_p_inf{i})) 
+ mean_aux = mean(reuna_p_inf{i}(p_ind,:));
+        reuna_p_inf{i}(p_ind,:) = reuna_p_inf{i}(p_ind,:) + (explode_param-1)*repmat(mean_aux,length(p_ind),1);
+    end
 end
 end
 end
@@ -339,7 +340,10 @@ for j = 1 : 3
 if translation_vec(j) ~= 0
 sensors(:,j) = sensors(:,j) + translation_vec(j);
 end
+sensors(:,j) = sensors(:,j)  +  (explode_param-1)*(sensors(:,j) - mean(sensors(:,j)));
 end
+
+
 
 if not(isempty(s_data_aux))
 sensors = [sensors s_data_aux];

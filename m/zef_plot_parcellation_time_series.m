@@ -55,7 +55,7 @@ end
 
 if plot_mode == 2
 
-colormap_size = 32768;
+colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));

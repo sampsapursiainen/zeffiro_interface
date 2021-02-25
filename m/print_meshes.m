@@ -87,7 +87,7 @@ end
 
 %T
 sensors = evalin('base','zef.sensors');
-aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;
@@ -857,7 +857,7 @@ reconstruction = reconstruction.*reconstruction_p_2;
 end
 end
 
-colormap_size = 32768;
+colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
@@ -1764,7 +1764,7 @@ light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
 sensors = evalin('base','zef.sensors');
-aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;
@@ -2163,7 +2163,7 @@ end
 end  
 end
 
-colormap_size = 32768;
+colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
@@ -2380,7 +2380,7 @@ set(h_waitbar,'handlevisibility','off');
 end    
 
 
-colormap_size = 32768;
+colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
