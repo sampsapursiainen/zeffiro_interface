@@ -678,4 +678,9 @@ uicontrol(...
 'FontSize',0.587962962962963,...
 'FontWeight','bold');
 
+zef.h = get(zef.h_zeffiro,'Children');
+zef.h = zef.h(isprop(zef.h,'Units'));
+set(zef.h,'Units','pixels');
+zef = rmfield(zef,'h');
+
 

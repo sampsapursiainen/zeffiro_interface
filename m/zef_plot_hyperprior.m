@@ -5,8 +5,6 @@ function zef_plot_hyperprior
 axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 
-set(evalin('base','zef.h_axes1'),'fontunits','pixels')
-
 tail_length = evalin('base','zef.inv_hyperprior_tail_length_db');
 snr_val = evalin('base','zef.inv_snr');
 pm_val = evalin('base','zef.inv_prior_over_measurement_db');
@@ -122,5 +120,3 @@ tick_label_cell{i} = num2str(db(tick_label_vec(i)));
 end
 h_axes.YTick = tick_label_vec;
 h_axes.YTickLabel = tick_label_cell;
-
-set(evalin('base','zef.h_axes1'),'fontunits','normalized')
