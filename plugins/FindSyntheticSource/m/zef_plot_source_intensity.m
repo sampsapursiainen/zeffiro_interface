@@ -22,10 +22,21 @@ if evalin('base','zef.find_synth_source.intensity_direction')
 else
     y_vals = abs(s_amp.*y_vals);
 end
+zef_temp_axis = evalin('base','zef.h_axes1');
+axes(zef_temp_axis);
+cla(zef_temp_axis);
+hold(zef_temp_axis,'off');
+set(zef_temp_axis,'CLim',[0 1])
+set(zef_temp_axis,'CameraUpVector', [0 1 0])
+set(zef_temp_axis,'CameraViewAngle', 6.6086)
+set(zef_temp_axis,'DataAspectRatio', [1 67.6694 14.4928])
+set(zef_temp_axis,'DataAspectRatioMode', 'auto')
+set(zef_temp_axis,'TickDir','in')
+set(zef_temp_axis,'View',[0 90])
+set(zef_temp_axis.Colorbar,'visible','off')
+rotate3d(zef_temp_axis,'off')
+clear zef_temp_axis
 
-axes(evalin('base','zef.h_axes1'));
-cla(evalin('base','zef.h_axes1'));
-hold(evalin('base','zef.h_axes1'),'off');
 
 %Available colors
 colors = [1,0,0;0,1,0;0,0,1;1,0,1;0.4,0.8,0.4;0.4,0.4,1;1,0.4,0.7;1,0.5,0];
