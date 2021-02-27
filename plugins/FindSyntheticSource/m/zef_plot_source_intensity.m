@@ -35,8 +35,6 @@ set(zef_temp_axis,'TickDir','in')
 set(zef_temp_axis,'View',[0 90])
 set(zef_temp_axis.Colorbar,'visible','off')
 rotate3d(zef_temp_axis,'off')
-clear zef_temp_axis
-
 
 %Available colors
 colors = [1,0,0;0,1,0;0,0,1;1,0,1;0.4,0.8,0.4;0.4,0.4,1;1,0.4,0.7;1,0.5,0];
@@ -55,13 +53,13 @@ for i = 1 : length(s_amp)
     h_plot = plot(t_vals,y_vals(i,:),line_style_cell{line_style_ind});
     set(h_plot, 'color',colors(mod(i-1,size(colors,1)-1)+1,:),'linewidth',2);
 if i == 1
-hold(evalin('base','zef.h_axes1'),'on');
+hold(zef_temp_axis,'on');
 end
 end
 
 %Set figure visualization options
-set(evalin('base','zef.h_axes1'),'ticklength',[0 0]);
-%Set a nice looking 8 tick x axis.
+set(zef_temp_axis,'ticklength',[0.01 0.025]);
+%Set a nice looking 9 tick x axis.
 Xtick_interval = (t_vals(end)-t_vals(1))/8;
 Xtick_scale = abs(min(floor(log10(mean(abs(t_vals)))),2));
 Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale);
@@ -69,17 +67,17 @@ if std(diff(Xtick))/mean(diff(Xtick))>0.05
     Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale+1);
 end
 
-set(evalin('base','zef.h_axes1'),'xtick',Xtick)
-set(evalin('base','zef.h_axes1'),'xticklabels',num2cell(Xtick))
-set(evalin('base','zef.h_axes1'),'xlim',[t_vals(1) t_vals(end)]);
+set(zef_temp_axis,'xtick',Xtick)
+set(zef_temp_axis,'xticklabels',num2cell(Xtick))
+set(zef_temp_axis,'xlim',[t_vals(1) t_vals(end)]);
 if evalin('base','zef.find_synth_source.intensity_direction')
-    set(evalin('base','zef.h_axes1'),'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
+    set(zef_temp_axis,'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
 else
-    set(evalin('base','zef.h_axes1'),'ylim',[0 1.05*max(y_vals(:))]);
+    set(zef_temp_axis,'ylim',[0 1.05*max(y_vals(:))]);
 end
-set(evalin('base','zef.h_axes1'),'ygrid','on');
+set(zef_temp_axis,'ygrid','on');
 legend(name_label,'location','eastoutside')
-hold(evalin('base','zef.h_axes1'),'off');
+hold(zef_temp_axis,'off');
 else
     y_vals = y_vals(:,length(t_vals(t_vals<=evalin('base','zef.fss_time_val'))));
 for i = 1 : length(s_amp)
@@ -88,25 +86,26 @@ for i = 1 : length(s_amp)
     end
     bar(i,y_vals(i),0.7,'facecolor',colors(mod(i-1,size(colors,1)-1)+1,:));
     if i == 1
-        hold(evalin('base','zef.h_axes1'),'on');
+        hold(zef_temp_axis,'on');
     end
 end
 %Set source names from UItable to labels of x axis
-set(evalin('base','zef.h_axes1'),'xticklabel',name_label);
+set(zef_temp_axis,'xticklabel',name_label);
 %Set a tick for every source
-xticks(evalin('base','zef.h_axes1'),1:length(s_amp));
-set(evalin('base','zef.h_axes1'),'xlim',[-0.15, (1.15+length(s_amp))]);
+xticks(zef_temp_axis,1:length(s_amp));
+set(zef_temp_axis,'xlim',[-0.15, (1.15+length(s_amp))]);
 if evalin('base','zef.find_synth_source.intensity_direction')
-    set(evalin('base','zef.h_axes1'),'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
+    set(zef_temp_axis,'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
 else
-    set(evalin('base','zef.h_axes1'),'ylim',[0 1.05*max(y_vals(:))]);
+    set(zef_temp_axis,'ylim',[0 1.05*max(y_vals(:))]);
 end
-set(evalin('base','zef.h_axes1'),'ygrid','on');
+set(zef_temp_axis,'ygrid','on');
 %Angle of source names on x axis
-xtickangle(evalin('base','zef.h_axes1'),0);
+xtickangle(zef_temp_axis,0);
+set(zef_temp_axis,'ticklength',[0.01 0.025]);
 legend(name_label,'location','eastoutside')
-hold(evalin('base','zef.h_axes1'),'off');
+hold(zef_temp_axis,'off');
 end
 
-
+clear zef_temp_axis
 end
