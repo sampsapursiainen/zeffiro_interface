@@ -62,13 +62,19 @@ end
 
 %Set figure ticks
 set(zef_temp_axis,'ticklength',[0.01 0.025]);
-%Set a nice looking 9 tick x axis.
-Xtick_interval = (t_vals(end)-t_vals(1))/8;
-Xtick_scale = abs(min(floor(log10(mean(abs(t_vals)))),2));
-Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale);
-if std(diff(Xtick))/mean(diff(Xtick))>0.05
-    Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale+1);
+%Set a nice looking ticks on x axis.
+Xtick_scale = min(floor(log10(abs(t_vals(end)))),2);
+Interval_reminder = ceil((t_vals(end)-t_vals(1))*10^(-Xtick_scale)/2);
+Xtick_interval = 0.25*Interval_reminder*10^Xtick_scale;
+if mod(Interval_reminder,4)==0
+    Xtick_scale = abs(min(floor(log10(Xtick_interval)),2));
+elseif mod(Interval_reminder,4)==2
+    Xtick_scale = abs(min(floor(log10(Xtick_interval)),2))+1;
+else
+    Xtick_scale = abs(min(floor(log10(Xtick_interval)),2))+2;
 end
+Xtick = round((t_vals(1)-mod(t_vals(1),Xtick_interval)):Xtick_interval:t_vals(end),Xtick_scale);
+
 set(zef_temp_axis,'xtick',Xtick)
 set(zef_temp_axis,'xticklabels',num2cell(Xtick))
 set(zef_temp_axis,'xlim',[t_vals(1) t_vals(end)]);
@@ -79,8 +85,15 @@ else
     set(zef_temp_axis,'ylim',[0 1.05*max(y_vals(:))]);
 end
 set(zef_temp_axis,'ygrid','on');
+xtickangle(zef_temp_axis,0);
 %Set Legend
 legend(name_label,'location','eastoutside')
+%Change plot to proper size
+window_ratio = evalin('base','zef.h_zeffiro.Position(3:4)./[0.239, 0.5134];');
+screen_resolution = get(0,'screensize');
+screen_resolution = screen_resolution(3:4);
+zef_temp_axis.Position(3:4)=[0.1325,0.2821].*window_ratio.*screen_resolution;
+zef_temp_axis.Position(1:2)=[0.0125,0.2215*window_ratio(2)].*screen_resolution;
 hold(zef_temp_axis,'off');
 
 %_ Bar plot for one time value _
@@ -107,11 +120,19 @@ else
 end
 set(zef_temp_axis,'ygrid','on');
 %Angle of source names on x axis
-xtickangle(zef_temp_axis,0);
+xtickangle(zef_temp_axis,30);
 set(zef_temp_axis,'ticklength',[0.01 0.025]);
 legend(name_label,'location','eastoutside')
+%Change plot to proper size
+window_ratio = evalin('base','zef.h_zeffiro.Position(3:4)./[0.239, 0.5134];');
+screen_resolution = get(0,'screensize');
+screen_resolution = screen_resolution(3:4);
+zef_temp_axis.Position(3:4)=window_ratio.*[0.1325, 0.281].*screen_resolution;
+zef_temp_axis.Position(4)=0.9*zef_temp_axis.Position(4);
+zef_temp_axis.Position(2)=window_ratio(2)*0.25*screen_resolution(2);
 hold(zef_temp_axis,'off');
 end
+
 
 clear zef_temp_axis
 end
