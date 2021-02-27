@@ -193,9 +193,8 @@ zef_data.sensors_attached_volume = [];
        zef_data.use_inflated_surfaces = 0;
        zef_data.explode_everything = 1;
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
+       zef_data.compartment_tags = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','w','g','c','sk','sc'};
 
-       
-       
        zef.fieldnames = fieldnames(zef);
        zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
  for zef_i = 1:length(zef.fieldnames)
