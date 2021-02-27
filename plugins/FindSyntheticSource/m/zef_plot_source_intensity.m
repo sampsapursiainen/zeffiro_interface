@@ -26,6 +26,7 @@ zef_temp_axis = evalin('base','zef.h_axes1');
 axes(zef_temp_axis);
 cla(zef_temp_axis);
 hold(zef_temp_axis,'off');
+set(zef_temp_axis,'visible','on')
 set(zef_temp_axis,'CLim',[0 1])
 set(zef_temp_axis,'CameraUpVector', [0 1 0])
 set(zef_temp_axis,'CameraViewAngle', 6.6086)
