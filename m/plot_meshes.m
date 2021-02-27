@@ -10,6 +10,9 @@ length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
 submesh_num = evalin('base','zef.submesh_num');
 nodes = evalin('base','zef.nodes');
+sensor_tag = evalin('base','zef.sensor_tags');
+sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+compartment_tags = evalin('base','zef.compartment_tags');
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
@@ -20,7 +23,6 @@ if evalin('base','zef.use_parcellation')
 selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 end
-
 
 if ismember(evalin('base','zef.visualization_type'), [3])
 max_abs_reconstruction = 0;
@@ -141,7 +143,6 @@ max_rec = max_abs_reconstruction;
 end
 end
    
-compartment_tags = evalin('base','zef.compartment_tags');
 
 cb_done = 0;
 i = 0;
@@ -358,11 +359,11 @@ for p_ind = selected_list
 p_i_ind{p_ind}{2}{ab_ind} = aux_is_3;
 end
 end
-end;
 end
 end
 end
-    end
+end
+end
 
 aux_ind_1 = [];
 aux_ind_2 = cell(1,length(reuna_t));
@@ -409,11 +410,11 @@ light('Position',[0 0 -1],'Style','infinite');
 hold on;
 
 
-if evalin('base','zef.s_visible')
+if evalin('base',['zef.' sensor_tag '_visible'])
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -423,8 +424,8 @@ end
 elseif electrode_model == 2  
  if not(isempty(sensors))
 h = trisurf(sensors(:,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
-set(h,'facecolor',evalin('base','zef.s_color'));
-set(h,'edgecolor',evalin('base','zef.s_color')); 
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
+set(h,'edgecolor',evalin('base',['zef.' sensor_tag '_color'])); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
@@ -434,7 +435,7 @@ set(h,'edgealpha',evalin('base','zef.layer_transparency'));
 if not(isempty(sensors_point_like))
 for i = 1 : size(sensors_point_like,1)
 h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -447,7 +448,7 @@ end
 if ismember(evalin('base','zef.imaging_method'),[2 3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -478,8 +479,6 @@ f_ind = frame_start;
 i = 0;
 
 aux_brain_visible_ind = [];
-
-compartment_tags = evalin('base','zef.compartment_tags');
 
 for k = 1 : length(compartment_tags)
         on_val = evalin('base',['zef.' compartment_tags{k} '_on']);
@@ -976,10 +975,10 @@ else
 
 i = 0;
 
-for k = 1 : length(compartment_tags{k})
+for k = 1 : length(compartment_tags)
         on_val = evalin('base',['zef.' compartment_tags{k} '_on']);
-        visible_val = evalin('base','zef.sc_visible');
-        color_str = evalin('base','zef.sc_color');
+        visible_val = evalin('base',['zef.'  compartment_tags{k} '_visible']);
+        color_str = evalin('base',['zef.'  compartment_tags{k} '_color']);
 if on_val 
 i = i + 1;    
 if visible_val

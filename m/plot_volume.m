@@ -9,6 +9,9 @@ sensors_point_like = [];
 loop_movie = 1;
 length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
+sensor_tag = evalin('base','zef.sensor_tags');
+sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_wm_ind = -1;
 
@@ -31,7 +34,6 @@ end
 hold on;
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
-
 
 cp_a = evalin('base','zef.cp_a');
 cp_b = evalin('base','zef.cp_b');
@@ -65,7 +67,7 @@ end
 
 
 aux_ind = []; 
-if evalin('base','zef.s_visible')
+if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
 if not(isempty(aux_ind))
 aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
@@ -117,7 +119,7 @@ end
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none');
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -127,8 +129,8 @@ end
 else
     if not(isempty(sensors))
 h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
-set(h,'facecolor',evalin('base','zef.s_color'));
-set(h,'edgecolor',evalin('base','zef.s_color')); 
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
+set(h,'edgecolor',evalin('base',['zef.' sensor_tag '_color'])); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
@@ -138,7 +140,7 @@ set(h,'edgealpha',evalin('base','zef.layer_transparency'));
 if not(isempty(sensors_point_like))
 for i = 1 : size(sensors_point_like,1)
 h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -150,7 +152,7 @@ end
 if ismember(evalin('base','zef.imaging_method'),[2,3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -169,7 +171,6 @@ end
 end
 end
 
-compartment_tags = evalin('base','zef.compartment_tags');
 
 i = 0;
 length_reuna = 0;
