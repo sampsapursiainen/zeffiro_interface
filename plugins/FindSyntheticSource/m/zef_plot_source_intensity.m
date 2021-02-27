@@ -22,6 +22,7 @@ if evalin('base','zef.find_synth_source.intensity_direction')
 else
     y_vals = abs(s_amp.*y_vals);
 end
+%Figure visualization setups
 zef_temp_axis = evalin('base','zef.h_axes1');
 axes(zef_temp_axis);
 cla(zef_temp_axis);
@@ -46,6 +47,7 @@ line_style_ind = 0;
 %Check if ground truth is setted and then do a plot loop that plot
 %line/bars for every color and then change line style to another if there 
 %is more sources than colors.
+%_ Curve plot _
 if isempty(evalin('base','zef.fss_time_val'))
 for i = 1 : length(s_amp)
     if mod(i,size(colors,1)) == 1
@@ -58,7 +60,7 @@ hold(zef_temp_axis,'on');
 end
 end
 
-%Set figure visualization options
+%Set figure ticks
 set(zef_temp_axis,'ticklength',[0.01 0.025]);
 %Set a nice looking 9 tick x axis.
 Xtick_interval = (t_vals(end)-t_vals(1))/8;
@@ -67,18 +69,21 @@ Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale);
 if std(diff(Xtick))/mean(diff(Xtick))>0.05
     Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale+1);
 end
-
 set(zef_temp_axis,'xtick',Xtick)
 set(zef_temp_axis,'xticklabels',num2cell(Xtick))
 set(zef_temp_axis,'xlim',[t_vals(1) t_vals(end)]);
+set(zef_temp_axis,'xgrid','off');
 if evalin('base','zef.find_synth_source.intensity_direction')
     set(zef_temp_axis,'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
 else
     set(zef_temp_axis,'ylim',[0 1.05*max(y_vals(:))]);
 end
 set(zef_temp_axis,'ygrid','on');
+%Set Legend
 legend(name_label,'location','eastoutside')
 hold(zef_temp_axis,'off');
+
+%_ Bar plot for one time value _
 else
     y_vals = y_vals(:,length(t_vals(t_vals<=evalin('base','zef.fss_time_val'))));
 for i = 1 : length(s_amp)
