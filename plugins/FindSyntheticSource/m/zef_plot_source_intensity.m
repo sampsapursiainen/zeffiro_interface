@@ -59,7 +59,18 @@ hold(evalin('base','zef.h_axes1'),'on');
 end
 end
 
+%Set figure visualization options
 set(evalin('base','zef.h_axes1'),'ticklength',[0 0]);
+%Set a nice looking 8 tick x axis.
+Xtick_interval = (t_vals(end)-t_vals(1))/8;
+Xtick_scale = abs(min(floor(log10(mean(abs(t_vals)))),2));
+Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale);
+if std(diff(Xtick))/mean(diff(Xtick))>0.05
+    Xtick = round(t_vals(1):Xtick_interval:t_vals(end),Xtick_scale+1);
+end
+
+set(evalin('base','zef.h_axes1'),'xtick',Xtick)
+set(evalin('base','zef.h_axes1'),'xticklabels',num2cell(Xtick))
 set(evalin('base','zef.h_axes1'),'xlim',[t_vals(1) t_vals(end)]);
 if evalin('base','zef.find_synth_source.intensity_direction')
     set(evalin('base','zef.h_axes1'),'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
@@ -84,6 +95,7 @@ end
 set(evalin('base','zef.h_axes1'),'xticklabel',name_label);
 %Set a tick for every source
 xticks(evalin('base','zef.h_axes1'),1:length(s_amp));
+set(evalin('base','zef.h_axes1'),'xlim',[-0.15, (1.15+length(s_amp))]);
 if evalin('base','zef.find_synth_source.intensity_direction')
     set(evalin('base','zef.h_axes1'),'ylim',[(1-0.05*sign(min(y_vals(:))))*min(y_vals(:)), 1.05*max(y_vals(:))]);
 else
