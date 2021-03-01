@@ -14,199 +14,15 @@ sensors = [];
 reuna_p = cell(0);
 reuna_t = cell(0);
 
-for k = 1 : 27
+compartment_tags = evalin('base','zef.compartment_tags');
+for k = 1 : length(compartment_tags)
 
-switch k
-    case 1
-        var_0 = 'zef.d1_on';
-        var_1 = 'zef.d1_scaling'; 
-        var_7 = 'zef.d1_points_inf';
-        var_8 = 'zef.d1_points';
-        var_9 = 'zef.d1_triangles';
-        var_10 = 'zef.d1_submesh_ind';
-    case 2
-        var_0 = 'zef.d2_on';
-        var_1 = 'zef.d2_scaling';
-        var_7 = 'zef.d2_points_inf';
-        var_8 = 'zef.d2_points';
-        var_9 = 'zef.d2_triangles';
-         var_10 = 'zef.d2_submesh_ind';
-    case 3
-        var_0 = 'zef.d3_on';
-        var_1 = 'zef.d3_scaling';
-        var_7 = 'zef.d3_points_inf';
-        var_8 = 'zef.d3_points';
-        var_9 = 'zef.d3_triangles';
-         var_10 = 'zef.d3_submesh_ind';
-    case 4
-        var_0 = 'zef.d4_on';
-        var_1 = 'zef.d4_scaling';
-        var_7 = 'zef.d4_points_inf';
-        var_8 = 'zef.d4_points';
-        var_9 = 'zef.d4_triangles';   
-         var_10 = 'zef.d4_submesh_ind';
-    case 5
-        var_0 = 'zef.d5_on';
-        var_1 = 'zef.d5_scaling'; 
-        var_7 = 'zef.d5_points_inf';
-        var_8 = 'zef.d5_points';
-        var_9 = 'zef.d5_triangles';
-         var_10 = 'zef.d5_submesh_ind';
-    case 6
-        var_0 = 'zef.d6_on';
-        var_1 = 'zef.d6_scaling'; 
-        var_7 = 'zef.d6_points_inf';
-        var_8 = 'zef.d6_points';
-        var_9 = 'zef.d6_triangles';
-         var_10 = 'zef.d6_submesh_ind';
-    case 7
-        var_0 = 'zef.d7_on';
-        var_1 = 'zef.d7_scaling';
-        var_7 = 'zef.d7_points_inf';
-        var_8 = 'zef.d7_points';
-        var_9 = 'zef.d7_triangles';
-         var_10 = 'zef.d7_submesh_ind';
-    case 8
-        var_0 = 'zef.d8_on';
-        var_1 = 'zef.d8_scaling';
-        var_7 = 'zef.d8_points_inf';
-        var_8 = 'zef.d8_points';
-        var_9 = 'zef.d8_triangles'; 
-         var_10 = 'zef.d8_submesh_ind';
-    case 9
-        var_0 = 'zef.d9_on';
-        var_1 = 'zef.d9_scaling';  
-        var_7 = 'zef.d9_points_inf';
-        var_8 = 'zef.d9_points';
-        var_9 = 'zef.d9_triangles';
-         var_10 = 'zef.d9_submesh_ind';
-    case 10
-        var_0 = 'zef.d10_on';
-        var_1 = 'zef.d10_scaling'; 
-        var_7 = 'zef.d10_points_inf';
-        var_8 = 'zef.d10_points';
-        var_9 = 'zef.d10_triangles';
-         var_10 = 'zef.d10_submesh_ind';
-    case 11
-        var_0 = 'zef.d11_on';
-        var_1 = 'zef.d11_scaling';  
-        var_7 = 'zef.d11_points_inf';
-        var_8 = 'zef.d11_points';
-        var_9 = 'zef.d11_triangles';
-         var_10 = 'zef.d11_submesh_ind';
-    case 12
-        var_0 = 'zef.d12_on';
-        var_1 = 'zef.d12_scaling';
-        var_7 = 'zef.d12_points_inf';
-        var_8 = 'zef.d12_points';
-        var_9 = 'zef.d12_triangles'; 
-         var_10 = 'zef.d12_submesh_ind';
-    case 13
-        var_0 = 'zef.d13_on';
-        var_1 = 'zef.d13_scaling';
-        var_7 = 'zef.d13_points_inf';
-        var_8 = 'zef.d13_points';
-        var_9 = 'zef.d13_triangles'; 
-         var_10 = 'zef.d13_submesh_ind';
-    case 14
-        var_0 = 'zef.d14_on';
-        var_1 = 'zef.d14_scaling'; 
-        var_7 = 'zef.d14_points_inf';
-        var_8 = 'zef.d14_points';
-        var_9 = 'zef.d14_triangles';
-         var_10 = 'zef.d14_submesh_ind';
-    case 15
-        var_0 = 'zef.d15_on';
-        var_1 = 'zef.d15_scaling';
-        var_7 = 'zef.d15_points_inf';
-        var_8 = 'zef.d15_points';
-        var_9 = 'zef.d15_triangles';
-         var_10 = 'zef.d15_submesh_ind'; 
-    case 16
-        var_0 = 'zef.d16_on';
-        var_1 = 'zef.d16_scaling'; 
-        var_7 = 'zef.d16_points_inf';
-        var_8 = 'zef.d16_points';
-        var_9 = 'zef.d16_triangles';
-         var_10 = 'zef.d16_submesh_ind';
-    case 17
-        var_0 = 'zef.d17_on';
-        var_1 = 'zef.d17_scaling';
-        var_7 = 'zef.d17_points_inf';
-        var_8 = 'zef.d17_points';
-        var_9 = 'zef.d17_triangles';
-         var_10 = 'zef.d17_submesh_ind';
-    case 18
-        var_0 = 'zef.d18_on';
-        var_1 = 'zef.d18_scaling';   
-        var_7 = 'zef.d18_points_inf';
-        var_8 = 'zef.d18_points';
-        var_9 = 'zef.d18_triangles';
-         var_10 = 'zef.d18_submesh_ind';
-    case 19
-        var_0 = 'zef.d19_on';
-        var_1 = 'zef.d19_scaling'; 
-        var_7 = 'zef.d19_points_inf';
-        var_8 = 'zef.d19_points';
-        var_9 = 'zef.d19_triangles';
-         var_10 = 'zef.d19_submesh_ind';
-    case 20
-        var_0 = 'zef.d20_on';
-        var_1 = 'zef.d20_scaling';  
-        var_7 = 'zef.d20_points_inf';
-        var_8 = 'zef.d20_points';
-        var_9 = 'zef.d20_triangles';
-         var_10 = 'zef.d20_submesh_ind';
-    case 21
-        var_0 = 'zef.d21_on';
-        var_1 = 'zef.d21_scaling';
-        var_7 = 'zef.d21_points_inf';
-        var_8 = 'zef.d21_points';
-        var_9 = 'zef.d21_triangles'; 
-         var_10 = 'zef.d21_submesh_ind';
-    case 22
-        var_0 = 'zef.d22_on';
-        var_1 = 'zef.d22_scaling';
-        var_7 = 'zef.d22_points_inf';
-        var_8 = 'zef.d22_points';
-        var_9 = 'zef.d22_triangles';
-         var_10 = 'zef.d22_submesh_ind';
-    case 23
-        var_0 = 'zef.w_on';
-        var_1 = 'zef.w_scaling';  
-        var_7 = 'zef.w_points_inf';
-        var_8 = 'zef.w_points';
-        var_9 = 'zef.w_triangles';
-         var_10 = 'zef.w_submesh_ind';
-    case 24
-        var_0 = 'zef.g_on';
-        var_1 = 'zef.g_scaling';
-        var_7 = 'zef.g_points_inf';
-        var_8 = 'zef.g_points';
-        var_9 = 'zef.g_triangles';
-         var_10 = 'zef.g_submesh_ind';
-    case 25
-        var_0 = 'zef.c_on';
-        var_1 = 'zef.c_scaling';
-        var_7 = 'zef.c_points_inf';
-        var_8 = 'zef.c_points';
-        var_9 = 'zef.c_triangles';
-         var_10 = 'zef.c_submesh_ind';
-     case 26
-        var_0 = 'zef.sk_on';
-        var_1 = 'zef.sk_scaling';
-        var_7 = 'zef.sk_points_inf';
-        var_8 = 'zef.sk_points';
-        var_9 = 'zef.sk_triangles';
-         var_10 = 'zef.sk_submesh_ind';
-     case 27
-        var_0 = 'zef.sc_on';
-        var_1 = 'zef.sc_scaling';  
-        var_7 = 'zef.sc_points_inf';
-        var_8 = 'zef.sc_points';
-        var_9 = 'zef.sc_triangles';
-         var_10 = 'zef.sc_submesh_ind';
-     end
+        var_0 = ['zef.' compartment_tags{k} '_on'];
+        var_1 = ['zef.' compartment_tags{k} '_scaling']; 
+        var_7 = ['zef.' compartment_tags{k} '_points_inf'];
+        var_8 = ['zef.' compartment_tags{k} '_points'];
+        var_9 = ['zef.' compartment_tags{k} '_triangles'];
+        var_10 = ['zef.' compartment_tags{k} '_submesh_ind'];
 
 on_val = evalin('base',var_0);      
 scaling_val = evalin('base',var_1);    
@@ -269,13 +85,16 @@ end
 end
 end
 
-s_points = evalin('base','zef.s_points');
+sensor_tag = evalin('base','zef.sensor_tags');
+sensor_tag = sensor_tag{evalin('base','zef.current_sensors')};
+
+s_points = evalin('base',['zef.' sensor_tag '_points']);
 s_data_aux = [];
 if ismember(evalin('base','zef.imaging_method'),[2 3]) 
-s_directions = evalin('base','zef.s_directions(:,1:3)');
+s_directions = evalin('base',['zef.' sensor_tag '_directions(:,1:3)']);
 s_directions_g = [];
-if size(evalin('base','zef.s_directions'),2) == 6
-s_directions_g = evalin('base','zef.s_directions(:,4:6)');
+if size(evalin('base',['zef.' sensor_tag '_directions']),2) == 6
+s_directions_g = evalin('base',['zef.' sensor_tag '_directions(:,4:6)']);
 end
 else
 if size(s_points,2)==6
@@ -285,13 +104,13 @@ end
 s_directions = [];
 s_directions_g = [];
 end
-s_scaling = evalin('base','zef.s_scaling');
-s_x_correction = evalin('base','zef.s_x_correction');
-s_y_correction = evalin('base','zef.s_y_correction');
-s_z_correction = evalin('base','zef.s_z_correction');
-s_xy_rotation = evalin('base','zef.s_xy_rotation');
-s_yz_rotation = evalin('base','zef.s_yz_rotation');
-s_zx_rotation = evalin('base','zef.s_zx_rotation');
+s_scaling = evalin('base',['zef.' sensor_tag '_scaling']);
+s_x_correction = evalin('base',['zef.' sensor_tag '_x_correction']);
+s_y_correction = evalin('base',['zef.' sensor_tag '_y_correction']);
+s_z_correction = evalin('base',['zef.' sensor_tag '_z_correction']);
+s_xy_rotation = evalin('base',['zef.' sensor_tag '_xy_rotation']);
+s_yz_rotation = evalin('base',['zef.' sensor_tag '_yz_rotation']);
+s_zx_rotation = evalin('base',['zef.' sensor_tag '_zx_rotation']);
 if isempty(s_directions)
 sensors = [s_points];
 else

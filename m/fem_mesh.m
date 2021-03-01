@@ -13,144 +13,14 @@ i = 0;
 sigma_vec = [];
 priority_vec = [];
 submesh_cell = cell(0);
-for k = 1 : 27   
-switch k
-    case 1
-        var_0 = 'zef.d1_on';
-        var_1 = 'zef.d1_sigma';
-        var_2 = 'zef.d1_priority';
-        var_3 = 'zef.d1_submesh_ind';
-     case 2
-        var_0 = 'zef.d2_on';
-        var_1 = 'zef.d2_sigma';   
-        var_2 = 'zef.d2_priority';
-        var_3 = 'zef.d2_submesh_ind';
-     case 3
-        var_0 = 'zef.d3_on';
-        var_1 = 'zef.d3_sigma';   
-        var_2 = 'zef.d3_priority';
-        var_3 = 'zef.d3_submesh_ind';
-     case 4
-        var_0 = 'zef.d4_on';
-        var_1 = 'zef.d4_sigma';   
-        var_2 = 'zef.d4_priority';
-        var_3 = 'zef.d4_submesh_ind';
-   case 5
-        var_0 = 'zef.d5_on';
-        var_1 = 'zef.d5_sigma';
-        var_2 = 'zef.d5_priority';
-        var_3 = 'zef.d5_submesh_ind';
-     case 6
-        var_0 = 'zef.d6_on';
-        var_1 = 'zef.d6_sigma';   
-        var_2 = 'zef.d6_priority';
-        var_3 = 'zef.d6_submesh_ind';
-     case 7
-        var_0 = 'zef.d7_on';
-        var_1 = 'zef.d7_sigma';   
-        var_2 = 'zef.d7_priority';
-        var_3 = 'zef.d7_submesh_ind';
-     case 8
-        var_0 = 'zef.d8_on';
-        var_1 = 'zef.d8_sigma';   
-        var_2 = 'zef.d8_priority';
-        var_3 = 'zef.d8_submesh_ind';
-   case 9
-        var_0 = 'zef.d9_on';
-        var_1 = 'zef.d9_sigma';
-        var_2 = 'zef.d9_priority';
-        var_3 = 'zef.d9_submesh_ind';
-     case 10
-        var_0 = 'zef.d10_on';
-        var_1 = 'zef.d10_sigma';   
-        var_2 = 'zef.d10_priority';
-        var_3 = 'zef.d10_submesh_ind';
-     case 11
-        var_0 = 'zef.d11_on';
-        var_1 = 'zef.d11_sigma';   
-        var_2 = 'zef.d11_priority';
-        var_3 = 'zef.d11_submesh_ind';
-     case 12
-        var_0 = 'zef.d12_on';
-        var_1 = 'zef.d12_sigma';   
-        var_2 = 'zef.d12_priority';
-        var_3 = 'zef.d12_submesh_ind';
-     case 13
-        var_0 = 'zef.d13_on';
-        var_1 = 'zef.d13_sigma';   
-        var_2 = 'zef.d13_priority';
-        var_3 = 'zef.d13_submesh_ind';
-     case 14
-        var_0 = 'zef.d14_on';
-        var_1 = 'zef.d14_sigma';
-        var_2 = 'zef.d14_priority';
-        var_3 = 'zef.d14_submesh_ind';
-     case 15
-        var_0 = 'zef.d15_on';
-        var_1 = 'zef.d15_sigma';   
-        var_2 = 'zef.d15_priority';
-        var_3 = 'zef.d15_submesh_ind';
-     case 16
-        var_0 = 'zef.d16_on';
-        var_1 = 'zef.d16_sigma';   
-        var_2 = 'zef.d16_priority';
-        var_3 = 'zef.d16_submesh_ind';
-     case 17
-        var_0 = 'zef.d17_on';
-        var_1 = 'zef.d17_sigma';   
-        var_2 = 'zef.d17_priority';
-        var_3 = 'zef.d17_submesh_ind';
-   case 18
-        var_0 = 'zef.d18_on';
-        var_1 = 'zef.d18_sigma';
-        var_2 = 'zef.d18_priority';
-        var_3 = 'zef.d18_submesh_ind';
-     case 19
-        var_0 = 'zef.d19_on';
-        var_1 = 'zef.d19_sigma';   
-        var_2 = 'zef.d19_priority';
-        var_3 = 'zef.d19_submesh_ind';
-     case 20
-        var_0 = 'zef.d20_on';
-        var_1 = 'zef.d20_sigma';   
-        var_2 = 'zef.d20_priority';
-        var_3 = 'zef.d20_submesh_ind';
-     case 21
-        var_0 = 'zef.d21_on';
-        var_1 = 'zef.d21_sigma';   
-        var_2 = 'zef.d21_priority';
-        var_3 = 'zef.d21_submesh_ind';
-     case 22
-        var_0 = 'zef.d22_on';
-        var_1 = 'zef.d22_sigma';   
-        var_2 = 'zef.d22_priority';
-        var_3 = 'zef.d22_submesh_ind';
-     case 23
-        var_0 = 'zef.w_on';
-        var_1 = 'zef.w_sigma';    
-        var_2 = 'zef.w_priority';
-        var_3 = 'zef.w_submesh_ind';
-     case 24
-        var_0 = 'zef.g_on';
-        var_1 = 'zef.g_sigma';
-        var_2 = 'zef.g_priority';
-        var_3 = 'zef.g_submesh_ind';
-    case 25
-        var_0 = 'zef.c_on';
-        var_1 = 'zef.c_sigma';
-        var_2 = 'zef.c_priority';
-        var_3 = 'zef.c_submesh_ind';
-     case 26
-        var_0 = 'zef.sk_on';
-        var_1 = 'zef.sk_sigma';
-        var_2 = 'zef.sk_priority';
-        var_3 = 'zef.sk_submesh_ind';
-     case 27
-        var_0 = 'zef.sc_on';
-        var_1 = 'zef.sc_sigma';
-        var_2 = 'zef.sc_priority';
-        var_3 = 'zef.sc_submesh_ind';
-     end
+compartment_tags = evalin('base','zef.compartment_tags');
+for k = 1 : length(compartment_tags)
+
+        var_0 = ['zef.' compartment_tags{k} '_on'];
+        var_1 = ['zef.' compartment_tags{k} '_sigma'];
+        var_2 = ['zef.' compartment_tags{k} '_priority'];
+        var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
+
 on_val = evalin('base',var_0);      
 sigma_val = evalin('base',var_1);  
 priority_val = evalin('base',var_2);  
@@ -159,9 +29,6 @@ i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 submesh_cell{i} = evalin('base',var_3);
-if k == 6;
-    aux_brain_ind = i;
-end
 end
 end
 
