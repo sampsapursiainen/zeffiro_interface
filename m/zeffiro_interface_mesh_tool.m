@@ -43,7 +43,7 @@ set(zef.h_inflate_strength,'value',zef.inflate_strength);
 set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
 
 set(zef.h_popupmenu1,'Items',zef.imaging_method_cell);
-zef.h_popupmenu1.ItemsData = [1:length(zef.h_popupmenu2.Items)];
+zef.h_popupmenu1.ItemsData = [1:length(zef.h_popupmenu1.Items)];
 set(zef.h_popupmenu1,'Value',zef.imaging_method);
 
 set(zef.h_popupmenu6,'Items',{'mm','cm','m'});
