@@ -2,6 +2,7 @@ zef_data = zeffiro_interface_segmentation_tool_app;
 
 zef.h_zeffiro_window_main = zef_data.h_zeffiro_window_main;
 
+
 zef.h_edit3 = zef_data.h_edit3;
 zef.h_edit6 =  zef_data.h_edit6;
 zef.h_edit7 =  zef_data.h_edit7;
@@ -701,3 +702,6 @@ zef.mlapp = 1;
 
 clear zef_data;
 
+set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
+zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
+set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.zeffiro_window_main_current_size);');

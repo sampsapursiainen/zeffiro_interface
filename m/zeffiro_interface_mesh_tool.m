@@ -43,7 +43,7 @@ set(zef.h_inflate_strength,'value',zef.inflate_strength);
 set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
 
 set(zef.h_popupmenu1,'Items',zef.imaging_method_cell);
-zef.h_popupmenu1.ItemsData = [1:length(zef.h_popupmenu2.Items)];
+zef.h_popupmenu1.ItemsData = [1:length(zef.h_popupmenu1.Items)];
 set(zef.h_popupmenu1,'Value',zef.imaging_method);
 
 set(zef.h_popupmenu6,'Items',{'mm','cm','m'});
@@ -82,6 +82,11 @@ set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+set(zef.h_mesh_tool,'AutoResizeChildren','off');
+zef.mesh_tool_current_size = get(zef.h_mesh_tool,'Position');
+set(zef.h_mesh_tool,'SizeChangedFcn','zef.mesh_tool_current_size = zef_change_size_function(zef.h_mesh_tool,zef.mesh_tool_current_size);');
+
 clear zef_data;
 
 

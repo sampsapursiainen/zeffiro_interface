@@ -16,7 +16,8 @@ snr_val = max(1,snr_val);
 min_amp_exp = 10;
 max_amp_exp = 10;
 dt = 0.01;
-eps_val = 1e-15;
+eps_val = 1e-12;
+max_val = 1E6;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
 if evalin('base','zef.inv_hyperprior') == 1
 [a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
@@ -38,8 +39,12 @@ pm_val = 10.^(-(pm_val+amplitude_db)/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
-y_lim_vec = [eps_val eps_val*10.^(1.05*(log10(max(plot_vec))-log10(eps_val)))];
+%y_lim_vec = [eps_val eps_val*(plot_vec/eps_val).^(1.05)];
 x_lim_vec = [10.^(-min_amp_exp/2) 10.^(max_amp_exp/2) ];
+y_lim_vec = [eps_val max_val];
+
+%y_lim_vec = double(y_lim_vec);
+%x_lim_vec = double(x_lim_vec);
 
 set(evalin('base','zef.h_axes1'),'xgrid','on');
 set(evalin('base','zef.h_axes1'),'ygrid','on');
@@ -61,26 +66,31 @@ h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec
 set(h_line,'color',[0 0 0],'linewidth',2,'linestyle',':');
 hold(evalin('base','zef.h_axes1'),'off');
 legend(evalin('base','zef.h_axes1'),{'Hyperprior density','Mean','Tail reference','Amplitude reference'},'Location','SouthWest');
-set(evalin('base','zef.h_axes1'),'fontsize',evalin('base','zef.font_size'))
+%set(evalin('base','zef.h_axes1'),'fontsize',evalin('base','zef.font_size'))
 
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.27*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+
+h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
+y_lim_vec(1)*10.^(0.10*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
 ['SNR = ' num2str(snr_val) ' dB']);
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.24*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['PM-SNR = ' num2str(pm_snr_val) ' dB']);
-set(h_text,'fontsize',evalin('base','zef.font_size'));
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.21*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Tail reference = ' num2str(tail_length) ' dB']);
-set(h_text,'fontsize',evalin('base','zef.font_size'));
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.18*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Shape = ' num2str(a)]);
-set(h_text,'fontsize',evalin('base','zef.font_size'));
-h_text = text(evalin('base','zef.h_axes1'),x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
+set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
+h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
 y_lim_vec(1)*10.^(0.15*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+['PM-SNR = ' num2str(pm_snr_val) ' dB']);
+set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
+h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
+y_lim_vec(1)*10.^(0.20*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+['Tail reference = ' num2str(tail_length) ' dB']);
+set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
+h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
+y_lim_vec(1)*10.^(0.25*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+['Shape = ' num2str(a)]);
+set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
+h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
+y_lim_vec(1)*10.^(0.30*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
 ['Scale = ' num2str(d)]);
+set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
+
+
 
 hold(evalin('base','zef.h_axes1'),'off');
 
@@ -89,8 +99,8 @@ set(evalin('base','zef.h_axes1'),'xlim',x_lim_vec);
 
 h_xlabel = xlabel(evalin('base','zef.h_axes1'),'Prior standard deviation (dB)');
 h_ylabel = ylabel(evalin('base','zef.h_axes1'),'Hyperprior density (dB)');
-h_xlabel.Position(2) = y_lim_vec(1)*10.^(0.03*(log10(y_lim_vec(2))-log10(y_lim_vec(1))));
-h_ylabel.Position(1) = x_lim_vec(1)*10.^(0.03*(log10(x_lim_vec(2))-log10(x_lim_vec(1))));
+h_xlabel.Position(2) = y_lim_vec(1)*10.^(0.05*(log10(y_lim_vec(2))-log10(y_lim_vec(1))));
+h_ylabel.Position(1) = x_lim_vec(1)*10.^(0.035*(log10(x_lim_vec(2))-log10(x_lim_vec(1))));
 
 h_axes = evalin('base','zef.h_axes1');
 h_axes.XTickLabelMode = 'manual';
@@ -103,7 +113,7 @@ h_axes.XTick = tick_label_vec;
 h_axes.XTickLabel = tick_label_cell;
 
 h_axes.YTickLabelMode = 'manual';
-tick_label_vec = 10.^(round(20*[log10(eps_val): log10(eps_val*10.^(1.05*(log10(max(plot_vec))-log10(eps_val))))])/20);
+tick_label_vec = 10.^(round(20*[log10(eps_val): log10(eps_val*10.^(1.05*(log10(max(max_val))-log10(eps_val))))])/20);
 tick_label_cell = cell(0);
 for i = 1 : length(tick_label_vec)
 tick_label_cell{i} = num2str(db(tick_label_vec(i)));

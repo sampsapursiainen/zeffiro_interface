@@ -78,3 +78,10 @@ zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(zef.h_additional_options.Children,'-property','FontSize'), 'FontSize', zef.font_size);
 
+set(zef.h_additional_options,'AutoResizeChildren','off');
+zef.additional_options_current_size = get(zef.h_additional_options,'Position');
+set(zef.h_additional_options,'SizeChangedFcn','zef.additional_options_current_size = zef_change_size_function(zef.h_additional_options,zef.additional_options_current_size);');
+
+
+clear zef_data;
+

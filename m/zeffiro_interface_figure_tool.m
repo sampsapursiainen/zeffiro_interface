@@ -1,7 +1,7 @@
 zef.h_zeffiro = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
 'Units','normalized',...
-'Position',[0.5785    0.5118    0.2129    0.4278],...
+'Position',[0.6942    0.6142    0.2390    0.5134],...
 'Renderer',get(0,'defaultfigureRenderer'),...
 'Visible',get(0,'defaultfigureVisible'),...
 'Color',get(0,'defaultfigureColor'),...
@@ -30,15 +30,17 @@ zef.h_zeffiro = figure(...
 addToolbarExplorationButtons(zef.h_zeffiro);
 
 zef.stop_movie = 0;
-zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','off','Units','normalized','Position',[0.05 0.43 0.9 0.55],'FontSize',0.587962962962963);
-zef.h_stop_movie = uicontrol('Style','PushButton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.67 0.34 0.15 0.06],'String','Stop','Callback','if zef.stop_movie == 1; zef.stop_movie = 0; set(zef.h_stop_movie,''foregroundcolor'',[0 0 0]); set(zef.h_stop_movie,''string'',''Stop'');else; zef.stop_movie = 1; set(zef.h_stop_movie,''foregroundcolor'',[1 0 0]); set(zef.h_stop_movie,''string'',''Stopped''); end; set(zef.h_stop_movie,''value'',zef.stop_movie);');
+zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.43 0.9 0.55],'FontSize',0.587962962962963);
+zef.h_stop_movie = uicontrol('Style','PushButton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.664473684210526 0.34 0.15 0.06],'String','Stop','Callback','if zef.stop_movie == 1; zef.stop_movie = 0; set(zef.h_stop_movie,''foregroundcolor'',[0 0 0]); set(zef.h_stop_movie,''string'',''Stop'');else; zef.stop_movie = 1; set(zef.h_stop_movie,''foregroundcolor'',[1 0 0]); set(zef.h_stop_movie,''string'',''Stopped''); end; set(zef.h_stop_movie,''value'',zef.stop_movie);');
 zef.h_pause_movie = uicontrol('Style','PushButton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.82 0.34 0.15 0.06],'String','Pause','Callback','if zef.stop_movie == 1; zef.stop_movie = 0; set(zef.h_pause_movie,''foregroundcolor'',[0 0 0]); set(zef.h_pause_movie,''string'',''Pause'');else; zef.stop_movie = 1; set(zef.h_pause_movie,''foregroundcolor'',[1 0 0]); set(zef.h_pause_movie,''string'',''Paused''); end; set(zef.h_pause_movie,''value'',zef.stop_movie);');
-zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.3 0.35 0.25 0.04],'String','Loop on / count:','Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
-zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.56 0.35 0.07 0.04],'String','Loop visualization','Callback','zef.loop_count = str2num(get(zef.h_loop_count,''string''));','HorizontalAlignment','right');
+zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.345394736842105 0.35 0.25 0.04],'String','Loop on / count:','Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
+zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.5888 0.35 0.05 0.04],'String','Loop visualization','Callback','zef.loop_count = str2num(get(zef.h_loop_count,''string''));','HorizontalAlignment','right');
 set(zef.h_loop_movie_count,'string',num2str(zef.loop_movie_count));
 
-imagesc(zef.h_axes1,imread('zeffiro_interface.jpg'));
-axis(zef.h_axes1,'equal');
+imagesc(zef.h_axes1,flipud(imread('zeffiro_interface.png')));
+set(zef.h_axes1,'YDir','normal');
+
+axis(zef.h_axes1,'auto');
 
 %***********************
 
@@ -675,5 +677,10 @@ uicontrol(...
 'Tag','text361',...
 'FontSize',0.587962962962963,...
 'FontWeight','bold');
+
+zef.h = get(zef.h_zeffiro,'Children');
+zef.h = zef.h(isprop(zef.h,'Units'));
+set(zef.h,'Units','pixels');
+zef = rmfield(zef,'h');
 
 

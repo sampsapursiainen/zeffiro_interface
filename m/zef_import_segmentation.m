@@ -11,13 +11,7 @@ end
 if not(isequal(file_name,0));   
     
 h_import = fopen([folder_name file_name]);
-
-line_counter = 1; 
-while not(isequal(fgetl(h_import),'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'))
-    line_counter = line_counter + 1; 
-end
-h_import = fopen([folder_name file_name]);
-ini_cell = textscan(h_import,'%s','HeaderLines',line_counter,'Delimiter',',');
+ini_cell = textscan(h_import,'%s','HeaderLines',57,'Delimiter',',');
 n_columns = 12;
 
 compartment_cell = {'detail_1', 'detail_2', 'detail_3', 'detail_4', 'detail_5', 'detail_6', 'detail_7','detail_8','detail_9', ...

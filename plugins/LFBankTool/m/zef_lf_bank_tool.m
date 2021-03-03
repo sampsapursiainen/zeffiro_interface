@@ -22,3 +22,8 @@ zef.h_lf_bank_update_measurements.ButtonPushedFcn = '[zef.yesno] = questdlg(''Su
 zef.h_lf_bank_update_noise_data.ButtonPushedFcn = '[zef.yesno] = questdlg(''Substitute the noise data of the selected lead field items with the current noise data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_lf_bank_update_noise_data; end;';
 zef.h_lf_bank_make_all.ButtonPushedFcn = '[zef.yesno] = questdlg(''Create a mesh and calculate the lead field matrices for the selected items?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.source_interpolation_on = 1; if isfield(zef,''h_source_interpolation_on''); if isvalid(''zef.h_source_interpolation_on''); set(zef.h_source_interpolation_on,''value'',1); end; end; [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; set(zef.h_text_elements,''string'',num2str(size(zef.tetra,1)+size(zef.prisms,1))); set(zef.h_text_nodes,''string'',num2str(size(zef.nodes,1)));zef_lf_bank_compute_lead_fields; end;';
 zef_init_lf_bank_tool;
+
+
+set(zef.h_lf_bank_tool,'AutoResizeChildren','off');
+zef.lf_bank_tool_current_size = get(zef.h_lf_bank_tool,'Position');
+set(zef.h_lf_bank_tool,'SizeChangedFcn','zef.lf_bank_tool_current_size = zef_change_size_function(zef.h_lf_bank_tool,zef.lf_bank_tool_current_size);');

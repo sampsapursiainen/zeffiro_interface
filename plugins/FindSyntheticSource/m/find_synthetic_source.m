@@ -89,4 +89,12 @@ zef.find_synth_source.h_plot_time_sequence.ButtonPushedFcn = 'zef_update_fss; ze
 zef.find_synth_source.h_plot_sources.ButtonPushedFcn = 'zef_update_fss; zef.h_synth_source = zef_plot_source(1);';
 zef.find_synth_source.h_plot_switch.ValueChangedFcn = 'zef.synth_source_updated_true = false;';
 
+set(findobj(zef.find_synth_source.h_find_synth_source.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+
+set(zef.find_synth_source.h_find_synth_source,'AutoResizeChildren','off');
+zef.find_synth_source_current_size = get(zef.find_synth_source.h_find_synth_source,'Position');
+set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn','zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size);');
+
+
 clear zef_i zef_j zef_n zef_N
