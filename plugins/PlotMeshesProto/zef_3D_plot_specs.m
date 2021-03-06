@@ -70,7 +70,12 @@ h.YAxis.TickLabels = num2cell(h.YAxis.TickValues);
 h.ZAxis.TickLabels = num2cell(h.ZAxis.TickValues);
 
 %__ Visual appearance __
-h.Position = [23.9500 239.2200 413.1000 304.7000];
+InitialPosition = [23.9500 239.2200 413.1000 304.7000]./[1920,1080,1920,1080];
+window_ratio = evalin('base','zef.h_zeffiro.Position(3:4)./[0.239, 0.5134];');
+screen_resolution = get(0,'screensize');
+screen_resolution = screen_resolution(3:4);
+h.Position(3:4)=InitialPosition(3:4).*window_ratio.*screen_resolution;
+h.Position(1:2)=InitialPosition(1:2).*[1,window_ratio(2)].*screen_resolution;
 
 h.XAxis.TickLength = [0.0100 0.0250];
 h.YAxis.TickLength = [0.0100 0.0250];
