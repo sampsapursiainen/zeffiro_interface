@@ -10,8 +10,7 @@ length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
 submesh_num = evalin('base','zef.submesh_num');
 nodes = evalin('base','zef.nodes');
-sensor_tag = evalin('base','zef.sensor_tags');
-sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+sensor_tag = evalin('base','zef.current_sensors');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])

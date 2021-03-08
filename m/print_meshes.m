@@ -12,8 +12,7 @@ aux_wm_ind = -1;
 
 movie_fps = evalin('base','zef.movie_fps');
 
-sensor_tag = evalin('base','zef.sensor_tags');
-sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+sensor_tag = evalin('base','zef.current_sensors');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 number_of_frames = evalin('base','zef.number_of_frames');

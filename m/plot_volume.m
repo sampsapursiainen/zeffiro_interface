@@ -9,8 +9,7 @@ sensors_point_like = [];
 loop_movie = 1;
 length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
-sensor_tag = evalin('base','zef.sensor_tags');
-sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+sensor_tag = evalin('base','zef.current_sensors');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_wm_ind = -1;

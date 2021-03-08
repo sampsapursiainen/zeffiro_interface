@@ -19,23 +19,38 @@ for k = 1 : length(compartment_tags)
 
         var_0 = ['zef.' compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_scaling']; 
-        var_7 = ['zef.' compartment_tags{k} '_points_inf'];
-        var_8 = ['zef.' compartment_tags{k} '_points'];
-        var_9 = ['zef.' compartment_tags{k} '_triangles'];
-        var_10 = ['zef.' compartment_tags{k} '_submesh_ind'];
+        var_2 = ['zef.' compartment_tags{k} '_x_correction']; 
+        var_3 = ['zef.' compartment_tags{k} '_y_correction']; 
+        var_4 = ['zef.' compartment_tags{k} '_z_correction']; 
+        var_5 = ['zef.' compartment_tags{k} '_xy_rotation']; 
+        var_6 = ['zef.' compartment_tags{k} '_yz_rotation']; 
+        var_7 = ['zef.' compartment_tags{k} '_zx_rotation']; 
+        var_8 = ['zef.' compartment_tags{k} '_points_inf'];
+        var_9 = ['zef.' compartment_tags{k} '_points'];
+        var_10 = ['zef.' compartment_tags{k} '_triangles'];
+        var_11 = ['zef.' compartment_tags{k} '_submesh_ind'];
 
 on_val = evalin('base',var_0);      
-scaling_val = evalin('base',var_1);    
-translation_vec = [0 0 0];     
-theta_angle_vec = [0 0 0];   
+  
 
 if on_val
 i = i + 1;
-reuna_p_inf{i} = evalin('base',var_7);
-reuna_p{i} = evalin('base',var_8);
-reuna_t{i} = evalin('base',var_9);
-reuna_submesh_ind{i} = evalin('base',var_10);
-mean_vec = repmat(mean(reuna_p{i}),size(reuna_p{i},1),1);   
+reuna_p_inf{i} = evalin('base',var_8);
+reuna_p{i} = evalin('base',var_9);
+reuna_t{i} = evalin('base',var_10);
+reuna_submesh_ind{i} = evalin('base',var_11);
+mean_vec = repmat(mean(reuna_p{i}),size(reuna_p{i},1),1); 
+
+for t_ind = 1 : length(evalin('base',var_1))
+    
+scaling_val = evalin('base',[var_1 '(' num2str(t_ind) ')']);    
+translation_vec(1) = evalin('base',[var_2 '(' num2str(t_ind) ')']); 
+translation_vec(2) = evalin('base',[var_3 '(' num2str(t_ind) ')']); 
+translation_vec(3) = evalin('base',[var_4 '(' num2str(t_ind) ')']); 
+theta_angle_vec(1) =  evalin('base',[var_5 '(' num2str(t_ind) ')']); 
+theta_angle_vec(2) =  evalin('base',[var_6 '(' num2str(t_ind) ')']);
+theta_angle_vec(3) =  evalin('base',[var_7 '(' num2str(t_ind) ')']);
+
 if scaling_val ~= 1  
 reuna_p{i} = scaling_val*reuna_p{i};
 reuna_p_inf{i} = scaling_val*reuna_p_inf{i};
@@ -65,6 +80,9 @@ reuna_p{i}(:,j) = reuna_p{i}(:,j) + translation_vec(j);
 reuna_p_inf{i}(:,j) = reuna_p_inf{i}(:,j) + translation_vec(j);
 end
 end
+
+end
+
 if explode_param ~= 1
 for s_ind = 1 : length(reuna_submesh_ind{i})
     if s_ind == 1 
@@ -85,8 +103,8 @@ end
 end
 end
 
-sensor_tag = evalin('base','zef.sensor_tags');
-sensor_tag = sensor_tag{evalin('base','zef.current_sensors')};
+
+sensor_tag = evalin('base','zef.current_sensors');
 
 s_points = evalin('base',['zef.' sensor_tag '_points']);
 s_data_aux = [];
@@ -120,13 +138,17 @@ else
 sensors = [s_points s_directions./repmat(sqrt(sum(s_directions.^2,2)),1,3) s_directions_g./repmat(sqrt(sum(s_directions_g.^2,2)),1,3)];
 end
 end
-scaling_val = s_scaling;    
-translation_vec = [s_x_correction s_y_correction s_z_correction];     
-theta_angle_vec = [s_xy_rotation s_yz_rotation s_zx_rotation]; 
+
+
+for t_ind = 1 : length(s_scaling)
+
+scaling_val = s_scaling(t_ind);    
+translation_vec = [s_x_correction(t_ind) s_y_correction(t_ind) s_z_correction(t_ind)];     
+theta_angle_vec = [s_xy_rotation(t_ind) s_yz_rotation(t_ind) s_zx_rotation(t_ind)]; 
 if not(isempty(sensors))
 mean_vec = repmat(mean(sensors(:,1:3)),size(sensors(:,1:3),1),1);    
 if scaling_val ~= 1 
-sensors(:,1:3) = s_scaling*sensors(:,1:3);
+sensors(:,1:3) = scaling_val*sensors(:,1:3);
 end
 for j = 1 : 3
 switch j
@@ -156,17 +178,24 @@ end
 end
 end
 for j = 1 : 3
+
 if translation_vec(j) ~= 0
 sensors(:,j) = sensors(:,j) + translation_vec(j);
 end
-sensors(:,j) = sensors(:,j)  +  (explode_param-1)*(sensors(:,j) - mean(sensors(:,j)));
+
+end
+end
 end
 
-
+if not(isempty(sensors))
+for j = 1 : 3
+sensors(:,j) = sensors(:,j)  +  (explode_param-1)*(sensors(:,j) - mean(sensors(:,j)));
+end
 
 if not(isempty(s_data_aux))
 sensors = [sensors s_data_aux];
 end
+
 else
     sensors = [NaN NaN NaN];
 end

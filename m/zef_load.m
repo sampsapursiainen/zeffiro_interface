@@ -7,12 +7,12 @@ else
 end
 if not(isequal(zef_data.file,0));
     
+zef_close_tools;
+zef_close_figs;    
 zef_init;
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path;     
-zef_close_tools;
-zef_close_figs;
-load([zef.file_path zef.file]);
+load([zef.file_path zef.file]);  
 zef_remove_object_fields;
 
 
@@ -31,13 +31,23 @@ zef_data.mlapp = zef.mlapp;
  zef.fieldnames = fieldnames(zef_data);
  for zef_i = 1:length(zef.fieldnames)
  zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
- end        
+ end
+  if isempty(find(contains(zef.fieldnames,'current_version'),1))
+     zef.current_version = 2.2;
+  end
  clear zef_i;
  zef = rmfield(zef,'fieldnames');
-          
+ 
+ if zef.current_version <= 2.2 
+     for zef_i = 1 : 22
+ evalin('base',['zef.d' num2str(zef_i) '_priority =' num2str(28-zef_i) ';']);
+     end
+ end
+          clear zef_i
  
 clear zef_data;
 zef_update;
+zef_close_figs;
 zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
 end;
