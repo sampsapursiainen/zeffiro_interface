@@ -41,6 +41,7 @@ zef.h_menu_help=zef_data.h_menu_help;
 zef.h_menu_documentation=zef_data.h_menu_documentation;
 zef.h_menu_about=zef_data.h_menu_about;
 zef.h_menu_import=zef_data.h_menu_import;
+zef.h_menu_segmentation_tool=zef_data.h_menu_segmentation_tool;
 zef.h_menu_new_segmentation_from_folder=zef_data.h_menu_new_segmentation_from_folder;
 zef.h_menu_import_segmentation_update_from_folder=zef_data.h_menu_import_segmentation_update_from_folder;
 zef.h_menu_import_new_project_from_folder=zef_data.h_menu_import_new_project_from_folder;
@@ -176,6 +177,9 @@ set(zef.h_menu_close_tools                           ,'MenuSelectedFcn','zef_clo
 set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_close_figs;zef_update;');
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef_update;');
 set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for EEG/MEG brain imaging.''};{[]}; {''Version: '' num2str(zef.current_version)} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''About'');');
+set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef_reopen_segmentation_tool;');
+
+
 
 set(zef.h_menu_inverse_tools,'Tag','inverse_tools');
 set(zef.h_menu_forward_tools,'Tag','forward_tools');

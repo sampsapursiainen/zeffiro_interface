@@ -16,6 +16,8 @@ field_cell_default =  {{'on', '1'       }
     {'directions', '[]' }
      {'directions_g', '[]' }
     {'points'  , '[]'  }
+    {'merge'  , '0'  }
+    {'invert'  , '0'  }
     {'name'    , ['[''Sensors ''  num2str(length(' zef_struct_name '.sensor_tags) + 1)]'] }
     {'scaling'  , '1'   }
     {'zx_rotation', '0' }

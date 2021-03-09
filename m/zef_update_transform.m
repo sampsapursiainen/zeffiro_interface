@@ -28,7 +28,7 @@ for zef_i = 1 : length(zef.aux_field_4)
     if zef_i == 1
 evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
 for zef_j = 1 : length(zef.aux_field_5)
-    ['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';']
+    ['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';'];
 evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';']);
 end
 else

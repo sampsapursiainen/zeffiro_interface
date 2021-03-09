@@ -377,6 +377,7 @@ else
     electrode_model = 0;
 end
 
+
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
 sensors = attach_sensors_volume(sensors,'geometry');
 elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
@@ -407,7 +408,6 @@ set(evalin('base','zef.h_axes1'),'YDir','normal');
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 hold on;
-
 
 if evalin('base',['zef.' sensor_tag '_visible'])
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))

@@ -3,7 +3,7 @@ function [p_vec_window] = zef_change_size_function(object_handle, current_size)
 p_vec_window = get(object_handle, 'Position');
 h = get(object_handle, 'Children');
 
-for i = 1 : length(h); 
+for i = 1 : length(h)
     p_vec_object = get(h(i), 'Position'); 
     fontsize_scaling = isprop(h(i),'FontSize');
     if fontsize_scaling
@@ -16,4 +16,7 @@ for i = 1 : length(h);
         set(h(i),'FontSize',fontsize_object*p_vec_window(4)./current_size(4)); 
          end
     end; 
+end
+
+
 end

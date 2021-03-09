@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [sensors,reuna_p,reuna_t,reuna_p_inf,reuna_submesh_ind] = process_meshes(varargin);
 
+reuna_p_inf = [];
+
 explode_param = 1;
 if not(isempty(varargin))
   if not(isempty(varargin{1}))
