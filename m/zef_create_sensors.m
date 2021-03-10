@@ -26,7 +26,9 @@ field_cell_default =  {{'on', '1'       }
     {'z_correction', '0'}
     {'y_correction', '0'}
     {'x_correction', '0'}
-    {'transform_name','{''Transform 1''}'}};
+    {'transform_name','{''Transform 1''}'}
+    {'type','''EEG'''},
+    {'name_list','[]'},};
 
 for i = 1 : length(field_cell_default)
 

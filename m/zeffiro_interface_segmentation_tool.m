@@ -58,24 +58,28 @@ zef.h_axes2=zef_data.h_axes2;
 zef.h_compartment_table=zef_data.h_compartment_table;
 zef.h_sensors_table=zef_data.h_sensors_table;
 zef.h_transform_table=zef_data.h_transform_table;
+zef.h_sensors_name_table=zef_data.h_sensors_name_table;
 zef.h_add_compartment=zef_data.h_add_compartment;
 zef.h_project_information=zef_data.h_project_information;
 zef.h_add_transform=zef_data.h_add_transform;
-zef.h_add_transform=zef_data.h_add_transform;
 zef.h_add_sensors=zef_data.h_add_sensors;
-zef.h_transform_parameters_table=zef_data.h_transform_parameters_table;
+zef.h_parameters_table=zef_data.h_parameters_table;
 
 set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',{'Inactive','Constrained field','Unconstrained field','Active surface'},'numeric'})
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
-set(zef.h_sensors_table,'columnformat',{'numeric','char','logical','logical','logical','logical'});
-set(zef.h_transform_parameters_table,'columnformat',{'char','numeric'});
+
+set(zef.h_transform_table,'columnformat',{'numeric','char'});
+set(zef.h_sensors_name_table,'columnformat',{'numeric','char','logical'});
+
+set(zef.h_sensors_table,'columnformat',{'numeric','char',{'EEG','MEG magnetometers','MEG gradiometers','EIT','tES'},'logical','logical','logical','logical'});
+set(zef.h_parameters_table,'columnformat',{'char','numeric'});
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_close_tools; zef_close_figs; rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
 
 set(zef.h_compartment_table,'DisplayDataChangedFcn','zef_update;');
 set(zef.h_sensors_table,'DisplayDataChangedFcn','zef_update;');
 set(zef.h_transform_table,'DisplayDataChangedFcn','zef_update_transform;');
-set(zef.h_transform_parameters_table,'DisplayDataChangedFcn','zef_update_transform_parameters;');
+set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_transform_parameters;');
 set(zef.h_add_compartment,'ButtonPushedFcn','zef_add_compartment;');
 set(zef.h_add_sensors,'ButtonPushedFcn','zef_add_sensors;');
 
@@ -88,6 +92,7 @@ set(zef.h_add_transform,'ButtonPushedFcn','zef_add_transform;');
 set(zef.h_compartment_table,'CellSelectionCallback',@zef_compartment_table_selection);
 set(zef.h_transform_table,'CellSelectionCallback',@zef_transform_table_selection);
 set(zef.h_sensors_table,'CellSelectionCallback',@zef_sensors_table_selection);
+set(zef.h_sensors_name_table,'CellSelectionCallback',@zef_sensors_name_table_selection);
 zef.h_menu_inverse_tools = zef_data.h_menu_inverse_tools;
 zef.h_menu_forward_tools = zef_data.h_menu_forward_tools;
 zef.h_menu_multi_tools = zef_data.h_menu_multi_tools;

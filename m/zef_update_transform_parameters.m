@@ -1,4 +1,4 @@
-zef.aux_field_1 = zef.h_transform_parameters_table.Data;
+zef.aux_field_1 = zef.h_parameters_table.Data;
 zef.aux_field_2 = {'scaling','x_correction','y_correction','z_correction','xy_rotation','yz_rotation','zx_rotation'};
 
 for zef_i = 1 : size(zef.aux_field_1,1)

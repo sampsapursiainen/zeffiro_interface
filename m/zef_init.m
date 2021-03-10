@@ -210,6 +210,7 @@ end
  if isfield(zef,'h_zeffiro_window_main')
      if isvalid(zef.h_zeffiro_window_main)
  zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
+  zef.zeffiro_window_main_relative_size = zef_get_relative_size(zef.h_zeffiro_window_main);
      end
  end
  clear zef_i zef_data;
