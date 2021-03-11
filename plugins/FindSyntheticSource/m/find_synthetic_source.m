@@ -109,7 +109,7 @@ set(findobj(zef.find_synth_source.h_find_synth_source.Children,'-property','Font
 set(zef.find_synth_source.h_find_synth_source,'AutoResizeChildren','off');
 zef.find_synth_source_current_size  = get(zef.find_synth_source.h_find_synth_source,'Position');
 zef.find_synth_source_relative_size = zef_get_relative_size(zef.find_synth_source.h_find_synth_source);
-zef.find_synth_source_current_size = set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn','zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size,zef.find_synth_source_relative_size);');
+set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn', 'zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size,zef.find_synth_source_relative_size);');
 
 
 clear zef_i zef_j zef_n zef_N
