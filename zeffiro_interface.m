@@ -40,15 +40,15 @@ zef.movie_fps = str2num(zef.ini_cell{1}{18});
 zef.font_size = str2num(zef.ini_cell{1}{20});
 zef.mlapp = str2num(zef.ini_cell{1}{22});
 zef = rmfield(zef,'ini_cell');
+zef_init;
 if zef.mlapp == 1
 zeffiro_interface_segmentation_tool; 
 else
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 end
-zef_data = zef;
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
-zef_init;
+
 
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
