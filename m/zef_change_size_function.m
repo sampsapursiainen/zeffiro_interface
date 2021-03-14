@@ -25,8 +25,8 @@ for i = 1 : length(h)
 if size(h_position{i},2) == 4
 set(h(i),'Position',relative_size{i}.*p_vec_window([3 4 3 4]));
 fontsize_scaling = isprop(h(i),'FontSize');
-    if fontsize_scaling
-    fontsize_object = get(h(i),'FontSize'); 
+if fontsize_scaling
+fontsize_object = get(h(i),'FontSize'); 
 set(h(i),'FontSize',fontsize_object*p_vec_window(4)./current_size(4)); 
  end
 end

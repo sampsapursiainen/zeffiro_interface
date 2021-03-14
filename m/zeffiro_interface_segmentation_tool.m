@@ -1,6 +1,9 @@
 zef_data = zeffiro_interface_segmentation_tool_app;
 
 
+zef.h_import_sensor_names=zef_data.h_import_sensor_names;
+zef.h_add_sensor_name=zef_data.h_add_sensor_name;
+zef.h_project_notes=zef_data.h_project_notes;
 zef.h_zeffiro_window_main=zef_data.h_zeffiro_window_main;
 zef.h_menu_project=zef_data.h_menu_project;
 zef.h_menu_new=zef_data.h_menu_new;
@@ -71,7 +74,7 @@ set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_sensors_name_table,'columnformat',{'numeric','char','logical'});
 
-set(zef.h_sensors_table,'columnformat',{'numeric','char',{'EEG','MEG magnetometers','MEG gradiometers','EIT','tES'},'logical','logical','logical','logical'});
+set(zef.h_sensors_table,'columnformat',{'numeric','char',{'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'},'logical','logical','logical','logical','logical'});
 set(zef.h_parameters_table,'columnformat',{'char','numeric'});
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_close_tools; zef_close_figs; rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
@@ -79,7 +82,8 @@ set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = [
 set(zef.h_compartment_table,'DisplayDataChangedFcn','zef_update;');
 set(zef.h_sensors_table,'DisplayDataChangedFcn','zef_update;');
 set(zef.h_transform_table,'DisplayDataChangedFcn','zef_update_transform;');
-set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_transform_parameters;');
+set(zef.h_sensors_name_table,'DisplayDataChangedFcn','zef_update_sensors_name_table;');
+set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_parameters;');
 set(zef.h_add_compartment,'ButtonPushedFcn','zef_add_compartment;');
 set(zef.h_add_sensors,'ButtonPushedFcn','zef_add_sensors;');
 
@@ -87,6 +91,9 @@ set(zef.h_mesh_button,  'ButtonPushedFcn','zef_get_surface_mesh;');
 set(zef.h_import_sensor_points,  'ButtonPushedFcn','zef_get_sensor_points;');
 set(zef.h_import_sensor_directions,  'ButtonPushedFcn','zef_get_sensor_directions;');
 set(zef.h_mesh_button,  'ButtonPushedFcn','zef_get_surface_mesh;');
+
+set(zef.h_add_sensor_name,  'ButtonPushedFcn','zef_add_sensor_name;');
+set(zef.h_import_sensor_names,  'ButtonPushedFcn','zef_import_sensor_names;');
 
 set(zef.h_add_transform,'ButtonPushedFcn','zef_add_transform;');
 set(zef.h_compartment_table,'CellSelectionCallback',@zef_compartment_table_selection);
@@ -196,6 +203,8 @@ set(zef.h_menu_edit,'Tag','edit');
 set(zef.h_menu_window,'Tag','window');
 set(zef.h_menu_help,'Tag','about');
 
+zef.h_project_notes.ValueChangedFcn = 'zef_update;';
+
 zef.mlapp = 1;
 
 clear zef_data;
@@ -203,6 +212,6 @@ clear zef_data;
 set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
 zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
 zef.zeffiro_window_main_relative_size = zef_get_relative_size(zef.h_zeffiro_window_main);
-zef.zeffiro_window_main_current_size = set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.zeffiro_window_main_current_size,zef.zeffiro_window_main_relative_size);');
+set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.zeffiro_window_main_current_size,zef.zeffiro_window_main_relative_size);');
 
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');

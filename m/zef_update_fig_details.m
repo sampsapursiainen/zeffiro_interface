@@ -2,11 +2,16 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 zef.aux_field = cell(0);
-for zef_i = 1 : length(zef.compartment_tags)
-    zef_j = length(zef.compartment_tags) - zef_i + 1;
-    zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.compartment_tags{zef_i} '_name']) '</BODY></HTML>'  ];   
+zef_j = 0;
+    if size(evalin('base',['zef.' zef.current_sensors '_visible_list']),1)==size(evalin('base',['zef.' zef.current_sensors '_points']),1)
+for zef_i = 1 : size(evalin('base',['zef.' zef.current_sensors '_points']),1)
+if evalin('base',['zef.' zef.current_sensors '_visible_list(' num2str(zef_i) ')'])
+    zef_j = zef_j + 1;
+    zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.current_sensors '_name_list{' num2str(zef_i) '}']) '</BODY></HTML>'  ];   
 end
-set(zef.h_compartment_color,'String',zef.aux_field);
+end
+    end
+set(zef.h_sensor_visible_color,'String',zef.aux_field);
 zef.aux_field = cell(0);
 zef_j = 0;
 for zef_i = 1 : length(zef.compartment_tags)

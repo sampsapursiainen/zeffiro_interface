@@ -90,7 +90,11 @@ end
 
 %T
 sensors = evalin('base','zef.sensors');
+sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+if not(isempty(sensors_visible))
+    sensors = sensors(sensors_visible,:);
+end
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;
@@ -1272,7 +1276,13 @@ light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
 sensors = evalin('base','zef.sensors');
+sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+if not(isempty(sensors_visible))
+    sensors = sensors(sensors_visible,:);
+end
+
+
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;

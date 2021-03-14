@@ -46,10 +46,11 @@ zef_data.mlapp = zef.mlapp;
           clear zef_i
  
 clear zef_data;
-zef_update;
-zef_close_figs;
+zef_reopen_segmentation_tool;
 zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
+zef_close_figs;
+zef_update;
 end;
 
 

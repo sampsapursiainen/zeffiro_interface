@@ -9,4 +9,6 @@ evalin('base',['zef.' zef.current_tag '_xy_rotation = [zef.' zef.current_tag '_x
 evalin('base',['zef.' zef.current_tag '_yz_rotation = [zef.' zef.current_tag '_yz_rotation, 0];']);
 evalin('base',['zef.' zef.current_tag '_zx_rotation = [zef.' zef.current_tag '_zx_rotation, 0];']);
 
+clear zef_i;
+
 zef_init_transform;

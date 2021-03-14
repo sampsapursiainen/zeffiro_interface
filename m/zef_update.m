@@ -71,29 +71,34 @@ zef.aux_field_3{zef_i,2} = zef.aux_field_1{zef.aux_field_2(zef_i),2};
 zef.aux_field_3{zef_i,3} = zef.aux_field_1{zef.aux_field_2(zef_i),3};
 zef.aux_field_3{zef_i,4} = zef.aux_field_1{zef.aux_field_2(zef_i),4};
 zef.aux_field_3{zef_i,5} = zef.aux_field_1{zef.aux_field_2(zef_i),5};
-zef.aux_field_3{zef_i,6} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_points))']);
-zef.aux_field_3{zef_i,7} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_directions))']);
+zef.aux_field_3{zef_i,6} = zef.aux_field_1{zef.aux_field_2(zef_i),6};
+zef.aux_field_3{zef_i,7} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_points))']);
+zef.aux_field_3{zef_i,8} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_directions))']);
 end
 zef.h_sensors_table.Data = zef.aux_field_3;
 for zef_i = 1 : length(zef.sensor_tags)
     evalin('base',['zef.' zef.sensor_tags{zef_i} '_name = zef.aux_field_3{zef_i,2};']);
-     evalin('base',['zef.' zef.sensor_tags{zef_i} '_type = zef.aux_field_3{zef_i,3};']);
+     evalin('base',['zef.' zef.sensor_tags{zef_i} '_imaging_method_name = zef.aux_field_3{zef_i,3};']);
     evalin('base',['zef.' zef.sensor_tags{zef_i} '_on = zef.aux_field_3{zef_i,4};']);
     evalin('base',['zef.' zef.sensor_tags{zef_i} '_visible = zef.aux_field_3{zef_i,5};']);
+   evalin('base',['zef.' zef.sensor_tags{zef_i} '_names_visible = zef.aux_field_3{zef_i,6};']);  
 end
 else
     zef.aux_field_1 = cell(0);
     for zef_i = 1 : length(zef.sensor_tags)
     zef.aux_field_1{zef_i,1} = zef_i;
     zef.aux_field_1{zef_i,2} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_name']);
-    zef.aux_field_1{zef_i,3} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_type']);
+    zef.aux_field_1{zef_i,3} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_imaging_method_name']);
     zef.aux_field_1{zef_i,4} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_on']);
     zef.aux_field_1{zef_i,5} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_visible']);
-    zef.aux_field_1{zef_i,6} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_points))']);
-    zef.aux_field_1{zef_i,7} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_directions))']);
+        zef.aux_field_1{zef_i,6} = evalin('base',['zef.' zef.sensor_tags{zef_i} '_names_visible']);
+    zef.aux_field_1{zef_i,7} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_points))']);
+    zef.aux_field_1{zef_i,8} = evalin('base',['not(isempty(zef.' zef.sensor_tags{zef_i} '_directions))']);
     end
+
     zef.h_sensors_table.Data = zef.aux_field_1;
 end
+
 %sensors end
 
 
@@ -161,6 +166,15 @@ zef.h_project_information.Items = ...
 
 zef = rmfield(zef,{'aux_field_1','aux_field_2','aux_field_3','aux_field_4','h_aux'});
 
+if length(zef.h_project_notes.Value) == 1 && isempty(zef.h_project_notes.Value{1})
+zef.h_project_notes.Value = zef.project_notes;
+else
+zef.project_notes = zef.h_project_notes.Value;
+end
+
+zef.imaging_method = find(ismember(zef.imaging_method_cell,evalin('base',['zef.' zef.current_sensors '_imaging_method_name'])),1);
+
+zef_init_sensors_name_table;
 zef_update_fig_details;
 
 clear zef_i zef_j;

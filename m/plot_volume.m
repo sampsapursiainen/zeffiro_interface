@@ -47,8 +47,19 @@ cp3_b = evalin('base','zef.cp3_b');
 cp3_c = evalin('base','zef.cp3_c');
 cp3_d = evalin('base','zef.cp3_d');
 
+%April 2021
 sensors = evalin('base','zef.sensors');
+sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
+sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
+sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
 aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+if not(isempty(sensors_visible))
+    sensors = sensors(sensors_visible,:);
+     sensors_name = sensors_name(sensors_visible);
+      sensors_color_table = sensors_color_table(sensors_visible,:);
+end
+sensors_original = sensors;
+%April 2021
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
 X_s = sphere_scale*X_s;
@@ -105,6 +116,9 @@ elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(ev
   sensors_point_like_index = find(sensors(:,4)==0);
   unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
   sensors_point_like = zeros(length(unique_sensors_point_like),3);
+    %April 2021
+sensors_point_like_id = sensors(sensors_point_like_index,1);
+%April 2021
   for spl_ind = 1 : length(unique_sensors_point_like)
 spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
 sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
@@ -118,6 +132,12 @@ end
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
+%April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
+set(h_text,'FontSize',evalin('base','zef.h_axes1.FontSize'));
+end
+%April 2021
 set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none');
 set(h,'specularstrength',0.3);
@@ -126,21 +146,41 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 else
+    %April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+sensors_name_points = attach_sensors_volume(sensors_original,'points');
+sensors_deep_id = find(sum(abs(sensors_original(:,[4 5])),2)==0);
+sensors_name_points(sensors_deep_id,:) = sensors_original(sensors_deep_id,1:3);
+for i = 1 : size(sensors_name_points,1)
+h_text = text(sensors_name_points(i,1),sensors_name_points(i,2),sensors_name_points(i,3),sensors_name{i});
+set(h_text,'FontSize',evalin('base','zef.h_axes1.FontSize'));
+end
+end
+%April 2021
     if not(isempty(sensors))
-h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
-set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
-set(h,'edgecolor',evalin('base',['zef.' sensor_tag '_color'])); 
+        %April 2021
+unique_sensors_aux_1 = unique(sensors(:,1));
+h = zeros(length(unique_sensors_aux_1),1);
+for i = 1 : length(unique_sensors_aux_1)
+unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
+h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
+end
+set(h,'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
+set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
-set(h,'edgealpha',evalin('base','zef.layer_transparency')); 
+set(h,'edgealpha',evalin('base','zef.layer_transparency'));
+%April 2021
     end
 if not(isempty(sensors_point_like))
 for i = 1 : size(sensors_point_like,1)
 h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
-set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
-set(h,'edgecolor','none'); 
+%April 2021
+set(h,'facecolor',sensors_color_table(sensors_point_like_id(i),:));
+set(h,'edgecolor','none');
+%April 2021set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
@@ -278,12 +318,7 @@ end
     
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 
-%if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
-%tetra_sort = gpuArray(uint32(tetra_sort));
-%tetra_sort = gather(sortrows(tetra_sort,[1 2 3])); 
-%else
 tetra_sort = sortrows(tetra_sort,[1 2 3]);   
-%end
 tetra_ind = uint32(zeros(size(tetra_sort,1),1));
 I = uint32(find(sum(abs(tetra_sort(2:end,1:3)-tetra_sort(1:end-1,1:3)),2)==0));
 

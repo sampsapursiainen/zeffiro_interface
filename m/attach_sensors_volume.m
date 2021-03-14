@@ -13,7 +13,7 @@ end
 
 if ismember(evalin('base','zef.imaging_method'),[1,4,5]) & not(isempty(evalin('base','zef.tetra'))) 
 
-if isequal(attach_type,'geometry');    
+if ismember(attach_type,{'geometry','points'});    
 geometry_triangles = evalin('base','zef.reuna_t{end}'); 
 geometry_nodes = evalin('base','zef.reuna_p{end}');
 end 
@@ -34,7 +34,7 @@ else
     electrode_model = 1;
 end
 
-if electrode_model == 1
+if electrode_model == 1 || isequal(attach_type,'points')
 if use_depth_electrodes == 1
 ele_nodes = nodes;
 else
@@ -45,6 +45,10 @@ sensors_attached_volume = sensors;
 for i = 1 : size(sensors,1)
 [min_val, min_ind] = min(sqrt(sum((ele_nodes - repmat(sensors(i,1:3),size(ele_nodes,1),1)).^2,2)));
 sensors_attached_volume(i,1:3) = ele_nodes(min_ind,:);
+end
+
+if ismember(attach_type,'points')
+    sensors_attached_volume = sensors_attached_volume(:,1:3);
 end
 
 else

@@ -10,11 +10,10 @@ field_cell_update = varargin{2};
 end
 
 
-field_cell_default =  {{'on', '1'       }
-{'color', '[0.1 0.1 0.1]'       }
+field_cell_default =  {{'on', '1'}
+{'color', '[0.1 0.1 0.1]'}
     {'visible', '1'   }
     {'directions', '[]' }
-     {'directions_g', '[]' }
     {'points'  , '[]'  }
     {'merge'  , '0'  }
     {'invert'  , '0'  }
@@ -27,8 +26,11 @@ field_cell_default =  {{'on', '1'       }
     {'y_correction', '0'}
     {'x_correction', '0'}
     {'transform_name','{''Transform 1''}'}
-    {'type','''EEG'''},
-    {'name_list','[]'},};
+    {'imaging_method_name',['''' evalin('base',[zef_struct_name '.imaging_method_cell{' zef_struct_name '.imaging_method}' ]) '''']}
+    {'name_list','[]'}
+    {'visible_list','[]'}
+    {'names_visible','1'}
+    {'color_table','[]'}};
 
 for i = 1 : length(field_cell_default)
 

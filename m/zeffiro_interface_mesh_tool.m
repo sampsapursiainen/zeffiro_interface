@@ -11,7 +11,6 @@ zef.h_checkbox_mesh_smoothing_on = zef_data.h_checkbox_mesh_smoothing_on;
 zef.h_refinement_on = zef_data.h_refinement_on;
 zef.h_source_interpolation_on = zef_data.h_source_interpolation_on;
 zef.h_downsample_surfaces = zef_data.h_downsample_surfaces;
-zef.h_popupmenu1 = zef_data.h_popupmenu1;
 zef.h_popupmenu6 = zef_data.h_popupmenu6;
 zef.h_popupmenu2 = zef_data.h_popupmenu2;
 zef.h_edit65 = zef_data.h_edit65;
@@ -42,10 +41,6 @@ set(zef.h_inflate_strength,'value',zef.inflate_strength);
 
 set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
 
-set(zef.h_popupmenu1,'Items',zef.imaging_method_cell);
-zef.h_popupmenu1.ItemsData = [1:length(zef.h_popupmenu1.Items)];
-set(zef.h_popupmenu1,'Value',zef.imaging_method);
-
 set(zef.h_popupmenu6,'Items',{'mm','cm','m'});
 zef.h_popupmenu6.ItemsData = [1:length(zef.h_popupmenu6.Items)];
 set(zef.h_popupmenu6,'Value',zef.location_unit);
@@ -67,7 +62,6 @@ set(zef.h_checkbox_mesh_smoothing_on,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_refinement_on,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_source_interpolation_on,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_downsample_surfaces,'ValueChangedFcn','zef_update_mesh_tool;');
-set(zef.h_popupmenu1,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_popupmenu6,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_popupmenu2,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_edit65,'ValueChangedFcn','zef_update_mesh_tool;');

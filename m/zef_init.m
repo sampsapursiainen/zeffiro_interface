@@ -4,9 +4,13 @@
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
+zef_data.imaging_method_cell = {'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'}; 
+zef_data.imaging_method= 1;
+
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.project_notes = '';
 zef_data.current_version = 3.0;
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
@@ -84,7 +88,7 @@ zef_data.top_reconstruction = [];
 
  zef_data.source_direction_mode = 2;
              
-         zef_data.imaging_method= 1;
+         
                  
                zef_data.sensors = [];
                zef_data.reuna_p = cell(0);

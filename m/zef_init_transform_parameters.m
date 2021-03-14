@@ -10,5 +10,7 @@ end
 
 zef.h_parameters_table.Data = zef.aux_data_1;
 
+zef.current_parameters = 'transform';
+
 zef = rmfield(zef,{'aux_data_1','aux_data_2'});
 clear zef_i zef_j;
