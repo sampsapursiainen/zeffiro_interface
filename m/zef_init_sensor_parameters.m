@@ -2,7 +2,7 @@
 zef.aux_data_1 = cell(0);
 zef_i = evalin('base','zef.current_sensor_name');
 
-if ismember(evalin('base',['zef.'  zef.current_sensors '_type']),{'EEG','EIT','tES'})
+if ismember(evalin('base',['zef.'  zef.current_sensors '_imaging_method_name']),{'EEG','EIT','tES'})
 zef.aux_data_2 = {
     {'X-coordinate','points','1'}
     {'Y-coordinate','points','2'}
@@ -11,7 +11,7 @@ zef.aux_data_2 = {
     {'Inner radius','points','5'}
     {'Impedance','points','6'}};
 
-elseif ismember(evalin('base',['zef.'  zef.current_sensors '_type']),{'MEG magnetometers'})
+elseif ismember(evalin('base',['zef.'  zef.current_sensors '_imaging_method_name']),{'MEG magnetometers'})
 
 zef.aux_data_2 = {
     {'X-coordinate','points','1'}
@@ -21,7 +21,7 @@ zef.aux_data_2 = {
     {'Y-direction','directions','2'}
     {'Z-direction','directions','3'}};
 
-elseif ismember(evalin('base',['zef.'  zef.current_sensors '_type']),{'MEG gradiometers'})
+elseif ismember(evalin('base',['zef.'  zef.current_sensors '_imaging_method_name']),{'MEG gradiometers'})
 
 zef.aux_data_2 = {
     {'X-coordinate','points','1'}

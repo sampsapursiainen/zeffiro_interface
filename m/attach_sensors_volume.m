@@ -47,9 +47,6 @@ for i = 1 : size(sensors,1)
 sensors_attached_volume(i,1:3) = ele_nodes(min_ind,:);
 end
 
-if ismember(attach_type,'points')
-    sensors_attached_volume = sensors_attached_volume(:,1:3);
-end
 
 else
     

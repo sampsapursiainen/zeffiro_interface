@@ -205,7 +205,6 @@ if not(isempty(sensors_visible))
      sensors_name = sensors_name(sensors_visible);
       sensors_color_table = sensors_color_table(sensors_visible,:);
 end
-sensors_original = sensors;
 %April 2021
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = 3.2*aux_scale_val;    
@@ -382,14 +381,23 @@ else
     electrode_model = 0;
 end
 
+%April 2021
+if not(evalin('base','zef.attach_electrodes'))
+    sensors_name_points = sensors(:,1:3);
+end
+%April 2021
 
-if evalin('base','zef.attach_electrodes') & electrode_model == 1
+if evalin('base','zef.attach_electrodes') && electrode_model == 1
 sensors = attach_sensors_volume(sensors,'geometry');
-elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
+elseif evalin('base','zef.attach_electrodes') && electrode_model == 2
   sensors_aux = attach_sensors_volume(sensors,'geometry');
   sensors_point_like_index = find(sensors_aux(:,4)==0);
   sensors_point_like = zeros(length(sensors_point_like_index),3);
   %April 2021
+    sensors_name_points = attach_sensors_volume(sensors,'points');
+    sensors_deep_id = find(sum(abs(sensors_name_points(:,[4 5])),2)==0);
+sensors_name_points(sensors_deep_id,:) = sensors(sensors_deep_id,:);
+sensors_name_points = sensors_name_points(:,1:3);
 sensors_point_like_id = sensors_aux(sensors_point_like_index,1);
 %April 2021
 for spl_ind = 1 : length(sensors_point_like_index)
@@ -402,6 +410,9 @@ end
 sensors = sensors_aux;
 sensors_patch_like_index = setdiff(1:size(sensors,1),sensors_point_like_index);
   sensors = sensors(sensors_patch_like_index,:);
+%April 2021
+   sensors_point_like = attach_sensors_volume(sensors_point_like,'points');
+%April 2021
 else
     electrode_model = 1;
 end
@@ -437,16 +448,12 @@ end
 elseif electrode_model == 2  
 %April 2021
 if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
-sensors_name_points = attach_sensors_volume(sensors_original,'points');
-sensors_deep_id = find(sum(abs(sensors_original(:,[4 5])),2)==0);
-sensors_name_points(sensors_deep_id,:) = sensors_original(sensors_deep_id,1:3);
 for i = 1 : size(sensors_name_points,1)
 h_text = text(sensors_name_points(i,1),sensors_name_points(i,2),sensors_name_points(i,3),sensors_name{i});
 set(h_text,'FontSize',evalin('base','zef.h_axes1.FontSize'));
 end
 end
 if not(isempty(sensors))
-%April 2021
 unique_sensors_aux_1 = unique(sensors(:,1));
 h = zeros(length(unique_sensors_aux_1),1);
 for i = 1 : length(unique_sensors_aux_1)

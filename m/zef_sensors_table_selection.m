@@ -20,8 +20,8 @@ if ismember(imaging_method_name,{'EEG','EIT','tES'})
     if size(evalin('base',['zef.' current_tag '_points']),2)==3
     sensors_aux = evalin('base',['zef.' current_tag '_points']);
     sensors_aux = [sensors_aux zeros(size(sensors_aux,1),3) ];
-    if evalin('base','zef.use_depth_electrodes') == 0
-      sensors_aux(:,5) == 1;  
+    if not(evalin('base','zef.use_depth_electrodes'))
+      sensors_aux(:,5) = 1;  
     end
     sensors_aux(:,6) = Inf;
     evalin('base',['zef.' current_tag '_points = reshape([' num2str(sensors_aux(:)') '],' num2str(size(sensors_aux,1)) ',' num2str(size(sensors_aux,2)) ');'])
