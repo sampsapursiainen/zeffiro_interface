@@ -16,8 +16,6 @@ end
 end
 end
 
-item_ind
-
 evalin('base',['zef.' current_sensors '_color_table(' num2str(item_ind) ',:) = [' num2str(color_vec) '];']);
 
 end
