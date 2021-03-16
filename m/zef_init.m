@@ -10,6 +10,7 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.sensors_visual_size = 3.5;
 zef_data.project_notes = '';
 zef_data.current_version = 3.0;
 zef_data.font_size = zef.font_size;

@@ -93,7 +93,7 @@ sensors = evalin('base','zef.sensors');
 sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
 sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
-aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+aux_scale_val = evalin('zef.sensors_visual_size');
 if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
      sensors_name = sensors_name(sensors_visible);
@@ -102,7 +102,7 @@ end
 %April 2021
 
 [X_s, Y_s, Z_s] = sphere(50); 
-sphere_scale = 3.2*aux_scale_val;    
+sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
@@ -237,7 +237,7 @@ end
 end
 if ismember(evalin('base','zef.imaging_method'),[2,3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -246,7 +246,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',0.9*[0 1 1]);
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -256,7 +256,6 @@ set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
 end
-
 
 i = 0;
 length_reuna = 0;
@@ -1323,7 +1322,7 @@ sensors = evalin('base','zef.sensors');
 sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
 sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
-aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+aux_scale_val = evalin('base','zef.sensors_visual_scale');
 if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
      sensors_name = sensors_name(sensors_visible);
@@ -1333,7 +1332,7 @@ end
 
 
 [X_s, Y_s, Z_s] = sphere(50); 
-sphere_scale = 3.2*aux_scale_val;    
+sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
@@ -1610,7 +1609,8 @@ end
 
 if ismember(evalin('base','zef.imaging_method'),[2 3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
+
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -1619,7 +1619,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor', 0.9*[1 1 1]);
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
