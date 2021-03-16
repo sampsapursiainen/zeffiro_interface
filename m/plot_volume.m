@@ -101,9 +101,15 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
 sensors = sensors(aux_ind,:);
+sensors_visible = sensors_visible(aux_ind,:);
+sensors_color_table = sensors_color_table(aux_ind,:);
+sensors_name = sensors_name(aux_ind);
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(sensors,1)]',aux_ind);
-sensors = sensors(aux_ind,:);   
+sensors = sensors(aux_ind,:);  
+sensors_visible = sensors_visible(aux_ind,:);
+sensors_color_table = sensors_color_table(aux_ind,:);
+sensors_name = sensors_name(aux_ind);
 end
 end
 aux_ind = [];
@@ -124,10 +130,7 @@ elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(ev
   sensors_point_like = zeros(length(unique_sensors_point_like),3);
 %April 2021
 sensors_name_points = attach_sensors_volume(sensors_aux,'points');
-sensors_deep_id = find(sum(abs(sensors_name_points(:,[4 5])),2)==0);
-sensors_name_points(sensors_deep_id,:) = sensors_aux(sensors_deep_id,:);
-sensors_name_points = sensors_name_points(:,1:3);
-sensors_point_like_id = unique(sensors(sensors_point_like_index,1));
+sensors_point_like_id = find(sensors(:,4)==0);
 %April 2021
   for spl_ind = 1 : length(unique_sensors_point_like)
 spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));

@@ -178,7 +178,6 @@ end
 end
 end
 
-
 axes(evalin('base','zef.h_axes1'));
 cla(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'YDir','normal');
@@ -299,9 +298,15 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
 sensors = sensors(aux_ind_1,:);
+sensors_visible = sensors_visible(aux_ind_1,:);
+sensors_color_table = sensors_color_table(aux_ind_1,:);
+sensors_name = sensors_name(aux_ind_1);
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
-sensors = sensors(aux_ind_1,:);   
+sensors = sensors(aux_ind_1,:);
+sensors_visible = sensors_visible(aux_ind_1,:);
+sensors_color_table = sensors_color_table(aux_ind_1,:);
+sensors_name = sensors_name(aux_ind_1);
 end
 for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1 
@@ -316,7 +321,7 @@ for p_ind = selected_list
 p_i_ind{p_ind}{2}{ab_ind} = aux_is_3;
 end
 end
-end;
+end
 end
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
@@ -390,15 +395,12 @@ end
 if evalin('base','zef.attach_electrodes') && electrode_model == 1
 sensors = attach_sensors_volume(sensors,'geometry');
 elseif evalin('base','zef.attach_electrodes') && electrode_model == 2
-  sensors_aux = attach_sensors_volume(sensors,'geometry');
-  sensors_point_like_index = find(sensors_aux(:,4)==0);
-  sensors_point_like = zeros(length(sensors_point_like_index),3);
-  %April 2021
-    sensors_name_points = attach_sensors_volume(sensors,'points');
-    sensors_deep_id = find(sum(abs(sensors_name_points(:,[4 5])),2)==0);
-sensors_name_points(sensors_deep_id,:) = sensors(sensors_deep_id,:);
-sensors_name_points = sensors_name_points(:,1:3);
-sensors_point_like_id = unique(sensors_aux(sensors_point_like_index,1));
+sensors_aux = attach_sensors_volume(sensors,'geometry');
+sensors_point_like_index = find(sensors_aux(:,4)==0);
+sensors_point_like = zeros(length(sensors_point_like_index),3);
+%April 2021
+sensors_name_points = attach_sensors_volume(sensors,'points');
+sensors_point_like_id = find(sensors(:,4)==0);
 %April 2021
 for spl_ind = 1 : length(sensors_point_like_index)
 if sensors_aux(sensors_point_like_index(spl_ind),2) == 0
@@ -409,7 +411,7 @@ end
 end
 sensors = sensors_aux;
 sensors_patch_like_index = setdiff(1:size(sensors,1),sensors_point_like_index);
-  sensors = sensors(sensors_patch_like_index,:);
+sensors = sensors(sensors_patch_like_index,:);
 else
     electrode_model = 1;
 end
