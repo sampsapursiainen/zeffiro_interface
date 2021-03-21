@@ -1,4 +1,6 @@
-if evalin('base',['size(zef.' zef.current_sensors '_points,2)']) == 6
+if not(evalin('base','zef.lock_sensor_names_on'))
+
+if ismember(evalin('base',['size(zef.' zef.current_sensors '_points,2)']),[6,0])
 evalin('base',['zef.' zef.current_sensors '_points = [zef.' zef.current_sensors '_points; [0 0 0 0 0 Inf]];']);
 else
 evalin('base',['zef.' zef.current_sensors '_points = [zef.' zef.current_sensors '_points; [0 0 0]];']);
@@ -15,3 +17,5 @@ end
 end
 
 zef_init_sensors_name_table;
+
+    end

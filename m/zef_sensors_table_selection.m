@@ -32,4 +32,10 @@ evalin('base','run(''zef_update'')');
 evalin('base','run(''zef_init_transform'')');
 evalin('base','run(''zef_init_sensors_name_table'')');
 
+sensor_sets_selected = eventdata.Indices(:,1);
+sensor_sets_selected = unique(sensor_sets_selected);
+sensor_sets_selected = sensor_sets_selected(:)';
+evalin('base',['zef.sensor_sets_selected =[' num2str(sensor_sets_selected) '];']);
+
+
 end

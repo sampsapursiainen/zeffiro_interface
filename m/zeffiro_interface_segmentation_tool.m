@@ -1,8 +1,4 @@
 zef_data = zeffiro_interface_segmentation_tool_app;
-
-
-zef.h_import_sensor_names=zef_data.h_import_sensor_names;
-zef.h_add_sensor_name=zef_data.h_add_sensor_name;
 zef.h_project_notes=zef_data.h_project_notes;
 zef.h_zeffiro_window_main=zef_data.h_zeffiro_window_main;
 zef.h_menu_project=zef_data.h_menu_project;
@@ -54,18 +50,12 @@ zef.h_menu_import_measurement_data=zef_data.h_menu_import_measurement_data;
 zef.h_menu_import_noise_data=zef_data.h_menu_import_noise_data;
 zef.h_menu_import_reconstruction=zef_data.h_menu_import_reconstruction;
 zef.h_menu_import_current_pattern=zef_data.h_menu_import_current_pattern;
-zef.h_mesh_button=zef_data.h_mesh_button;
-zef.h_import_sensor_points=zef_data.h_import_sensor_points;
-zef.h_import_sensor_directions=zef_data.h_import_sensor_directions;
 zef.h_axes2=zef_data.h_axes2;
 zef.h_compartment_table=zef_data.h_compartment_table;
 zef.h_sensors_table=zef_data.h_sensors_table;
 zef.h_transform_table=zef_data.h_transform_table;
 zef.h_sensors_name_table=zef_data.h_sensors_name_table;
-zef.h_add_compartment=zef_data.h_add_compartment;
 zef.h_project_information=zef_data.h_project_information;
-zef.h_add_transform=zef_data.h_add_transform;
-zef.h_add_sensors=zef_data.h_add_sensors;
 zef.h_parameters_table=zef_data.h_parameters_table;
 
 set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',{'Inactive','Constrained field','Unconstrained field','Active surface'},'numeric'})
@@ -84,18 +74,10 @@ set(zef.h_sensors_table,'DisplayDataChangedFcn','zef_update;');
 set(zef.h_transform_table,'DisplayDataChangedFcn','zef_update_transform;');
 set(zef.h_sensors_name_table,'DisplayDataChangedFcn','zef_update_sensors_name_table;');
 set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_parameters;');
-set(zef.h_add_compartment,'ButtonPushedFcn','zef_add_compartment;');
-set(zef.h_add_sensors,'ButtonPushedFcn','zef_add_sensors;');
 
-set(zef.h_mesh_button,  'ButtonPushedFcn','zef_get_surface_mesh;');
-set(zef.h_import_sensor_points,  'ButtonPushedFcn','zef_get_sensor_points;');
-set(zef.h_import_sensor_directions,  'ButtonPushedFcn','zef_get_sensor_directions;');
-set(zef.h_mesh_button,  'ButtonPushedFcn','zef_get_surface_mesh;');
 
-set(zef.h_add_sensor_name,  'ButtonPushedFcn','zef_add_sensor_name;');
-set(zef.h_import_sensor_names,  'ButtonPushedFcn','zef_import_sensor_names;');
 
-set(zef.h_add_transform,'ButtonPushedFcn','zef_add_transform;');
+
 set(zef.h_compartment_table,'CellSelectionCallback',@zef_compartment_table_selection);
 set(zef.h_transform_table,'CellSelectionCallback',@zef_transform_table_selection);
 set(zef.h_sensors_table,'CellSelectionCallback',@zef_sensors_table_selection);
@@ -149,6 +131,47 @@ zef.h_menu_close_tools                            =zef_data.h_menu_close_tools;
 zef.h_menu_close_figures                          =zef_data.h_menu_close_figures;        
 zef.h_menu_documentation                          =zef_data.h_menu_documentation;       
 zef.h_menu_about                                  =zef_data.h_menu_about;
+
+zef.h_menu_lock_sensor_names_on = zef_data.h_menu_lock_sensor_names_on;
+zef.h_menu_lock_transforms_on = zef_data.h_menu_lock_transforms_on;
+zef.h_menu_add_sensor_sets = zef_data.h_menu_add_sensor_sets;
+zef.h_menu_sensor_dat_points = zef_data.h_menu_sensor_dat_points;
+zef.h_menu_sensor_dat_directions = zef_data.h_menu_sensor_dat_directions;
+zef.h_menu_delete_sensor_sets = zef_data.h_menu_delete_sensor_sets;
+zef.h_menu_lock_sensor_sets_on = zef_data.h_menu_lock_sensor_sets_on;
+zef.h_menu_add_compartment = zef_data.h_menu_add_compartment;
+zef.h_menu_delete_compartment = zef_data.h_menu_delete_compartment;
+zef.h_menu_lock_on = zef_data.h_menu_lock_on;
+zef.h_menu_stl = zef_data.h_menu_stl;
+zef.h_menu_dat_points = zef_data.h_menu_dat_points;
+zef.h_menu_dat_triangles = zef_data.h_menu_dat_triangles;
+
+zef.h_menu_add_sensors = zef_data.h_menu_add_sensors;
+zef.h_menu_delete_sensors = zef_data.h_menu_delete_sensors;
+zef.h_menu_import_sensor_names = zef_data.h_menu_import_sensor_names;
+zef.h_menu_add_transform = zef_data.h_menu_add_transform;
+zef.h_menu_delete_transform = zef_data.h_menu_delete_transform;
+
+set(zef.h_menu_add_sensors,'MenuSelectedFcn','zef_add_sensor_name;');
+set(zef.h_menu_delete_sensors,'MenuSelectedFcn','zef_delete_sensors;');
+set(zef.h_menu_import_sensor_names,'MenuSelectedFcn','zef_import_sensor_names;');
+set(zef.h_menu_delete_transform,'MenuSelectedFcn','zef_delete_transform;');
+set(zef.h_menu_add_transform,'MenuSelectedFcn','zef_add_transform;');
+
+set(zef.h_menu_lock_transforms_on,'MenuSelectedFcn','zef.lock_transforms_on = abs(zef.lock_transforms_on - 1); zef_toggle_lock_transforms_on;');
+set(zef.h_menu_lock_sensor_names_on,'MenuSelectedFcn','zef.lock_sensor_names_on = abs(zef.lock_sensor_names_on - 1); zef_toggle_lock_sensor_names_on;');
+set(zef.h_menu_lock_sensor_sets_on,'MenuSelectedFcn','zef.lock_sensor_sets_on = abs(zef.lock_sensor_sets_on - 1); zef_toggle_lock_sensor_sets_on;');
+set(zef.h_menu_delete_compartment,'MenuSelectedFcn','zef_delete_compartment;');
+set(zef.h_menu_sensor_dat_points,'MenuSelectedFcn','zef_get_sensor_points;');
+set(zef.h_menu_sensor_dat_directions,'MenuSelectedFcn','zef_get_sensor_directions;');
+set(zef.h_menu_add_compartment,'MenuSelectedFcn','zef_add_compartment;');
+set(zef.h_menu_add_sensor_sets,'MenuSelectedFcn','zef_add_sensors;');
+set(zef.h_menu_delete_sensor_sets,'MenuSelectedFcn','zef_delete_sensor_sets;');
+set(zef.h_menu_lock_on,'MenuSelectedFcn','zef.lock_on = abs(zef.lock_on - 1); zef_toggle_lock_on');
+set(zef.h_menu_stl,'MenuSelectedFcn','zef.surface_mesh_type = 1; zef.file = 0;[file file_path] = uigetfile(''*.stl'');zef_get_surface_mesh;');
+set(zef.h_menu_dat_points,'MenuSelectedFcn','zef.surface_mesh_type = 2; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
+set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = 3; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
+
 
 set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;end;');
 set(zef.h_menu_open,'MenuSelectedFcn','zef_load;');

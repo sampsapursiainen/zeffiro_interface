@@ -172,10 +172,22 @@ else
 zef.project_notes = zef.h_project_notes.Value;
 end
 
-zef.imaging_method = find(ismember(zef.imaging_method_cell,evalin('base',['zef.' zef.current_sensors '_imaging_method_name'])),1);
 
+if not(ismember(zef.current_sensors,zef.sensor_tags))
+    zef.current_sensors = [];
+    zef.h_sensors_name_table.Data = [];
+    zef.h_parameters_table.Data = [];
+else
+zef.imaging_method = find(ismember(zef.imaging_method_cell,evalin('base',['zef.' zef.current_sensors '_imaging_method_name'])),1);
 zef_init_sensors_name_table;
+end
+
 zef_update_fig_details;
+
+zef_toggle_lock_on;
+zef_toggle_lock_sensor_sets_on;
+zef_toggle_lock_sensor_names_on;
+zef_toggle_lock_transforms_on;
 
 clear zef_i zef_j;
 

@@ -1,5 +1,3 @@
-zef.file = 0;
-[zef.file zef.file_path zef.surface_mesh_type] = zef_import_surface_mesh_type; 
 
 if not(isequal(zef.file,0));
 [zef.aux_points,zef.aux_triangles,zef.aux_submesh_ind] = zef_get_mesh([zef.file_path zef.file], zef.current_compartment, zef.surface_mesh_type,'full'); 
