@@ -1,6 +1,5 @@
 function [y_ES, ES_optimized_current_density, residual, flag_val] = zef_ES_optimize_current(TolFun, reg_param)
 
-% Preallocation for L_ES & x_ES
 L_aux                   = evalin('base','zef.L');
 source_positions_ES     = evalin('base','zef.inv_synth_source(:,1:3)');
 source_position_index   = zeros(size(source_positions_ES,1),1);
@@ -34,10 +33,10 @@ x_ES_projection         = [zeros(length(J_x_ES),1) ; x_ES_projection];
 
 active_electrodes       = evalin('base','zef.ES_active_electrodes');
 if not(isempty(evalin('base','zef.ES_active_electrodes')))
-    L_ES_projection   = L_ES_projection(:,active_electrodes);
+    L_ES_projection     = L_ES_projection(:,active_electrodes);
 else
-    active_electrodes = [1:size(L_ES_projection,2)];
-    L_ES_projection   = L_ES_projection(:,active_electrodes);
+    active_electrodes   = [1:size(L_ES_projection,2)];
+    L_ES_projection     = L_ES_projection(:,active_electrodes);
 end
 
 % Linear Programming Solver
@@ -105,7 +104,7 @@ end
 
 if not(isempty(evalin('base','zef.ES_active_electrodes')))
     y_ES_aux = zeros(size(L_aux,2),1);
-    y_ES_aux(active_electrodes) = y_ES;
+    y_ES_aux(active_electrodes) = y_ES(active_electrodes);
     y_ES = y_ES_aux;
 end
 
