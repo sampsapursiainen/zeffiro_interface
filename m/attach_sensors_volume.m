@@ -42,15 +42,15 @@ surface_ind = [1:size(sensors,1)]';
 deep_ind = [];
 else
     surface_ind = find(not(ismember(sensors(:,5),0)));
-    deep_ind = find(ismember(sensors(:,4),0));    
+    deep_ind = setdiff(find(ismember(sensors(:,4),0)),surface_ind);
 end
 sensors_attached_volume = sensors;
 for i = 1 : length(deep_ind)
-[min_val, min_ind] = min(sqrt(sum((nodes - repmat(sensors(i,1:3),size(nodes,1),1)).^2,2)));
+[min_val, min_ind] = min(sqrt(sum((nodes - repmat(sensors(deep_ind(i),1:3),size(nodes,1),1)).^2,2)));
 sensors_attached_volume(deep_ind(i),1:3) = nodes(min_ind,:);
 end
 for i = 1 : length(surface_ind)
-[min_val, min_ind] = min(sqrt(sum((geometry_nodes - repmat(sensors(i,1:3),size(geometry_nodes,1),1)).^2,2)));
+[min_val, min_ind] = min(sqrt(sum((geometry_nodes - repmat(sensors(surface_ind(i),1:3),size(geometry_nodes,1),1)).^2,2)));
 sensors_attached_volume(surface_ind(i),1:3) = geometry_nodes(min_ind,:);
 end
 
@@ -129,24 +129,23 @@ else
     
 [min_val, min_ind] = min(sqrt(sum((ele_nodes - repmat(sensors(i,1:3),size(ele_nodes,1),1)).^2,2)));
 sensors(i,1:3) = ele_nodes(min_ind,:);
- [dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
- dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5)); 
- sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) surface_triangles(dist_ind,:)];
+[dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
+dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5)); 
+sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) surface_triangles(dist_ind,:)];
  
   elseif isequal(attach_type,'geometry')
           
- [min_val, min_ind] = min(sqrt(sum((geometry_nodes - repmat(sensors(i,1:3),size(geometry_nodes,1),1)).^2,2)));
+[min_val, min_ind] = min(sqrt(sum((geometry_nodes - repmat(sensors(i,1:3),size(geometry_nodes,1),1)).^2,2)));
 sensors(i,1:3) = geometry_nodes(min_ind,:);
- [dist_val] = (sqrt(sum((geometry_center_points_aux - repmat(sensors(i,1:3),size(geometry_center_points_aux,1),1)).^2,2)));
- dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5)); 
- sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) geometry_triangles(dist_ind,:)];
+[dist_val] = (sqrt(sum((geometry_center_points_aux - repmat(sensors(i,1:3),size(geometry_center_points_aux,1),1)).^2,2)));
+dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5)); 
+sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) geometry_triangles(dist_ind,:)];
  
-  end
-
 end
 end
+end
 
- sensors_attached_volume = sensors_aux; 
+sensors_attached_volume = sensors_aux; 
 
 end
 
