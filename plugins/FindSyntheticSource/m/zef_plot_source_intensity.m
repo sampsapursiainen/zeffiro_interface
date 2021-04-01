@@ -39,7 +39,9 @@ set(zef_temp_axis.Colorbar,'visible','off')
 rotate3d(zef_temp_axis,'off')
 
 %Available colors
-colors = [1,0,0;0,1,0;0,0,1;1,0,1;0.4,0.8,0.4;0.4,0.4,1;1,0.4,0.7;1,0.5,0];
+colors = [1,0,0;0,1,0;0,0,1;
+          1,0.5,0;0,1,1;1,0,1;
+          0.8,0.8,0;0,0.8,0.4;0.5,0,1];
 colors = [colors;0.5*colors];
 %Available line styles
 line_style_cell = {'-','--','-.',':','o-','o--','o-.','o:','s-','s--','s-.','s:','d-','d--','d-.','d:','*-','*--','*-.','*:'};
@@ -84,6 +86,13 @@ if evalin('base','zef.find_synth_source.intensity_direction')
 else
     set(zef_temp_axis,'ylim',[0 1.05*max(y_vals(:))]);
 end
+y_scale = 10^floor(log10(max(abs(zef_temp_axis.YLim))));
+if floor(max(abs(zef_temp_axis.YLim))/y_scale)<2
+    y_scale = 0.1*y_scale;
+end
+zef_temp_axis.YAxis.TickValues = zef_temp_axis.YLim(1):y_scale:zef_temp_axis.YLim(2);
+zef_temp_axis.YAxis.TickLabels = num2cell(zef_temp_axis.YAxis.TickValues);
+
 set(zef_temp_axis,'ygrid','on');
 xtickangle(zef_temp_axis,0);
 %Set Legend

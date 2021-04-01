@@ -40,15 +40,15 @@ zef.movie_fps = str2num(zef.ini_cell{1}{18});
 zef.font_size = str2num(zef.ini_cell{1}{20});
 zef.mlapp = str2num(zef.ini_cell{1}{22});
 zef = rmfield(zef,'ini_cell');
+zef_init;
 if zef.mlapp == 1
 zeffiro_interface_segmentation_tool; 
 else
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 end
-zef_data = zef;
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
-zef_init;
+
 
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -69,82 +69,6 @@ clear zef_j zef_k
 zef = rmfield(zef,'h_temp');
 zef = rmfield(zef,'menu_accelerator_vec');
 
-zef.aux_handle_vec = [...
-zef.h_w_sources;
-zef.h_d1_sources;
-zef.h_d2_sources;
-zef.h_d3_sources;
-zef.h_d4_sources;
-zef.h_s_on;
-zef.h_s_visible;
-zef.h_w_on;
-zef.h_w_visible;
-zef.h_g_on;
-zef.h_g_visible;
-zef.h_c_on;
-zef.h_c_visible;
-zef.h_sk_on;
-zef.h_sk_visible;
-zef.h_sc_on;
-zef.h_sc_visible;
-zef.h_d1_on;
-zef.h_d1_visible;
-zef.h_d2_on;
-zef.h_d2_visible;
-zef.h_d3_on;
-zef.h_d3_visible;
-zef.h_d4_on;
-zef.h_d4_visible;
-zef.h_pushbutton16;
-zef.h_pushbutton17;
-zef.h_pushbutton1;
-zef.h_pushbutton3;
-zef.h_pushbutton5;
-zef.h_pushbutton7;
-zef.h_pushbutton9;
-zef.h_pushbutton101;
-zef.h_pushbutton201;
-zef.h_pushbutton301;
-zef.h_pushbutton401;
-zef.h_edit15;
-zef.h_edit3;
-zef.h_edit6;
-zef.h_edit7;
-zef.h_edit12;
-zef.h_edit13;
-zef.h_edit14;
-zef.h_edit29;
-zef.h_edit70;
-zef.h_edit9001;
-zef.h_edit36;
-zef.h_edit71;
-zef.h_edit9002;
-zef.h_edit50;
-zef.h_edit72;
-zef.h_edit9003;
-zef.h_edit57;
-zef.h_edit73;
-zef.h_edit9004;
-zef.h_edit64;
-zef.h_edit74;
-zef.h_edit9005;
-zef.h_edit129;
-zef.h_edit170;
-zef.h_edit9006;
-zef.h_edit229;
-zef.h_edit270;
-zef.h_edit9007;
-zef.h_edit329;
-zef.h_edit370;
-zef.h_edit9008;
-zef.h_edit429;
-zef.h_edit470;
-zef.h_edit9009;
-];
-if zef.mlapp == 0
-uistack(flipud(zef.aux_handle_vec),'bottom');
-end
-rmfield(zef,'aux_handle_vec');
 zef.o_h = findall(zef.h_zeffiro_window_main);
 %zef.h_axes2 = findobj(zef.o_h,'Type','Axes');
 %zef.h_axes2  = zef.h_axes2(1); 

@@ -17,9 +17,9 @@ if isequal(output_mode,'full');
    submesh_data = evalin('base',['zef.' field_id '_submesh_ind;']);
 end
 
-evalin('base',['zef.' field_id '_triangles_original_surface_mesh = []']);
-evalin('base',['zef.' field_id '_points_original_surface_mesh = []']);
-evalin('base',['zef.' field_id '_submesh_ind_original_surface_mesh = []']);
+evalin('base',['zef.' field_id '_triangles_original_surface_mesh = [];']);
+evalin('base',['zef.' field_id '_points_original_surface_mesh = [];']);
+evalin('base',['zef.' field_id '_submesh_ind_original_surface_mesh = [];']);
 
 merge_on = evalin('base',['zef.' field_id '_merge']);
 invert_on = evalin('base',['zef.' field_id '_invert']);

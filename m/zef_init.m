@@ -4,8 +4,21 @@
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
-zef_init_compartments;
+zef_data.imaging_method_cell = {'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'}; 
+zef_data.imaging_method= 1;
 
+zef_init_compartments;
+zef_init_sensors;
+
+zef_data.lock_on = 0;
+zef_data.lock_sensor_names_on = 0;
+zef_data.lock_transforms_on = 0;
+zef_data.lock_sensor_sets_on = 0;
+zef_data.lock_sensors_on = 0;
+zef_data.lock_transform_on = 0;
+zef_data.sensors_visual_size = 3.5;
+zef_data.project_notes = '';
+zef_data.current_version = 3.0;
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
@@ -82,7 +95,7 @@ zef_data.top_reconstruction = [];
 
  zef_data.source_direction_mode = 2;
              
-         zef_data.imaging_method= 1;
+         
                  
                zef_data.sensors = [];
                zef_data.reuna_p = cell(0);
@@ -193,21 +206,23 @@ zef_data.sensors_attached_volume = [];
        zef_data.use_inflated_surfaces = 0;
        zef_data.explode_everything = 1;
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
-       zef_data.compartment_tags = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','w','g','c','sk','sc'};
-       zef_data.sensor_tags = {'s'};
-       zef_data.current_sensors = 1;
        zef_data.parcellation_compartment = {'g'};
        
        zef.fieldnames = fieldnames(zef);
-       zef.fieldnames = zef.fieldnames(find(startsWith(zef.fieldnames, 'h_')));
- for zef_i = 1:length(zef.fieldnames)
- zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
- end        
+
+for zef_i = 1 : length(zef.fieldnames)
+    if isobject(evalin('base',['zef.' zef.fieldnames{zef_i}]))
+    zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
+    end
+end
+       
  zef = zef_data;
  
  if isfield(zef,'h_zeffiro_window_main')
      if isvalid(zef.h_zeffiro_window_main)
  zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
+  zef.zeffiro_window_main_relative_size = zef_get_relative_size(zef.h_zeffiro_window_main);
      end
  end
  clear zef_i zef_data;
+ 

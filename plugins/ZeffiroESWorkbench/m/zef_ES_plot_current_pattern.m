@@ -20,13 +20,12 @@ if not(isempty(h_axes))
 end
 
 if evalin('base','zef.ES_current_threshold_checkbox') == 0
-    y_ES = evalin('base','zef.y_ES');
+    y_ES = evalin('base','zef.y_ES_single.y_ES');
 else
-    y_ES = evalin('base','zef.y_ES_threshold');
+    y_ES = evalin('base','zef.y_ES_threshold.y_ES');
 end
 
 sensors = evalin('base','zef.sensors');
-%reuna_p = evalin('base','zef.reuna_p');
 
 if evalin('base','zef.attach_electrodes')
     sensors(:,4) = 0;

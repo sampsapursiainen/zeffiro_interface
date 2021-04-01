@@ -12,8 +12,7 @@ aux_wm_ind = -1;
 
 movie_fps = evalin('base','zef.movie_fps');
 
-sensor_tag = evalin('base','zef.sensor_tags');
-sensor_tag = sensor_tag{(evalin('base','zef.current_sensors'))};
+sensor_tag = evalin('base','zef.current_sensors');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 number_of_frames = evalin('base','zef.number_of_frames');
@@ -89,11 +88,21 @@ h_aviobj.Quality = video_quality;
 open(h_aviobj);
 end
 
-%T
+%April 2021
 sensors = evalin('base','zef.sensors');
-aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
+sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
+sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
+aux_scale_val = evalin('zef.sensors_visual_size');
+if not(isempty(sensors_visible))
+    sensors = sensors(sensors_visible,:);
+     sensors_name = sensors_name(sensors_visible);
+      sensors_color_table = sensors_color_table(sensors_visible,:);
+end
+%April 2021
+
 [X_s, Y_s, Z_s] = sphere(50); 
-sphere_scale = 3.2*aux_scale_val;    
+sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
@@ -132,12 +141,25 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
 sensors = sensors(aux_ind,:);
+sensors_visible = sensors_visible(aux_ind,:);
+sensors_color_table = sensors_color_table(aux_ind,:);
+sensors_name = sensors_name(aux_ind);
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(sensors,1)]',aux_ind);
-sensors = sensors(aux_ind,:);   
+sensors = sensors(aux_ind,:);
+sensors_visible = sensors_visible(aux_ind,:);
+sensors_color_table = sensors_color_table(aux_ind,:); 
+sensors_name = sensors_name(aux_ind);
 end
 end
 aux_ind = [];
+
+%April 2021
+if not(evalin('base','zef.attach_electrodes'))
+    sensors_name_points = sensors(:,1:3);
+end
+sensors_aux = sensors;
+%April 2021
 
 if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = attach_sensors_volume(sensors); 
@@ -146,6 +168,10 @@ sensors = attach_sensors_volume(sensors);
 sensors_point_like_index = find(sensors(:,4)==0);
 unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
 sensors_point_like = zeros(length(unique_sensors_point_like),3);
+%April 2021
+sensors_name_points = attach_sensors_volume(sensors_aux,'points');
+sensors_point_like_id = find(sensors(:,4)==0);
+%April 2021
 for spl_ind = 1 : length(unique_sensors_point_like)
 spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));
 sensors_point_like(spl_ind,:) = mean(nodes(sensors(sensors_point_like_index(spl_aux_ind),2),:),1);
@@ -159,7 +185,13 @@ end
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+%April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
+set(h_text,'FontSize',1500);
+end
+set(h,'facecolor',sensors_color_table(i,:));
+%April 2021
 set(h,'edgecolor','none');
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -167,10 +199,22 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 else
-    if not(isempty(sensors))
-h = trisurf(sensors(:,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
-set(h,'facecolor',evalin('base','zef.s_color'));
-set(h,'edgecolor',evalin('base','zef.s_color')); 
+%April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+for i = 1 : size(sensors_name_points,1)
+h_text = text(sensors_name_points(i,1),sensors_name_points(i,2),sensors_name_points(i,3),sensors_name{i});
+set(h_text,'FontSize',1500);
+end
+end
+if not(isempty(sensors))
+unique_sensors_aux_1 = unique(sensors(:,1));
+h = zeros(length(unique_sensors_aux_1),1);
+for i = 1 : length(unique_sensors_aux_1)
+    unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
+h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
+set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
+end
+set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
@@ -178,9 +222,12 @@ set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
     end
 if not(isempty(sensors_point_like))
+h = zeros(size(sensors_point_like,1),1);
 for i = 1 : size(sensors_point_like,1)
-h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+h(i) = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
+set(h(i),'facecolor',sensors_color_table(sensors_point_like_id(i),:));
+end
+%April 2021
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -188,10 +235,9 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
-end
 if ismember(evalin('base','zef.imaging_method'),[2,3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -200,7 +246,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',0.9*[0 1 1]);
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -210,7 +256,6 @@ set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
 end
-
 
 i = 0;
 length_reuna = 0;
@@ -1272,10 +1317,22 @@ light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
 hold on;
+%April 2021
 sensors = evalin('base','zef.sensors');
-aux_scale_val = 0.005*max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
+sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
+sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
+aux_scale_val = evalin('base','zef.sensors_visual_scale');
+if not(isempty(sensors_visible))
+    sensors = sensors(sensors_visible,:);
+     sensors_name = sensors_name(sensors_visible);
+      sensors_color_table = sensors_color_table(sensors_visible,:);
+end
+%April 2021
+
+
 [X_s, Y_s, Z_s] = sphere(50); 
-sphere_scale = 3.2*aux_scale_val;    
+sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
@@ -1374,9 +1431,15 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
 sensors = sensors(aux_ind_1,:);
+sensors_visible = sensors_visible(aux_ind_1,:);
+sensors_color_table = sensors_color_table(aux_ind_1,:);
+sensors_name = sensors_name(aux_ind_1);
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
-sensors = sensors(aux_ind_1,:);   
+sensors = sensors(aux_ind_1,:);
+sensors_visible = sensors_visible(aux_ind_1,:);
+sensors_color_table = sensors_color_table(aux_ind_1,:);
+sensors_name = sensors_name(aux_ind_1);  
 end
 for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1
@@ -1456,12 +1519,24 @@ else
     electrode_model = 0;
 end
 
+%April 2021
+if not(evalin('base','zef.attach_electrodes'))
+    sensors_name_points = sensors(:,1:3);
+end
+%April 2021
+
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
 sensors = attach_sensors_volume(sensors,'geometry'); 
 elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
   sensors_aux = attach_sensors_volume(sensors,'geometry');
   sensors_point_like_index = find(sensors_aux(:,4)==0);
   sensors_point_like = zeros(length(sensors_point_like_index),3);
+
+%April 2021
+sensors_name_points = attach_sensors_volume(sensors,'points');
+sensors_point_like_id = find(sensors(:,4)==0);
+%April 2021
+
 for spl_ind = 1 : length(sensors_point_like_index)
 if sensors_aux(sensors_point_like_index(spl_ind),2) == 0
 sensors_point_like(spl_ind,:) = sensors(sensors_aux(sensors_point_like_index(spl_ind),1),1:3);
@@ -1481,28 +1556,49 @@ if evalin('base','zef.s_visible')
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+%April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
+set(h_text,'FontSize',1500);
+end
+set(h,'facecolor',sensors_color_table(i,:));
+%April 2021
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
-elseif electrode_model == 2  
-    if not(isempty(sensors))
-h = trisurf(sensors(:,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
-set(h,'facecolor',evalin('base','zef.s_color'));
-set(h,'edgecolor',evalin('base','zef.s_color')); 
+elseif electrode_model == 2 
+ %April 2021
+if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
+for i = 1 : size(sensors_name_points,1)
+h_text = text(sensors_name_points(i,1),sensors_name_points(i,2),sensors_name_points(i,3),sensors_name{i});
+set(h_text,'FontSize',1500);
+end
+end
+if not(isempty(sensors))
+unique_sensors_aux_1 = unique(sensors(:,1));
+h = zeros(length(unique_sensors_aux_1),1);
+for i = 1 : length(unique_sensors_aux_1)
+    unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
+h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
+set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
+end
+set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
 set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
-    end
+end
 if not(isempty(sensors_point_like))
+h = zeros(size(sensors_point_like,1),1);
 for i = 1 : size(sensors_point_like,1)
-h = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
-set(h,'facecolor',evalin('base','zef.s_color'));
+h(i) = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
+set(h(i),'facecolor',sensors_color_table(sensors_point_like_id(i),:));
+end
+%April 2021;
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -1510,11 +1606,11 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
-end
 
 if ismember(evalin('base','zef.imaging_method'),[2 3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,4),sensors(:,2) + 4.5*sensors(:,5),sensors(:,3) + 4.5*sensors(:,6),8*sensors(:,4),8*sensors(:,5),8*sensors(:,6),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
+
 set(h,'facecolor',evalin('base','zef.s_color'));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
@@ -1523,7 +1619,7 @@ set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
-h=coneplot(sensors(:,1) + 4.5*sensors(:,7),sensors(:,2) + 4.5*sensors(:,8),sensors(:,3) + 4.5*sensors(:,9),8*sensors(:,7),8*sensors(:,8),8*sensors(:,9),0,'nointerp');
+h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor', 0.9*[1 1 1]);
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);

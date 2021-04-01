@@ -4,8 +4,8 @@ function [void] = color_label(tag_str)
 
 void = [];
 
-switch_val_1 = get(evalin('base',['zef.h_' tag_str '_on']),'value');
-switch_val_2 = get(evalin('base',['zef.h_' tag_str '_visible']),'value');
+switch_val_1 = evalin('base',['zef.' tag_str '_on']);
+switch_val_2 = evalin('base',['zef.' tag_str '_visible']);
 
 if isvalid(evalin('base','zef.h_zeffiro'))
 if switch_val_1 & switch_val_2 

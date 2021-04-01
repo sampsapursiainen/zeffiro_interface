@@ -6,7 +6,6 @@ if zef.mlapp == 1
 zef.refinement_on = zef.h_refinement_on.Value;
 zef.source_interpolation_on = zef.h_source_interpolation_on.Value;
 zef.downsample_surfaces = zef.h_downsample_surfaces.Value;
-zef.imaging_method = zef.h_popupmenu1.Value;
 zef.location_unit = zef.h_popupmenu6.Value;
 zef.source_direction_mode = zef.h_popupmenu2.Value;
 zef.mesh_resolution = (zef.h_edit65.Value);

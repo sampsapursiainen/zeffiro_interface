@@ -1,26 +1,19 @@
 function [h_colorbar_ES] = zef_ES_plot_error_chart
-f = figure(300);
-set(f,'Name','ZEFFIRO Interface: Error chart tool')
-set(f,'NumberTitle','off');
-set(f,'ToolBar','figure');
-set(f,'MenuBar','none');
 
-if isfield(evalin('base','zef'),'h_colorbar_ES')
-    h_synth_source = evalin('base','zef.h_colorbar_ES');
-    if ishandle(h_synth_source)
-        delete(h_synth_source)
-    end
+figure('Name','ZEFFIRO Interface: Error chart tool','NumberTitle','off', ...
+    'ToolBar','figure','MenuBar','none');
+
+if evalin('base','zef.ES_current_threshold_checkbox') == 0
+    y_ES          = evalin('base','zef.y_ES_interval.y_ES');
+    residual      = evalin('base','zef.y_ES_interval.residual');
+    tolerance_aux = evalin('base','zef.y_ES_interval.optimizer_tolerance');
+    reg_param_aux = evalin('base','zef.y_ES_interval.reg_param');
+else
+    y_ES          = evalin('base','zef.y_ES_interval_threshold.y_ES');
+    residual      = evalin('base','zef.y_ES_interval_threshold.residual');
+    tolerance_aux = evalin('base','zef.y_ES_interval_threshold.optimizer_tolerance');
+    reg_param_aux = evalin('base','zef.y_ES_interval_threshold.reg_param');
 end
-
-h_colorbar_ES = findobj(evalin('base','zef.h_zeffiro'),'tag','ES_colorbar');
-if not(isempty(h_colorbar_ES))
-    colorbar(h_colorbar_ES,'delete');        
-end
-
-y_ES = evalin('base','zef.y_ES_interval.y_ES');
-residual = evalin('base','zef.y_ES_interval.residual');
-tolerance_aux = evalin('base','zef.y_ES_interval.optimizer_tolerance_range');
-reg_param_aux = evalin('base','zef.y_ES_interval.reg_param_range');
 
 A = zeros(size(y_ES,1),size(y_ES,2));
 B = zeros(size(y_ES,1),size(y_ES,2));
@@ -36,25 +29,23 @@ C = B/max(abs(B(:))) + A/max(abs(A(:)));
 h_axes = gca;
 imagesc(C);
 colormap('jet');
-%grid on;
+grid on;
 
 h_colorbar_ES = colorbar;
 set(h_colorbar_ES, 'ylim', [min(C(:)) max(C(:))]);
 
 set(gca, 'XTick', 1:length(reg_param_aux));
 set(gca, 'XTicklabel', reg_param_aux);
-xtickangle(90);
-xlabel('Regularization parameter');
-
 set(gca, 'YTick', 1:length(tolerance_aux));
 set(gca, 'YTicklabel', tolerance_aux);
+xtickangle(90);
+xlabel('Regularization parameter');
 ylabel('Optimizer tolerance');
-
 
 hold on;
 for i = 1:length(tolerance_aux)
     for j = 1:length(reg_param_aux)
-        plot(j,i,'ko','MarkerFaceColor','none','MarkerSize',5);
+        plot(j,i,'k.','MarkerFaceColor','none','MarkerSize',3);
     end
 end
 [c, r] = find(C == min(C(C>0),[],'all'),1,'first');
