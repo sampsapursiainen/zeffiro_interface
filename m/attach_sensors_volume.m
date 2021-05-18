@@ -12,10 +12,10 @@ end
 
 if ismember(evalin('base','zef.imaging_method'),[1,4,5]) 
 
-if ismember(attach_type,{'geometry','points'});    
+%if ismember(attach_type,{'geometry','points'});    
 geometry_triangles = evalin('base','zef.reuna_t{end}'); 
 geometry_nodes = evalin('base','zef.reuna_p{end}');
-end 
+%end 
 
 surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
