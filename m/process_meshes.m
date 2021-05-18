@@ -41,7 +41,7 @@ reuna_p_inf{i} = evalin('base',var_8);
 reuna_p{i} = evalin('base',var_9);
 reuna_t{i} = evalin('base',var_10);
 reuna_submesh_ind{i} = evalin('base',var_11);
-mean_vec = repmat(mean(reuna_p{i}),size(reuna_p{i},1),1); 
+mean_vec = repmat(mean(reuna_p{i},1),size(reuna_p{i},1),1); 
 
 for t_ind = 1 : length(evalin('base',var_1))
     
@@ -94,10 +94,10 @@ for s_ind = 1 : length(reuna_submesh_ind{i})
     end
     t_ind_2 = reuna_submesh_ind{i}(s_ind);
     p_ind = unique(reuna_t{i}(t_ind_1:t_ind_2,:));
-    mean_aux = mean(reuna_p{i}(p_ind,:));
+    mean_aux = mean(reuna_p{i}(p_ind,:),1);
             reuna_p{i}(p_ind,:) = reuna_p{i}(p_ind,:) + (explode_param-1)*repmat(mean_aux,length(p_ind),1);
     if not(isempty(reuna_p_inf{i})) 
- mean_aux = mean(reuna_p_inf{i}(p_ind,:));
+ mean_aux = mean(reuna_p_inf{i}(p_ind,:),1);
         reuna_p_inf{i}(p_ind,:) = reuna_p_inf{i}(p_ind,:) + (explode_param-1)*repmat(mean_aux,length(p_ind),1);
     end
 end
@@ -148,7 +148,7 @@ scaling_val = s_scaling(t_ind);
 translation_vec = [s_x_correction(t_ind) s_y_correction(t_ind) s_z_correction(t_ind)];     
 theta_angle_vec = [s_xy_rotation(t_ind) s_yz_rotation(t_ind) s_zx_rotation(t_ind)]; 
 if not(isempty(sensors))
-mean_vec = repmat(mean(sensors(:,1:3)),size(sensors(:,1:3),1),1);    
+mean_vec = repmat(mean(sensors(:,1:3),1),size(sensors(:,1:3),1),1);    
 if scaling_val ~= 1 
 sensors(:,1:3) = scaling_val*sensors(:,1:3);
 end
@@ -191,7 +191,7 @@ end
 
 if not(isempty(sensors))
 for j = 1 : 3
-sensors(:,j) = sensors(:,j)  +  (explode_param-1)*(sensors(:,j) - mean(sensors(:,j)));
+sensors(:,j) = sensors(:,j)  +  (explode_param-1)*(sensors(:,j) - mean(sensors(:,j),1));
 end
 
 if not(isempty(s_data_aux))

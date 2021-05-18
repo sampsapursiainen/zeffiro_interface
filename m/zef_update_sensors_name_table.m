@@ -2,7 +2,7 @@ zef.aux_field_1 = zef.h_sensors_name_table.Data;
 zef.aux_field_2 = [];
 zef.aux_field_3 = [];
 
-for zef_i = 1 : size(zef.aux_field_1)
+for zef_i = 1 : size(zef.aux_field_1,1)
 
     if not(isnan(zef.aux_field_1{zef_i,1}))
 zef.aux_field_2 = [zef.aux_field_2 zef_i];
