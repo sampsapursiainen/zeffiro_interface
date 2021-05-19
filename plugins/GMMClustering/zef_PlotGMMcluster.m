@@ -2,6 +2,7 @@ function zef_PlotGMMcluster
 m_size = evalin('base','zef.GMMcluster_markersize');
 m_width = evalin('base','zef.GMMcluster_markerwidth');
 m_sym = evalin('base','zef.GMMcluster_markercolor');
+s_length = evalin('base','zef.GMMcluster_veclength')^2;
 plot_ellipsoids = evalin('base','zef.GMMcluster_plotellip');
 ellip_trans = evalin('base','zef.GMMcluster_elliptrans');
 
@@ -40,18 +41,19 @@ for k = 1:size(GMModel.mu,1)
     %Determine principal and semi axes of the ellipsoid:
     if identcov == 1
         if covtype == 1
-            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(:,:,k)));
+            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3,k)));
+            semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = 1./GMModel.Sigma(:,:,k);
+            semi_axes = r*sqrt(GMModel.Sigma(1,1:3,k));
         end
     else
         if covtype == 1
-            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma));
+            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3)));
+            semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = 1./GMModel.Sigma;            
+            semi_axes = r*sqrt(GMModel.Sigma(1:3));            
         end
     end
-    semi_axes = transpose(r./sqrt(diag(semi_axes)));
     %form ellipsoid mesh:
     [X,Y,Z]=ellipsoid(GMModel.mu(k,1),GMModel.mu(k,2),GMModel.mu(k,3),semi_axes(1),semi_axes(2),semi_axes(3),100);
     s(k) = surf(h,X,Y,Z);
@@ -62,15 +64,22 @@ for k = 1:size(GMModel.mu,1)
     %axes (rotation command is based on right-hand-rule):
     CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
     ang = real(acosd(CosTheta));
-    rotate(s(k),cross([1;0;0],principal_axes(:,1)),ang,GMModel.mu(k,:));
+    if ang ~= 0
+    rotate(s(k),cross([1;0;0],principal_axes(:,1)),ang,GMModel.mu(k,1:3));
+    end
     CosTheta = max(min(dot([0;1;0],principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
     ang = real(acosd(CosTheta));
-    rotate(s(k),cross([0;1;0],principal_axes(:,2)),ang,GMModel.mu(k,:));
-   
+    if ang ~= 0
+    rotate(s(k),cross([0;1;0],principal_axes(:,2)),ang,GMModel.mu(k,1:3));
+    end
+    
 end
 end
 %plot centroid marks:
 plot3(h,GMModel.mu(:,1),GMModel.mu(:,2),GMModel.mu(:,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+%set direction vectors (original can be non-unit length)
+direct = s_length*GMModel.mu(:,4:6)./sqrt(sum(GMModel.mu(:,4:6).^2,2));
+quiver3(h,GMModel.mu(:,1),GMModel.mu(:,2),GMModel.mu(:,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')
 %If time serie exists:
 else
@@ -93,18 +102,19 @@ for k = 1:size(GMModel{t}.mu,1)
     %Determine principal and semi axes of the ellipsoid:
     if identcov == 1
         if covtype == 1
-            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(:,:,k)));
+            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3,k)));
+            semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = 1./GMModel{t}.Sigma(:,:,k);
+            semi_axes = r*sqrt(GMModel{t}.Sigma(1,1:3,k));
         end
     else
         if covtype == 1
-            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma));
+            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3)));
+            semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = 1./GMModel{t}.Sigma;
+            semi_axes = r*sqrt(GMModel{t}.Sigma(1:3));            
         end
-    end
-    semi_axes = transpose(r./sqrt(diag(semi_axes)));   
+    end   
     %form ellipsoid mesh:
     [X,Y,Z]=ellipsoid(GMModel{t}.mu(k,1),GMModel{t}.mu(k,2),GMModel{t}.mu(k,3),semi_axes(1),semi_axes(2),semi_axes(3),100);
     s(k) = surf(h,X,Y,Z);
@@ -115,14 +125,21 @@ for k = 1:size(GMModel{t}.mu,1)
     %axes (rotation command is based on right-hand-rule):
     CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
     ang = real(acosd(CosTheta));
+    if ang ~= 0
     rotate(s(k),cross([1;0;0],principal_axes(:,1)),ang,GMModel{t}.mu(k,:));
+    end
     CosTheta = max(min(dot([0;1;0],principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
     ang = real(acosd(CosTheta));
+    if ang ~= 0
     rotate(s(k),cross([0;1;0],principal_axes(:,2)),ang,GMModel{t}.mu(k,:));
+    end
 end
 end
 %plot centroid marks:
 plot3(h,GMModel{t}.mu(:,1),GMModel{t}.mu(:,2),GMModel{t}.mu(:,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+%set direction vectors (original can be non-unit length)
+direct = s_length*GMModel{t}.mu(:,4:6)./sqrt(sum(GMModel{t}.mu(:,4:6).^2,2));
+quiver3(h,GMModel{t}.mu(:,1),GMModel{t}.mu(:,2),GMModel{t}.mu(:,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')
 pause(1.5)
 end
