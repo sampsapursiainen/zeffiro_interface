@@ -1322,7 +1322,7 @@ sensors = evalin('base','zef.sensors');
 sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
 sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
-aux_scale_val = evalin('base','zef.sensors_visual_scale');
+aux_scale_val = evalin('base','zef.sensors_visual_size');
 if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
      sensors_name = sensors_name(sensors_visible);
