@@ -116,7 +116,7 @@ else
 end
 
 aux_ind = []; 
-if evalin('base','zef.s_visible')
+if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
 if not(isempty(aux_ind))
 aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
@@ -238,7 +238,7 @@ end
 if ismember(evalin('base','zef.imaging_method'),[2,3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag 'color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
@@ -1556,7 +1556,7 @@ else
 end
 
 
-if evalin('base','zef.s_visible')
+if evalin('base',['zef.' sensor_tag '_visible'])
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
@@ -1615,7 +1615,7 @@ if ismember(evalin('base','zef.imaging_method'),[2 3])
 sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 
-set(h,'facecolor',evalin('base','zef.s_color'));
+set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
 set(h,'specularstrength',0.3);
 set(h,'diffusestrength',0.7);
