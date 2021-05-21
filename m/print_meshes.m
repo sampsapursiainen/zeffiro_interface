@@ -1431,13 +1431,17 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
 sensors = sensors(aux_ind_1,:);
+if not(isempty(sensors_visible))
 sensors_visible = sensors_visible(aux_ind_1,:);
+end
 sensors_color_table = sensors_color_table(aux_ind_1,:);
 sensors_name = sensors_name(aux_ind_1);
 elseif evalin('base','zef.cp_mode') == 2
 aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
 sensors = sensors(aux_ind_1,:);
+if not(isempty(sensors_visible))
 sensors_visible = sensors_visible(aux_ind_1,:);
+end
 sensors_color_table = sensors_color_table(aux_ind_1,:);
 sensors_name = sensors_name(aux_ind_1);  
 end

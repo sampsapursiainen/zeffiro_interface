@@ -241,7 +241,7 @@ if evalin('base','zef.cp_on')
     cp_c = evalin('base','zef.cp_c');
     cp_d = evalin('base','zef.cp_d');
     
-    if not(isempty(aux_ind_1))
+    if not(isempty(aux_ind_1)) 
         aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
     else
         aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d);
@@ -261,7 +261,7 @@ if evalin('base','zef.cp2_on')
     cp2_c = evalin('base','zef.cp2_c');
     cp2_d = evalin('base','zef.cp2_d');
     
-    if not(isempty(aux_ind_1))
+    if not(isempty(aux_ind_1)) 
         aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d));
     else
         aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d);
@@ -281,7 +281,7 @@ if evalin('base','zef.cp3_on')
     cp3_c = evalin('base','zef.cp3_c');
     cp3_d = evalin('base','zef.cp3_d');
     
-    if not(isempty(aux_ind_1))
+    if not(isempty(aux_ind_1)) 
         aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d));
     else
         aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d);
@@ -299,13 +299,17 @@ end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     if evalin('base','zef.cp_mode') == 1
         sensors = sensors(aux_ind_1,:);
+        if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
+        end
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
     elseif evalin('base','zef.cp_mode') == 2
         aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
         sensors = sensors(aux_ind_1,:);
+        if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
+        end
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
     end
