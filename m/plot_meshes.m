@@ -802,9 +802,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
             f_ind_aux = 1;
             for f_ind = frame_start + frame_step : frame_step : frame_stop
                 evalin('base',['zef.h_slider.Value=' num2str(f_ind),';']);
-                pause(0.05);
+                pause(0.02);
                 stop_movie = evalin('base','zef.stop_movie');
-                pause(0.05);
+                pause(0.02);
                 if stop_movie
                     if get(evalin('base','zef.h_pause_movie'),'value') == 1
                         waitfor(evalin('base','zef.h_pause_movie'),'value');
