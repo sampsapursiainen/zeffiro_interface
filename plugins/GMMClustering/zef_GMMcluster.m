@@ -93,7 +93,6 @@ for t=1:T
     catch
         GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
             'SharedCovariance',SharedCovariance,'RegularizationValue',reg_value,'Options',options);
-        continue;
     end
     
     if GMModel_aux.BIC < best_BIC
@@ -110,6 +109,7 @@ for t=1:T
     end
     
     end     %end of k loop
+    
     if T > 1
         ind2 = [];
         for k = 1:size(GMModel{t}.mu,1)
