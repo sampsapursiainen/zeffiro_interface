@@ -31,7 +31,7 @@ if ~isfield(zef,'GMMcluster_markercolor')
     zef.GMMcluster_markercolor = zef.GMMclustering.GMMcluster_markercolor.ItemsData{1};
 end
 if ~isfield(zef,'GMMcluster_markersize')
-    zef.GMMcluster_markersize = 16;
+    zef.GMMcluster_markersize = 8;
 end
 if ~isfield(zef,'GMMcluster_markerwidth')
     zef.GMMcluster_markerwidth = 4;
@@ -77,6 +77,7 @@ clear zef_props zef_i
 zef.GMMclustering.GMMcluster_covident.ValueChangedFcn = 'zef.GMMcluster_covident = str2num(zef.GMMclustering.GMMcluster_covident.Value);';
 zef.GMMclustering.GMMcluster_covtype.ValueChangedFcn = 'zef.GMMcluster_covtype = str2num(zef.GMMclustering.GMMcluster_covtype.Value);';
 zef.GMMclustering.GMMcluster_MaxIter.ValueChangedFcn = 'zef.GMMcluster_MaxIter = str2num(zef.GMMclustering.GMMcluster_MaxIter.Value);';
+zef.GMMclustering.GMMcluster_threshold.ValueChangedFcn = 'zef.GMMcluster_threshold = str2num(zef.GMMclustering.GMMcluster_threshold.Value);';
 zef.GMMclustering.GMMcluster_reg.ValueChangedFcn = 'zef.GMMcluster_reg = str2num(zef.GMMclustering.GMMcluster_reg.Value);';
 zef.GMMclustering.GMMcluster_clustnum.ValueChangedFcn = 'zef.GMMcluster_clustnum = str2num(zef.GMMclustering.GMMcluster_clustnum.Value);';
 zef.GMMclustering.GMMcluster_alpha.ValueChangedFcn = 'zef.GMMcluster_alpha=str2num(zef.GMMclustering.GMMcluster_alpha.Value);';
