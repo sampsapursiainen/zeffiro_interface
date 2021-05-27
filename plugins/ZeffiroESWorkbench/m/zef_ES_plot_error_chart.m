@@ -1,56 +1,75 @@
-function [h_colorbar_ES] = zef_ES_plot_error_chart
-
-figure('Name','ZEFFIRO Interface: Error chart tool','NumberTitle','off', ...
-    'ToolBar','figure','MenuBar','none');
-
+function zef_ES_plot_error_chart
+%% Variables and parameters setup
+if not(isfield(evalin('base','zef'),'y_ES_interval'))
+    warning('There are no values calculated yet...')
+    return
+end
 if evalin('base','zef.ES_current_threshold_checkbox') == 0
-    y_ES          = evalin('base','zef.y_ES_interval.y_ES');
-    residual      = evalin('base','zef.y_ES_interval.residual');
-    tolerance_aux = evalin('base','zef.y_ES_interval.optimizer_tolerance');
-    reg_param_aux = evalin('base','zef.y_ES_interval.reg_param');
+    load_aux = evalin('base','zef.y_ES_interval');
 else
-    y_ES          = evalin('base','zef.y_ES_interval_threshold.y_ES');
-    residual      = evalin('base','zef.y_ES_interval_threshold.residual');
-    tolerance_aux = evalin('base','zef.y_ES_interval_threshold.optimizer_tolerance');
-    reg_param_aux = evalin('base','zef.y_ES_interval_threshold.reg_param');
-end
-
-A = zeros(size(y_ES,1),size(y_ES,2));
-B = zeros(size(y_ES,1),size(y_ES,2));
-
-for i = 1:size(y_ES,1)
-    for j = 1:size(y_ES,2)
-        A(i,j) = norm(cell2mat(y_ES(i,j)));
-        B(i,j) = norm(cell2mat(residual(i,j)));
+    try
+        load_aux = evalin('base','zef.y_ES_interval_threshold');
+    catch
+        error('Attempting to plot threshold values that have not yet been calculated. Plotting original values instead.')
     end
 end
-C = B/max(abs(B(:))) + A/max(abs(A(:)));
+loader = zef_ES_error_criteria;
+title_aux = {'Total Dose (L_{1}-Norm)', 'Residual', 'Max Y_{ES}', 'Effective NNZ Currents', 'Local Relative Error', 'Local Relative Magnitude Error', 'Local Orientation Error'};
+%% Figure and Axes
+if isempty(findobj('type','figure','Name','ZEFFIRO Interface: Error chart tool'))
+    f = figure('Name','ZEFFIRO Interface: Error chart tool','NumberTitle','off', ...
+        'ToolBar','figure','MenuBar','none');
+    %set(f,'Position',[1 1430 1300 1050]);
 
-h_axes = gca;
-imagesc(C);
-colormap('jet');
-grid on;
+end
+%% Tab #1 Properties
+h = uitabgroup();
+tab = uitab(h, 'title', 'Panel 1');
+axes('parent', tab);
 
-h_colorbar_ES = colorbar;
-set(h_colorbar_ES, 'ylim', [min(C(:)) max(C(:))]);
+loader_aux = loader(1,1:4);
+titles     = title_aux(1:4);
 
-set(gca, 'XTick', 1:length(reg_param_aux));
-set(gca, 'XTicklabel', reg_param_aux);
-set(gca, 'YTick', 1:length(tolerance_aux));
-set(gca, 'YTicklabel', tolerance_aux);
-xtickangle(90);
-xlabel('Regularization parameter');
-ylabel('Optimizer tolerance');
-
-hold on;
-for i = 1:length(tolerance_aux)
-    for j = 1:length(reg_param_aux)
-        plot(j,i,'k.','MarkerFaceColor','none','MarkerSize',3);
+for w = 1:4
+    sp_var = cell2mat(loader_aux{1,w});
+    subplot(2,2,w)
+    h_map = heatmap(num2str(load_aux.reg_param, '%1.1e'), num2str(load_aux.optimizer_tolerance, '%1.1e'), sp_var);
+    
+    title(char(titles(w)))
+    printing;
+    if w == 4
+        set(h_map, 'CellLabelFormat', '%2.0f')
+    else
+        set(h_map, 'CellLabelFormat', '%1.3f')
     end
 end
-[c, r] = find(C == min(C(C>0),[],'all'),1,'first');
-plot(r,c,'yp','MarkerFaceColor','yellow','MarkerSize',10);
-hold off;
+clear aux titles
+%% Tab #2 Properties
+% Tab #2star_row_idx
+tab = uitab(h, 'title', 'Panel 2');
+a = axes('parent', tab); %#ok<NASGU>
+loader_aux = [loader(1,2) loader(1,5:end)];
+titles = title_aux([2,5:7]);
 
-h_colorbar_ES = [h_axes; h_colorbar_ES];
+for w = 1:4
+    sp_var = cell2mat(loader_aux{1,w});
+    subplot(2,2,w)
+    
+    h_map = heatmap(num2str(load_aux.reg_param, '%1.1e'), num2str(load_aux.optimizer_tolerance, '%1.1e'), sp_var);
+    
+    title(char(titles(w)))
+    printing;
+    if w == 4
+        set(h_map, 'CellLabelFormat', '%2.0f')
+    else
+        set(h_map, 'CellLabelFormat', '%1.3f')
+    end
+end
+%% Wrapping up, functions and return of variables
+    function printing
+        colormap('jet');
+        set(h_map.NodeChildren(3), 'XTickLabelRotation', 90)
+        xlabel('Regularization parameter');
+        ylabel('Optimizer tolerance');
+    end
 end
