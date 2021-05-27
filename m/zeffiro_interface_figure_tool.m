@@ -31,11 +31,14 @@ addToolbarExplorationButtons(zef.h_zeffiro);
 
 zef.stop_movie = 0;
 zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.43 0.9 0.55],'FontSize',0.587962962962963);
-zef.h_stop_movie = uicontrol('Style','PushButton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.664473684210526 0.26 0.15 0.06],'String','Stop','Callback','if zef.stop_movie == 1; zef.stop_movie = 0; set(zef.h_stop_movie,''foregroundcolor'',[0 0 0]); set(zef.h_stop_movie,''string'',''Stop'');else; zef.stop_movie = 1; set(zef.h_stop_movie,''foregroundcolor'',[1 0 0]); set(zef.h_stop_movie,''string'',''Stopped''); end; set(zef.h_stop_movie,''value'',zef.stop_movie);');
-zef.h_pause_movie = uicontrol('Style','PushButton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.82 0.26 0.15 0.06],'String','Pause','Callback','if zef.stop_movie == 1; zef.stop_movie = 0; set(zef.h_pause_movie,''foregroundcolor'',[0 0 0]); set(zef.h_pause_movie,''string'',''Pause'');else; zef.stop_movie = 1; set(zef.h_pause_movie,''foregroundcolor'',[1 0 0]); set(zef.h_pause_movie,''string'',''Paused''); end; set(zef.h_pause_movie,''value'',zef.stop_movie);');
+zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.664473684210526 0.26 0.15 0.06],'String','Stop','Callback',@zef_callbackstop);
+zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.82 0.26 0.15 0.06],'String','Pause','Callback',@zef_callbackpause);
 zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.345394736842105 0.27 0.25 0.04],'String','Loop on / count:','Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
 zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.5888 0.27 0.05 0.04],'String','Loop visualization','Callback','zef.loop_count = str2num(get(zef.h_loop_count,''string''));','HorizontalAlignment','right');
+zef.h_slider=uicontrol('Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.02 0.27 0.30 0.04],'Min',1*(~isempty(zef.reconstruction)),'Max',0.99*(isempty(zef.reconstruction))+length(zef.reconstruction),'Value',mean([1*(~isempty(zef.reconstruction)),0.99*(isempty(zef.reconstruction))+length(zef.reconstruction)]),'Sliderstep',min([[1-1e-6 1];[1 5]/(0.99*(isempty(zef.reconstruction))+length(zef.reconstruction)-1*(~isempty(zef.reconstruction)))]),'Callback','zef_slidding_callback;');
 set(zef.h_loop_movie_count,'string',num2str(zef.loop_movie_count));
+
+
 
 imagesc(zef.h_axes1,flipud(imread('zeffiro_interface.png')));
 set(zef.h_axes1,'YDir','normal');

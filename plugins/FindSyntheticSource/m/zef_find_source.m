@@ -3,11 +3,18 @@
 function [meas_data] = zef_find_source
 source_positions = evalin('base','zef.source_positions');
 noise_level = 10^(evalin('base','zef.inv_synth_source(1,8)')/20);       %dipole noise
+if noise_level > 1
+    warning(['Noise level ',num2str(evalin('base','zef.inv_synth_source(1,8)')),' corresponds to ',num2str(round(100*noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
+end
 if ~isempty(evalin('base','zef.fss_bg_noise'))
 bg_noise_level = 10^(evalin('base','zef.fss_bg_noise')/20);    %background noise
 else
 bg_noise_level = 0;
 end
+if bg_noise_level > 1
+    warning(['Background noise level ',num2str(evalin('base','zef.fss_bg_noise')),' corresponds to ',num2str(round(100*bg_noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
+end
+
 s_p = evalin('base','zef.inv_synth_source(:,1:3)');
 s_o = evalin('base','zef.inv_synth_source(:,4:6)');
 s_o = s_o./repmat(sqrt(sum(s_o.^2,2)),1,3);
@@ -31,7 +38,7 @@ else
             time_seq = evalin('base','zef.time_sequence');
         end
     else
-        if size(evalin('base','zef.time_sequence'),1) > length(evalin('base','zef.find_synth_source.selected_source'))
+        if evalin('base','str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
             time_seq = evalin('base','zef.time_sequence(zef.find_synth_source.selected_source,length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
         else
             time_seq = evalin('base','zef.time_sequence(:,length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
