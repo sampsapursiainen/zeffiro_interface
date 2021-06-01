@@ -720,7 +720,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             end
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
-                            set(gca,'CLim',[min_rec max_rec]);
+                            set(gca,'CLim',gather([min_rec max_rec]));
                             set(h_surf_2{i},'specularstrength',0.2);
                             set(h_surf_2{i},'specularexponent',0.8);
                             set(h_surf_2{i},'SpecularColorReflectance',0.8);
