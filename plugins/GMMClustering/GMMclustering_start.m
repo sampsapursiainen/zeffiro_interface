@@ -58,6 +58,16 @@ if ~isfield(zef,'GMMcluster_stopframe')
         zef.GMMcluster_stopframe = 1;
     end
 end
+if ~isfield(zef,'GMMcluster_c_startframe')
+    zef.GMMcluster_c_startframe = 1;
+end
+if ~isfield(zef,'GMMcluster_c_stopframe')
+    if iscell(zef.reconstruction)
+        zef.GMMcluster_c_stopframe = length(zef.reconstruction);
+    else
+        zef.GMMcluster_c_stopframe = 1;
+    end
+end
 
 %set parameters if saved in ZI: 
 %(Naming concept: zef.GMMclustering."field" = zef."field")
@@ -81,6 +91,9 @@ zef.GMMclustering.GMMcluster_threshold.ValueChangedFcn = 'zef.GMMcluster_thresho
 zef.GMMclustering.GMMcluster_reg.ValueChangedFcn = 'zef.GMMcluster_reg = str2num(zef.GMMclustering.GMMcluster_reg.Value);';
 zef.GMMclustering.GMMcluster_clustnum.ValueChangedFcn = 'zef.GMMcluster_clustnum = str2num(zef.GMMclustering.GMMcluster_clustnum.Value);';
 zef.GMMclustering.GMMcluster_alpha.ValueChangedFcn = 'zef.GMMcluster_alpha=str2num(zef.GMMclustering.GMMcluster_alpha.Value);';
+zef.GMMclustering.GMMcluster_c_startframe.ValueChangedFcn = 'zef.GMMcluster_c_startframe=str2num(zef.GMMclustering.GMMcluster_c_startframe.Value);';
+zef.GMMclustering.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMMcluster_c_stopframe=str2num(zef.GMMclustering.GMMcluster_c_stopframe.Value);';
+
 zef.GMMclustering.GMMcluster_markercolor.ValueChangedFcn = 'zef.GMMcluster_markercolor=zef.GMMclustering.GMMcluster_markercolor.Value;';
 zef.GMMclustering.GMMcluster_markersize.ValueChangedFcn = 'zef.GMMcluster_markersize=str2num(zef.GMMclustering.GMMcluster_markersize.Value);';
 zef.GMMclustering.GMMcluster_markerwidth.ValueChangedFcn = 'zef.GMMcluster_markerwidth=str2num(zef.GMMclustering.GMMcluster_markerwidth.Value);';

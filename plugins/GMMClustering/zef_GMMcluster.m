@@ -31,10 +31,12 @@ threshold = evalin('base','zef.GMMcluster_threshold');
 reg_value = evalin('base','zef.GMMcluster_reg');
 
 if iscell(z_vec)
-    T=length(z_vec);
+    T=evalin('base','zef.GMMcluster_c_stopframe');
+    t_start = evalin('base','zef.GMMcluster_c_startframe');
     GMModel=cell(T,1);
     GMModelDipoles=cell(T,1);
 else
+    t_start=1;
     T=1;
 end
 
@@ -44,7 +46,7 @@ end
 
 waitbar(0,h,['Step 1 of ',num2str(T),'. Please wait.']);
 tic;
-for t=1:T
+for t=t_start:T
     best_BIC = Inf;
     if T > 1
         time_val = toc;
@@ -117,7 +119,7 @@ for t=1:T
         end
         disp(['Relative centroid current densities at the frame ',num2str(t),': ',num2str(J(ind2)'/max(J))])
         GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,1:3);
-        waitbar(t/T,h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
+        waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
         for k = 1:size(GMModel.mu,1)
