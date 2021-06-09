@@ -13,7 +13,7 @@ zef.LeadFieldProcessingTool.auxData.imaging_method=zef.imaging_method;
 
 zef.LeadFieldProcessingTool.auxData.measurements = zef.measurements;
 zef.LeadFieldProcessingTool.auxData.noise_data = zef.noise_data;
-zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor = zef.lf_bank_scaling_factor;
+%zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor = zef.lf_bank_scaling_factor;
 zef.LeadFieldProcessingTool.auxData.lf_tag = zef.lf_tag;
 
 

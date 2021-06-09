@@ -3,6 +3,7 @@
 
 zef.LeadFieldProcessingTool.combineNew=true;
 zef.LeadFieldProcessingTool.combinePoints=zef.LeadFieldProcessingTool.app.NoisestartSpinner.Value:zef.LeadFieldProcessingTool.app.NoiseendSpinner.Value;
+zef.LeadFieldProcessingTool.combineData=[];
 for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bankSize
     
     if zef.LeadFieldProcessingTool.app.BankTable.Data{zef_LeadFieldProcessingTool_index_combine, 5}
@@ -53,8 +54,12 @@ for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bank
                 (1./zef.LeadFieldProcessingTool.combineData.noise).*zef.LeadFieldProcessingTool.auxData.noise_data);
         end
         
-        zef.LeadFieldProcessingTool.combineData.sensors = vertcat(zef.LeadFieldProcessingTool.combineData.sensors , zef.LeadFieldProcessingTool.auxData.sensors);
         
+        if isempty(zef.LeadFieldProcessingTool.combineData.sensors)
+            zef.LeadFieldProcessingTool.combineData.sensors = vertcat(zef.LeadFieldProcessingTool.combineData.sensors, zef.LeadFieldProcessingTool.auxData.sensors(:,1:3));
+        else
+            zef.LeadFieldProcessingTool.combineData.sensors = vertcat(zef.LeadFieldProcessingTool.combineData.sensors(:,1:3) , zef.LeadFieldProcessingTool.auxData.sensors(:,1:3));
+        end
         
         
     end

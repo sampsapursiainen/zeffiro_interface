@@ -17,7 +17,7 @@ zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.measu
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.noise_data = zef.LeadFieldProcessingTool.auxData.noise_data;
 
 
-zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor;
+%zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor;
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.lf_tag = zef.LeadFieldProcessingTool.auxData.lf_tag;
 
 
