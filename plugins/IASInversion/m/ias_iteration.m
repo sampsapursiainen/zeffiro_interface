@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [z] = ias_iteration(void)
+function [z,reconstruction_information] = ias_iteration(void)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
@@ -21,6 +21,20 @@ number_of_frames = evalin('base','zef.ias_number_of_frames');
 time_step = evalin('base','zef.ias_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
+
+reconstruction_information.tag = 'IAS';
+reconstruction_information.inv_time_1 = evalin('base','zef.ias_time_1');
+reconstruction_information.inv_time_2 = evalin('base','zef.ias_time_2');
+reconstruction_information.inv_time_3 = evalin('base','zef.ias_time_3');
+reconstruction_information.sampling_freq = evalin('base','zef.ias_sampling_frequency');
+reconstruction_information.low_pass = evalin('base','zef.ias_high_cut_frequency');
+reconstruction_information.high_pass = evalin('base','zef.ias_low_cut_frequency');
+reconstruction_information.number_of_frames = evalin('base','zef.ias_number_of_frames');
+reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
+reconstruction_information.source_directions = evalin('base','zef.source_directions');
+reconstruction_information.ias_hyperprior = evalin('base','zef.ias_hyperprior');
+reconstruction_information.snr_val = evalin('base','zef.ias_snr');
+reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measurement_db');
 
 if source_direction_mode == 2
 
