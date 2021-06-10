@@ -11,11 +11,9 @@ sizeL2=procFile.sizeL2;
 n_interp=procFile.n_interp;
 
 z=cell(size(z_inverse));
-for f_ind=1:size(z_inverse,1)
+for f_ind=1:length(z_inverse)
 z_vec=z_inverse{f_ind};
     
-
-
     
     if ismember(source_direction_mode, [1,2])
         z_aux = zeros(sizeL2,1);

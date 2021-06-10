@@ -25,7 +25,7 @@ else
 end
 
 
-if Optional_averaging_bool && size(f ,2) > 1 
+if Optional_averaging_bool && size(f,2) > 1 
     f = mean(f,2);
 end
 
