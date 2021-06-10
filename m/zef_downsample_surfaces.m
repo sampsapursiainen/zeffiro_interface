@@ -1,63 +1,9 @@
 
 zef.h = waitbar(0,'Downsampling surfaces.');
 zef.temp_time = now;
-zef.number_of_compartments = 27;
+zef.number_of_compartments = length(zef.compartment_tags);
 for zef_k = 1 : zef.number_of_compartments
-switch zef_k
-    case 1
-        zef.temp_var_0 = 'd1';
-     case 2
-        zef.temp_var_0 = 'd2';
-     case 3
-        zef.temp_var_0 = 'd3';
-     case 4
-        zef.temp_var_0 = 'd4';
-     case 5
-        zef.temp_var_0 = 'd5';
-     case 6
-        zef.temp_var_0 = 'd6';
-     case 7
-        zef.temp_var_0 = 'd7';
-     case 8
-        zef.temp_var_0 = 'd8';
-    case 9
-        zef.temp_var_0 = 'd9';
-     case 10
-        zef.temp_var_0 = 'd10';
-     case 11
-        zef.temp_var_0 = 'd11';
-     case 12
-        zef.temp_var_0 = 'd12';
-     case 13
-        zef.temp_var_0 = 'd13';
-  case 14
-        zef.temp_var_0 = 'd14';
-  case 15
-        zef.temp_var_0 = 'd15';
-     case 16
-        zef.temp_var_0 = 'd16';
-     case 17
-        zef.temp_var_0 = 'd17';
-    case 18
-        zef.temp_var_0 = 'd18';
-     case 19
-        zef.temp_var_0 = 'd19';
-     case 20
-        zef.temp_var_0 = 'd20';
-     case 21
-        zef.temp_var_0 = 'd21';
-     case 22
-        zef.temp_var_0 = 'd22';
-    case 23
-        zef.temp_var_0 = 'w';
-    case 24
-        zef.temp_var_0 = 'g';
-    case 25
-        zef.temp_var_0 = 'c';
-     case 26
-        zef.temp_var_0 = 'sk';
-     case 27
-        zef.temp_var_0 = 'sc';
+        zef.temp_var_0 = compartment_tags{zef_k};
 end    
 
 if evalin('base',['zef.' zef.temp_var_0 '_on']) 

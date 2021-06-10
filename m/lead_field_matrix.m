@@ -37,33 +37,11 @@ zef.aux_vec = setdiff(zef.brain_ind,zef.non_source_ind);
 end
 zef.aux_vec = zef.aux_vec(randperm(length(zef.aux_vec)));
 zef.n_sources_old = zef.n_sources;
-zef.w_sources_old = zef.w_sources;
-zef.d1_sources_old = zef.d1_sources;
-zef.d2_sources_old = zef.d2_sources;
-zef.d3_sources_old = zef.d3_sources;
-zef.d4_sources_old = zef.d4_sources;
-zef.d5_sources_old = zef.d5_sources;
-zef.d6_sources_old = zef.d6_sources;
-zef.d7_sources_old = zef.d7_sources;
-zef.d8_sources_old = zef.d8_sources;
-zef.d9_sources_old = zef.d9_sources;
-zef.d10_sources_old = zef.d10_sources;
-zef.d11_sources_old = zef.d11_sources;
-zef.d12_sources_old = zef.d12_sources;
-zef.d13_sources_old = zef.d13_sources;
-zef.d14_sources_old = zef.d14_sources;
-zef.d15_sources_old = zef.d15_sources;
-zef.d16_sources_old = zef.d16_sources;
-zef.d17_sources_old = zef.d17_sources;
-zef.d18_sources_old = zef.d18_sources;
-zef.d19_sources_old = zef.d19_sources;
-zef.d20_sources_old = zef.d20_sources;
-zef.d21_sources_old = zef.d21_sources;
-zef.d22_sources_old = zef.d22_sources;
-zef.g_sources_old = zef.g_sources;
-zef.c_sources_old = zef.c_sources;
-zef.sk_sources_old = zef.sk_sources;
-zef.sc_sources_old = zef.sc_sources;
+for zef_i = 1 : length(zef.compartment_tags)
+evalin('base',['zef.' zef.compartment_tags{zef_i} '_sources_old = zef.' zef.compartment_tags{zef_i} '_sources;']);
+end
+clear zef_i;
+zef.lf_tag = zef.imaging_method_cell{zef.imaging_method};
 zef.source_ind = zef.aux_vec(1:min(zef.n_sources,length(zef.aux_vec)));
 zef.n_sources_mod = 0;
 end
