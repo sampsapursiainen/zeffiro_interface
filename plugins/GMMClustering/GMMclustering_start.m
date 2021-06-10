@@ -104,9 +104,9 @@ zef.GMMclustering.GMMcluster_elliptrans.ValueChangedFcn = 'zef.GMMcluster_ellipt
 zef.GMMclustering.GMMcluster_startframe.ValueChangedFcn = 'zef.GMMcluster_startframe=str2num(zef.GMMclustering.GMMcluster_startframe.Value);';
 zef.GMMclustering.GMMcluster_stopframe.ValueChangedFcn = 'zef.GMMcluster_stopframe=str2num(zef.GMMclustering.GMMcluster_stopframe.Value);';
 
-zef.GMMclustering.StartButton.ButtonPushedFcn = '[zef.GMModel,zef.GMModelDipoles] = zef_GMM_cluster;';
+zef.GMMclustering.StartButton.ButtonPushedFcn = '[zef.GMModel,zef.GMModelDipoles] = zef_GMMcluster;';
 zef.GMMclustering.CloseButton.ButtonPushedFcn = 'delete(zef.GMMclustering);';
-zef.GMMclustering.PlotButton.ButtonPushedFcn = 'zef_PlotGMM_cluster;';
+zef.GMMclustering.PlotButton.ButtonPushedFcn = 'zef_PlotGMMcluster;';
 zef.GMMclustering.ExportButton.ButtonPushedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uiputfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uiputfile(''*.mat'',''Save Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_GMModel = zef.GMModel; zef_GMModelDipoles=zef.GMModelDipoles; save(fullfile(zef_aux_path,zef_aux_file),''zef_GMModel'',''zef_GMModelDipoles'',''-v7.3''); clear zef_GMModel zef_GMModelDipoles; end; clear zef_aux_file zef_aux_path;';
 zef.GMMclustering.ImportButton.ButtonPushedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_aux = struct2cell(load(fullfile(zef_aux_path,zef_aux_file))); zef.GMModel = zef_aux{1}; zef.GMModelDipoles = zef_aux{2}; end; clear zef_aux zef_aux_file zef_aux_path;';
 
