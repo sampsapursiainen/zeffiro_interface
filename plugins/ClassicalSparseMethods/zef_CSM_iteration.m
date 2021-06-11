@@ -463,8 +463,7 @@ if method_type == 1 || method_type == 2
     
     %__ dSPM __
     %Source covariance
-    C_s = eye(size(L,2));
-    P = C_s*L'/(L*C_s*L'+S_mat);
+    P = L'/(L*L'+S_mat);
     if method_type == 1
         d = 1./sqrt(diag(P*S_mat*P'));
         z_vec = d.*P*f;
