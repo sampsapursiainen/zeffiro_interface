@@ -1,6 +1,26 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [z] = zef_dipoleScan
+function [z, reconstruction_information] = zef_dipoleScan
+
+
+
+
+%super unelegant call for the information
+reconstruction_information.tag = 'Dipole';
+reconstruction_information.type = 'Dipole';
+reconstruction_information.inv_time_1 = evalin('base','zef.inv_time_1');
+reconstruction_information.inv_time_2 = evalin('base','zef.inv_time_2');
+reconstruction_information.inv_time_3 = evalin('base','zef.inv_time_3');
+reconstruction_information.sampling_freq = evalin('base','zef.inv_sampling_frequency');
+reconstruction_information.low_pass = evalin('base','zef.inv_high_cut_frequency');
+reconstruction_information.high_pass = evalin('base','zef.inv_low_cut_frequency');
+reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
+reconstruction_information.source_directions = evalin('base','zef.source_directions');
+reconstruction_information.inv_hyperprior = evalin('base','zef.inv_hyperprior');
+reconstruction_information.snr_val = evalin('base','zef.inv_snr');
+reconstruction_information.number_of_frames = evalin('base','zef.number_of_frames');
+
+
 
 
 h = waitbar(0,'Dipole scanning');
