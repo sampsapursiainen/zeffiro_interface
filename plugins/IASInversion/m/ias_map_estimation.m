@@ -15,6 +15,8 @@ set(zef.h_ias_map_estimation,'Name','ZEFFIRO Interface: IAS MAP estimation');
 set(findobj(zef.h_ias_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_ias_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+set(zef.h_ias_start,'Callback','zef_update_ias; [zef.reconstruction, zef.reconstruction_information] = ias_iteration([]);');
+
 zef_init_ias;
 
 uistack(flipud([zef.h_ias_hyperprior ; 
