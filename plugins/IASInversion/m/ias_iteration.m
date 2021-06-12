@@ -21,11 +21,6 @@ number_of_frames = evalin('base','zef.ias_number_of_frames');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 
-evalin('base','zef.inv_time_1 = zef.ias_time_1;');
-evalin('base','zef.inv_time_2 = zef.ias_time_2;');
-evalin('base','zef.inv_time_3 = zef.ias_time_3;');
-evalin('base','zef.inv_sampling_frequency = zef.ias_sampling_frequency;');
-
 reconstruction_information.tag = 'IAS';
 reconstruction_information.inv_time_1 = evalin('base','zef.ias_time_1');
 reconstruction_information.inv_time_2 = evalin('base','zef.ias_time_2');
@@ -39,7 +34,6 @@ reconstruction_information.source_directions = evalin('base','zef.source_directi
 reconstruction_information.ias_hyperprior = evalin('base','zef.ias_hyperprior');
 reconstruction_information.snr_val = evalin('base','zef.ias_snr');
 reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measurement_db');
-
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
