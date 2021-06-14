@@ -24,9 +24,13 @@ clear indexOfMinimumTrueElement;
 
 %% copy the information to the zef file
 
-zef.inv_time_1=zef.reconstruction_information.inv_time_1;
-zef.inv_time_2=zef.reconstruction_information.inv_time_2;
-zef.inv_time_3=zef.reconstruction_information.inv_time_3;
-zef.inv_sampling_frequency=zef.reconstruction_information.inv_sampling_frequency;
 
+if isfield(zef.reconstruction_information, 'inv_time_1') && isfield(zef.reconstruction_information, 'inv_time_2') ...
+        && isfield(zef.reconstruction_information, 'inv_time_3') && isfield(zef.reconstruction_information, 'inv_sampling_frequency')
+    zef.inv_time_1=zef.reconstruction_information.inv_time_1;
+    zef.inv_time_2=zef.reconstruction_information.inv_time_2;
+    zef.inv_time_3=zef.reconstruction_information.inv_time_3;
+    zef.inv_sampling_frequency=zef.reconstruction_information.inv_sampling_frequency;
+
+end
 
