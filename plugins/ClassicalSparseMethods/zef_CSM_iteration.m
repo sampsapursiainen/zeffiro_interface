@@ -79,7 +79,7 @@ if method_type == 1 || method_type == 2
     P = L'/(L*L'+S_mat);
     if method_type == 1
         %d = 1./sqrt(diag(P*S_mat*P'));
-        d = 1./sqrt(sum(P.'.*(S_mat*P'),1))';
+        d = 1./sqrt(sum((P.*P').*diag(S_mat)));
         z_vec = d.*P*f;
     else
         %__ sLORETA __
