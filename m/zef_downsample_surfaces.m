@@ -3,8 +3,7 @@ zef.h = waitbar(0,'Downsampling surfaces.');
 zef.temp_time = now;
 zef.number_of_compartments = length(zef.compartment_tags);
 for zef_k = 1 : zef.number_of_compartments
-        zef.temp_var_0 = compartment_tags{zef_k};
-end    
+        zef.temp_var_0 = zef.compartment_tags{zef_k};    
 
 if evalin('base',['zef.' zef.temp_var_0 '_on']) 
 if evalin('base',['isfield(zef,"' zef.temp_var_0 '_points_original_surface_mesh")'])
