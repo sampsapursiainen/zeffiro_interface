@@ -60,7 +60,7 @@ if ismember(evalin('base','zef.visualization_type'), [3])
         end
         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
             if evalin('base','zef.inv_scale') == 1
-                min_rec_log10 = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                min_rec_log_10 = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                 max_rec = -min_rec_log10 + 20*log10(max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                 min_rec = 0;
             elseif evalin('base','zef.inv_scale') == 2
