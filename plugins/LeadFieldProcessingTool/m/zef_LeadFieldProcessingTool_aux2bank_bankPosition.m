@@ -8,6 +8,10 @@ zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.sourc
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.L = zef.LeadFieldProcessingTool.auxData.L;
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.sensors = zef.LeadFieldProcessingTool.auxData.sensors;
 
+
+%this script gets more convoluted every time I update it. Should I copy
+%every field?
+%these could make a problem
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.imaging_method_Name = zef.imaging_method_cell{zef.LeadFieldProcessingTool.auxData.imaging_method};
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.imaging_method = zef.LeadFieldProcessingTool.auxData.imaging_method;
 
@@ -19,6 +23,13 @@ zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.noise
 
 %zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor;
 zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.lf_tag = zef.LeadFieldProcessingTool.auxData.lf_tag;
+
+zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.source_structure=zef.LeadFieldProcessingTool.auxData.source_structure;
+zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}.compartment_tags=zef.LeadFieldProcessingTool.auxData.compartment_tags;
+
+
+
+
 
 
 zef_LeadfieldProcessingTool_updateTable;

@@ -6,8 +6,8 @@ if ~isfield(zef, 'reconstruction_information')
 end
 
 
-if isfield(zef, 'reconstruction_info') && isfield(zef.reconstruction_info, 'tag')
-    zef.reconstructionTool.currentInfo{1}=zef.reconstruction_info;
+if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'tag')
+    zef.reconstructionTool.currentInfo{1}=zef.reconstruction_information.tag;
 else
     zef.reconstructionTool.currentInfo{1}='';
 end

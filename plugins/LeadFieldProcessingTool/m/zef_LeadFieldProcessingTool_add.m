@@ -13,6 +13,19 @@ zef.LeadFieldProcessingTool.auxData.noise_data = zef.noise_data;
 zef.LeadFieldProcessingTool.auxData.scaling_factor = zef.lf_bank_scaling_factor;
 zef.LeadFieldProcessingTool.auxData.lf_tag = zef.lf_tag;
 
+zef.LeadFieldProcessingTool.auxData.source_structure = cell(0,0);
+
+for zef_ind=1:length(zef.compartment_tags)
+
+    zef_name=strcat(zef.compartment_tags{zef_ind}, '_sources');
+    
+    zef.LeadFieldProcessingTool.auxData.source_structure{zef_ind}=zef.(zef_name);
+    %evalin('base', ['zef.' zef.compartment_tags{zef_ind} '_sources']);
+    
+end
+    
+    
+
 zef_LeadFieldProcessingTool_aux2bank; %aux data is deleted in aux2bank
 
 
