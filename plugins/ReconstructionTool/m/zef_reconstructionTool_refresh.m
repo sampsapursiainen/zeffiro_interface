@@ -12,8 +12,18 @@ else
     zef.reconstructionTool.currentInfo{1}='';
 end
 
-zef.reconstructionTool.currentInfo{2}='?';
-zef.reconstructionTool.currentInfo{3}='?';
+if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'type')
+    zef.reconstructionTool.currentInfo{2}=zef.reconstruction_information.type;
+else
+    zef.reconstructionTool.currentInfo{2}='?';
+end
+
+if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'modality')
+    zef.reconstructionTool.currentInfo{3}=zef.reconstruction_information.modality;
+else
+    zef.reconstructionTool.currentInfo{3}='?';
+end
+
 
 if iscell(zef.reconstruction)
     zef.reconstructionTool.currentInfo{4}=size(zef.reconstruction, 1);
