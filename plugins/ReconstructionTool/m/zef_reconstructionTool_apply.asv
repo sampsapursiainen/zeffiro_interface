@@ -38,8 +38,7 @@ for index=1:zef.reconstructionTool.bankSize
             zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction=newRec;
             zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information=zef.reconstructionTool.bankReconstruction{index,1}.reconstruction_information;
             zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.appliedFunction=zef.reconstructionTool.app.FunctionDropDown.Value;
-            zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.tag = ...
-                strcat(zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.tag, zef.reconstructionTool.app.FunctionDropDown.Value);
+                        zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.appliedFunction=zef.reconstructionTool.app.FunctionDropDown.Value;
 
             
             
