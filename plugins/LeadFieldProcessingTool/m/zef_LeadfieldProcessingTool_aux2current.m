@@ -28,20 +28,20 @@ for zef_LeadFieldProcessingTool_index=1:zef.LeadFieldProcessingTool.bankSize
         zef.LeadFieldProcessingTool.app.currentLeadfield.Data={zef.lf_tag, zef.imaging_method_cell{zef.imaging_method}, size(zef.sensors, 1), size(zef.source_positions, 1)};
 
         
-        
-        zef.compartment_tags=cell(0,0);
-        for zef_ind=1:length(zef.LeadFieldProcessingTool.auxData.compartment_tags)
-            
-            zef_name=strcat(zef.LeadFieldProcessingTool.auxData.compartment_tags{zef_ind}, '_sources');
-            
-            zef.(zef_name)=zef.LeadFieldProcessingTool.auxData.source_structure{zef_ind};
-            
-            
-            %evalin('base', ['zef.' zef.compartment_tags{zef_ind} '_sources']);
-            
+        if isfield(zef.LeadFieldProcessingTool.auxData, 'compartment_tags')
+            zef.compartment_tags=cell(0,0);
+            for zef_ind=1:length(zef.LeadFieldProcessingTool.auxData.compartment_tags)
+                
+                zef_name=strcat(zef.LeadFieldProcessingTool.auxData.compartment_tags{zef_ind}, '_sources');
+                
+                zef.(zef_name)=zef.LeadFieldProcessingTool.auxData.source_structure{zef_ind};
+                
+                
+                %evalin('base', ['zef.' zef.compartment_tags{zef_ind} '_sources']);
+                
+            end
+            clear zef_ind zef_name;
         end
-        clear zef_ind zef_name;
-        
         
         
         
