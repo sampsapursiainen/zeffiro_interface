@@ -56,7 +56,7 @@ if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_submesh_ind));'])
     end
 else 
    zef.temp_patch_data.faces = zef.temp_patch_data.faces_all;
-   zef.temp_patch_data.faces = zef.temp_patch_data.vertices_all;
+   zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all;
    zef.temp_patch_data_aux = reducepatch(zef.temp_patch_data,min(1,zef.max_surface_face_count/size(zef.temp_patch_data.faces,1)));
         if evalin('base',['zef.' zef.temp_var_0 '_sources'])
      zef.temp_patch_data_aux.vertices_inflated = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
