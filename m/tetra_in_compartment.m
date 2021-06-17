@@ -80,7 +80,7 @@ end
 
 end
 
-waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+waitbar(1,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(now)) '.']);
 
 ind_vec(I) = gather(ind_vec_aux);
 I = find(ind_vec > evalin('base','zef.meshing_threshold'));
