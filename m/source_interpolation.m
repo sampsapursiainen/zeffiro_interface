@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
+h = waitbar(0,['Interpolation 1.']);  
+
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
 nodes = evalin('base','zef.nodes');
