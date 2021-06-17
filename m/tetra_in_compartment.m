@@ -50,6 +50,7 @@ use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
 
 if use_gpu == 1 & gpuDeviceCount > 0
+gpuDevice(gpu_num);
 nodes_aux = gpuArray(nodes_aux);
 aux_vec_1 = gpuArray(aux_vec_1);
 aux_vec_4 = gpuArray(aux_vec_4);
