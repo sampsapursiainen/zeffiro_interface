@@ -36,6 +36,7 @@ use_gpu  = evalin('base','zef.use_gpu');
 gpu_num  = evalin('base','zef.gpu_num');
 
 if use_gpu == 1 & gpuDeviceCount > 0
+gpuDevice(gpu_num);
 center_points = gpuArray(center_points);
 source_positions = gpuArray(source_positions);
 source_interpolation_aux = gpuArray(source_interpolation_aux);
