@@ -5,8 +5,6 @@ zef_data.file_path = zef.file_path;
 zef_init;
 zef.save_file = zef.file; 
 zef.save_file_path = zef.file_path;     
-zef_close_tools;
-zef_close_figs;
 load([zef.file_path zef.file]);
 
 zef_data.save_file_path = zef.save_file_path;
