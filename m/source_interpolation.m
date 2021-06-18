@@ -3,7 +3,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
-h = waitbar(0,['Interpolation 1.']);
+h = waitbar(0,['Interpolation 1.']);   
+
 
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
@@ -61,7 +62,7 @@ source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
 if i == 1
-h = waitbar(i/size_center_points,['Interpolation 1.']);    
+waitbar(i/size_center_points,h,['Interpolation 1.']);    
 elseif mod(i_ind,bar_ind)==0 
 waitbar(i/size_center_points,h,['Interpolation 1. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
