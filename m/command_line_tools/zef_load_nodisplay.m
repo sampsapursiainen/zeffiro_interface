@@ -2,10 +2,13 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef_data.file = zef.file; 
 zef_data.file_path = zef.file_path;
-
+ 
 zef_init;   
 load([zef.file_path zef.file]);  
 zef_remove_object_fields;
+
+zef_data.save_file_path = zef.save_file_path;
+zef_data.save_file = zef.save_file;
 
 zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
