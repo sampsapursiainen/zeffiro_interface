@@ -4,6 +4,8 @@ zef_data.file = zef.file;
 zef_data.file_path = zef.file_path;
  
 zef_init;   
+zef.save_file = zef.file; 
+zef.save_file_path = zef.file_path;   
 load([zef.file_path zef.file]);  
 zef_remove_object_fields;
 
