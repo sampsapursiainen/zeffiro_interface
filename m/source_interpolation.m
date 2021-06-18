@@ -3,6 +3,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
+h = waitbar(1,['Interpolation 1.']);
+
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
 nodes = evalin('base','zef.nodes');
@@ -73,7 +75,7 @@ source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
 end
 source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_ind), length(brain_ind), 4); 
 
-waitbar(1,h,['Interpolation 1. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interpolation 1. Ready: ' datestr(datevec(now)) '.']);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -171,7 +173,7 @@ triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triangles); 
 
 
-waitbar(1,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now)) '.']);
 
 end
 
@@ -241,7 +243,7 @@ source_interpolation_ind{3} = (gather(source_interpolation_aux));
 % triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind) '}']);
 % source_interpolation_ind{2} = source_interpolation_ind{2}(triangles); 
 
-waitbar(1,h,['Interp. 3: Ready: ' datestr(datevec(now+(size_source_positions/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interp. 3: Ready: ' datestr(datevec(now)) '.']);
 
 close(h)
 
