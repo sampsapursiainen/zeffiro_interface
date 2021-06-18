@@ -40,6 +40,5 @@ zef_data.mlapp = zef.mlapp;
  
 clear zef_data;
 
-
-
+zef_update_compartments_nodisplay;
 
