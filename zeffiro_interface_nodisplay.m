@@ -1,4 +1,3 @@
-
 if not(exist('zef'))
     zef = [];
 end
@@ -8,6 +7,7 @@ if isfield(zef,'h_zeffiro_window_main')
         error('Another instance of Zeffiro interface already open.')
     end
 end
+
 clear zef;
 zef.ver = ver;
 if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
@@ -17,7 +17,6 @@ zef = rmfield(zef, 'ver');
 zef.program_path = cd; 
 if not(isdeployed)
 zef.code_path = '/m';
-addpath(genpath([zef.program_path]));
 addpath(genpath([zef.program_path '/m']));
 addpath(genpath([zef.program_path '/mlapp']));
 addpath([zef.program_path '/fig']);  
@@ -41,11 +40,13 @@ zef.movie_fps = str2num(zef.ini_cell{1}{18});
 zef.font_size = str2num(zef.ini_cell{1}{20});
 zef.mlapp = str2num(zef.ini_cell{1}{22});
 zef = rmfield(zef,'ini_cell');
-
-zef_data = zef;
 zef_init;
 
 zef.clear_axes1 = 0;
+
+zef_update_compartments_nodisplay;
+
+
 
 
 
