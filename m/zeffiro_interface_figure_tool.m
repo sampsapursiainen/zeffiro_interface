@@ -30,7 +30,7 @@ zef.h_zeffiro = figure(...
 addToolbarExplorationButtons(zef.h_zeffiro);
 
 zef.stop_movie = 0;
-zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.43 0.9 0.55],'FontSize',0.587962962962963);
+zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.43 0.9 0.55],'FontSize',0.587962962962963,'Tag','axes1');
 zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.664473684210526 0.26 0.15 0.06],'String','Stop','Callback',@zef_callbackstop);
 zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.82 0.26 0.15 0.06],'String','Pause','Callback',@zef_callbackpause);
 zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.345394736842105 0.27 0.25 0.04],'String','Loop on / count:','Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
@@ -89,5 +89,8 @@ zef.h = get(zef.h_zeffiro,'Children');
 zef.h = zef.h(isprop(zef.h,'Units'));
 set(zef.h,'Units','pixels');
 zef = rmfield(zef,'h');
+
+set(zef.h_zeffiro,'handlevisibility','on');
+set(zef.h_zeffiro,'WindowButtonDownFcn','zef.h_zeffiro = gcf; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');')
 
 

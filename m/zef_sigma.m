@@ -7,6 +7,19 @@ prisms = [];
 johtavuus_prisms = [];
 non_source_ind = []; 
 
+if evalin('base','zef.sigma_bypass')
+    
+   johtavuus = evalin('base','zef.sigma');
+   brain_ind = evalin('base','zef.brain_ind');
+   non_source_ind = evalin('base','zef.non_source_ind');
+     nodes = evalin('base','zef.nodes');
+      tetra = evalin('base','zef.tetra');
+   johtavuus_prisms = evalin('base','zef.sigma_prisms');
+   prisms = evalin('base','zef.prisms');
+     submesh_ind = evalin('base','zef.submesh_ind');
+   
+else
+
 compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_brain_ind = zeros(1,length(compartment_tags));
@@ -666,7 +679,9 @@ end
 %brain_ind = single(brain_ind);
 %tetra = single(tetra);
 
- end
+end
+ 
+end
 
 
 
