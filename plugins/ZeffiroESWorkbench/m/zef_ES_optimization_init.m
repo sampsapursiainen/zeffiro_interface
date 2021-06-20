@@ -1,7 +1,39 @@
 zef.ES_inv_colormap = 10;
-zef.ES_search_type = 1;
+zef.ES_search_type = 2;
+zef.ES_search_method = 1;
 zef.ES_current_threshold_checkbox = 0;
 
+zef.ES_update_plot_data = 0;
+
+zef.ES_scoredose = 12;
+zef.ES_scoredose_checkbox = 0;
+zef.ES_solvermaximumcurrent = 0;
+zef.ES_solvermaximumcurrent_checkbox = 0;
+zef.ES_relativeweightnnz = 90;
+zef.ES_effectivennz = 0;
+
+zef.ES_objfun = 1;
+zef.ES_separationangle = 45;
+zef.ES_lattice_zoom = 1;
+
+if not(isfield(zef,'ES_lattice_zoom'))
+    zef.ES_lattice_zoom = 1;
+end
+if not(isfield(zef,'ES_separationangle'))
+    zef.ES_separationangle = 45;
+end
+if not(isfield(zef,'ES_effectivennz'))
+    zef.ES_effectivennz = 0;
+end
+if not(isfield(zef,'ES_objfun'))
+    zef.ES_objfun = 1;
+end
+if not(isfield(zef,'ES_solvermaximumcurrent'))
+    zef.ES_solvermaximumcurrent = 0;
+end
+if not(isfield(zef,'ES_relativeweightnnz'))
+    zef.ES_relativeweightnnz = 90;
+end
 if not(isfield(zef,'ES_plot_type'))
     zef.ES_plot_type = 1;
 end
@@ -26,11 +58,11 @@ end
 if not(isfield(zef,'ES_regularization_parameter_max'))
     zef.ES_regularization_parameter_max = 10; 
 end
-if not(isfield(zef,'ES_current_threshold_checkbox'))
-    zef.ES_current_threshold_checkbox = 0;
-end
 if not(isfield(zef,'ES_current_threshold'))
     zef.ES_current_threshold = 0.1; 
+end
+if not(isfield(zef,'ES_current_threshold_checkbox'))
+    zef.ES_current_threshold_checkbox = 0;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];
@@ -43,9 +75,6 @@ if not(isfield(zef,'ES_negativity_constraint'))
 end
 if not(isfield(zef,'ES_maximum_current'))
     zef.ES_maximum_current = 0.002; 
-end
-if not(isfield(zef,'y_ES'))
-    zef.y_ES = 0; 
 end
 if not(isfield(zef,'ES_cortex_thickness'))
     zef.ES_cortex_thickness = 4; 
@@ -61,4 +90,13 @@ if not(isfield(zef,'ES_inv_colormap'))
 end
 if not(isfield(zef,'ES_step_size'))
     zef.ES_step_size = 10;
+end
+if not(isfield(zef,'ES_scoredose'))
+    zef.ES_scoredose = 12;
+end
+if not(isfield(zef,'ES_scoredose_checkbox'))
+    zef.ES_scoredose_checkbox = 0;
+end
+if not(isfield(zef,'ES_update_plot_data'))
+    zef.ES_update_plot_data = 0;
 end

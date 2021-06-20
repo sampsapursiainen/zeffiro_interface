@@ -458,7 +458,6 @@ close(h);
 h = waitbar(0,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
-gpuDevice(evalin('base','zef.gpu_num'));
 precond_vec = gpuArray(1./full(diag(A)));
 A = gpuArray(A);
 

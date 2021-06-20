@@ -84,7 +84,7 @@ for zef_i = 1:length(zef_props)
         zef.beamformer.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
     end
 end
-clear zef_props zef_i
+clear zef_props zef_i zef_bf_names
 
 if zef.L_reg_type==2 || zef.L_reg_type==3
     zef.beamformer.inv_leadfield_lambda.Enable = 'off';

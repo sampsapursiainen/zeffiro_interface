@@ -1,9 +1,9 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [exp_ias_multires_dec, exp_ias_multires_ind, exp_ias_multires_count] = exp_ias_make_multires_dec
+function [exp_multires_dec, exp_multires_ind, exp_multires_count] = exp_make_multires_dec
 
-n_decompositions = evalin('base','zef.exp_ias_multires_n_decompositions');
-[n_levels] = evalin('base','zef.exp_ias_multires_n_levels');
+n_decompositions = evalin('base','zef.exp_multires_n_decompositions');
+[n_levels] = evalin('base','zef.exp_multires_n_levels');
 [s_ind] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 
 for n_rep = 1 : n_decompositions
@@ -20,12 +20,12 @@ if n_rep == 1
 h = waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']); 
 end
 
-exp_ias_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
-exp_ias_multires_ind{n_rep}{n_levels} = [1:size_center_points]';
-exp_ias_multires_count{n_rep}{n_levels} = ones(size_center_points,1);
+exp_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
+exp_multires_ind{n_rep}{n_levels} = [1:size_center_points]';
+exp_multires_count{n_rep}{n_levels} = ones(size_center_points,1);
 
 par_num = evalin('base','zef.parallel_vectors');
-exp_ias_multires_sparsity = evalin('base','zef.exp_ias_multires_sparsity');
+exp_em_multires_sparsity = evalin('base','zef.exp_multires_sparsity');
 bar_ind = ceil(size_center_points/(50*par_num));
 
 use_gpu  = evalin('base','zef.use_gpu');
@@ -33,7 +33,7 @@ gpu_num  = evalin('base','zef.gpu_num');
 
 for k = 1 : n_levels-1
 
-size_source_points = floor(size_center_points/exp_ias_multires_sparsity^(n_levels - k));
+size_source_points = floor(size_center_points/exp_em_multires_sparsity^(n_levels - k));
 source_interpolation_aux = zeros(size_source_points,1);
 
 aux_ind = randperm(size_center_points);
@@ -47,7 +47,7 @@ source_points = gpuArray(source_points);
 source_interpolation_aux = gpuArray(source_interpolation_aux);
 end 
 
-exp_ias_multires_dec{n_rep}{k} = aux_ind(1:size_source_points)';
+exp_multires_dec{n_rep}{k} = aux_ind(1:size_source_points)';
 
 i_ind = 0;
 tic
@@ -71,15 +71,15 @@ end
 end
 
 source_interpolation_aux = gather(source_interpolation_aux);
-exp_ias_multires_ind{n_rep}{k} = source_interpolation_aux;
+exp_multires_ind{n_rep}{k} = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
-exp_ias_multires_count{n_rep}{k} = accumarray(i_c,1);
+exp_multires_count{n_rep}{k} = accumarray(i_c,1);
 
 end
 
-exp_ias_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
-exp_ias_multires_ind{n_rep}{n_levels} = [1:size_center_points]';
-exp_ias_multires_count{n_rep}{n_levels} = ones(size_center_points,1);
+exp_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
+exp_multires_ind{n_rep}{n_levels} = [1:size_center_points]';
+exp_multires_count{n_rep}{n_levels} = ones(size_center_points,1);
 
 end
 

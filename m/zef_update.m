@@ -148,6 +148,9 @@ zef.h_windows_open = [zef.h_windows_open ; setdiff(zef.h_aux, zef.h_windows_open
 
 for zef_i = 1 : length(zef.h_windows_open)
 zef.aux_field_1 = sum(contains(get(zef.h_windows_open(1:zef_i),'Name'),get(zef.h_windows_open(zef_i),'Name')));
+if isequal(zef.h_windows_open(zef_i).Name,'ZEFFIRO Interface: Figure tool')
+uimenu(zef.h_menu_window,'label',[zef.h_windows_open(zef_i).Name ' ' num2str(zef.aux_field_1)],'callback',['figure(evalin(''base'', ''zef.h_windows_open(' num2str(zef_i) ')'')); zef.h_zeffiro = gcf; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');']); 
+end
 uimenu(zef.h_menu_window,'label',[zef.h_windows_open(zef_i).Name ' ' num2str(zef.aux_field_1)],'callback',['figure(evalin(''base'', ''zef.h_windows_open(' num2str(zef_i) ')''))']);
 zef.aux_field_2 = zef.h_windows_open(zef_i).CloseRequestFcn;
 if not(contains(zef.aux_field_2,'zef_update;'))  

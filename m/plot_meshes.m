@@ -60,8 +60,9 @@ if ismember(evalin('base','zef.visualization_type'), [3])
         end
         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
             if evalin('base','zef.inv_scale') == 1
-                min_rec = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
-                max_rec = 20*log10(max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                min_rec_log10 = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                max_rec = -min_rec_log10 + 20*log10(max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                min_rec = 0;
             elseif evalin('base','zef.inv_scale') == 2
                 min_rec = (max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                 max_rec = (max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
@@ -89,8 +90,9 @@ if ismember(evalin('base','zef.visualization_type'), [3])
         max_rec = max_abs_reconstruction;
         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
             if evalin('base','zef.inv_scale') == 1
-                min_rec = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
-                max_rec = 20*log10(max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                min_rec_log10 = 20*log10(max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                max_rec = -min_rec_log10 + 20*log10(max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+            min_rec = 0;
             elseif evalin('base','zef.inv_scale') == 2
                 min_rec = (max(min_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                 max_rec = (max(max_rec,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
@@ -611,8 +613,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
                                 if evalin('base','zef.inv_scale') == 1
-                                    reconstruction = 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
-                                elseif evalin('base','zef.inv_scale') == 2
+                                    reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));                          
+  elseif evalin('base','zef.inv_scale') == 2
                                     reconstruction = (max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                                 elseif evalin('base','zef.inv_scale') == 3
                                     reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
@@ -720,7 +722,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             end
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
-                            set(gca,'CLim',[min_rec max_rec]);
+                            set(gca,'CLim',gather([min_rec max_rec]));
                             set(h_surf_2{i},'specularstrength',0.2);
                             set(h_surf_2{i},'specularexponent',0.8);
                             set(h_surf_2{i},'SpecularColorReflectance',0.8);
@@ -872,7 +874,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                         
                         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
                             if evalin('base','zef.inv_scale') == 1
-                                reconstruction = 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
+                                reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                             elseif evalin('base','zef.inv_scale') == 2
                                 reconstruction = (max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                             elseif evalin('base','zef.inv_scale') == 3

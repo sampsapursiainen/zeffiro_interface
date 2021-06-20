@@ -1,32 +1,43 @@
-function [h_current_ES] = zef_ES_plot_current_pattern
+function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern
+%% clear Axes handle
+if isfield(evalin('base','zef'),'h_current_ES')
+    evalin('base', 'delete(zef.h_current_ES)')
+end
+%% Variables and parameter setup
+if evalin('base','zef.ES_search_type') == 1
+    if evalin('base','zef.ES_current_threshold_checkbox') == 0
+        y_ES = evalin('base','zef.y_ES_single.y_ES');
+    else
+        try
+            y_ES = evalin('base','zef.y_ES_single_threshold.y_ES');
+        catch
+            error('Attempting to plot threshold values that have not yet been calculated... Plotting original values instead.')
+        end
+    end
+elseif evalin('base','zef.ES_search_type') >= 2
+    [star_row_idx, star_col_idx] = zef_ES_objective_function;
+    if isempty(star_row_idx)
+        star_row_idx = 1;
+    end
+    if isempty(star_col_idx)
+        star_col_idx = 1;
+    end
+    
+    if evalin('base','zef.ES_current_threshold_checkbox') == 0
+        y_ES = evalin('base','zef.y_ES_interval.y_ES');
+    else
+        try
+            y_ES = evalin('base','zef.y_ES_interval_threshold.y_ES');
+        catch
+            error('Attempting to plot threshold values that have not yet been calculated... Plotting original values instead.')
+        end
+    end
+    y_ES = cell2mat(y_ES(star_row_idx,star_col_idx));
+end
 
 nodes = evalin('base','zef.nodes');
-
-if isfield(evalin('base','zef'),'h_current_ES')
-    h_synth_source = evalin('base','zef.h_current_ES');
-    if ishandle(h_synth_source)
-        delete(h_synth_source)
-    end
-end
-
-h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','ES_colorbar');
-if not(isempty(h_colorbar))
-    colorbar(h_colorbar,'delete');        
-end
-
-h_axes = findobj(evalin('base','zef.h_zeffiro'),'tag','ES_axes');
-if not(isempty(h_axes))
-    colorbar(h_axes,'delete');        
-end
-
-if evalin('base','zef.ES_current_threshold_checkbox') == 0
-    y_ES = evalin('base','zef.y_ES_single.y_ES');
-else
-    y_ES = evalin('base','zef.y_ES_threshold.y_ES');
-end
-
 sensors = evalin('base','zef.sensors');
-
+%% Sensors attachment
 if evalin('base','zef.attach_electrodes')
     sensors(:,4) = 0;
     I_aux = find(sensors(:,5)~=0);
@@ -40,20 +51,20 @@ if evalin('base','zef.attach_electrodes')
     end
     sensors = sensors_point_like;
 end
-
+%% Sphere generation and allocation of color indexes
 aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
-[X_s, Y_s, Z_s] = sphere(20); 
-sphere_scale = 3.2*aux_scale_val;    
+[X_s, Y_s, Z_s] = sphere(20);
+sphere_scale = 3.2*aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
-    
+
 colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
 if evalin('base','zef.ES_inv_colormap') == 1
     c_aux_1 = floor(colortune_param*colormap_size/3);
     c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
-    colormap_vec_aux = [([20/colortune_param*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1)]); ([15/colortune_param*[1: c_aux_1] 15*(1-2/3)/(1-2*colortune_param/3)*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*(1-2/3)/(1-2*colortune_param/3)*[1:c_aux_2-c_aux_1] 6/colortune_param*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 7.5/colortune_param*[1:colormap_size-c_aux_2]])];
+    colormap_vec_aux = [([20/colortune_param*[c_aux_1:-1:1] zeros(1,colormap_size-c_aux_1)]); ([15/colortune_param*[1: c_aux_1] 15*(1-2/3)/(1-2*colortune_param/3)*[c_aux_2-c_aux_1:-1:1] zeros(1,colormap_size-c_aux_2)]) ; ([zeros(1,c_aux_1) 6*(1-2/3)/(1-2*colortune_param/3)*[1:c_aux_2-c_aux_1] 6/colortune_param*[colormap_size-c_aux_2:-1:1]]);([zeros(1,c_aux_2) 7.5/colortune_param*[1:colormap_size-c_aux_2]])]; %#ok<*NBRAK>
     ES_colormap_vec = zeros(3,size(colormap_vec_aux,2));
     ES_colormap_vec = ES_colormap_vec + 0.52*[50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:) ; 50*colormap_vec_aux(1,:)];
     ES_colormap_vec = ES_colormap_vec + 0.5*[85*colormap_vec_aux(3,:) ; 197*colormap_vec_aux(3,:) ; 217*colormap_vec_aux(3,:)];
@@ -61,7 +72,7 @@ if evalin('base','zef.ES_inv_colormap') == 1
     ES_colormap_vec = ES_colormap_vec + [203*colormap_vec_aux(4,:) ; 203*colormap_vec_aux(4,:) ; 100*colormap_vec_aux(4,:)];
     clear colormap_vec_aux;
     ES_colormap_vec = ES_colormap_vec'/max(ES_colormap_vec(:));
-    ES_colormap_vec = ES_colormap_vec(:,1:3); 
+    ES_colormap_vec = ES_colormap_vec(:,1:3);
 elseif evalin('base','zef.ES_inv_colormap') == 2
     c_aux_1 = floor(colortune_param*colormap_size/3);
     c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
@@ -175,32 +186,36 @@ hold on;
 
 index_aux = floor((colormap_size-1)*(y_ES(:) - min(y_ES(:))) / (max(y_ES(:)) - min(y_ES(:))))+1;
 ES_colormap_vec(index_aux,:);
-
+%% Printing color and their properties
 h_current_ES = zeros(size(sensors,1),1);
+h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
     h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
-    if y_ES(i) == 0
-        set(h_current_ES(i),'facecolor',[0 0 0]);
-    else
+    h_current_coords(i) = h_current_ES(i);
+    set(h_current_ES(i),'edgecolor','none');
+    if not(y_ES(i)) == 0
         set(h_current_ES(i),'facecolor',ES_colormap_vec(index_aux(i),:));
+        set(h_current_ES(i),'specularstrength',0.3);
+        set(h_current_ES(i),'diffusestrength',0.7);
+        set(h_current_ES(i),'ambientstrength',0.7);
+        set(h_current_ES(i),'facealpha',(abs(y_ES(i))/max(abs(y_ES)))*(1-evalin('base','zef.brain_transparency'))+evalin('base','zef.brain_transparency'));
+    else
+        set(h_current_ES(i),'facecolor',[1 1 1]);
+        set(h_current_ES(i),'facealpha',0.3);
     end
-    set(h_current_ES(i),'edgecolor','none'); 
-    set(h_current_ES(i),'specularstrength',0.3);
-    set(h_current_ES(i),'diffusestrength',0.7);
-    set(h_current_ES(i),'ambientstrength',0.7);
-    set(h_current_ES(i),'facealpha',(abs(y_ES(i))/max(abs(y_ES)))*(1-evalin('base','zef.brain_transparency'))+evalin('base','zef.brain_transparency'));
 end
 hold off;
+%% Wrapping up and return of variables
 
 h_axes = axes('Units','normalized','Position',[0 0 0 0],'visible','off');
 set(h_axes,'TitleHorizontalAlignment','left');
 imagesc(y_ES);
 colormap(h_axes, ES_colormap_vec);
-h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.29]);
-set(h_colorbar,'limits',[min(y_ES(:)) max(y_ES(:))]*1.15);
-set(h_colorbar,'tag','Colorbar');
 
-h_colorbar.Label.String     = 'Ampere (A)';
+h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25]);
+set(h_colorbar,'limits',[min(y_ES(:)) max(y_ES(:))]*1.15);
+
+h_colorbar.Label.String     = 'Amplitude (mA)';
 h_colorbar.Label.Position   = [-2 0];
 h_colorbar.Label.Rotation   = 90;
 
