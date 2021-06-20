@@ -20,7 +20,7 @@ set(zef.h_eit_sensitivity_tool,'AutoResizeChildren','off');
 zef.eit_sensitivity_tool_current_size  = get(zef.h_eit_sensitivity_tool,'Position');
 set(zef.h_eit_sensitivity_tool,'SizeChangedFcn', 'zef.eit_sensitivity_tool_current_size = zef_change_size_function(zef.h_eit_sensitivity_tool,zef.eit_sensitivity_tool_current_size);');
 
-zef.h_create_dipolar_pair.Name = 'ZEFFIRO Interface: EIT Sensitivity Tool';
+zef.h_eit_sensitivity_tool.Name = 'ZEFFIRO Interface: EIT Sensitivity Tool';
 
 
 clear zef_data;
