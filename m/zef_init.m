@@ -10,7 +10,9 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
-zef.sigma_bypass = 0;
+zef_data.lead_field_id = 0;
+zef_data.lead_field_id_max = 0;
+zef_data.sigma_bypass = 0;
 zef_data.lock_on = 0;
 zef_data.lock_sensor_names_on = 0;
 zef_data.lock_transforms_on = 0;
