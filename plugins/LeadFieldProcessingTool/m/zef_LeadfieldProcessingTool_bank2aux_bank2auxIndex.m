@@ -19,10 +19,11 @@ zef.LeadFieldProcessingTool.auxData.imaging_method = zef.LeadFieldProcessingTool
 
 zef.LeadFieldProcessingTool.auxData.measurements = zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.measurements;
 zef.LeadFieldProcessingTool.auxData.noise_data = zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.noise_data;
-zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.lf_bank_scaling_factor;
+%zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.lf_bank_scaling_factor;
 zef.LeadFieldProcessingTool.auxData.lf_tag = zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.lf_tag;
 
-
+zef.LeadFieldProcessingTool.auxData.source_structure=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.source_structure;
+zef.LeadFieldProcessingTool.auxData.compartment_tags=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.compartment_tags;
 
 
 

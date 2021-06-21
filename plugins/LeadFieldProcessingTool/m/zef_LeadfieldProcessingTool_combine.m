@@ -19,9 +19,12 @@ for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bank
             zef.LeadFieldProcessingTool.combineData.source_positions = zef.LeadFieldProcessingTool.auxData.source_positions;
             zef.LeadFieldProcessingTool.combineData.source_directions = zef.LeadFieldProcessingTool.auxData.source_directions;
             zef.LeadFieldProcessingTool.combineData.imaging_method_Name = 'combined';
-            zef.LeadFieldProcessingTool.combineData.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor;
+            %zef.LeadFieldProcessingTool.combineData.lf_bank_scaling_factor = zef.LeadFieldProcessingTool.auxData.lf_bank_scaling_factor;
 
-                        
+            zef.LeadFieldProcessingTool.combineData.source_structure=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.source_structure;
+            zef.LeadFieldProcessingTool.combineData.compartment_tags=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.compartment_tags;
+            
+            
             zef.LeadFieldProcessingTool.combineData.imaging_method = zef.LeadFieldProcessingTool.auxData.imaging_method;
             zef.LeadFieldProcessingTool.combineData.lf_tag = '';
             

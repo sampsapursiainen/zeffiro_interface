@@ -10,7 +10,6 @@ for zef_LeadFieldProcessingTool_index=1:zef.LeadFieldProcessingTool.bankSize
         
         zef_LeadfieldProcessingTool_bank2aux_bank2auxIndex;
         
-        
         zef.LeadFieldProcessingTool.auxData.L = zef.LeadFieldProcessingTool.tra*zef.LeadFieldProcessingTool.auxData.L;
         zef.LeadFieldProcessingTool.auxData.sensors = zef.LeadFieldProcessingTool.auxData.sensors(1:size(zef.LeadFieldProcessingTool.tra,1),:);
         zef.LeadFieldProcessingTool.auxData.imaging_method = 3;

@@ -29,7 +29,7 @@ for zef_LeadFieldProcessingTool_index=1:zef.LeadFieldProcessingTool.bankSize
 
         
         if isfield(zef.LeadFieldProcessingTool.auxData, 'compartment_tags')
-            zef.compartment_tags=cell(0,0);
+            zef.compartment_tags=zef.LeadFieldProcessingTool.auxData.compartment_tags;
             for zef_ind=1:length(zef.LeadFieldProcessingTool.auxData.compartment_tags)
                 
                 zef_name=strcat(zef.LeadFieldProcessingTool.auxData.compartment_tags{zef_ind}, '_sources');
