@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
-zef.lead_field_id = zef_update_lead_field_id(zef.lead_field_id);
+[zef.lead_field_id, zef.lead_field_id_max]  = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_max,'create');
 
 tic;
 
