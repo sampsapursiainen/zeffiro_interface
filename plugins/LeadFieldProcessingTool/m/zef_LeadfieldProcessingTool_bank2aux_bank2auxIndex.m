@@ -26,13 +26,14 @@
 % zef.LeadFieldProcessingTool.auxData.compartment_tags=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex}.compartment_tags;
 % 
 % 
-% 
-% 
-% 
-% 
-% 
-% 
+
 zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bank2auxIndex};
+
+
+
+
+
+
 
 
 

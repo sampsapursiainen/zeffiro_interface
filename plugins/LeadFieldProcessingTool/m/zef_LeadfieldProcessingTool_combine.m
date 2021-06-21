@@ -6,7 +6,7 @@ zef.LeadFieldProcessingTool.combinePoints=zef.LeadFieldProcessingTool.app.Noises
 zef.LeadFieldProcessingTool.combineData=[];
 for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bankSize
     
-    if zef.LeadFieldProcessingTool.app.BankTable.Data{zef_LeadFieldProcessingTool_index_combine, 5}
+    if zef.LeadFieldProcessingTool.app.BankTable.Data{zef_LeadFieldProcessingTool_index_combine, 6}
         
         zef.LeadFieldProcessingTool.bank2auxIndex=zef_LeadFieldProcessingTool_index_combine;
         zef_LeadfieldProcessingTool_bank2aux_bank2auxIndex;
@@ -72,6 +72,10 @@ end
 
         zef.LeadFieldProcessingTool.auxData=[];
         zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.combineData;
+        
+        [zef.lead_field_id,zef.lead_field_id_max] = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'bank_apply');
+        zef.LeadFieldProcessingTool.auxData.lead_field_id=zef.lead_field_id_max;
+        
         zef.LeadFieldProcessingTool.combineData=[];
         zef_LeadFieldProcessingTool_aux2bank_new;
         
