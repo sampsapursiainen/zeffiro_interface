@@ -131,7 +131,7 @@ for k = 1:size(GMModel{t}.mu,1)
     ang = real(acosd(CosTheta));
     rot_axis = cross([1;0;0],principal_axes(:,1));
     if ang ~= 0
-    rotate(s(k),rot_axis,ang,GMModel.mu(k,1:3));
+    rotate(s(k),rot_axis,ang,GMModel.mu{t}(k,1:3));
     end
     %transform (0,1,0) vector to the new direction via Rodrigues' formula:
     e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
@@ -139,7 +139,7 @@ for k = 1:size(GMModel{t}.mu,1)
     CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
     ang = real(acosd(CosTheta));
     if ang ~= 0
-    rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel.mu(k,1:3));
+    rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel{t}.mu(k,1:3));
     end
 end
 end
