@@ -53,6 +53,7 @@ for zef_LeadFieldProcessingTool_index=1:zef.LeadFieldProcessingTool.bankSize
     end
 end
 
+clear zef_LeadFieldProcessingTool_index;
 
 zef_update;
 

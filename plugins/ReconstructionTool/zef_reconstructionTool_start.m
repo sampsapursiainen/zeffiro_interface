@@ -18,9 +18,28 @@ if ~isfield(zef, 'reconstruction_information')
 end
 
 if ~isfield(zef.reconstructionTool, 'bankInfo')
-    zef.reconstructionTool.bankInfo=cell(0,6);
+    zef.reconstructionTool.bankInfo=cell(0,7);
 else
-    zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
+    %TODO check for old data format
+    if size(zef.reconstructionTool.bankInfo, 2)==6
+        zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo(:,1:5);
+        for zef_index=1:size(zef.reconstructionTool.bankInfo, 1)
+            
+            if isfield(zef.reconstructionTool.bankReconstruction{zef_index}, 'reconstruction_information') && isfield(zef.reconstructionTool.bankReconstruction{zef_index}.reconstruction_information, 'lead_field_id')
+                zef.reconstructionTool.app.BankTable.Data{zef_index,6}=zef.reconstructionTool.bankReconstruction{zef_index}.reconstruction_information.lead_field_id;
+            else
+                zef.reconstructionTool.app.BankTable.Data{zef_index,6}='noID';
+                zef.reconstructionTool.bankReconstruction{zef_index}.reconstruction_information.lead_field_id='noID';
+            end
+                
+                
+            zef.reconstructionTool.app.BankTable.Data{zef_index,7}=false;
+        end
+        clear zef_index;
+        zef.reconstructionTool.bankInfo=zef.reconstructionTool.app.BankTable.Data; 
+    else
+        zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
+    end
 end
 
 
@@ -30,42 +49,8 @@ if ~isfield(zef, 'reconstruction')
     zef.reconstruction=cell(0);
 end
 
-if ~isfield(zef.reconstructionTool, 'currentInfo')
-    zef.reconstructionTool.currentInfo=cell(1,5);
-    
-    if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'tag')
-        zef.reconstructionTool.currentInfo{1}=zef.reconstruction_information.tag;
-    else
-        zef.reconstructionTool.currentInfo{1}='';
-    end
-    
-    if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'type')
-        zef.reconstructionTool.currentInfo{2}=zef.reconstruction_information.type;
-    else
-        zef.reconstructionTool.currentInfo{2}='';
-    end
-    
-    if isfield(zef, 'reconstruction_information') && isfield(zef.reconstruction_information, 'modality')
-        zef.reconstructionTool.currentInfo{3}=zef.reconstruction_information.modality;
-    else
-        zef.reconstructionTool.currentInfo{3}='';
-    end
 
-    
-    if iscell(zef.reconstruction)
-    zef.reconstructionTool.currentInfo{4}=size(zef.reconstruction, 1);
-    else
-        zef.reconstructionTool.currentInfo{4}=size(zef.reconstruction, 2);
-    end
-    
-    if iscell(zef.reconstruction) && zef.reconstructionTool.currentInfo{4}>=1
-        zef.reconstructionTool.currentInfo{5}=size(zef.reconstruction{1}, 1);
-    else %is either empty cell or single frame
-        zef.reconstructionTool.currentInfo{5}=size(zef.reconstruction,1);
-    end
-end
-
-zef.reconstructionTool.app.current.Data=zef.reconstructionTool.currentInfo;
+zef_reconstructionTool_refresh;
 
 %app functions
 zef.reconstructionTool.app.AddButton.ButtonPushedFcn='zef_reconstructionTool_addCurrent2bank';
