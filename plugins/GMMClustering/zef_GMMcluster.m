@@ -118,7 +118,7 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel{t}.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid current densities at the frame ',num2str(t),': ',num2str(J(ind2)'/max(J))])
-        GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,1:3);
+        GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,4:6);
         waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
@@ -126,7 +126,7 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid current densities: ',num2str(J(ind2)'/max(J))]) 
-        GMModelDipoles = J(ind2).*GMModel.mu(:,1:3);
+        GMModelDipoles = J(ind2).*GMModel.mu(:,4:6);
     end
 
 end     %end of t loop
