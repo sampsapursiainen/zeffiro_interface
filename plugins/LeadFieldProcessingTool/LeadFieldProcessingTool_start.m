@@ -13,7 +13,7 @@ end
 
 zef.LeadFieldProcessingTool.bankSize=size(zef.LeadFieldProcessingTool.bank,2);
 
-if zef.LeadFieldProcessingTool.bankSize>1
+if zef.LeadFieldProcessingTool.bankSize>=1
     
 
     for zef_LeadfieldProcessingTool_startIndex=1:zef.LeadFieldProcessingTool.bankSize
@@ -50,7 +50,7 @@ zef.LeadFieldProcessingTool.app.replaceButton.ButtonPushedFcn='zef_LeadfieldProc
 
 zef.LeadFieldProcessingTool.app.deleteButton.ButtonPushedFcn='zef_LeadfieldProcessingTool_delete';
 zef.LeadFieldProcessingTool.app.CombineButton.ButtonPushedFcn='zef_LeadfieldProcessingTool_combine';
-
+zef.LeadFieldProcessingTool.app.refreshButton.ButtonPushedFcn='zef_LeadfieldProcessingTool_refresh';
 
 %zef.LeadFieldProcessingTool.app.currentLeadfield.CellEditCallback='zef_LeadfieldProcessingTool_currentTableUpdate';
 zef.LeadFieldProcessingTool.app.BankTable.CellEditCallback='zef_LeadfieldProcessingTool_BankTableLabelUpdate';
