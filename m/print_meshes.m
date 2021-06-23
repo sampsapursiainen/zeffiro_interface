@@ -93,7 +93,7 @@ sensors = evalin('base','zef.sensors');
 sensors_visible = find(evalin('base',['zef.' sensor_tag '_visible_list']));
 sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
 sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
-aux_scale_val = evalin('zef.sensors_visual_size');
+aux_scale_val = evalin('base','zef.sensors_visual_size');
 if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
      sensors_name = sensors_name(sensors_visible);
@@ -330,11 +330,11 @@ elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
 tetra = tetra(aux_ind,:);   
 elseif evalin('base','zef.cp_mode') == 3
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 elseif evalin('base','zef.cp_mode') == 4
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 end
 else

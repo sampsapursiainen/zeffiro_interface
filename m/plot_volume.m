@@ -298,11 +298,11 @@ elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
 tetra = tetra(aux_ind,:);   
 elseif evalin('base','zef.cp_mode') == 3
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 elseif evalin('base','zef.cp_mode') == 4
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 end
 else
