@@ -14,7 +14,7 @@ set(zef.h_ramus_ias_map_estimation,'Name','ZEFFIRO Interface: RAMUS Inversion');
 set(findobj(zef.h_ramus_ias_map_estimation.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_ramus_ias_map_estimation.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
-set(zef.h_ramus_start,'Callback','zef_update_ias; [zef.reconstruction, zef.reconstruction_information] = zef_ramus_iteration([]);');
+set(zef.h_ramus_start,'Callback','zef_update_ramus_inversion_tool; [zef.reconstruction, zef.reconstruction_information] = zef_ramus_iteration([]);');
 
 
 zef_init_ramus_inversion_tool;
