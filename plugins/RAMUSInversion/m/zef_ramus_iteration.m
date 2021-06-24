@@ -26,17 +26,17 @@ weight_vec_aux = (sparsity_factor.^[0:n_multires-1]');
 std_lhood = 10^(-snr_val/20);
 
 reconstruction_information.tag = 'RAMUS';
-reconstruction_information.inv_time_1 = evalin('base','zef.ias_time_1');
-reconstruction_information.inv_time_2 = evalin('base','zef.ias_time_2');
-reconstruction_information.inv_time_3 = evalin('base','zef.ias_time_3');
-reconstruction_information.sampling_freq = evalin('base','zef.ias_sampling_frequency');
-reconstruction_information.low_pass = evalin('base','zef.ias_high_cut_frequency');
-reconstruction_information.high_pass = evalin('base','zef.ias_low_cut_frequency');
-reconstruction_information.number_of_frames = evalin('base','zef.ias_number_of_frames');
+reconstruction_information.inv_time_1 = evalin('base','zef.ramus_time_1');
+reconstruction_information.inv_time_2 = evalin('base','zef.ramus_time_2');
+reconstruction_information.inv_time_3 = evalin('base','zef.ramus_time_3');
+reconstruction_information.sampling_freq = evalin('base','zef.ramus_sampling_frequency');
+reconstruction_information.low_pass = evalin('base','zef.ramus_high_cut_frequency');
+reconstruction_information.high_pass = evalin('base','zef.ramus_low_cut_frequency');
+reconstruction_information.number_of_frames = evalin('base','zef.ramus_number_of_frames');
 reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
 reconstruction_information.source_directions = evalin('base','zef.source_directions');
-reconstruction_information.ias_hyperprior = evalin('base','zef.ias_hyperprior');
-reconstruction_information.snr_val = evalin('base','zef.ias_snr');
+reconstruction_information.ias_hyperprior = evalin('base','zef.ramus_hyperprior');
+reconstruction_information.snr_val = evalin('base','zef.ramus_snr');
 reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measurement_db');
 
 
