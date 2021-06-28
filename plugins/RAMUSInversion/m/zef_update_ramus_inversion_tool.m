@@ -19,5 +19,6 @@
     zef.inv_time_1 = str2num(get(zef.h_ramus_time_1,'string')); 
     zef.inv_time_2 = str2num(get(zef.h_ramus_time_2,'string')); 
     zef.inv_time_3 = str2num(get(zef.h_ramus_time_3,'string')); 
+    zef.inv_sampling_frequency = str2num(get(zef.h_ramus_sampling_frequency,'string')); 
     zef.number_of_frames = str2num(get(zef.h_ramus_number_of_frames,'string')); 
     zef.inv_snr = zef.ramus_snr;
