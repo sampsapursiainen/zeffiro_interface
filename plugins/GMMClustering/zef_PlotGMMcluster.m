@@ -135,7 +135,7 @@ end
 if comp_ord ~= 3
     dip_ind = order(1:min(dip_num,length(order)));
 else
-    dip_ind = intersect(dip_components,1:size(GMModel{t}.mu,1));
+    dip_ind = intersect(dip_components,1:size(GMModel.mu,1));
 end
 %plot centroid marks:
 plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
