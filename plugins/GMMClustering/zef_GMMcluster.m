@@ -1,5 +1,5 @@
 function [GMModel,GMModelDipoles] = zef_GMMcluster
-h = waitbar(0,['Gaussian mixature model clustering.']);
+h = waitbar(0,['Gaussian mixature model.']);
 
 %Options 
 options = statset('MaxIter',evalin('base','zef.GMMcluster_MaxIter'));
