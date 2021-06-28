@@ -76,7 +76,7 @@ elseif comp_ord == 2
     Amp = sum(GMMdipoles.^2,2);
     [~,order] = sort(Amp,'descend');
 elseif comp_ord == 3
-    order = intersect(ellip_components,1:size(GMModel{t}.mu,1));
+    order = intersect(ellip_components,1:size(GMModel.mu,1));
 end
     
 evalin('base','zef_visualize_surfaces;');
