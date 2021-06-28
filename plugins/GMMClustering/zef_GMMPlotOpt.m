@@ -21,6 +21,9 @@ for zef_i = 1:length(zef_props)
         if ~ischar(zef.(zef_props{zef_i})) && ~strcmp(zef_props{zef_i},'GMM_colors')
         zef.GMM_PlotOpt.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
         elseif strcmp(zef_props{zef_i},'GMM_colors')
+            if isempty(zef.GMM_colors)
+                zef.GMM.PlotOpt.(zef_props{zef_i}).Value = '';
+            else
             zef_aux_mat = reshape(zef.GMM_colors',[],1)';
             zef_aux_str = ['[',num2str(zef_aux_mat(1))];
             for zef_j = 2:length(zef_aux_mat)
@@ -34,6 +37,7 @@ for zef_i = 1:length(zef_props)
             end 
             zef.GMM_PlotOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
             clear zef_aux_str zef_aux_mat
+            end
         else
         zef.GMM_PlotOpt.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
         end
