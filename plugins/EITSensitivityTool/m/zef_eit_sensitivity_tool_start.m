@@ -39,4 +39,6 @@ set(zef.h_eit_sensitivity_tool_activate,'text','Active');
 end
 zef.h_eit_sensitivity_tool_file.Value = zef.eit_sensitivity_tool_file;
 
+zef.h_eit_sensitivity_tool_distribution.Items = {'Sigma','Absolute sensitivity (parallel)','Absolute sensitivity (orthogonal)','Relative sensitivity (parallel)','Relative sensitivity (orthogonal)'};
+
 clear zef_data;

@@ -1,5 +1,4 @@
-quantile_val_1 = 0.25;
-quantile_val_2 = 0.01;
+
 
 if isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{1})
 
@@ -7,37 +6,39 @@ if isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_t
     
 elseif isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{2})
  
-     %zef.reconstruction = sqrt(max((zef.L)));
-%zef.reconstruction = real(sqrt(sum((zef.L(1:end-2,:)).^2)));
- zef.reconstruction = (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)*sqrt(mean(zef.L(1:end-2,:).^2))./zef_eit_sensitivity_tool_volume'./sqrt(mean(zef.inv_bg_data(1:end-2).^2));
+zef.reconstruction = abs(sum(zef.L(1:end-2,:).*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))./(sum(zef.inv_bg_data(1:end-2).^2));
+zef.reconstruction =  (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)./zef_eit_sensitivity_tool_volume'.*zef.reconstruction;
+zef.reconstruction = min(quantile(zef.reconstruction,1-0.02),zef.reconstruction);
+zef.reconstruction = repmat(zef.reconstruction,3,1);
+zef.reconstruction = zef.reconstruction(:);
+
+elseif isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{3})
  
-%zef.reconstruction = sqrt(sum((zef.reconstruction - zef.inv_bg_data(1:end-2).*(abs(sum((zef.reconstruction.*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))))./norm(zef.inv_bg_data(1:end-2),2)).^2))./sqrt(sum(zef.reconstruction.^2));
+zef.reconstruction = (sum(zef.L(1:end-2,:).^2))./sqrt(sum(zef.inv_bg_data(1:end-2).^2));
+zef.reconstruction = sqrt(zef.reconstruction - (abs(sum(zef.L(1:end-2,:).*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))./(sum(zef.inv_bg_data(1:end-2).^2))).^2);
+zef.reconstruction =  (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)./zef_eit_sensitivity_tool_volume'.*zef.reconstruction;
+zef.reconstruction = min(quantile(zef.reconstruction,1-0.02),zef.reconstruction);
+zef.reconstruction = repmat(zef.reconstruction,3,1);
+zef.reconstruction = zef.reconstruction(:);
 
-%zef.reconstruction = sqrt(abs(sum((zef.L(1:end-2,:).^2))) - abs(sum((zef.L(1:end-2,:).*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))./norm(zef.inv_bg_data(1:end-2),2)).^2);
-%zef.reconstruction = zef.reconstruction./sqrt(abs(sum((zef.L(1:end-2,:).^2))));
-%zef.reconstruction = max(abs((zef.L(1:end-2,:)-repmat(mean(zef.L(1:end-2,:),1),size(zef.L,1)-2,1))));
-
-zef.reconstruction = min(quantile(zef.reconstruction,1-quantile_val_2),zef.reconstruction);
-% zef.reconstruction = max(quantile(zef.reconstruction,quantile_val_2),zef.reconstruction);
-
+    
+elseif    isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{4})
+ 
+zef.reconstruction = abs(sum(zef.L(1:end-2,:).*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))./(sum(zef.inv_bg_data(1:end-2).^2));
+zef.reconstruction =  (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)./zef_eit_sensitivity_tool_volume'.*zef.reconstruction;
+zef.reconstruction = std(zef.eit_sensitivity_tool_data.covK').*zef.reconstruction;
+zef.reconstruction = min(quantile(zef.reconstruction,1-0.02),zef.reconstruction);
 zef.reconstruction = repmat(zef.reconstruction,3,1);
  zef.reconstruction = zef.reconstruction(:);
-    
-elseif    isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{3})
  
-zef.reconstruction =  sqrt(mean(zef.L(1:end-2,:).^2))./zef_eit_sensitivity_tool_volume'./sqrt(mean(zef.inv_bg_data(1:end-2).^2));
-% zef.reconstruction = repmat(zef.reconstruction./zef_eit_sensitivity_tool_volume',3,1);
-
- zef.reconstruction = min(quantile(zef.reconstruction,1-quantile_val_2),zef.reconstruction);
+ elseif    isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{5})
  
- 
- 
-  zef.reconstruction = (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)*std(zef.eit_sensitivity_tool_data.covK').*zef.reconstruction;
-
- 
-% zef.reconstruction = max(quantile(zef.reconstruction,quantile_val_2),zef.reconstruction);
- 
- zef.reconstruction = repmat(zef.reconstruction,3,1);
- zef.reconstruction = zef.reconstruction(:);
+zef.reconstruction = (sum(zef.L(1:end-2,:).^2))./(sum(zef.inv_bg_data(1:end-2).^2));
+zef.reconstruction = sqrt(zef.reconstruction - (abs(sum(zef.L(1:end-2,:).*repmat(zef.inv_bg_data(1:end-2),1,size(zef.L,2))))./(sum(zef.inv_bg_data(1:end-2).^2))).^2);
+zef.reconstruction =  (1./zef.n_sources)*sum(zef_eit_sensitivity_tool_volume)./zef_eit_sensitivity_tool_volume'.*zef.reconstruction;
+zef.reconstruction = std(zef.eit_sensitivity_tool_data.covK').*zef.reconstruction;
+zef.reconstruction = min(quantile(zef.reconstruction,1-0.02),zef.reconstruction);
+zef.reconstruction = repmat(zef.reconstruction,3,1);
+zef.reconstruction = zef.reconstruction(:);
  
 end
