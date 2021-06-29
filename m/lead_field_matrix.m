@@ -37,7 +37,7 @@ for zef_i = 1 : length(zef.compartment_tags)
 zef.aux_vec_sources(zef_i) = evalin('base',['isequal(zef.' zef.compartment_tags{zef_i} '_sources_old, zef.' zef.compartment_tags{zef_i} '_sources);']);
 end
 
-if isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources)
+if not(zef.source_space_lock_on) && isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources)
 if isempty(zef.non_source_ind)
 zef.aux_vec = zef.brain_ind;
 else
