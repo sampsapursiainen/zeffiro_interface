@@ -77,6 +77,7 @@ elseif comp_ord == 2
     [~,order] = sort(Amp,'descend');
 elseif comp_ord == 3
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
+    max_iter = min(length(order),max_iter);
 end
     
 evalin('base','zef_visualize_surfaces;');
@@ -159,6 +160,7 @@ elseif comp_ord == 2
     [~,order] = sort(Amp,'descend');
 elseif comp_ord == 3
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
+    max_iter = min(length(order),max_iter);
 end
     
 %set surface visualization frames to go along this for loop:
