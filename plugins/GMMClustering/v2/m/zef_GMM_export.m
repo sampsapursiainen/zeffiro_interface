@@ -16,6 +16,10 @@ if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0)
     if saved_ones{3} == 1
         zef_GMM.parameters = GMM.parameters;
     end
+    if saved_ones{4} == 1
+        zef_GMM.reconstruction = evalin('base','zef.reconstruction');
+    end
+    
     save(fullfile(zef_aux_path,zef_aux_file),'zef_GMM','-v7.3'); 
 end
 
