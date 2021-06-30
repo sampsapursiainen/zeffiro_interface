@@ -80,7 +80,8 @@ elseif comp_ord == 3
     max_iter = min(length(order),max_iter);
 end
     
-evalin('base','zef_visualize_surfaces;');
+evalin('base','zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMMcluster_startframe; zef.frame_stop=zef.GMMcluster_stopframe;');
+evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
 hold(h,'on')
 if plot_ellipsoids
 if covtype ~= 1
