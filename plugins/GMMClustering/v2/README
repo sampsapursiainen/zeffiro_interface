@@ -17,10 +17,10 @@ ADVANCED PLOT OPTIONS SYNTAXING
 Pressing "Advanced plot options" from the main app, the Advanced GMM plot options appear. 
 From this window you can set component order to "Manually selected" when you get access to edit fields "Dipole components" and "Ellipsoid components".
 The possible syntaxing for both of the fields are
-1,2,3
-1;2;3
+3,1,2
+3;1;2
 and
-1 2 3
+3 1 2
 
 Changing "Ellipsoid coloring" to "Manually selected", you can give your own array of colors for the plotted confidence ellipsoids.
 Some of the possible syntaxings are
