@@ -71,12 +71,12 @@ evalin('base','zef_brain_transparency_temp=zef.brain_transparency; zef.brain_tra
 if ~iscell(GMModel)
 max_iter = min(size(GMModel.mu,1),ellip_num);
 if comp_ord == 1
-    order = 1:max_iter;
+    order = 1:size(GMModel.mu,1);
 elseif comp_ord == 2
     Amp = sum(GMMdipoles.^2,2);
     [~,order] = sort(Amp,'descend');
 elseif comp_ord == 3
-    order = intersect(ellip_components,1:size(GMModel.mu,1));
+    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
 end
     
 evalin('base','zef_visualize_surfaces;');
@@ -158,7 +158,7 @@ elseif comp_ord == 2
     Amp = sum(GMMdipoles{t}.^2,2);
     [~,order] = sort(Amp,'descend');
 elseif comp_ord == 3
-    order = intersect(ellip_components,1:size(GMModel{t}.mu,1));
+    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
 end
     
 %set surface visualization frames to go along this for loop:
@@ -219,7 +219,7 @@ end
 if comp_ord ~= 3
     dip_ind = order(1:min(dip_num,length(order)));
 else
-    dip_ind = intersect(dip_components,1:size(GMModel{t}.mu,1));
+    dip_ind = dip_components(ismember(dip_components,intersect(dip_components,1:size(GMModel{t}.mu,1))));
 end
 %plot centroid marks:
 plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
