@@ -110,7 +110,7 @@ elseif strcmp(comp_ord,'2')
     Amp = sum(GMMdipoles.^2,2);
     [~,order] = sort(Amp,'descend');
 elseif strcmp(comp_ord,'3')
-    order = intersect(ellip_components,1:size(GMModel.mu,1));
+    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
     max_iter = min(length(order),max_iter);
 end
     
@@ -193,7 +193,7 @@ elseif strcmp(comp_ord,'2')
     Amp = sum(GMMdipoles{t}.^2,2);
     [~,order] = sort(Amp,'descend');
 elseif strcmp(comp_ord,'3')
-    order = intersect(ellip_components,1:size(GMModel{t}.mu,1));
+    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
     max_iter = min(length(order),max_iter);
 end
     
