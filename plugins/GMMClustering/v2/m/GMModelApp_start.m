@@ -8,7 +8,7 @@ zef.GMM.apps.main = GMModelApp;
 if isfield(zef,'GMModel')
     zef.GMM.model = zef.GMModel;
     zef.GMM.dipoles = zef.GMModelDipoles;
-    zef = rmfield(zef,{'GMModel','GMModelDipoles'});
+    %zef = rmfield(zef,{'GMModel','GMModelDipoles'});
 end
 
 if ~isfield(zef.GMM,'parameters')
