@@ -72,7 +72,7 @@ for zef_i = 2:length(zef_props)
             else
             	zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
             end
-            zef = rmfield(zef,zef_props{zef_i});
+            %zef = rmfield(zef,zef_props{zef_i});
             zef.GMM.parameters{zef_n,2} = {zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value};
         end
     end
