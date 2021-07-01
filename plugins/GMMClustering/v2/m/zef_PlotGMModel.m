@@ -10,16 +10,16 @@ m_sym = evalin('base','zef.GMM.parameters.Values{7}');
 s_length = str2num(evalin('base','zef.GMM.parameters.Values{16}'))^2;
 plot_ellipsoids = evalin('base','zef.GMM.parameters.Values{11}');
 ellip_trans = str2num(evalin('base','zef.GMM.parameters.Values{12}'));
-comp_ord = evalin('base','zef.GMM.parameters.Values{19}');
-ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{24}');
-ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
-dip_components = str2num(evalin('base','zef.GMM.parameters.Values{22}'));
+comp_ord = evalin('base','zef.GMM.parameters.Values{20}');
+ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{25}');
+ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{24}'));
+dip_components = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
 if strcmp(comp_ord,'3')
-    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{21}')),length(ellip_components));
-    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{20}')),length(dip_components));
+    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{22}')),length(ellip_components));
+    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{21}')),length(dip_components));
 else
-    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{21}'));
-    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{20}'));
+    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{22}'));
+    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{21}'));
 end
 
 start_t = str2num(evalin('base','zef.GMM.parameters.Values{13}'));
@@ -43,12 +43,13 @@ if strcmp(ellip_coloring_type,'1')
         colors = colors(randperm(K),:);
     end
 else
-    colors = evalin('base','zef.GMM.parameters.Values{25}');
+    colors = evalin('base','zef.GMM.parameters.Values{26}');
     if ~iscell(colors)
         colors = str2num(colors);
         if size(colors,2) < 3 || size(colors,2) > 3
             colors = reshape(colors',3,[])';
         end
+        keyboard
         if size(colors,1) < K
             colors = [colors; repmat(colors(end,:),K-size(colors,1),1)];
         end
@@ -113,8 +114,9 @@ elseif strcmp(comp_ord,'3')
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
     max_iter = min(length(order),max_iter);
 end
-    
-evalin('base','zef_visualize_surfaces;');
+
+evalin('base','zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMM.parameters.Values{17}; zef.frame_stop=zef.GMM.parameters.Values{18};');
+evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
 hold(h,'on')
 if strcmp(plot_ellipsoids,'1')
 if ~strcmp(covtype,'1')
@@ -186,6 +188,9 @@ else
     end
     
 for t = start_t:stop_t
+    if isempty(GMModel{t})
+        error(['There is no Gaussian mixature model for the frame ',num2str(t),'.'])
+    end
 max_iter = min(size(GMModel{t}.mu,1),ellip_num);    
 if strcmp(comp_ord,'1')
     order = 1:size(GMModel{t}.mu,1);

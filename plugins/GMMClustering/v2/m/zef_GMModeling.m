@@ -1,22 +1,23 @@
 function [GMModel,GMModelDipoles] = zef_GMModeling
 h = waitbar(0,['Gaussian mixature model.']);
 
+parameters = evalin('base','zef.GMM.parameters.Values');
 %Options 
-options = statset('MaxIter',str2num(evalin('base','zef.GMM.parameters.Values{2}')));
-if strcmp(evalin('base','zef.GMM.parameters.Values{3}'),'1')
+options = statset('MaxIter',str2num(parameters{2}));
+if strcmp(parameters{3},'1')
     Sigma = 'full';
 else
     Sigma = 'diagonal';
 end
 
-if strcmp(evalin('base','zef.GMM.parameters.Values{4}'),'1')
+if strcmp(parameters{4},'1')
     SharedCovariance = false;
 else
     SharedCovariance = true;
 end
 
 %Initialization
-K = str2num(evalin('base','zef.GMM.parameters.Values{1}'));
+K = str2num(parameters{1});
 if size(K,1) > size(K,2)
     K=K';
 end
@@ -27,12 +28,31 @@ if isempty(z_vec)
 end
 
 source_positions = evalin('base','zef.source_positions');
-threshold = str2num(evalin('base','zef.GMM.parameters.Values{5}'));
-reg_value = str2num(evalin('base','zef.GMM.parameters.Values{15}'));
+%check parcellation
+tag_ind = evalin('base','find(strcmp(zef.GMM.parameters.Tags,''domain''))');
+
+
+if strcmp(parameters{tag_ind},'2')
+source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
+p_ind_aux_1 = [];
+p_selected = evalin('base','zef.parcellation_selected');
+for p_ind = 1 : length(p_selected)
+    p_ind_aux_2 = evalin('base',['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
+    p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
+end
+p_ind_aux_1 = unique(p_ind_aux_1);
+I_aux = unique(source_ind_aux(p_ind_aux_1,:));
+source_positions = source_positions(I_aux(:),:);
+I_aux = [3*I_aux(:)-2,3*I_aux(:)-1,3*I_aux(:)];
+end
+clear p_ind_aux_1 p_ind_aux_2 p_ind p_selected source_ind_aux
+
+threshold = str2num(parameters{5});
+reg_value = str2num(parameters{15});
 
 if iscell(z_vec)
-    T=str2num(evalin('base','zef.GMM.parameters.Values{18}'));
-    t_start = str2num(evalin('base','zef.GMM.parameters.Values{17}'));
+    T=str2num(parameters{18});
+    t_start = str2num(parameters{17});
     GMModel=cell(T,1);
     GMModelDipoles=cell(T,1);
 else
@@ -64,13 +84,25 @@ for t=t_start:T
     end
     %calculuate squares of current densities
     if iscell(z_vec)
-        z=sqrt(z_vec{t}(1:3:end).^2+z_vec{t}(2:3:end).^2+z_vec{t}(3:3:end).^2);
-        direct = [z_vec{t}(1:3:end),z_vec{t}(2:3:end),z_vec{t}(3:3:end)];
-        direct = direct./sqrt(sum(direct.^2,2));
+        if strcmp(parameters{tag_ind},'1')
+            z=sqrt(z_vec{t}(1:3:end).^2+z_vec{t}(2:3:end).^2+z_vec{t}(3:3:end).^2);
+            direct = [z_vec{t}(1:3:end),z_vec{t}(2:3:end),z_vec{t}(3:3:end)];
+            direct = direct./sqrt(sum(direct.^2,2));
+        else
+            z=sqrt(z_vec{t}(I_aux(:,1)).^2+z_vec{t}(I_aux(:,2)).^2+z_vec{t}(I_aux(:,3)).^2);
+            direct = [z_vec{t}(I_aux(:,1)),z_vec{t}(I_aux(:,2)),z_vec{t}(I_aux(:,3))];
+            direct = direct./sqrt(sum(direct.^2,2));
+        end
     else
-        z=sqrt(z_vec(1:3:end).^2+z_vec(2:3:end).^2+z_vec(3:3:end).^2);
-        direct = [z_vec(1:3:end),z_vec(2:3:end),z_vec(3:3:end)];
-        direct = direct./sqrt(sum(direct.^2,2));
+        if strcmp(parameters{tag_ind},'1')
+            z=sqrt(z_vec(1:3:end).^2+z_vec(2:3:end).^2+z_vec(3:3:end).^2);
+            direct = [z_vec(1:3:end),z_vec(2:3:end),z_vec(3:3:end)];
+            direct = direct./sqrt(sum(direct.^2,2));
+        else
+            z=sqrt(z_vec(I_aux(:,1)).^2+z_vec(I_aux(:,2)).^2+z_vec(I_aux(:,3)).^2);
+            direct = [z_vec(I_aux(:,1)),z_vec(I_aux(:,2)),z_vec(I_aux(:,3))];
+            direct = direct./sqrt(sum(direct.^2,2));
+        end
     end
     J = sqrt(z);      %current density
     z = z./max(z);

@@ -23,10 +23,19 @@ end
 
 zef_update_GMMPlotOpts;
 
+zef_n = length(findobj(zef.GMM.apps.main.UIFigure.Children,'Type','uilabel'));
+%set up new tags
+zef_props=findobj(zef.GMM.apps.PlotOpt.UIFigure,'-property','Value');
+zef_props = flip(get(zef_props,'Tag'));
+if sum(strcmp(zef.GMM.parameters.Tags,'saved'))==0
+    zef.GMM.parameters.Tags = [zef.GMM.parameters.Tags(1:zef_n);zef_props];
+else
+    zef.GMM.parameters.Tags = [zef.GMM.parameters.Tags(1:zef_n);zef_props;{'saved'}];
+end
+
 %set parameters if saved in ZI: 
 %(Naming concept: zef.GMM.apps.main."field" = zef."field")
 zef_props = properties(zef.GMM.apps.PlotOpt);
-zef_n = 18;
 for zef_i = 2:length(zef_props)
     if strcmp(zef.GMM.apps.PlotOpt.(zef_props{zef_i-1}).Type,'uilabel')
         zef_n=zef_n+1;
@@ -72,11 +81,12 @@ for zef_i = 2:length(zef_props)
             else
             	zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
             end
-            %zef = rmfield(zef,zef_props{zef_i});
+            zef = rmfield(zef,zef_props{zef_i});
             zef.GMM.parameters{zef_n,2} = {zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value};
         end
     end
 end
+
 clear zef_props zef_i zef_j zef_n zef_temp_screen_size
 
 if strcmp(zef.GMM.apps.PlotOpt.GMM_comp_ord.Value,'3')
@@ -93,13 +103,13 @@ else
     zef.GMM.apps.PlotOpt.GMM_colors.Enable = 'off';
 end
 
-zef.GMM.apps.PlotOpt.GMM_comp_ord.ValueChangedFcn = 'zef.GMM.parameters{19,2} = {zef.GMM.apps.PlotOpt.GMM_comp_ord.Value}; if strcmp(zef.GMM.parameters{19,2},''3''); zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''on''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''off''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''off''; end;';
-zef.GMM.apps.PlotOpt.GMM_dip_comp.ValueChangedFcn = 'zef.GMM.parameters{22,2} = {zef.GMM.apps.PlotOpt.GMM_dip_comp.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_comp.ValueChangedFcn = 'zef.GMM.parameters{23,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_comp.Value};';
-zef.GMM.apps.PlotOpt.GMM_dip_num.ValueChangedFcn = 'zef.GMM.parameters{20,2} = {zef.GMM.apps.PlotOpt.GMM_dip_num.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_num.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_num.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_coloring.ValueChangedFcn = 'zef.GMM.parameters{24,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_coloring.Value}; if strcmp(zef.GMM.parameters{24,2},''2''); zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''off''; end;';
-zef.GMM.apps.PlotOpt.GMM_colors.ValueChangedFcn = 'if isempty(str2num(zef.GMM.apps.PlotOpt.GMM_colors.Value)); zef.GMM.parameters{25,2} = {strsplit(erase(zef.GMM.apps.PlotOpt.GMM_colors.Value,{'''''''','' ''}),{'','','';''})}; else zef.GMM.parameters{25,2} = {zef.GMM.apps.PlotOpt.GMM_colors.Value}; end;';
+zef.GMM.apps.PlotOpt.GMM_comp_ord.ValueChangedFcn = 'zef.GMM.parameters{20,2} = {zef.GMM.apps.PlotOpt.GMM_comp_ord.Value}; if strcmp(zef.GMM.parameters{20,2},''3''); zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''on''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''off''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''off''; end;';
+zef.GMM.apps.PlotOpt.GMM_dip_comp.ValueChangedFcn = 'zef.GMM.parameters{23,2} = {zef.GMM.apps.PlotOpt.GMM_dip_comp.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_comp.ValueChangedFcn = 'zef.GMM.parameters{24,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_comp.Value};';
+zef.GMM.apps.PlotOpt.GMM_dip_num.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.PlotOpt.GMM_dip_num.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_num.ValueChangedFcn = 'zef.GMM.parameters{22,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_num.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_coloring.ValueChangedFcn = 'zef.GMM.parameters{25,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_coloring.Value}; if strcmp(zef.GMM.parameters{25,2},''2''); zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''off''; end;';
+zef.GMM.apps.PlotOpt.GMM_colors.ValueChangedFcn = 'if isempty(str2num(zef.GMM.apps.PlotOpt.GMM_colors.Value)); zef.GMM.parameters{26,2} = {strsplit(erase(zef.GMM.apps.PlotOpt.GMM_colors.Value,{'''''''','' ''}),{'','','';''})}; else zef.GMM.parameters{26,2} = {zef.GMM.apps.PlotOpt.GMM_colors.Value}; end;';
 zef.GMM.apps.PlotOpt.UIFigure.CloseRequestFcn = 'delete(zef.GMM.apps.PlotOpt);';
 
 %set fonts

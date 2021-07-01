@@ -24,11 +24,11 @@ end
 set(zef.GMM.apps.Export.ComponentTable,'columnformat',{'char','logical'});
 zef.GMM.apps.Export.ComponentTable.ColumnEditable = [false,true];
 
-if length(zef.GMM.parameters.Values)<26
-    zef.GMM.parameters=[zef.GMM.parameters;{'Saved components:',num2cell(ones(4,1))}];
+if sum(strcmp(zef.GMM.parameters.Tags,'saved')) == 0
+    zef.GMM.parameters=[zef.GMM.parameters;{'Saved components:',num2cell(ones(4,1)),'saved'}];
     zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Parameters';'Reconstruction'},num2cell(ones(4,1))];
 else
-    zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Parameters';'Reconstruction'},zef.GMM.parameters.Values{26}];
+    zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Parameters';'Reconstruction'},zef.GMM.parameters.Values{end}];
 end
     
 
