@@ -31,7 +31,7 @@ zef.create_dipolar_pair_separation = 2;
 end
 
 if not(isfield(zef,'h_create_dipolar_pair_impedance'))
-zef.create_dipolar_pair_impedance = 1E12;
+zef.create_dipolar_pair_impedance = 1E3;
 end 
 
 if not(isfield(zef,'h_create_dipolar_pair_color'))
