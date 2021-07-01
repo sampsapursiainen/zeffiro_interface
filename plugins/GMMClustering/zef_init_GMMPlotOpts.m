@@ -12,7 +12,7 @@ end
 if ~isfield(zef,'GMM_dip_num')
     if isfield(zef,'GMModel')
         if iscell(zef.GMModel)
-            zef.GMM_dip_num = zef.GMModel{1}.NumComponents;
+            zef.GMM_dip_num = zef.GMModel{find(~cellfun(@isempty,zef.GMModel),1)}.NumComponents;
         else
             zef.GMM_dip_num = zef.GMModel.NumComponents;
         end
@@ -23,7 +23,7 @@ end
 if ~isfield(zef,'GMM_ellip_num')
     if isfield(zef,'GMModel')
         if iscell(zef.GMModel)
-            zef.GMM_ellip_num = zef.GMModel{1}.NumComponents;
+            zef.GMM_ellip_num = zef.GMModel{find(~cellfun(@isempty,zef.GMModel),1)}.NumComponents;
         else
             zef.GMM_ellip_num = zef.GMModel.NumComponents;
         end
