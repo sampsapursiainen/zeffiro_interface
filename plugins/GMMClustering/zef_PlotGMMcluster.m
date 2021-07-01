@@ -1,8 +1,4 @@
 function zef_PlotGMMcluster
-%=====TODO==========
-%1. komponenttien järjestäminen annetun tavan mukaan
-%2. komponentteja piirretään annettu määrä
-%3. enable off componentti ja colorarray paneeleista
 
 m_size = evalin('base','zef.GMMcluster_markersize');
 m_width = evalin('base','zef.GMMcluster_markerwidth');

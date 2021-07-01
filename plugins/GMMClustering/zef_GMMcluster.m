@@ -27,6 +27,21 @@ if isempty(z_vec)
 end
 
 source_positions = evalin('base','zef.source_positions');
+%check parcellation
+if evalin('base','zef.GMMcluster_domain') == 2
+source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
+p_ind_aux_1 = [];
+p_selected = evalin('base','zef.parcellation_selected');
+for p_ind = 1 : length(p_selected)
+    p_ind_aux_2 = evalin('base',['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
+    p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
+end
+p_ind_aux_1 = unique(p_ind_aux_1);
+I_aux = unique(source_ind_aux(p_ind_aux_1,:));
+source_positions = source_positions(I_aux(:),:);
+I_aux = [3*I_aux(:)-2,3*I_aux(:)-1,3*I_aux(:)];
+end
+
 threshold = evalin('base','zef.GMMcluster_threshold');
 reg_value = evalin('base','zef.GMMcluster_reg');
 
@@ -64,13 +79,25 @@ for t=t_start:T
     end
     %calculuate squares of current densities
     if iscell(z_vec)
-        z=sqrt(z_vec{t}(1:3:end).^2+z_vec{t}(2:3:end).^2+z_vec{t}(3:3:end).^2);
-        direct = [z_vec{t}(1:3:end),z_vec{t}(2:3:end),z_vec{t}(3:3:end)];
-        direct = direct./sqrt(sum(direct.^2,2));
+        if evalin('base','zef.GMMcluster_domain') == 1
+            z=sqrt(z_vec{t}(1:3:end).^2+z_vec{t}(2:3:end).^2+z_vec{t}(3:3:end).^2);
+            direct = [z_vec{t}(1:3:end),z_vec{t}(2:3:end),z_vec{t}(3:3:end)];
+            direct = direct./sqrt(sum(direct.^2,2));
+        else
+            z=sqrt(z_vec{t}(I_aux(:,1)).^2+z_vec{t}(I_aux(:,2)).^2+z_vec{t}(I_aux(:,3)).^2);
+            direct = [z_vec{t}(I_aux(:,1)),z_vec{t}(I_aux(:,2)),z_vec{t}(I_aux(:,3))];
+            direct = direct./sqrt(sum(direct.^2,2));
+        end
     else
-        z=sqrt(z_vec(1:3:end).^2+z_vec(2:3:end).^2+z_vec(3:3:end).^2);
-        direct = [z_vec(1:3:end),z_vec(2:3:end),z_vec(3:3:end)];
-        direct = direct./sqrt(sum(direct.^2,2));
+        if evalin('base','zef.GMMcluster_domain') == 1
+            z=sqrt(z_vec(1:3:end).^2+z_vec(2:3:end).^2+z_vec(3:3:end).^2);
+            direct = [z_vec(1:3:end),z_vec(2:3:end),z_vec(3:3:end)];
+            direct = direct./sqrt(sum(direct.^2,2));
+        else
+            z=sqrt(z_vec(I_aux(:,1)).^2+z_vec(I_aux(:,2)).^2+z_vec(I_aux(:,3)).^2);
+            direct = [z_vec(I_aux(:,1)),z_vec(I_aux(:,2)),z_vec(I_aux(:,3))];
+            direct = direct./sqrt(sum(direct.^2,2));
+        end
     end
     J = sqrt(z);      %current density
     z = z./max(z);
