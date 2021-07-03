@@ -3,7 +3,5 @@ if not(isequal(zef.file,0));
 [zef.eit_sensitivity_tool_data] = load([zef.file_path zef.file]);
 zef.eit_sensitivity_tool_file = [zef.file_path zef.file];
 set(zef.h_eit_sensitivity_tool_file, 'Value', zef.eit_sensitivity_tool_file); 
-zef.reconstruction = repmat(zef.eit_sensitivity_tool_data.avg,3,1);
-zef.reconstruction = zef.reconstruction(:);
 end
 
