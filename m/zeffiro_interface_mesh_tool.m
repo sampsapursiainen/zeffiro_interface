@@ -56,7 +56,7 @@ set(zef.h_edit76,'value',(zef.solver_tolerance));
 set(zef.h_edit75,'value',(zef.n_sources));
 set(zef.h_max_surface_face_count,'value',(zef.max_surface_face_count));
 set(zef.h_pushbutton23,'ButtonPushedFcn','apply_transform;');
-set(zef.h_pushbutton34,'ButtonPushedFcn','[zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]);zef_update_fig_details]');
+set(zef.h_pushbutton34,'ButtonPushedFcn','[zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]);zef_update_fig_details;');
 
 set(zef.h_checkbox_mesh_smoothing_on,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_refinement_on,'ValueChangedFcn','zef_update_mesh_tool;');
