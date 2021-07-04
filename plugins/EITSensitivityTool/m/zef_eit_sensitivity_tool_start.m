@@ -62,6 +62,6 @@ zef.h_eit_sensitivity_tool_file_2.Value = zef.eit_sensitivity_tool_file_2;
 zef.h_eit_sensitivity_tool_lower_quantile.Value = zef.eit_sensitivity_tool_lower_quantile;
 zef.h_eit_sensitivity_tool_upper_quantile.Value = zef.eit_sensitivity_tool_upper_quantile;
 
-zef.h_eit_sensitivity_tool_distribution.Items = {'Sigma','Sigma, excluding outer layers','Sensitivity, parallel','Sensitivity, orthogonal','Relative sensitivity, parallel','Relative sensitivity, orthogonal','Difference sensitivity, parallel','Difference sensitivity, orthogonal'};
+zef.h_eit_sensitivity_tool_distribution.Items = {'Sigma 1','Sigma 2','Sigma 1, excluding outer layers','Sigma 2, excluding outer layers','Sensitivity, parallel','Sensitivity, orthogonal','Relative sensitivity, parallel','Relative sensitivity, orthogonal','Difference sensitivity, parallel','Difference sensitivity, orthogonal','Lead field 1','Lead field 2','Lead field difference, parallel','Lead field difference, orthogonal'};
 
 clear zef_data;
