@@ -68,6 +68,7 @@ zef.beamformer.inv_time_2.Value = '0';
 zef.beamformer.number_of_frames.Value = '0';
 zef.beamformer.inv_time_3.Value = '0';
 zef.beamformer.inv_data_segment.Value = '1';
+zef.beamformer.averaging_over_time_window.Value = false;
 
 if ~isfield(zef,'inv_cov_lambda')
     zef.inv_cov_lambda = 5e-2;
@@ -107,6 +108,7 @@ zef.beamformer.number_of_frames.ValueChangedFcn = 'zef.number_of_frames = str2nu
 zef.beamformer.inv_time_3.ValueChangedFcn = 'zef.inv_time_3 = str2num(zef.beamformer.inv_time_3.Value);';
 zef.beamformer.inv_data_segment.ValueChangedFcn = 'zef.inv_data_segment = str2num(zef.beamformer.inv_data_segment.Value);';
 zef.beamformer.normalize_data.ValueChangedFcn = 'zef.normalize_data = str2num(zef.beamformer.normalize_data.Value);';
+zef.beamformer.averaging_over_time_window.ValueChangedFcn = 'zef.averaging_over_time_window = zef.beamformer.averaging_over_time_window.Value;';
 zef.beamformer.normalize_leadfield.ValueChangedFcn = 'zef.normalize_leadfield = str2num(zef.beamformer.normalize_leadfield.Value);';
 zef.beamformer.StartButton.ButtonPushedFcn = 'if strcmp(zef.beamformer.estimation_attr.Value,''1''); [zef.reconstruction,~] = zef_beamformer; elseif strcmp(zef.beamformer.estimation_attr.Value,''2''); [~,zef.reconstruction] = zef_beamformer; else; [zef.reconstruction,zef.bf_var_loc] = zef_beamformer; end;';
 zef.beamformer.CloseButton.ButtonPushedFcn = 'delete(zef.beamformer);';
