@@ -47,13 +47,10 @@ end
 f_data = zef_getFilteredData;
 size_f = size(f_data,2);
 
-if evalin('base','zef.cov_type') == 1
-    C = (f_data-mean(f_data,2))*(f-mean(f,2))'/size(f_data,2);
-    C = C+lambda_cov*trace(C)*eye(size(C))/size(f_data,1);
-elseif evalin('base','zef.cov_type') == 2
-    C = (f_data-mean(f_data,2))*(f-mean(f_data,2))'/size(f_data,2);
-    C = C + lambda_cov*eye(size(C));
-end
+
+            
+        
+
 
 tic;
 %------------------ TIME LOOP STARTS HERE ------------------------------
@@ -77,14 +74,6 @@ Var_vec = ones(size(L,2),1);
 
 f=zef_getTimeStep(f_data, f_ind, true);
 
-if evalin('base','zef.cov_type') == 3
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
-    C = C+lambda_cov*trace(C)*eye(size(C))/size(f,1);
-elseif evalin('base','zef.cov_type') == 4
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
-    C = C + lambda_cov*eye(size(C));
-end
-
 if f_ind == 1
 waitbar(0,h,['Beamformer. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
@@ -92,8 +81,13 @@ end
 
 %---------------CALCULATIONS STARTS HERE----------------------------------
 %Data covariance matrix and its regularization
-
-
+if evalin('base','zef.cov_type') == 1
+    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
+    C = C+lambda_cov*trace(C)*eye(size(C))/size(f,1);
+elseif evalin('base','zef.cov_type') == 2
+    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
+    C = C + lambda_cov*eye(size(C));
+end
 
 if method_type == 1
    %__ LCMV Beamformer __
