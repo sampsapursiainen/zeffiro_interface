@@ -18,8 +18,11 @@ if ~isfield(zef,'bf_type')
 end
 
 %_ Covariance calculation types _
-zef_bf_names = {'Measurement based',
-                'Basic'};
+zef_bf_names = {'Full data, measurement based',
+                'Full data, basic', 
+                'Pointwise, measurement based',
+                'Pointwise, basic'          
+                };
             
 zef.beamformer.cov_type.Items = zef_bf_names;
 zef.beamformer.cov_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
