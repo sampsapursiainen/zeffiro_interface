@@ -87,7 +87,7 @@ end
 z_vec = ones(size(L,2),1);
 Var_vec = ones(size(L,2),1);
 
-f=zef_getTimeStep(f_data, f_ind, zef.averaging_over_time_window);
+f=zef_getTimeStep(f_data, f_ind, true);
 
 if f_ind == 1
 waitbar(0,h,['Beamformer. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
