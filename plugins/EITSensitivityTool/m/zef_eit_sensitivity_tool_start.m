@@ -3,7 +3,7 @@ zef_data = zef_eit_sensitivity_tool;
 if not(isfield(zef,'eit_sensitivity_tool_file'))
     zef.eit_sensitivity_tool_file = '';
 end
-
+ 
 if not(isfield(zef,'eit_sensitivity_tool_file_2'))
     zef.eit_sensitivity_tool_file_2 = '';
 end
@@ -62,6 +62,6 @@ zef.h_eit_sensitivity_tool_file_2.Value = zef.eit_sensitivity_tool_file_2;
 zef.h_eit_sensitivity_tool_lower_quantile.Value = zef.eit_sensitivity_tool_lower_quantile;
 zef.h_eit_sensitivity_tool_upper_quantile.Value = zef.eit_sensitivity_tool_upper_quantile;
 
-zef.h_eit_sensitivity_tool_distribution.Items = {'Sigma 1','Sigma 2','Sigma 1, excluding outer layers','Sigma 2, excluding outer layers','Sensitivity, parallel','Sensitivity, orthogonal','Relative sensitivity, parallel','Relative sensitivity, orthogonal','Difference sensitivity, parallel','Difference sensitivity, orthogonal','Lead field 1','Lead field 2','Lead field difference, parallel','Lead field difference, orthogonal'};
+zef.h_eit_sensitivity_tool_distribution.Items = {'Sigma 1','Sigma 2','Sigma 1, excluding outer layers','Sigma 2, excluding outer layers','EIT sensitivity, parallel','EIT sensitivity, orthogonal','EIT relative sensitivity, parallel','EIT relative sensitivity, orthogonal','EIT difference sensitivity, parallel','EIT difference sensitivity, orthogonal', 'EEG lead field difference, parallel','EEG lead field difference, orthogonal','Store lead field EIT','Store lead field EEG 1','Store lead field EEG 2','Use EIT source space','Use EEG source space'};
 
 clear zef_data;
