@@ -155,10 +155,10 @@ zef.reconstruction = zef.reconstruction(:);
 
 elseif    isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivity_tool_distribution.Items{12})
 
-%zef.reconstruction = (sum(zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:).*zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:)))./sqrt((sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)));
-%zef.reconstruction = (zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:) - repmat(zef.reconstruction,size(zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:),1),1).*zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:)./sqrt(sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)) );
-%zef.reconstruction = sqrt(sum(zef.reconstruction.^2)./sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)); 
-zef.reconstruction = sqrt(sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2));
+zef.reconstruction = (sum(zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:).*zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:)))./sqrt((sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)));
+zef.reconstruction = (zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:) - repmat(zef.reconstruction,size(zef.eit_sensitivity_tool_L_EEG_2(1:end-2,:),1),1).*zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:)./sqrt(sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)) );
+zef.reconstruction = sqrt(sum(zef.reconstruction.^2)./sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2)); 
+%zef.reconstruction = sqrt(sum(zef.eit_sensitivity_tool_L_EEG_1(1:end-2,:).^2));
 zef.aux_quantile = quantile(zef.reconstruction, [zef.eit_sensitivity_tool_lower_quantile zef.eit_sensitivity_tool_upper_quantile]);
 zef.reconstruction = max(zef.reconstruction, zef.aux_quantile(1));
 zef.reconstruction = min(zef.reconstruction, zef.aux_quantile(2));
