@@ -694,8 +694,7 @@ end
 source_nonzero_ind = intersect(source_nonzero_ind,source_ind);
 M2 = size(source_nonzero_ind,1);
 else
-aux_rand_perm = randperm(length(fi_source_locations));
-aux_rand_perm = aux_rand_perm(1:evalin('base','zef.n_sources'));    
+aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind));    
 dipole_directions = fi_source_directions(aux_rand_perm,:);
 dipole_locations = fi_source_locations(aux_rand_perm,:);
 L_meg = L_meg_fi(:,aux_rand_perm);
