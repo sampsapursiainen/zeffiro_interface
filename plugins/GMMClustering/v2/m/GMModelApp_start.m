@@ -114,12 +114,12 @@ for zef_i = 2:length(zef_props)
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i}))
             zef.GMM.apps.main.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
-            zef = rmfield(zef,zef_props{zef_i});
+            %zef = rmfield(zef,zef_props{zef_i});
             zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
             zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
             else
             zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
-            zef = rmfield(zef,zef_props{zef_i});
+            %zef = rmfield(zef,zef_props{zef_i});
             zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
             zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
             end
