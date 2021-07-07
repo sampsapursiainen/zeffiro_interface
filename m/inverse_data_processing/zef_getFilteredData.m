@@ -11,7 +11,7 @@ function [f] = zef_getFilteredData
 
 f = evalin('base','zef.measurements');
 high_pass = evalin('base','zef.inv_low_cut_frequency');
-low_pass = evalin('base','zef.inv_low_cut_frequency');
+low_pass = evalin('base','zef.inv_high_cut_frequency');
 sampling_freq = evalin('base','zef.inv_sampling_frequency');
 
 
