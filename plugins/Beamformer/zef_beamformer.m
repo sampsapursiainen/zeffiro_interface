@@ -49,7 +49,7 @@ size_f = size(f_data,2);
 
 
   if evalin('base','zef.cov_type') == 1
-    C = (f_data-mean(f_data,2))*(f-mean(f,2))'/size(f_data,2);
+    C = (f_data-mean(f_data,2))*(f_data-mean(f_data,2))'/size(f_data,2);
     C = C+lambda_cov*trace(C)*eye(size(C))/size(f_data,1);
 elseif evalin('base','zef.cov_type') == 2
     C = (f_data-mean(f_data,2))*(f-mean(f_data,2))'/size(f_data,2);
@@ -97,13 +97,7 @@ end
 
 %---------------CALCULATIONS STARTS HERE----------------------------------
 %Data covariance matrix and its regularization
-if evalin('base','zef.cov_type') == 1
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
-    C = C+lambda_cov*trace(C)*eye(size(C))/size(f,1);
-elseif evalin('base','zef.cov_type') == 2
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
-    C = C + lambda_cov*eye(size(C));
-end
+
 
 if method_type == 1
    %__ LCMV Beamformer __
