@@ -587,11 +587,6 @@ clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 %*******************************
 end
 
-L_eeg_fi = zeros(L,M_fi);
-if source_model == 2
-L_eeg_ew = zeros(L,M_ew);
-end
-
 %%
 if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
 aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind)); 
@@ -601,6 +596,11 @@ dipole_locations = fi_source_locations(aux_rand_perm,:);
 G_fi = G_fi(:,aux_rand_perm);
 end
 %%
+
+L_eeg_fi = zeros(L,M_fi);
+if source_model == 2
+L_eeg_ew = zeros(L,M_ew);
+end
 
 waitbar(0,h,'PCG iteration.');
 
