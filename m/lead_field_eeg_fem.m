@@ -616,13 +616,6 @@ else
 relres_vec = gpuArray(zeros(1,L-1));
 end
 
-
-L_eeg_fi = gpuArray(L_eeg_fi);
-if source_model == 2
-L_eeg_ew = gpuArray(L_eeg_ew); 
-end
-
-
 tic;
 
 for i = 1 : L
