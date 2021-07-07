@@ -36,6 +36,10 @@ function [L_eeg, dipole_locations, dipole_directions] = lead_field_eeg_fem(nodes
 N = size(nodes,1);
 source_model = evalin('base','zef.source_model');
 
+if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+source_model = 1;
+end
+
 if iscell(elements)
         tetrahedra = elements{1};
         prisms = [];
@@ -581,6 +585,21 @@ clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 %*******************************
 end
 
+L_eeg_fi = zeros(L,M_fi);
+if source_model == 2
+L_eeg_ew = zeros(L,M_ew);
+end
+
+%%
+if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind)); 
+M_fi = length(aux_rand_perm);
+dipole_directions = fi_source_directions(aux_rand_perm,:);
+dipole_locations = fi_source_locations(aux_rand_perm,:);
+G_fi = G_fi(:,aux_rand_perm);
+end
+%%
+
 waitbar(0,h,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
@@ -596,11 +615,11 @@ relres_vec = gpuArray(zeros(1,L-1));
 end
 
 
-L_eeg_fi = zeros(L,M_fi);
-
+L_eeg_fi = gpuArray(L_eeg_fi);
 if source_model == 2
-L_eeg_ew = zeros(L,M_ew);
+L_eeg_ew = gpuArray(L_eeg_ew); 
 end
+
 
 tic;
 
@@ -694,10 +713,7 @@ relres_vec = zeros(1,L);
 else
 relres_vec = zeros(1,L-1);
 end
-L_eeg_fi = zeros(L,M_fi);
-if source_model == 2
-L_eeg_ew = zeros(L,M_ew);
-end
+
 tic;
 for i = 1 : L
 if isequal(electrode_model,'PEM')
@@ -801,10 +817,7 @@ end
 source_nonzero_ind = intersect(source_nonzero_ind,source_ind);
 M2 = size(source_nonzero_ind,1);
 else
-aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind));  
-dipole_directions = fi_source_directions(aux_rand_perm,:);
-dipole_locations = fi_source_locations(aux_rand_perm,:);
-L_eeg = L_eeg_fi(:,aux_rand_perm);
+L_eeg = L_eeg_fi;
 end
 
 

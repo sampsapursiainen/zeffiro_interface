@@ -5,6 +5,10 @@ function [L_meg, dipole_locations, dipole_directions] = lead_field_eeg_fem(nodes
 N = size(nodes,1);
 source_model = evalin('base','zef.source_model');
 
+if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+source_model = 1;
+end
+
 if iscell(elements)
         tetrahedra = elements{1};
         prisms = [];
@@ -554,6 +558,16 @@ clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 %*******************************
 %*******************************
 end
+
+%%
+if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind)); 
+M_fi = length(aux_rand_perm);
+dipole_directions = fi_source_directions(aux_rand_perm,:);
+dipole_locations = fi_source_locations(aux_rand_perm,:);
+G_fi = G_fi(:,aux_rand_perm);
+end
+%%
 
 L_meg_fi = zeros(L,M_fi); 
 for j = 1 : L
