@@ -20,7 +20,12 @@ std_lhood = 10^(-snr_val/20);
 number_of_frames = evalin('base','zef.number_of_frames');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 n_decompositions = evalin('base','zef.exp_multires_n_decompositions');
-weight_vec_aux = sum(sparsity_factor.^[0:n_multires-1]');
+%weight_vec_aux = sum(sparsity_factor.^[0:n_multires-1]');
+[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+n_interp = length(s_ind_1);
+weight_vec_aux = sum(n_interp./floor(n_interp*sparsity_factor.^[1-n_multires:0]));
+clear s_ind_1 n_interp
+
 n_L1_iter = evalin('base', 'zef.inv_n_L1_iterations');
 exp_ias_multires_dec =  evalin('base','zef.exp_multires_dec');
 exp_ias_multires_ind =  evalin('base','zef.exp_multires_ind');
@@ -96,7 +101,14 @@ for n_rep = 1 : n_decompositions
 
 if evalin('base','zef.inv_init_guess_mode') == 2
 theta =zeros(size(L,2),1)+(beta+1/q-1)./theta0;
-end 
+end
+
+if f_ind > 1    
+        waitbar(n_rep/n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+else
+        waitbar(n_rep/n_decompositions,h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+end
+        
 
 for j = 1 : n_multires
 
@@ -158,7 +170,7 @@ end
 
 %__ Initialization __
 n = size(L_aux_2,2);
-L_aux = 1/std_lhood*L_aux_2;
+%L_aux = 1/std_lhood*L_aux_2;
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
 z_vec = gather(z_vec);
@@ -166,11 +178,6 @@ end
 if q == 1
     x_old = ones(n,1);
     for i = 1 : n_iter(j)
-        if f_ind > 1    
-        waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        waitbar(i/n_iter(j),h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
-        end
         z_vec = L1_optimization(L_aux_2,std_lhood,f,theta,x_old,n_L1_iter);
         theta = beta./(theta0+0.5*abs(z_vec));    
         
@@ -179,14 +186,9 @@ if q == 1
     end
 else
     for i = 1 : n_iter(j)
-        if f_ind > 1    
-        waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        waitbar(i/n_iter(j),h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
-        end
-        w = 1./theta;
+        w = 1./(theta*std_lhood^2*max(f)^2);
        
-        z_vec = w.*(L_aux'*((L_aux*(w.*L_aux') + eye(size(L_aux,1)))\f));
+        z_vec = w.*(L_aux_2'*((L_aux_2*(w.*L_aux_2') + eye(size(L_aux_2,1)))\f));
        theta = (beta+1/q-1)./(theta0+0.5*abs(z_vec).^q);
     end
 end
@@ -212,5 +214,5 @@ z{f_ind} = z_vec_aux/(n_decompositions*weight_vec_aux);
 end
 
 z = zef_postProcessInverse(z, procFile);
-z = zef_normalizeInverseReconstruction(z);
+%z = zef_normalizeInverseReconstruction(z);
 close(h);
