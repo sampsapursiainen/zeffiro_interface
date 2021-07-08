@@ -125,7 +125,7 @@ gamma =zeros(length(z_vec),1)+(beta+1/q)./theta0;
         else
         waitbar(i/n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
         end;
-        w = 1./gamma;
+        w = 1./(gamma*std_lhood^2*max(f)^2);
        
         z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
         %_ gamma update _
