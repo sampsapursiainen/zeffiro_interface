@@ -33,7 +33,7 @@ else
     h = waitbar(0,['Create time sequence data.']);
     if isempty(evalin('base','zef.fss_time_val'))
         if evalin('base','str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
-            time_seq = evalin('base','zef.time_sequence(zef.find_synth_source.selected_source,:)');
+            time_seq = evalin('base','zef.time_sequence(1:length(zef.find_synth_source.selected_source),:)');
         else
             time_seq = evalin('base','zef.time_sequence');
         end
