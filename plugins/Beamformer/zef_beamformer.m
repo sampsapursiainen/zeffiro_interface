@@ -24,7 +24,7 @@ end
 reconstruction_information.inv_time_1 = evalin('base','zef.inv_time_1');
 reconstruction_information.inv_time_2 = evalin('base','zef.inv_time_2');
 reconstruction_information.inv_time_3 = evalin('base','zef.inv_time_3');
-reconstruction_information.sampling_freq = evalin('base','zef.inv_sampling_frequency');
+reconstruction_information.sampling_frequency = evalin('base','zef.inv_sampling_frequency');
 reconstruction_information.low_pass = evalin('base','zef.inv_high_cut_frequency');
 reconstruction_information.high_pass = evalin('base','zef.inv_low_cut_frequency');
 reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
