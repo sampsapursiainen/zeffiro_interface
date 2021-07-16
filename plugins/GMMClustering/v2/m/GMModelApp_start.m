@@ -2,19 +2,31 @@
 %script to zeffiro_plugins file:
 %GMMclustering, inverse_tools, GMModel_start
 
+%don't allow to open multiple app window because it cause ether App
+%Designer or app's functionalities to crash or both of them
+if isfield(zef,'GMM')
+if isfield(zef.GMM.apps,'main')
+    if isvalid(zef.GMM.apps.main)
+        eval(zef.GMM.apps.main.UIFigure.CloseRequestFcn);
+    end
+end
+end
 zef.GMM.apps.main = GMModelApp;
 
 %move possible output of previous version to the GMM structure field
 if isfield(zef,'GMModel')
     zef.GMM.model = zef.GMModel;
+    %zef = rmfield(zef,'GMModel');
+end
+if isfield(zef,'GMModelDipoles')
     zef.GMM.dipoles = zef.GMModelDipoles;
-    zef = rmfield(zef,{'GMModel','GMModelDipoles'});
+    %zef = rmfield(zef,'GMModelDipoles');
 end
 
 
 if ~isfield(zef.GMM,'parameters')
 %_ Initial values _
-zef_GMM_values = cell(26,1);
+zef_GMM_values = cell(2,1);
 
 %maximum number of components
 zef_GMM_values{1} = '3';
@@ -62,39 +74,50 @@ if iscell(zef.reconstruction)
 else
     zef_GMM_values{18} = '1';
 end
+%time point for amplitude bar plot
+zef_GMM_values{20} = '';
+
+zef_i = length(zef_GMM_values);
+zef.GMM.meta{1} = zef_i;
 
 %_ Advanced plot options initial values _
 %Component plotting order
-zef_GMM_values{20} = '1';
-%manually seleced dipole components
-zef_GMM_values{23} = '';
-%manually selected ellipsoids
-zef_GMM_values{24} = '';
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '1';
 %number of dipoles
+zef_i = zef_i+1;
 if isfield(zef.GMM,'model')
     if iscell(zef.GMM.model)
-        zef_GMM_values{21} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+        zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
     else
-        zef_GMM_values{21} = num2str(zef.GMM.model.NumComponents);
+        zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
     end
 else
-    zef_GMM_values{21} = '3';
+    zef_GMM_values{zef_i} = '3';
 end
-
 %number of ellipsoids
+zef_i = zef_i+1;
 if isfield(zef.GMM,'model')
     if iscell(zef.GMM.model)
-        zef_GMM_values{21} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+        zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
     else
-        zef_GMM_values{21} = num2str(zef.GMM.model.NumComponents);
+        zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
     end
 else
-    zef_GMM_values{21} = '3';
+    zef_GMM_values{zef_i} = '3';
 end
+%manually seleced dipole components
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '';
+%manually selected ellipsoids
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '';
 %type of ellipsoid coloring
-zef_GMM_values{25} = '1';
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '1';
 %manually setted colors
-zef_GMM_values{26} = '';
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '';
 
 zef_GMM_label_names = repmat({''},length(zef_GMM_values),1);
 else
@@ -149,6 +172,8 @@ zef.GMM.apps.main.GMMcluster_alpha.ValueChangedFcn = 'zef.GMM.parameters{6,2}={z
 zef.GMM.apps.main.GMMcluster_domain.ValueChangedFcn = 'zef.GMM.parameters{19,2} = {zef.GMM.apps.main.GMMcluster_domain.Value};';
 zef.GMM.apps.main.GMMcluster_c_startframe.ValueChangedFcn = 'zef.GMM.parameters{17,2}={zef.GMM.apps.main.GMMcluster_c_startframe.Value};';
 zef.GMM.apps.main.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMMcluster_c_stopframe.Value};';
+zef.GMM.apps.main.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMMcluster_c_stopframe.Value};';
+zef.GMM.apps.main.GMMcluster_ampframe.ValueChangedFcn = 'zef.GMM.parameters{20,2}={zef.GMM.apps.main.GMMcluster_ampframe.Value};';
 
 zef.GMM.apps.main.GMMcluster_markercolor.ValueChangedFcn = 'zef.GMM.parameters{7,2}={zef.GMM.apps.main.GMMcluster_markercolor.Value};';
 zef.GMM.apps.main.GMMcluster_markersize.ValueChangedFcn = 'zef.GMM.parameters{8,2}={zef.GMM.apps.main.GMMcluster_markersize.Value};';
@@ -160,12 +185,13 @@ zef.GMM.apps.main.GMMcluster_elliptrans.ValueChangedFcn = 'zef.GMM.parameters{12
 zef.GMM.apps.main.GMMcluster_startframe.ValueChangedFcn = 'zef.GMM.parameters{13,2}={zef.GMM.apps.main.GMMcluster_startframe.Value};';
 zef.GMM.apps.main.GMMcluster_stopframe.ValueChangedFcn = 'zef.GMM.parameters{14,2}={zef.GMM.apps.main.GMMcluster_stopframe.Value};';
 
-zef.GMM.apps.main.StartButton.ButtonPushedFcn = '    [zef.GMM.model,zef.GMM.dipoles] = zef_GMModeling;';
+zef.GMM.apps.main.StartButton.ButtonPushedFcn = '    [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;';
 zef.GMM.apps.main.CloseButton.ButtonPushedFcn = 'if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';
-zef.GMM.apps.main.PlotOptButton.ButtonPushedFcn = 'zef_GMMPlotOpt;';
-zef.GMM.apps.main.PlotButton.ButtonPushedFcn = 'zef_update_GMMPlotOpts; zef_PlotGMModel;';
-zef.GMM.apps.main.ExportButton.ButtonPushedFcn = 'zef_GMMExport_start;';
-zef.GMM.apps.main.ImportButton.ButtonPushedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_aux = load(fullfile(zef_aux_path,zef_aux_file)); if isfield(zef_aux,''zef_GMModel''); zef.GMM.model = zef_aux.zef_GMModel; zef.GMM.dipoles = zef_aux.zef_GMModelDipoles; elseif isfield(zef_aux,''zef_GMM''); zef_aux = zef_aux.zef_GMM; if isfield(zef_aux,''model''); zef.GMM.model = zef_aux.model; end; if isfield(zef_aux,''dipoles''); zef.GMM.dipoles = zef_aux.dipoles; end; if isfield(zef_aux,''parameters''); zef.GMM.parameters = zef_aux.parameters; zef_GMM_update; end; if isfield(zef_aux,''reconstruction''); zef.reconstruction = zef_aux.reconstruction; end; end; end; clear zef_aux zef_aux_file zef_aux_path;';
+zef.GMM.apps.main.PlotOptMenu.MenuSelectedFcn = 'zef_GMMPlotOpt;';
+zef.GMM.apps.main.PlotModelButton.ButtonPushedFcn = 'zef_update_GMMPlotOpts; zef_PlotGMModel;';
+zef.GMM.apps.main.PlotAmpButton.ButtonPushedFcn = 'zef_update_GMMPlotOpts; zef_plot_GMM_amplitudes;';
+zef.GMM.apps.main.ExportMenu.MenuSelectedFcn = 'zef_GMMExport_start;';
+zef.GMM.apps.main.ImportMenu.MenuSelectedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_aux = load(fullfile(zef_aux_path,zef_aux_file)); if isfield(zef_aux,''zef_GMModel''); zef.GMM.model = zef_aux.zef_GMModel; zef.GMM.dipoles = zef_aux.zef_GMModelDipoles; elseif isfield(zef_aux,''zef_GMM''); zef_aux = zef_aux.zef_GMM; if isfield(zef_aux,''model''); zef.GMM.model = zef_aux.model; end; if isfield(zef_aux,''dipoles''); zef.GMM.dipoles = zef_aux.dipoles; end; if isfield(zef_aux,''parameters''); zef.GMM.parameters = zef_aux.parameters; zef_GMM_update; end; if isfield(zef_aux,''reconstruction''); zef.reconstruction = zef_aux.reconstruction; end; end; end; clear zef_aux zef_aux_file zef_aux_path;';
 
 %close request function
 zef.GMM.apps.main.UIFigure.CloseRequestFcn = 'if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';

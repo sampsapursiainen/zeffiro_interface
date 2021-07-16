@@ -10,16 +10,16 @@ m_sym = evalin('base','zef.GMM.parameters.Values{7}');
 s_length = str2num(evalin('base','zef.GMM.parameters.Values{16}'))^2;
 plot_ellipsoids = evalin('base','zef.GMM.parameters.Values{11}');
 ellip_trans = str2num(evalin('base','zef.GMM.parameters.Values{12}'));
-comp_ord = evalin('base','zef.GMM.parameters.Values{20}');
-ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{25}');
-ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{24}'));
-dip_components = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
+comp_ord = evalin('base','zef.GMM.parameters.Values{21}');
+ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{26}');
+ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{25}'));
+dip_components = str2num(evalin('base','zef.GMM.parameters.Values{24}'));
 if strcmp(comp_ord,'3')
-    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{22}')),length(ellip_components));
-    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{21}')),length(dip_components));
+    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{23}')),length(ellip_components));
+    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{22}')),length(dip_components));
 else
-    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{22}'));
-    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{21}'));
+    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
+    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{22}'));
 end
 
 start_t = str2num(evalin('base','zef.GMM.parameters.Values{13}'));
@@ -43,7 +43,7 @@ if strcmp(ellip_coloring_type,'1')
         colors = colors(randperm(K),:);
     end
 else
-    colors = evalin('base','zef.GMM.parameters.Values{26}');
+    colors = evalin('base','zef.GMM.parameters.Values{27}');
     if ~iscell(colors)
         colors = str2num(colors);
         if size(colors,2) < 3 || size(colors,2) > 3
@@ -115,7 +115,7 @@ elseif strcmp(comp_ord,'3')
     max_iter = min(length(order),max_iter);
 end
 
-evalin('base','zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMM.parameters.Values{17}; zef.frame_stop=zef.GMM.parameters.Values{18};');
+evalin('base','zef_GMM_subs_time_vars(''in''); zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMM.parameters.Values{17}; zef.frame_stop=zef.GMM.parameters.Values{18};');
 evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
 hold(h,'on')
 if strcmp(plot_ellipsoids,'1')
@@ -179,10 +179,12 @@ plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,
 %set direction vectors (original can be non-unit length)
 direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
 quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
-hold(h,'off')
+hold(h,'off')%set old time parameters back to their places:
+evalin('base','zef_GMM_subs_time_vars(''out'')');
+
 %If time serie exists:
 else
-    evalin('base','zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop;');
+    evalin('base','zef_GMM_subs_time_vars(''in''); zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop;');
     if  length(GMModel) < stop_t
         stop_t = length(GMModel);
     end
@@ -270,8 +272,8 @@ quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_in
 hold(h,'off')
 pause(1.5)
 end
-%set old frame values back to their  places:
-evalin('base','clear zef_t; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
+%set old frame values and time parameters back to their places:
+evalin('base','zef_GMM_subs_time_vars(''out'') clear zef_t; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
 
 end
 %set transparencies back:

@@ -55,7 +55,7 @@ end
 %_ Export options _
 if isfield(zef.GMM.apps,'Export')
     if isvalid(zef.GMM.apps.Export)
-        zef.GMM.apps.Export.ComponentTable.Data=[{'model';'dipoles';'parameters'},zef.GMM.parameters.Values{26}];
+        zef.GMM.apps.Export.ComponentTable.Data=[{'model';'dipoles';'parameters'},zef.GMM.parameters.Values{find(strcmp(zef.GMM.parameters.Tags,'saved'))}];
     else
         zef.GMM.apps = rmfield(zef.GMM.apps,'Export');
     end
