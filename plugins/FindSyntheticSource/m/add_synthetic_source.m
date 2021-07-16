@@ -14,7 +14,7 @@ end
 zef.find_synth_source.h_source_list.Data=flip(zef.find_synth_source.h_source_list.Data); 
 
 zef.find_synth_source.h_source_list.Data{end+1,1} = ['Source(',num2str(zef_temp_itemnum),')']; 
-zef.find_synth_source.selected_source=zef_temp_itemnum; 
+zef.find_synth_source.selected_source=1; 
 
 zef.find_synth_source.h_source_list.Data=flip(zef.find_synth_source.h_source_list.Data); 
 clear zef_temp_itemnum; 
