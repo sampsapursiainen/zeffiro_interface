@@ -40,14 +40,7 @@ zef.synth_source_init{15,2} = '1';
 zef.synth_source_init{16,2} = '1';
 
 if isfield(zef,'synth_source_data')
-     %If FSS uses Noise STD instead of signal to noise ratio
-    for zef_n = 1:length(zef.synth_source_data)
-        if strcmp(zef.synth_source_data{zef_n}.parameters{8,1},'Noise STD w.r.t. amplitude')
-            zef.synth_source_data{zef_n}.parameters{8,1} = 'Noise STD w.r.t. amplitude (dB)';
-            zef.synth_source_data{zef_n}.parameters{8,2} = num2str(db(str2num(zef.synth_source_data{zef_n}.parameters{8,2})));
-        end
-    end
-    %Display elements on synt_source_data
+    %Display elements on synth_source_data
     zef.find_synth_source.h_source_list.Data=[];
     if ~iscell(zef.synth_source_data)
        zef_aux_data = zef.synth_source_data;
@@ -61,6 +54,13 @@ if isfield(zef,'synth_source_data')
     end
     for zef_j = 1:length(zef.synth_source_data)
         zef.find_synth_source.h_source_list.Data{zef_j,1}=zef.synth_source_data{zef_j}.name;
+    end
+     %If FSS uses Noise STD instead of signal to noise ratio
+    for zef_n = 1:length(zef.synth_source_data)
+        if strcmp(zef.synth_source_data{zef_n}.parameters{8,1},'Noise STD w.r.t. amplitude')
+            zef.synth_source_data{zef_n}.parameters{8,1} = 'Noise STD w.r.t. amplitude (dB)';
+            zef.synth_source_data{zef_n}.parameters{8,2} = num2str(db(str2num(zef.synth_source_data{zef_n}.parameters{8,2})));
+        end
     end
 elseif isfield(zef,'inv_synth_source')
     %Statement that "updates" field construction of zef
@@ -94,7 +94,7 @@ zef.find_synth_source.h_bg_noise.Value = num2str(zef.fss_bg_noise);
 zef.find_synth_source.h_add_source.ButtonPushedFcn = 'zef.synth_source_updated_true = false; add_synthetic_source;';
 zef.find_synth_source.h_remove_source.ButtonPushedFcn = 'zef.synth_source_updated_true = false; remove_synthetic_source;';
 zef.find_synth_source.h_source_list.DisplayDataChangedFcn = 'zef.synth_source_data{zef.find_synth_source.selected_source}.name = zef.find_synth_source.h_source_list.Data{zef.find_synth_source.selected_source};';
-zef.find_synth_source.h_source_parameters.DisplayDataChangedFcn = 'zef.synth_source_updated_true = false; zef.synth_source_data{zef.find_synth_source.selected_source}.parameters=zef.find_synth_source.h_source_parameters.Data; for zef_j = 1:length(zef.synth_source_data); zef.synth_source_data{zef_j}.parameters{8,2}=zef.synth_source_data{zef.find_synth_source.selected_source}.parameters{8,2}; zef.synth_source_data{zef_j}.parameters{9,2}=zef.synth_source_data{zef.find_synth_source.selected_source}.parameters{9,2};  end; clear zef_j;';
+zef.find_synth_source.h_source_parameters.DisplayDataChangedFcn = 'zef.synth_source_updated_true = false; zef.synth_source_data{zef.find_synth_source.selected_source}.parameters=zef.find_synth_source.h_source_parameters.Data; zef.synth_source_init{8,2} = zef.find_synth_source.h_source_parameters.Data{8,2}; zef.synth_source_init{9,2} = zef.find_synth_source.h_source_parameters.Data{9,2}; for zef_j = 1:length(zef.synth_source_data); zef.synth_source_data{zef_j}.parameters{8,2}=zef.synth_source_data{zef.find_synth_source.selected_source}.parameters{8,2}; zef.synth_source_data{zef_j}.parameters{9,2}=zef.synth_source_data{zef.find_synth_source.selected_source}.parameters{9,2}; zef.inv_synth_sampling_frequency = str2num(zef.synth_source_data{zef.find_synth_source.selected_source}.parameters{9,2}); end; clear zef_j;';
 zef.find_synth_source.h_time_val.ValueChangedFcn = 'zef.fss_time_val = str2num(zef.find_synth_source.h_time_val.Value);';
 zef.find_synth_source.h_generate_time_sequence.ButtonPushedFcn = 'zef_update_fss; [zef.time_sequence,zef.time_variable] = zef_generate_time_sequence;';
 zef.find_synth_source.h_create_synth_data.ButtonPushedFcn = 'zef_update_fss; zef.measurements = zef_find_source;';
@@ -106,10 +106,10 @@ zef.find_synth_source.h_bg_noise.ValueChangedFcn = 'zef.fss_bg_noise = str2num(z
 
 set(findobj(zef.find_synth_source.h_find_synth_source.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+
 set(zef.find_synth_source.h_find_synth_source,'AutoResizeChildren','off');
-zef.find_synth_source_current_size  = get(zef.find_synth_source.h_find_synth_source,'Position');
-zef.find_synth_source_relative_size = zef_get_relative_size(zef.find_synth_source.h_find_synth_source);
-set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn', 'zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size,zef.find_synth_source_relative_size);');
+zef.find_synth_source_current_size = get(zef.find_synth_source.h_find_synth_source,'Position');
+set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn','zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size);');
 
 
 clear zef_i zef_j zef_n zef_N
