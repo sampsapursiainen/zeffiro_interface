@@ -2,7 +2,7 @@ function [time_serie,time_var] = zef_generate_time_sequence
 h = waitbar(0,['Generate time sequence.']);
 
 %Sample rate as the number of samples per second
-sampling_freq = evalin('base','zef.inv_synth_sampling_frequency');
+sampling_freq = evalin('base','max(cell2mat(zef.inv_synth_sampling_frequency))');
 %The time when peak of pulse occurs
 peak_time = evalin('base','zef.inv_pulse_peak_time');
 %Amplitude of the pulse between 0 and 1
