@@ -106,10 +106,9 @@ zef.find_synth_source.h_bg_noise.ValueChangedFcn = 'zef.fss_bg_noise = str2num(z
 
 set(findobj(zef.find_synth_source.h_find_synth_source.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
-
 set(zef.find_synth_source.h_find_synth_source,'AutoResizeChildren','off');
-zef.find_synth_source_current_size = get(zef.find_synth_source.h_find_synth_source,'Position');
-set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn','zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size);');
-
+zef.find_synth_source_current_size  = get(zef.find_synth_source.h_find_synth_source,'Position');
+zef.find_synth_source_relative_size = zef_get_relative_size(zef.find_synth_source.h_find_synth_source);
+set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn', 'zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size,zef.find_synth_source_relative_size);');
 
 clear zef_i zef_j zef_n zef_N
