@@ -175,9 +175,6 @@ if method_type == 1
         if evalin('base','zef.L_reg_type')==1
             invLTinvCL = inv(L_aux'*L_aux+lambda_L*eye(size(L_aux,2)));
         elseif evalin('base','zef.L_reg_type')==2
-            disp(0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2)))
-            invLTinvCL = inv(L_aux'*L_aux+0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2)));
-        elseif evalin('base','zef.L_reg_type')==3
             invLTinvCL = pinv(L_aux'*L_aux);
         end
         
@@ -231,11 +228,9 @@ elseif method_type == 2
                 %Leadfield regularization
                 if evalin('base','zef.L_reg_type')==1
                     lambdaI = lambda_L*eye(size(L_aux,2));
-                elseif evalin('base','zef.L_reg_type')==2
-                    lambdaI = 0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2));
                 end
                 L_aux = L_aux2(:,L_ind(n_iter,1));
-                if evalin('base','zef.L_reg_type')==3
+                if evalin('base','zef.L_reg_type')==2
                     weights = C\pinv(L_aux)';
                 else
                     weights = (C\L(:,L_ind(n_iter,1)))/(L_aux'*L_aux+lambdaI);
@@ -248,8 +243,6 @@ elseif method_type == 2
                 %Leadfield regularization
                 if evalin('base','zef.L_reg_type')==1
                     lambdaI = lambda_L*eye(size(L_aux,2));
-                elseif evalin('base','zef.L_reg_type')==2
-                    lambdaI = 0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2));
                 end
                 %Leadfield normalization
                 if strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'1')
@@ -259,7 +252,7 @@ elseif method_type == 2
             %- J. Gross and A.A. Ioannides. "Linear transformations of data space in MEG",
             %Phys. Med. Biol., vol. 44, pp. 2081–2097, 1999.
                       L_aux = L_aux2(:,L_ind(n_iter,:))/norm(L_aux);
-                      if ~ismember(evalin('base','zef.L_reg_type'),[3])
+                      if ~ismember(evalin('base','zef.L_reg_type'),[2])
                           weights = C\L_aux;
                           weights = weights/(L_aux'*L_aux+lambdaI);
                       else
@@ -267,7 +260,7 @@ elseif method_type == 2
                       end
                 elseif strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'2')
                     L_aux = L_aux2(:,L_ind(n_iter,:))./sqrt(sum(L_aux.^2,1));
-                    if ~ismember(evalin('base','zef.L_reg_type'),[3])
+                    if ~ismember(evalin('base','zef.L_reg_type'),[2])
                         weights = C\L_aux;
                         weights = weights/(L_aux'*L_aux+lambdaI);
                     else
@@ -275,7 +268,7 @@ elseif method_type == 2
                     end
                 elseif strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'3')
                     L_aux = L_aux2(:,L_ind(n_iter,:))./sqrt(sum(L_aux.^2,2));
-                    if ~ismember(evalin('base','zef.L_reg_type'),[3])
+                    if ~ismember(evalin('base','zef.L_reg_type'),[2])
                         weights = C\L_aux;
                         weights = weights/(L_aux'*L_aux+lambdaI);
                     else
@@ -283,7 +276,7 @@ elseif method_type == 2
                     end
                 else
                     L_aux = L_aux2(:,L_ind(n_iter,:));
-                    if ~ismember(evalin('base','zef.L_reg_type'),[3])
+                    if ~ismember(evalin('base','zef.L_reg_type'),[2])
                         weights = C\L_aux;
                         weights = weights/(L_aux'*L_aux+lambdaI);
                     else
@@ -296,8 +289,6 @@ elseif method_type == 2
         %Leadfield regularization
         if evalin('base','zef.L_reg_type')==1
             lambdaI = lambda_L*eye(size(L_aux,2));
-        elseif evalin('base','zef.L_reg_type')==2
-            lambdaI = 0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2));
         end
         %Leadfield normalization
         if strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'1')
@@ -307,7 +298,7 @@ elseif method_type == 2
             %- J. Gross and A.A. Ioannides. "Linear transformations of data space in MEG",
             %Phys. Med. Biol., vol. 44, pp. 2081–2097, 1999.
             L_aux = L_aux2(:,L_ind(n_iter,:))/norm(L_aux);
-            if ~ismember(evalin('base','zef.L_reg_type'),[3])
+            if ~ismember(evalin('base','zef.L_reg_type'),[2])
                 weights = C\L_aux;
                 weights = weights/(L_aux'*L_aux+lambdaI);
             else
@@ -315,7 +306,7 @@ elseif method_type == 2
             end
         elseif strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'2')
             L_aux = L_aux2(:,L_ind(n_iter,:))./sqrt(sum(L_aux.^2,1));
-            if ~ismember(evalin('base','zef.L_reg_type'),[3])
+            if ~ismember(evalin('base','zef.L_reg_type'),[2])
                 weights = C\L_aux;
                 weights = weights/(L_aux'*L_aux+lambdaI);
             else
@@ -323,7 +314,7 @@ elseif method_type == 2
             end
         elseif strcmp(evalin('base','zef.beamformer.normalize_leadfield.Value'),'3')
             L_aux = L_aux2(:,L_ind(n_iter,:))./sqrt(sum(L_aux.^2,2));
-            if ~ismember(evalin('base','zef.L_reg_type'),[3])
+            if ~ismember(evalin('base','zef.L_reg_type'),[2])
                 weights = C\L_aux;
                 weights = weights/(L_aux'*L_aux+lambdaI);
             else
@@ -331,7 +322,7 @@ elseif method_type == 2
             end
         else
             L_aux = L_aux2(:,L_ind(n_iter,:));
-            if ~ismember(evalin('base','zef.L_reg_type'),[3])
+            if ~ismember(evalin('base','zef.L_reg_type'),[2])
                 weights = C\L_aux;
                 weights = weights/(L_aux'*L_aux+lambdaI);
             else
@@ -437,9 +428,6 @@ elseif method_type == 3
         if evalin('base','zef.L_reg_type')==1
             invLTinvCL = inv(L_aux'*L_aux+lambda_L*eye(size(L_aux,2)));
         elseif evalin('base','zef.L_reg_type')==2
-            disp(0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2)))
-            invLTinvCL = inv(L_aux'*L_aux+0.5*max(mean(L_aux'*L_aux,'all'),min(abs(L_aux'*L_aux),[],'all'))*eye(size(L_aux,2)));
-        elseif evalin('base','zef.L_reg_type')==3
             invLTinvCL = pinv(L_aux'*L_aux);
         end
         

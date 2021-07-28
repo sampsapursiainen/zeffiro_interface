@@ -35,7 +35,6 @@ end
 
 %_ Names of leadfield regularization methods _
 zef_bf_names = {'Basic'
-                '2nd order Taylor minimum error'
                 'Pseudoinverse'};
             
 zef.beamformer.L_reg_type.Items = zef_bf_names;
