@@ -273,7 +273,7 @@ hold(h,'off')
 pause(1.5)
 end
 %set old frame values and time parameters back to their places:
-evalin('base','zef_GMM_subs_time_vars(''out'') clear zef_t; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
+evalin('base','zef_GMM_subs_time_vars(''out''); clear(''zef_t''); zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear(''zef_frame_start_temp'',''zef_frame_stop_temp'');');
 
 end
 %set transparencies back:

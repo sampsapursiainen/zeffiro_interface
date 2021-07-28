@@ -14,11 +14,18 @@ if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0)
         zef_GMM.dipoles = GMM.dipoles;
     end
     if saved_ones{3} == 1
-        zef_GMM.parameters = GMM.parameters;
+        zef_GMM.amplitudes = GMM.amplitudes;
     end
     if saved_ones{4} == 1
+        zef_GMM.time_variables = GMM.time_variables;
+    end
+    if saved_ones{5} == 1
+        zef_GMM.parameters = GMM.parameters;
+    end
+    if saved_ones{6} == 1
         zef_GMM.reconstruction = evalin('base','zef.reconstruction');
     end
+    
     
     save(fullfile(zef_aux_path,zef_aux_file),'zef_GMM','-v7.3'); 
 end
