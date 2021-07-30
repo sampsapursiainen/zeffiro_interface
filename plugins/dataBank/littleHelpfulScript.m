@@ -39,7 +39,7 @@ for i=1:length(allHashes)
         
         [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
         
-        zef.dataBank.tree.(newHash).name='gmm_8_90';
+        zef.dataBank.tree.(newHash).name='gmm_8_50';
         if strcmp(zef.dataBank.save2disk, 'On')
             nodeData=zef.dataBank.tree.(newHash).data;
             folderName=strcat(zef.dataBank.folder, newHash);
@@ -52,3 +52,10 @@ for i=1:length(allHashes)
         
     end
 end
+
+
+%%
+
+zef_dipole_start;
+zef_ramus_iteration
+
