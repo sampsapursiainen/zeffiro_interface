@@ -20,12 +20,6 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 method_type = evalin('base','zef.csm_type');
 
-if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],1);
-elseif evalin('base','zef.inv_hyperprior') == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],1);
-end
-
 if method_type == 1
     reconstruction_information.tag = 'CSM/dSPM';
 elseif method_type == 2
@@ -45,6 +39,12 @@ reconstruction_information.snr_val = evalin('base','zef.inv_snr');
 reconstruction_information.number_of_frames = evalin('base','zef.number_of_frames');
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+
+if evalin('base','zef.inv_hyperprior') == 1
+[beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
+elseif evalin('base','zef.inv_hyperprior') == 2 
+[beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
+end
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
