@@ -1,4 +1,4 @@
-function [z, info] = zef_mne(void)
+function [z, info] = zef_mne(~~)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
@@ -20,8 +20,8 @@ source_directions = evalin('base','zef.source_directions');
 
 
 info=[];
-info.tag='mne_type';
-info.type='mne_type';
+info.tag=mne_type;
+info.type=mne_type;
 info.std_lhood=std_lhood;
 
 info.snr_val = evalin('base','zef.mne_snr');
