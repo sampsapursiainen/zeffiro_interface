@@ -2,11 +2,26 @@
 
 
 
-
 dbFieldNames=fieldnames(zef.dataBank.tree.(zef.dataBank.hash).data);
 
+
 for dbi=1:length(dbFieldNames)
-    zef.(dbFieldNames{dbi})=zef.dataBank.tree.(zef.dataBank.hash).data.(dbFieldNames{dbi});
+     if strcmp(zef.dataBank.tree.(zef.dataBank.hash).type, 'gmm')
+    
+        if ~(startsWith(dbFieldNames{dbi}, 'Properties')||startsWith(dbFieldNames{dbi}, 'type')) %prevents the copy of the properties if the data is an matObject
+            zef.GMM.(dbFieldNames{dbi})=zef.dataBank.tree.(zef.dataBank.hash).data.(dbFieldNames{dbi});
+        end
+                zef_GMM_update;
+
+        
+        
+     else
+    
+    if ~(startsWith(dbFieldNames{dbi}, 'Properties')||startsWith(dbFieldNames{dbi}, 'type')) %prevents the copy of the properties if the data is an matObject
+        zef.(dbFieldNames{dbi})=zef.dataBank.tree.(zef.dataBank.hash).data.(dbFieldNames{dbi});
+    end
+    
+     end
     
 end
 
@@ -21,6 +36,7 @@ if zef.dataBank.loadParents
         end        
     
 end
+
     
     
     

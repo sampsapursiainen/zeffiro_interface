@@ -15,9 +15,11 @@ for dbi=1:length(zef.dataBank.hashList)
     dbparent=dbparent.Children(str2double(hashNumber));
     zef.dataBank.hash=extractAfter(zef.dataBank.hash, '_');
     end
-    uitreenode(dbparent, 'Text', zef.dataBank.tree.(zef.dataBank.hashList{dbi}).name, 'NodeData',zef.dataBank.tree.(zef.dataBank.hashList{dbi}).hash);   
+    newNode=uitreenode(dbparent, 'Text', zef.dataBank.tree.(zef.dataBank.hashList{dbi}).name, 'NodeData',zef.dataBank.tree.(zef.dataBank.hashList{dbi}).hash);  
+    newNode.ContextMenu=zef.dataBank.app.treeMenu;
+
 end
 
 expand(zef.dataBank.app.Tree, 'all');
 
-clear dbparent
+clear dbparent newNode

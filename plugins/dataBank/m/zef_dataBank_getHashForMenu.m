@@ -15,8 +15,9 @@ else
             return;
         end
         
-        for dbi=1:size(zef.dataBank.app.Tree.SelectedNodes,1)>1
-            zef.dataBank.hash(i)=zef.dataBank.app.Tree.SelectedNodes(dbi).NodeData;
+        
+        for dbi=1:size(zef.dataBank.app.Tree.SelectedNodes,1)
+            zef.dataBank.hash{dbi}=zef.dataBank.app.Tree.SelectedNodes(dbi).NodeData;
         end
     else
         

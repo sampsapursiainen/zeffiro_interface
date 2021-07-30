@@ -37,7 +37,7 @@ switch type
       
     case 'gmm'
         data = rmfield(zef.GMM,'apps');
-        
+        data.type='gmm';
         
 end
 
