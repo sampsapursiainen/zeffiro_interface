@@ -162,7 +162,7 @@ end
     end
     z_amp = A_mat'*((A_mat*A_mat'+S_mat)\f);    %amplitude estimation
     z_vec = zeros(size(L,2),1); 
-    z_vec(L_ind(ind_space,:)) = repelem(abs(z_amp),3).*orj; %couple the amplitude with the position.
+    z_vec(L_ind(ind_space,:)) = repelem(abs(z_amp),3).*orj; %couple the amplitude with the orjentation.
 
 z{f_ind} = z_vec;
 end;
