@@ -10,6 +10,8 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.lead_field_id = 0; 
+zef_data.lead_field_id_max = 0;
 zef_data.inv_amplitude_db = 20;
 zef_data.sigma_bypass = 0;
 zef_data.source_space_lock_on = 0;
