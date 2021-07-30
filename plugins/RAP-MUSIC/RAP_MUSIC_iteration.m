@@ -139,8 +139,8 @@ end
                 ind_space(end) = n;
             end
         end
-            orj = [orj;orj_best];   %add the best orjentation to the orjentation vector
-            A_mat = L(:,reshape(L_ind(ind_space,:),[],1)).*orj';    %form the matrix A that is leadfield of found sources times their orjentation
+            orj = [orj,orj_best];   %add the best orjentation to the orjentation vector
+            A_mat = L(:,reshape(L_ind(ind_space,:),[],1)).*reshape(orj,[],1)';    %form the matrix A that is leadfield of found sources times their orjentation
             %Projection that assumes a column independency for leadfield
             %(problematic!)
             Proj = eye(size(A_mat,1))-A_mat*((A_mat'*A_mat+lambda_L*eye(size(A_mat,2)))\transpose(A_mat));
@@ -162,7 +162,10 @@ end
     end
     z_amp = A_mat'*((A_mat*A_mat'+S_mat)\f);    %amplitude estimation
     z_vec = zeros(size(L,2),1); 
-    z_vec(L_ind(ind_space,:)) = repelem(abs(z_amp),3).*orj; %couple the amplitude with the orjentation.
+    z_vec(reshape(L_ind(ind_space,:),[],1)) = reshape(z_amp'.*orj,[],1); %couple the amplitude with the orjentation.
+    %Notice that L_ind(ind_space,:) and orj are structurally same, and
+    %reshape form order similar with s_ind indexing.
+    
 
 z{f_ind} = z_vec;
 end;
