@@ -76,21 +76,27 @@ end
 
 %___ Calculations start ___
 
-if method_type == 1 || method_type == 2
-    S_mat = max(f.^2,[],'all')*(std_lhood^2/theta0)*eye(size(L,1));
+
+   
+    
+    
+    if method_type == 1 || method_type == 2
+        
+            S_mat = max(f.^2,[],'all')*(std_lhood^2/theta0)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         S_mat = gpuArray(S_mat);
     end
+    
     if size_f > 1
         f = mean(f,2);
     end
-    
+        
     %__ dSPM __
     %Source covariance
     P = L'/(L*L'+S_mat);
     if method_type == 1
         %d = 1./sqrt(diag(P*S_mat*P'));
-        d = 1./sqrt(sum((P.*P').*diag(S_mat)));
+        d = 1./sqrt(sum(((P*S_mat).*P),2));
         z_vec = d.*P*f;
     else
         %__ sLORETA __
@@ -103,6 +109,11 @@ if method_type == 1 || method_type == 2
     end
     
 elseif method_type == 3
+    
+        S_mat = max(f.^2,[],'all')*(std_lhood^2)*eye(size(L,1));
+    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+        S_mat = gpuArray(S_mat);
+    end
     %__ Sparse Bayesian Learning _
     n_iter = evalin('base','zef.csm_n_iter');
     C_data = cov(f');
