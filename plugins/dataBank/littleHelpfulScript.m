@@ -29,6 +29,8 @@ end
 
 %% make gmm for every reconstruction
 
+for  i=[0.25, 0.5, 0.75, 0.9]
+zef.GMMcluster_threshold =i;
 %open gmm tool first and set the parameters
 allHashes=fieldnames(zef.dataBank.tree);
 for i=1:length(allHashes)
@@ -39,7 +41,7 @@ for i=1:length(allHashes)
         
         [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
         
-        zef.dataBank.tree.(newHash).name='gmm_8_50';
+        zef.dataBank.tree.(newHash).name=strcat('gmm_8_', num2str(100*zef.GMMcluster_threshold));
         if strcmp(zef.dataBank.save2disk, 'On')
             nodeData=zef.dataBank.tree.(newHash).data;
             folderName=strcat(zef.dataBank.folder, newHash);
@@ -53,9 +55,79 @@ for i=1:length(allHashes)
     end
 end
 
+end
 
-%%
+%% make all reconstructions
 
-zef_dipole_start;
-zef_ramus_iteration
+%set all parameters!
+% beamformer app needs to be open
+%choose node to add to
+%enjoy!
+
+
+%mne
+[zef.reconstruction, zef.reconstruction_information]=zef_find_mne_reconstruction;
+zef_dataBank_addButtonPress;
+
+
+%ramus
+zef_update_ramus_inversion_tool; 
+[zef.reconstruction, zef.reconstruction_information]  = zef_ramus_iteration([]);%dipole
+zef_dataBank_addButtonPress;
+%dipole
+[zef.reconstruction, zef.reconstruction_information]=zef_dipoleScan;
+zef_dataBank_addButtonPress;
+%beamformer
+if strcmp(zef.beamformer.estimation_attr.Value,'1')
+    [zef.reconstruction,~, zef.reconstruction_information] = zef_beamformer; 
+elseif strcmp(zef.beamformer.estimation_attr.Value,'2')
+    [~,zef.reconstruction, zef.reconstruction_information] = zef_beamformer; 
+else; [zef.reconstruction,zef.bf_var_loc, zef.reconstruction_information] = zef_beamformer; 
+end
+zef_dataBank_addButtonPress;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

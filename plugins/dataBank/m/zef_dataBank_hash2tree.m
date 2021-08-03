@@ -1,7 +1,7 @@
 
 %this builds a uiTree in the databank.app from the databank.tree node
 %hashcodes
-
+zef.dataBank.tree=zef_dataBank_reorderTree(zef.dataBank.tree);
 zef.dataBank.tree=orderfields(zef.dataBank.tree);
 zef.dataBank.hashList=fieldnames(zef.dataBank.tree);
 
