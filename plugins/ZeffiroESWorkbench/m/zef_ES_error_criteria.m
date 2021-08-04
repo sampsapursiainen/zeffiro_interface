@@ -1,14 +1,6 @@
 function vec = zef_ES_error_criteria
 %% Variables and parameters setup
-if evalin('base','zef.ES_current_threshold_checkbox') == 0
     load_aux = evalin('base','zef.y_ES_interval');
-elseif evalin('base','zef.ES_current_threshold_checkbox') == 1
-    try
-        load_aux = evalin('base','zef.y_ES_interval_threshold');
-    catch
-        error('Attempting to plot threshold values that have not yet been calculated.')
-    end
-end
 B = cell2mat(load_aux.residual);
 B = B/max(abs(B(:)));
 
