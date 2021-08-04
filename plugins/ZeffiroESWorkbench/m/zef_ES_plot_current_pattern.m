@@ -5,34 +5,20 @@ if isfield(evalin('base','zef'),'h_current_ES')
 end
 %% Variables and parameter setup
 if evalin('base','zef.ES_search_type') == 1
-    if evalin('base','zef.ES_current_threshold_checkbox') == 0
         y_ES = evalin('base','zef.y_ES_single.y_ES');
-    else
-        try
-            y_ES = evalin('base','zef.y_ES_single_threshold.y_ES');
-        catch
-            error('Attempting to plot threshold values that have not yet been calculated... Plotting original values instead.')
-        end
-    end
+
 elseif evalin('base','zef.ES_search_type') >= 2
-    [star_row_idx, star_col_idx] = zef_ES_objective_function;
-    if isempty(star_row_idx)
-        star_row_idx = 1;
+    [~,sr, sc] = zef_ES_objective_function;
+    if isempty(sr)
+        sr = 1;
     end
-    if isempty(star_col_idx)
-        star_col_idx = 1;
+    if isempty(sc)
+        sc = 1;
     end
     
-    if evalin('base','zef.ES_current_threshold_checkbox') == 0
-        y_ES = evalin('base','zef.y_ES_interval.y_ES');
-    else
-        try
-            y_ES = evalin('base','zef.y_ES_interval_threshold.y_ES');
-        catch
-            error('Attempting to plot threshold values that have not yet been calculated... Plotting original values instead.')
-        end
-    end
-    y_ES = cell2mat(y_ES(star_row_idx,star_col_idx));
+     y_ES = evalin('base','zef.y_ES_interval.y_ES');
+    
+    y_ES = cell2mat(y_ES(sr,sc));
 end
 
 nodes = evalin('base','zef.nodes');
@@ -161,7 +147,7 @@ elseif evalin('base','zef.ES_inv_colormap') == 9
     ES_colormap_vec = ES_colormap_vec'/max(ES_colormap_vec(:));
     ES_colormap_vec = flipud(ES_colormap_vec);
 elseif evalin('base','zef.ES_inv_colormap') == 10
-    c_aux_1 = floor(colormap_size - colortune_param*colormap_size/2);
+    c_aux_1         = floor(colormap_size - colortune_param*colormap_size/2);
     ES_colormap_vec = [10*(colormap_size/3)*[c_aux_1:-1:1]/c_aux_1 zeros(1,colormap_size-c_aux_1); 8*(colormap_size/3)*[1: c_aux_1]/c_aux_1 8*(colormap_size/3)*[colormap_size-c_aux_1:-1:1]/(colormap_size-c_aux_1); zeros(1,c_aux_1) 5*(colormap_size/3)*[1:colormap_size-c_aux_1]/(colormap_size-c_aux_1)];
     ES_colormap_vec = ES_colormap_vec+100;
     ES_colormap_vec = ES_colormap_vec'/max(ES_colormap_vec(:));
@@ -187,26 +173,29 @@ hold on;
 index_aux = floor((colormap_size-1)*(y_ES(:) - min(y_ES(:))) / (max(y_ES(:)) - min(y_ES(:))))+1;
 ES_colormap_vec(index_aux,:);
 %% Printing color and their properties
-h_current_ES = zeros(size(sensors,1),1);
+h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
     h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');
     if not(y_ES(i)) == 0
+        
         set(h_current_ES(i),'facecolor',ES_colormap_vec(index_aux(i),:));
+        %set(h_current_ES(i),'facealpha',(abs(y_ES(i))/max(abs(y_ES)))*(1-evalin('base','zef.brain_transparency'))+evalin('base','zef.brain_transparency'));
         set(h_current_ES(i),'specularstrength',0.3);
         set(h_current_ES(i),'diffusestrength',0.7);
         set(h_current_ES(i),'ambientstrength',0.7);
-        set(h_current_ES(i),'facealpha',(abs(y_ES(i))/max(abs(y_ES)))*(1-evalin('base','zef.brain_transparency'))+evalin('base','zef.brain_transparency'));
     else
+        %set(h_current_ES(i),'edgecolor',[0.8 0.8 0.8]);
         set(h_current_ES(i),'facecolor',[1 1 1]);
         set(h_current_ES(i),'facealpha',0.3);
+        set(h_current_ES(i),'meshstyle','both');
+        set(h_current_ES(i),'linestyle',':');
     end
 end
 hold off;
 %% Wrapping up and return of variables
-
 h_axes = axes('Units','normalized','Position',[0 0 0 0],'visible','off');
 set(h_axes,'TitleHorizontalAlignment','left');
 imagesc(y_ES);

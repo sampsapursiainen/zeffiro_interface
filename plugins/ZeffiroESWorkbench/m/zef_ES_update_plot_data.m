@@ -4,7 +4,8 @@ switch evalin('base','zef.ES_plot_type');
             try
                 [zef.h_current_ES, zef.h_current_coords] = zef_ES_plot_current_pattern;
             catch ME
-                error('No electrode values to plot...');
+                warning('No electrode values to plot...');
+                rethrow(ME)
             end
         else
             if isfield(evalin('base','zef'),'h_current_ES')
@@ -14,15 +15,14 @@ switch evalin('base','zef.ES_plot_type');
         end
     case 2
         if zef.ES_update_plot_data
-            loader_aux = zef_ES_error_criteria;
-            [star_row_idx, star_col_idx] = deal(loader_aux{1:2});
+            [~, star_row_idx, star_col_idx] = zef_ES_objective_function;
             if isempty(star_row_idx)
                 star_row_idx = 1;
             end
             if isempty(star_col_idx)
                 star_col_idx = 1;
             end
-            zef.h_barplot_ES = zef_ES_plot_barplot(star_row_idx,star_col_idx);
+            zef.h_barplot_ES = zef_ES_plot_barplot(star_row_idx, star_col_idx);
         else
             if get(gcf,'Name') == "ZEFFIRO Interface: Electrode potentials tool"
                 close(gcf);
@@ -44,5 +44,8 @@ switch evalin('base','zef.ES_plot_type');
                 end
             end
         end
+        
+         case 4
+              zef_ES_optimizer_properties_show;
 end
 clear x y
