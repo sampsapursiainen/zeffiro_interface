@@ -1,5 +1,5 @@
 if not(isfield(zef,'ES_L2_reg_ratio_UL'))
-    zef.ES_L2_reg_ratio_UL = 1e3;
+    zef.ES_L2_reg_ratio_UL = 1E3;
 end
 if not(isfield(zef,'ES_L2_reg_ratio_LL'))
     zef.ES_L2_reg_ratio_LL = 1E-3;
@@ -81,4 +81,11 @@ if not(isfield(zef,'ES_scoredose'))
 end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
+end
+
+if not(isfield(zef,'ES_delta_param'))
+    zef.ES_delta_param = 1000;
+end
+if not(isfield(zef,'ES_L1_iter'))
+    zef.ES_L1_iter = 12;
 end

@@ -1,5 +1,3 @@
-
-
 zef_data = zef_ES_optimizer_properties_app;
 
 zef.h_ES_optimizer_properties = zef_data.h_ES_optimizer_properties;

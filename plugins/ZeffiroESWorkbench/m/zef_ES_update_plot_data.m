@@ -14,23 +14,28 @@ switch evalin('base','zef.ES_plot_type');
             end
         end
     case 2
-        if zef.ES_update_plot_data
-            [~, star_row_idx, star_col_idx] = zef_ES_objective_function;
-            if isempty(star_row_idx)
-                star_row_idx = 1;
-            end
-            if isempty(star_col_idx)
-                star_col_idx = 1;
-            end
-            zef.h_barplot_ES = zef_ES_plot_barplot(star_row_idx, star_col_idx);
-        else
-            if get(gcf,'Name') == "ZEFFIRO Interface: Electrode potentials tool"
-                close(gcf);
-                if isfield(evalin('base','zef'),'h_barplot_ES')
-                    delete(zef.h_barplot_ES)
-                    zef = rmfield(zef,'h_barplot_ES');
+        switch evalin('base','zef.ES_search_method')
+            case {1,2}
+                if zef.ES_update_plot_data
+                    [~, sr, sc] = zef_ES_objective_function;
+                    if isempty(sr)
+                        sr = 1;
+                    end
+                    if isempty(sc)
+                        sc = 1;
+                    end
+                    zef.h_barplot_ES = zef_ES_plot_barplot(sr, sc);
+                else
+                    if get(gcf,'Name') == "ZEFFIRO Interface: Electrode potentials tool"
+                        close(gcf);
+                        if isfield(evalin('base','zef'),'h_barplot_ES')
+                            delete(zef.h_barplot_ES)
+                            zef = rmfield(zef,'h_barplot_ES');
+                        end
+                    end
                 end
-            end
+            case 3
+                zef.h_barplot_ES = zef_ES_plot_barplot;
         end
     case 3
         if zef.ES_update_plot_data
@@ -44,8 +49,7 @@ switch evalin('base','zef.ES_plot_type');
                 end
             end
         end
-        
-         case 4
-              zef_ES_optimizer_properties_show;
+    case 4
+        zef_ES_optimizer_properties_show;
 end
-clear x y
+clear x y sr sc
