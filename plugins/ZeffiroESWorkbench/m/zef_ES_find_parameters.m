@@ -1,3 +1,4 @@
+
 function [TolFun, reg_param, k_val] = zef_ES_find_parameters
 TolFun     = evalin('base','zef.ES_optimizer_tolerance');
 reg_param  = evalin('base','zef.ES_regularization_parameter');
@@ -24,6 +25,7 @@ if evalin('base','zef.ES_search_type') == 2
         tol_max = 1E-10;
         warning('Maxima optimizer tolerance value exceeding solver limit.');
     end
+
        
     TolFun    = exp(log(TolFun):(log(tol_max)-log(TolFun))/(step_size-1):log(tol_max))';
     if reg_param == 0

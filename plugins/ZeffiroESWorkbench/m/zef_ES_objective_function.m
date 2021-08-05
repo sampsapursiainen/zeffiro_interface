@@ -1,3 +1,4 @@
+
 function [vec, sr, sc] = zef_ES_objective_function
 
 load_aux = evalin('base','zef.y_ES_interval');
@@ -65,3 +66,4 @@ else
     Accept_idx = intersect(star_idx,D_idx);
     [sr, sc] = ind2sub(size(D), Accept_idx);
 end
+

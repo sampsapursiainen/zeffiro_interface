@@ -20,6 +20,8 @@ if method_type == 1
     reconstruction_information.tag = 'Beamformer/LCMV';
 elseif method_type == 2
     reconstruction_information.tag = 'Beamformer/UNG';
+elseif method_type == 3
+    reconstruction_information.tag = 'Beamformer/Unit-Gain constraint';
 end
 reconstruction_information.inv_time_1 = evalin('base','zef.inv_time_1');
 reconstruction_information.inv_time_2 = evalin('base','zef.inv_time_2');

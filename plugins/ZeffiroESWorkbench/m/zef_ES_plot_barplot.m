@@ -2,6 +2,7 @@ function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
 n = length(varargin);
 switch n
     case 0
+
         if evalin('base','zef.ES_search_method') ~= 3
             switch evalin('base','zef.ES_search_type')
                 case 1
@@ -25,6 +26,7 @@ switch n
         [sr, sc] = varargin{:};
         load_aux = evalin('base','zef.y_ES_interval.y_ES');
         y_ES = cell2mat(load_aux(sr, sc));
+
     case 3
         if numel(varargin{1}) > 1
             y_ES = varargin{1};
@@ -49,6 +51,7 @@ if n ~= 3
     f.Position(2) = win_temp(2)+(win_temp(4)-f.Position(4));
     f.Position(3) = 880;
     f.Position(4) = 500;
+
     
     if evalin('base','zef.ES_search_method') ~= 3
         sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
@@ -56,6 +59,7 @@ if n ~= 3
         sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
     end
 end
+
 
 
 h_barplot_ES = bar(y_ES,0.3);
@@ -77,6 +81,7 @@ h_axes.YLabel.FontName = 'Arial';
 h_axes.XGrid = 'off';
 h_axes.YGrid = 'on';
 
+
 max_current = evalin('base','zef.ES_solvermaximumcurrent');
 
 h_axes.XLim = [0 length(y_ES)+1];
@@ -93,7 +98,15 @@ if p_max > max_current
     h_axes.YLim = [p_min p_max]*1.05;
 else
     h_axes.YLim = [-max_current max_current]*1.05;
+
 end
+% 
+% if max(abs(y_ES)) > max_current
+hold on;
+plot(xlim,[ max_current  max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
+plot(xlim,[-max_current -max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
+hold off;
+%end
 
 hold on;
 plot(xlim,[ max_current  max_current],'LineWidth',1.0,'Color','r','LineStyle','--');

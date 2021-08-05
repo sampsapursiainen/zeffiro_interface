@@ -49,7 +49,9 @@ switch evalin('base','zef.ES_plot_type');
                 end
             end
         end
+
     case 4
         zef_ES_optimizer_properties_show;
+
 end
 clear x y sr sc

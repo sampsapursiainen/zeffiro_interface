@@ -8,3 +8,4 @@ zef.ES_objfun                           = get(zef.h_ES_objfun,'Value');
 zef.ES_fixed_active_electrodes          = get(zef.h_ES_fixed_active_electrodes,'Value');
 
 zef_ES_init_parameter_table;
+

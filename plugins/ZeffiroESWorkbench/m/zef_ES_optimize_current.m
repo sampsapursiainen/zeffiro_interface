@@ -8,6 +8,7 @@ source_position_index       = zeros(size(source_positions,1),1);
 
 for i = 1:size(source_positions,1)
     [~,aux_index] = min(sqrt(sum((evalin('base','zef.source_positions') - source_positions(i,:)).^2,2)));
+
     source_position_index(i) = aux_index;
 end
 
@@ -150,6 +151,7 @@ end
 %% Flag value from LP solver
 if ismember(flag_val,[1 3])
     ES_optimized_current_density  = reshape(L_aux*y_ES,3,size(L_aux,1)/3);
+
     if evalin('base','zef.ES_search_method') ~= 3
         residual = norm(L_ES_projection*y_ES_solution-x_ES_projection,1);
     else

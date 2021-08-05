@@ -18,7 +18,6 @@ switch evalin('base','zef.ES_search_method')
     case 3
         zef.reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
 end
-
 try
     plot_meshes;
 catch
