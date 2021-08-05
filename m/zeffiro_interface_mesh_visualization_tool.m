@@ -40,6 +40,7 @@ zef.h_inv_dynamic_range = zef_data.h_inv_dynamic_range;
 zef.h_submesh_num = zef_data.h_submesh_num;
 zef.h_use_inflated_surfaces = zef_data.h_use_inflated_surfaces;
 zef.h_explode_everything = zef_data.h_explode_everything;
+zef.h_cone_draw = zef_data.h_cone_draw;
 
 %*******
 
@@ -52,6 +53,7 @@ set(zef.h_checkbox15,'value',zef.axes_visible);
 set(zef.h_edit80,'value',zef.azimuth);
 set(zef.h_edit81,'value',zef.elevation);
 set(zef.h_edit82,'value',zef.cam_va);
+set(zef.h_cone_draw,'value',zef.cone_draw);
 
 set(zef.h_visualization_type,'Items',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
@@ -145,7 +147,7 @@ set(zef.h_inv_dynamic_range,'ValueChangedFcn','zef_update_mesh_visualization_too
 set(zef.h_submesh_num,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_use_inflated_surfaces,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_explode_everything,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-
+set(zef.h_cone_draw,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
 
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 

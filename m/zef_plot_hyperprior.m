@@ -8,7 +8,7 @@ cla(evalin('base','zef.h_axes1'));
 tail_length = evalin('base','zef.inv_hyperprior_tail_length_db');
 snr_val = evalin('base','zef.inv_snr');
 pm_val = evalin('base','zef.inv_prior_over_measurement_db');
-amplitude_db = 20;
+amplitude_db = evalin('base','zef.inv_amplitude_db');
 pm_snr_val = pm_val;
 pm_val = pm_val - amplitude_db;
 snr_val = max(1,snr_val);

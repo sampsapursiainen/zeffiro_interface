@@ -5,6 +5,8 @@ zef.h_as_opt_2 = zef_data.h_as_opt_2;
 zef.h_as_opt_1 = zef_data.h_as_opt_1;
 zef.h_as_opt_3 = zef_data.h_as_opt_3;
 zef.h_as_opt_4 = zef_data.h_as_opt_4;
+zef.h_cone_lattice_resolution = zef_data.h_cone_lattice_resolution;
+zef.h_cone_scale = zef_data.h_cone_scale;
 zef.h_meshing_threshold = zef_data.h_meshing_threshold;
 zef.h_as_opt_5 = zef_data.h_as_opt_5;
 zef.h_as_opt_6 = zef_data.h_as_opt_6;
@@ -43,6 +45,8 @@ zef.h_inv_hyperprior_tail_length_db.ValueChangedFcn = 'zef_update_options;';
 zef.h_inv_snr.ValueChangedFcn = 'zef_update_options;';
 zef.h_inv_prior_over_measurement_db.ValueChangedFcn = 'zef_update_options;';
 
+zef.h_cone_lattice_resolution.ValueChangedFcn = 'zef_update_options;';
+zef.h_cone_scale.ValueChangedFcn = 'zef_update_options;';
 
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
 
@@ -73,6 +77,9 @@ zef.h_inv_hyperprior.Value = zef.inv_hyperprior;
 zef.h_inv_hyperprior_tail_length_db.Value = num2str(zef.inv_hyperprior_tail_length_db);
 zef.h_inv_snr.Value = num2str(zef.inv_snr);
 zef.h_inv_prior_over_measurement_db.Value = num2str(zef.inv_prior_over_measurement_db);
+zef.h_cone_lattice_resolution.Value = num2str(zef.cone_lattice_resolution); 
+zef.h_cone_scale.Value = num2str(zef.cone_scale); 
+
 
 zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');

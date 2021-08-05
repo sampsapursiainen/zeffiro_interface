@@ -19,6 +19,7 @@ zef.h_filter_save_as.ButtonPushedFcn = 'zef_filter_save_as;';
 zef.h_filter_save_processed_data.ButtonPushedFcn = 'zef_filter_save_processed_data_as;';
 zef.h_filter_load.ButtonPushedFcn = 'zef_filter_load;';
 zef.h_filter_import_data.ButtonPushedFcn = 'zef_import_raw_data;';
+zef.h_filter_substitute_raw_data_with_measurement_data.ButtonPushedFcn = 'zef_filter_substitute_raw_data_with_measurement_data;';
 zef.h_filter_plot_data.ButtonPushedFcn = 'zef_filter_schroll_bar; zef_update_filter_tool; zef_filter_raw_data; zef_filter_plot_data;';
 zef.h_filter_substitute_measurement_data.ButtonPushedFcn = 'zef_filter_substitute_raw_data;';
 zef.h_filter_substitute_raw_data.ButtonPushedFcn = 'zef_filter_substitute_measurement_data;';

@@ -1,5 +1,9 @@
 zef_create_dipolar_pair_update_struct;
 
+if isfield(zef,'h_create_dipolar_pair_arrow')
+delete(zef.h_create_dipolar_pair_arrow);
+end
+
 zef.aux_field = sqrt(zef.create_dipolar_pair_ori_x.^2 + zef.create_dipolar_pair_ori_y.^2 + zef.create_dipolar_pair_ori_z.^2);
 zef.create_dipolar_pair_ori_x = zef.create_dipolar_pair_ori_x/zef.aux_field;
 zef.create_dipolar_pair_ori_y = zef.create_dipolar_pair_ori_y/zef.aux_field;

@@ -18,8 +18,12 @@ if ~isfield(zef,'bf_type')
 end
 
 %_ Covariance calculation types _
-zef_bf_names = {'Measurement based',
-                'Basic'};
+%_ Covariance calculation types _
+zef_bf_names = {'Full data, measurement based',
+                'Full data, basic', 
+                'Pointwise, measurement based',
+                'Pointwise, basic'          
+                };
             
 zef.beamformer.cov_type.Items = zef_bf_names;
 zef.beamformer.cov_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
@@ -31,7 +35,6 @@ end
 
 %_ Names of leadfield regularization methods _
 zef_bf_names = {'Basic'
-                '2nd order Taylor minimum error'
                 'Pseudoinverse'};
             
 zef.beamformer.L_reg_type.Items = zef_bf_names;
@@ -108,7 +111,7 @@ zef.beamformer.inv_time_3.ValueChangedFcn = 'zef.inv_time_3 = str2num(zef.beamfo
 zef.beamformer.inv_data_segment.ValueChangedFcn = 'zef.inv_data_segment = str2num(zef.beamformer.inv_data_segment.Value);';
 zef.beamformer.normalize_data.ValueChangedFcn = 'zef.normalize_data = str2num(zef.beamformer.normalize_data.Value);';
 zef.beamformer.normalize_leadfield.ValueChangedFcn = 'zef.normalize_leadfield = str2num(zef.beamformer.normalize_leadfield.Value);';
-zef.beamformer.StartButton.ButtonPushedFcn = 'if strcmp(zef.beamformer.estimation_attr.Value,''1''); [zef.reconstruction,~] = zef_beamformer; elseif strcmp(zef.beamformer.estimation_attr.Value,''2''); [~,zef.reconstruction] = zef_beamformer; else; [zef.reconstruction,zef.bf_var_loc] = zef_beamformer; end;';
+zef.beamformer.StartButton.ButtonPushedFcn = 'if strcmp(zef.beamformer.estimation_attr.Value,''1''); [zef.reconstruction,~, zef.reconstruction_information] = zef_beamformer; elseif strcmp(zef.beamformer.estimation_attr.Value,''2''); [~,zef.reconstruction, zef.reconstruction_information] = zef_beamformer; else; [zef.reconstruction,zef.bf_var_loc, zef.reconstruction_information] = zef_beamformer; end;';
 zef.beamformer.CloseButton.ButtonPushedFcn = 'delete(zef.beamformer);';
 
 %set fonts

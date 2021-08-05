@@ -27,6 +27,9 @@ end
 if ~isfield(zef,'GMMcluster_covtype')
     zef.GMMcluster_covtype = 1;
 end
+if ~isfield(zef,'GMMcluster_domain')
+    zef.GMMcluster_domain = 1;
+end
 if ~isfield(zef,'GMMcluster_markercolor')
     zef.GMMcluster_markercolor = zef.GMMclustering.GMMcluster_markercolor.ItemsData{1};
 end
@@ -68,6 +71,28 @@ if ~isfield(zef,'GMMcluster_c_stopframe')
         zef.GMMcluster_c_stopframe = 1;
     end
 end
+if ~isfield(zef,'GMM_colors')
+    zef.GMM_colors = [];
+end
+if ~isfield(zef,'GMM_ellip_coloring')
+    zef.GMM_ellip_coloring = 1;
+end
+if ~isfield(zef,'GMM_ellip_comp')
+    zef.GMM_ellip_comp = [];
+end
+if ~isfield(zef,'GMM_dip_comp')
+    zef.GMM_dip_comp = [];
+end
+if ~isfield(zef,'GMM_ellip_num')
+    zef.GMM_ellip_num = 3;
+end
+if ~isfield(zef,'GMM_dip_num')
+    zef.GMM_dip_num = 3;
+end
+if ~isfield(zef,'GMM_comp_ord')
+    zef.GMM_comp_ord = 1;
+end
+
 
 %set parameters if saved in ZI: 
 %(Naming concept: zef.GMMclustering."field" = zef."field")
@@ -84,13 +109,13 @@ end
 clear zef_props zef_i
 
 %_ Functions _
-zef.GMMclustering.GMMcluster_covident.ValueChangedFcn = 'zef.GMMcluster_covident = str2num(zef.GMMclustering.GMMcluster_covident.Value);';
-zef.GMMclustering.GMMcluster_covtype.ValueChangedFcn = 'zef.GMMcluster_covtype = str2num(zef.GMMclustering.GMMcluster_covtype.Value);';
+zef.GMMclustering.GMMcluster_clustnum.ValueChangedFcn = 'zef.GMMcluster_clustnum = str2num(zef.GMMclustering.GMMcluster_clustnum.Value);';
 zef.GMMclustering.GMMcluster_MaxIter.ValueChangedFcn = 'zef.GMMcluster_MaxIter = str2num(zef.GMMclustering.GMMcluster_MaxIter.Value);';
 zef.GMMclustering.GMMcluster_threshold.ValueChangedFcn = 'zef.GMMcluster_threshold = str2num(zef.GMMclustering.GMMcluster_threshold.Value);';
 zef.GMMclustering.GMMcluster_reg.ValueChangedFcn = 'zef.GMMcluster_reg = str2num(zef.GMMclustering.GMMcluster_reg.Value);';
-zef.GMMclustering.GMMcluster_clustnum.ValueChangedFcn = 'zef.GMMcluster_clustnum = str2num(zef.GMMclustering.GMMcluster_clustnum.Value);';
-zef.GMMclustering.GMMcluster_alpha.ValueChangedFcn = 'zef.GMMcluster_alpha=str2num(zef.GMMclustering.GMMcluster_alpha.Value);';
+zef.GMMclustering.GMMcluster_covtype.ValueChangedFcn = 'zef.GMMcluster_covtype = str2num(zef.GMMclustering.GMMcluster_covtype.Value);';
+zef.GMMclustering.GMMcluster_covident.ValueChangedFcn = 'zef.GMMcluster_covident = str2num(zef.GMMclustering.GMMcluster_covident.Value);';
+zef.GMMclustering.GMMcluster_domain.ValueChangedFcn = 'zef.GMMcluster_domain = str2num(zef.GMMclustering.GMMcluster_domain.Value);';
 zef.GMMclustering.GMMcluster_c_startframe.ValueChangedFcn = 'zef.GMMcluster_c_startframe=str2num(zef.GMMclustering.GMMcluster_c_startframe.Value);';
 zef.GMMclustering.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMMcluster_c_stopframe=str2num(zef.GMMclustering.GMMcluster_c_stopframe.Value);';
 
@@ -101,16 +126,19 @@ zef.GMMclustering.GMMcluster_headtrans.ValueChangedFcn = 'zef.GMMcluster_headtra
 zef.GMMclustering.GMMcluster_veclength.ValueChangedFcn = 'zef.GMMcluster_veclength = str2num(zef.GMMclustering.GMMcluster_veclength.Value);';
 zef.GMMclustering.GMMcluster_plotellip.ValueChangedFcn = 'zef.GMMcluster_plotellip=str2num(zef.GMMclustering.GMMcluster_plotellip.Value);';
 zef.GMMclustering.GMMcluster_elliptrans.ValueChangedFcn = 'zef.GMMcluster_elliptrans=str2num(zef.GMMclustering.GMMcluster_elliptrans.Value);';
+zef.GMMclustering.GMMcluster_alpha.ValueChangedFcn = 'zef.GMMcluster_alpha=str2num(zef.GMMclustering.GMMcluster_alpha.Value);';
 zef.GMMclustering.GMMcluster_startframe.ValueChangedFcn = 'zef.GMMcluster_startframe=str2num(zef.GMMclustering.GMMcluster_startframe.Value);';
 zef.GMMclustering.GMMcluster_stopframe.ValueChangedFcn = 'zef.GMMcluster_stopframe=str2num(zef.GMMclustering.GMMcluster_stopframe.Value);';
 
-zef.GMMclustering.StartButton.ButtonPushedFcn = '[zef.GMModel,zef.GMModelDipoles] = zef_GMMcluster;';
-zef.GMMclustering.CloseButton.ButtonPushedFcn = 'delete(zef.GMMclustering);';
+zef.GMMclustering.StartButton.ButtonPushedFcn = 'zef_init_GMMPlotOpts; [zef.GMModel,zef.GMModelDipoles] = zef_GMMcluster;';
+zef.GMMclustering.CloseButton.ButtonPushedFcn = 'if isfield(zef,''GMM_PlotOpt''); delete(zef.GMM_PlotOpt); end; delete(zef.GMMclustering);';
+zef.GMMclustering.PlotOptButton.ButtonPushedFcn = 'GMMclustering_PlotOpt_start;';
 zef.GMMclustering.PlotButton.ButtonPushedFcn = 'zef_PlotGMMcluster;';
 zef.GMMclustering.ExportButton.ButtonPushedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uiputfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uiputfile(''*.mat'',''Save Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_GMModel = zef.GMModel; zef_GMModelDipoles=zef.GMModelDipoles; save(fullfile(zef_aux_path,zef_aux_file),''zef_GMModel'',''zef_GMModelDipoles'',''-v7.3''); clear zef_GMModel zef_GMModelDipoles; end; clear zef_aux_file zef_aux_path;';
 zef.GMMclustering.ImportButton.ButtonPushedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_aux = struct2cell(load(fullfile(zef_aux_path,zef_aux_file))); zef.GMModel = zef_aux{1}; zef.GMModelDipoles = zef_aux{2}; end; clear zef_aux zef_aux_file zef_aux_path;';
 
-
+%close request function
+zef.GMMclustering.UIFigure.CloseRequestFcn = 'if isfield(zef,''GMM_PlotOpt''); delete(zef.GMM_PlotOpt); end; delete(zef.GMMclustering);';
 
 %set fonts
 set(findobj(zef.GMMclustering.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);

@@ -105,6 +105,10 @@ if iscell(elements)
     end
     end
     K = length(brain_ind);
+    
+    if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+source_model = 1;
+end
    
 A = spalloc(N,N,0);
 
@@ -548,6 +552,16 @@ clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 %*******************************
 end
 
+%%
+if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
+aux_rand_perm  = ceil(length(fi_source_locations)*source_ind/length(brain_ind)); 
+M_fi = length(aux_rand_perm);
+dipole_directions = fi_source_directions(aux_rand_perm,:);
+dipole_locations = fi_source_locations(aux_rand_perm,:);
+G_fi = G_fi(:,aux_rand_perm);
+end
+%%
+
 L_meg_fi = zeros(L,M_fi); 
 for j = 1 : L
 cross_mat = cross(fi_source_directions', repmat(sensors(1:3,j),1,M_fi) - fi_source_locations'); 
@@ -694,11 +708,7 @@ end
 source_nonzero_ind = intersect(source_nonzero_ind,source_ind);
 M2 = size(source_nonzero_ind,1);
 else
-aux_rand_perm = randperm(length(fi_source_locations));
-aux_rand_perm = aux_rand_perm(1:evalin('base','zef.n_sources'));    
-dipole_directions = fi_source_directions(aux_rand_perm,:);
-dipole_locations = fi_source_locations(aux_rand_perm,:);
-L_meg = L_meg_fi(:,aux_rand_perm);
+L_meg = L_meg_fi;
 end
 
 

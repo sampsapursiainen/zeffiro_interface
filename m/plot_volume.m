@@ -298,11 +298,11 @@ elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
 tetra = tetra(aux_ind,:);   
 elseif evalin('base','zef.cp_mode') == 3
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 elseif evalin('base','zef.cp_mode') == 4
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
-aux_ind = union(aux_ind,find(johtavuus==aux_brain_ind));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
 tetra = tetra(aux_ind,:);  
 end
 else
@@ -616,6 +616,10 @@ colormap_cell = evalin('base','zef.colormap_cell');
 set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
 
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+if evalin('base','zef.cone_draw')
+[h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
+end
+
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'specularstrength',0.2);
@@ -841,6 +845,9 @@ end
 
 %h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'CData',reconstruction);
+if evalin('base','zef.cone_draw')
+[h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
+end
 
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');

@@ -1,4 +1,4 @@
-function [z] = zef_mne(void)
+function [z, info] = zef_mne(void)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
@@ -17,6 +17,25 @@ number_of_frames = evalin('base','zef.mne_number_of_frames');
 time_step = evalin('base','zef.mne_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
+
+
+info=[];
+info.tag='mne_type';
+info.type='mne_type';
+info.std_lhood=std_lhood;
+
+info.snr_val = evalin('base','zef.mne_snr');
+info.mne_type = evalin('base','zef.mne_type');
+info.mne_prior = evalin('base','zef.mne_prior');
+info.sampling_freq = evalin('base','zef.mne_sampling_frequency');
+info.high_pass = evalin('base','zef.mne_low_cut_frequency');
+info.low_pass = evalin('base','zef.mne_high_cut_frequency');
+info.number_of_frames = evalin('base','zef.mne_number_of_frames');
+info.time_step = evalin('base','zef.mne_time_3');
+info.source_direction_mode = evalin('base','zef.source_direction_mode');
+info.source_directions = evalin('base','zef.source_directions');
+
+
 
 if source_direction_mode == 2
 
