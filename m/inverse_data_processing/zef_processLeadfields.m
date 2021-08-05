@@ -10,6 +10,7 @@ source_directions = evalin('base','zef.source_directions');
 
 
 s_ind_2=[];
+s_ind_3=[];
 s_ind_4=[];
 
 

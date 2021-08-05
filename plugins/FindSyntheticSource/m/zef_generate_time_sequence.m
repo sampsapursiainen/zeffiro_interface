@@ -18,7 +18,7 @@ signal_duration = 0;
 for n = 1:length(peak_time)
     signal_duration = max([pulse_length{n}/2+peak_time{n},signal_duration]);
 end
-time_var = 0:(1/sampling_freq):signal_duration';
+time_var = 0:(1/sampling_freq):signal_duration;
 
 time_serie = zeros(length(peak_time),length(time_var));
 for n = 1:length(peak_time)

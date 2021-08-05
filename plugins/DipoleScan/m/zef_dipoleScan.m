@@ -31,9 +31,7 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
-    L = gpuArray(L);
-end
+
 
     z = cell(number_of_frames,1);
 f_data = zef_getFilteredData;
@@ -52,9 +50,7 @@ for f_ind = 1 : number_of_frames
 
     z_vec = nan(size(L,2),1);
     
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
-        f = gpuArray(f);
-    end
+
      
     
 %% inversion starts here
@@ -195,9 +191,7 @@ for f_ind = 1 : number_of_frames
         z_vec(z_ind)=z_max;
     end
         
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
-        z_vec = gather(z_vec);
-    end
+
     
     z{f_ind}=z_vec;
     
