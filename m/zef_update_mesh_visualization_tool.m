@@ -33,6 +33,7 @@ zef.brain_transparency = 1 - str2num(zef.h_brain_transparency.Value);
 zef.inv_dynamic_range = str2num(zef.h_inv_dynamic_range.Value);
 zef.use_inflated_surfaces = zef.h_use_inflated_surfaces.Value;
 zef.explode_everything = zef.h_explode_everything.Value;
+zef.cone_draw = zef.h_cone_draw.Value;
 
 if zef.inv_dynamic_range == 0
 zef.inv_dynamic_range = Inf;

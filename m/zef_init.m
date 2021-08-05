@@ -10,6 +10,9 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.cone_draw = 0;
+zef_data.cone_lattice_resolution = 10;
+zef_data.cone_scale = 0.5;
 zef_data.lead_field_id = 0; 
 zef_data.lead_field_id_max = 0;
 zef_data.inv_amplitude_db = 20;
