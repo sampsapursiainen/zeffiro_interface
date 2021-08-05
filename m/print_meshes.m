@@ -684,9 +684,8 @@ set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_co
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(h_axes_image,'CLim',[min_rec max_rec]);
 set(h_surf_2,'specularstrength',0.2);
@@ -977,9 +976,8 @@ reconstruction = reconstruction.*reconstruction_p_2;
 end
 
 h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2,'specularstrength',0.2);
@@ -1816,9 +1814,8 @@ h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),re
 else    
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 end
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 %marker here
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -1915,9 +1912,8 @@ h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 end
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',gather([min_rec max_rec])); 
 set(h_surf_2{i},'specularstrength',0.2);
@@ -2211,9 +2207,8 @@ h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),re
 else
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');    
 end
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
 set(h_surf_2{ab_ind},'specularstrength',0.2);
@@ -2266,9 +2261,8 @@ h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 end
-if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(h_axes_image, f_ind, 2);
-end
+zef_plot_cone_field(h_axes_image, f_ind, 2);
+
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 

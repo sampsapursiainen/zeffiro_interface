@@ -10,6 +10,11 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.streamline_draw = 0;
+zef_data.streamline_linestyle = '-';
+zef_data.streamline_linewidth = 1;
+zef_data.streamline_color = 'blue';
+zef_data.n_streamline = 100;
 zef_data.cone_draw = 0;
 zef_data.cone_lattice_resolution = 10;
 zef_data.cone_scale = 0.5;

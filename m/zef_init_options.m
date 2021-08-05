@@ -1,5 +1,26 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+
+if not(isfield(zef,'streamline_draw')) 
+zef.streamline_draw = 0;
+end
+
+if not(isfield(zef,'streamline_linestyle')); 
+zef.streamline_linestyle = '-';
+end
+
+if not(isfield(zef,'streamline_linewidth')); 
+zef.streamline_linewidth = 1;
+end
+
+if not(isfield(zef,'streamline_color')); 
+zef.streamline_color = 'blue';
+end
+
+if not(isfield(zef,'n_streamline')); 
+zef.n_streamline = 100;
+end
+
 if not(isfield(zef,'submesh_num')); 
     zef.submesh_num = 0; 
 end; 

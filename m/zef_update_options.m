@@ -24,6 +24,11 @@ zef.inv_prior_over_measurement_db = str2num(get(zef.h_inv_prior_over_measurement
 zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value'));
 zef.cone_scale = str2num(get(zef.h_cone_scale,'Value'));
 
+zef.streamline_linestyle = get(zef.h_streamline_linestyle,'value');
+zef.streamline_linewidth = str2num(get(zef.h_streamline_linewidth,'value'));
+zef.streamline_color = get(zef.h_streamline_color,'value');
+zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
+
 else
     
 zef.submesh_num = str2num(get(zef.h_submesh_num,'string'));
