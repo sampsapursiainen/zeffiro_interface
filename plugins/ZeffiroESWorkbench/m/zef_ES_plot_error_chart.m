@@ -7,8 +7,8 @@ catch
         error('There are no values calculated yet...')
     end
 end
-[loader, star_r, star_c] = zef_ES_objective_function;
-titles = fieldnames(loader);
+[loader, sr, sc] = zef_ES_objective_function;
+%titles = fieldnames(loader);
 %% Figure and Axes
 if isempty(findobj('type','figure','Name','ZEFFIRO Interface: Error chart tool'))
     f = figure('Name','ZEFFIRO Interface: Error chart tool','NumberTitle','off', ...
@@ -30,28 +30,24 @@ h = uitabgroup();
 % Tab #1 Properties
 tab1 = uitab(h, 'title', 'Y_ES');
 axes('parent', tab1);
-loader_aux = loader(1,1:end);
-titles_aux = titles(1:4);
+
+loader_aux = loader(1, 1:4);
+fieldnames_table = fieldnames(loader_aux);
 for w = 1:4
-   sp_var = cell2mat(loader_aux{1,w});
-   % if w ~= 4
-       printing_imagesc(w);
-%     else
-%        printing_heatmap(w);
-%     end
+    sp_var = cell2mat(loader_aux{1,w});
+    printing_imagesc(w);
 end
 %sgtitle('Y_{ES} and Objective Function')
-
 %% Tab #2 Properties
 tab2 = uitab(h, 'title', 'Volumetric');
 axes('parent', tab2);
- loader_aux = loader(1, 5:end);
-titles_aux = fieldnames(loader_aux);
+
+loader_aux = loader(1, 5:end);
+fieldnames_table = fieldnames(loader_aux);
 for w = 1:4
-     sp_var = cell2mat(loader_aux{1,w});
-     printing_imagesc(w);
-%     %printing_heatmap(w);
- end
+    sp_var = cell2mat(loader_aux{1,w});
+    printing_imagesc(w);
+end
 % sgtitle('Current Angle and Magnitude differences')
 %% Wrapping up, functions and return of variables
 % h.Children(1).BackgroundColor = [1 1 1];
@@ -60,51 +56,44 @@ for w = 1:4
         imagesc(sp_var(:,1:end));
         colormap('jet');
         pbaspect([1 1 1])
-        %fnt_sz = 28;
+
         fnt_sz = 11;
-        
-      R = 1;
         
         ax = gca;
         ax.FontSize = fnt_sz;
         
+        R = 1;
+        
         ax.XTick      = 1:R:length(load_aux.reg_param);
-       
-            ax.XTickLabel = (load_aux.reg_param(1:R:end));
-       
+        ax.XTickLabel =           (load_aux.reg_param(1:R:end));
         ax.XLabel.String = 'Regularization parameter';
         ax.XTickLabelRotation = 90;
         ax.XLabel.FontSize = fnt_sz;
         ax.XLabel.FontWeight = 'bold';
         ax.XLabel.FontName = 'Arial';
         
-        ax.YTick      = 1:R:length(load_aux.optimizer_tolerance);
-
-            ax.YTickLabel = (load_aux.optimizer_tolerance(1:R:end));
-
-            if evalin('base','zef.ES_search_method')==1
-        ax.YLabel.String = 'Optimizer tolerance';
-            elseif evalin('base','zef.ES_search_method')==2
-        ax.YLabel.String = 'k-value';
-            end
+        if evalin('base','zef.ES_search_method') == 1
+            ax.YLabel.String = 'Optimizer tolerance';
+            param_val_aux = load_aux.optimizer_tolerance;
+        elseif evalin('base','zef.ES_search_method') == 2
+            ax.YLabel.String = 'Weighted k-value';
+            param_val_aux = load_aux.k_val;
+        end
+        ax.YTick      = 1:R:length(param_val_aux);
+        ax.YTickLabel =           (param_val_aux(1:R:end));
         ax.YLabel.FontSize = fnt_sz;
         ax.YLabel.FontWeight = 'bold';
         ax.YLabel.FontName = 'Arial';
         
-        cb                = colorbar; 
+        cb                = colorbar; %#ok<NASGU>
         %cb.Ruler.Exponent = -3;
         grid on;
-        
+
         hold on;
-%         for i = 1:length(load_aux.optimizer_tolerance)
-%             for j = 1:length(load_aux.reg_param)
-%                 plot(j,i,'ks','MarkerFaceColor','none','MarkerEdgeColor','k','MarkerSize',7);
-%             end
-%         end
-        plot(star_c, star_r, 'yp','MarkerFaceColor','yellow','MarkerEdgeColor','k','MarkerSize',18);
+        plot(sc, sr, 'yp','MarkerFaceColor','yellow','MarkerEdgeColor','k','MarkerSize',18);
         hold off;
-%         axis equal
-        title(titles_aux(w));
+        %         axis equal
+        title(fieldnames_table(w));
     end
     function printing_heatmap(w)
         subplot(2,2,w)
@@ -116,6 +105,6 @@ for w = 1:4
         set(h_map.NodeChildren(3), 'XTickLabelRotation', 90)
         xlabel('Regularization parameter');
         ylabel('Optimizer tolerance');
-        title(titles_aux(w));
+        title(fieldnames_table(w));
     end
 end

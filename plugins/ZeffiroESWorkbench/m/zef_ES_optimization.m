@@ -1,7 +1,7 @@
 zef_ES_optimization_init;
 zef_data = zef_ES_optimization_app;
 %% zef_data
-zef.h_ES_parameter_table                 = zef_data.h_ES_parameter_table;
+zef.h_ES_parameter_table                  = zef_data.h_ES_parameter_table;
 zef.h_ES_workbench                        = zef_data.h_ES_workbench;
 zef.h_ES_plot_type                        = zef_data.h_ES_plot_type;
 zef.h_ES_plot_data                        = zef_data.h_ES_plot_data;
@@ -18,9 +18,7 @@ zef.h_ES_plot_data_menu_item_3 = zef_data.h_ES_plot_data_menu_item_3;
 zef.h_ES_plot_data_menu_item_4 = zef_data.h_ES_plot_data_menu_item_4;
 
 clear zef_data;
-
 zef_ES_init_parameter_table;
-
 zef.h_ES_plot_type.Items =  {'Current pattern',  'Electrode potentials',  'Error Chart', 'Show optimizer properties'};
 
 %% 
@@ -40,10 +38,10 @@ zef.h_ES_plot_data_menu_item_3.MenuSelectedFcn = 'zef.ES_plot_type = 3;';
 zef.h_ES_plot_data_menu_item_4.MenuSelectedFcn = 'zef.ES_plot_type = 4;';
 
 zef.h_ES_fixed_active_electrodes.Value = zef.ES_fixed_active_electrodes;
-zef.ES_active_electrodes = zef_ES_fix_active_electrodes;
+zef.ES_active_electrodes               = zef_ES_fix_active_electrodes;
 zef.h_ES_fixed_active_electrodes.ValueChangedFcn = 'zef.ES_active_electrodes = zef_ES_fix_active_electrodes;';
 
- zef.h_ES_plot_type.Items = {'Current pattern' , 'Electrode potentials' , 'Error Chart' , 'Optimizer properties'};
+zef.h_ES_plot_type.Items = {'Current pattern' , 'Electrode potentials' , 'Error Chart' , 'Optimizer properties'};
 zef.h_ES_objfun.ValueChangedFcn                          = 'zef_ES_optimization_update;';
 zef.h_ES_objfun.ItemsData                                = 1:length(zef.h_ES_objfun.Items);
 zef.h_ES_objfun.Value                                    = zef.ES_objfun;

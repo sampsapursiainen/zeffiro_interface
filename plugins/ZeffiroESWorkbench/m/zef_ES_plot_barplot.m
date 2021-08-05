@@ -2,33 +2,36 @@ function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
 n = length(varargin);
 switch n
     case 0
-        if evalin('base','zef.ES_search_type') == 1
-                y_ES = evalin('base','zef.y_ES_single.y_ES');
-        elseif evalin('base','zef.ES_search_type') >= 2
-            [~,star_row_idx, star_col_idx] = zef_ES_objective_function;
-            if isempty(star_row_idx)
-                star_row_idx = 1;
+        if evalin('base','zef.ES_search_method') ~= 3
+            switch evalin('base','zef.ES_search_type')
+                case 1
+                    y_ES = evalin('base','zef.y_ES_single.y_ES');
+                case 2
+                    [~, sr, sc] = zef_ES_objective_function;
+                    if isempty(sr)
+                        sr = 1;
+                    end
+                    if isempty(sc)
+                        sc = 1;
+                    end
+                    load_aux = evalin('base','zef.y_ES_interval.y_ES');
+                    y_ES = cell2mat(load_aux(sr, sc));
             end
-            if isempty(star_col_idx)
-                star_col_idx = 1;
-            end
-              load_aux = evalin('base','zef.y_ES_interval.y_ES');
-           
-            y_ES = cell2mat(load_aux(star_row_idx, star_col_idx));
+        else
+            y_ES = evalin('base','zef.y_ES_4x1.y_ES');
         end
+        
     case 2
-        [star_row_idx,star_col_idx] = varargin{:};
-
-            load_aux = evalin('base','zef.y_ES_interval.y_ES');
-
-        y_ES = cell2mat(load_aux(star_row_idx, star_col_idx));
+        [sr, sc] = varargin{:};
+        load_aux = evalin('base','zef.y_ES_interval.y_ES');
+        y_ES = cell2mat(load_aux(sr, sc));
     case 3
         if numel(varargin{1}) > 1
             y_ES = varargin{1};
         else
             error('Tis not a y_ES value!')
         end
-        [~,star_row_idx,star_col_idx] = varargin{:};
+        [~, sr, sc] = varargin{:};
     otherwise
         error('Too many input arguments declared. Insert 2, 3 or no argument at all.')
 end
@@ -46,8 +49,14 @@ if n ~= 3
     f.Position(2) = win_temp(2)+(win_temp(4)-f.Position(4));
     f.Position(3) = 880;
     f.Position(4) = 500;
-    sgtitle(['[' num2str(star_row_idx) ',' num2str(star_col_idx) ']']);
+    
+    if evalin('base','zef.ES_search_method') ~= 3
+        sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
+    else
+        sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
+    end
 end
+
 
 h_barplot_ES = bar(y_ES,0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
@@ -79,23 +88,18 @@ else
     p_max = max(abs(y_ES)); p_min = -p_max;
 end
 
-% if isinf(max_current)
-%     max_current = 0.002;
-% end
-% 
+
 if p_max > max_current
     h_axes.YLim = [p_min p_max]*1.05;
 else
     h_axes.YLim = [-max_current max_current]*1.05;
-    %h_axes.YLim = [-max(abs(y_ES)) max(abs(y_ES))]*1.05;
 end
-% 
-% if max(abs(y_ES)) > max_current
+
 hold on;
 plot(xlim,[ max_current  max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
 plot(xlim,[-max_current -max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
 hold off;
-%end
 
 h_barplot_ES = [h_axes; h_barplot_ES];
+clear sr sc
 end
