@@ -78,6 +78,17 @@ max_y = max(s_p(:,2));
 min_z = min(s_p(:,3));
 max_z = max(s_p(:,3));
 
+l_d_x = (max_x - min_x)/(lattice_res + 1);
+l_d_y = (max_y - min_y)/(lattice_res + 1);
+l_d_z = (max_z - min_z)/(lattice_res + 1);
+
+min_x = min_x + l_d_x;
+max_x = max_x - l_d_x;
+min_y = min_y + l_d_x;
+max_y = max_y - l_d_x;
+min_z = min_z + l_d_x;
+max_z = max_z - l_d_x;
+
 [X_lattice, Y_lattice, Z_lattice] = meshgrid(linspace(min_x,max_x,lattice_res),linspace(min_y,max_y,lattice_res),linspace(min_z,max_z,lattice_res));
 
 X_field = zeros(size(X_lattice));
