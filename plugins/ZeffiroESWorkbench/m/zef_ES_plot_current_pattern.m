@@ -17,14 +17,13 @@ switch evalin('base','zef.ES_search_method')
                 if isempty(sc)
                     sc = 1;
                 end
-                
                 y_ES = evalin('base','zef.y_ES_interval.y_ES');
                 y_ES = cell2mat(y_ES(sr,sc));
         end
     case 3
         y_ES = evalin('base','zef.y_ES_4x1.y_ES');
 end
-nodes = evalin('base','zef.nodes');
+nodes   = evalin('base','zef.nodes');
 sensors = evalin('base','zef.sensors');
 %% Sensors attachment
 if evalin('base','zef.attach_electrodes')
