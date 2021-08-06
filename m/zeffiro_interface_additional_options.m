@@ -29,6 +29,8 @@ zef.h_streamline_linewidth = zef_data.h_streamline_linewidth;
 zef.h_streamline_color = zef_data.h_streamline_color;
 zef.h_n_streamline = zef_data.h_n_streamline;
 
+zef.h_cone_alpha = zef_data.h_cone_alpha;
+
 zef.h_additional_options = zef_data.h_additional_options;
 zef.h_as_opt_2.ValueChangedFcn = 'zef_update_options;';
 zef.h_as_opt_1.ValueChangedFcn = 'zef_update_options;';
@@ -57,6 +59,8 @@ zef.h_streamline_linestyle.ValueChangedFcn = 'zef_update_options;';
 zef.h_streamline_linewidth.ValueChangedFcn = 'zef_update_options;';
 zef.h_streamline_color.ValueChangedFcn = 'zef_update_options;';
 zef.h_n_streamline.ValueChangedFcn = 'zef_update_options;';
+
+zef.h_cone_alpha.ValueChangedFcn = 'zef_update_options;';
 
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
 
@@ -94,6 +98,8 @@ zef.h_streamline_linestyle.Value = zef.streamline_linestyle;
 zef.h_streamline_linewidth.Value = num2str(zef.streamline_linewidth);
 zef.h_streamline_color.Value = zef.streamline_color;
 zef.h_n_streamline.Value = num2str(zef.n_streamline);
+
+zef.h_cone_alpha.Value = num2str(1 - zef.cone_alpha);
 
 zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');

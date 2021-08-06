@@ -24,6 +24,11 @@ end
 if not(isfield(zef,'submesh_num')); 
     zef.submesh_num = 0; 
 end; 
+
+if not(isfield(zef,'cone_alpha')); 
+    zef.cone_alpha = 1; 
+end; 
+
 if not(isfield(zef,'reconstruction_type')); 
     zef.reconstruction_type = 1; 
 end; 

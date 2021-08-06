@@ -105,6 +105,7 @@ if evalin('base','zef.cone_draw')
 
 h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
 set(h_cone_field,'edgecolor','none');
+set(h_cone_field,'facealpha',evalin('base','zef.cone_alpha'));
 
 end 
 

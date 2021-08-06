@@ -10,6 +10,7 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.cone_alpha = 1;
 zef_data.streamline_draw = 0;
 zef_data.streamline_linestyle = '-';
 zef_data.streamline_linewidth = 1;
