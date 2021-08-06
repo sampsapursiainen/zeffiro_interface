@@ -20,7 +20,7 @@ zef.h_ES_plot_data_menu_item_4 = zef_data.h_ES_plot_data_menu_item_4;
 clear zef_data;
 zef_ES_init_parameter_table;
 zef.h_ES_plot_type.Items =  {'Current pattern',  'Electrode potentials',  'Error Chart', 'Show optimizer properties'};
-zef.h_ES_search_method.Items = {'L1 optimization'  'L2 optimization'  '4x1'};
+zef.h_ES_search_method.Items = {'L1 optimization',  'L2 optimization',  '4x1'};
 
 %% 
 zef.h_ES_parameter_table.CellEditCallback                = 'zef_ES_optimization_update;';
