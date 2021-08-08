@@ -1,7 +1,16 @@
 function [nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val)
 
- h = waitbar(0,'Mesh optimization.');   
+ h = waitbar(0,'Mesh optimization.'); 
+ 
+ tetra_ind = 0; 
+ iter_ind_aux_0 = 0;
+ 
+while not(isempty(tetra_ind)) & iter_ind_aux_0 < evalin('base','zef.mesh_optimization_repetitions')
 
+     iter_ind_aux_0 =  iter_ind_aux_0 + 1;
+    
+waitbar(0, h,'Mesh optimization.'); 
+ 
     ind_m = [1 4 7; 2 5 8 ; 3 6 9];
     Aux_mat = [nodes(tetra(:,1),:)'; nodes(tetra(:,2),:)'; nodes(tetra(:,3),:)'] - repmat(nodes(tetra(:,4),:)',3,1);
     tilavuus = (Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
@@ -9,6 +18,8 @@ function [nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val)
     + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
 
 tetra_ind = find(tilavuus > -thresh_val*max(abs(tilavuus)));
+
+if not(isempty(tetra_ind))
 
 roi_ind = find(sum(ismember(tetra,tetra(tetra_ind,:)),2)==3);
 
@@ -89,6 +100,10 @@ k_min_2 = 0;
          tetra(tetra_aux_ind(k_min_2),:) = reshape(tetra_aux_3(2,:,k_min_1(k_min_2),k_min_2),1,4);
          end
     
+end
+
+end
+
 end
 
 close(h)

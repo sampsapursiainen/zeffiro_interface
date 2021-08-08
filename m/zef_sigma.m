@@ -246,11 +246,10 @@ end
 
 close(h)
 
-for iter_ind_aux_0 = 1 : evalin('base','zef.mesh_optimization_repetitions')
 [nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val);
 tetra_aux = tetra;
 
-end
+
 
 end
 
