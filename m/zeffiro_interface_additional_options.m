@@ -23,6 +23,10 @@ zef.h_inv_hyperprior_tail_length_db = zef_data.h_inv_hyperprior_tail_length_db;
 zef.h_inv_snr = zef_data.h_inv_snr;
 zef.h_inv_prior_over_measurement_db = zef_data.h_inv_prior_over_measurement_db;
 zef.h_plot_hyperprior = zef_data.h_plot_hyperprior;
+zef.h_mesh_smoothing_repetitions = zef_data.h_mesh_smoothing_repetitions;
+zef.h_mesh_optimization_repetitions = zef_data.h_mesh_optimization_repetitions;
+zef.h_mesh_optimization_parameter = zef_data.h_mesh_optimization_parameter; 
+zef.h_mesh_labeling_approach =  zef_data.h_mesh_labeling_approach; 
 
 zef.h_streamline_linestyle = zef_data.h_streamline_linestyle;
 zef.h_streamline_linewidth = zef_data.h_streamline_linewidth;
@@ -32,6 +36,10 @@ zef.h_n_streamline = zef_data.h_n_streamline;
 zef.h_cone_alpha = zef_data.h_cone_alpha;
 
 zef.h_additional_options = zef_data.h_additional_options;
+zef.h_mesh_smoothing_repetitions.ValueChangedFcn = 'zef_update_options;';
+zef.h_mesh_optimization_repetitions.ValueChangedFcn = 'zef_update_options;';
+zef.h_mesh_optimization_parameter.ValueChangedFcn = 'zef_update_options;';
+zef.h_mesh_labeling_approach.ValueChangedFcn = 'zef_update_options;';
 zef.h_as_opt_2.ValueChangedFcn = 'zef_update_options;';
 zef.h_as_opt_1.ValueChangedFcn = 'zef_update_options;';
 zef.h_as_opt_3.ValueChangedFcn = 'zef_update_options;';
@@ -99,7 +107,17 @@ zef.h_streamline_linewidth.Value = num2str(zef.streamline_linewidth);
 zef.h_streamline_color.Value = zef.streamline_color;
 zef.h_n_streamline.Value = num2str(zef.n_streamline);
 
+zef.h_mesh_labeling_approach.ItemsData = [1:length(zef.h_mesh_labeling_approach.Items)];
+zef.h_mesh_smoothing_repetitions.Value = num2str(zef.mesh_smoothing_repetitions);
+zef.h_mesh_optimization_repetitions.Value = num2str(zef.mesh_optimization_repetitions);
+zef.h_mesh_optimization_parameter.Value = num2str(zef.mesh_optimization_parameter); 
+zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach; 
+
+
 zef.h_cone_alpha.Value = num2str(1 - zef.cone_alpha);
+
+
+
 
 zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');

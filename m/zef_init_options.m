@@ -184,3 +184,24 @@ end;
 if not(isfield(zef,'inv_hyperprior_weight')); 
     zef.inv_hyperprior_weight = 1; 
 end; 
+
+if not(isfield(zef,'mesh_smoothing_repetitions')); 
+    zef.mesh_smoothing_repetitions = 1; 
+end;
+
+if not(isfield(zef,'mesh_optimization_repetitions')); 
+    zef.mesh_optimization_repetitions = 5; 
+end;
+
+if not(isfield(zef,'mesh_optimization_parameter')); 
+    zef.mesh_optimization_parameter = 1E-5; 
+end;
+
+if not(isfield(zef,'mesh_labeling_approach')); 
+    zef.mesh_labeling_approach = 1; 
+end;
+
+
+
+
+

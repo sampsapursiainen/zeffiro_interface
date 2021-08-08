@@ -29,6 +29,11 @@ zef.streamline_linewidth = str2num(get(zef.h_streamline_linewidth,'value'));
 zef.streamline_color = get(zef.h_streamline_color,'value');
 zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
 
+zef.mesh_smoothing_repetitions = str2num(zef.h_mesh_smoothing_repetitions.Value);
+zef.mesh_optimization_repetitions = str2num(zef.h_mesh_optimization_repetitions.Value);
+zef.mesh_optimization_parameter = str2num(zef.h_mesh_optimization_parameter.Value); 
+zef.mesh_labeling_approach =  zef.h_mesh_labeling_approach.Value; 
+
 zef.cone_alpha = 1 - str2num(get(zef.h_cone_alpha,'value'));
 
 else
