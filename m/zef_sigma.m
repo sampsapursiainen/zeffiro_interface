@@ -7,6 +7,8 @@ prisms = [];
 johtavuus_prisms = [];
 non_source_ind = []; 
 
+optimizer_flag = 1;
+
 if evalin('base','zef.sigma_bypass')
     
    johtavuus = evalin('base','zef.sigma');
@@ -117,18 +119,18 @@ johtavuus = johtavuus(:);
 
 clear johtavuus_ind priority_ind;
 
-
 nodes = evalin('base','zef.nodes_b');
 tetra = evalin('base','zef.tetra_aux');
 N = size(nodes, 1);
-
 
 % nodes_b = evalin('base','zef.nodes_b');
 if evalin('base','zef.mesh_smoothing_on');
     
 tetra_aux = evalin('base','zef.tetra_aux');
     
-length_waitbar = 4+length(priority_vec)+evalin('base','zef.smoothing_steps_surf')/5;    
+length_waitbar = 4+length(priority_vec)+20;    
+
+nodes = evalin('base','zef.nodes_b');
 
 for smoothing_repetition_ind  = 1 : evalin('base','zef.mesh_smoothing_repetitions')
 
@@ -175,7 +177,7 @@ tetra = evalin('base','zef.tetra_aux');
 
 smoothing_ok = 0;
 
-nodes = evalin('base','zef.nodes_b');
+
 smoothing_param = evalin('base','zef.smoothing_strength');   
 smoothing_steps_surf = evalin('base','zef.smoothing_steps_surf');   
 smoothing_steps_vol =  evalin('base','zef.smoothing_steps_vol'); 
@@ -225,8 +227,9 @@ taubin_lambda = 1;
 taubin_mu = -1;
 
 for iter_ind_aux_1 = 1 : smoothing_steps_surf
- %nodes_old = nodes;   
-waitbar((4+length(priority_vec)+iter_ind_aux_1/5)/length_waitbar,h,'Mesh smoothing.');
+ 
+%nodes_old = nodes;   
+waitbar((4+length(priority_vec)+(iter_ind_aux_1/(smoothing_steps_surf+smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
 nodes_aux = A(K,K)*nodes(K,:);
 nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
@@ -236,29 +239,37 @@ nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
 nodes(K,:) =  nodes(K,:) + taubin_mu*smoothing_param*nodes_aux;
 
-for iter_ind_aux_2 = 1 : smoothing_steps_vol
-nodes_aux = B*nodes; 
-nodes_aux = nodes_aux./sum_B;
-nodes(J,:) = nodes(J,:) + smoothing_param*(nodes_aux(J,:)-nodes(J,:));
-end
+
 
 end
+
+for iter_ind_aux_2 = 1 : smoothing_steps_vol
+    waitbar((4+length(priority_vec)+((smoothing_steps_surf+iter_ind_aux_2)/(smoothing_steps_surf + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+nodes_aux = B*nodes; 
+nodes_aux = nodes_aux./sum_B;
+nodes = nodes + smoothing_param*taubin_lambda*(nodes_aux -nodes);
+nodes_aux = B*nodes; 
+nodes_aux = nodes_aux./sum_B;
+nodes = nodes + smoothing_param*taubin_mu*(nodes_aux -nodes);
+end
+
 
 close(h)
 
-[nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val);
+
+
+
+[nodes, tetra, optimizer_flag, J_fix] = zef_tetra_turn(nodes, tetra, thresh_val);
+
+
 tetra_aux = tetra;
-
-
 
 end
 
-
 clear nodes_aux;
 
-condition_number = zef_condition_number(nodes,tetra);
 
-if min(condition_number) < thresh_val*max(condition_number) 
+if optimizer_flag == -1;
 smoothing_ok = 0;
 else
 smoothing_ok = 1;
@@ -525,7 +536,6 @@ johtavuus_aux = [johtavuus_aux ; (johtavuus_aux_new)];
 clear tetra_new_ind tetra_new_out;
  
 waitbar(10/length_waitbar,h,'Refinement.'); 
-
 
 Aux_mat = [nodes(tetra(:,1),:)'; nodes(tetra(:,2),:)'; nodes(tetra(:,3),:)'] - repmat(nodes(tetra(:,4),:)',3,1);
 ind_m = [1 4 7; 2 5 8 ; 3 6 9];

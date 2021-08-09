@@ -1,4 +1,6 @@
-function [nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val)
+function [nodes, tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
+
+flag_val = 1;
 
  h = waitbar(0,'Mesh optimization.'); 
 
@@ -114,6 +116,15 @@ end
 
 end
 
+
 close(h)
+
+if min(condition_number) < thresh_val*max(condition_number) 
+flag_val = -1; 
+else
+flag_val = 1;
+end
+
+nodes_ind = unique(tetra(find(condition_number < thresh_val*max(condition_number)),:));
 
 end
