@@ -159,8 +159,8 @@ zef_data.sensors_attached_volume = [];
        zef_data.sigma_prisms = [];
        zef_data.refinement_on = 0;
        zef_data.smoothing_strength = 0.25;
-       zef_data.smoothing_steps_surf = 15;
-       zef_data.smoothing_steps_vol = 5;
+       zef_data.smoothing_steps_surf = 1000;
+       zef_data.smoothing_steps_vol = 2;
        zef_data.refinement_type = 1;
        zef_data.surface_sources = 0; 
        zef_data.visualization_type = 1;
@@ -223,7 +223,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.parcellation_compartment = {'g'};
        
     zef_data.mesh_smoothing_repetitions = 1; 
-    zef_data.mesh_optimization_repetitions = 5; 
+    zef_data.mesh_optimization_repetitions = 10; 
    zef_data.mesh_optimization_parameter = 1E-5; 
     zef_data.mesh_labeling_approach = 1; 
 

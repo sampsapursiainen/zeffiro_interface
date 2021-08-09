@@ -69,10 +69,10 @@ if not(isfield(zef,'preconditioner_tolerance'));
     zef.preconditioner_tolerance = 0.001; 
 end;
 if not(isfield(zef,'smoothing_steps_surf')); 
-    zef.smoothing_steps_surf = 9; 
+    zef.smoothing_steps_surf = 1000; 
 end;
 if not(isfield(zef,'smoothing_steps_vol')); 
-    zef.smoothing_steps_vol = 1; 
+    zef.smoothing_steps_vol = 2; 
 end;
 if not(isfield(zef,'refinement_type')); 
     zef.refinement_type = 1; 
@@ -190,7 +190,7 @@ if not(isfield(zef,'mesh_smoothing_repetitions'));
 end;
 
 if not(isfield(zef,'mesh_optimization_repetitions')); 
-    zef.mesh_optimization_repetitions = 5; 
+    zef.mesh_optimization_repetitions = 10; 
 end;
 
 if not(isfield(zef,'mesh_optimization_parameter')); 
