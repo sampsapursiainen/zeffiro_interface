@@ -1,9 +1,13 @@
 function [nodes, tetra] = zef_tetra_turn(nodes, tetra, thresh_val)
 
  h = waitbar(0,'Mesh optimization.'); 
+
+ind_m = [1 4 7; 2 5 8 ; 3 6 9];
  
  tetra_ind = 0; 
  iter_ind_aux_0 = 0;
+
+[condition_number, tilavuus] = zef_condition_number(nodes,tetra); 
  
 while not(isempty(tetra_ind)) & iter_ind_aux_0 < evalin('base','zef.mesh_optimization_repetitions')
 
@@ -11,14 +15,11 @@ while not(isempty(tetra_ind)) & iter_ind_aux_0 < evalin('base','zef.mesh_optimiz
     
 waitbar(0, h,'Mesh optimization.'); 
  
-    ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-    Aux_mat = [nodes(tetra(:,1),:)'; nodes(tetra(:,2),:)'; nodes(tetra(:,3),:)'] - repmat(nodes(tetra(:,4),:)',3,1);
-    tilavuus = (Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-    - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-    + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
+condition_number_thresh = thresh_val*max(condition_number);
 
-tetra_ind = find(tilavuus > -thresh_val*max(abs(tilavuus)));
-
+tetra_ind = find(condition_number < condition_number_thresh);
+     rejected_elements = length(tetra_ind);
+    
 if not(isempty(tetra_ind))
 
 roi_ind = find(sum(ismember(tetra,tetra(tetra_ind,:)),2)==3);
@@ -27,9 +28,6 @@ tetra_aux_1 = tetra(tetra_ind,:);
 
 for i = 1 : length(tetra_ind)
     
-    if mod(i,ceil(length(tetra_ind)/100)) == 0 
-    waitbar(i/length(tetra_ind),h,'Mesh optimization.');  
-    end
     
     flipped_tetra = 0;
     
@@ -95,11 +93,21 @@ k_min_2 = 0;
          [min_val, k_min_2] = min(min_vec_aux);
          
          if [k_min_1 k_min_2] > 0 & min_val < Inf
-                     
-         tetra(tetra_ind(i),:) = reshape(tetra_aux_3(1,:,k_min_1(k_min_2),k_min_2),1,4);
-         tetra(tetra_aux_ind(k_min_2),:) = reshape(tetra_aux_3(2,:,k_min_1(k_min_2),k_min_2),1,4);
-         end
+         
+         tetra_1 = reshape(tetra_aux_3(1,:,k_min_1(k_min_2),k_min_2),1,4);   
+         tetra_2 =  reshape(tetra_aux_3(2,:,k_min_1(k_min_2),k_min_2),1,4);
+         tetra(tetra_ind(i),:) = tetra_1;
+         tetra(tetra_aux_ind(k_min_2),:) = tetra_2;
+  
+         condition_number([tetra_ind(i); tetra_aux_ind(k_min_2)]) = zef_condition_number(nodes,[tetra_1 ; tetra_2]);
+         
+end
     
+         if mod(i,ceil(length(tetra_ind)/100)) == 0 
+waitbar(i/length(tetra_ind),h,['Mesh optimization. Rejected elements: ' num2str(rejected_elements)]);  
+
+end
+
 end
 
 end
@@ -109,6 +117,3 @@ end
 close(h)
 
 end
-
-
-

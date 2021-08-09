@@ -217,10 +217,10 @@ waitbar((4+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
 clear B_part;
 B = spones(B);
 sum_B = full(sum(B))';
+sum_B = sum_B(:,[1 1 1]);
 end
 
 sum_A = sum_A(:,[1 1 1]);
-sum_B = sum_B(:,[1 1 1]);
 taubin_lambda = 1;
 taubin_mu = -1;
 
@@ -256,22 +256,14 @@ end
 
 clear nodes_aux;
 
-Aux_mat = [nodes(tetra(:,1),:)'; nodes(tetra(:,2),:)'; nodes(tetra(:,3),:)'] - repmat(nodes(tetra(:,4),:)',3,1);
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = (Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-- Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-+ Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
-clear Aux_mat;
+condition_number = zef_condition_number(nodes,tetra);
 
-if max(tilavuus)/min(tilavuus) < 0.5*thresh_val
+if min(condition_number) < thresh_val*max(condition_number) 
 smoothing_ok = 0;
 else
 smoothing_ok = 1;
 end
-% smoothing_ok = 1
-% max(tilavuus)
-% figure
-% hist((tilavuus),100)
+
 
 if smoothing_ok == 0
 nodes = evalin('base','zef.nodes_b');
