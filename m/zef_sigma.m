@@ -107,7 +107,7 @@ if not(aux_brain_ind(k)==0)
 end
 end
 end
-
+ 
 if sum(aux_brain_ind) == 0 
 brain_ind = find(johtavuus);
 end
@@ -226,20 +226,33 @@ sum_A = sum_A(:,[1 1 1]);
 taubin_lambda = 1;
 taubin_mu = -1;
 
+A_K = A(K,K);
+nodes(K,:) = nodes(K,:);
+
+if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+A = gpuArray(A);
+A_K = gpuArray(A_K);
+B = gpuArray(B); 
+K = gpuArray(K)
+sum_B = gpuArray(sum_B);
+end
+
 for iter_ind_aux_1 = 1 : smoothing_steps_surf
  
+if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+nodes = gpuArray(nodes);
+end
+    
 %nodes_old = nodes;   
 waitbar((4+length(priority_vec)+(iter_ind_aux_1/(smoothing_steps_surf+smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
-nodes_aux = A(K,K)*nodes(K,:);
+nodes_aux = A_K*nodes(K,:);
 nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
 nodes(K,:) =  nodes(K,:) + taubin_lambda*smoothing_param*nodes_aux;
-nodes_aux = A(K,K)*nodes(K,:);
+nodes_aux = A_K*nodes(K,:);
 nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
 nodes(K,:) =  nodes(K,:) + taubin_mu*smoothing_param*nodes_aux;
-
-
 
 end
 
@@ -253,14 +266,11 @@ nodes_aux = nodes_aux./sum_B;
 nodes = nodes + smoothing_param*taubin_mu*(nodes_aux -nodes);
 end
 
+nodes = gather(nodes);
 
 close(h)
 
-
-
-
 [nodes, tetra, optimizer_flag, J_fix] = zef_tetra_turn(nodes, tetra, thresh_val);
-
 
 tetra_aux = tetra;
 
@@ -575,8 +585,6 @@ non_source_ind = intersect(brain_ind, non_source_ind);
 close(h)
 
 
-
-
 end
 
 johtavuus = [johtavuus(:) johtavuus_aux(:)] ;
@@ -589,6 +597,10 @@ end
 end
  
 end
+
+
+
+
 
 
 
