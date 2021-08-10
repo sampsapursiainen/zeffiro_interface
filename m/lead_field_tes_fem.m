@@ -747,7 +747,7 @@ end
 
 if not(impedance_inf == 0)
    
-    R_tes = R_tes - mean(R_tes);
+    R_tes = R_tes - mean(R_tes,2);
     
 end
 
