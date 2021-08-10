@@ -449,20 +449,24 @@ if isequal(electrode_model,'PEM')
     B = spalloc(N,L,0);
     C = spalloc(L,L,0);
     entry_vec = (1./impedance_vec(ele_ind(:,1)));
+     for i = 1 : L 
     B(ele_ind(i),i) = entry_vec;
     A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
+     end
     C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
+   
     
     else
 
     B = spalloc(N,L,0);
     C = spalloc(L,L,0);
-    entry_vec = ones(size(ele_ind(:,1)));
-    B(ele_ind(i),i) = entry_vec;
+     for i = 1 : L 
+    B(ele_ind(i),i) = 1;
+     end
 %Dirichlet boundary condition for a single node.
     A(ele_ind(1),:) = 0;
-A(:,ele_ind(1)) = 0;
-A(ele_ind(1),ele_ind(1)) = 1;
+    A(:,ele_ind(1)) = 0;
+    A(ele_ind(1),ele_ind(1)) = 1;
     C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
         
     end
