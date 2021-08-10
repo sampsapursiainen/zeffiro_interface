@@ -577,7 +577,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %     end
     tic;
     
-    if isequal(electrode_model,'PEM') & impedance_inf == 0
+    if not(isequal(electrode_model,'PEM')) & impedance_inf == 0
     iter_ind_1 = 1;
     else
     iter_ind_1 = 2;
