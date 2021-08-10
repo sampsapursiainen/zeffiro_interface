@@ -576,7 +576,13 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %         L_eeg_ew = zeros(L,M_ew);
 %     end
     tic;
-
+    
+    if isequal(electrode_model,'PEM') & impedance_inf == 0
+    iter_ind_1 = 1;
+    else
+    iter_ind_1 = 2;
+    end
+    
     for i = 1 : L
 %        if isequal(electrode_model,'PEM')
 %            if i == L
