@@ -442,7 +442,9 @@ end
 
 % 22.06.2020 Start
 if isequal(electrode_model,'PEM')
-
+    
+    if impedance_inf == 0
+    
     % B and C
     B = spalloc(N,L,0);
     C = spalloc(L,L,0);
@@ -451,9 +453,18 @@ if isequal(electrode_model,'PEM')
     A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
     C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
     
-    if not(impedance_inf == 0)
-        'Cannot use infinite impedance for tES'
-        return
+    else
+
+    B = spalloc(N,L,0);
+    C = spalloc(L,L,0);
+    entry_vec = ones(size(ele_ind(:,1)));
+    B(ele_ind(i),i) = entry_vec;
+%Dirichlet boundary condition for a single node.
+    A(ele_ind(1),:) = 0;
+A(:,ele_ind(1)) = 0;
+A(ele_ind(1),ele_ind(1)) = 1;
+    C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
+        
     end
 end
 
@@ -727,6 +738,13 @@ else
 
     end
 end
+
+if not(impedance_inf == 0)
+   
+    R_tes = R_tes - mean(R_tes);
+    
+end
+
 clear S r p x aux_vec inv_M_r a b;
 % waitbar(0,h,'Interpolation.');
 
@@ -736,7 +754,7 @@ clear S r p x aux_vec inv_M_r a b;
 
     % S_tes
     J = eye(size(B'*R_tes));
-    S_tes = ( (eye(L)-(1/L)*ones(L,L)) )* (inv(C) * (J+(B'*R_tes))) * J;
+    S_tes = ( (eye(L)-(1/L)*ones(L,L)) ) * (inv(C) * (J+(B'*R_tes))) * J;
 
     if isfield(evalin('base','zef'),'redo_eit_dec')
         if evalin('base','zef.redo_eit_dec') == 1
@@ -748,7 +766,7 @@ clear S r p x aux_vec inv_M_r a b;
     else
         [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
     end
-    
+     
     R_tes_1 = Grad_1*R_tes;
     R_tes_2 = Grad_2*R_tes;
     R_tes_3 = Grad_3*R_tes;
