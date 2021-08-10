@@ -1,5 +1,7 @@
 zef_data = zeffiro_interface_mesh_tool_app;
 
+zef.h_plot_condition = zef_data.h_plot_condition;
+zef.h_mesh_optimize = zef_data.h_mesh_optimize;
 zef.h_mesh_tool = zef_data.h_mesh_tool;
 zef.h_make_all = zef_data.h_make_all;
 zef.h_pushbutton21 = zef_data.h_pushbutton21;
@@ -24,7 +26,8 @@ zef.h_pushbutton34 = zef_data.h_pushbutton34;
 zef.h_inflate_n_iterations = zef_data.h_inflate_n_iterations;
 zef.h_inflate_strength = zef_data.h_inflate_strength;
 
-
+set(zef.h_plot_condition,'ButtonPushedFcn','zef_plot_condition;');
+set(zef.h_mesh_optimize,'ButtonPushedFcn','[zef.nodes,zef.tetrahedra] = zef_optimize_mesh(zef.nodes,zef.tetra);');
 set(zef.h_make_all,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef.source_interpolation_on = 1; set(zef.h_source_interpolation_on,''value'',1); [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);[zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);lead_field_matrix;');
 set(zef.h_pushbutton21,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); [zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);zef.tetra_aux = zef.tetra; [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;');
 set(zef.h_pushbutton14,'ButtonPushedFcn','zef_delete_original_field;[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);[zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);lead_field_matrix;');

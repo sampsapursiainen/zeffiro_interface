@@ -10,6 +10,12 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.cone_alpha = 1;
+zef_data.streamline_draw = 0;
+zef_data.streamline_linestyle = '-';
+zef_data.streamline_linewidth = 1;
+zef_data.streamline_color = 'blue';
+zef_data.n_streamline = 100;
 zef_data.cone_draw = 0;
 zef_data.cone_lattice_resolution = 10;
 zef_data.cone_scale = 0.5;
@@ -153,8 +159,8 @@ zef_data.sensors_attached_volume = [];
        zef_data.sigma_prisms = [];
        zef_data.refinement_on = 0;
        zef_data.smoothing_strength = 0.25;
-       zef_data.smoothing_steps_surf = 15;
-       zef_data.smoothing_steps_vol = 5;
+       zef_data.smoothing_steps_surf = 1000;
+       zef_data.smoothing_steps_vol = 2;
        zef_data.refinement_type = 1;
        zef_data.surface_sources = 0; 
        zef_data.visualization_type = 1;
@@ -216,7 +222,15 @@ zef_data.sensors_attached_volume = [];
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
        zef_data.parcellation_compartment = {'g'};
        
+    zef_data.mesh_smoothing_repetitions = 1; 
+    zef_data.mesh_optimization_repetitions = 10; 
+   zef_data.mesh_optimization_parameter = 1E-5; 
+    zef_data.mesh_labeling_approach = 1; 
+
+       
        zef.fieldnames = fieldnames(zef);
+       
+       
 
 for zef_i = 1 : length(zef.fieldnames)
     if isobject(evalin('base',['zef.' zef.fieldnames{zef_i}]))

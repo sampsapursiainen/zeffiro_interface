@@ -41,6 +41,7 @@ zef.h_submesh_num = zef_data.h_submesh_num;
 zef.h_use_inflated_surfaces = zef_data.h_use_inflated_surfaces;
 zef.h_explode_everything = zef_data.h_explode_everything;
 zef.h_cone_draw = zef_data.h_cone_draw;
+zef.h_streamline_draw = zef_data.h_streamline_draw;
 
 %*******
 
@@ -54,6 +55,7 @@ set(zef.h_edit80,'value',zef.azimuth);
 set(zef.h_edit81,'value',zef.elevation);
 set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_cone_draw,'value',zef.cone_draw);
+set(zef.h_streamline_draw,'value',zef.streamline_draw);
 
 set(zef.h_visualization_type,'Items',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
@@ -98,7 +100,6 @@ zef.h_inv_colormap = zef_data.h_inv_colormap;
 set(zef.h_inv_colormap,'Items',{'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation'});
 zef.h_inv_colormap.ItemsData = [1:length(zef.h_inv_colormap.Items)];
 set(zef.h_inv_colormap,'Value',zef.inv_colormap);
-
 
 set(zef.h_cp_mode,'Items',{'Cut out','Cut in','Cut out & whole brain','Cut in & whole brain'});
 zef.h_cp_mode.ItemsData = [1:length(zef.h_cp_mode.Items)];
@@ -148,6 +149,8 @@ set(zef.h_submesh_num,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_use_inflated_surfaces,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_explode_everything,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
 set(zef.h_cone_draw,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
+set(zef.h_streamline_draw,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
+
 
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 

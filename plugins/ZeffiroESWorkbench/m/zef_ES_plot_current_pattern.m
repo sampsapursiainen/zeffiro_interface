@@ -4,24 +4,26 @@ if isfield(evalin('base','zef'),'h_current_ES')
     evalin('base', 'delete(zef.h_current_ES)')
 end
 %% Variables and parameter setup
-if evalin('base','zef.ES_search_type') == 1
-        y_ES = evalin('base','zef.y_ES_single.y_ES');
-
-elseif evalin('base','zef.ES_search_type') >= 2
-    [~,sr, sc] = zef_ES_objective_function;
-    if isempty(sr)
-        sr = 1;
-    end
-    if isempty(sc)
-        sc = 1;
-    end
-    
-     y_ES = evalin('base','zef.y_ES_interval.y_ES');
-    
-    y_ES = cell2mat(y_ES(sr,sc));
+switch evalin('base','zef.ES_search_method')
+    case {1,2}
+        switch evalin('base','zef.ES_search_type')
+            case 1
+                y_ES = evalin('base','zef.y_ES_single.y_ES');
+            case 2
+                [~,sr, sc] = zef_ES_objective_function;
+                if isempty(sr)
+                    sr = 1;
+                end
+                if isempty(sc)
+                    sc = 1;
+                end
+                y_ES = evalin('base','zef.y_ES_interval.y_ES');
+                y_ES = cell2mat(y_ES(sr,sc));
+        end
+    case 3
+        y_ES = evalin('base','zef.y_ES_4x1.y_ES');
 end
-
-nodes = evalin('base','zef.nodes');
+nodes   = evalin('base','zef.nodes');
 sensors = evalin('base','zef.sensors');
 %% Sensors attachment
 if evalin('base','zef.attach_electrodes')

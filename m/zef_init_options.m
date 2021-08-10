@@ -1,8 +1,34 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+
+if not(isfield(zef,'streamline_draw')) 
+zef.streamline_draw = 0;
+end
+
+if not(isfield(zef,'streamline_linestyle')); 
+zef.streamline_linestyle = '-';
+end
+
+if not(isfield(zef,'streamline_linewidth')); 
+zef.streamline_linewidth = 1;
+end
+
+if not(isfield(zef,'streamline_color')); 
+zef.streamline_color = 'blue';
+end
+
+if not(isfield(zef,'n_streamline')); 
+zef.n_streamline = 100;
+end
+
 if not(isfield(zef,'submesh_num')); 
     zef.submesh_num = 0; 
 end; 
+
+if not(isfield(zef,'cone_alpha')); 
+    zef.cone_alpha = 1; 
+end; 
+
 if not(isfield(zef,'reconstruction_type')); 
     zef.reconstruction_type = 1; 
 end; 
@@ -43,10 +69,10 @@ if not(isfield(zef,'preconditioner_tolerance'));
     zef.preconditioner_tolerance = 0.001; 
 end;
 if not(isfield(zef,'smoothing_steps_surf')); 
-    zef.smoothing_steps_surf = 9; 
+    zef.smoothing_steps_surf = 1000; 
 end;
 if not(isfield(zef,'smoothing_steps_vol')); 
-    zef.smoothing_steps_vol = 1; 
+    zef.smoothing_steps_vol = 2; 
 end;
 if not(isfield(zef,'refinement_type')); 
     zef.refinement_type = 1; 
@@ -158,3 +184,24 @@ end;
 if not(isfield(zef,'inv_hyperprior_weight')); 
     zef.inv_hyperprior_weight = 1; 
 end; 
+
+if not(isfield(zef,'mesh_smoothing_repetitions')); 
+    zef.mesh_smoothing_repetitions = 1; 
+end;
+
+if not(isfield(zef,'mesh_optimization_repetitions')); 
+    zef.mesh_optimization_repetitions = 10; 
+end;
+
+if not(isfield(zef,'mesh_optimization_parameter')); 
+    zef.mesh_optimization_parameter = 1E-5; 
+end;
+
+if not(isfield(zef,'mesh_labeling_approach')); 
+    zef.mesh_labeling_approach = 1; 
+end;
+
+
+
+
+

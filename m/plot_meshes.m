@@ -683,9 +683,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 set(h_surf_2{ab_ind},'FaceAlpha','interp');
                                 set(h_surf_2{ab_ind},'AlphaDataMapping','none');
                             end
-                             if evalin('base','zef.cone_draw')
-                            [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
-                            end
+                            zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+
                             
                             if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
                                 cb_done = 1;
@@ -725,9 +724,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             else
                                 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             end
-                              if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
-        end
+                           
+                            zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                             set(gca,'CLim',gather([min_rec max_rec]));
                             set(h_surf_2{i},'specularstrength',0.2);
@@ -916,9 +914,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                         axes(evalin('base','zef.h_axes1'));
                         %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                         set(h_surf_2{ab_ind},'CData',reconstruction);
-                          if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
-        end
+                        zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+
                         
                         set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                         set(gca,'CLim',[min_rec max_rec]);
@@ -963,10 +960,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                     axes(evalin('base','zef.h_axes1'));
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
-                      if evalin('base','zef.cone_draw')
-        [h_cone_field, h_cone_colorbar] = zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
-        end
-                    
+                    zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+
                     set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                     set(gca,'CLim',gather([min_rec max_rec]));
                     set(h_surf_2{i},'specularstrength',0.2);
