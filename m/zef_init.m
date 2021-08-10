@@ -10,7 +10,7 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
-
+zef_data.use_pem = 0;
 zef_data.default_impedance_value = 5E3;
 zef_data.cone_alpha = 1;
 zef_data.streamline_draw = 0;
