@@ -169,11 +169,15 @@ for f_ind = 1 : number_of_frames
                     
                    % pot = lf*mom{i}';
                     pot = lf*mom;
+                    
+                    
 
                     %relativ residual variance
-                    z_vec(i) = 1 - sum((f-pot).^2) ./ sum(f.^2); %goodnes of fit
-                                      z_vec(i+n_interp)=z_vec(i);
-                    z_vec(i+2*n_interp)=z_vec(i);
+                    mom=mom/norm(mom);
+                    gof=1 - sum((f-pot).^2) ./ sum(f.^2); %goodnes of fit
+                    z_vec(i) = gof*mom(1);
+                    z_vec(i+n_interp)=gof*mom(2);
+                    z_vec(i+2*n_interp)=gof*mom(3);
                   end
                       
             end
