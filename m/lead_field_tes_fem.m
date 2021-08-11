@@ -404,18 +404,18 @@ if isequal(electrode_model,'CEM')
         impedance_vec(ele_loop_ind) = impedance_vec(ele_loop_ind)*sum_ala;
         else 
          for i = 1 : length(I) 
-             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) -ele_ind(I(i),3)./impedance_vec(ele_loop_ind);  
+             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) +ele_ind(I(i),3)./impedance_vec(ele_loop_ind);  %
             for j = 1 : length(I) 
                     A(ele_ind(I(i),2),ele_ind(I(j),2)) = A(ele_ind(I(i),2),ele_ind(I(j),2)) + ele_ind(I(i),3)*ele_ind(I(j),3)./impedance_vec(ele_loop_ind); 
             end
          end
         C(ele_loop_ind, ele_loop_ind) = 1./impedance_vec(ele_loop_ind);
         end  
-    end
+       end
 
     entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))).*ala(I_triangles)';
     for i = 1 : 3
-        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), -(1/3)*entry_vec, N, L);         
+        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), +(1/3)*entry_vec, N, L);         
     end
     if impedance_inf == 0
         for i = 1 : 3   
@@ -584,12 +584,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %     end
     tic;
     
-    if not(isequal(electrode_model,'PEM')) & impedance_inf == 0
-    iter_ind_1 = 1;
-    else
-    iter_ind_1 = 2;
-    end
-    
+  
     for i = 1 : L
 %        if isequal(electrode_model,'PEM')
 %            if i == L
@@ -599,8 +594,13 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %           b(ele_ind(i+1)) = 1;
 %        end
         
-        %if isequal(electrode_model,'CEM')    
-            b = full(B(:,i));
+        %if isequal(electrode_model,'CEM')  
+         
+              b = full(B(:,i));
+          if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+              b = zeros(size(b));
+          end
+    
             tol_val = min(impedance_vec(i),1)*tol_val_eff;
         %end
 
@@ -701,6 +701,9 @@ else
 %       end
 %       if isequal(electrode_model,'CEM')    
             b = full(B(:,i));
+          if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+              b = zeros(size(b));
+          end
             tol_val = min(impedance_vec(i),1)*tol_val_eff;
 %       end
 
