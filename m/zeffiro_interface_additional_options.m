@@ -27,6 +27,9 @@ zef.h_mesh_smoothing_repetitions = zef_data.h_mesh_smoothing_repetitions;
 zef.h_mesh_optimization_repetitions = zef_data.h_mesh_optimization_repetitions;
 zef.h_mesh_optimization_parameter = zef_data.h_mesh_optimization_parameter; 
 zef.h_mesh_labeling_approach =  zef_data.h_mesh_labeling_approach; 
+zef.h_smoothing_steps_ele =  zef_data.h_smoothing_steps_ele;
+
+
 
 zef.h_streamline_linestyle = zef_data.h_streamline_linestyle;
 zef.h_streamline_linewidth = zef_data.h_streamline_linewidth;
@@ -67,6 +70,8 @@ zef.h_streamline_linestyle.ValueChangedFcn = 'zef_update_options;';
 zef.h_streamline_linewidth.ValueChangedFcn = 'zef_update_options;';
 zef.h_streamline_color.ValueChangedFcn = 'zef_update_options;';
 zef.h_n_streamline.ValueChangedFcn = 'zef_update_options;';
+zef.h_smoothing_steps_ele.ValueChangedFcn = 'zef_update_options;';
+
 
 zef.h_cone_alpha.ValueChangedFcn = 'zef_update_options;';
 
@@ -112,6 +117,7 @@ zef.h_mesh_smoothing_repetitions.Value = num2str(zef.mesh_smoothing_repetitions)
 zef.h_mesh_optimization_repetitions.Value = num2str(zef.mesh_optimization_repetitions);
 zef.h_mesh_optimization_parameter.Value = num2str(zef.mesh_optimization_parameter); 
 zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach; 
+zef.h_smoothing_steps_ele.Value =  num2str(zef.smoothing_steps_ele); 
 
 
 zef.h_cone_alpha.Value = num2str(1 - zef.cone_alpha);

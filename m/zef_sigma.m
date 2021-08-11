@@ -131,11 +131,13 @@ tetra_aux = evalin('base','zef.tetra_aux');
 length_waitbar = 4+length(priority_vec)+20;    
 
 nodes = evalin('base','zef.nodes_b');
+sensors = evalin('base','zef.sensors');
 
 for smoothing_repetition_ind  = 1 : evalin('base','zef.mesh_smoothing_repetitions')
 
 h = waitbar(0,'Mesh smoothing.');
 N = size(nodes, 1);
+L = [];
 
 surface_triangles = [];
 J = [];
@@ -163,12 +165,15 @@ tetra_ind(I+1) = 1;
 I = find(tetra_ind == 0);
 tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
 surface_triangles = [ surface_triangles ; tetra(tetra_ind)];
-J = [ J ; unique(surface_triangles)];
+J = [J ; unique(surface_triangles)];
+K = unique(J);
 end
+
+
 waitbar((1+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
 surface_triangles = sort(surface_triangles,2);
 surface_triangles = unique(surface_triangles,'rows');
-K = unique(J);
+
 J = setdiff(tetra(:),K);
 
 waitbar((2+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
@@ -177,10 +182,10 @@ tetra = evalin('base','zef.tetra_aux');
 
 smoothing_ok = 0;
 
-
 smoothing_param = evalin('base','zef.smoothing_strength');   
 smoothing_steps_surf = evalin('base','zef.smoothing_steps_surf');   
 smoothing_steps_vol =  evalin('base','zef.smoothing_steps_vol'); 
+smoothing_steps_ele = evalin('base','zef.smoothing_steps_ele'); 
 
 A = sparse(N, N, 0);
 B = sparse(N, N, 0);
@@ -195,13 +200,19 @@ A = A + A_part ;
 A = A + A_part';
 end
 end
-end       
+end     
+
+
 waitbar((3+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
 clear surface_triangles;
 
 clear A_part;
 A = spones(A);
 sum_A = full(sum(A(K,K)))';
+sum_A = sum_A(:,[1 1 1]);
+
+A_K = A(K,K);
+nodes(K,:) = nodes(K,:);
 
 if smoothing_steps_vol > 0
 for i = 1 : 4
@@ -222,12 +233,8 @@ sum_B = full(sum(B))';
 sum_B = sum_B(:,[1 1 1]);
 end
 
-sum_A = sum_A(:,[1 1 1]);
 taubin_lambda = 1;
 taubin_mu = -1;
-
-A_K = A(K,K);
-nodes(K,:) = nodes(K,:);
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 A = gpuArray(A);
@@ -235,6 +242,7 @@ A_K = gpuArray(A_K);
 B = gpuArray(B); 
 K = gpuArray(K)
 sum_B = gpuArray(sum_B);
+sum_A = gpuArray(sum_A);
 end
 
 for iter_ind_aux_1 = 1 : smoothing_steps_surf
@@ -244,7 +252,7 @@ nodes = gpuArray(nodes);
 end
     
 %nodes_old = nodes;   
-waitbar((4+length(priority_vec)+(iter_ind_aux_1/(smoothing_steps_surf+smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+waitbar((4+length(priority_vec)+(iter_ind_aux_1/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
 nodes_aux = A_K*nodes(K,:);
 nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
@@ -254,23 +262,66 @@ nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
 nodes(K,:) =  nodes(K,:) + taubin_mu*smoothing_param*nodes_aux;
 
+
+
 end
 
+
+[sensors_attached_volume] = attach_sensors_volume(sensors,'mesh',nodes,tetra);
+L = zef_electrode_struct(sensors_attached_volume);
+if not(isempty(L))
+    waitbar((4+length(priority_vec)+((smoothing_steps_surf+1)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+    C = [];
+for electrode_ind = 1 : length(L)
+ C_sparse = sparse(N, N, 0);
+for i = 1 : 2
+for j = i : 2
+C_part = sparse(L(electrode_ind).edges(:,i),L(electrode_ind).edges(:,j),double(ones(size(L(electrode_ind).edges,1),1)),N,N);
+if i == j 
+C_sparse = C_sparse + C_part;
+else
+C_sparse = C_sparse + C_part ;
+C_sparse = C_sparse + C_part';
+end
+end
+end  
+  C = full(C_sparse(L(electrode_ind).nodes,L(electrode_ind).nodes));
+  C_sum = sum(C)';
+  C_sum = C_sum(:,[1 1 1]);
+
+for iter_ind_aux_3 = 1 : smoothing_steps_ele
+nodes_aux = C*nodes(L(electrode_ind).nodes,:);
+nodes_aux = nodes_aux./C_sum;
+nodes_aux = nodes_aux - nodes(L(electrode_ind).nodes,:);
+nodes(L(electrode_ind).nodes,:) =  nodes(L(electrode_ind).nodes,:) + taubin_lambda*smoothing_param*nodes_aux;
+nodes_aux = C*nodes(L(electrode_ind).nodes,:);
+nodes_aux = nodes_aux./C_sum;
+nodes_aux = nodes_aux - nodes(L(electrode_ind).nodes,:);
+nodes(L(electrode_ind).nodes,:) =  nodes(L(electrode_ind).nodes,:) + taubin_mu*smoothing_param*nodes_aux;
+end
+end
+end
+
+
 for iter_ind_aux_2 = 1 : smoothing_steps_vol
-    waitbar((4+length(priority_vec)+((smoothing_steps_surf+iter_ind_aux_2)/(smoothing_steps_surf + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+waitbar((4+length(priority_vec)+((smoothing_steps_surf+1+iter_ind_aux_2)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
 nodes_aux = B*nodes; 
 nodes_aux = nodes_aux./sum_B;
 nodes = nodes + smoothing_param*taubin_lambda*(nodes_aux -nodes);
 nodes_aux = B*nodes; 
 nodes_aux = nodes_aux./sum_B;
 nodes = nodes + smoothing_param*taubin_mu*(nodes_aux -nodes);
+
 end
+
+
+
 
 nodes = gather(nodes);
 
 close(h)
 
-[nodes, tetra, optimizer_flag, J_fix] = zef_tetra_turn(nodes, tetra, thresh_val);
+[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
 
 tetra_aux = tetra;
 
@@ -284,7 +335,6 @@ smoothing_ok = 0;
 else
 smoothing_ok = 1;
 end
-
 
 if smoothing_ok == 0
 nodes = evalin('base','zef.nodes_b');
@@ -468,9 +518,6 @@ waitbar(7/length_waitbar,h,'Refinement.');
 
 tetra = [tetra ; tetra_new ];
 johtavuus_aux = [johtavuus_aux ; (johtavuus_aux_new)];
-
-
-
 
 waitbar(8/length_waitbar,h,'Refinement.'); 
 

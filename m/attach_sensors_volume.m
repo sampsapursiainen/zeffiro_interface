@@ -3,10 +3,18 @@
 function  [sensors_attached_volume] = attach_sensors_volume(sensors,varargin)
 
 attach_type = 'mesh';
+nodes = evalin('base','zef.nodes');
+ tetra = evalin('base','zef.tetra');
 
 if not(isempty(varargin))
    if length(varargin) > 0
    attach_type = varargin{1};
+   if length(varargin) > 1
+       nodes = varargin{2};
+   end
+      if length(varargin) > 2
+       tetra = varargin{3};
+      end
    end
 end
 
@@ -18,9 +26,7 @@ geometry_nodes = evalin('base','zef.reuna_p{end}');
 %end 
 
 surface_triangles = evalin('base','zef.surface_triangles');
-nodes = evalin('base','zef.nodes');
 use_depth_electrodes = evalin('base','zef.use_depth_electrodes');
-tetra = evalin('base','zef.tetra');
 
 %if evalin('base','zef.use_gpu')
 %    nodes = gpuArray(nodes);

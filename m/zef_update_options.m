@@ -23,6 +23,8 @@ zef.inv_snr = str2num(get(zef.h_inv_snr,'Value'));
 zef.inv_prior_over_measurement_db = str2num(get(zef.h_inv_prior_over_measurement_db,'Value'));
 zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value'));
 zef.cone_scale = str2num(get(zef.h_cone_scale,'Value'));
+zef.smoothing_steps_ele = str2num(get(zef.h_smoothing_steps_ele,'Value'));
+
 
 zef.streamline_linestyle = get(zef.h_streamline_linestyle,'value');
 zef.streamline_linewidth = str2num(get(zef.h_streamline_linewidth,'value'));

@@ -9,6 +9,10 @@ if not(isfield(zef,'streamline_linestyle'));
 zef.streamline_linestyle = '-';
 end
 
+if not(isfield(zef,'smoothing_steps_ele')); 
+zef.smoothing_steps_ele = 100;
+end
+
 if not(isfield(zef,'streamline_linewidth')); 
 zef.streamline_linewidth = 1;
 end
