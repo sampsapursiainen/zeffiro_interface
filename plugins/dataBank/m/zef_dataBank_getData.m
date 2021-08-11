@@ -35,9 +35,15 @@ switch type
         end
         
       
-    case 'gmm'
-        data = rmfield(zef.GMM,'apps');
-        data.type='gmm';
+    case 'gmm'        
+        data.model = zef.GMM.model;
+        data.dipoles = zef.GMM.dipoles;
+        data.amplitudes = zef.GMM.amplitudes;
+        data.time_variables = zef.GMM.time_variables;
+        data.parameters = zef.GMM.parameters;
+        
+        
+        
         
 end
 
