@@ -29,19 +29,29 @@ end
 
 %% make gmm for every reconstruction
 
-for  i=[0.25, 0.5, 0.75, 0.9]
-zef.GMMcluster_threshold =i;
-%open gmm tool first and set the parameters
+
+for  ii=[0, 0.25, 0.5, 0.75, 0.9]
+
+    
+    %open gmm tool first and set the parameters
+    
+    zef.GMM.parameters{5,2}={num2str(ii)};
+    
 allHashes=fieldnames(zef.dataBank.tree);
+
+allHashes=allHashes(startsWith(allHashes, 'node_1_3'));
+
+
+
 for i=1:length(allHashes)
     if strcmp(zef.dataBank.tree.(allHashes{i}).type, 'reconstruction')
         zef.dataBank.hash=allHashes{i};
         zef_dataBank_setData;
-        [zef.GMM.model,zef.GMM.dipoles] = zef_GMModeling;
+         [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;
         
         [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
         
-        zef.dataBank.tree.(newHash).name=strcat('gmm_8_', num2str(100*zef.GMMcluster_threshold));
+        zef.dataBank.tree.(newHash).name=strcat('gmm_8_', num2str(100*ii));
         if strcmp(zef.dataBank.save2disk, 'On')
             nodeData=zef.dataBank.tree.(newHash).data;
             folderName=strcat(zef.dataBank.folder, newHash);
@@ -89,45 +99,37 @@ zef_dataBank_addButtonPress;
 
 
 
+%% delete all x
+
+dltType='gmm';
 
 
+onlyIn='node';
+
+allHashes=fieldnames(zef.dataBank.tree);
+allHashes=allHashes(startsWith(allHashes, onlyIn));
 
 
+i=1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+while i<=length(allHashes)
+    
+    
+    
+    if strcmp(zef.dataBank.tree.(allHashes{i}).type, dltType)
+        zef.dataBank.hash=allHashes{i};
+        zef.dataBank.tree=zef_dataBank_delete(zef.dataBank.tree, zef.dataBank.hash);
+        %zef_dataBank_uiTreeDeleteHash(zef.dataBank.app.Tree, zef.dataBank.hash);
+        allHashes=fieldnames(zef.dataBank.tree);
+        allHashes=allHashes(startsWith(allHashes, onlyIn));
+        
+        i=1;
+    else
+        i=i+1;
+    end
+    
+end
+    
+    
 
 
