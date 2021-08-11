@@ -112,6 +112,9 @@ else
     electrode_model = 'PEM';
     L = size(electrodes,1);
     ele_ind = zeros(L,1);
+    impedance_inf = 1;%%
+    impedance_vec = ones(size(electrodes,1),1);%%
+
     for i = 1 : L
         [min_val, min_ind] = min(sum((repmat(electrodes(i,:),N,1)' - nodes').^2));
         ele_ind(i) = min_ind; 
@@ -467,7 +470,7 @@ if isequal(electrode_model,'PEM')
     A(ele_ind(1),:) = 0;
     A(:,ele_ind(1)) = 0;
     A(ele_ind(1),ele_ind(1)) = 1;
-    C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
+    C = sparse(eye(L));
         
     end
 end
@@ -638,7 +641,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 
 %        if isequal(electrode_model,'CEM')
 %           L_eeg_fi(i,:) = - x'*G_fi;
-            R_tes(:,i) = - x;
+%            R_tes(:,i) = - x;
 %           if source_model == 2
 %               L_eeg_ew(i,:) = - x'*G_ew;  
 %           end
