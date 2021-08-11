@@ -470,7 +470,7 @@ if isequal(electrode_model,'PEM')
     A(ele_ind(1),:) = 0;
     A(:,ele_ind(1)) = 0;
     A(ele_ind(1),ele_ind(1)) = 1;
-    C = sparse(eye(L));
+    C = eye(L);
         
     end
 end
@@ -649,9 +649,9 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 
 %        if isequal(electrode_model,'CEM')
             if impedance_inf == 0
-                Aux_mat(:,i) = B'*x - C(:,i);
+                Aux_mat(:,i) = C(:,i)-B'*x ;
             else
-                Aux_mat(:,i) = - C(:,i);    
+                Aux_mat(:,i) = C(:,i);    
             end
 %        end
      
@@ -729,13 +729,13 @@ else
         r = x(iperm_vec);
         x = r;
         
-            R_tes(:,i) = - x;
+            R_tes(:,i) =  x;
 
 %         if isequal(electrode_model,'CEM')
             if impedance_inf == 0
-                Aux_mat(:,i) = B'*x - C(:,i);
+                Aux_mat(:,i) =C(:,i)- B'*x ;
             else
-                Aux_mat(:,i) = - C(:,i);    
+                Aux_mat(:,i) =C(:,i);    
             end
 %         end
 
@@ -780,9 +780,9 @@ clear S r p x aux_vec inv_M_r a b;
         [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
     end
      
-    R_tes_1 = Grad_1*R_tes;
-    R_tes_2 = Grad_2*R_tes;
-    R_tes_3 = Grad_3*R_tes;
+    R_tes_1 = -Grad_1*R_tes;
+    R_tes_2 = -Grad_2*R_tes;
+    R_tes_3 = -Grad_3*R_tes;
     
     clear R_tes;
     
