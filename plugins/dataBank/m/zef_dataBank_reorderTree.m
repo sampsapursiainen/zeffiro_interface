@@ -17,7 +17,6 @@ listIndex=1;
 while listIndex<=N
     
     hashes=fieldnames(tree);
-    clc;
     hashes=hashes(startsWith(hashes, number2hash(array)));
     
     if ~isempty(hashes)
