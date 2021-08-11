@@ -5,9 +5,10 @@
 zef.beamformer = beamformer_app;
 
 %_ Names of methods that are included in app _
-zef_bf_names = {'Linearly constraint minimum variance (LCMV)',
-                'Unit noise gain beamformer',
+zef_bf_names = {'Linearly constraint minimum variance (LCMV)'
+                'Unit noise gain beamformer'
                 'Unit-gain constraint beamformer'
+                'Unit nosie gain scalar beamformer'
                 };
             
 zef.beamformer.bf_type.Items = zef_bf_names;
