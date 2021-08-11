@@ -16,10 +16,15 @@ source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 method_type = evalin('base','zef.bf_type');
 
-if method_type == 1
-    reconstruction_information.tag = 'Beamformer/LCMV';
-elseif method_type == 2
-    reconstruction_information.tag = 'Beamformer/UNG';
+switch method_type
+    case 1
+        reconstruction_information.tag = 'Beamformer/LCMV';
+    case 2
+        reconstruction_information.tag = 'Beamformer/UNG';
+    case 3 
+        reconstruction_information.tag = 'Beamformer/UG';
+    case 4
+        reconstruction_information.tag = 'Beamformer/UNGsc';
 end
 reconstruction_information.inv_time_1 = evalin('base','zef.inv_time_1');
 reconstruction_information.inv_time_2 = evalin('base','zef.inv_time_2');
