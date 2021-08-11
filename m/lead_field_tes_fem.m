@@ -630,7 +630,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
         relres_vec(i) = gather(norm(r)/norm_b);
         r = gather(x(iperm_vec));
         x = r;
-        
+        R_tes(:,i) =  x;
 %        if isequal(electrode_model,'PEM')
 %           L_eeg_fi(i+1,:) = - x'*G_fi;
 %           R_tes(:,i) = - x;          
