@@ -77,24 +77,27 @@ end
 aux_ind = []; 
 if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 end
 if evalin('base','zef.cp2_on');
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d));
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 end
 if evalin('base','zef.cp3_on');
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d));
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
@@ -271,23 +274,23 @@ tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:)
 
 aux_ind = [];
 if evalin('base','zef.cp_on');
-
-aux_ind = [find(sum(tetra_c.*repmat([cp_a cp_b cp_c],size(tetra_c,1),1),2) >= cp_d)];
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
 if evalin('base','zef.cp2_on');
-
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(tetra_c.*repmat([cp2_a cp2_b cp2_c],size(tetra_c,1),1),2) >= cp2_d));
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(tetra_c.*repmat([cp2_a cp2_b cp2_c],size(tetra_c,1),1),2) >= cp2_d)];
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
 end
 if evalin('base','zef.cp3_on');
-
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(tetra_c.*repmat([cp3_a cp3_b cp3_c],size(tetra_c,1),1),2) >= cp3_d));
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(tetra_c.*repmat([cp3_a cp3_b cp3_c],size(tetra_c,1),1),2) >= cp3_d)];
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
 end
 
@@ -614,8 +617,7 @@ colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
-[min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,surface_triangles(I_3,:));
-h_surf_2 = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction);
+h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','surface');
 zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
 

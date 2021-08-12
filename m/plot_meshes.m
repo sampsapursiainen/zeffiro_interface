@@ -243,16 +243,18 @@ if evalin('base','zef.cp_on')
     cp_c = evalin('base','zef.cp_c');
     cp_d = evalin('base','zef.cp_d');
     
+    clipping_plane = {cp_a,cp_b,cp_c,cp_d};
+    
     if not(isempty(aux_ind_1)) 
-        aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
-        aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d);
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
         if not(isempty(aux_ind_2{i}))
-            aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d));
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
-            aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d);
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
 end
@@ -263,16 +265,18 @@ if evalin('base','zef.cp2_on')
     cp2_c = evalin('base','zef.cp2_c');
     cp2_d = evalin('base','zef.cp2_d');
     
+    clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
+    
     if not(isempty(aux_ind_1)) 
-        aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d));
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
-        aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d);
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
         if not(isempty(aux_ind_2{i}))
-            aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp2_a cp2_b cp2_c],size(triangle_c{i},1),1),2) >= cp2_d));
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
-            aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp2_a cp2_b cp2_c],size(triangle_c{i},1),1),2) >= cp2_d);
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
 end
@@ -283,16 +287,18 @@ if evalin('base','zef.cp3_on')
     cp3_c = evalin('base','zef.cp3_c');
     cp3_d = evalin('base','zef.cp3_d');
     
+     clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
+    
     if not(isempty(aux_ind_1)) 
-        aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d));
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
-        aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d);
+        aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
         if not(isempty(aux_ind_2{i}))
-            aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp3_a cp3_b cp3_c],size(triangle_c{i},1),1),2) >= cp3_d));
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
-            aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp3_a cp3_b cp3_c],size(triangle_c{i},1),1),2) >= cp3_d);
+            aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
 end
@@ -648,13 +654,12 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             %**********************************************
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                                
-                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p_inf{i},reuna_t{i});
-                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                               
+                           
+                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','surface');
                             else
-                                [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
-                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','surface');
                             end
                            
@@ -727,12 +732,10 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             reconstruction = reconstruction(:);
                             
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p_inf{i},reuna_t{i});
-                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{ab_ind},'Tag','surface');
                             else
-                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
-                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{ab_ind},'Tag','surface');
                             end
                            
