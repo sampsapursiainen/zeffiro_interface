@@ -128,21 +128,21 @@ if evalin('base','zef.mesh_smoothing_on');
     
 tetra_aux = evalin('base','zef.tetra_aux');
     
-length_waitbar = 4+length(priority_vec)+20;    
+length_waitbar = 4+length(priority_vec);    
 
 nodes = evalin('base','zef.nodes_b');
 sensors = evalin('base','zef.sensors');
 
 for smoothing_repetition_ind  = 1 : evalin('base','zef.mesh_smoothing_repetitions')
 
-h = waitbar(0,'Mesh smoothing.');
+h = waitbar(0,'Smoothing operators.');
 N = size(nodes, 1);
 L = [];
 
 surface_triangles = [];
 J = [];
 for k = 1 : length(priority_vec)
-waitbar(k/length_waitbar,h,'Mesh smoothing.');
+waitbar(k/length_waitbar,h,'Smoothing operators.');
 tetra = tetra_aux;
 I = find(johtavuus_aux==k);
 tetra = tetra(I,:);
@@ -170,13 +170,13 @@ K = unique(J);
 end
 
 
-waitbar((1+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
+waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 surface_triangles = sort(surface_triangles,2);
 surface_triangles = unique(surface_triangles,'rows');
 
 J = setdiff(tetra(:),K);
 
-waitbar((2+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
+waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
 tetra = evalin('base','zef.tetra_aux');
 
@@ -203,7 +203,7 @@ end
 end     
 
 
-waitbar((3+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
+waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear surface_triangles;
 
 clear A_part;
@@ -226,7 +226,7 @@ B = B + B_part';
 end
 end
 end       
-waitbar((4+length(priority_vec))/length_waitbar,h,'Mesh smoothing.');
+waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear B_part;
 B = spones(B);
 sum_B = full(sum(B))';
@@ -252,7 +252,7 @@ nodes = gpuArray(nodes);
 end
     
 %nodes_old = nodes;   
-waitbar((4+length(priority_vec)+(iter_ind_aux_1/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+waitbar(iter_ind_aux_1/smoothing_steps_surf,h,'Surface smoothing.');
 nodes_aux = A_K*nodes(K,:);
 nodes_aux = nodes_aux./sum_A;
 nodes_aux = nodes_aux - nodes(K,:);
@@ -273,6 +273,7 @@ if not(isempty(L))
     waitbar((4+length(priority_vec)+((smoothing_steps_surf+1)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
     C = [];
 for electrode_ind = 1 : length(L)
+ waitbar(electrode_ind/length(L),h,'Electrode smoothing.');
  C_sparse = sparse(N, N, 0);
 for i = 1 : 2
 for j = i : 2
@@ -304,7 +305,7 @@ end
 
 
 for iter_ind_aux_2 = 1 : smoothing_steps_vol
-waitbar((4+length(priority_vec)+((smoothing_steps_surf+1+iter_ind_aux_2)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
+waitbar(iter_ind_aux_2/smoothing_steps_vol,h,'Volume smoothing.');
 nodes_aux = B*nodes; 
 nodes_aux = nodes_aux./sum_B;
 nodes = nodes + smoothing_param*taubin_lambda*(nodes_aux -nodes);
