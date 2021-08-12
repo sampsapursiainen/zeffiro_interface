@@ -25,11 +25,12 @@ zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value')
 zef.cone_scale = str2num(get(zef.h_cone_scale,'Value'));
 zef.smoothing_steps_ele = str2num(get(zef.h_smoothing_steps_ele,'Value'));
 
-
 zef.streamline_linestyle = get(zef.h_streamline_linestyle,'value');
 zef.streamline_linewidth = str2num(get(zef.h_streamline_linewidth,'value'));
 zef.streamline_color = get(zef.h_streamline_color,'value');
 zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
+
+zef.colormap_size = str2num(get(zef.h_colormap_size,'value'));
 
 zef.mesh_smoothing_repetitions = str2num(zef.h_mesh_smoothing_repetitions.Value);
 zef.mesh_optimization_repetitions = str2num(zef.h_mesh_optimization_repetitions.Value);

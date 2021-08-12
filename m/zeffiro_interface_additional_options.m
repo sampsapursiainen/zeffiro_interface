@@ -28,8 +28,7 @@ zef.h_mesh_optimization_repetitions = zef_data.h_mesh_optimization_repetitions;
 zef.h_mesh_optimization_parameter = zef_data.h_mesh_optimization_parameter; 
 zef.h_mesh_labeling_approach =  zef_data.h_mesh_labeling_approach; 
 zef.h_smoothing_steps_ele =  zef_data.h_smoothing_steps_ele;
-
-
+zef.h_colormap_size =  zef_data.h_colormap_size;
 
 zef.h_streamline_linestyle = zef_data.h_streamline_linestyle;
 zef.h_streamline_linewidth = zef_data.h_streamline_linewidth;
@@ -71,6 +70,7 @@ zef.h_streamline_linewidth.ValueChangedFcn = 'zef_update_options;';
 zef.h_streamline_color.ValueChangedFcn = 'zef_update_options;';
 zef.h_n_streamline.ValueChangedFcn = 'zef_update_options;';
 zef.h_smoothing_steps_ele.ValueChangedFcn = 'zef_update_options;';
+zef.h_colormap_size.ValueChangedFcn = 'zef_update_options;';
 
 
 zef.h_cone_alpha.ValueChangedFcn = 'zef_update_options;';
@@ -106,6 +106,7 @@ zef.h_inv_snr.Value = num2str(zef.inv_snr);
 zef.h_inv_prior_over_measurement_db.Value = num2str(zef.inv_prior_over_measurement_db);
 zef.h_cone_lattice_resolution.Value = num2str(zef.cone_lattice_resolution); 
 zef.h_cone_scale.Value = num2str(zef.cone_scale); 
+zef.h_colormap_size.Value = num2str(zef.colormap_size); 
 
 zef.h_streamline_linestyle.Value = zef.streamline_linestyle;
 zef.h_streamline_linewidth.Value = num2str(zef.streamline_linewidth);
