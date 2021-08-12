@@ -49,6 +49,7 @@ zef_data.save_file_path = zef.save_file_path;
 zef_data.save_file = zef.save_file;
 zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
+
 zef_data.gpu_num = zef.gpu_num;
 zef_data.parallel_vectors = zef.parallel_vectors;
 zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
@@ -56,6 +57,7 @@ zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
 zef_data.movie_fps = zef.movie_fps;
 zef_data.mlapp = zef.mlapp;
 
+%%% Here begins initialization variables
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
           zef_data.multi_lead_field = 0;
@@ -76,7 +78,7 @@ zef_data.top_reconstruction = [];
           zef_data.parcellation_selected = [];
           zef_data.parcellation_type = [1];
           zef_data.parcellation_quantile = [0.98];
-
+          zef_data.use_gpu_graphic = 1;
           
           zef_data.loop_movie = [0];
           zef_data.loop_movie_count = [5];
@@ -255,3 +257,4 @@ end
  end
  clear zef_i zef_data;
  
+

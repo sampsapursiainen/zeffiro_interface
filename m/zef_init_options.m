@@ -92,6 +92,9 @@ if not(isfield(zef,'use_gpu'));
     zef.use_gpu = 0; 
 end;
 
+if not(isfield(zef,'use_gpu_graphic')); 
+    zef.use_gpu_graphic = 0; 
+end;
 
 if not(isfield(zef,'gpu_num')); 
     zef.gpu_num = 1; 
@@ -204,8 +207,3 @@ end;
 if not(isfield(zef,'mesh_labeling_approach')); 
     zef.mesh_labeling_approach = 1; 
 end;
-
-
-
-
-

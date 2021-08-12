@@ -355,7 +355,7 @@ tetra_sort = [tetra(:,[2 3 4]) ones(size(tetra,1),1) [1:size(tetra,1)]';
               tetra(:,[1 3 2]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu_graphic') == 1 & evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 tetra_sort = gpuArray(uint32(tetra_sort));
 tetra_sort = gather(sortrows(tetra_sort,[1 2 3])); 
 else

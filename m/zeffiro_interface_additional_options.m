@@ -15,6 +15,8 @@ zef.h_source_model =  zef_data.h_source_model;
 zef.h_colortune_param = zef_data.h_colortune_param;
 zef.h_inv_hyperprior_weight = zef_data.h_inv_hyperprior_weight;
 zef.h_use_gpu = zef_data.h_use_gpu;
+zef.h_use_gpu_graphic = zef_data.h_use_gpu_graphic;
+
 zef.h_parcellation_type = zef_data.h_parcellation_type;
 zef.h_gpu_num = zef_data.h_gpu_num;
 zef.h_parcellation_quantile = zef_data.h_parcellation_quantile;
@@ -25,8 +27,8 @@ zef.h_inv_prior_over_measurement_db = zef_data.h_inv_prior_over_measurement_db;
 zef.h_plot_hyperprior = zef_data.h_plot_hyperprior;
 zef.h_mesh_smoothing_repetitions = zef_data.h_mesh_smoothing_repetitions;
 zef.h_mesh_optimization_repetitions = zef_data.h_mesh_optimization_repetitions;
-zef.h_mesh_optimization_parameter = zef_data.h_mesh_optimization_parameter; 
-zef.h_mesh_labeling_approach =  zef_data.h_mesh_labeling_approach; 
+zef.h_mesh_optimization_parameter = zef_data.h_mesh_optimization_parameter;
+zef.h_mesh_labeling_approach =  zef_data.h_mesh_labeling_approach;
 zef.h_smoothing_steps_ele =  zef_data.h_smoothing_steps_ele;
 zef.h_colormap_size =  zef_data.h_colormap_size;
 
@@ -54,6 +56,7 @@ zef.h_source_model.ValueChangedFcn = 'zef_update_options;';
 zef.h_colortune_param.ValueChangedFcn = 'zef_update_options;';
 zef.h_inv_hyperprior_weight.ValueChangedFcn = 'zef_update_options;';
 zef.h_use_gpu.ValueChangedFcn = 'zef_update_options;';
+zef.h_use_gpu_graphic.ValueChangedFcn = 'zef_update_options;';
 zef.h_parcellation_type.ValueChangedFcn = 'zef_update_options;';
 zef.h_gpu_num.ValueChangedFcn = 'zef_update_options;';
 zef.h_parcellation_quantile.ValueChangedFcn = 'zef_update_options;';
@@ -72,7 +75,6 @@ zef.h_n_streamline.ValueChangedFcn = 'zef_update_options;';
 zef.h_smoothing_steps_ele.ValueChangedFcn = 'zef_update_options;';
 zef.h_colormap_size.ValueChangedFcn = 'zef_update_options;';
 
-
 zef.h_cone_alpha.ValueChangedFcn = 'zef_update_options;';
 
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
@@ -80,9 +82,9 @@ zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
 clear zef_data;
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
-zef.h_as_opt_1.Value = zef.preconditioner; 
-zef.h_as_opt_2.Value = num2str(zef.preconditioner_tolerance); 
-zef.h_as_opt_3.Value = num2str(zef.smoothing_steps_surf); 
+zef.h_as_opt_1.Value = zef.preconditioner;
+zef.h_as_opt_2.Value = num2str(zef.preconditioner_tolerance);
+zef.h_as_opt_3.Value = num2str(zef.smoothing_steps_surf);
 zef.h_as_opt_4.Value = num2str(zef.smoothing_steps_vol);
 zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
 zef.h_as_opt_5.ItemsData = [1:length(zef.h_as_opt_5.Items)];
@@ -95,6 +97,7 @@ zef.h_colortune_param.Value = num2str(zef.colortune_param);
 zef.h_inv_hyperprior_weight.ItemsData = [1:length(zef.h_inv_hyperprior_weight.Items)];
 zef.h_inv_hyperprior_weight.Value = zef.inv_hyperprior_weight;
 zef.h_use_gpu.Value = zef.use_gpu;
+zef.h_use_gpu_graphic.Value = zef.use_gpu_graphic;
 zef.h_parcellation_type.ItemsData = [1:length(zef.h_parcellation_type.Items)];
 zef.h_parcellation_type.Value = zef.parcellation_type;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);
@@ -104,9 +107,9 @@ zef.h_inv_hyperprior.Value = zef.inv_hyperprior;
 zef.h_inv_hyperprior_tail_length_db.Value = num2str(zef.inv_hyperprior_tail_length_db);
 zef.h_inv_snr.Value = num2str(zef.inv_snr);
 zef.h_inv_prior_over_measurement_db.Value = num2str(zef.inv_prior_over_measurement_db);
-zef.h_cone_lattice_resolution.Value = num2str(zef.cone_lattice_resolution); 
-zef.h_cone_scale.Value = num2str(zef.cone_scale); 
-zef.h_colormap_size.Value = num2str(zef.colormap_size); 
+zef.h_cone_lattice_resolution.Value = num2str(zef.cone_lattice_resolution);
+zef.h_cone_scale.Value = num2str(zef.cone_scale);
+zef.h_colormap_size.Value = num2str(zef.colormap_size);
 
 zef.h_streamline_linestyle.Value = zef.streamline_linestyle;
 zef.h_streamline_linewidth.Value = num2str(zef.streamline_linewidth);
@@ -116,15 +119,11 @@ zef.h_n_streamline.Value = num2str(zef.n_streamline);
 zef.h_mesh_labeling_approach.ItemsData = [1:length(zef.h_mesh_labeling_approach.Items)];
 zef.h_mesh_smoothing_repetitions.Value = num2str(zef.mesh_smoothing_repetitions);
 zef.h_mesh_optimization_repetitions.Value = num2str(zef.mesh_optimization_repetitions);
-zef.h_mesh_optimization_parameter.Value = num2str(zef.mesh_optimization_parameter); 
-zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach; 
-zef.h_smoothing_steps_ele.Value =  num2str(zef.smoothing_steps_ele); 
-
+zef.h_mesh_optimization_parameter.Value = num2str(zef.mesh_optimization_parameter);
+zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach;
+zef.h_smoothing_steps_ele.Value =  num2str(zef.smoothing_steps_ele);
 
 zef.h_cone_alpha.Value = num2str(1 - zef.cone_alpha);
-
-
-
 
 zef.h_additional_options.Name = 'ZEFFIRO Interface: Options';
 set(findobj(zef.h_additional_options.Children,'-property','FontUnits'),'FontUnits','pixels');
@@ -134,6 +133,4 @@ set(zef.h_additional_options,'AutoResizeChildren','off');
 zef.additional_options_current_size = get(zef.h_additional_options,'Position');
 set(zef.h_additional_options,'SizeChangedFcn','zef.additional_options_current_size = zef_change_size_function(zef.h_additional_options,zef.additional_options_current_size);');
 
-
 clear zef_data;
-
