@@ -464,8 +464,10 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
                     unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
-                    h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
+                    [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{end},sensors(unique_sensors_aux_2,2:4));
+                    h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));
                     set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
+                    set(h(i),'Tag','sensor');
                 end
                 set(h,'edgecolor','none');
                 set(h,'specularstrength',0.3);
@@ -646,9 +648,14 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             %**********************************************
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                                h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+                                
+                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p_inf{i},reuna_t{i});
+                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                                set(h_surf_2{ab_ind},'Tag','surface');
                             else
-                                h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+                                [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                                set(h_surf_2{ab_ind},'Tag','surface');
                             end
                            
                             %**********************************************
@@ -720,9 +727,13 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             reconstruction = reconstruction(:);
                             
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                                h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p_inf{i},reuna_t{i});
+                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                            set(h_surf_2{ab_ind},'Tag','surface');
                             else
-                                h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+                            h_surf_2{ab_ind} = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction,'edgecolor','none');
+                            set(h_surf_2{ab_ind},'Tag','surface');
                             end
                            
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
@@ -770,7 +781,10 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             %%%% End of topography reconstruction
                             
                         else
-                            h_surf = trimesh(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),'edgecolor','none','facecolor',color_str);
+                            
+                            [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+                            h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
+                            set(h_surf,'Tag','surface');
                             set(h_surf,'specularstrength',0.1);
                             set(h_surf,'diffusestrength',0.5);
                             set(h_surf,'ambientstrength',0.85);
@@ -1031,7 +1045,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
             if on_val
                 i = i + 1;
                 if visible_val
-                    h_surf = trimesh(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),'edgecolor','none','facecolor',color_str);
+                    [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+                    h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
+                    set(h_surf,'Tag','surface');
                     set(h_surf,'specularstrength',0.1);
                     set(h_surf,'diffusestrength',0.5);
                     set(h_surf,'ambientstrength',0.85);
@@ -1069,9 +1085,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
     
 end
 
-
+sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+uistack(sensor_patches,'top');
 
 rotate3d on;
-%if evalin('base','zef.visualization_type')==3 & iscell(evalin('base','zef.reconstruction'))
-%close(h_waitbar);
-%end
+
+end

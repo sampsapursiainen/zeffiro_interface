@@ -74,8 +74,6 @@ else
     electrode_model = 1;
 end
 
-
-
 aux_ind = []; 
 if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
@@ -171,8 +169,10 @@ if not(isempty(sensors))
 unique_sensors_aux_1 = unique(sensors(:,1));
 h = zeros(length(unique_sensors_aux_1),1);
 for i = 1 : length(unique_sensors_aux_1)
-    unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
-h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
+unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));    
+[min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,sensors(unique_sensors_aux_2,2:4));
+h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));
+set(h(i),'Tag','sensor');
 set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
 end
 set(h,'edgecolor','none'); 
@@ -614,8 +614,9 @@ colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
-
-h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+[min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,surface_triangles(I_3,:));
+h_surf_2 = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),reconstruction);
+set(h_surf_2,'Tag','surface');
 zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -670,7 +671,10 @@ I_3 = find(ismember(tetra_ind,I_2));
 % surface_triangles = tetra(I);
 color_str = color_cell{i};
 if not(isempty(I_3))
-h_surf = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),'edgecolor','none','facecolor',color_str,'facelighting','flat');
+    
+[min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,surface_triangles(I_3,:));
+h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str,'facelighting','flat');
+set(h_surf,'Tag','surface')
 set(h_surf,'specularstrength',0.1);
 set(h_surf,'diffusestrength',0.5);
 set(h_surf,'ambientstrength',0.85);
@@ -904,6 +908,8 @@ end
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
+sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+uistack(sensor_patches,'top');
 
 rotate3d on;
 
