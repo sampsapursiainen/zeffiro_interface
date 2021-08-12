@@ -10,6 +10,10 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.colormap_size = 2048;
+zef_data.colorscale_min_slider = 0;
+zef_data.colorscale_max_slider = 0;
+zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation'};
 zef_data.smoothing_steps_ele = 100;
 zef_data.use_pem = 0;
 zef_data.default_impedance_value = 5E3;

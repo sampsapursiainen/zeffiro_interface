@@ -676,7 +676,7 @@ reconstruction = reconstruction.*reconstruction_p_2;
 end
 end
 
-colormap_size = 4096;
+colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
@@ -1675,7 +1675,7 @@ end
 end  
 end
 
-colormap_size = 4096;
+colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));

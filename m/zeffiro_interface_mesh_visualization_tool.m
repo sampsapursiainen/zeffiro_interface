@@ -97,7 +97,7 @@ set(zef.h_inv_scale,'Value',zef.inv_scale);
 
 zef.h_inv_colormap = zef_data.h_inv_colormap;
 
-set(zef.h_inv_colormap,'Items',{'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation'});
+set(zef.h_inv_colormap,'Items',zef.colormap_items);
 zef.h_inv_colormap.ItemsData = [1:length(zef.h_inv_colormap.Items)];
 set(zef.h_inv_colormap,'Value',zef.inv_colormap);
 

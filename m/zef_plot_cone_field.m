@@ -129,7 +129,7 @@ set(h_streamline,'color',evalin('base','zef.streamline_color'));
 end
 
 if position_case == 1
-position_vec = [0.33 0.37 0.33 0.015];
+position_vec = [0.33 0.41 0.33 0.015];
 elseif position_case == 2
 position_vec = [0.33 0.05 0.33 0.015];
 end

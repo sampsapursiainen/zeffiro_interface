@@ -536,7 +536,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                         ab_ind = find(aux_brain_ind==i);
                         
                         
-                        colormap_size = 4096;
+                        colormap_size = evalin('base','zef.colormap_size');
                         colortune_param = evalin('base','zef.colortune_param');
                         colormap_cell = evalin('base','zef.colormap_cell');
                         set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
