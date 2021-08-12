@@ -269,11 +269,14 @@ end
 
 [sensors_attached_volume] = attach_sensors_volume(sensors,'mesh',nodes,tetra);
 L = zef_electrode_struct(sensors_attached_volume);
-if not(isempty(L))
+electrode_is_point = evalin('base','zef.sensors'); 
+electrode_is_point = find(electrode_is_point(:,4)==0);
+if not(isempty(L)) 
     waitbar((4+length(priority_vec)+((smoothing_steps_surf+1)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
     C = [];
 for electrode_ind = 1 : length(L)
  waitbar(electrode_ind/length(L),h,'Electrode smoothing.');
+ if not(ismember(electrode_ind,electrode_is_point))
  C_sparse = sparse(N, N, 0);
 for i = 1 : 2
 for j = i : 2
@@ -302,7 +305,7 @@ nodes(L(electrode_ind).nodes,:) =  nodes(L(electrode_ind).nodes,:) + taubin_mu*s
 end
 end
 end
-
+end
 
 for iter_ind_aux_2 = 1 : smoothing_steps_vol
 waitbar(iter_ind_aux_2/smoothing_steps_vol,h,'Volume smoothing.');
