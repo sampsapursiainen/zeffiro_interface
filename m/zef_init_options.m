@@ -89,11 +89,11 @@ if not(isfield(zef,'colortune_param'));
 end;
 
 if not(isfield(zef,'use_gpu')); 
-    zef.use_gpu = 0; 
+    zef.use_gpu = 1; 
 end;
 
 if not(isfield(zef,'use_gpu_graphic')); 
-    zef.use_gpu_graphic = 0; 
+    zef.use_gpu_graphic = 1; 
 end;
 
 if not(isfield(zef,'gpu_num')); 
