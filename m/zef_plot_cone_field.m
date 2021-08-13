@@ -17,6 +17,8 @@ cone_field_size = size(s_p,1);
 
 aux_ind_1 = [1:cone_field_size];
 
+clipped = 0;
+
 if evalin('base','zef.cp_on')
 cp_a = evalin('base','zef.cp_a');
 cp_b = evalin('base','zef.cp_b');
@@ -25,11 +27,12 @@ cp_d = evalin('base','zef.cp_d');
 
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
-end 
+end
+clipped = 1;
 end
 
 if evalin('base','zef.cp2_on')
@@ -40,11 +43,12 @@ cp2_d = evalin('base','zef.cp2_d');
 
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
-end   
+end  
+clipped = 1;
 end
 
 if evalin('base','zef.cp3_on')
@@ -55,11 +59,12 @@ cp3_d = evalin('base','zef.cp3_d');
 
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 =  zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
 end   
+clipped = 1;
 end
 
 s_p = s_p(aux_ind_1,:);
