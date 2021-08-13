@@ -808,6 +808,9 @@ clear S r p x aux_vec inv_M_r a b;
     
     dof_positions = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
     dof_directions = ones(size(dof_positions));
+    
+    L_tes = L_tes';
+    S_tes = S_tes';
 
 waitbar(1,h);
 close(h);
