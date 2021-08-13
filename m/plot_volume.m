@@ -75,30 +75,34 @@ else
 end
 
 aux_ind = []; 
+clipped = 0; 
 if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
@@ -273,25 +277,29 @@ tetra = tetra(I,:);
 tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
 
 aux_ind = [];
+clipped = 0;
 if evalin('base','zef.cp_on');
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')

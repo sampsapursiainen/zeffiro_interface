@@ -237,6 +237,8 @@ if submesh_num > 0
     end
 end
 
+clipped = 0;
+
 if evalin('base','zef.cp_on')
     cp_a = evalin('base','zef.cp_a');
     cp_b = evalin('base','zef.cp_b');
@@ -245,18 +247,19 @@ if evalin('base','zef.cp_on')
     
     clipping_plane = {cp_a,cp_b,cp_c,cp_d};
     
-    if not(isempty(aux_ind_1)) 
+    if clipped
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
-        if not(isempty(aux_ind_2{i}))
+        if clipped
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
+  clipped = 1;  
 end
 
 if evalin('base','zef.cp2_on')
@@ -267,18 +270,19 @@ if evalin('base','zef.cp2_on')
     
     clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
     
-    if not(isempty(aux_ind_1)) 
+    if clipped 
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
-        if not(isempty(aux_ind_2{i}))
+        if clipped
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
+    clipped = 1;
 end
 
 if evalin('base','zef.cp3_on')
@@ -289,18 +293,19 @@ if evalin('base','zef.cp3_on')
     
      clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
     
-    if not(isempty(aux_ind_1)) 
+    if clipped 
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
     end
     for i = 1 : length(reuna_t)
-        if not(isempty(aux_ind_2{i}))
+        if clipped
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i});
         else
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
+    clipped = 1;
 end
 
 

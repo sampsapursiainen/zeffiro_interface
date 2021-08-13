@@ -116,30 +116,34 @@ else
 end
 
 aux_ind = []; 
+clipped = 0;
 if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
@@ -307,25 +311,29 @@ tetra = tetra(I,:);
 tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
 
 aux_ind = [];
+clipped = 0;
 if evalin('base','zef.cp_on');
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
-if not(isempty(aux_ind))
+if clipped
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
 aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
@@ -1382,6 +1390,8 @@ if submesh_num > 0
     end
 end
 
+clipped = 0;
+
 if evalin('base','zef.cp_on')
 cp_a = evalin('base','zef.cp_a');
 cp_b = evalin('base','zef.cp_b');
@@ -1392,18 +1402,19 @@ clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 % if cp_a ~= 0 | cp_b ~=0    
 % light('Position',[-cp_a -cp_b -cp_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
+    if clipped
 aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
 aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
     end
 end    
+clipped = 1;
 end
 
 
@@ -1417,18 +1428,19 @@ clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 % if cp2_a ~= 0 | cp2_b ~=0    
 % light('Position',[-cp2_a -cp2_b -cp2_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
+    if clipped
 aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
 aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
     end
 end   
+clipped = 1;
 end
 
 if evalin('base','zef.cp3_on')
@@ -1441,18 +1453,19 @@ clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 % if cp3_a ~= 0 | cp3_b ~=0    
 % light('Position',[-cp3_a -cp3_b -cp3_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
+if clipped
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
 aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
+    if clipped
 aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
 aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
     end
 end    
+clipped = 1;
 end
 
 
