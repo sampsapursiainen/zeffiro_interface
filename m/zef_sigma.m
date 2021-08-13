@@ -270,8 +270,12 @@ end
 [sensors_attached_volume] = attach_sensors_volume(sensors,'mesh',nodes,tetra);
 L = zef_electrode_struct(sensors_attached_volume);
 electrode_is_point = evalin('base','zef.sensors'); 
+if not(isempty(L))
+    if size(electrode_is_point,2) == 3
+    electrode_is_point = zeros(size(electrode_is_point,1),1);
+    else
 electrode_is_point = find(electrode_is_point(:,4)==0);
-if not(isempty(L)) 
+    end
     waitbar((4+length(priority_vec)+((smoothing_steps_surf+1)/(smoothing_steps_surf + 1 + smoothing_steps_vol))*20)/length_waitbar,h,'Mesh smoothing.');
     C = [];
 for electrode_ind = 1 : length(L)
