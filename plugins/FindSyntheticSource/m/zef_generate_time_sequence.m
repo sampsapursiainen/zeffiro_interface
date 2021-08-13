@@ -30,7 +30,7 @@ for n = 1:length(peak_time)
             start_ind = 1;
         end
         pulse_points=length(start_ind:end_ind);
-        signal_pulse = pulse_amp{n}(j)*blackmanharris(pulse_points)'.*cos(2*pi*oscillation_freq{n}(j)*time_var(start_ind:end_ind)+oscillation_phase{n}(j));
+        signal_pulse = pulse_amp{n}(j)*blackmanharris(pulse_points).*cos(2*pi*oscillation_freq{n}(j)*time_var(start_ind:end_ind)+oscillation_phase{n}(j));
         time_serie(n,start_ind:end_ind) = time_serie(n,start_ind:end_ind) + signal_pulse;
     end
     waitbar(n/size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
