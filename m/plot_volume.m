@@ -744,10 +744,10 @@ zef_plot_dpq('dynamical');
 
 
 for f_ind = frame_start + frame_step : frame_step : frame_stop
-
+              evalin('base',['zef.h_slider.Value=' num2str(f_ind*frame_step/(frame_stop-frame_start+frame_step)) ';']);
 pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
-%pause(0.01);
+pause(0.01);
 if stop_movie
     if get(evalin('base','zef.h_pause_movie'),'value') == 1
     waitfor(evalin('base','zef.h_pause_movie'),'value');    

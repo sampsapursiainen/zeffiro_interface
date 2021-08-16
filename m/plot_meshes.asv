@@ -839,7 +839,7 @@ zef_plot_dpq('dynamical');
             
             f_ind_aux = 1;
             for f_ind = frame_start + frame_step : frame_step : frame_stop
-                evalin('base',['zef.h_slider.Value=' num2str(f_ind*frame_step/(frame_stop-frame_start+frame_step)) ';']);
+                evalin('base',['zef.h_slider.Value=' num2str(f_ind)/(,';']);
                 pause(0.01);
                 stop_movie = evalin('base','zef.stop_movie');
                 pause(0.01);

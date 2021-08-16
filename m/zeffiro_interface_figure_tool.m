@@ -37,7 +37,7 @@ zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'vis
 zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.15 0.03 0.03],'Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
 zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.1 0.03 0.03],'String','Loop visualization','Callback','zef.loop_movie_count = str2num(get(zef.h_loop_movie_count,''string''));','HorizontalAlignment','right');
 uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Time:','HorizontalAlignment','left','Position',[0.68 0.90 0.12 0.03]);
-zef.h_slider=uicontrol('Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.90 0.17 0.03],'Min',1e-6,'Max',1,'Value',1e-6,'Sliderstep',[1e-5 0.1],'Callback','zef_slidding_callback;');
+zef.h_slider=uicontrol('Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.90 0.17 0.03],'Min',1e-6,'Max',1,'Value',1e-5,'Sliderstep',[1e-5 0.1],'Callback','zef_slidding_callback;');
 uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color min:','HorizontalAlignment','left','Position',[0.68 0.85 0.12 0.03]);
 uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color max:','HorizontalAlignment','left','Position',[0.68 0.80 0.12 0.03]);
 
