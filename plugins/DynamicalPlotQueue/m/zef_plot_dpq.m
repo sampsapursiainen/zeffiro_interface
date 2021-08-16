@@ -1,4 +1,4 @@
-function plot_dpq(type)
+function zef_plot_dpq(type)
 
 dpq_table = evalin('base','zef.dynamical_plot_queue_table');
 
