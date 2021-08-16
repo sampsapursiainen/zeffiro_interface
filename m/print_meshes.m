@@ -36,9 +36,13 @@ set(h_fig_aux,'renderer','opengl');
 set(h_fig_aux,'paperunits','inches');
 set(h_fig_aux,'papersize',snapshot_resolution);
 set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
-light('Position',[0 0 1],'Style','infinite');
-light('Position',[0 0 -1],'Style','infinite');
+%light('Position',[0 0 1],'Style','infinite');
+%light('Position',[0 0 -1],'Style','infinite');
+if not(evalin('base','zef.axes_visible'))
+h_axes_image = axes('visible','off');
+else
 h_axes_image = axes;
+end
 hold on;
 
 cp_a = evalin('base','zef.cp_a');
@@ -814,12 +818,11 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-        sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
-        uistack(sensor_patches,'top');
+sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+uistack(sensor_patches,'top');
 zef_plot_dpq('static');
-zef_plot_dpq('dynamic');
-        zef_set_sliders_print(1,h_axes_image);
-
+zef_plot_dpq('dynamical');
+zef_set_sliders_print(1,h_axes_image);
     
 %drawnow;
   
@@ -1034,7 +1037,7 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
-zef_plot_dpq('dynamic');
+zef_plot_dpq('dynamical');
 zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
@@ -2058,8 +2061,11 @@ camup(c_u);
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
-zef_plot_dpq('dynamic');
+zef_plot_dpq('dynamical');
         zef_set_sliders_print(1,h_axes_image);
+if not(evalin('base','zef.axes_visible'))
+set(h_axes_image,'visible','off');
+end
 
 %drawnow;
 
@@ -2356,8 +2362,8 @@ end
 %End of topography reconstruction.
     
 end
-zef_plot_dpq('dynamic');
-zef_set_sliders_print(1,h_axes_image);
+zef_plot_dpq('dynamical');
+zef_set_sliders_print(1);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
 
@@ -2457,7 +2463,7 @@ camup(c_u);
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
-zef_plot_dpq('dynamic');
+zef_plot_dpq('dynamical');
         zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;

@@ -19,13 +19,15 @@ slider_value_new = varargin{3};
 end
 end
 
-h = findobj(h,'Tag','additional');
+h = findobj(h,'-regexp','Tag','additional');
 
 kappa = 1.05.^(-100*(slider_value_new-slider_value_old));
 
 for i = 1 : length(h)
 
+if not(isempty(find(ismember(properties(h(i)),'FaceAlpha'))))
 h(i).FaceAlpha = min(1,kappa*h(i).FaceAlpha);
+end
 
 
 end

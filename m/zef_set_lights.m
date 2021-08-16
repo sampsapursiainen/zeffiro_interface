@@ -1,6 +1,11 @@
-function zef_set_lights(lights_vec)
+function zef_set_lights(lights_vec,varargin)
 
+if not(isempty(varargin))
+h_1 = varargin{1};
+else
 h_1 = evalin('base','zef.h_axes1');
+end
+
 delete(findobj(h_1.Children,'Type','Light'));
 
 for i = 1 : length(lights_vec)

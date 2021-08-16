@@ -15,6 +15,7 @@ compartment_tags = evalin('base','zef.compartment_tags');
 aux_wm_ind = -1;
 
 number_of_frames = evalin('base','zef.number_of_frames');
+h_axes_image = evalin('base','zef.h_axes1');
 axes(evalin('base','zef.h_axes1')); 
 cla(evalin('base','zef.h_axes1'));
 set(evalin('base','zef.h_axes1'),'layer','top');
@@ -735,7 +736,7 @@ end
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
-zef_plot_dpq('dynamic');
+zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -900,7 +901,7 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
-zef_plot_dpq('dynamic');
+zef_plot_dpq('dynamical');
 zef_set_sliders_plot(2);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 

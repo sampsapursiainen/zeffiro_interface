@@ -26,16 +26,17 @@ zef_update_transparency_additional(h_axes_image,0,evalin('base','zef.update_tran
 end;
 if evalin('base','zef.update_transparency_cones');
  zef_update_transparency_cones(h_axes_image,0,evalin('base','zef.update_transparency_cones')); 
+end
 if not(isequal(evalin('base','zef.update_zoom'),evalin('base','zef.cam_va'))); 
 zef_update_zoom(h_axes_image); 
 end;
-if abs(zef.colorscale_min_slider); 
+if abs(evalin('base','zef.colorscale_min_slider')); 
 zef_update_colorscale_min(h_axes_image,0,evalin('base','zef.colorscale_min_slider')); 
 end;
-if abs(zef.colorscale_max_slider); 
-zef_update_colorscale_max(h_axes_image,0,zef.colorscale_max_slider); 
+if abs(evalin('base','zef.colorscale_max_slider')); 
+zef_update_colorscale_max(h_axes_image,0,evalin('base','zef.colorscale_max_slider')); 
 end;
-zef_set_lights(zef.update_lights(h_axes_image));;
+zef_set_lights(evalin('base','zef.update_lights'),h_axes_image);
 
 elseif mode == 2 
 
