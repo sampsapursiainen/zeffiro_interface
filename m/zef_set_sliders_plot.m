@@ -7,6 +7,7 @@ evalin('base','zef_update_ambience;');
 evalin('base','zef_update_diffusion;');
 evalin('base','zef_update_specular;');
 evalin('base','if zef.update_brightness; zef_update_brightness; end;');
+evalin('base','if zef.update_contrast; zef_update_contrast; end;');
 evalin('base','if zef.update_transparency_reconstruction; zef_update_transparency_reconstruction(zef.h_axes1,0,zef.update_transparency_reconstruction); end;');
 evalin('base','if zef.update_transparency_surface; zef_update_transparency_surface(zef.h_axes1,0,zef.update_transparency_surface); end;');
 evalin('base','if zef.update_transparency_sensor; zef_update_transparency_sensor(zef.h_axes1,0,zef.update_transparency_sensor); end;');

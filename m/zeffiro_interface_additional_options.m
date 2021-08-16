@@ -3,7 +3,9 @@ zef_data = zeffiro_interface_additional_options_app;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+if find(ismember(properties(zef.(zef.fieldnames{zef_i})),'ValueChangedFcn'))
 zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_options;';
+end
 end  
 
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
