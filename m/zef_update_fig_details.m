@@ -81,7 +81,5 @@ end
 set(zef.h_system_information, 'String',zef.aux_field);
 zef = rmfield(zef,'aux_field');
 
-zef_reset_color_sliders;
-zef.h_update_colormap.Value = zef.inv_colormap;
 
 clear zef_i;

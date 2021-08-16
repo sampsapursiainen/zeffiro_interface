@@ -127,10 +127,12 @@ I = [1:size(s_p,1)];
 I = I(1:round(length(I)/(evalin('base','zef.n_streamline')-1)):end);
 
 if evalin('base','zef.cone_draw')
-
+   
 h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
+set(h_cone_field,'facecolor','interp');
 set(h_cone_field,'edgecolor','none');
 set(h_cone_field,'facealpha',evalin('base','zef.cone_alpha'));
+set(h_cone_field,'Tag','cones');
 
 end 
 
@@ -143,7 +145,7 @@ set(h_streamline,'color',evalin('base','zef.streamline_color'));
 end
 
 if position_case == 1
-position_vec = [0.33 0.41 0.33 0.015];
+position_vec = [0.21 0.30 0.21 0.015];
 elseif position_case == 2
 position_vec = [0.33 0.05 0.33 0.015];
 end

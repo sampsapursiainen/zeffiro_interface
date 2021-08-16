@@ -12,4 +12,5 @@ colormap_vec = colormap_vec'/max(colormap_vec(:));
 colormap_vec = flipud(colormap_vec);
 colormap_vec = colormap_vec(:,1:3);
 
+
 end

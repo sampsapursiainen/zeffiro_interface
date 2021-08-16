@@ -69,11 +69,11 @@ set(zef.h_parameters_table,'columnformat',{'char','numeric'});
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_close_tools; zef_close_figs; rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
 
-set(zef.h_compartment_table,'DisplayDataChangedFcn','zef_update;');
-set(zef.h_sensors_table,'DisplayDataChangedFcn','zef_update;');
-set(zef.h_transform_table,'DisplayDataChangedFcn','zef_update_transform;');
-set(zef.h_sensors_name_table,'DisplayDataChangedFcn','zef_update_sensors_name_table;');
-set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_parameters;');
+set(zef.h_compartment_table,'CellEditCallback','zef_update;');
+set(zef.h_sensors_table,'CellEditCallback','zef_update;');
+set(zef.h_transform_table,'CellEditCallback','zef_update_transform;');
+set(zef.h_sensors_name_table,'CellEditCallback','zef_update_sensors_name_table;');
+set(zef.h_parameters_table,'CellEditCallback','zef_update_parameters;');
 
 
 
