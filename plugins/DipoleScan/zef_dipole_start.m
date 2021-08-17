@@ -52,8 +52,8 @@ end
 
 %_ Functions _
 zef.dipole_app.dipole_type.ValueChangedFcn = 'zef.dipole_type = str2num(zef.dipole_app.dipole_type.Value);';
-zef.dipole_app.inv_leadfield_lambda.ValueChangedFcn = 'zef.inv_leadfield_lambda = str2num(zef.dipole_app.inv_leadfield_lambda.Value);';
-zef.dipole_app.L_reg_type.ValueChangedFcn = 'zef.L_reg_type = str2num(zef.dipole_app.L_reg_type.Value); if zef.L_reg_type==2 || zef.L_reg_type==3; zef.dipole_app.inv_leadfield_lambda.Enable = ''off''; else; zef.dipole_app.inv_leadfield_lambda.Enable = ''on''; end;';
+%zef.dipole_app.inv_leadfield_lambda.ValueChangedFcn = 'zef.inv_leadfield_lambda = str2num(zef.dipole_app.inv_leadfield_lambda.Value);';
+%zef.dipole_app.L_reg_type.ValueChangedFcn = 'zef.L_reg_type = str2num(zef.dipole_app.L_reg_type.Value); if zef.L_reg_type==2 || zef.L_reg_type==3; zef.dipole_app.inv_leadfield_lambda.Enable = ''off''; else; zef.dipole_app.inv_leadfield_lambda.Enable = ''on''; end;';
 zef.dipole_app.inv_snr.ValueChangedFcn = 'zef.inv_snr = str2num(zef.dipole_app.inv_snr.Value);';
 zef.dipole_app.inv_sampling_frequency.ValueChangedFcn = 'zef.inv_sampling_frequency = str2num(zef.dipole_app.inv_sampling_frequency.Value);';
 zef.dipole_app.inv_low_cut_frequency.ValueChangedFcn = 'zef.inv_low_cut_frequency = str2num(zef.dipole_app.inv_low_cut_frequency.Value);';
