@@ -130,6 +130,56 @@ while i<=length(allHashes)
     
 end
     
+%% make gmm for every reconstruction Quantile version
+
+
+for  ii=[0.1 0.25, 0.5, 0.75, 0.9]
+
     
+    %open gmm tool first and set the parameters
+    
+    
+allHashes=fieldnames(zef.dataBank.tree);
+
+allHashes=allHashes(startsWith(allHashes, 'node_1_3'));
+
+
+
+for i=1:length(allHashes)
+    if strcmp(zef.dataBank.tree.(allHashes{i}).type, 'reconstruction')
+        zef.dataBank.hash=allHashes{i};
+        zef_dataBank_setData;
+        
+        
+        values=nan(length(zef.reconstruction{1})/3,1);
+        j=1;
+        for k=1:3:length(zef.reconstruction{1})
+            values(j)=zef.reconstruction{1}(k)^2+zef.reconstruction{1}(k+1)^2+zef.reconstruction{1}(k+2)^2;
+            j=j+1;
+        end
+
+        zef.GMM.parameters{5,2}={num2str(quantile(values, ii))};
+        
+        
+        
+        [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;
+        
+        [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
+        
+        zef.dataBank.tree.(newHash).name=strcat('gmm_10_quantile', num2str(100*ii));
+        if strcmp(zef.dataBank.save2disk, 'On')
+            nodeData=zef.dataBank.tree.(newHash).data;
+            folderName=strcat(zef.dataBank.folder, newHash);
+            save(folderName, '-struct', 'nodeData');
+            zef.dataBank.tree.(newHash).data=matfile(folderName);
+            
+            clear nodeData folderName
+        end
+        
+        
+    end
+end
+
+end
 
 

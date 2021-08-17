@@ -11,7 +11,7 @@ for dbi=1:length(dbFieldNames)
           zef.GMM.model = zef.dataBank.tree.(zef.dataBank.hash).data.model; 
             zef.GMM.dipoles = zef.dataBank.tree.(zef.dataBank.hash).data.dipoles;
             zef.GMM.parameters = zef.dataBank.tree.(zef.dataBank.hash).data.parameters; 
-            zef.GMM.time_variables = zef.dataBank.tree.(zef.dataBank.hash).data.time_variables; 
+            zef.GMM.time_variables = [];
             zef.GMM.amplitudes = zef.dataBank.tree.(zef.dataBank.hash).data.amplitudes;
 
         
