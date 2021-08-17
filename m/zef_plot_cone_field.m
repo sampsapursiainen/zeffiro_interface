@@ -92,26 +92,34 @@ max_y = max(s_p(:,2));
 min_z = min(s_p(:,3));
 max_z = max(s_p(:,3));
 
-l_d_x = (max_x - min_x)/(lattice_res + 1);
-l_d_y = (max_y - min_y)/(lattice_res + 1);
-l_d_z = (max_z - min_z)/(lattice_res + 1);
+lattice_constant = lattice_res/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3); 
+lattice_res_x = floor(lattice_constant*(max_x - min_x));
+lattice_res_y = floor(lattice_constant*(max_y - min_y));
+lattice_res_z = floor(lattice_constant*(max_z - min_z));
+
+l_d_x = (max_x - min_x)/(lattice_res_x + 1);
+l_d_y = (max_y - min_y)/(lattice_res_y + 1);
+l_d_z = (max_z - min_z)/(lattice_res_z + 1);
 
 min_x = min_x + l_d_x;
 max_x = max_x - l_d_x;
-min_y = min_y + l_d_x;
-max_y = max_y - l_d_x;
-min_z = min_z + l_d_x;
-max_z = max_z - l_d_x;
+min_y = min_y + l_d_y;
+max_y = max_y - l_d_y;
+min_z = min_z + l_d_z;
+max_z = max_z - l_d_z;
 
-[X_lattice, Y_lattice, Z_lattice] = meshgrid(linspace(min_x,max_x,lattice_res),linspace(min_y,max_y,lattice_res),linspace(min_z,max_z,lattice_res));
+[X_lattice, Y_lattice, Z_lattice] = meshgrid(linspace(min_x,max_x,lattice_res_x),linspace(min_y,max_y,lattice_res_y),linspace(min_z,max_z,lattice_res_z));
 
 X_field = zeros(size(X_lattice));
 Y_field = zeros(size(Y_lattice));
 Z_field = zeros(size(Z_lattice));
 C_field = X_lattice;
 
-lattice_ind_aux = max(1,ceil(lattice_res*(s_p-min(s_p))./(max(s_p)-min(s_p))));
-lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res.^2 + (lattice_ind_aux(:,1)-1)*lattice_res + lattice_ind_aux(:,2);
+lattice_ind_aux = [max(1,ceil(lattice_res_x*(s_p(:,1)-min(s_p(:,1)))./(max(s_p(:,1))-min(s_p(:,1))))) ... 
+    max(1,ceil(lattice_res_y*(s_p(:,2)-min(s_p(:,2)))./(max(s_p(:,2))-min(s_p(:,2)))))...
+    max(1,ceil(lattice_res_z*(s_p(:,3)-min(s_p(:,3)))./(max(s_p(:,3))-min(s_p(:,3)))))];
+    
+lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res_x*lattice_res_y + (lattice_ind_aux(:,1)-1)*lattice_res_y + lattice_ind_aux(:,2);
 
 X_field(lattice_ind_aux) = cone_field(:,1);
 Y_field(lattice_ind_aux) = cone_field(:,2);

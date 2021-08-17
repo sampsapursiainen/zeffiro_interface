@@ -8,6 +8,8 @@ zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_options;';
 end
 end  
 
+zef = rmfield(zef,'fieldnames');
+
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
 
 clear zef_data;

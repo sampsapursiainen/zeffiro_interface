@@ -590,13 +590,13 @@ Aux_mat_6 = eye(L,L) - (1/L)*ones(L,L);
 
 if isfield(evalin('base','zef'),'redo_eit_dec')
 if evalin('base','zef.redo_eit_dec') == 1
-[eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+[eit_ind, eit_count] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
 else
 eit_ind = evalin('base','zef.eit_ind');
 eit_count = evalin('base','zef.eit_count');
 end
 else
-[eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+[eit_ind, eit_count] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
 end
 
 Current_pattern = evalin('base','zef.current_pattern');

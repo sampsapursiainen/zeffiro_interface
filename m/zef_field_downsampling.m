@@ -1,5 +1,4 @@
 
-
 if isfield(zef,'source_positions_original_field')
 if isempty(zef.source_positions_original_field)
 
@@ -24,8 +23,6 @@ zef.L_original_field = zef.L;
 zef.source_interpolation_ind_original_field = zef.source_interpolation_ind;
 
 end
-
-
 
 if zef.n_sources < size(zef.source_positions,1)
 

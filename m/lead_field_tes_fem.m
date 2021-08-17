@@ -1,13 +1,13 @@
 % %%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [L_tes, S_tes, dof_positions, dof_directions, eit_ind, eit_count] = lead_field_tes_fem(nodes,elements,sigma,electrodes,varargin)
+function [L_tes, S_tes, dof_positions, dof_directions, dof_ind, dof_count] = lead_field_tes_fem(nodes,elements,sigma,electrodes,varargin)
 % 17.6.2020
 % Sentence used:
 % 
 % source_ind = randperm(size(zef.brain_ind,1)); source_ind = source_ind(1:zef.n_sources);
 % sensors = attach_sensors_volume(zef.sensors);
 % var_arg.impedances = 1000;
-% [L_tes, S_tes, eit_ind, eit_count] = lead_field_tes_fem(zef.nodes,zef.tetra,zef.sigma(:,1),sensors,zef.brain_ind,source_ind,var_arg);
+% [L_tes, S_tes, dof_ind, dof_count] = lead_field_tes_fem(zef.nodes,zef.tetra,zef.sigma(:,1),sensors,zef.brain_ind,source_ind,var_arg);
 % zef.reconstruction = reshape(L_tes(:,50)',3,2000);
 %
 % function [L_eeg, source_locations, source_directions] = lead_field_eeg_fem(nodes,elements,sigma,electrodes,brain_ind,source_ind,additional_options)
@@ -774,13 +774,14 @@ clear S r p x aux_vec inv_M_r a b;
 
     if isfield(evalin('base','zef'),'redo_eit_dec')
         if evalin('base','zef.redo_eit_dec') == 1
-            [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+            [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
         else
-            eit_ind   = evalin('base','zef.eit_ind');
-            eit_count = evalin('base','zef.eit_count');
+            dof_ind   = evalin('base','zef.dof_ind');
+            dof_count = evalin('base','zef.dof_count');
+            dof_positions = evalin('base','zef.source_positions');
         end
     else
-        [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+        [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
     end
      
     R_tes_1 = -Grad_1*R_tes;
@@ -793,20 +794,19 @@ clear S r p x aux_vec inv_M_r a b;
 
 % 25.06.2020
     for i = 1 : K
-        L_tes(3*(eit_ind(i)-1)+1,:) =  L_tes(3*(eit_ind(i)-1)+1,:) + R_tes_1(i,:);
-        L_tes(3*(eit_ind(i)-1)+2,:) =  L_tes(3*(eit_ind(i)-1)+2,:) + R_tes_2(i,:);
-        L_tes(3*(eit_ind(i)-1)+3,:) =  L_tes(3*(eit_ind(i)-1)+3,:) + R_tes_3(i,:);
+        L_tes(3*(dof_ind(i)-1)+1,:) =  L_tes(3*(dof_ind(i)-1)+1,:) + R_tes_1(i,:);
+        L_tes(3*(dof_ind(i)-1)+2,:) =  L_tes(3*(dof_ind(i)-1)+2,:) + R_tes_2(i,:);
+        L_tes(3*(dof_ind(i)-1)+3,:) =  L_tes(3*(dof_ind(i)-1)+3,:) + R_tes_3(i,:);
     end
     
     for i = 1 : K3
-        L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/eit_count(i);
-        L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/eit_count(i);
-        L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/eit_count(i);
+        L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/dof_count(i);
+        L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/dof_count(i);
+        L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/dof_count(i);
     end
 
     clear R_tes_1 R_tes_2 R_tes_3;
     
-    dof_positions = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
     dof_directions = ones(size(dof_positions));
     
     L_tes = L_tes';
