@@ -52,7 +52,7 @@ evalin('base','zef.h_colorscale_max_slider.Value = zef.colorscale_max_slider;');
 
 end
 
-evalin('base','zef.update_colormap = zef.h_update_colormap.Value; if not(isequal(zef.h_update_colormap.Value, zef.update_colormap)); zef.h_axes1.Colormap = zef_colormap(zef.h_update_colormap.Value);end;');
+evalin('base','zef.update_colormap = zef.h_update_colormap.Value; zef.h_axes1.Colormap = zef_colormap(zef.h_update_colormap.Value);');
 evalin('base','zef.update_ambience = zef_update_ambience;');
 evalin('base','zef.update_diffusion = zef_update_diffusion;');
 evalin('base','zef.update_specular = zef_update_specular;');
