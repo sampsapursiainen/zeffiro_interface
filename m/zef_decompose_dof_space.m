@@ -1,16 +1,35 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [decomposition_ind,decomposition_count,dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,varargin)
+function [decomposition_ind,decomposition_count,dof_positions,decomposition_ind_first] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,varargin)
 
 if not(isempty(varargin))
 source_ind = varargin{1};
+if length(varargin) > 1
+n_sources = varargin{2};
 else
+    n_sources = evalin('base','zef.n_sources');
+end
+if length(varargin) > 2
+dof_decomposition_type = varargin{3};
+else
+dof_decomposition_type = evalin('base','zef.dof_decomposition_type');
+end
+else
+source_ind = brain_ind;
+n_sources = evalin('base','zef.n_sources');
+dof_decomposition_type = evalin('base','zef.dof_decomposition_type');
+end
+
+if isempty(source_ind)
 source_ind = brain_ind;
 end
 
+if evalin('caller','exist(''h'')')
+    if isvalid(evalin('caller','h'))
 h = evalin('caller','h');
+    end
+end
 
-dof_decomposition_type = evalin('base','zef.dof_decomposition_type');
 
 center_points = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
 source_points = center_points(source_ind,:)';
@@ -67,6 +86,7 @@ source_interpolation_aux = gather(source_interpolation_aux);
 decomposition_ind = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
 decomposition_count = accumarray(i_c,1);
+decomposition_pointe = i_a;
 
 elseif dof_decomposition_type == 2
     
@@ -77,7 +97,7 @@ max_y = max(center_points(:,2));
 min_z = min(center_points(:,3));
 max_z = max(center_points(:,3));
 
-lattice_constant = evalin('base','zef.n_sources').^(1/3)/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3); 
+lattice_constant = n_sources.^(1/3)/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3); 
 lattice_res_x = floor(lattice_constant*(max_x - min_x));
 lattice_res_y = floor(lattice_constant*(max_y - min_y));
 lattice_res_z = floor(lattice_constant*(max_z - min_z));
@@ -105,13 +125,16 @@ lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res_x*lattice_res_y + (lattic
 dof_positions = [X_lattice(:) Y_lattice(:) Z_lattice(:)];
 decomposition_ind = lattice_ind_aux;
 [aux_vec, i_a, i_c] = unique(decomposition_ind);
+dof_positions = dof_positions(aux_vec,:);
 decomposition_count = accumarray(i_c,1);
+decomposition_ind_first = i_a;
 
 elseif dof_decomposition_type == 3    
     
  decomposition_ind = [1:length(brain_ind)]';
  decomposition_count = ones(size(decomposition_ind));
  dof_positions = center_points;
+ decomposition_ind_first = [1:length(brain_ind)]';
 
 end
 end
