@@ -10,8 +10,9 @@ nodes = evalin('base','zef.nodes');
 sigma = evalin('base','zef.sigma');
 sigma = sigma(:,[2 1]); 
 labels = sigma(:,1);
-labels_conductivity = unique(sigma,'rows')
+labels_conductivity = unique(sigma,'rows');
+name_tags = zef.name_tags;
 
-save([path '/' file],'-v7.3','nodes','tetrahedra','labels','labels_conductivity');
+save([path '/' file],'-v7.3','nodes','tetrahedra','labels','labels_conductivity','name_tags');
 
 end

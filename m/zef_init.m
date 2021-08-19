@@ -10,6 +10,7 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.name_tags = cell(0);
 zef_data.dof_decomposition_type = 2;
 zef_data.dynamical_plot_queue_table = cell(0);
 zef_data.dpq_selected = 1;
