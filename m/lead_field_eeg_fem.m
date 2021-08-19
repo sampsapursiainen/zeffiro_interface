@@ -694,6 +694,11 @@ end
 %******************************************
 else
     
+    
+%******************************************************
+%PCG CPU start
+%******************************************************
+%Define preconditioner
 if isequal(precond,'ssor');
 S1 = tril(A)*spdiags(1./sqrt(diag(A)),0,N,N);
 S2 = S1';
@@ -704,68 +709,83 @@ end
 if isequal(electrode_model,'CEM')
 Aux_mat = zeros(L); 
 tol_val_eff = tol_val;
-relres_vec = zeros(1,L);
-else
-relres_vec = zeros(1,L-1);
 end
 
+
+%Define block size
+delete(gcp('nocreate'))
+parallel_processes = max(1,feature('numcores')-1); 
+processes_per_core = 5;
 tic;
-for i = 1 : L
+block_size =  parallel_processes*processes_per_core; 
+for i = 1 : block_size : L
+block_ind = [i : min(L,i+block_size-1)];
+
+%Define right hand side
 if isequal(electrode_model,'PEM')
-if i == L
-    break
+b = zeros(length(A),ones(1,length(block_ind)));
+for j =  1 : length(block_ind)
+b(ele_ind(block_ind),j) = 1;
 end
-b = zeros(length(A),1);
-b(ele_ind(i+1)) = 1;
 end
 if isequal(electrode_model,'CEM')    
-b = full(B(:,i));
-tol_val = min(impedance_vec(i),1)*tol_val_eff;
+b = full(B(:,block_ind));
+tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 end
 
-x = zeros(N,1);
-norm_b = norm(b);
-r = b(perm_vec);
+%Iterate 
+x_block_cell = cell(0);
+relres_cell = cell(0);
+x_block = zeros(N,length(block_ind));
+relres_vec = zeros(1,length(block_ind));
+tol_val = tol_val(:)';
+norm_b = sqrt(sum(b.^2));
+block_iter_end = block_ind(end)-block_ind(1)+1;
+[block_iter_ind] = [1 : processes_per_core : block_iter_end];
+parfor block_iter = 1 : length(block_iter_ind)
+ block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+ x = zeros(N,length(block_iter_sub));
+r = b(perm_vec,block_iter_sub);
 aux_vec = S1 \ r;
 p = S2 \ aux_vec;
 m = 0;
-while( (norm(r)/norm_b > tol_val) & (m < m_max))
-  a = A * p;
+while( not(isempty(find(sqrt(sum(r.^2))./norm_b(block_iter_sub) > tol_val(block_iter_sub)))) & (m < m_max) )
+    a = A * p;
   a_dot_p = sum(a.*p);
   aux_val = sum(r.*p);
   lambda = aux_val ./ a_dot_p;
-  x = x + lambda * p;
-  r = r - lambda * a;
+  x = x + lambda .* p;
+  r = r - lambda .* a;
   aux_vec = S1\r;
   inv_M_r = S2\aux_vec;
   aux_val = sum(inv_M_r.*a);
   gamma = aux_val ./ a_dot_p;
-  p = inv_M_r - gamma * p;
+  p = inv_M_r - gamma .* p;
   m=m+1;
 end
-relres_vec(i) = norm(r)/norm_b;
-r = x(iperm_vec);
-x = r;
-if isequal(electrode_model,'PEM')
-L_eeg_fi(i+1,:) = - x'*G_fi;
+x_block_cell{block_iter} = x(iperm_vec,:);
+relres_cell{block_iter} = sqrt(sum(r.^2))./norm_b(block_iter_sub);
+end
+
+for block_iter = 1 : length(block_iter_ind)
+ block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+x_block(:,block_iter_sub) = x_block_cell{block_iter};
+relres_vec(block_iter_sub) = relres_cell{block_iter};
+end
+
+%Substitute matrices
+L_eeg_fi(block_ind,:) = - x_block'*G_fi;
 if source_model == 2
-L_eeg_ew(i+1,:) = - x'*G_ew;  
-end
-end
-if isequal(electrode_model,'CEM')
-L_eeg_fi(i,:) = - x'*G_fi;
-if source_model == 2
-L_eeg_ew(i,:) = - x'*G_ew;  
-end
+L_eeg_ew(block_ind,:) = - x_block'*G_ew;  
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Aux_mat(:,block_ind) = B'*x_block - C(:,block_ind);
 else
-Aux_mat(:,i) = - C(:,i);    
+Aux_mat(:,block_ind) = - C(:,block_ind);    
 end
 end
-if tol_val < relres_vec(i)
+if not(isempty(find(tol_val < relres_vec)))
     close(h);
     'Error: PCG iteration did not converge.'
     L_eeg = [];
@@ -773,12 +793,16 @@ if tol_val < relres_vec(i)
 end
 time_val = toc; 
 if isequal(electrode_model,'PEM')
-waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
 end
 if isequal(electrode_model,'CEM')
 waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 end
+
+%******************************************************
+%PCG CPU end
+%******************************************************
 
 end
 
