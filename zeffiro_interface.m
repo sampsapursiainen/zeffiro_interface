@@ -38,7 +38,7 @@ zef.snapshot_vertical_resolution = str2num(zef.ini_cell{1}{14});
 zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
 zef.movie_fps = str2num(zef.ini_cell{1}{18});
 zef.font_size = str2num(zef.ini_cell{1}{20});
-zef.mlapp = str2num(zef.ini_cell{1}{22});
+zef.parallel_processes = str2num(zef.ini_cell{1}{22});
 zef = rmfield(zef,'ini_cell');
 zef_init;
 if zef.mlapp == 1
