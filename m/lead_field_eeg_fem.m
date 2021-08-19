@@ -723,7 +723,7 @@ block_ind = [i : min(L,i+block_size-1)];
 
 %Define right hand side
 if isequal(electrode_model,'PEM')
-b = zeros(length(A),ones(1,length(block_ind)));
+b = zeros(length(A),length(block_ind));
 for j =  1 : length(block_ind)
 b(ele_ind(block_ind),j) = 1;
 end
