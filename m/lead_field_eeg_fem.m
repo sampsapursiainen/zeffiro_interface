@@ -708,13 +708,14 @@ S1 = S2';
 end
 if isequal(electrode_model,'CEM')
 Aux_mat = zeros(L); 
-tol_val_eff = tol_val;
 end
+tol_val_eff = tol_val;
+
 
 
 %Define block size
 delete(gcp('nocreate'))
-parallel_processes = max(1,feature('numcores')-1); 
+parallel_processes = evalin('base','zef.parallel_processes');
 processes_per_core = 5;
 tic;
 block_size =  parallel_processes*processes_per_core; 
@@ -724,6 +725,7 @@ block_ind = [i : min(L,i+block_size-1)];
 %Define right hand side
 if isequal(electrode_model,'PEM')
 b = zeros(length(A),length(block_ind));
+tol_val = ones(1,length(block_ind))*tol_val_eff;
 for j =  1 : length(block_ind)
 b(ele_ind(block_ind),j) = 1;
 end

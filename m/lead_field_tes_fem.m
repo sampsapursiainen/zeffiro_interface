@@ -691,7 +691,7 @@ tol_val_eff = tol_val;
 
 %Define block size
 delete(gcp('nocreate'))
-parallel_processes = max(1,feature('numcores')-1); 
+parallel_processes = evalin('base','zef.parallel_processes'); 
 processes_per_core = 5;
 tic;
 block_size =  parallel_processes*processes_per_core; 
