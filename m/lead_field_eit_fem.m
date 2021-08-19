@@ -525,6 +525,7 @@ L_eit = zeros(L,N);
 %Define block size
 delete(gcp('nocreate'))
 parallel_processes = evalin('base','zef.parallel_processes');
+parpool(parallel_processes);
 processes_per_core = 5;
 tic;
 block_size =  parallel_processes*processes_per_core; 
