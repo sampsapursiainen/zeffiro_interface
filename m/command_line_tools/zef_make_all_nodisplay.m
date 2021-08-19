@@ -3,7 +3,7 @@ zef_downsample_surfaces;
 end; 
 zef.source_interpolation_on = 1; 
 [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]); 
-[zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles]=fem_mesh([]);
+[zef.nodes,zef.nodes_b,zef.tetra,zef.sigma_ind,zef.surface_triangles,zef.name_tags]=fem_mesh([]);
 zef.tetra_aux = zef.tetra; 
 [zef.sigma,zef.brain_ind,zef.non_source_ind,zef.nodes,zef.tetra,zef.sigma_prisms,zef.prisms,zef.submesh_ind]=zef_sigma([]); 
 zef.n_sources_mod = 1; 
