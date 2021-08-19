@@ -71,6 +71,7 @@ zef_data.save_file_path = zef.save_file_path;
 zef_data.save_file = zef.save_file;
 zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
+zef_data.parallel_processes = zef.parallel_processes;
 
 zef_data.gpu_num = zef.gpu_num;
 zef_data.parallel_vectors = zef.parallel_vectors;
