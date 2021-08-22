@@ -108,7 +108,7 @@ switch evalin('base','zef.ES_search_method')
         y_ES = ones(size(L_ES_projection,2),1);
         for inv_iter = 1 : evalin('base','zef.ES_L1_iter')
             %d_sqrt = sqrt(1./(abs(y_ES)+delta*abs(y_ES)));
-            d_sqrt = sqrt(1./(abs(y_ES)+delta));
+            d_sqrt = abs(y_ES)+delta;
             L_ES_projection_aux = L_ES_projection.*repmat(d_sqrt',size(L_ES_projection,1),1);
             y_ES = d_sqrt.*((L_ES_projection_aux)' * (L_ES_projection_aux) + reg_param*eye(size(L_ES_projection_aux,2)))\(L_ES_projection_aux)'*x_ES_projection;
         end
