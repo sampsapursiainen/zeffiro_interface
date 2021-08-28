@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [void] = plot_meshes(~)
 
+f_ind = 1;
+
 void = [];
 sensors_point_like = [];
 
