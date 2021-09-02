@@ -111,10 +111,10 @@ elseif source_direction_mode == 3
 end    
     nn = size(L_ind,1);
     %Initial objects
+    Proj=1;     %Projection matrix \Pi^\perp_{A_{k-1}} by J. Mosher
     ind_space = [];     %indices of L_ind (i.e., source position nodes) that are already estimated as true source positions
     orj = [];   % orjentation of estimates as 3*n x 1 -vector
     search_space = 1:nn;    %source position indices where dipoles are searched
-    A_mat = [];     %source space gain forwardmodel
     %_ Main loop _
     for d_iter = 1:n_dipoles
         if number_of_frames == 1
@@ -132,16 +132,18 @@ end
         %value of subspace correlation
         for n_iter = 1:length(search_space)
             n = search_space(n_iter);
-            [s,u] = zef_subspace_corr([A_mat L(:,L_ind(n,:))],Phi_s,'max');   %See Appendix from "EEG and MEG Source Localization using Recursively Applied (RAP) MUSIC" (1997), J. C. Mosher & R. M. Leahy
+            [s,u] = zef_subspace_corr(Proj*L(:,L_ind(n,:)),Proj*Phi_s,'max');   %See Appendix from "EEG and MEG Source Localization using Recursively Applied (RAP) MUSIC" (1997), J. C. Mosher & R. M. Leahy
             if s > s_max
                 s_max = s;
                 orj_best = u;
                 ind_space(end) = n;
             end
         end
-            %orj = [orj,orj_best];   %add the best orjentation to the orjentation vector
-            orj = orj_best;
+            orj = [orj,orj_best];   %add the best orjentation to the orjentation vector
             A_mat = L(:,reshape(L_ind(ind_space,:),[],1)).*reshape(orj,[],1)';    %form the matrix A that is leadfield of found sources times their orjentation
+            %Projection that assumes a column independency for leadfield
+            %(problematic!)
+            Proj = eye(size(A_mat,1))-A_mat*((A_mat'*A_mat+lambda_L*eye(size(A_mat,2)))\transpose(A_mat));
             search_space = setdiff(search_space,ind_space(d_iter)); %extract the found dipole location from searched nodes.
             
         if f_ind > 1;    
@@ -160,8 +162,7 @@ end
     end
     z_amp = A_mat'*((A_mat*A_mat'+S_mat)\f);    %amplitude estimation
     z_vec = zeros(size(L,2),1); 
-    z_vec_aux = repelem(z_amp,3).*orj;
-    z_vec(reshape(L_ind(ind_space,:),[],1)) = z_vec_aux([1:3:end,2:3:end,3:3:end]); %couple the amplitude with the orjentation.
+    z_vec(reshape(L_ind(ind_space,:),[],1)) = reshape(z_amp'.*orj,[],1); %couple the amplitude with the orjentation.
     %Notice that L_ind(ind_space,:) and orj are structurally same, and
     %reshape form order similar with s_ind indexing.
     
