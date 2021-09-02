@@ -34,6 +34,7 @@ zef.dataBank.app.Entrytype.Items=zef.dataBank.types;
 
 zef.dataBank.app.showButton.ButtonPushedFcn='[zef.dataBank.app.DataTable.Data, zef.dataBank.app.DataTable.ColumnName, zef.dataBank.DataTableHashList]=zef_databank_showAll(zef.dataBank.tree, zef.dataBank.app.Entrytype.Value);';
 zef.dataBank.app.showcurrentButton.ButtonPushedFcn='[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_showCurrent(zef, zef.dataBank.app.Entrytype.Value);';
+zef.dataBank.app.RefreshButton.ButtonPushedFcn='zef.dataBank.app.Tree.Children.delete; zef_dataBank_hash2tree;';
 
 zef.dataBank.app.selectfolderButton.ButtonPushedFcn=strcat( "zef.dataBank.folder=uigetdir('', 'select folder for the databank');","zef.dataBank.folder=strcat(zef.dataBank.folder, zef.dataBank.folder(1));" ,...
  "zef.dataBank.app.savetodiskSwitch.Enable=true;", "zef.dataBank.app.DataFolder.Text=zef.dataBank.folder;");
@@ -53,12 +54,12 @@ zef.dataBank.app.showinformationMenu.MenuSelectedFcn="disp('sorry, this is not i
 zef.dataBank.app.modifyMenu.MenuSelectedFcn=strcat('zef.dataBank.selectMultiple=true;', 'zef_dataBank_getHashForMenu;', ...
             'zef.dataBank.workingHashes=zef_dataBank_hashToWorkingSpace(zef.dataBank.hash, zef.dataBank.workingHashes);', ...
             '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);');
-
-
+zef.dataBank.app.changeNameMenu.MenuSelectedFcn='zef_dataBank_startNameChange';
+zef.dataBank.app.showinformationMenu.MenuSelectedFcn='zef_dataBank_getHashForMenu; disp(zef.dataBank.tree.(zef.dataBank.hash)); disp(zef.dataBank.tree.(zef.dataBank.hash).data);';
 
 zef.dataBank.app.loadMenuData.MenuSelectedFcn='zef.dataBank.loadParents=false; zef_dataBank_getHashForMenu;zef_dataBank_setData;';
 zef.dataBank.app.loadwithparentsMenuData.MenuSelectedFcn='zef.dataBank.loadParents=true; zef_dataBank_getHashForMenu;zef_dataBank_setData;';
-
+zef.dataBank.app.showinformationMenuData.MenuSelectedFcn='zef_dataBank_getHashForTableMenu; disp(zef.dataBank.tree.(zef.dataBank.hash{1})); disp(zef.dataBank.tree.(zef.dataBank.hash{1}).data);';
 zef.dataBank.app.deleteMenuData.MenuSelectedFcn=strcat('zef.dataBank.selectMultiple=false;', 'zef_dataBank_getHashForTableMenu;', ...
                 'zef.dataBank.tree=zef_dataBank_delete(zef.dataBank.tree, zef.dataBank.hash);','  zef_dataBank_uiTreeDeleteHash(zef.dataBank.app.Tree, zef.dataBank.hash);', ...
                 'zef.dataBank.selectMultiple=false;', ...
@@ -68,9 +69,6 @@ zef.dataBank.app.modifyMenuData.MenuSelectedFcn=strcat('zef.dataBank.selectMulti
             'zef.dataBank.workingHashes=zef_dataBank_hashToWorkingSpace(zef.dataBank.hash, zef.dataBank.workingHashes);', ...
             '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);');
 
-
-zef.dataBank.app.exportMenuData.MenuSelectedFcn="disp('sorry, this is not implemented,yet')";
-zef.dataBank.app.showinformationMenuData.MenuSelectedFcn="disp('sorry, this is not implemented,yet')";
 
 
 
