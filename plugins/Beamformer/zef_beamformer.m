@@ -50,7 +50,6 @@ number_of_frames = 1;
 end
 
 f_data = zef_getFilteredData;
-size_f = size(f_data,2);
 
 
   if evalin('base','zef.cov_type') == 1
@@ -85,12 +84,21 @@ z_vec = ones(size(L,2),1);
 Var_vec = ones(size(L,2),1);
 
 f=zef_getTimeStep(f_data, f_ind, true);
+size_f = size(f,2);
 
 if evalin('base','zef.cov_type') == 3
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
+    if size_f > 1
+        C = (f-mean(f,2))*(f-mean(f,2))'/size(f,2);
+    else
+        C = (f-mean(f,1))*(f-mean(f,1))';
+    end
     C = C+lambda_cov*trace(C)*eye(size(C))/size(f,1);
 elseif evalin('base','zef.cov_type') == 4
-    C = (f-mean(f,1))*(f-mean(f,1))'/size(f,2);
+    if size_f > 1
+        C = (f-mean(f,2))*(f-mean(f,2))'/size(f,2);
+    else
+        C = (f-mean(f,1))*(f-mean(f,1))';
+    end
     C = C + lambda_cov*eye(size(C));
 end
 
