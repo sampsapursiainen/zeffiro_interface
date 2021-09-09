@@ -26,7 +26,7 @@ if sum(strcmp(zef.GMM.parameters.Tags,'saved')) == 0
     zef.GMM.parameters=[zef.GMM.parameters;{'Saved components:',num2cell(ones(6,1)),'saved'}];
     zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Amplitudes';'Time variables';'Parameters';'Reconstruction'},num2cell(ones(6,1))];
 else
-    zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Parameters';'Reconstruction'},zef.GMM.parameters.Values{end}];
+    zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Amplitudes';'Time variables';'Parameters';'Reconstruction'},zef.GMM.parameters.Values{end}];
 end
     
 
