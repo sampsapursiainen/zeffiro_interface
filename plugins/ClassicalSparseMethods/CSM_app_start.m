@@ -64,7 +64,7 @@ zef.CSM.number_of_frames.ValueChangedFcn = 'zef.number_of_frames = str2num(zef.C
 zef.CSM.inv_time_3.ValueChangedFcn = 'zef.inv_time_3 = str2num(zef.CSM.inv_time_3.Value);';
 zef.CSM.inv_data_segment.ValueChangedFcn = 'zef.inv_data_segment = str2num(zef.CSM.inv_data_segment.Value);';
 zef.CSM.normalize_data.ValueChangedFcn = 'zef.normalize_data = str2num(zef.CSM.normalize_data.Value);';
-zef.CSM.StartButton.ButtonPushedFcn = 'zef.reconstruction=zef_CSM_iteration;';
+zef.CSM.StartButton.ButtonPushedFcn = '[zef.reconstruction,zef.reconstruction_information]=zef_CSM_iteration;';
 zef.CSM.CloseButton.ButtonPushedFcn = 'delete(zef.CSM);';
 
 %set fonts
