@@ -5,10 +5,17 @@
 %zef.dataBank.tree=zef_dataBank_reorderTree(zef.dataBank.tree);
 %zef.dataBank.tree=zef_dataBank_sortTree(zef.dataBank.tree);
 
+
+% if strcmp(zef.dataBank.save2disk, 'Off')
 zef.dataBank.tree=zef_dataBank_sortTree(zef.dataBank.tree);
 zef.dataBank.tree=zef_dataBank_rebuildTree(zef.dataBank.tree);
-zef.dataBank.tree=zef_dataBank_sortTree(zef.dataBank.tree);
-%there might be bugs here, but they behave weirdly
+
+if strcmp(zef.dataBank.save2disk, 'On')
+    zef.dataBank.tree= zef_dataBank_rebuildTreeSaveFile(zef.dataBank.tree);
+end
+    
+    
+    
 
 zef.dataBank.hashList=fieldnames(zef.dataBank.tree);
 

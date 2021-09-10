@@ -1,8 +1,20 @@
-function [tree] = zef_dataBank_sortTree(tree)
+function [tree, newText] = zef_dataBank_sortTree(tree)
 %sorts the tree with the numbers of the hashes, so that e.g. node_11>node_7
 %this is needed to build the tree easily
 
+if isstruct(tree)
 text=fieldnames(tree);
+else
+    text=properties(tree);
+    
+    
+    for i=1:length(text)
+        if strcmp(text{i}, 'Properties')
+        text(i)=[];
+        break;
+        end
+    end
+end
 
 R2=(regexp(text, '(?<num>\d+)', 'names'));
 
@@ -31,8 +43,10 @@ end
     end
     
     
-    
+    if isstruct(tree)
     tree=orderfields(tree, newText);
+    end
+    
 
 end
 

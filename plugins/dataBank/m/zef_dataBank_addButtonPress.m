@@ -20,6 +20,7 @@ else
 
 end
 
+%if import maybe loop here
 
 [zef.dataBank.tree, newNode.NodeData]=zef_dataBank_add(zef.dataBank.tree, dbParentHash, zef_dataBank_getData(zef, dbtype));
 
