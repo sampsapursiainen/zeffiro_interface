@@ -84,7 +84,6 @@ for i = 1 : length(p_points)
     end
 end
 
-
 brain_ind = evalin('base','zef.brain_ind');
 nodes = evalin('base','zef.nodes');
 tetra = evalin('base','zef.tetra');
@@ -103,8 +102,6 @@ brain_cortex_ind = find(ismember(brain_ind,I_compartment));
 cortex_ind = brain_ind(brain_cortex_ind);
 
 [center_points I center_points_ind] = unique(tetra(cortex_ind,:));
-source_interpolation_ind = zeros(length(center_points),1);
-source_interpolation_aux = source_interpolation_ind;
 center_points = nodes(center_points,:);
 size_center_points = size(center_points,1);
 
@@ -124,25 +121,21 @@ else
 
 if not(isempty(source_positions))
 
-ones_vec = ones(size(source_positions,2),1);
-
-par_num = evalin('base','zef.parallel_vectors');
-bar_ind = ceil(size_center_points/(50*par_num));
-i_ind = 0;
 
 MdlKDT = KDTreeSearcher(source_positions);
-source_interpolation_aux = knnsearch(MdlKDT,center_points);
+source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
 waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
 
-source_interpolation_ind = source_interpolation_aux(:);
+source_interpolation_ind = source_interpolation_ind(:);
+
+distance_vec = sum((source_positions(source_interpolation_ind,:)-center_points).^2,2);
 
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
 %end
-
-parcellation_interpolation_ind{p_ind-1}{1} = find(mean(sqrt(reshape(source_interpolation_ind(center_points_ind), length(cortex_ind), 4)),2)<p_tolerance); 
+parcellation_interpolation_ind{p_ind-1}{1} =  find(mean(sqrt(reshape(distance_vec(center_points_ind), length(cortex_ind), 4)),2)<p_tolerance); 
 parcellation_interpolation_ind{p_ind-1}{1} = brain_cortex_ind(parcellation_interpolation_ind{p_ind-1}{1});
 
 end
@@ -184,34 +177,30 @@ if not(isempty(source_positions))
 
 %aux_point_ind = unique(gather(source_interpolation_ind{1}));
 %source_positions = source_positions_aux(:,aux_point_ind);
-ones_vec = ones(size(source_positions,2),1);
 
 %s_ind_1{ab_ind} = aux_point_ind;
 
 center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
 
-source_interpolation_ind = zeros(length(center_points),1);
-source_interpolation_aux = source_interpolation_ind;
+
 
 size_center_points = size(center_points,2); 
-
-par_num = evalin('base','zef.parallel_vectors');
-bar_ind = ceil(size_center_points/(50*par_num)); 
-i_ind = 0; 
 
 tic;
 
 MdlKDT = KDTreeSearcher(source_positions);
-source_interpolation_aux = knnsearch(MdlKDT,center_points);
+source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
 waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
-source_interpolation_ind = source_interpolation_aux(:);
+source_interpolation_ind = source_interpolation_ind(:);
+
+distance_vec = sum((source_positions(source_interpolation_ind,:)-center_points).^2,2);
 
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{2}{ab_ind} = rand_perm_aux(source_interpolation_ind{2});
 %end
-parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(source_interpolation_ind(triangles)),2)<p_tolerance); 
+parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(distance_vec(triangles)),2)<p_tolerance); 
 
 
 waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
