@@ -214,7 +214,7 @@ source_interpolation_ind = source_interpolation_aux(:);
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(source_interpolation_ind(triangles)),2)<p_tolerance); 
 
 
-waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
 end
 end
