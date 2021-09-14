@@ -39,6 +39,32 @@ zef.dataBank.app.selectfolderButton.ButtonPushedFcn='zef_dataBank_saveFolderButt
 
 zef.dataBank.app.savetodiskSwitch.ValueChangedFcn='zef_dataBank_saveTreeNodeSwitchChange;';
 
+zef.dataBank.app.FunctionsDropDown.ValueChangedFcn='zef_dataBank_FunctionsDropDown;';
+
+
+
+
+
+
+
+
+
+%set functions for the import panel
+
+zef.dataBank.app.importButton.ButtonPushedFcn='zef_dataBank_importNodeButtonPress;';
+zef.dataBank.app.exportButton.ButtonPushedFcn='zef_dataBank_exportButtonPress;';
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 %set funtions for the treeMenu
