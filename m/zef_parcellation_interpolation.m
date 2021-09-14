@@ -203,7 +203,7 @@ distance_vec = sum((source_positions(source_interpolation_ind,:)-center_points).
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(distance_vec(triangles)),2)<p_tolerance); 
 
 
-waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
+waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
 
 end
 end
