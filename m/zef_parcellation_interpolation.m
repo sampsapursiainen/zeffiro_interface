@@ -105,8 +105,8 @@ cortex_ind = brain_ind(brain_cortex_ind);
 [center_points I center_points_ind] = unique(tetra(cortex_ind,:));
 source_interpolation_ind = zeros(length(center_points),1);
 source_interpolation_aux = source_interpolation_ind;
-center_points = nodes(center_points,:)';
-size_center_points = size(center_points,2);
+center_points = nodes(center_points,:);
+size_center_points = size(center_points,1);
 
 h = waitbar(i/size_center_points,['Interp. 1.']); 
 p_counter = 0;
@@ -124,41 +124,19 @@ else
 
 if not(isempty(source_positions))
 
-source_positions = source_positions';
 ones_vec = ones(size(source_positions,2),1);
-
-use_gpu  = evalin('base','zef.use_gpu');
-gpu_num  = evalin('base','zef.gpu_num');
-
-if use_gpu == 1 & gpuDeviceCount > 0
-center_points = gpuArray(center_points);
-source_positions = gpuArray(source_positions);
-source_interpolation_aux = gpuArray(source_interpolation_aux);
-end 
 
 par_num = evalin('base','zef.parallel_vectors');
 bar_ind = ceil(size_center_points/(50*par_num));
 i_ind = 0;
-  
-tic;
-for i = 1 : par_num : size_center_points
 
-i_ind = i_ind + 1;
-block_ind = [i: min(i+par_num-1,size_center_points)];
-aux_vec = center_points(:,block_ind);
-aux_vec = reshape(aux_vec,3,1,length(block_ind));
-norm_vec = sum((source_positions(:,:,ones(1,length(block_ind))) - aux_vec(:,ones_vec,:)).^2);
-[min_val min_ind] = min(norm_vec,[],2);
-source_interpolation_aux(block_ind) = min_val(:);
+MdlKDT = KDTreeSearcher(source_positions);
+source_interpolation_aux = knnsearch(MdlKDT,center_points);
 
-time_val = toc;
-if mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
-end
+waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
-end
 
-source_interpolation_ind = (gather(source_interpolation_aux));
+source_interpolation_ind = source_interpolation_aux(:);
 
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{1} = rand_perm_aux(source_interpolation_ind{1});
@@ -200,7 +178,7 @@ else
 
 if ismember(aux_brain_ind(ab_ind),cortex_surface_ind_aux)
    
-source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:)';    
+source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);    
 
 if not(isempty(source_positions))
 
@@ -211,21 +189,11 @@ ones_vec = ones(size(source_positions,2),1);
 %s_ind_1{ab_ind} = aux_point_ind;
 
 center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
-center_points = center_points';
 
 source_interpolation_ind = zeros(length(center_points),1);
 source_interpolation_aux = source_interpolation_ind;
 
 size_center_points = size(center_points,2); 
-
-use_gpu  = evalin('base','zef.use_gpu');
-gpu_num  = evalin('base','zef.gpu_num');
-
-if use_gpu == 1 & gpuDeviceCount > 0
-center_points = gpuArray(center_points);
-source_positions = gpuArray(source_positions);
-source_interpolation_aux = gpuArray(source_interpolation_aux);
-end 
 
 par_num = evalin('base','zef.parallel_vectors');
 bar_ind = ceil(size_center_points/(50*par_num)); 
@@ -233,26 +201,12 @@ i_ind = 0;
 
 tic;
 
-for i = 1 : par_num : size_center_points
+MdlKDT = KDTreeSearcher(source_positions);
+source_interpolation_aux = knnsearch(MdlKDT,center_points);
 
-i_ind = i_ind + 1;
-block_ind = [i: min(i+par_num-1,size_center_points)];
-aux_vec = center_points(:,block_ind);
-aux_vec = reshape(aux_vec,3,1,length(block_ind));
-norm_vec = sum((source_positions(:,:,ones(1,length(block_ind))) - aux_vec(:,ones_vec,:)).^2);
-[min_val min_ind] = min(norm_vec,[],2);
-source_interpolation_aux(block_ind) = min_val(:);
+waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
-time_val = toc;
-if i == 1 && p_ind == p_selected(1) + 1
-waitbar(i/size_center_points,h,['Interp. 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);    
-elseif mod(i_ind,bar_ind)==0 
-waitbar(i/size_center_points,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ', ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '. Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
-end
-
-end
-
-source_interpolation_ind = gather(source_interpolation_aux);
+source_interpolation_ind = source_interpolation_aux(:);
 
 %if not(isempty(rand_perm_aux))
 %source_interpolation_ind{2}{ab_ind} = rand_perm_aux(source_interpolation_ind{2});
