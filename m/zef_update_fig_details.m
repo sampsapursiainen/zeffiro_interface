@@ -20,6 +20,8 @@ for zef_i = 1 : length(zef.compartment_tags)
         zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.compartment_tags{zef_i} '_name']) '</BODY></HTML>'  ];   
     end
 end
+set(zef.h_sensor_visible_color,'Min',1);
+set(zef.h_sensor_visible_color,'Max',length(zef.aux_field));
 set(zef.h_compartment_visible_color,'String',fliplr(zef.aux_field));
 
   zef.aux_field = {['Tetrahedra: ' num2str(size(zef.tetra,1))],...
@@ -78,4 +80,6 @@ end
 
 set(zef.h_system_information, 'String',zef.aux_field);
 zef = rmfield(zef,'aux_field');
+
+
 clear zef_i;

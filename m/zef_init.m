@@ -10,6 +10,35 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.name_tags = cell(0);
+zef_data.dof_decomposition_type = 2;
+zef_data.dynamical_plot_queue_table = cell(0);
+zef_data.dpq_selected = 1;
+zef_data.update_lights = 1;
+zef_data.update_colormap = 1;
+zef_data.update_zoom = 6;
+zef_data.update_transparency_reconstruction = 0;
+zef_data.update_transparency_surface = 0;
+zef_data.update_transparency_sensor = 0;
+zef_data.update_transparency_cones = 0;
+zef_data.update_transparency_additional = 0;
+zef_data.update_transparency_sensor = 0;
+zef_data.update_transparency_cones = 0;
+zef_data.update_transparency_additional = 0;
+zef_data.update_brightness = 0;
+zef_data.update_contrast = 0;
+zef_data.update_ambience = 0.85;
+zef_data.update_diffusion = 0.5;
+zef_data.update_specular = 0.1;
+zef_data.colorscale_min_slider = 0;
+zef_data.colorscale_max_slider = 0;
+zef_data.colormap_size = 2048;
+zef_data.colorscale_min_slider = 0;
+zef_data.colorscale_max_slider = 0;
+zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation'};
+zef_data.smoothing_steps_ele = 100;
+zef_data.use_pem = 0;
+zef_data.default_impedance_value = 5E3;
 zef_data.cone_alpha = 1;
 zef_data.streamline_draw = 0;
 zef_data.streamline_linestyle = '-';
@@ -42,6 +71,8 @@ zef_data.save_file_path = zef.save_file_path;
 zef_data.save_file = zef.save_file;
 zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
+zef_data.parallel_processes = zef.parallel_processes;
+
 zef_data.gpu_num = zef.gpu_num;
 zef_data.parallel_vectors = zef.parallel_vectors;
 zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
@@ -49,6 +80,7 @@ zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
 zef_data.movie_fps = zef.movie_fps;
 zef_data.mlapp = zef.mlapp;
 
+%%% Here begins initialization variables
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
           zef_data.multi_lead_field = 0;
@@ -69,7 +101,7 @@ zef_data.top_reconstruction = [];
           zef_data.parcellation_selected = [];
           zef_data.parcellation_type = [1];
           zef_data.parcellation_quantile = [0.98];
-
+          zef_data.use_gpu_graphic = 1;
           
           zef_data.loop_movie = [0];
           zef_data.loop_movie_count = [5];
@@ -121,7 +153,7 @@ zef_data.top_reconstruction = [];
                 zef_data.tetra_aux = [];
                 zef_data.nodes_b = [];
 
-                 zef_data.cam_va = 10;
+                 zef_data.cam_va = 6;
          zef_data.preconditioner = 2;
       zef_data.solver_tolerance = 1e-6;
 zef_data.preconditioner_tolerance= 0.001;
@@ -248,3 +280,4 @@ end
  end
  clear zef_i zef_data;
  
+

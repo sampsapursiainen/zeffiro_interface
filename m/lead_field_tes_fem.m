@@ -1,13 +1,13 @@
 % %%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [L_tes, S_tes, dof_positions, dof_directions, eit_ind, eit_count] = lead_field_tes_fem(nodes,elements,sigma,electrodes,varargin)
+function [L_tes, S_tes, dof_positions, dof_directions, dof_ind, dof_count] = lead_field_tes_fem(nodes,elements,sigma,electrodes,varargin)
 % 17.6.2020
 % Sentence used:
 % 
 % source_ind = randperm(size(zef.brain_ind,1)); source_ind = source_ind(1:zef.n_sources);
 % sensors = attach_sensors_volume(zef.sensors);
 % var_arg.impedances = 1000;
-% [L_tes, S_tes, eit_ind, eit_count] = lead_field_tes_fem(zef.nodes,zef.tetra,zef.sigma(:,1),sensors,zef.brain_ind,source_ind,var_arg);
+% [L_tes, S_tes, dof_ind, dof_count] = lead_field_tes_fem(zef.nodes,zef.tetra,zef.sigma(:,1),sensors,zef.brain_ind,source_ind,var_arg);
 % zef.reconstruction = reshape(L_tes(:,50)',3,2000);
 %
 % function [L_eeg, source_locations, source_directions] = lead_field_eeg_fem(nodes,elements,sigma,electrodes,brain_ind,source_ind,additional_options)
@@ -112,6 +112,9 @@ else
     electrode_model = 'PEM';
     L = size(electrodes,1);
     ele_ind = zeros(L,1);
+    impedance_inf = 1;%%
+    impedance_vec = ones(size(electrodes,1),1);%%
+
     for i = 1 : L
         [min_val, min_ind] = min(sum((repmat(electrodes(i,:),N,1)' - nodes').^2));
         ele_ind(i) = min_ind; 
@@ -401,18 +404,18 @@ if isequal(electrode_model,'CEM')
         impedance_vec(ele_loop_ind) = impedance_vec(ele_loop_ind)*sum_ala;
         else 
          for i = 1 : length(I) 
-             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) -ele_ind(I(i),3)./impedance_vec(ele_loop_ind);  
+             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) +ele_ind(I(i),3)./impedance_vec(ele_loop_ind);  %
             for j = 1 : length(I) 
                     A(ele_ind(I(i),2),ele_ind(I(j),2)) = A(ele_ind(I(i),2),ele_ind(I(j),2)) + ele_ind(I(i),3)*ele_ind(I(j),3)./impedance_vec(ele_loop_ind); 
             end
          end
         C(ele_loop_ind, ele_loop_ind) = 1./impedance_vec(ele_loop_ind);
         end  
-    end
+       end
 
     entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))).*ala(I_triangles)';
     for i = 1 : 3
-        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), -(1/3)*entry_vec, N, L);         
+        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), +(1/3)*entry_vec, N, L);         
     end
     if impedance_inf == 0
         for i = 1 : 3   
@@ -449,21 +452,25 @@ if isequal(electrode_model,'PEM')
     B = spalloc(N,L,0);
     C = spalloc(L,L,0);
     entry_vec = (1./impedance_vec(ele_ind(:,1)));
+     for i = 1 : L 
     B(ele_ind(i),i) = entry_vec;
     A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
+     end
     C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
+   
     
     else
 
     B = spalloc(N,L,0);
     C = spalloc(L,L,0);
-    entry_vec = ones(size(ele_ind(:,1)));
-    B(ele_ind(i),i) = entry_vec;
+     for i = 1 : L 
+    B(ele_ind(i),i) = 1;
+     end
 %Dirichlet boundary condition for a single node.
     A(ele_ind(1),:) = 0;
-A(:,ele_ind(1)) = 0;
-A(ele_ind(1),ele_ind(1)) = 1;
-    C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
+    A(:,ele_ind(1)) = 0;
+    A(ele_ind(1),ele_ind(1)) = 1;
+    C = eye(L);
         
     end
 end
@@ -576,7 +583,8 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %         L_eeg_ew = zeros(L,M_ew);
 %     end
     tic;
-
+    
+  
     for i = 1 : L
 %        if isequal(electrode_model,'PEM')
 %            if i == L
@@ -586,8 +594,13 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %           b(ele_ind(i+1)) = 1;
 %        end
         
-        %if isequal(electrode_model,'CEM')    
-            b = full(B(:,i));
+        %if isequal(electrode_model,'CEM')  
+         
+              b = full(B(:,i));
+          if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+              b = zeros(size(b));
+          end
+    
             tol_val = min(impedance_vec(i),1)*tol_val_eff;
         %end
 
@@ -617,7 +630,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
         relres_vec(i) = gather(norm(r)/norm_b);
         r = gather(x(iperm_vec));
         x = r;
-        
+        R_tes(:,i) =  x;
 %        if isequal(electrode_model,'PEM')
 %           L_eeg_fi(i+1,:) = - x'*G_fi;
 %           R_tes(:,i) = - x;          
@@ -628,7 +641,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 
 %        if isequal(electrode_model,'CEM')
 %           L_eeg_fi(i,:) = - x'*G_fi;
-            R_tes(:,i) = - x;
+%            R_tes(:,i) = - x;
 %           if source_model == 2
 %               L_eeg_ew(i,:) = - x'*G_ew;  
 %           end
@@ -636,9 +649,9 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 
 %        if isequal(electrode_model,'CEM')
             if impedance_inf == 0
-                Aux_mat(:,i) = B'*x - C(:,i);
+                Aux_mat(:,i) = C(:,i)-B'*x ;
             else
-                Aux_mat(:,i) = - C(:,i);    
+                Aux_mat(:,i) = C(:,i);    
             end
 %        end
      
@@ -657,91 +670,116 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
     end
 %******************************************
 else
-    if isequal(precond,'ssor')
-        S1 = tril(A)*spdiags(1./sqrt(diag(A)),0,N,N);
-        S2 = S1';
-    else    
-        S2 = ichol(A,struct('type','nofill'));
-        S1 = S2'; 
-    end
     
-%   if isequal(electrode_model,'CEM')
-        Aux_mat = zeros(L); 
-        tol_val_eff = tol_val;
-        relres_vec = zeros(1,L);
-%   else
-%       relres_vec = zeros(1,L-1);
-%   end
+    %******************************************************
+%PCG CPU start
+%******************************************************
+%Define preconditioner
+if isequal(precond,'ssor');
+S1 = tril(A)*spdiags(1./sqrt(diag(A)),0,N,N);
+S2 = S1';
+else    
+S2 = ichol(A,struct('type','nofill'));
+S1 = S2'; 
+end
+
+Aux_mat = zeros(L); 
+tol_val_eff = tol_val;
+
     R_tes = zeros(size(B,1),L);
-%   if source_model == 2
-%       L_eeg_ew = zeros(L,M_ew);
-%   end
 
-    tic;
-    for i = 1 : L
-%       if isequal(electrode_model,'PEM')
-%           if i == L
-%               break
-%           end
-%       b = zeros(length(A),1);
-%       b(ele_ind(i+1)) = 1;
-%       end
-%       if isequal(electrode_model,'CEM')    
-            b = full(B(:,i));
-            tol_val = min(impedance_vec(i),1)*tol_val_eff;
-%       end
 
-        x = zeros(N,1);
-        norm_b = norm(b);
-        r = b(perm_vec);
-        aux_vec = S1 \ r;
-        p = S2 \ aux_vec;
-        m = 0;
-        while( (norm(r)/norm_b > tol_val) && (m < m_max))
-          a = A * p;
-          a_dot_p = sum(a.*p);
-          aux_val = sum(r.*p);
-          lambda = aux_val ./ a_dot_p;
-          x = x + lambda * p;
-          r = r - lambda * a;
-          aux_vec = S1\r;
-          inv_M_r = S2\aux_vec;
-          aux_val = sum(inv_M_r.*a);
-          gamma = aux_val ./ a_dot_p;
-          p = inv_M_r - gamma * p;
-          m=m+1;
-        end
+%Define block size
+delete(gcp('nocreate'))
+parallel_processes = evalin('base','zef.parallel_processes'); 
+parpool(parallel_processes);
+processes_per_core = 5;
+tic;
+block_size =  parallel_processes*processes_per_core; 
+for i = 1 : block_size : L
+block_ind = [i : min(L,i+block_size-1)];
 
-        relres_vec(i) = norm(r)/norm_b;
-        r = x(iperm_vec);
-        x = r;
-        
-            R_tes(:,i) = - x;
+%Define right hand side  
+b = full(B(:,block_ind));
+tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 
-%         if isequal(electrode_model,'CEM')
-            if impedance_inf == 0
-                Aux_mat(:,i) = B'*x - C(:,i);
-            else
-                Aux_mat(:,i) = - C(:,i);    
-            end
-%         end
 
-        if tol_val < relres_vec(i)
-            close(h);
-            'Error: PCG iteration did not converge.'
-            R_tes = [];
-            return
-        end
+if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+              b = zeros(size(b));
+ end
 
-        time_val = toc; 
-        waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 
-    end
+%Iterate 
+x_block_cell = cell(0);
+relres_cell = cell(0);
+x_block = zeros(N,length(block_ind));
+relres_vec = zeros(1,length(block_ind));
+tol_val = tol_val(:)';
+norm_b = sqrt(sum(b.^2));
+block_iter_end = block_ind(end)-block_ind(1)+1;
+[block_iter_ind] = [1 : processes_per_core : block_iter_end];
+parfor block_iter = 1 : length(block_iter_ind)
+ block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+ x = zeros(N,length(block_iter_sub));
+r = b(perm_vec,block_iter_sub);
+aux_vec = S1 \ r;
+p = S2 \ aux_vec;
+m = 0;
+while( not(isempty(find(sqrt(sum(r.^2))./norm_b(block_iter_sub) > tol_val(block_iter_sub)))) & (m < m_max) )
+    a = A * p;
+  a_dot_p = sum(a.*p);
+  aux_val = sum(r.*p);
+  lambda = aux_val ./ a_dot_p;
+  x = x + lambda .* p;
+  r = r - lambda .* a;
+  aux_vec = S1\r;
+  inv_M_r = S2\aux_vec;
+  aux_val = sum(inv_M_r.*a);
+  gamma = aux_val ./ a_dot_p;
+  p = inv_M_r - gamma .* p;
+  m=m+1;
+end
+x_block_cell{block_iter} = x(iperm_vec,:);
+relres_cell{block_iter} = sqrt(sum(r.^2))./norm_b(block_iter_sub);
+end
+
+for block_iter = 1 : length(block_iter_ind)
+ block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+x_block(:,block_iter_sub) = x_block_cell{block_iter};
+relres_vec(block_iter_sub) = relres_cell{block_iter};
+end
+
+
+%Substitute matrices
+ R_tes(:,block_ind) =  x_block;
+
+if impedance_inf == 0
+Aux_mat(:,block_ind) = C(:,block_ind) - B'*x_block ;
+else
+Aux_mat(:,block_ind) = C(:,block_ind);    
+end
+
+if not(isempty(find(tol_val < relres_vec)))
+    close(h);
+    'Error: PCG iteration did not converge.'
+    R_tes = []; 
+    return
+end
+time_val = toc; 
+
+waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+
+end
+
+%******************************************************
+%PCG CPU end
+%******************************************************
+
 end
 
 if not(impedance_inf == 0)
    
-    R_tes = R_tes - mean(R_tes);
+    R_tes = R_tes - mean(R_tes,2);
     
 end
 
@@ -758,18 +796,19 @@ clear S r p x aux_vec inv_M_r a b;
 
     if isfield(evalin('base','zef'),'redo_eit_dec')
         if evalin('base','zef.redo_eit_dec') == 1
-            [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+            [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
         else
-            eit_ind   = evalin('base','zef.eit_ind');
-            eit_count = evalin('base','zef.eit_count');
+            dof_ind   = evalin('base','zef.dof_ind');
+            dof_count = evalin('base','zef.dof_count');
+            dof_positions = evalin('base','zef.source_positions');
         end
     else
-        [eit_ind, eit_count] = make_eit_dec(nodes,tetrahedra,brain_ind,source_ind);
+        [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
     end
      
-    R_tes_1 = Grad_1*R_tes;
-    R_tes_2 = Grad_2*R_tes;
-    R_tes_3 = Grad_3*R_tes;
+    R_tes_1 = -Grad_1*R_tes;
+    R_tes_2 = -Grad_2*R_tes;
+    R_tes_3 = -Grad_3*R_tes;
     
     clear R_tes;
     
@@ -777,21 +816,23 @@ clear S r p x aux_vec inv_M_r a b;
 
 % 25.06.2020
     for i = 1 : K
-        L_tes(3*(eit_ind(i)-1)+1,:) =  L_tes(3*(eit_ind(i)-1)+1,:) + R_tes_1(i,:);
-        L_tes(3*(eit_ind(i)-1)+2,:) =  L_tes(3*(eit_ind(i)-1)+2,:) + R_tes_2(i,:);
-        L_tes(3*(eit_ind(i)-1)+3,:) =  L_tes(3*(eit_ind(i)-1)+3,:) + R_tes_3(i,:);
+        L_tes(3*(dof_ind(i)-1)+1,:) =  L_tes(3*(dof_ind(i)-1)+1,:) + R_tes_1(i,:);
+        L_tes(3*(dof_ind(i)-1)+2,:) =  L_tes(3*(dof_ind(i)-1)+2,:) + R_tes_2(i,:);
+        L_tes(3*(dof_ind(i)-1)+3,:) =  L_tes(3*(dof_ind(i)-1)+3,:) + R_tes_3(i,:);
     end
     
     for i = 1 : K3
-        L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/eit_count(i);
-        L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/eit_count(i);
-        L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/eit_count(i);
+        L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/dof_count(i);
+        L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/dof_count(i);
+        L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/dof_count(i);
     end
 
     clear R_tes_1 R_tes_2 R_tes_3;
     
-    dof_positions = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
     dof_directions = ones(size(dof_positions));
+    
+    L_tes = L_tes';
+    S_tes = S_tes';
 
 waitbar(1,h);
 close(h);

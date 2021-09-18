@@ -1,62 +1,8 @@
 zef_data = zeffiro_interface_segmentation_tool_app;
-zef.h_project_notes=zef_data.h_project_notes;
-zef.h_zeffiro_window_main=zef_data.h_zeffiro_window_main;
-zef.h_menu_project=zef_data.h_menu_project;
-zef.h_menu_new=zef_data.h_menu_new;
-zef.h_menu_open=zef_data.h_menu_open;
-zef.h_menu_save=zef_data.h_menu_save;
-zef.h_menu_save_as=zef_data.h_menu_save_as;
-zef.h_menu_save_figures_as=zef_data.h_menu_save_figures_as;
-zef.h_menu_print_to_file=zef_data.h_menu_print_to_file;
-zef.h_menu_exit=zef_data.h_menu_exit;
-zef.h_menu_export=zef_data.h_menu_export;
-zef.h_menu_export_volume_data=zef_data.h_menu_export_volume_data;
-zef.h_menu_segmentation_data=zef_data.h_menu_segmentation_data;
-zef.h_menu_lead_field=zef_data.h_menu_lead_field;
-zef.h_menu_source_positions=zef_data.h_menu_source_positions;
-zef.h_menu_source_directions=zef_data.h_menu_source_directions;
-zef.h_menu_reconstruction=zef_data.h_menu_reconstruction;
-zef.h_menu_edit=zef_data.h_menu_edit;
-zef.h_menu_reset_lead_field=zef_data.h_menu_reset_lead_field;
-zef.h_menu_reset_volume_data=zef_data.h_menu_reset_volume_data;;
-zef.h_menu_reset_measurement_data=zef_data.h_menu_reset_measurement_data;
-zef.h_menu_reset_reconstruction=zef_data.h_menu_reset_reconstruction;
-zef.h_menu_merge_lead_field=zef_data.h_menu_merge_lead_field;
-zef.h_menu_inverse_tools=zef_data.h_menu_inverse_tools;
-zef.h_menu_forward_tools=zef_data.h_menu_forward_tools;
-zef.h_menu_butterfly_plot=zef_data.h_menu_butterfly_plot;
-zef.h_menu_find_synthetic_source=zef_data.h_menu_find_synthetic_source;
-zef.h_menu_generate_eit_data=zef_data.h_menu_generate_eit_data;
-zef.h_menu_multi_tools=zef_data.h_menu_multi_tools;
-zef.h_menu_mesh_tool=zef_data.h_menu_mesh_tool;
-zef.h_menu_mesh_visualization_tool=zef_data.h_menu_mesh_visualization_tool;
-zef.h_menu_figure_tool=zef_data.h_menu_figure_tool;
-zef.h_menu_parcellation_tool=zef_data.h_menu_parcellation_tool;
-zef.h_menu_options=zef_data.h_menu_options;
-zef.h_menu_window=zef_data.h_menu_window;
-zef.h_menu_close_tools=zef_data.h_menu_close_tools;
-zef.h_menu_close_figures=zef_data.h_menu_close_figures;
-zef.h_menu_help=zef_data.h_menu_help;
-zef.h_menu_documentation=zef_data.h_menu_documentation;
-zef.h_menu_about=zef_data.h_menu_about;
-zef.h_menu_import=zef_data.h_menu_import;
-zef.h_menu_segmentation_tool=zef_data.h_menu_segmentation_tool;
-zef.h_menu_new_segmentation_from_folder=zef_data.h_menu_new_segmentation_from_folder;
-zef.h_menu_import_segmentation_update_from_folder=zef_data.h_menu_import_segmentation_update_from_folder;
-zef.h_menu_import_new_project_from_folder=zef_data.h_menu_import_new_project_from_folder;
-zef.h_menu_import_project_update_from_folder=zef_data.h_menu_import_project_update_from_folder;
-zef.h_menu_import_volume_data=zef_data.h_menu_import_volume_data;
-zef.h_menu_import_measurement_data=zef_data.h_menu_import_measurement_data;
-zef.h_menu_import_noise_data=zef_data.h_menu_import_noise_data;
-zef.h_menu_import_reconstruction=zef_data.h_menu_import_reconstruction;
-zef.h_menu_import_current_pattern=zef_data.h_menu_import_current_pattern;
-zef.h_axes2=zef_data.h_axes2;
-zef.h_compartment_table=zef_data.h_compartment_table;
-zef.h_sensors_table=zef_data.h_sensors_table;
-zef.h_transform_table=zef_data.h_transform_table;
-zef.h_sensors_name_table=zef_data.h_sensors_name_table;
-zef.h_project_information=zef_data.h_project_information;
-zef.h_parameters_table=zef_data.h_parameters_table;
+zef.fieldnames = fieldnames(zef_data);
+for zef_i = 1:length(zef.fieldnames)
+zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+end   
 
 set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',{'Inactive','Constrained field','Unconstrained field','Active surface'},'numeric'})
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
@@ -69,11 +15,11 @@ set(zef.h_parameters_table,'columnformat',{'char','numeric'});
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_close_tools; zef_close_figs; rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
 
-set(zef.h_compartment_table,'DisplayDataChangedFcn','zef_update;');
-set(zef.h_sensors_table,'DisplayDataChangedFcn','zef_update;');
-set(zef.h_transform_table,'DisplayDataChangedFcn','zef_update_transform;');
-set(zef.h_sensors_name_table,'DisplayDataChangedFcn','zef_update_sensors_name_table;');
-set(zef.h_parameters_table,'DisplayDataChangedFcn','zef_update_parameters;');
+set(zef.h_compartment_table,'CellEditCallback','zef_update;');
+set(zef.h_sensors_table,'CellEditCallback','zef_update;');
+set(zef.h_transform_table,'CellEditCallback','zef_update_transform;');
+set(zef.h_sensors_name_table,'CellEditCallback','zef_update_sensors_name_table;');
+set(zef.h_parameters_table,'CellEditCallback','zef_update_parameters;');
 
 
 
@@ -171,6 +117,7 @@ set(zef.h_menu_lock_on,'MenuSelectedFcn','zef.lock_on = abs(zef.lock_on - 1); ze
 set(zef.h_menu_stl,'MenuSelectedFcn','zef.surface_mesh_type = 1; zef.file = 0;[file file_path] = uigetfile(''*.stl'');zef_get_surface_mesh;');
 set(zef.h_menu_dat_points,'MenuSelectedFcn','zef.surface_mesh_type = 2; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
 set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = 3; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
+set(zef.h_menu_export_fem_mesh_as,'MenuSelectedFcn','zef_export_fem_mesh_as;');
 
 
 set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;end;');

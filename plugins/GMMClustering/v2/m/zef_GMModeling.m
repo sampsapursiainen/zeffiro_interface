@@ -9,6 +9,8 @@ if evalin('base','isfield(zef,''reconstruction_information'')')
             GMModelTimeVariables.sampling_freq = reconstruction_information.inv_sampling_frequency;
         elseif isfield(reconstruction_information,'sampling_frequency')
             GMModelTimeVariables.sampling_frequency = reconstruction_information.sampling_frequency;
+        elseif isfield(reconstruction_information,'sampling_freq')
+            GMModelTimeVariables.sampling_frequency = reconstruction_information.sampling_freq;
         end
         GMModelTimeVariables.time_1 = reconstruction_information.inv_time_1;
         GMModelTimeVariables.time_2 = reconstruction_information.inv_time_2;

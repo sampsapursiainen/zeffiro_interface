@@ -1,8 +1,22 @@
 
 %this builds a uiTree in the databank.app from the databank.tree node
 %hashcodes
-zef.dataBank.tree=zef_dataBank_reorderTree(zef.dataBank.tree);
-zef.dataBank.tree=orderfields(zef.dataBank.tree);
+
+%zef.dataBank.tree=zef_dataBank_reorderTree(zef.dataBank.tree);
+%zef.dataBank.tree=zef_dataBank_sortTree(zef.dataBank.tree);
+
+
+% if strcmp(zef.dataBank.save2disk, 'Off')
+zef.dataBank.tree=zef_dataBank_sortTree(zef.dataBank.tree);
+zef.dataBank.tree=zef_dataBank_rebuildTree(zef.dataBank.tree);
+
+if strcmp(zef.dataBank.save2disk, 'On')
+    zef.dataBank.tree= zef_dataBank_rebuildTreeSaveFile(zef.dataBank.tree);
+end
+    
+    
+    
+
 zef.dataBank.hashList=fieldnames(zef.dataBank.tree);
 
 for dbi=1:length(zef.dataBank.hashList)

@@ -15,7 +15,6 @@ zef.save_file_path = zef.file_path;
 load([zef.file_path zef.file]);  
 zef_remove_object_fields;
 
-
 zef_data.save_file_path = zef.save_file_path;
 zef_data.save_file = zef.save_file;
 zef_data.video_codec = zef.video_codec;
@@ -51,6 +50,7 @@ zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
 zef_close_figs;
 zef_update;
+zef_set_figure_tool_sliders
 end;
 
 

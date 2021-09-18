@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [void] = print_meshes(void);
  
+f_ind = 1;
+
 void = []; 
 
 sensors_point_like = [];
@@ -36,9 +38,13 @@ set(h_fig_aux,'renderer','opengl');
 set(h_fig_aux,'paperunits','inches');
 set(h_fig_aux,'papersize',snapshot_resolution);
 set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
-light('Position',[0 0 1],'Style','infinite');
-light('Position',[0 0 -1],'Style','infinite');
-h_axes_image = get(h_fig_aux,'currentaxes');
+%light('Position',[0 0 1],'Style','infinite');
+%light('Position',[0 0 -1],'Style','infinite');
+if not(evalin('base','zef.axes_visible'))
+h_axes_image = axes('visible','off');
+else
+h_axes_image = axes;
+end
 hold on;
 
 cp_a = evalin('base','zef.cp_a');
@@ -116,27 +122,34 @@ else
 end
 
 aux_ind = []; 
+clipped = 0;
 if evalin('base',['zef.' sensor_tag '_visible'])
 if evalin('base','zef.cp_on');
-if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
+if clipped
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
-if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d));
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
+if clipped
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
-if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d));
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
+if clipped
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d)];
+aux_ind = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
 if evalin('base','zef.cp_mode') == 1
@@ -185,6 +198,7 @@ end
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
+h.Tag = 'sensor';
 %April 2021
 if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
 h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
@@ -193,9 +207,9 @@ end
 set(h,'facecolor',sensors_color_table(i,:));
 %April 2021
 set(h,'edgecolor','none');
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 else
@@ -211,13 +225,15 @@ unique_sensors_aux_1 = unique(sensors(:,1));
 h = zeros(length(unique_sensors_aux_1),1);
 for i = 1 : length(unique_sensors_aux_1)
     unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
-h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),nodes(:,1),nodes(:,2),nodes(:,3));
+    [min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,sensors(unique_sensors_aux_2,2:4));
+h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));
+set(h(i),'Tag','sensor');
 set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
 end
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
     end
@@ -226,12 +242,13 @@ h = zeros(size(sensors_point_like,1),1);
 for i = 1 : size(sensors_point_like,1)
 h(i) = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
 set(h(i),'facecolor',sensors_color_table(sensors_point_like_id(i),:));
+set(h(i),'Tag','sensor');
 end
 %April 2021
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -240,18 +257,18 @@ sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base',['zef.' sensor_tag 'color']));
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',0.9*[0 1 1]);
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -302,25 +319,29 @@ tetra = tetra(I,:);
 tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
 
 aux_ind = [];
+clipped = 0;
 if evalin('base','zef.cp_on');
-
-aux_ind = [find(sum(tetra_c.*repmat([cp_a cp_b cp_c],size(tetra_c,1),1),2) >= cp_d)];
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
+clipped = 1;
 end
 if evalin('base','zef.cp2_on');
-
-if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(tetra_c.*repmat([cp2_a cp2_b cp2_c],size(tetra_c,1),1),2) >= cp2_d));
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
+if clipped
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(tetra_c.*repmat([cp2_a cp2_b cp2_c],size(tetra_c,1),1),2) >= cp2_d)];
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 if evalin('base','zef.cp3_on');
-
-if not(isempty(aux_ind))
-aux_ind = intersect(aux_ind,find(sum(tetra_c.*repmat([cp3_a cp3_b cp3_c],size(tetra_c,1),1),2) >= cp3_d));
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
+if clipped
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind); 
 else
-aux_ind = [find(sum(tetra_c.*repmat([cp3_a cp3_b cp3_c],size(tetra_c,1),1),2) >= cp3_d)];
+aux_ind = zef_clipping_plane(tetra_c,clipping_plane); 
 end
+clipped = 1;
 end
 
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
@@ -353,7 +374,7 @@ tetra_sort = [tetra(:,[2 3 4]) ones(size(tetra,1),1) [1:size(tetra,1)]';
               tetra(:,[1 3 2]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu_graphic') == 1 & evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 tetra_sort = gpuArray(uint32(tetra_sort));
 tetra_sort = gather(sortrows(tetra_sort,[1 2 3])); 
 else
@@ -676,7 +697,7 @@ reconstruction = reconstruction.*reconstruction_p_2;
 end
 end
 
-colormap_size = 4096;
+colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
@@ -684,15 +705,16 @@ set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_co
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+set(h_surf_2,'Tag','sensor');
 zef_plot_cone_field(h_axes_image, f_ind, 2);
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(h_axes_image,'CLim',[min_rec max_rec]);
-set(h_surf_2,'specularstrength',0.2);
-set(h_surf_2,'specularexponent',0.8);
-set(h_surf_2,'SpecularColorReflectance',0.8);
-set(h_surf_2,'diffusestrength',1);
-set(h_surf_2,'ambientstrength',1);
+%set(h_surf_2,'specularstrength',0.2);
+%set(h_surf_2,'specularexponent',0.8);
+%set(h_surf_2,'SpecularColorReflectance',0.8);
+%set(h_surf_2,'diffusestrength',1);
+%set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(nodes,1),1);
 I_tr = I_3;
@@ -750,10 +772,12 @@ I_2 = find(johtavuus(aux_ind) == i);
 I_3 = find(ismember(tetra_ind,I_2));
 color_str = color_cell{i};
 if not(isempty(I_3))
-h_surf = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),'edgecolor','none','facecolor',color_str,'facelighting','flat');
-set(h_surf,'specularstrength',0.1);
-set(h_surf,'diffusestrength',0.5);
-set(h_surf,'ambientstrength',0.85);
+[min_n_aux, min_t_aux] = zef_minimal_mesh(nodes,surface_triangles(I_3,:));
+h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str,'facelighting','flat');
+set(h_surf,'Tag','surface');
+%set(h_surf,'specularstrength',0.1);
+%set(h_surf,'diffusestrength',0.5);
+%set(h_surf,'ambientstrength',0.85);
 if not(ismember(evalin('base','zef.visualization_type'),[2,4])) || not(ismember(i,aux_brain_ind))
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 end
@@ -780,7 +804,7 @@ set(gca,'visible','off');
 set(gca,'xGrid','off');
 set(gca,'yGrid','off');
 set(gca,'zGrid','off');
-end    
+end   
 
 
   if evalin('base','zef.visualization_type') == 2
@@ -796,6 +820,11 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
+sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+uistack(sensor_patches,'top');
+zef_plot_dpq('static');
+zef_plot_dpq('dynamical');
+zef_set_sliders_print(1,h_axes_image);
     
 %drawnow;
   
@@ -975,16 +1004,17 @@ end
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 
-h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
+set(h_surf_2,'Tag','reconstruction');
 zef_plot_cone_field(h_axes_image, f_ind, 2);
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2,'specularstrength',0.2);
-set(h_surf_2,'specularexponent',0.8);
-set(h_surf_2,'SpecularColorReflectance',0.8);
-set(h_surf_2,'diffusestrength',1);
-set(h_surf_2,'ambientstrength',1);
+%set(h_surf_2,'specularstrength',0.2);
+%set(h_surf_2,'specularexponent',0.8);
+%set(h_surf_2,'SpecularColorReflectance',0.8);
+%set(h_surf_2,'diffusestrength',1);
+%set(h_surf_2,'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 %f_alpha_aux = zeros(size(nodes,1),1);
 if evalin('base','zef.inv_scale') == 1
@@ -1009,8 +1039,12 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none'); 
 end
-lighting phong;
+zef_plot_dpq('dynamical');
+zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
+
+
+
 
 if evalin('base','zef.visualization_type') == 2
 h_bar = bar(h_axes_hist,b_hist+(max_rec-min_rec)/(2*50),a_hist,'hist');
@@ -1370,26 +1404,31 @@ if submesh_num > 0
     end
 end
 
+clipped = 0;
+
 if evalin('base','zef.cp_on')
 cp_a = evalin('base','zef.cp_a');
 cp_b = evalin('base','zef.cp_b');
 cp_c = evalin('base','zef.cp_c');
 cp_d = evalin('base','zef.cp_d');
+
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 % if cp_a ~= 0 | cp_b ~=0    
 % light('Position',[-cp_a -cp_b -cp_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d));
+if clipped
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
-aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp_a cp_b cp_c],size(sensors,1),1),2) >= cp_d);
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
-aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d));
+    if clipped
+aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
-aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp_a cp_b cp_c],size(triangle_c{i},1),1),2) >= cp_d);
+aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
     end
 end    
+clipped = 1;
 end
 
 
@@ -1398,21 +1437,24 @@ cp2_a = evalin('base','zef.cp2_a');
 cp2_b = evalin('base','zef.cp2_b');
 cp2_c = evalin('base','zef.cp2_c');
 cp2_d = evalin('base','zef.cp2_d');
+
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 % if cp2_a ~= 0 | cp2_b ~=0    
 % light('Position',[-cp2_a -cp2_b -cp2_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d));
+if clipped
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
-aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp2_a cp2_b cp2_c],size(sensors,1),1),2) >= cp2_d);
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-    if not(isempty(aux_ind_2{i}))
-aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp2_a cp2_b cp2_c],size(triangle_c{i},1),1),2) >= cp2_d));
+    if clipped
+aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
-aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp2_a cp2_b cp2_c],size(triangle_c{i},1),1),2) >= cp2_d);
+aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
     end
-end    
+end   
+clipped = 1;
 end
 
 if evalin('base','zef.cp3_on')
@@ -1420,21 +1462,24 @@ cp3_a = evalin('base','zef.cp3_a');
 cp3_b = evalin('base','zef.cp3_b');
 cp3_c = evalin('base','zef.cp3_c');
 cp3_d = evalin('base','zef.cp3_d');
+
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 % if cp3_a ~= 0 | cp3_b ~=0    
 % light('Position',[-cp3_a -cp3_b -cp3_b],'Style','infinite');
 % end
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d));
+if clipped
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1); 
 else
-aux_ind_1 = find(sum(sensors(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(sensors,1),1),2) >= cp3_d);
+aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane); 
 end
 for i = 1 : length(reuna_t)
-if not(isempty(aux_ind_2{i}))
-aux_ind_2{i} = intersect(aux_ind_2{i},find(sum(triangle_c{i}.*repmat([cp3_a cp3_b cp3_c],size(triangle_c{i},1),1),2) >= cp3_d));
+    if clipped
+aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane,aux_ind_2{i}); 
 else
-aux_ind_2{i} = find(sum(triangle_c{i}.*repmat([cp3_a cp3_b cp3_c],size(triangle_c{i},1),1),2) >= cp3_d);
-end
+aux_ind_2{i} = zef_clipping_plane(tetra_c{i},clipping_plane); 
+    end
 end    
+clipped = 1;
 end
 
 
@@ -1570,6 +1615,7 @@ if evalin('base',['zef.' sensor_tag '_visible'])
 if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
+h.Tag = 'sensor';
 %April 2021
 if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
 h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
@@ -1578,9 +1624,9 @@ end
 set(h,'facecolor',sensors_color_table(i,:));
 %April 2021
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 elseif electrode_model == 2 
@@ -1595,14 +1641,16 @@ if not(isempty(sensors))
 unique_sensors_aux_1 = unique(sensors(:,1));
 h = zeros(length(unique_sensors_aux_1),1);
 for i = 1 : length(unique_sensors_aux_1)
-    unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
-h(i) = trisurf(sensors(unique_sensors_aux_2,2:4),reuna_p{end}(:,1),reuna_p{end}(:,2),reuna_p{end}(:,3));
+unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
+[min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{end},sensors(unique_sensors_aux_2,2:4));
+h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));
+set(h(i),'Tag','sensor');
 set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
 end
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
 end
@@ -1611,12 +1659,13 @@ h = zeros(size(sensors_point_like,1),1);
 for i = 1 : size(sensors_point_like,1)
 h(i) = surf(sensors_point_like(i,1) + X_s, sensors_point_like(i,2) + Y_s, sensors_point_like(i,3) + Z_s);
 set(h(i),'facecolor',sensors_color_table(sensors_point_like_id(i),:));
+set(h(i),'Tag','sensor');
 end
 %April 2021;
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -1627,18 +1676,18 @@ h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_va
 
 set(h,'facecolor',evalin('base',['zef.' sensor_tag '_color']));
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor', 0.9*[1 1 1]);
 set(h,'edgecolor','none'); 
-set(h,'specularstrength',0.3);
-set(h,'diffusestrength',0.7);
-set(h,'ambientstrength',0.7);
+%set(h,'specularstrength',0.3);
+%set(h,'diffusestrength',0.7);
+%set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -1675,7 +1724,7 @@ end
 end  
 end
 
-colormap_size = 4096;
+colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
@@ -1811,19 +1860,21 @@ axes(h_axes_image); set(h_fig_aux,'visible','on');
 
 if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
-else    
+set(h_surf_2{ab_ind},'Tag','reconstruction');
+else   
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
 zef_plot_cone_field(h_axes_image, f_ind, 2);
 
 %marker here
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2{ab_ind},'specularstrength',0.2);
-set(h_surf_2{ab_ind},'specularexponent',0.8);
-set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
-set(h_surf_2{ab_ind},'diffusestrength',1);
-set(h_surf_2{ab_ind},'ambientstrength',1);
+%set(h_surf_2{ab_ind},'specularstrength',0.2);
+%set(h_surf_2{ab_ind},'specularexponent',0.8);
+%set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
+%set(h_surf_2{ab_ind},'diffusestrength',1);
+%set(h_surf_2{ab_ind},'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
@@ -1909,18 +1960,19 @@ reconstruction = reconstruction(:);
 
 if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf2{i},'Tag','reconstruction');
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf2{i},'Tag','reconstruction');
 end
 zef_plot_cone_field(h_axes_image, f_ind, 2);
-
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',gather([min_rec max_rec])); 
-set(h_surf_2{i},'specularstrength',0.2);
-set(h_surf_2{i},'specularexponent',0.8);
-set(h_surf_2{i},'SpecularColorReflectance',0.8);
-set(h_surf_2{i},'diffusestrength',1);
-set(h_surf_2{i},'ambientstrength',1);
+%set(h_surf_2{i},'specularstrength',0.2);
+%set(h_surf_2{i},'specularexponent',0.8);
+%set(h_surf_2{i},'SpecularColorReflectance',0.8);
+%set(h_surf_2{i},'diffusestrength',1);
+%set(h_surf_2{i},'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
@@ -1959,11 +2011,13 @@ lighting phong;
 
 %%%% End of topography reconstruction
 
-else    
-h_surf = trimesh(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),'edgecolor','none','facecolor',color_str);
-set(h_surf,'specularstrength',0.1);
-set(h_surf,'diffusestrength',0.5);
-set(h_surf,'ambientstrength',0.85);
+    else    
+[min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
+set(h_surf,'Tag','surface');
+%set(h_surf,'specularstrength',0.1);
+%set(h_surf,'diffusestrength',0.5);
+%set(h_surf,'ambientstrength',0.85);
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 %if not(evalin('base','zef.visualization_type')==3);
 lighting phong;
@@ -2005,6 +2059,15 @@ campos(c_pos);
 camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
+
+        sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+        uistack(sensor_patches,'top');
+zef_plot_dpq('static');
+zef_plot_dpq('dynamical');
+        zef_set_sliders_print(1,h_axes_image);
+if not(evalin('base','zef.axes_visible'))
+set(h_axes_image,'visible','off');
+end
 
 %drawnow;
 
@@ -2204,18 +2267,20 @@ axes(h_axes_image); set(h_fig_aux,'visible','on');
 
 if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'Tag','reconstruction');
 else
-h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');    
+h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
 zef_plot_cone_field(h_axes_image, f_ind, 2);
 
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2{ab_ind},'specularstrength',0.2);
-set(h_surf_2{ab_ind},'specularexponent',0.8);
-set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
-set(h_surf_2{ab_ind},'diffusestrength',1);
-set(h_surf_2{ab_ind},'ambientstrength',1);
+%set(h_surf_2{ab_ind},'specularstrength',0.2);
+%set(h_surf_2{ab_ind},'specularexponent',0.8);
+%set(h_surf_2{ab_ind},'SpecularColorReflectance',0.8);
+%set(h_surf_2{ab_ind},'diffusestrength',1);
+%set(h_surf_2{ab_ind},'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
@@ -2258,19 +2323,21 @@ delete(h_surf_2{i});
 
 if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{i},'Tag','reconstruction');
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+set(h_surf_2{i},'Tag','reconstruction');
 end
 zef_plot_cone_field(h_axes_image, f_ind, 2);
 
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
-set(h_surf_2{i},'specularstrength',0.2);
-set(h_surf_2{i},'specularexponent',0.8);
-set(h_surf_2{i},'SpecularColorReflectance',0.8);
-set(h_surf_2{i},'diffusestrength',1);
-set(h_surf_2{i},'ambientstrength',1);
+%set(h_surf_2{i},'specularstrength',0.2);
+%set(h_surf_2{i},'specularexponent',0.8);
+%set(h_surf_2{i},'SpecularColorReflectance',0.8);
+%set(h_surf_2{i},'diffusestrength',1);
+%set(h_surf_2{i},'ambientstrength',1);
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 f_alpha_aux = zeros(size(reuna_p{i},1),1);
 if evalin('base','zef.inv_scale') == 1
@@ -2297,10 +2364,10 @@ end
 %End of topography reconstruction.
     
 end
-
+zef_plot_dpq('dynamical');
+zef_set_sliders_print(1);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
-
 
 delete(h_text);
 axes(h_axes_text);set(h_fig_aux,'visible','on');
@@ -2360,11 +2427,13 @@ for k = 1 : length(compartment_tags)
         color_str =  evalin('base',['zef.' compartment_tags{k} '_color']);
 if on_val 
 i = i + 1;    
-if visible_val
-h_surf = trimesh(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),'edgecolor','none','facecolor',color_str);
-set(h_surf,'specularstrength',0.1);
-set(h_surf,'diffusestrength',0.5);
-set(h_surf,'ambientstrength',0.85);
+if visible_val  
+[min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
+set(h_surf,'Tag','surface');
+%set(h_surf,'specularstrength',0.1);
+%set(h_surf,'diffusestrength',0.5);
+%set(h_surf,'ambientstrength',0.85);
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 lighting flat;
 end
@@ -2392,6 +2461,12 @@ campos(c_pos);
 camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
+
+        sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+        uistack(sensor_patches,'top');
+zef_plot_dpq('static');
+zef_plot_dpq('dynamical');
+        zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;
 

@@ -13,14 +13,8 @@ switch evalin('base','zef.ES_search_method')
                     sc = 1;
                 end
                 zef.reconstruction = rec_aux{sr, sc};
-                clear rec_aux star_row_idx star_col_idx loader_aux
         end
     case 3
         zef.reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
 end
-
-try
-    plot_meshes;
-catch
-    zef_visualize_surfaces;
-end
+zef_visualize_surfaces;

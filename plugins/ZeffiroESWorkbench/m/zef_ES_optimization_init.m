@@ -11,7 +11,10 @@ if not(isfield(zef,'ES_effectivennz'))
     zef.ES_effectivennz = 8;
 end
 if not(isfield(zef,'ES_objfun'))
-    zef.ES_objfun = 1;
+    zef.ES_objfun = 3;
+end
+if not(isfield(zef,'ES_objfun_2'))
+    zef.ES_objfun_2 = 4;
 end
 if not(isfield(zef,'ES_solvermaximumcurrent'))
     zef.ES_solvermaximumcurrent = 0.004;
@@ -27,9 +30,6 @@ if not(isfield(zef,'ES_plot_type'))
 end
 if not(isfield(zef,'ES_search_type'))
     zef.ES_search_type = 2;
-end
-if not(isfield(zef,'y_ES_interval'))
-    zef.y_ES_interval = [];
 end
 if not(isfield(zef,'ES_search_method'))
     zef.ES_search_method = 1;
@@ -82,10 +82,15 @@ end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
-
 if not(isfield(zef,'ES_delta_param'))
-    zef.ES_delta_param = 1000;
+    zef.ES_delta_param = 0.1;
 end
 if not(isfield(zef,'ES_L1_iter'))
-    zef.ES_L1_iter = 12;
+    zef.ES_L1_iter = 3;
+end
+if not(isfield(zef,'ES_acceptable_threshold'))
+    zef.ES_acceptable_threshold = 95;
+end
+if not(isfield(zef,'ES_boundary_color_limit'))
+    zef.ES_boundary_color_limit = 0.00025;
 end

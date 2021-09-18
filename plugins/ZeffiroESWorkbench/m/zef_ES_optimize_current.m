@@ -46,6 +46,9 @@ switch evalin('base','zef.ES_search_method')
         opts = optimset('linprog');
         %opts.TolCon     = 1e-3;
         %opts.TolX       = 1e-3;
+        if isfloat(TolFun)
+           TolFun = round(TolFun,10);
+        end
         opts.TolFun     = TolFun;
         opts.Algorithm  = 'dual-simplex';
         opts.Display    = 'off';
@@ -80,8 +83,8 @@ switch evalin('base','zef.ES_search_method')
             x_ES_projection = [x_ES_projection ; zeros(length(negativity_constraint),1)];
         end
         %% Linprog Solver
-        
         if reg_param <= 0
+            %[y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, ones(1,size(L_ES_projection,2)), 0, lower_bound, upper_bound, opts);
             [y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, ones(1,size(L_ES_projection,2)), 0, lower_bound, upper_bound, opts);
         else
             L_ES_projection = [L_ES_projection ; reg_param*ones(1,size(L_ES_projection,2))];
@@ -108,11 +111,11 @@ switch evalin('base','zef.ES_search_method')
         y_ES = ones(size(L_ES_projection,2),1);
         for inv_iter = 1 : evalin('base','zef.ES_L1_iter')
             %d_sqrt = sqrt(1./(abs(y_ES)+delta*abs(y_ES)));
-            d_sqrt = sqrt(1./(abs(y_ES)+delta));
+            d_sqrt = abs(y_ES)+delta;
             L_ES_projection_aux = L_ES_projection.*repmat(d_sqrt',size(L_ES_projection,1),1);
             y_ES = d_sqrt.*((L_ES_projection_aux)' * (L_ES_projection_aux) + reg_param*eye(size(L_ES_projection_aux,2)))\(L_ES_projection_aux)'*x_ES_projection;
         end
-        %y_ES = ((L_ES_projection)' * (L_ES_projection) + reg_param*eye(size(L_ES_projection,2)))\(L_ES_projection)'*x_ES_projection;
+            %y_ES = ((L_ES_projection)' * (L_ES_projection) + reg_param*eye(size(L_ES_projection,2)))\(L_ES_projection)'*x_ES_projection;
         flag_val = 1;
     case 3
         active_electrodes = zef_ES_4x1_sensors;
@@ -122,7 +125,6 @@ switch evalin('base','zef.ES_search_method')
         flag_val = 1;
 end
 
-
 if max(abs(y_ES)) >= evalin('base', 'zef.ES_maximum_current')
     y_ES = evalin('base','zef.ES_maximum_current') * y_ES ./ max(abs(y_ES));
 end
@@ -131,12 +133,9 @@ if max(sum(abs(y_ES))) >= evalin('base', 'zef.ES_solvermaximumcurrent')
     y_ES = evalin('base','zef.ES_solvermaximumcurrent') * y_ES ./ sum(abs(y_ES));
 end
 
-%if evalin('base','zef.ES_search_method') ~= 3
 [~,y_ES] = zef_ES_rwnnz(y_ES, evalin('base','zef.ES_relativeweightnnz'), evalin('base','zef.ES_scoredose'));
-%end
 
-y_ES_solution = y_ES;
-%y_ES = y_ES_solution;
+try
 if not(isempty(active_electrodes))
     y_ES_aux = zeros(size(L_aux,2),1);
     if evalin('base','zef.ES_search_method') ~= 3
@@ -146,20 +145,21 @@ if not(isempty(active_electrodes))
     end
     y_ES = y_ES_aux;
 end
-
+catch
+    y_ES = 0;
+end
 %% Flag value from LP solver
 if ismember(flag_val,[1 3])
     ES_optimized_current_density  = reshape(L_aux*y_ES,3,size(L_aux,1)/3);
     if evalin('base','zef.ES_search_method') ~= 3
-        residual = norm(L_ES_projection*y_ES_solution-x_ES_projection,1);
+        if not(isempty(active_electrodes))
+            residual = norm(L_ES_projection*y_ES(active_electrodes)-x_ES_projection,1);
+        else
+            residual = norm(L_ES_projection*y_ES-x_ES_projection,1);
+        end
     else
-        residual = norm(L_ES_projection.*find(y_ES_solution)-x_ES_projection,1);
+        y_ES = zeros(size(L_aux,2),1);
+        ES_optimized_current_density  = reshape(L_aux*y_ES,3,size(L_aux,1)/3);
+        residual = 0;
     end
-else
-    %warning(['No feasible solution using [Opt Tolerance: ' num2str(TolFun,'%1.2e') '] and [Reg.Param: ' num2str(reg_param,'%1.2e') '].']);
-    y_ES = zeros(size(L_aux,2),1);
-    ES_optimized_current_density  = reshape(L_aux*y_ES,3,size(L_aux,1)/3);
-    residual = 0;
-end
-
 end

@@ -9,6 +9,10 @@ if not(isfield(zef,'streamline_linestyle'));
 zef.streamline_linestyle = '-';
 end
 
+if not(isfield(zef,'smoothing_steps_ele')); 
+zef.smoothing_steps_ele = 100;
+end
+
 if not(isfield(zef,'streamline_linewidth')); 
 zef.streamline_linewidth = 1;
 end
@@ -85,9 +89,12 @@ if not(isfield(zef,'colortune_param'));
 end;
 
 if not(isfield(zef,'use_gpu')); 
-    zef.use_gpu = 0; 
+    zef.use_gpu = 1; 
 end;
 
+if not(isfield(zef,'use_gpu_graphic')); 
+    zef.use_gpu_graphic = 1; 
+end;
 
 if not(isfield(zef,'gpu_num')); 
     zef.gpu_num = 1; 
@@ -200,8 +207,3 @@ end;
 if not(isfield(zef,'mesh_labeling_approach')); 
     zef.mesh_labeling_approach = 1; 
 end;
-
-
-
-
-

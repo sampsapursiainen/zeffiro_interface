@@ -1,7 +1,7 @@
 if not(evalin('base','zef.lock_sensor_names_on'))
 
 if ismember(evalin('base',['size(zef.' zef.current_sensors '_points,2)']),[6,0])
-evalin('base',['zef.' zef.current_sensors '_points = [zef.' zef.current_sensors '_points; [0 0 0 0 1 5E3]];']);
+evalin('base',['zef.' zef.current_sensors '_points = [zef.' zef.current_sensors '_points; [0 0 0 0 1 ' num2str(evalin('base','zef.default_impedance_value')) ' ]];']);
 else
 evalin('base',['zef.' zef.current_sensors '_points = [zef.' zef.current_sensors '_points; [0 0 0]];']);
 end

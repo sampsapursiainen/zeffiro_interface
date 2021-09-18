@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [nodes, nodes_b, tetra, johtavuus_ind, surface_triangles] = fem_mesh(void)
+function [nodes, nodes_b, tetra, johtavuus_ind, surface_triangles,name_tags] = fem_mesh(void)
 
 h = waitbar(0,'Initial mesh.');
 
@@ -21,6 +21,7 @@ for k = 1 : length(compartment_tags)
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
+        var_4 = ['zef.' compartment_tags{k} '_name'];
 
 on_val = evalin('base',var_0);      
 sigma_val = evalin('base',var_1);  
@@ -32,6 +33,7 @@ i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 submesh_cell{i} = evalin('base',var_3);
+name_tags{i} = evalin('base',var_4); 
 
 end
 end

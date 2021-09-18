@@ -37,22 +37,22 @@ for zef_i = 1 : length(zef.compartment_tags)
 zef.aux_vec_sources(zef_i) = evalin('base',['isequal(zef.' zef.compartment_tags{zef_i} '_sources_old, zef.' zef.compartment_tags{zef_i} '_sources);']);
 end
 
-if not(zef.source_space_lock_on) && ( isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources) )
+%if not(zef.source_space_lock_on) && ( isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources) )
 if isempty(zef.non_source_ind)
 zef.aux_vec = zef.brain_ind;
 else
 zef.aux_vec = setdiff(zef.brain_ind,zef.non_source_ind);
 end
-zef.aux_vec = zef.aux_vec(randperm(length(zef.aux_vec)));
 zef.n_sources_old = zef.n_sources;
 for zef_i = 1 : length(zef.compartment_tags)
 evalin('base',['zef.' zef.compartment_tags{zef_i} '_sources_old = zef.' zef.compartment_tags{zef_i} '_sources;']);
 end
 clear zef_i;
 zef.lf_tag = zef.imaging_method_cell{zef.imaging_method};
-zef.source_ind = zef.aux_vec(1:min(zef.n_sources,length(zef.aux_vec)));
+[~,~,~,zef.source_ind] = zef_decompose_dof_space(zef.nodes,zef.tetra,zef.aux_vec,[],zef.n_sources,2);
+zef.source_ind = zef.aux_vec(zef.source_ind);
 zef.n_sources_mod = 0;
-end
+%end
 zef.sensors_aux = zef.sensors;
 zef.nodes_aux = zef.nodes/1000;
 if ismember(zef.imaging_method,[1,4,5]) & size(zef.sensors,2) == 3

@@ -17,16 +17,22 @@ cone_field_size = size(s_p,1);
 
 aux_ind_1 = [1:cone_field_size];
 
+clipped = 0;
+
 if evalin('base','zef.cp_on')
 cp_a = evalin('base','zef.cp_a');
 cp_b = evalin('base','zef.cp_b');
 cp_c = evalin('base','zef.cp_c');
 cp_d = evalin('base','zef.cp_d');
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(s_p.*repmat([cp_a cp_b cp_c],size(s_p,1),1),2) >= cp_d));
+
+clipping_plane = {cp_a,cp_b,cp_c,cp_d};
+
+if clipped
+aux_ind_1 = zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
-aux_ind_1 = find(sum(s_p.*repmat([cp_a cp_b cp_c],size(s_p,1),1),2) >= cp_d);
-end 
+aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
+end
+clipped = 1;
 end
 
 if evalin('base','zef.cp2_on')
@@ -34,11 +40,15 @@ cp2_a = evalin('base','zef.cp2_a');
 cp2_b = evalin('base','zef.cp2_b');
 cp2_c = evalin('base','zef.cp2_c');
 cp2_d = evalin('base','zef.cp2_d');
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(s_p.*repmat([cp2_a cp2_b cp2_c],size(s_p,1),1),2) >= cp2_d));
+
+clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
+
+if clipped
+aux_ind_1 = zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
-aux_ind_1 = find(sum(s_p.*repmat([cp2_a cp2_b cp2_c],size(s_p,1),1),2) >= cp2_d);
-end   
+aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
+end  
+clipped = 1;
 end
 
 if evalin('base','zef.cp3_on')
@@ -46,11 +56,15 @@ cp3_a = evalin('base','zef.cp3_a');
 cp3_b = evalin('base','zef.cp3_b');
 cp3_c = evalin('base','zef.cp3_c');
 cp3_d = evalin('base','zef.cp3_d');
-if not(isempty(aux_ind_1))
-aux_ind_1 = intersect(aux_ind_1,find(sum(s_p(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(s_p,1),1),2) >= cp3_d));
+
+clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
+
+if clipped
+aux_ind_1 =  zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
-aux_ind_1 = find(sum(s_p(:,1:3).*repmat([cp3_a cp3_b cp3_c],size(s_p,1),1),2) >= cp3_d);
+aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
 end   
+clipped = 1;
 end
 
 s_p = s_p(aux_ind_1,:);
@@ -78,26 +92,34 @@ max_y = max(s_p(:,2));
 min_z = min(s_p(:,3));
 max_z = max(s_p(:,3));
 
-l_d_x = (max_x - min_x)/(lattice_res + 1);
-l_d_y = (max_y - min_y)/(lattice_res + 1);
-l_d_z = (max_z - min_z)/(lattice_res + 1);
+lattice_constant = lattice_res/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3); 
+lattice_res_x = floor(lattice_constant*(max_x - min_x));
+lattice_res_y = floor(lattice_constant*(max_y - min_y));
+lattice_res_z = floor(lattice_constant*(max_z - min_z));
+
+l_d_x = (max_x - min_x)/(lattice_res_x + 1);
+l_d_y = (max_y - min_y)/(lattice_res_y + 1);
+l_d_z = (max_z - min_z)/(lattice_res_z + 1);
 
 min_x = min_x + l_d_x;
 max_x = max_x - l_d_x;
-min_y = min_y + l_d_x;
-max_y = max_y - l_d_x;
-min_z = min_z + l_d_x;
-max_z = max_z - l_d_x;
+min_y = min_y + l_d_y;
+max_y = max_y - l_d_y;
+min_z = min_z + l_d_z;
+max_z = max_z - l_d_z;
 
-[X_lattice, Y_lattice, Z_lattice] = meshgrid(linspace(min_x,max_x,lattice_res),linspace(min_y,max_y,lattice_res),linspace(min_z,max_z,lattice_res));
+[X_lattice, Y_lattice, Z_lattice] = meshgrid(linspace(min_x,max_x,lattice_res_x),linspace(min_y,max_y,lattice_res_y),linspace(min_z,max_z,lattice_res_z));
 
 X_field = zeros(size(X_lattice));
 Y_field = zeros(size(Y_lattice));
 Z_field = zeros(size(Z_lattice));
 C_field = X_lattice;
 
-lattice_ind_aux = max(1,ceil(lattice_res*(s_p-min(s_p))./(max(s_p)-min(s_p))));
-lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res.^2 + (lattice_ind_aux(:,1)-1)*lattice_res + lattice_ind_aux(:,2);
+lattice_ind_aux = [max(1,ceil(lattice_res_x*(s_p(:,1)-min(s_p(:,1)))./(max(s_p(:,1))-min(s_p(:,1))))) ... 
+    max(1,ceil(lattice_res_y*(s_p(:,2)-min(s_p(:,2)))./(max(s_p(:,2))-min(s_p(:,2)))))...
+    max(1,ceil(lattice_res_z*(s_p(:,3)-min(s_p(:,3)))./(max(s_p(:,3))-min(s_p(:,3)))))];
+    
+lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res_x*lattice_res_y + (lattice_ind_aux(:,1)-1)*lattice_res_y + lattice_ind_aux(:,2);
 
 X_field(lattice_ind_aux) = cone_field(:,1);
 Y_field(lattice_ind_aux) = cone_field(:,2);
@@ -113,10 +135,12 @@ I = [1:size(s_p,1)];
 I = I(1:round(length(I)/(evalin('base','zef.n_streamline')-1)):end);
 
 if evalin('base','zef.cone_draw')
-
+   
 h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
+set(h_cone_field,'facecolor','interp');
 set(h_cone_field,'edgecolor','none');
 set(h_cone_field,'facealpha',evalin('base','zef.cone_alpha'));
+set(h_cone_field,'Tag','cones');
 
 end 
 
@@ -129,7 +153,7 @@ set(h_streamline,'color',evalin('base','zef.streamline_color'));
 end
 
 if position_case == 1
-position_vec = [0.33 0.37 0.33 0.015];
+position_vec = [0.21 0.30 0.21 0.015];
 elseif position_case == 2
 position_vec = [0.33 0.05 0.33 0.015];
 end

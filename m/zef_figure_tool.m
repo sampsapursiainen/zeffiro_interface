@@ -20,6 +20,6 @@ end
 
 set(zef.h_zeffiro,'AutoResizeChildren','off');
 zef.zeffiro_current_size = get(zef.h_zeffiro,'Position');
-set(zef.h_zeffiro,'SizeChangedFcn','zef.zeffiro_current_size = zef_change_size_function(zef.h_zeffiro,zef.zeffiro_current_size);');
+set(zef.h_zeffiro,'SizeChangedFcn','zef.zeffiro_current_size = zef_change_size_function(zef.h_zeffiro,zef.zeffiro_current_size,[],{''Colorbar''});');
 
 

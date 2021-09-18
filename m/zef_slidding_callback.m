@@ -1,17 +1,9 @@
-% function []=slidding_callback (src,event)
-% %Todo : plot corrsponding figure
-%         % modify frame index
-%         %link max value to number frame
-%         
-% val=event.AffectedObject.Value;
-% frame=round(val);
-% event.AffectedObject.Value=frame;
-% 
-% disp(zef.h_slider.Value)
+function []=slidding_callback
 
-    
-evalin('base',['zef.frame_start=' ,num2str(round(zef.h_slider.Value)),';']);
-evalin('base',['zef.frame_stop=' ,num2str(round(zef.h_slider.Value)),';']);
-evalin('base','zef_visualize_surfaces')
+l_r = evalin('base','(zef.frame_stop-zef.frame_start+zef.frame_step)/zef.frame_step');
+evalin('base',['zef.frame_start=' ,num2str(ceil(l_r*evalin('base','zef.h_slider.Value'))),';']);
+evalin('base',['zef.frame_stop=' ,num2str(ceil(l_r*evalin('base','zef.h_slider.Value'))),';']);
+evalin('base','zef_visualize_surfaces');
 
-% disp(evalin('base',num2str(zef.h_slider.Value)))
+end
+

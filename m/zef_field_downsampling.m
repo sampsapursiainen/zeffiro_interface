@@ -1,5 +1,4 @@
 
-
 if isfield(zef,'source_positions_original_field')
 if isempty(zef.source_positions_original_field)
 
@@ -25,8 +24,6 @@ zef.source_interpolation_ind_original_field = zef.source_interpolation_ind;
 
 end
 
-
-
 if zef.n_sources < size(zef.source_positions,1)
 
 zef.rand_vec_aux = randperm(size(zef.source_positions,1));
@@ -39,7 +36,7 @@ zef.rand_vec_aux = [zef.rand_vec_aux + 1; zef.rand_vec_aux + 2; zef.rand_vec_aux
 zef.rand_vec_aux = zef.rand_vec_aux(:);
 zef.L = zef.L(:,zef.rand_vec_aux);
 elseif ismember(zef.source_direction_mode,[1 3])
-zef.L = zef.L(zef.rand_vec_aux,:);
+zef.L = zef.L(:,zef.rand_vec_aux);
 if not(isempty(zef.source_directions))
 zef.source_directions = zef.source_directions(zef.rand_vec_aux,:);
 end

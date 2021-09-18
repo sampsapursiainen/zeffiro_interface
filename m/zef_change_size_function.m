@@ -1,18 +1,27 @@
 function [p_vec_window] = zef_change_size_function(object_handle, current_size, varargin)
 
 relative_size = [];
+exclude_type = cell(0);
 if not(isempty(varargin))
     if length(varargin) > 0 %#ok<ISMT>
         relative_size = varargin{1};
+    end
+    if length(varargin) > 1
+        exclude_type = varargin{2};
     end
 end
 
 p_vec_window = get(object_handle(1),'Position');
     h = [];
     for i = 1 : length(object_handle)
-        h_aux = get(object_handle(i), 'Children');
+        h_aux = object_handle(i).Children;
         h = [h; h_aux];
     end
+    
+    for i = 1 : length(exclude_type)
+    h = setdiff(h, findobj(h,'Type',exclude_type{i}));
+    end
+    
 if isempty(relative_size)
     for i = 1 : length(h)
         p_vec_object = get(h(i),'Position');

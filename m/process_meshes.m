@@ -140,6 +140,11 @@ else
 sensors = [s_points s_directions./repmat(sqrt(sum(s_directions.^2,2)),1,3) s_directions_g./repmat(sqrt(sum(s_directions_g.^2,2)),1,3)];
 end
 end
+use_pem = 0;
+if ismember(evalin('base','zef.imaging_method'),[1 5]) 
+use_pem = evalin('base','zef.use_pem');
+end
+
 
 
 for t_ind = 1 : length(s_scaling)
@@ -200,5 +205,11 @@ end
 
 else
     sensors = [NaN NaN NaN];
+end
+
+if use_pem 
+sensors = sensors(:,1:3);
+end
+
 end
 

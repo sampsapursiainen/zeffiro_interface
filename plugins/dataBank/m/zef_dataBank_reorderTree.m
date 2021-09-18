@@ -17,8 +17,7 @@ listIndex=1;
 while listIndex<=N
     
     hashes=fieldnames(tree);
-    clc;
-    hashes=hashes(startsWith(hashes, number2hash(array)));
+    hashes=hashes(startsWith(hashes, zef_dataBank_number2hash(array)));
     
     if ~isempty(hashes)
         
@@ -28,12 +27,12 @@ while listIndex<=N
             %Process this node and go up
             
             arrayToGive=arrayToGive(1:end-1);
-            newtree.( number2hash(arrayToGive))=tree.(number2hash(array));
-            newtree.( number2hash(arrayToGive)).hash=number2hash(arrayToGive);
-            tree=rmfield(tree, number2hash( array));
+            newtree.( zef_dataBank_number2hash(arrayToGive))=tree.(zef_dataBank_number2hash(array));
+            newtree.( zef_dataBank_number2hash(arrayToGive)).hash=zef_dataBank_number2hash(arrayToGive);
+            tree=rmfield(tree, zef_dataBank_number2hash( array));
             
-            listOld{listIndex}=number2hash( array);
-            listNew{listIndex}=number2hash(arrayToGive);
+            listOld{listIndex}=zef_dataBank_number2hash( array);
+            listNew{listIndex}=zef_dataBank_number2hash(arrayToGive);
             listIndex=listIndex+1;
             
             arrayToGive(end)=arrayToGive(end)+1;
@@ -44,7 +43,7 @@ while listIndex<=N
             
             
             %find smallest number
-            hashes=extractAfter( hashes,strcat(number2hash(array), '_'));
+            hashes=extractAfter( hashes,strcat(zef_dataBank_number2hash(array), '_'));
             
             numbers=NaN(length(hashes),1);
             for i=1:length(hashes)  %get the starting numbers numbers of all hashes
@@ -59,13 +58,15 @@ while listIndex<=N
             smallNumbers=find(numbers==min(numbers));
             
             if length(smallNumbers)==1 %in this case, the child is a node without children. Process it directly
-                newtree.( number2hash(arrayToGive))=tree.(number2hash( [array, min(numbers)]));
-                newtree.( number2hash(arrayToGive)).hash=number2hash(arrayToGive);
+                newtree.( zef_dataBank_number2hash(arrayToGive))=tree.(zef_dataBank_number2hash( [array, min(numbers)]));
+                newtree.( zef_dataBank_number2hash(arrayToGive)).hash=zef_dataBank_number2hash(arrayToGive);
                 
-                tree=rmfield(tree, number2hash( [array, min(numbers)]));
-                
-                listOld{listIndex}=number2hash( [array, min(numbers)]);
-                listNew{listIndex}=number2hash(arrayToGive);
+              if isstruct(tree)
+              tree=rmfield(tree, zef_dataBank_number2hash( [array, min(numbers)]));
+              end  
+              
+                listOld{listIndex}=zef_dataBank_number2hash( [array, min(numbers)]);
+                listNew{listIndex}=zef_dataBank_number2hash(arrayToGive);
                 listIndex=listIndex+1;
                 
                 arrayToGive(end)=arrayToGive(end)+1; %same level
@@ -91,17 +92,6 @@ end
 end
 
 
-function [hash]=number2hash(number)
-%x is an array of numbers, we will add
-% nodes and _
-
-hash='node';
-for i=1:length(number)
-    hash=strcat(hash, '_', num2str(number(i)));
-end
-
-
-end
 
 
 
