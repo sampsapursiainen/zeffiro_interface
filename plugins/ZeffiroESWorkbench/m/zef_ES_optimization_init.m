@@ -92,5 +92,5 @@ if not(isfield(zef,'ES_acceptable_threshold'))
     zef.ES_acceptable_threshold = 95;
 end
 if not(isfield(zef,'ES_boundary_color_limit'))
-    zef.ES_boundary_color_limit = 0.002;
+    zef.ES_boundary_color_limit = 0.00025;
 end
