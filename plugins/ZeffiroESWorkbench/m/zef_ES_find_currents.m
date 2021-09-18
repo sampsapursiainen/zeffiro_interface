@@ -10,8 +10,9 @@ try
             end
             switch evalin('base','zef.ES_search_type');
                 case 1
+                    tic;
                     [y_ES, volumetric_current_density, residual, flag, source_position_index, source_directions, source_magnitude] = zef_ES_optimize_current(param_val_aux, reg_param);
-                    
+                    zef.y_ES_single.elapsed_time                        = toc;
                     zef.y_ES_single.y_ES                                = y_ES;
                     zef.y_ES_single.volumetric_current_density          = volumetric_current_density;
                     zef.y_ES_single.residual                            = residual;
@@ -29,19 +30,18 @@ try
                     zef.y_ES_single.optimizer_tolerance                 = TolFun;
                     zef.y_ES_single.reg_param                           = reg_param;
                 case 2
-                    lattice_size = evalin('base','zef.ES_step_size');
                     %% Waitbar
                     if exist('wait_bar_temp','var') == 1
                         delete(wait_bar_temp)
                     end
-                    wait_bar_temp = waitbar(0,sprintf('Optimizing ES currents: i = %d, j = d%',0,0), ...
+                    wait_bar_temp = waitbar(0,sprintf('Optimizing: i = %d, j = d%',0,0), ...
                         'Name','ZEFFIRO Interface: ES Optimization...', ...
                         'CreateCancelbtn','setappdata(gcbf,''canceling'',1)', ...
                         'Visible','on');
                     try
                         if isempty(evalin('base','zef.source_positions'))
                             delete(wait_bar_temp)
-                            error('No discretized sources found. Perhaps you forgot to calculate them...? or forgot to load a file...?')
+                            error('No discretized sources found. Perhaps you forgot to calculate them...? or load a file...?')
                         end
                     catch
                         delete(wait_bar_temp)
@@ -49,6 +49,7 @@ try
                     end
                     waitbar_ind = 1/(length(reg_param)*length(param_val_aux));
                     %% The real task...
+                    lattice_size = evalin('base','zef.ES_step_size');
                     zef.y_ES_interval = [];
                     
                     for i = 1:lattice_size
@@ -60,6 +61,7 @@ try
                             
                             tic;
                             [y_ES, volumetric_current_density, residual, flag, source_position_index, source_directions, source_magnitude] = zef_ES_optimize_current(param_val_aux(i), reg_param(j));
+                            zef.y_ES_interval.elapsed_time{i,j}                 = toc;
                             
                             zef.y_ES_interval.y_ES{i,j}                         = y_ES;
                             zef.y_ES_interval.volumetric_current_density{i,j}   = volumetric_current_density;
@@ -78,8 +80,8 @@ try
                                 zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}      =  mean(sqrt(sum(volumetric_current_density(:, vec_index).^2)));
                             end
                             
-                            zef.y_ES_interval.elapsed_time{i,j}                 = toc;
                             waitbar_ind = waitbar_ind + 1/(length(reg_param)*length(param_val_aux));
+                            
                         end
                     end
                     if evalin('base','zef.ES_search_method') == 1
@@ -107,22 +109,20 @@ try
                 zef.y_ES_4x1.field_source(running_index).relative_error = norm(vec_1'-vec_2)./norm(vec_1');
             end
             zef.y_ES_4x1.separation_angle                    = evalin('base','zef.ES_separation_angle');
-
     end
-
     if exist('wait_bar_temp') %#ok<EXIST>
         delete(wait_bar_temp)
     end
     %% Wrapping up and clear of temp. values
-    clear i j k_val reg_param m lattice_size param_val_aux TolFun
-    clear y_ES* volumetric_current_density* residual* flag*
-    clear wait* vec* running_index source*
+%     clear i j k_val reg_param m lattice_size param_val_aux TolFun
+%     clear y_ES* volumetric_current_density* residual* flag*
+%     clear wait* vec* running_index source*
 catch ME
     if exist('wait_bar_temp') %#ok<EXIST>
         delete(wait_bar_temp)
     end
-    clear i j k_val reg_param m lattice_size param_val_aux TolFun
-    clear y_ES* volumetric_current_density* residual* flag*
-    clear wait* vec* running_index source*
+%     clear i j k_val reg_param m lattice_size param_val_aux TolFunLP
+%     clear y_ES* volumetric_current_density* residual* flag*
+%     clear wait* vec* running_index source*
     rethrow(ME)
 end
