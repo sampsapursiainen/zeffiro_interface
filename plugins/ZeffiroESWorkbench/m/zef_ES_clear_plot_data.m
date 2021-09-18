@@ -1,5 +1,4 @@
-n = evalin('base','zef.ES_plot_type');
-switch n
+switch evalin('base','zef.ES_plot_type');
     case 1
         if isfield(evalin('base','zef'),'h_current_ES')
             delete(zef.h_current_ES)
@@ -18,4 +17,3 @@ switch n
             close(gcf);
         end
 end
-clear n

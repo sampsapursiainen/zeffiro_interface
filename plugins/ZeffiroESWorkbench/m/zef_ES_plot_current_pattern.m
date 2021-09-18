@@ -42,13 +42,14 @@ end
 %% Sphere generation and allocation of color indexes
 aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
 [X_s, Y_s, Z_s] = sphere(20);
-sphere_scale = 3.2*aux_scale_val;
+sphere_scale = evalin('base','zef.sensors_visual_size')*aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
 
 colormap_size = 4096;
 colortune_param = evalin('base','zef.colortune_param');
+
 if evalin('base','zef.ES_inv_colormap') == 1
     c_aux_1 = floor(colortune_param*colormap_size/3);
     c_aux_2 = floor(colormap_size  - colortune_param*colormap_size/3);
@@ -172,8 +173,12 @@ end
 axes(evalin('base','zef.h_axes1'));
 hold on;
 
-index_aux = floor((colormap_size-1)*(y_ES(:) - min(y_ES(:))) / (max(y_ES(:)) - min(y_ES(:))))+1;
+max_colorbar_value = evalin('base','zef.ES_boundary_color_limit');
+min_colorbar_value = -(max_colorbar_value);
+
+index_aux = floor( (colormap_size-1)*(min(max_colorbar_value,max(min_colorbar_value,y_ES(:)))-min_colorbar_value) / (max_colorbar_value-min_colorbar_value) )+1;
 ES_colormap_vec(index_aux,:);
+
 %% Printing color and their properties
 h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
@@ -182,16 +187,15 @@ for i = 1:size(sensors,1)
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');
     if not(y_ES(i)) == 0
-        
         set(h_current_ES(i),'facecolor',ES_colormap_vec(index_aux(i),:));
         %set(h_current_ES(i),'facealpha',(abs(y_ES(i))/max(abs(y_ES)))*(1-evalin('base','zef.brain_transparency'))+evalin('base','zef.brain_transparency'));
-        set(h_current_ES(i),'specularstrength',0.3);
+        set(h_current_ES(i),'specularstrength',0.9);
         set(h_current_ES(i),'diffusestrength',0.7);
         set(h_current_ES(i),'ambientstrength',0.7);
     else
         %set(h_current_ES(i),'edgecolor',[0.8 0.8 0.8]);
         set(h_current_ES(i),'facecolor',[1 1 1]);
-        set(h_current_ES(i),'facealpha',0.3);
+        set(h_current_ES(i),'facealpha',0.1);
         set(h_current_ES(i),'meshstyle','both');
         set(h_current_ES(i),'linestyle',':');
     end
@@ -200,11 +204,15 @@ hold off;
 %% Wrapping up and return of variables
 h_axes = axes('Units','normalized','Position',[0 0 0 0],'visible','off');
 set(h_axes,'TitleHorizontalAlignment','left');
-imagesc(y_ES);
+imagesc(linspace(min_colorbar_value,max_colorbar_value,colormap_size));
+
 colormap(h_axes, ES_colormap_vec);
 
 h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25]);
-set(h_colorbar,'limits',[min(y_ES(:)) max(y_ES(:))]*1.15);
+
+%h_colorbar.Limits = [min(y_ES(:)) max(y_ES(:))];
+h_colorbar.Limits = [min_colorbar_value max_colorbar_value];
+%h_colorbar.Ruler.Exponent = -3;
 
 h_colorbar.Label.String     = 'Amplitude (mA)';
 h_colorbar.Label.Position   = [-2 0];

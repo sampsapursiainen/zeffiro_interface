@@ -69,7 +69,7 @@ h_axes.XLabel.FontSize = 11;
 h_axes.XLabel.FontWeight = 'bold';
 h_axes.XLabel.FontName = 'Arial';
 
-h_axes.YLabel.String = 'Amplitude (A)';
+h_axes.YLabel.String = 'Amplitude (mA)';
 h_axes.YLabel.FontSize = 11;
 h_axes.YLabel.FontWeight = 'bold';
 h_axes.YLabel.FontName = 'Arial';
