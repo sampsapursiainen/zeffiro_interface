@@ -12,7 +12,7 @@ end
 if isempty(findobj('type','figure','Name','ZEFFIRO Interface: Error chart tool'))
     f = figure('Name','ZEFFIRO Interface: Error chart tool','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
-    set(f,'Position',[1396 400 1163 933]);
+    set(f,'Position',[800 400 800 600]);
 else
     f = findobj('type','figure','Name','ZEFFIRO Interface: Error chart tool');
     axes(f.CurrentAxes);
@@ -36,14 +36,11 @@ axes('parent', tab1);
 fieldnames_table = fieldnames(loader);
 
 for w = 1:4
-%for w = [1,5,6]
     recon = char(evalin('base','recon'));
     method =     evalin('base','method');
     
     sp_var = cell2mat(loader{1,w});
     printing_imagesc(w, recon);
-    str = regexprep(char(fieldnames_table(w)), ' +', '_');      
-    %print(gcf,['imagesc_' recon '_' num2str(evalin('base','zef.ES_scoredose')) 'chn_' method '_' str],'-djpeg', '-r200')
 end
 
 tab2 = uitab(h, 'title', 'Volumetric');
@@ -66,16 +63,16 @@ ax = gca;
 ax.TickLabelInterpreter = 'Latex';
 ax.FontSize = fnt_sz;
 
-%ax.XLabel.String       = 'Regularization parameter';
+ax.XLabel.String       = 'Regularization parameter';
 ax.XLabel.FontSize     = fnt_sz;
 ax.XLabel.FontWeight   = 'bold';
 
-%ax.XTickLabel          = {num2str(load_aux.reg_param,'%1.2g')};
+ax.XTickLabel          = {num2str(load_aux.reg_param,'%1.2g')};
 ax.XTick               = 1:length(load_aux.reg_param);
-ax.XTickLabel(1)       = {num2str(load_aux.reg_param(1),'%1.0g')};
-ax.XTickLabel(2:end-1) = {char(' ')};
-ax.XTickLabel(13)      = {num2str(load_aux.reg_param(13),'%1.0g')};
-ax.XTickLabel(end)     = {num2str(load_aux.reg_param(end),'%1.0g')};
+%ax.XTickLabel(1)       = {num2str(load_aux.reg_param(1),'%1.0g')};
+%ax.XTickLabel(2:end-1) = {char(' ')};
+%ax.XTickLabel(13)      = {num2str(load_aux.reg_param(13),'%1.0g')};
+%ax.XTickLabel(end)     = {num2str(load_aux.reg_param(end),'%1.0g')};
 ax.XTickLabelRotation  = 0;
 
 if evalin('base','zef.ES_search_method') == 1
@@ -90,11 +87,11 @@ ax.YLabel.FontSize     = fnt_sz;
 ax.YLabel.FontWeight   = 'bold';
 
 ax.YTick               = 1:length(param_val_aux);
-%ax.YTickLabel          = {num2str(param_val_aux,'%1.2g')};
-ax.YTickLabel(1)       = {'0.1'};
-ax.YTickLabel(2:end-1) = {char(' ')};
-ax.YTickLabel(13)      = {sprintf('%1.0g',param_val_aux(13))};
-ax.YTickLabel(end)     = {'1e-10'};
+ax.YTickLabel          = {num2str(param_val_aux,'%1.2g')};
+%ax.YTickLabel(1)       = {'0.1'};
+%ax.YTickLabel(2:end-1) = {char(' ')};
+%ax.YTickLabel(13)      = {sprintf('%1.0g',param_val_aux(13))};
+%ax.YTickLabel(end)     = {'1e-10'};
 ax.YTickLabelRotation  = 0;
 
 cb                = colorbar;
@@ -108,8 +105,8 @@ end
 % ax.YTick = [];
 
 hold on;
-p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',32);
-p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',32);
+p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
+p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
 
 lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
 lgd.Interpreter = 'Latex';
@@ -125,10 +122,10 @@ grid on
 ax.GridAlpha = 0.3;
 ax.GridColor = [0.3 0.3 0.3];
 %ax.Layer = 'top';
-p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',32);
+p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
 hold off
 
-%title(fieldnames_table(w));
+title(fieldnames_table(w));
 end
 function printing_heatmap(w)
     subplot(2,2,w)
