@@ -18,38 +18,29 @@ else
     axes(f.CurrentAxes);
     clf(f.CurrentAxes);
 end
-% Original
-%f.PaperUnits = 'inches';
-%f.Units      = 'inches';
-%f.Renderer   = 'zbuffer';
+
 f.Color      = [1 1 1];
 set(1,'renderer','painters')
-%set(f,'Position',[14 2 14 12])
 pbaspect([1 1 1])
-%% Tab 1 properties
-h = uitabgroup();
 
+%% Tab properties
+h = uitabgroup();
 tab1 = uitab(h, 'title', 'Y_ES');
 set(tab1,'BackgroundColor',[1 1 1])
 axes('parent', tab1);
-
 fieldnames_table = fieldnames(loader);
-
 for w = 1:4
-    recon = char(evalin('base','recon'));
-    method =     evalin('base','method');
-    
     sp_var = cell2mat(loader{1,w});
-    printing_imagesc(w, recon);
+    printing_imagesc(w);
 end
 
 tab2 = uitab(h, 'title', 'Volumetric');
+set(tab2,'BackgroundColor',[1 1 1])
 axes('parent', tab2);
-
 fieldnames_table = fieldnames(loader(:,[5:8]));
 for w = 1:4
     sp_var = cell2mat(loader{1,w+4});
-    printing_imagesc(w, recon);
+    printing_imagesc(w);
 end
 %% Wrapping up, functions and return of variables
 function printing_imagesc(w,varargin)
