@@ -67,6 +67,7 @@ clear p_ind_aux_1 p_ind_aux_2 p_ind p_selected source_ind_aux
 
 threshold = str2num(parameters{5});
 reg_value = str2num(parameters{15});
+amp_est_type = str2num(parameters{21});
 
 if iscell(z_vec)
     T=str2num(parameters{18});
@@ -135,7 +136,8 @@ for t=t_start:T
     ind2 = zeros(1,z_cum(end));
     ind2(z_cum-z(ind)+1)=1;
     activity_pos = source_positions(ind,:);
-    activity_dir = direct(ind,:);
+    %activity_dir = direct(ind,:);
+    activity_dir = [atan2(sqrt(sum((direct(ind,[1,2]).^2),2)),direct(ind,3)),atan2(direct(ind,2),direct(ind,1))];
     
     activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];    
     %calculate Gaussian mixature models:
@@ -168,9 +170,18 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel{t}.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid current densities at the frame ',num2str(t),': ',num2str(J(ind2)'/max(J))])
-        GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,4:6);
-        GMModelAmplitudes{t} = sqrt(sum(GMModelDipoles{t}.^2,2));
-        GMModelAmplitudes{t} = GMModelAmplitudes{t}/max(GMModelAmplitudes{t});
+        %GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,4:6);
+        GMModelDipoles{t} = [cos(GMModel{t}.mu(:,5)).*sin(GMModel{t}.mu(:,4)),sin(GMModel{t}.mu(:,5)).*sin(GMModel{t}.mu(:,4)),cos(GMModel{t}.mu(:,4))];
+        if amp_est_type == 1
+            amp = J(ind2);
+        elseif amp_est_type == 2
+            amp = GMM2amplitude(GMModelDipoles{t},ind2,t,1)*1e3;
+        else
+            amp = GMM2amplitude(GMModelDipoles{t},ind2,t,2)*1e3;
+        end
+        GMModelDipoles{t} = amp.*GMModelDipoles{t};
+        GMModelAmplitudes{t} = amp;
+        %GMModelAmplitudes{t} = GMModelAmplitudes{t}/max(GMModelAmplitudes{t});
         waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
@@ -178,9 +189,18 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid current densities: ',num2str(J(ind2)'/max(J))]) 
-        GMModelDipoles = J(ind2).*GMModel.mu(:,4:6);
-        GMModelAmplitudes = sqrt(sum(GMModelDipoles.^2,2));
-        GMModelAmplitudes = GMModelAmplitudes/max(GMModelAmplitudes);
+        %GMModelDipoles = J(ind2).*GMModel.mu(:,4:6);
+        GMModelDipoles = [cos(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),sin(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),cos(GMModel.mu(:,4))];
+        if amp_est_type == 1
+            amp = J(ind2);
+        elseif amp_est_type == 2
+            amp = GMM2amplitude(GMModelDipoles,ind2,1,1)*1e3;
+        else
+            amp = GMM2amplitude(GMModelDipoles,ind2,1,2)*1e3;
+        end
+        GMModelDipoles = amp.*GMModelDipoles;
+        GMModelAmplitudes = amp;
+        %GMModelAmplitudes = GMModelAmplitudes/max(GMModelAmplitudes);
     end
 
 end     %end of t loop

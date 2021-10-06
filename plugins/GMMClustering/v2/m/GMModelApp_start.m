@@ -76,6 +76,8 @@ else
 end
 %time point for amplitude bar plot
 zef_GMM_values{20} = '';
+%Amplitude estimation type 
+zef_GMM_values{21} = '1';
 
 zef_i = length(zef_GMM_values);
 zef.GMM.meta{1} = zef_i;
@@ -172,8 +174,8 @@ zef.GMM.apps.main.GMMcluster_alpha.ValueChangedFcn = 'zef.GMM.parameters{6,2}={z
 zef.GMM.apps.main.GMMcluster_domain.ValueChangedFcn = 'zef.GMM.parameters{19,2} = {zef.GMM.apps.main.GMMcluster_domain.Value};';
 zef.GMM.apps.main.GMMcluster_c_startframe.ValueChangedFcn = 'zef.GMM.parameters{17,2}={zef.GMM.apps.main.GMMcluster_c_startframe.Value};';
 zef.GMM.apps.main.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMMcluster_c_stopframe.Value};';
-zef.GMM.apps.main.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMMcluster_c_stopframe.Value};';
 zef.GMM.apps.main.GMMcluster_ampframe.ValueChangedFcn = 'zef.GMM.parameters{20,2}={zef.GMM.apps.main.GMMcluster_ampframe.Value};';
+zef.GMM.apps.main.GMMcluster_amptype.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.main.GMMcluster_amptype.Value};';
 
 zef.GMM.apps.main.GMMcluster_markercolor.ValueChangedFcn = 'zef.GMM.parameters{7,2}={zef.GMM.apps.main.GMMcluster_markercolor.Value};';
 zef.GMM.apps.main.GMMcluster_markersize.ValueChangedFcn = 'zef.GMM.parameters{8,2}={zef.GMM.apps.main.GMMcluster_markersize.Value};';
