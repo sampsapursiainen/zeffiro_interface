@@ -56,7 +56,7 @@ f_data = zef_getFilteredData;
     C = (f_data-mean(f_data,2))*(f_data-mean(f_data,2))'/size(f_data,2);
     C = C+lambda_cov*trace(C)*eye(size(C))/size(f_data,1);
 elseif evalin('base','zef.cov_type') == 2
-    C = (f_data-mean(f_data,2))*(f-mean(f_data,2))'/size(f_data,2);
+ C = (f_data-mean(f_data,2))*(f_data-mean(f_data,2))'/size(f_data,2);
     C = C + lambda_cov*eye(size(C));
 end
         
