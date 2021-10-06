@@ -10,16 +10,16 @@ m_sym = evalin('base','zef.GMM.parameters.Values{7}');
 s_length = str2num(evalin('base','zef.GMM.parameters.Values{16}'))^2;
 plot_ellipsoids = evalin('base','zef.GMM.parameters.Values{11}');
 ellip_trans = str2num(evalin('base','zef.GMM.parameters.Values{12}'));
-comp_ord = evalin('base','zef.GMM.parameters.Values{21}');
-ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{26}');
-ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{25}'));
-dip_components = str2num(evalin('base','zef.GMM.parameters.Values{24}'));
+comp_ord = evalin('base','zef.GMM.parameters.Values{22}');
+ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{27}');
+ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{26}'));
+dip_components = str2num(evalin('base','zef.GMM.parameters.Values{25}'));
 if strcmp(comp_ord,'3')
-    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{23}')),length(ellip_components));
-    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{22}')),length(dip_components));
+    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{24}')),length(ellip_components));
+    dip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{23}')),length(dip_components));
 else
-    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
-    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{22}'));
+    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{24}'));
+    dip_num = str2num(evalin('base','zef.GMM.parameters.Values{23}'));
 end
 
 start_t = str2num(evalin('base','zef.GMM.parameters.Values{13}'));
@@ -43,7 +43,7 @@ if strcmp(ellip_coloring_type,'1')
         colors = colors(randperm(K),:);
     end
 else
-    colors = evalin('base','zef.GMM.parameters.Values{27}');
+    colors = evalin('base','zef.GMM.parameters.Values{28}');
     if ~iscell(colors)
         colors = str2num(colors);
         if size(colors,2) < 3 || size(colors,2) > 3
@@ -177,7 +177,8 @@ end
 %plot centroid marks:
 plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
 %set direction vectors (original can be non-unit length)
-direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
+%direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
+direct = s_length*[cos(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,4)),sin(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,1)),cos(GMModel.mu(dip_ind,4))];
 quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')%set old time parameters back to their places:
 evalin('base','zef_GMM_subs_time_vars(''out'')');
@@ -267,7 +268,8 @@ end
 %plot centroid marks:
 plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
 %set direction vectors (original can be non-unit length)
-direct = s_length*GMModel{t}.mu(dip_ind,4:6)./sqrt(sum(GMModel{t}.mu(dip_ind,4:6).^2,2));
+%direct = s_length*GMModel{t}.mu(dip_ind,4:6)./sqrt(sum(GMModel{t}.mu(dip_ind,4:6).^2,2));
+direct = s_length*[cos(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),sin(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),cos(GMModel{t}.mu(dip_ind,4))];
 quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')
 pause(1.5)
