@@ -1,9 +1,4 @@
 function zef_PlotGMModel
-%=====TODO==========
-%1. komponenttien järjestäminen annetun tavan mukaan
-%2. komponentteja piirretään annettu määrä
-%3. enable off componentti ja colorarray paneeleista
-
 m_size = str2num(evalin('base','zef.GMM.parameters.Values{8}'));
 m_width = str2num(evalin('base','zef.GMM.parameters.Values{9}'));
 m_sym = evalin('base','zef.GMM.parameters.Values{7}');

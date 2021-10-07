@@ -1,5 +1,7 @@
 %Script for updating edit field of GMM system.
 
+if isfield(zef.GMM,'apps')
+   if isvalid(zef.GMM.apps.main)
 %_ Main app _
 zef_props = properties(zef.GMM.apps.main);
 zef_n=0;
@@ -9,6 +11,7 @@ for zef_i = 2:length(zef_props)
         zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.GMM.parameters.Values{zef_n};
     end
 end
+   end
 
 %_ Advanced plot options _
 if isfield(zef.GMM.apps,'PlotOpt')
@@ -50,8 +53,8 @@ if isfield(zef.GMM.apps,'PlotOpt')
     else
         zef.GMM.apps = rmfield(zef.GMM.apps,'PlotOpt');
     end
-end
-
+end 
+   
 %_ Export options _
 if isfield(zef.GMM.apps,'Export')
     if isvalid(zef.GMM.apps.Export)
@@ -62,3 +65,17 @@ if isfield(zef.GMM.apps,'Export')
 end
 
 clear zef_props zef_i zef_n
+end
+
+if isfield(zef.GMM,'parameters')
+    for zef_i = 1:length(zef.GMM.parameters.Tags)
+        if ~iscell(zef.GMM.parameters.Values{zef_i}) && ~isempty(zef.GMM.parameters.Values{zef_i})
+            if ~ischar(zef.GMM.parameters.Values{zef_i})
+                zef.(['GMM_',zef.GMM.parameters.Tags{zef_i}]) = str2num(zef.GMM.parameters.Values{zef_i});
+            else
+                zef.(['GMM_',zef.GMM.parameters.Tags{zef_i}]) = zef.GMM.parameters.Values{zef_i};
+            end
+        end
+    end
+    clear zef_i
+end

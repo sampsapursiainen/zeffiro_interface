@@ -1,10 +1,10 @@
 %This is the startup script for GMModel app. One must add this as launch
 %script to zeffiro_plugins file:
-%GMMclustering, inverse_tools, GMModel_start
+%GMMing, inverse_tools, GMModel_start
 
 %don't allow to open multiple app window because it cause ether App
 %Designer or app's functionalities to crash or both of them
-if isfield(zef,'GMM')
+if isfield(zef,'GMM.apps')
 if isfield(zef.GMM.apps,'main')
     if isvalid(zef.GMM.apps.main)
         eval(zef.GMM.apps.main.UIFigure.CloseRequestFcn);
@@ -12,16 +12,6 @@ if isfield(zef.GMM.apps,'main')
 end
 end
 zef.GMM.apps.main = GMModelApp;
-
-%move possible output of previous version to the GMM structure field
-if isfield(zef,'GMModel')
-    zef.GMM.model = zef.GMModel;
-    %zef = rmfield(zef,'GMModel');
-end
-if isfield(zef,'GMModelDipoles')
-    zef.GMM.dipoles = zef.GMModelDipoles;
-    %zef = rmfield(zef,'GMModelDipoles');
-end
 
 
 if ~isfield(zef.GMM,'parameters')
@@ -45,7 +35,7 @@ zef_GMM_values{3} = '1';
 %target domain
 zef_GMM_values{19} = '1';
 %centroid marker (color)
-zef_GMM_values{7} = zef.GMM.apps.main.GMMcluster_markercolor.ItemsData{1};
+zef_GMM_values{7} = zef.GMM.apps.main.GMM_markercolor.ItemsData{1};
 %centroid marker size
 zef_GMM_values{8} = '8';
 %centroid marker line width
@@ -126,6 +116,7 @@ else
     zef_GMM_values = zef.GMM.parameters{:,2};
     zef_GMM_label_names = zef.GMM.parameters{:,1};
     zef_GMM_tags = zef.GMM.parameters{:,3};
+    zef.GMM.meta{1} = length(findobj(zef.GMM.apps.main.UIFigure,{'Type','uieditfield','-or','Type','uidropdown'}));
 end
 
 
@@ -135,7 +126,9 @@ for zef_i = 2:length(zef_props)
     if strcmp(zef.GMM.apps.main.(zef_props{zef_i-1}).Type,'uilabel')
         zef_n=zef_n+1;
         zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
+        if ~isempty(zef_GMM_values{zef_n}) || ~strcmp(zef.GMM.apps.main.(zef_props{zef_i}).Type,'uidropdown')
         zef.GMM.apps.main.(zef_props{zef_i}).Value = zef_GMM_values{zef_n};
+        end
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i}))
             zef.GMM.apps.main.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
@@ -164,28 +157,28 @@ zef.GMM.parameters = table(zef_GMM_label_names,zef_GMM_values,zef_GMM_tags,'Vari
 clear zef_props zef_i zef_n zef_GMM_label_names zef_GMM_values zef_GMM_tags
 
 %_ Functions _
-zef.GMM.apps.main.GMMcluster_covident.ValueChangedFcn = 'zef.GMM.parameters{4,2} = {zef.GMM.apps.main.GMMcluster_covident.Value};';
-zef.GMM.apps.main.GMMcluster_covtype.ValueChangedFcn = 'zef.GMM.parameters{3,2} = {zef.GMM.apps.main.GMMcluster_covtype.Value};';
-zef.GMM.apps.main.GMMcluster_MaxIter.ValueChangedFcn = 'zef.GMM.parameters{2,2} = {zef.GMM.apps.main.GMMcluster_MaxIter.Value};';
-zef.GMM.apps.main.GMMcluster_threshold.ValueChangedFcn = 'zef.GMM.parameters{5,2} = {zef.GMM.apps.main.GMMcluster_threshold.Value};';
-zef.GMM.apps.main.GMMcluster_reg.ValueChangedFcn = 'zef.GMM.parameters{15,2} = {zef.GMM.apps.main.GMMcluster_reg.Value};';
-zef.GMM.apps.main.GMMcluster_clustnum.ValueChangedFcn = 'zef.GMM.parameters{1,2} = {zef.GMM.apps.main.GMMcluster_clustnum.Value};';
-zef.GMM.apps.main.GMMcluster_alpha.ValueChangedFcn = 'zef.GMM.parameters{6,2}={zef.GMM.apps.main.GMMcluster_alpha.Value};';
-zef.GMM.apps.main.GMMcluster_domain.ValueChangedFcn = 'zef.GMM.parameters{19,2} = {zef.GMM.apps.main.GMMcluster_domain.Value};';
-zef.GMM.apps.main.GMMcluster_c_startframe.ValueChangedFcn = 'zef.GMM.parameters{17,2}={zef.GMM.apps.main.GMMcluster_c_startframe.Value};';
-zef.GMM.apps.main.GMMcluster_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMMcluster_c_stopframe.Value};';
-zef.GMM.apps.main.GMMcluster_ampframe.ValueChangedFcn = 'zef.GMM.parameters{20,2}={zef.GMM.apps.main.GMMcluster_ampframe.Value};';
-zef.GMM.apps.main.GMMcluster_amptype.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.main.GMMcluster_amptype.Value};';
+zef.GMM.apps.main.GMM_covident.ValueChangedFcn = 'zef.GMM.parameters{4,2} = {zef.GMM.apps.main.GMM_covident.Value};';
+zef.GMM.apps.main.GMM_covtype.ValueChangedFcn = 'zef.GMM.parameters{3,2} = {zef.GMM.apps.main.GMM_covtype.Value};';
+zef.GMM.apps.main.GMM_MaxIter.ValueChangedFcn = 'zef.GMM.parameters{2,2} = {zef.GMM.apps.main.GMM_MaxIter.Value};';
+zef.GMM.apps.main.GMM_threshold.ValueChangedFcn = 'zef.GMM.parameters{5,2} = {zef.GMM.apps.main.GMM_threshold.Value};';
+zef.GMM.apps.main.GMM_reg.ValueChangedFcn = 'zef.GMM.parameters{15,2} = {zef.GMM.apps.main.GMM_reg.Value};';
+zef.GMM.apps.main.GMM_clustnum.ValueChangedFcn = 'zef.GMM.parameters{1,2} = {zef.GMM.apps.main.GMM_clustnum.Value};';
+zef.GMM.apps.main.GMM_alpha.ValueChangedFcn = 'zef.GMM.parameters{6,2}={zef.GMM.apps.main.GMM_alpha.Value};';
+zef.GMM.apps.main.GMM_domain.ValueChangedFcn = 'zef.GMM.parameters{19,2} = {zef.GMM.apps.main.GMM_domain.Value};';
+zef.GMM.apps.main.GMM_c_startframe.ValueChangedFcn = 'zef.GMM.parameters{17,2}={zef.GMM.apps.main.GMM_c_startframe.Value};';
+zef.GMM.apps.main.GMM_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMM_c_stopframe.Value};';
+zef.GMM.apps.main.GMM_ampframe.ValueChangedFcn = 'zef.GMM.parameters{20,2}={zef.GMM.apps.main.GMM_ampframe.Value};';
+zef.GMM.apps.main.GMM_amptype.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.main.GMM_amptype.Value};';
 
-zef.GMM.apps.main.GMMcluster_markercolor.ValueChangedFcn = 'zef.GMM.parameters{7,2}={zef.GMM.apps.main.GMMcluster_markercolor.Value};';
-zef.GMM.apps.main.GMMcluster_markersize.ValueChangedFcn = 'zef.GMM.parameters{8,2}={zef.GMM.apps.main.GMMcluster_markersize.Value};';
-zef.GMM.apps.main.GMMcluster_markerwidth.ValueChangedFcn = 'zef.GMM.parameters{9,2}={zef.GMM.apps.main.GMMcluster_markerwidth.Value};';
-zef.GMM.apps.main.GMMcluster_headtrans.ValueChangedFcn = 'zef.GMM.parameters{10,2}={zef.GMM.apps.main.GMMcluster_headtrans.Value};';
-zef.GMM.apps.main.GMMcluster_veclength.ValueChangedFcn = 'zef.GMM.parameters{16,2} = {zef.GMM.apps.main.GMMcluster_veclength.Value};';
-zef.GMM.apps.main.GMMcluster_plotellip.ValueChangedFcn = 'zef.GMM.parameters{11,2}={zef.GMM.apps.main.GMMcluster_plotellip.Value};';
-zef.GMM.apps.main.GMMcluster_elliptrans.ValueChangedFcn = 'zef.GMM.parameters{12,2}={zef.GMM.apps.main.GMMcluster_elliptrans.Value};';
-zef.GMM.apps.main.GMMcluster_startframe.ValueChangedFcn = 'zef.GMM.parameters{13,2}={zef.GMM.apps.main.GMMcluster_startframe.Value};';
-zef.GMM.apps.main.GMMcluster_stopframe.ValueChangedFcn = 'zef.GMM.parameters{14,2}={zef.GMM.apps.main.GMMcluster_stopframe.Value};';
+zef.GMM.apps.main.GMM_markercolor.ValueChangedFcn = 'zef.GMM.parameters{7,2}={zef.GMM.apps.main.GMM_markercolor.Value};';
+zef.GMM.apps.main.GMM_markersize.ValueChangedFcn = 'zef.GMM.parameters{8,2}={zef.GMM.apps.main.GMM_markersize.Value};';
+zef.GMM.apps.main.GMM_markerwidth.ValueChangedFcn = 'zef.GMM.parameters{9,2}={zef.GMM.apps.main.GMM_markerwidth.Value};';
+zef.GMM.apps.main.GMM_headtrans.ValueChangedFcn = 'zef.GMM.parameters{10,2}={zef.GMM.apps.main.GMM_headtrans.Value};';
+zef.GMM.apps.main.GMM_veclength.ValueChangedFcn = 'zef.GMM.parameters{16,2} = {zef.GMM.apps.main.GMM_veclength.Value};';
+zef.GMM.apps.main.GMM_plotellip.ValueChangedFcn = 'zef.GMM.parameters{11,2}={zef.GMM.apps.main.GMM_plotellip.Value};';
+zef.GMM.apps.main.GMM_elliptrans.ValueChangedFcn = 'zef.GMM.parameters{12,2}={zef.GMM.apps.main.GMM_elliptrans.Value};';
+zef.GMM.apps.main.GMM_startframe.ValueChangedFcn = 'zef.GMM.parameters{13,2}={zef.GMM.apps.main.GMM_startframe.Value};';
+zef.GMM.apps.main.GMM_stopframe.ValueChangedFcn = 'zef.GMM.parameters{14,2}={zef.GMM.apps.main.GMM_stopframe.Value};';
 
 zef.GMM.apps.main.StartButton.ButtonPushedFcn = '    [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;';
 zef.GMM.apps.main.CloseButton.ButtonPushedFcn = 'if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';
