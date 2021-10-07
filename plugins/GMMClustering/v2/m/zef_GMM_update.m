@@ -8,7 +8,9 @@ zef_n=0;
 for zef_i = 2:length(zef_props)
     if strcmp(zef.GMM.apps.main.(zef_props{zef_i-1}).Type,'uilabel')
         zef_n=zef_n+1;
-        zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.GMM.parameters.Values{zef_n};
+        if ~isempty(zef.GMM.parameters.Values{zef_n}) || ~strcmp(zef.GMM.apps.main.(zef_props{zef_i}).Type,'uidropdown')
+            zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.GMM.parameters.Values{zef_n};
+        end
     end
 end
    end
