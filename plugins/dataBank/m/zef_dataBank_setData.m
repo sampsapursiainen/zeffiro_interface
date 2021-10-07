@@ -8,14 +8,8 @@ dbFieldNames=fieldnames(zef.dataBank.tree.(zef.dataBank.hash).data);
 for dbi=1:length(dbFieldNames)
      if strcmp(zef.dataBank.tree.(zef.dataBank.hash).type, 'gmm')
     
-          zef.GMM.model = zef.dataBank.tree.(zef.dataBank.hash).data.model; 
-            zef.GMM.dipoles = zef.dataBank.tree.(zef.dataBank.hash).data.dipoles;
-            zef.GMM.parameters = zef.dataBank.tree.(zef.dataBank.hash).data.parameters; 
-            zef.GMM.time_variables = [];
-            zef.GMM.amplitudes = zef.dataBank.tree.(zef.dataBank.hash).data.amplitudes;
-
-        
-                zef_GMM_update;
+          zef_load_GMM(zef.dataBank.tree.(zef.dataBank.hash).data);
+          zef_GMM_update;
 
         
         
