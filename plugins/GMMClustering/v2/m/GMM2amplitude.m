@@ -24,12 +24,23 @@ if type == 2
     C_prior = std_lhood./sqrt(sum(L.^2,1)');
     L = L.*transpose(reshape(dipoles,[],1));
     z = C_prior.*L'*((L*(C_prior.*L')+std_lhood^2*eye(size(L,1)))\f);
+    amp = sqrt(z(1:n_interp).^2+z((1:n_interp)+n_interp).^2+z((1:n_interp)+2*n_interp).^2);
 else
     L = L.*transpose(reshape(dipoles,[],1));
     z = pinv(L)*f;
+    L = L(:,1:n_interp)+L(:,(1:n_interp)+n_interp)+L(:,(1:n_interp)+2*n_interp);
+    amp = pinv(L)*f;
+    while sum(amp<0)>0 && sum(amp>0)>0
+        c_ind = amp>0;
+        L = L(:,c_ind);
+        amp(c_ind) = pinv(L)*f;
+        amp(not(c_ind))=0;
+    end
+    if sum(amp<0)>0 || sum(amp>0)==0
+        amp = sqrt(z(1:n_interp).^2+z((1:n_interp)+n_interp).^2+z((1:n_interp)+2*n_interp).^2);
+    end
+    
 end
-
-amp = sqrt(z(1:n_interp).^2+z((1:n_interp)+n_interp).^2+z((1:n_interp)+2*n_interp).^2);
 
 
 end
