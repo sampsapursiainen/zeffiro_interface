@@ -29,13 +29,8 @@ else
     L = L.*transpose(reshape(dipoles,[],1));
     z = pinv(L)*f;
     L = L(:,1:n_interp)+L(:,(1:n_interp)+n_interp)+L(:,(1:n_interp)+2*n_interp);
-    amp = pinv(L)*f;
-    while sum(amp<0)>0 && sum(amp>0)>0
-        c_ind = amp>0;
-        L = L(:,c_ind);
-        amp(c_ind) = pinv(L)*f;
-        amp(not(c_ind))=0;
-    end
+    options = optimoptions('lsqlin','Algorithm','interior-point','Display','off');
+    amp = lsqlin(L,f,[],[],[],[],zeros(size(L,2),1),[],[],options);
     if sum(amp<0)>0 || sum(amp>0)==0
         amp = sqrt(z(1:n_interp).^2+z((1:n_interp)+n_interp).^2+z((1:n_interp)+2*n_interp).^2);
     end
