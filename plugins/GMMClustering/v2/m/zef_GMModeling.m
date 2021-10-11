@@ -222,8 +222,8 @@ for t=t_start:T
             end
         end
     elseif strcmp(model_criterion,'3')
-        density = pdf(gmdistribution(GMModel_aux.mu(:,1:3),GMModel_aux.Sigma(1:3,1:3,:),GMModel_aux.ComponentProportion),activity_pos);
-        fit = sum((z(z>0)/sum(z(z>0))-density/sum(density)).^2);
+        density = pdf(gmdistribution(GMModel_aux.mu(:,1:3),GMModel_aux.Sigma(1:3,1:3,:),GMModel_aux.ComponentProportion),source_positions);
+        fit = sum((z/sum(z)-density/sum(density)).^2);
         disp(fit)
         if fit < best_fit
             best_fit = fit;
