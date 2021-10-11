@@ -52,6 +52,9 @@ if isfield(struct,'parameters')
                 n=min(n+1,size(struct.parameters,1));
             end
         end
+        GMM.meta{1} = 21;
+        GMM.meta{2} = 27;
+        
     end
     
 end

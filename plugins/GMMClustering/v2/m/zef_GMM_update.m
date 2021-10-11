@@ -16,6 +16,26 @@ end
    end
    
 %_ Advanced modeling options
+if isempty(zef.GMM.parameters.Values{zef_n+1})
+    zef.GMM.parameters.Values{zef_n+1} =  '1';
+end
+if isempty(zef.GMM.parameters.Values{zef_n+2})
+    zef.GMM.parameters.Values{zef_n+2} =  '1';
+end
+if isempty(zef.GMM.parameters.Values{zef_n+3})
+    zef.GMM.parameters.Values{zef_n+3} =  '1';
+end
+if isempty(zef.GMM.parameters.Values{zef_n+4})
+    zef.GMM.parameters.Values{zef_n+4} =  '6';
+end
+if isempty(zef.GMM.parameters.Values{zef_n+5})
+    zef.GMM.parameters.Values{zef_n+5} =  '0.95';
+end
+if isempty(zef.GMM.parameters.Values{zef_n+6})
+    zef.GMM.parameters.Values{zef_n+6} =  '0';
+end
+
+
 if isfield(zef.GMM.apps,'ModelingOpt')
     if isvalid(zef.GMM.apps.ModelingOpt)
         zef_props = properties(zef.GMM.apps.ModelingOpt);

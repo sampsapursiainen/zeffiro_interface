@@ -36,7 +36,9 @@ for zef_i = 2:length(zef_props)
         zef_n=zef_n+1;
         zef.GMM.parameters(zef_n,1)={zef.GMM.apps.ModelingOpt.(zef_props{zef_i-1}).Text};
         if ~strcmp(zef_props{zef_i},'GMM_colors')
-            zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value=zef.GMM.parameters{zef_n,2}{1};
+            if ~isempty(zef.GMM.parameters.Values{zef_n})
+                zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value=zef.GMM.parameters.Values{zef_n};
+            end
         else
             if iscell(zef.GMM.parameters{zef_n,2}{1})
                 zef_aux_str = '';
