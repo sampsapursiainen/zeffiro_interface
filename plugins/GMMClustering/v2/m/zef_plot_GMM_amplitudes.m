@@ -19,20 +19,20 @@ if iscell(amp)
     amp = amp{f_ind};
 end
 
-comp_ord = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+1}');
-ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+6}');
-ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+5}'));
+comp_ord = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+1}');
+ellip_coloring_type = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+6}');
+ellip_components = str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+5}'));
 if strcmp(comp_ord,'3')
-    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+3}')),length(ellip_components));
+    ellip_num = min(str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+3}')),length(ellip_components));
 else
-    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+3}'));
+    ellip_num = str2num(evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+3}'));
 end
 
 %___ construct the color array/cell ___
 if strcmp(ellip_coloring_type,'1')
     colors = [1,0,0;0,1,0;0,0,1;1,0.5,0;0,1,1;0.5,0,1;1,0.5,0.5;0.4,1,0.8;0.2,0.6,1;1,0.8,0.6;0.8,1,0.6;0.6,1,1;0.8,0.6,1];
 else
-    colors = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{1}+7}');
+    colors = evalin('base','zef.GMM.parameters.Values{zef.GMM.meta{2}+7}');
     if ~iscell(colors)
         colors = str2num(colors);
         if size(colors,2) < 3 || size(colors,2) > 3
