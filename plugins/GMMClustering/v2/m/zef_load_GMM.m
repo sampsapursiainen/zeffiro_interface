@@ -2,7 +2,7 @@ function zef_load_GMM(struct)
 
 if evalin('base','isfield(zef,''GMM'')')
     GMM = evalin('base','zef.GMM');
-    n_params = 35;
+    n_params = 35;       
 else
     if isfield(struct,'parameters')
     GMM_Tags ={'clustnum','MaxIter','covtype','covident','threshold',...
@@ -44,6 +44,8 @@ if isfield(struct,'parameters')
                 'c_stopframe','domain','ampframe','amptype','model_criterion','initial_mode','replicates',...
                 'logpost_threshold','comp_prob','smooth_std','comp_ord','dip_num','ellip_num',...
                 'dip_comp','ellip_comp','ellip_coloring','colors','saved'}';
+        GMM.parameters = table('Size',[length(GMM_Tags),3],'VariableTypes',{'string','cell','string'},'VariableNames',{'Parameter Names','Values','Tags'});
+        GMM.parameters.Tags = GMM_Tags;
         n = 1;
         
         for i = 1:length(GMM_Tags)

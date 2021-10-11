@@ -138,6 +138,7 @@ zef.GMM.meta{3} = zef_i;
 zef_GMM_label_names = repmat({''},length(zef_GMM_values),1);
 else
     zef_load_GMM(zef.GMM);
+    zef_GMM_update;
     zef_GMM_values = zef.GMM.parameters{:,2};
     zef_GMM_label_names = zef.GMM.parameters{:,1};
     zef_GMM_tags = zef.GMM.parameters{:,3};
