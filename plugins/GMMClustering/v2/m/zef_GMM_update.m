@@ -14,6 +14,25 @@ for zef_i = 2:length(zef_props)
     end
 end
    end
+   
+%_ Advanced modeling options
+if isfield(zef.GMM.apps,'ModelingOpt')
+    if isvalid(zef.GMM.apps.ModelingOpt)
+        zef_props = properties(zef.GMM.apps.ModelingOpt);
+        for zef_i = 2:length(zef_props)
+            if strcmp(zef.GMM.apps.ModelingOpt.(zef_props{zef_i-1}).Type,'uilabel')
+                zef_n=zef_n+1;
+                if ~isempty(zef.GMM.parameters.Values{zef_n}) || ~strcmp(zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Type,'uidropdown')
+                    zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value = zef.GMM.parameters.Values{zef_n};
+                end
+            end
+        end
+    else
+        zef_n=zef.GMM.meta{2};
+    end
+else
+    zef_n=zef.GMM.meta{2};
+end
 
 %_ Advanced plot options _
 if isfield(zef.GMM.apps,'PlotOpt')

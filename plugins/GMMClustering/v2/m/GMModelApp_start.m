@@ -66,14 +66,36 @@ else
 end
 %time point for amplitude bar plot
 zef_GMM_values{20} = '';
-%Amplitude estimation type 
+%amplitude estimation type 
 zef_GMM_values{21} = '1';
 
 zef_i = length(zef_GMM_values);
 zef.GMM.meta{1} = zef_i;
 
+%_ Advanced modeling options initial values _
+%model fitness criterion
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '2';
+%initialization approach
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '1';
+%number of replicates for k++
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '1';
+%log-posterior threshold
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '6';    %log-post = 10^(-db/20)
+%Mixture component probability for Mahalanobis distance approach
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '0.95';
+%reconstruction smoothing std
+zef_i = zef_i+1;
+zef_GMM_values{zef_i} = '0';
+
+zef.GMM.meta{2} = zef_i;
+
 %_ Advanced plot options initial values _
-%Component plotting order
+%component plotting order
 zef_i = zef_i+1;
 zef_GMM_values{zef_i} = '1';
 %number of dipoles
@@ -111,8 +133,11 @@ zef_GMM_values{zef_i} = '1';
 zef_i = zef_i+1;
 zef_GMM_values{zef_i} = '';
 
+zef.GMM.meta{3} = zef_i;
+
 zef_GMM_label_names = repmat({''},length(zef_GMM_values),1);
 else
+    zef_load_GMM(zef.GMM);
     zef_GMM_values = zef.GMM.parameters{:,2};
     zef_GMM_label_names = zef.GMM.parameters{:,1};
     zef_GMM_tags = zef.GMM.parameters{:,3};
@@ -149,6 +174,7 @@ end
 if ~isfield(zef.GMM,'parameters')
     zef_GMM_tags=findobj(zef.GMM.apps.main.UIFigure,'-property','Value');
     zef_GMM_tags = flip(get(zef_GMM_tags,'Tag'));
+    zef_GMM_tags = [zef_GMM_tags;{'model_criterion';'initial_mode';'replicates';'logpost_threshold';'comp_prob';'smooth_std'}];
     zef_GMM_tags = [zef_GMM_tags;{'comp_ord';'dip_num';'ellip_num';'dip_comp';'ellip_comp';'ellip_coloring';'colors'}];
 end
 
@@ -180,16 +206,17 @@ zef.GMM.apps.main.GMM_elliptrans.ValueChangedFcn = 'zef.GMM.parameters{12,2}={ze
 zef.GMM.apps.main.GMM_startframe.ValueChangedFcn = 'zef.GMM.parameters{13,2}={zef.GMM.apps.main.GMM_startframe.Value};';
 zef.GMM.apps.main.GMM_stopframe.ValueChangedFcn = 'zef.GMM.parameters{14,2}={zef.GMM.apps.main.GMM_stopframe.Value};';
 
-zef.GMM.apps.main.StartButton.ButtonPushedFcn = '    [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;';
+zef.GMM.apps.main.StartButton.ButtonPushedFcn = 'if ~strcmp(zef.GMM.parameters.Values{zef.GMM.meta{1}+1},''1'') || ~strcmp(zef.GMM.parameters.Values{zef.GMM.meta{1}+2},''1''); [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling; else [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling_K; end;';
 zef.GMM.apps.main.CloseButton.ButtonPushedFcn = 'if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';
 zef.GMM.apps.main.PlotOptMenu.MenuSelectedFcn = 'zef_GMMPlotOpt;';
+zef.GMM.apps.main.ModelingOptMenu.MenuSelectedFcn = 'zef_GMM_AdvModelingOpt;';
 zef.GMM.apps.main.PlotModelButton.ButtonPushedFcn = 'zef_update_GMMPlotOpts; zef_PlotGMModel;';
 zef.GMM.apps.main.PlotAmpButton.ButtonPushedFcn = 'zef_update_GMMPlotOpts; zef_plot_GMM_amplitudes;';
 zef.GMM.apps.main.ExportMenu.MenuSelectedFcn = 'zef_GMMExport_start;';
 zef.GMM.apps.main.ImportMenu.MenuSelectedFcn = 'if not(isempty(zef.save_file_path)) && prod(not(zef.save_file_path==0)); [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model'',zef.save_file_path); else; [zef_aux_file,zef_aux_path] = uigetfile(''*.mat'',''Select Gaussian Mixature Model''); end; if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0); zef_aux = load(fullfile(zef_aux_path,zef_aux_file)); if isfield(zef_aux,''zef_GMModel''); zef.GMM.model = zef_aux.zef_GMModel; zef.GMM.dipoles = zef_aux.zef_GMModelDipoles; elseif isfield(zef_aux,''zef_GMM''); zef_load_GMM(zef_aux.zef_GMM); zef_GMM_update; end; end; clear zef_aux zef_aux_file zef_aux_path;';
 
 %close request function
-zef.GMM.apps.main.UIFigure.CloseRequestFcn = 'if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';
+zef.GMM.apps.main.UIFigure.CloseRequestFcn = 'if isfield(zef.GMM.apps,''ModelingOpt''); delete(zef.GMM.apps.ModelingOpt); end; if isfield(zef.GMM.apps,''PlotOpt''); delete(zef.GMM.apps.PlotOpt); end; if isfield(zef.GMM.apps,''Export''); delete(zef.GMM.apps.Export); end; delete(zef.GMM.apps.main);';
 
 %set fonts
 set(findobj(zef.GMM.apps.main.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);

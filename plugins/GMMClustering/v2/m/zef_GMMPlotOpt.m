@@ -19,7 +19,8 @@ end
 
 zef_update_GMMPlotOpts;
 
-zef_n = length(findobj(zef.GMM.apps.main.UIFigure.Children,'Type','uilabel'));
+zef_n = zef.GMM.meta{2};
+
 %set up new tags
 zef_props=findobj(zef.GMM.apps.PlotOpt.UIFigure,'-property','Value');
 zef_props = flip(get(zef_props,'Tag'));
@@ -82,7 +83,7 @@ for zef_i = 2:length(zef_props)
         end
     end
 end
-zef.GMM.meta{2} = zef_n;
+zef.GMM.meta{3} = zef_n;
 
 clear zef_props zef_i zef_j zef_n zef_temp_screen_size
 
@@ -100,13 +101,13 @@ else
     zef.GMM.apps.PlotOpt.GMM_colors.Enable = 'off';
 end
 
-zef.GMM.apps.PlotOpt.GMM_comp_ord.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+1,2} = {zef.GMM.apps.PlotOpt.GMM_comp_ord.Value}; if strcmp(zef.GMM.parameters{zef.GMM.meta{1}+1,2},''3''); zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''on''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''off''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''off''; end;';
-zef.GMM.apps.PlotOpt.GMM_dip_comp.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+4,2} = {zef.GMM.apps.PlotOpt.GMM_dip_comp.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_comp.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+5,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_comp.Value};';
-zef.GMM.apps.PlotOpt.GMM_dip_num.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+2,2} = {zef.GMM.apps.PlotOpt.GMM_dip_num.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_num.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+3,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_num.Value};';
-zef.GMM.apps.PlotOpt.GMM_ellip_coloring.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+6,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_coloring.Value}; if strcmp(zef.GMM.parameters{zef.GMM.meta{1}+6,2},''2''); zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''off''; end;';
-zef.GMM.apps.PlotOpt.GMM_colors.ValueChangedFcn = 'if isempty(str2num(zef.GMM.apps.PlotOpt.GMM_colors.Value)); zef.GMM.parameters{zef.GMM.meta{1}+7,2} = {strsplit(erase(zef.GMM.apps.PlotOpt.GMM_colors.Value,{'''''''','' ''}),{'','','';''})}; else zef.GMM.parameters{zef.GMM.meta{1}+7,2} = {zef.GMM.apps.PlotOpt.GMM_colors.Value}; end;';
+zef.GMM.apps.PlotOpt.GMM_comp_ord.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+1,2} = {zef.GMM.apps.PlotOpt.GMM_comp_ord.Value}; if strcmp(zef.GMM.parameters{zef.GMM.meta{2}+1,2},''3''); zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''on''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = ''off''; zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = ''off''; end;';
+zef.GMM.apps.PlotOpt.GMM_dip_comp.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+4,2} = {zef.GMM.apps.PlotOpt.GMM_dip_comp.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_comp.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+5,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_comp.Value};';
+zef.GMM.apps.PlotOpt.GMM_dip_num.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+2,2} = {zef.GMM.apps.PlotOpt.GMM_dip_num.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_num.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+3,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_num.Value};';
+zef.GMM.apps.PlotOpt.GMM_ellip_coloring.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{2}+6,2} = {zef.GMM.apps.PlotOpt.GMM_ellip_coloring.Value}; if strcmp(zef.GMM.parameters{zef.GMM.meta{2}+6,2},''2''); zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''on''; else zef.GMM.apps.PlotOpt.GMM_colors.Enable = ''off''; end;';
+zef.GMM.apps.PlotOpt.GMM_colors.ValueChangedFcn = 'if isempty(str2num(zef.GMM.apps.PlotOpt.GMM_colors.Value)); zef.GMM.parameters{zef.GMM.meta{2}+7,2} = {strsplit(erase(zef.GMM.apps.PlotOpt.GMM_colors.Value,{'''''''','' ''}),{'','','';''})}; else zef.GMM.parameters{zef.GMM.meta{2}+7,2} = {zef.GMM.apps.PlotOpt.GMM_colors.Value}; end;';
 zef.GMM.apps.PlotOpt.UIFigure.CloseRequestFcn = 'delete(zef.GMM.apps.PlotOpt);';
 
 %set fonts
