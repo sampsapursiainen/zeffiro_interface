@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 %function for changing time serie parameters temporarly for GMM visualization
 %Input char 'in' means replacing inv_... parameters with the ones saved to
 %GMM structure and 'out' changes them back. parameter are temporarly placed
