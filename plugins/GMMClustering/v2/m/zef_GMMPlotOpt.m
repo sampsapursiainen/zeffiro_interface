@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 %This is script for opening advanced GMM plot options.
 
 if isfield(zef.GMM.apps,'PlotOpt')
