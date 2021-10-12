@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Frank Neugebauer, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+    
 function [GMModel,GMModelDipoles,GMModelAmplitudes,GMModelTimeVariables] = zef_GMModeling
 h = waitbar(0,['Gaussian mixature model.']);
 GMModelTimeVariables = [];
@@ -171,11 +174,19 @@ for t=t_start:T
         if strcmp(initial_mode,'2')
         if k>1
         [index_vec1, ~,~, mylogpdf]=cluster(GMModel_aux, activity_space);
-        ind1=find(mylogpdf<max(mylogpdf)-logpdfThreshold);
-        index_vec1(ind1)=k;
+        counter=0;
+        index_vec2=index_vec1;
+
+        while length(unique(index_vec2))~=k &&counter<256/logpdfThreshold
+            index_vec2=index_vec1;
+            counter=counter+1;
+            ind1=find(mylogpdf<max(mylogpdf)-counter*logpdfThreshold);
+            index_vec2(ind1)=k;
+        end
+        index_vec1=index_vec2;
         
         if length(unique(index_vec1))~=k
-            disp(['The ',num2str(k),'-component GMM was not realized.'])
+            disp(['The ',num2str(k),'-component GMM was not realized.']);
             break;
         end
         end
@@ -281,4 +292,3 @@ end     %end of t loop
 
 close(h);
 end
-    
