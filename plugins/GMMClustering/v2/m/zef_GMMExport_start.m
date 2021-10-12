@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 %Script for starting exporting window for GMM.
 
 %don't allow to open multiple app window because it cause ether App
