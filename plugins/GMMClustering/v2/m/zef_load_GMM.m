@@ -1,3 +1,8 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
+%Function that substitutes given GMM structure (struct) to zef.GMM while updating it to the most recent layout. 
+%Usually zef_GMM_update function need to be called after this one.
 function zef_load_GMM(struct)
 
 if evalin('base','isfield(zef,''GMM'')')
