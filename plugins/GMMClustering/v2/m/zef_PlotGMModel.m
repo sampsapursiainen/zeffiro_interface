@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 function zef_PlotGMModel
 parameters = evalin('base','zef.GMM.parameters.Values');
 m_size = str2num(parameters{8});
