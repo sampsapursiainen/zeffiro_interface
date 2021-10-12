@@ -1,3 +1,5 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [amp] = GMM2amplitude(dipoles,ind,frame,type)
 amp = ones(size(dipoles,1),1);
 L = evalin('base','zef.L');
