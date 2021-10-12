@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 %Script for updating edit field of GMM system.
 
 if isfield(zef.GMM,'apps')
