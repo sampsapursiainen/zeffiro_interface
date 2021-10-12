@@ -1,3 +1,7 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
+%Plot estimated amplitudes as a bar plot
 function zef_plot_GMM_amplitudes
 
 
