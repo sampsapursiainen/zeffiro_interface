@@ -1,3 +1,6 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
+
 %This is the startup script for GMModel app. One must add this as launch
 %script to zeffiro_plugins file:
 %GMMing, inverse_tools, GMModel_start
