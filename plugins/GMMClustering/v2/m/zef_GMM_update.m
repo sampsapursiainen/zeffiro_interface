@@ -1,13 +1,10 @@
-%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-
 %Script for updating edit field of GMM system.
 
+zef_n=0;
 if isfield(zef.GMM,'apps')
    if isvalid(zef.GMM.apps.main)
 %_ Main app _
 zef_props = properties(zef.GMM.apps.main);
-zef_n=0;
 for zef_i = 2:length(zef_props)
     if strcmp(zef.GMM.apps.main.(zef_props{zef_i-1}).Type,'uilabel')
         zef_n=zef_n+1;
