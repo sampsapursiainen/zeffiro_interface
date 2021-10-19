@@ -98,7 +98,7 @@ else
 end
                    
 
-h = evalin('caller','h_axes_image');
+h = evalin('base','zef.h_axes_image');
 hold(h,'on');
 
 %set temporarly transparencies stated in mesh visualization to temporary
@@ -180,14 +180,13 @@ plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,
 direct = s_length*[cos(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,4)),sin(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,1)),cos(GMModel.mu(dip_ind,4))];
 quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')%set old time parameters back to their places:
-evalin('base','zef_GMM_subs_time_vars(''out'')');
 
 %If time serie exists:
 else
     
 
     if isempty(GMModel{t})
-        error(['There is no Gaussian mixature model for the frame ',num2str(t),'.'])
+        error(['There is no Gaussian mixture model for the frame ',num2str(t),'.'])
     end
 max_iter = min(size(GMModel{t}.mu,1),ellip_num);    
 if strcmp(comp_ord,'1')
@@ -201,9 +200,7 @@ elseif strcmp(comp_ord,'3')
 end
     
 %set surface visualization frames to go along this for loop:
-assignin('base','zef_t',t);
-evalin('base','zef.frame_start=zef_t; zef.frame_stop=zef_t;');
-evalin('base','zef_visualize_surfaces;');
+
 hold(h,'on')
 if strcmp(plot_ellipsoids,'1')
 if strcmp(covtype,'1')
