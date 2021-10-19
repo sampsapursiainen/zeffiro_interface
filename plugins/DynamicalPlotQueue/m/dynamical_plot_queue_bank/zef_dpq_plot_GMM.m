@@ -232,7 +232,7 @@ for k = 1:max_iter
     else
         set(s(k),'FaceColor',colors(k,:));
     end
-    set(s(k),'FaceAlpha',ellip_trans);
+    %set(s(k),'FaceAlpha',ellip_trans);
     %Rotate standard coordinated ellipsoid to the direction of principal
     %axes (rotation command is based on right-hand-rule):
     CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
