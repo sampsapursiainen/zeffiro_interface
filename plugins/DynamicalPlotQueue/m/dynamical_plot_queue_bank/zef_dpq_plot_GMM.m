@@ -98,7 +98,7 @@ else
 end
                    
 
-h = evalin('base','zef.h_axes1');
+h = evalin('caller','h_axes_image');
 hold(h,'on');
 
 %set temporarly transparencies stated in mesh visualization to temporary
