@@ -820,7 +820,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+sensor_patches = findobj(evalin('base','zef.h_axes_image'),'Type','Patch','Tag','sensor');
 uistack(sensor_patches,'top');
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
@@ -2060,7 +2060,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-        sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
+        sensor_patches = findobj(evalin('base','zef.h_axes_image'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
