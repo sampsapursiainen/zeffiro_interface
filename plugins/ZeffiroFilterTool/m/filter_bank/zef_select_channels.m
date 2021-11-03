@@ -9,12 +9,12 @@ function [processed_data] = zef_select_channels(f, select_channels)
 %Output: Data for selected channels.
 
 %Conversion between string and numeric data types.
+
 if isstr(select_channels)
 select_channels = str2num(select_channels);
 end
 %End of conversion.
 
-select_channels = find(not(ismember([1:length(f)],select_channels)));
-
 processed_data = f(select_channels,:);
+
    

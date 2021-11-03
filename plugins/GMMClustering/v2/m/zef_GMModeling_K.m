@@ -1,7 +1,7 @@
-%Copyright © 2018- Joonas Lahtinen, Frank Neugebauer, Sampsa Pursiainen & ZI Development Team
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-    
-function [GMModel,GMModelDipoles,GMModelAmplitudes,GMModelTimeVariables] = zef_GMModeling
+
+function [GMModel,GMModelDipoles,GMModelAmplitudes,GMModelTimeVariables] = zef_GMModeling_K
 h = waitbar(0,['Gaussian mixature model.']);
 GMModelTimeVariables = [];
 if evalin('base','isfield(zef,''reconstruction_information'')')
@@ -73,11 +73,7 @@ reg_value = str2num(parameters{15});
 amp_est_type = str2num(parameters{21});
 meta1 = evalin('base','zef.GMM.meta{1}');
 smooth_std = str2num(parameters{meta1+6});
-initial_mode = parameters{meta1+2};
-model_criterion = parameters{meta1+1};
 replicates =str2num(parameters{meta1+3});
-logpdfThreshold = 10^(-str2num(parameters{meta1+4})/20);
-r_squared = chi2inv(str2num(parameters{meta1+5}),5);
 
 if iscell(z_vec)
     T=str2num(parameters{18});
@@ -96,18 +92,14 @@ end
 waitbar(0,h,['Step 1 of ',num2str(T),'. Please wait.']);
 tic;
 for t=t_start:T
-    best_fit = Inf;
     if T > 1
         time_val = toc;
     end
-    for k = 1:K(t)
     if T == 1
         time_val = toc;
     end
     if t > 1
         date_str = ['Ready: ',datestr(datevec(now+(T/(t-1) - 1)*time_val/86400)),'.'];
-    elseif k > 1 && T == 1
-        date_str = ['Ready: ',datestr(datevec(now+(K(t)/(k-1) - 1)*time_val/86400)),'.'];
     else
         date_str = [];
     end
@@ -160,97 +152,24 @@ for t=t_start:T
     
     activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];    
     
-    if strcmp(initial_mode,'1')
-        %calculate Gaussian mixature models:
-        try
-            GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
-                'SharedCovariance',SharedCovariance,'Start','plus','Replicates',replicates,'Options',options);
-        catch
-            GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
-                'SharedCovariance',SharedCovariance,'Start','plus','Replicates',replicates,'RegularizationValue',reg_value,'Options',options);
-        end
-    elseif strcmp(initial_mode,'2') || strcmp(initial_mode,'3')
-        index_vec1=ones(size(activity_space,1),1);
-        if strcmp(initial_mode,'2')
-        if k>1
-        [index_vec1, ~,~, mylogpdf]=cluster(GMModel_aux, activity_space);
-        counter=0;
-        index_vec2=index_vec1;
-
-        while length(unique(index_vec2))~=k &&counter<256/logpdfThreshold
-            index_vec2=index_vec1;
-            counter=counter+1;
-            ind1=find(mylogpdf<max(mylogpdf)-counter*logpdfThreshold);
-            index_vec2(ind1)=k;
-        end
-        index_vec1=index_vec2;
-        
-        if length(unique(index_vec1))~=k
-            disp(['The ',num2str(k),'-component GMM was not realized.']);
-            break;
-        end
-        end
-        elseif strcmp(initial_mode,'3')
-            if k>1
-                [index_vec1, ~,~, ~, MahalanobisD2]=cluster(GMModel_aux, activity_space);
-                ind = ones(size(MahalanobisD2,1),1);
-                for kk = 1:(k-1)
-                    ind1=MahalanobisD2(:,kk)<r_squared;
-                    index_vec1(ind1)=kk;
-                    ind = ind & not(ind1);
-                    index_vec1(ind)=k;
-                end      
-             if length(unique(index_vec1))~=k
-                disp(['The ',num2str(k),'-component GMM was not realized.'])
-                break;
-            end
-            end
-        end
-
-        %modified Start-Option
-        try
-            GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
-                'SharedCovariance',SharedCovariance,'Start',index_vec1, 'Options',options);
-        catch
-            GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
-                'SharedCovariance',SharedCovariance,'Start',index_vec1,'RegularizationValue',reg_value,'Options',options);
-        end
+    %calculate Gaussian mixature models:
+    try
+        GMModel_aux = fitgmdist(activity_space,K(t),'CovarianceType',Sigma, ...
+            'SharedCovariance',SharedCovariance,'Start','plus','Replicates',replicates,'Options',options);
+    catch
+        GMModel_aux = fitgmdist(activity_space,K(t),'CovarianceType',Sigma, ...
+            'SharedCovariance',SharedCovariance,'Start','plus','Replicates',replicates,'RegularizationValue',reg_value,'Options',options);
     end
     
-    if strcmp(model_criterion,'1')
-        if T>1
-            GMModel{t} = GMModel_aux;
-        else
-            GMModel = GMModel_aux;
-        end
-    elseif strcmp(model_criterion,'2')
-        if GMModel_aux.BIC < best_fit
-                best_fit = GMModel_aux.BIC;
-            if T>1
-                GMModel{t} = GMModel_aux;
-            else
-                GMModel = GMModel_aux;
-            end
-        end
-    elseif strcmp(model_criterion,'3')
-        density = pdf(gmdistribution(GMModel_aux.mu(:,1:3),GMModel_aux.Sigma(1:3,1:3,:),GMModel_aux.ComponentProportion),source_positions);
-        fit = sum((z/sum(z)-density/sum(density)).^2);
-        disp(fit)
-        if fit < best_fit
-            best_fit = fit;
-            if T>1
-                GMModel{t} = GMModel_aux;
-            else
-                GMModel = GMModel_aux;
-            end
-        end
+    if T>1
+        GMModel{t} = GMModel_aux;
+    else
+        GMModel = GMModel_aux;
     end
     
     if T==1
-      waitbar(k/K(t),h,['Step ',num2str(k),' of ',num2str(K(t)),'. ',date_str]);
-    end
-    
-    end     %end of k loop
+      waitbar(0,h,['Step ','1 of 1. ',date_str]);
+    end 
     
     if T > 1
         ind2 = [];
@@ -292,4 +211,4 @@ end     %end of t loop
 
 close(h);
 end
-
+    

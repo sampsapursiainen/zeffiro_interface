@@ -1,3 +1,5 @@
+%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
+%See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef_GMM_export(save_file_path,GMM,saved_ones)
 
 if not(isempty(save_file_path)) && prod(not(save_file_path==0))
