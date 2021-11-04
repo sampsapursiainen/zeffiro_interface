@@ -85,9 +85,9 @@ end
 
 for i = 1 : n_iter
 if f_ind > 1;    
-waitbar((n_rep*(n_iter-1)+1)/(n_decompositions*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar((n_rep*(n_iter-1)+1)/(n_decompositions*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 
 if isequal(evalin('base','zef.relax_iteration_type'),1)
