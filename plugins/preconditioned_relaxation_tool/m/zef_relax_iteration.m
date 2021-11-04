@@ -21,7 +21,7 @@ n_decompositions = evalin('base','zef.relax_multires_n_decompositions');
 M = evalin('base','zef.relax_preconditioner');
 perm_vec = evalin('base','zef.relax_preconditioner_permutation');
 gamma = 10^(-relax_db/20);
-tol_val = 10^(-(snr_val)/20);
+std_lhood = 10^(-snr_val/20);
 
 reconstruction_information.tag = 'Relaxation';
 reconstruction_information.inv_time_1 = evalin('base','zef.relax_time_1');
@@ -38,6 +38,7 @@ reconstruction_information.snr_val = evalin('base','zef.relax_snr');
 [L, n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
 [f_data] = zef_getFilteredData; 
+
 
 tic;
 
@@ -62,7 +63,7 @@ end
 L_aux = L;
 z_vec_aux = zeros(size(L,2),1);
 
-for n_rep = 1 : n_decompositions
+for n_rep = 1 : length(M)
 
 L = L_aux(:,perm_vec{n_rep}{1});
     
@@ -111,13 +112,13 @@ relres_vec = gather(norm(r)/norm_b);
 
 end
 
-if relres_vec < tol_val
+if relres_vec < std_lhood
 break;
 end
 
 end
 
-if tol_val < relres_vec
+if std_lhood < relres_vec
     'Error: iteration did not converge.'
 end
 
