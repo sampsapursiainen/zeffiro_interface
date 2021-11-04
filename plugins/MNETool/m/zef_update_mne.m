@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
     zef.mne_prior = get(zef.h_mne_prior ,'value'); 
     zef.mne_type = get(zef.h_mne_type ,'value'); 
-    zef.mne_likelihood_snr = str2num(get(zef.h_mne_snr,'string')); 
+    zef.mne_likelihood_snr = zef.inv_snr; 
     zef.mne_sampling_frequency = str2num(get(zef.h_mne_sampling_frequency,'string')); 
     zef.mne_low_cut_frequency = str2num(get(zef.h_mne_low_cut_frequency,'string')); 
     zef.mne_high_cut_frequency = str2num(get(zef.h_mne_high_cut_frequency,'string'));  

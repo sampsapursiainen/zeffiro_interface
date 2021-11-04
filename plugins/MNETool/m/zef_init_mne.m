@@ -7,7 +7,7 @@ if not(isfield(zef,'mne_type'));
     zef.mne_type = 1; 
 end; 
 if not(isfield(zef,'mne_snr')); 
-    zef.mne_snr = 30; 
+    zef.mne_snr = zef.inv_snr; 
 end;
 if not(isfield(zef,'mne_pcg_tol')); 
     zef.mne_pcg_tol = 1e-8; 
@@ -43,7 +43,6 @@ end;
 
 set(zef.h_mne_prior ,'value',zef.mne_prior);
 set(zef.h_mne_type ,'value',zef.mne_type);
-set(zef.h_mne_snr ,'string',num2str(zef.mne_snr));
 set(zef.h_mne_sampling_frequency ,'string',num2str(zef.mne_sampling_frequency));
 set(zef.h_mne_low_cut_frequency ,'string',num2str(zef.mne_low_cut_frequency));
 set(zef.h_mne_high_cut_frequency ,'string',num2str(zef.mne_high_cut_frequency));

@@ -6,7 +6,11 @@ h = waitbar(0,['MNE Reconstruction.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
-snr_val = evalin('base','zef.mne_snr');
+pm_val = evalin('base','zef.inv_prior_over_measurement_db');
+amplitude_db = evalin('base','zef.inv_amplitude_db');
+pm_val = pm_val - amplitude_db;
+
+snr_val = evalin('base','zef.inv_snr');
 mne_type = evalin('base','zef.mne_type');
 mne_prior = evalin('base','zef.mne_prior');
 std_lhood = 10^(-snr_val/20);
@@ -18,13 +22,12 @@ time_step = evalin('base','zef.mne_time_3');
 source_direction_mode = evalin('base','zef.source_direction_mode');
 source_directions = evalin('base','zef.source_directions');
 
-
 info=[];
 info.tag='mne_type';
 info.type='mne_type';
 info.std_lhood=std_lhood;
 
-info.snr_val = evalin('base','zef.mne_snr');
+info.snr_val = evalin('base','zef.inv_snr');
 info.mne_type = evalin('base','zef.mne_type');
 info.mne_prior = evalin('base','zef.mne_prior');
 info.sampling_freq = evalin('base','zef.mne_sampling_frequency');
@@ -187,8 +190,7 @@ else
     balance_spatially = 0;
 end
 
-[theta0] = zef_find_gaussian_prior(snr_val,L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.mne_normalize_data'),0);
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 L = gpuArray(L);
@@ -309,9 +311,9 @@ if isequal(mne_type,2)
     aux_vec = sqrt(aux_vec);
     L_inv = L_inv./aux_vec(:,ones(size(L_inv,2),1));
 
-elseif isequal(mne_type, 2)
+elseif isequal(mne_type, 3)
 %'sLORETA'
-    
+ 
 aux_vec = sqrt(sum(L_inv.*L', 2));
 L_inv = L_inv./aux_vec(:,ones(size(L_inv,2),1));
 
