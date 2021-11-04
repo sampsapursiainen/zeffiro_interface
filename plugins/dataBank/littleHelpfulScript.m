@@ -64,6 +64,11 @@ for i=1:length(allHashes)
         [zef.reconstruction, zef.reconstruction_information]  = zef_ramus_iteration([]);%dipole
         zef.dataBank.tree=zef_dataBank_add(zef.dataBank.tree, zef.dataBank.hash, zef_dataBank_getData(zef, 'reconstruction'));
         
+        %slorata
+        [zef.reconstruction, zef.reconstruction_information]=zef_CSM_iteration;
+        zef.dataBank.tree=zef_dataBank_add(zef.dataBank.tree, zef.dataBank.hash, zef_dataBank_getData(zef, 'reconstruction'));
+
+        
         
 %         %dipole
 %         [zef.reconstruction, zef.reconstruction_information]=zef_dipoleScan;
@@ -87,8 +92,20 @@ end
 
 %% make gmm for every reconstruction
 
+for gmm_opt=1:3
+    
+    zef.GMM.parameters{23,2}={num2str(gmm_opt)};
+    
+    switch gmm_opt
+        case 1
+            meth='_kmeans';
+        case 2
+            meth='_maxProb_';
+        case 3
+            meth='_maxComp_';
+    end
 
-for  ii=[0, 0.25, 0.5, 0.75, 0.9]
+for  ii=[0.25, 0.5, 0.75]
 
     
     %open gmm tool first and set the parameters
@@ -97,7 +114,7 @@ for  ii=[0, 0.25, 0.5, 0.75, 0.9]
     
 allHashes=fieldnames(zef.dataBank.tree);
 
-allHashes=allHashes(startsWith(allHashes, 'node_1_3'));
+allHashes=allHashes(startsWith(allHashes, 'node_'));
 
 
 
@@ -109,7 +126,7 @@ for i=1:length(allHashes)
         
         [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
         
-        zef.dataBank.tree.(newHash).name=strcat('gmm_8_', num2str(100*ii));
+        zef.dataBank.tree.(newHash).name=strcat('gmm_4',meth, num2str(100*ii));
         if strcmp(zef.dataBank.save2disk, 'On')
             nodeData=zef.dataBank.tree.(newHash).data;
             folderName=strcat(zef.dataBank.folder, newHash);
@@ -124,6 +141,7 @@ for i=1:length(allHashes)
 end
 
 end
+end
 
 %% make all reconstructions
 
@@ -137,14 +155,20 @@ end
 [zef.reconstruction, zef.reconstruction_information]=zef_find_mne_reconstruction;
 zef_dataBank_addButtonPress;
 
+%sLoreta
+
+[zef.reconstruction, zef.reconstruction_information]=zef_CSM_iteration;
+zef_dataBank_addButtonPress;
 
 %ramus
 zef_update_ramus_inversion_tool; 
-[zef.reconstruction, zef.reconstruction_information]  = zef_ramus_iteration([]);%dipole
+[zef.reconstruction, zef.reconstruction_information]  = zef_ramus_iteration([]);
 zef_dataBank_addButtonPress;
+
 %dipole
 [zef.reconstruction, zef.reconstruction_information]=zef_dipoleScan;
 zef_dataBank_addButtonPress;
+
 %beamformer
 if strcmp(zef.beamformer.estimation_attr.Value,'1')
     [zef.reconstruction,~, zef.reconstruction_information] = zef_beamformer; 
@@ -159,7 +183,7 @@ zef_dataBank_addButtonPress;
 
 %% delete all x
 
-dltType='reconstruction';
+dltType='gmm';
 
 
 onlyIn='node';
@@ -176,7 +200,7 @@ while i<=length(allHashes)
     
     if strcmp(zef.dataBank.tree.(allHashes{i}).type, dltType)
         zef.dataBank.hash=allHashes{i};
-        zef.dataBank.tree=zef_dataBank_delete(zef.dataBank.tree, zef.dataBank.hash);
+        zef.dataBank.tree=zef_dataBank_delete(zef.dataBank.tree, zef.dataBank.hash, 'false');
         %zef_dataBank_uiTreeDeleteHash(zef.dataBank.app.Tree, zef.dataBank.hash);
         allHashes=fieldnames(zef.dataBank.tree);
         allHashes=allHashes(startsWith(allHashes, onlyIn));
@@ -187,57 +211,91 @@ while i<=length(allHashes)
     end
     
 end
-    
-%% make gmm for every reconstruction Quantile version
 
 
-for  ii=[0.1 0.25, 0.5, 0.75, 0.9]
 
-    
-    %open gmm tool first and set the parameters
-    
-    
+%%
+
+
+%chose folder
+zef.file_path='./dataNodes/';
+
+zef.file_index=3; %1-jpg, 2-tiff, 3-png
+
+
+
 allHashes=fieldnames(zef.dataBank.tree);
 
-allHashes=allHashes(startsWith(allHashes, 'node_1_3'));
+allHashes=allHashes(startsWith(allHashes, 'node_1'));
 
-
-
-for i=1:length(allHashes)
-    if strcmp(zef.dataBank.tree.(allHashes{i}).type, 'reconstruction')
-        zef.dataBank.hash=allHashes{i};
-        zef_dataBank_setData;
+for nMod=1:length(allHashes)
+    
+    if strcmp(zef.dataBank.tree.(allHashes{nMod}).type, 'custom')
+        modality=zef.dataBank.tree.(allHashes{nMod}).name;
         
+        allHashesMod=allHashes(startsWith(allHashes, zef.dataBank.tree.(allHashes{nMod}).hash));
         
-        values=nan(length(zef.reconstruction{1})/3,1);
-        j=1;
-        for k=1:3:length(zef.reconstruction{1})
-            values(j)=zef.reconstruction{1}(k)^2+zef.reconstruction{1}(k+1)^2+zef.reconstruction{1}(k+2)^2;
-            j=j+1;
-        end
-
-        zef.GMM.parameters{5,2}={num2str(quantile(values, ii))};
-        
-        
-        
-        [zef.GMM.model,zef.GMM.dipoles,zef.GMM.amplitudes,zef.GMM.time_variables] = zef_GMModeling;
-        
-        [zef.dataBank.tree, newHash]=zef_dataBank_add(zef.dataBank.tree, allHashes{i}, zef_dataBank_getData(zef, 'gmm'));
-        
-        zef.dataBank.tree.(newHash).name=strcat('gmm_10_quantile', num2str(100*ii));
-        if strcmp(zef.dataBank.save2disk, 'On')
-            nodeData=zef.dataBank.tree.(newHash).data;
-            folderName=strcat(zef.dataBank.folder, newHash);
-            save(folderName, '-struct', 'nodeData');
-            zef.dataBank.tree.(newHash).data=matfile(folderName);
-            
-            clear nodeData folderName
+        for nRec=1:length(allHashesMod)
+            if strcmp(zef.dataBank.tree.(allHashesMod{nRec}).type, 'reconstruction')
+                rec=zef.dataBank.tree.(allHashesMod{nRec}).name;
+                
+                allHashesRec=allHashes(startsWith(allHashesMod, zef.dataBank.tree.(allHashesMod{nRec}).hash));
+                
+                
+                
+                
+                
+                
+                
+                for i=1:length(allHashesRec)
+                    if strcmp(zef.dataBank.tree.(allHashesRec{i}).type, 'gmm')
+                        zef.dataBank.hash=allHashesRec{i};
+                        zef_dataBank_setData;
+                        zef.file=strcat(modality,'_',rec,'_', zef.dataBank.tree.(allHashesRec{i}).name);
+                        
+                        if not(isequal(zef.file,0))
+                            [zef.sensors,zef.reuna_p,zef.reuna_t,zef.reuna_p_inf] = process_meshes(zef.explode_everything);
+                            print_meshes([]);
+                            name=strcat(zef.file_path, zef.file, '.jpg');
+                            exportgraphics(gca,name)
+                            close gcf;
+                        end
+                    end
+                end
+            end
         end
         
         
     end
 end
 
-end
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
