@@ -30,7 +30,9 @@ balance_snr = varargin{4};
 end
 
 if length(varargin) > 4
+    if balance_snr
 w_param = 0.5 - 0.05*(varargin{5}-1);
+    end
 end
 
 if isempty(L)
