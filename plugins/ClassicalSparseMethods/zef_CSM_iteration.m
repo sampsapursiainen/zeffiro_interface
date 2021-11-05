@@ -40,11 +40,9 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
-elseif evalin('base','zef.inv_hyperprior') == 2 
-[beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
-end
+
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
+
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
@@ -76,9 +74,6 @@ end
 
 %___ Calculations start ___
 
-
-   
-    
     
     if method_type == 1 || method_type == 2
         
