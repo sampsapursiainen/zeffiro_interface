@@ -21,7 +21,7 @@ n_decompositions = evalin('base','zef.relax_multires_n_decompositions');
 M = evalin('base','zef.relax_preconditioner');
 perm_vec = evalin('base','zef.relax_preconditioner_permutation');
 gamma = 10^(-relax_db/20);
-std_lhood = 10^(-snr_val/20);
+tol_val = 10^(-relax_tolerance/20);
 
 reconstruction_information.tag = 'Relaxation';
 reconstruction_information.inv_time_1 = evalin('base','zef.relax_time_1');
@@ -112,13 +112,13 @@ relres_vec = gather(norm(r)/norm_b);
 
 end
 
-if relres_vec < std_lhood
+if relres_vec < tol_val
 break;
 end
 
 end
 
-if std_lhood < relres_vec
+if tol_val < relres_vec
     'Error: iteration did not converge.'
 end
 
