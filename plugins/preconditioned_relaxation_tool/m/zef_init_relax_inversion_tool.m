@@ -49,10 +49,10 @@ if not(isfield(zef,'relax_preconditioner_type'));
     zef.relax_preconditioner_type = 1; 
 end;
 if not(isfield(zef,'relax_db')); 
-    zef.relax_db = 0; 
+    zef.relax_db = 40; 
 end;
 if not(isfield(zef,'relax_tolerance')); 
-    zef.relax_tolerance = 0; 
+    zef.relax_tolerance = 10; 
 end;
 
 zef.relax_snr = zef.inv_snr;

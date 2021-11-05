@@ -21,7 +21,7 @@ n_decompositions = evalin('base','zef.relax_multires_n_decompositions');
 M = evalin('base','zef.relax_preconditioner');
 perm_vec = evalin('base','zef.relax_preconditioner_permutation');
 gamma = 10^(-relax_db/20);
-tol_val = 10^(-(snr_val)/20);
+tol_val = 10^(-relax_tolerance/20);
 
 reconstruction_information.tag = 'Relaxation';
 reconstruction_information.inv_time_1 = evalin('base','zef.relax_time_1');
@@ -38,6 +38,7 @@ reconstruction_information.snr_val = evalin('base','zef.relax_snr');
 [L, n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
 [f_data] = zef_getFilteredData; 
+
 
 tic;
 
@@ -62,7 +63,7 @@ end
 L_aux = L;
 z_vec_aux = zeros(size(L,2),1);
 
-for n_rep = 1 : n_decompositions
+for n_rep = 1 : length(M)
 
 L = L_aux(:,perm_vec{n_rep}{1});
     
@@ -84,9 +85,9 @@ end
 
 for i = 1 : n_iter
 if f_ind > 1;    
-waitbar((n_rep*(n_iter-1)+1)/(n_decompositions*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar((n_rep*(n_iter-1)+1)/(n_decompositions*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 
 if isequal(evalin('base','zef.relax_iteration_type'),1)
