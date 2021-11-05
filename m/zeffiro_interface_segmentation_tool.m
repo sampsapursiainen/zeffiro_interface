@@ -73,6 +73,8 @@ zef.h_menu_mesh_visualization_tool                =zef_data.h_menu_mesh_visualiz
 zef.h_menu_figure_tool                            =zef_data.h_menu_figure_tool;
 zef.h_menu_parcellation_tool                      =zef_data.h_menu_parcellation_tool;                 
 zef.h_menu_options                                =zef_data.h_menu_options;
+zef.h_menu_graphics_options                                =zef_data.h_menu_graphics_options;
+zef.h_menu_gaussian_prior_options                                =zef_data.h_menu_gaussian_prior_options;
 zef.h_menu_close_tools                            =zef_data.h_menu_close_tools;        
 zef.h_menu_close_figures                          =zef_data.h_menu_close_figures;        
 zef.h_menu_documentation                          =zef_data.h_menu_documentation;       
@@ -154,7 +156,9 @@ set(zef.h_menu_mesh_tool                             ,'MenuSelectedFcn','zef_mes
 set(zef.h_menu_mesh_visualization_tool                             ,'MenuSelectedFcn','zeffiro_interface_mesh_visualization_tool;zef_update;');
 set(zef.h_menu_figure_tool                           ,'MenuSelectedFcn','zef_figure_tool;zef_update;');
 set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_parcellation_tool;zef_update;');
-set(zef.h_menu_options                               ,'MenuSelectedFcn','additional_options;zef_update;');
+set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef_update;');
+set(zef.h_menu_graphics_options                               ,'MenuSelectedFcn','zef_open_graphics_options;zef_update;');
+set(zef.h_menu_gaussian_prior_options                               ,'MenuSelectedFcn','zef_open_gaussian_prior_options;zef_update;');
 set(zef.h_menu_close_tools                           ,'MenuSelectedFcn','zef_close_tools;zef_update;');
 set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_close_figs;zef_update;');
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef_update;');

@@ -1,7 +1,8 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-zef.h_plugin = fopen('zeffiro_plugins.ini');
+zef.h_plugin = fopen([zef.program_path '/zeffiro_plugins.ini']);
 zef.ini_cell = textscan(zef.h_plugin,'%s','HeaderLines',17,'Delimiter',',');
+fclose(zef.h_plugin);
 for zef_i = 1 : length(zef.ini_cell{:})/3
 zef.h_menu = findobj(zef.h_zeffiro_window_main,'Tag',zef.ini_cell{1}{3*zef_i-1});
 zef.h_menu = uimenu(zef.h_menu,'label',zef.ini_cell{1}{3*zef_i-2},'callback',[zef.ini_cell{1}{3*zef_i} '; zef_update;'] );
