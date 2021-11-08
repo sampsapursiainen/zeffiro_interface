@@ -20,6 +20,7 @@ p_vec_window = get(object_handle(1),'Position');
     
     for i = 1 : length(exclude_type)
     h = setdiff(h, findobj(h,'Type',exclude_type{i}));
+    h = setdiff(h, findobj(h,'Tag',exclude_type{i}));
     end
     
 if isempty(relative_size)
