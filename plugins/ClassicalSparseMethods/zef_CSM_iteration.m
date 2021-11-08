@@ -77,7 +77,7 @@ end
     
     if method_type == 1 || method_type == 2
         
-            S_mat = max(f.^2,[],'all')*(std_lhood^2/theta0)*eye(size(L,1));
+            S_mat = (std_lhood^2/theta0)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         S_mat = gpuArray(S_mat);
     end
