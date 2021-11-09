@@ -28,9 +28,12 @@ ind_aux_1 = multigrid_dec{i}{j}{k};
 ind_aux_2 = multigrid_perm{1}(ind_aux_1);
 ind_aux_2 = [3*(ind_aux_2'-1)+1; 3*(ind_aux_2'-1)+2; 3*ind_aux_2'];
 ind_aux_2 = ind_aux_2(:);
-LTL = L(:,ind_aux_2)'*L(:,ind_aux_2);
 
+LTL = sum(L(:,ind_aux_2).*L(:,ind_aux_2))';
+if not(isempty(LTL))
+LTL = spdiags(LTL,0,length(ind_aux_2),length(ind_aux_2));
 M(ind_aux_2,ind_aux_2) = M(ind_aux_2,ind_aux_2) + LTL; 
+end
 
 
 end
@@ -44,8 +47,7 @@ end
 
 M = M + (std_lhood.^2/theta0)*speye(size(M,1)); 
 
-M = spdiags(M,0); 
-M = spdiags(M,0,length(M),length(M));
+
 
 multigrid_perm_output{2} = [3*(multigrid_perm{3}-1)+1;3*(multigrid_perm{3}-1)+2; 3*multigrid_perm{3}];
 multigrid_perm_output{2} = multigrid_perm_output{2}(:);
