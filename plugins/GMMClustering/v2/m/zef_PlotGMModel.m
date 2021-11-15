@@ -1,6 +1,3 @@
-%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-
 function zef_PlotGMModel
 parameters = evalin('base','zef.GMM.parameters.Values');
 m_size = str2num(parameters{8});
@@ -27,6 +24,7 @@ stop_t = str2num(parameters{14});
 
 identcov = parameters{4};
 covtype = parameters{3};
+estim_param = str2num(parameters{22}); 
 
 K = max(str2num(parameters{1}));
 GMModel = evalin('base','zef.GMM.model');
@@ -178,7 +176,11 @@ end
 plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
 %set direction vectors (original can be non-unit length)
 %direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
+if estim_param == 1
 direct = s_length*[cos(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,4)),sin(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,1)),cos(GMModel.mu(dip_ind,4))];
+elseif estim_param == 2
+    direct = zeros(length(dip_ind),3);
+end
 quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')%set old time parameters back to their places:
 evalin('base','zef_GMM_subs_time_vars(''out'')');
@@ -266,10 +268,16 @@ else
     dip_ind = intersect(dip_components,1:size(GMModel{t}.mu,1));
 end
 %plot centroid marks:
-plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+%plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),'o','Color',[1,0.5,0],'LineWidth',m_width,'MarkerSize',m_size)
 %set direction vectors (original can be non-unit length)
+if estim_param == 1
 direct = s_length*[cos(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),sin(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),cos(GMModel{t}.mu(dip_ind,4))];
-quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
+elseif estim_param == 2
+    direct = zeros(length(dip_ind),3);
+end
+%quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
+quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',[1,0.5,0],'linewidth',m_width,'MarkerSize',m_size);
 hold(h,'off')
 pause(1.5)
 end
