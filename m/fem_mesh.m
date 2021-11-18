@@ -43,6 +43,28 @@ for k = 1 : length(reuna_p)
 n_compartments = n_compartments + max(1,length(submesh_cell{k}));
 end
 
+priority_vec_aux = zeros(n_compartments,1);
+compartment_counter = 0;
+submesh_ind_1 = ones(n_compartments,1);
+submesh_ind_2 = ones(n_compartments,1);
+
+for i = 1 :  length(reuna_p)
+       
+for k = 1 : max(1,length(submesh_cell{i}))
+    
+compartment_counter = compartment_counter + 1;
+priority_vec_aux(compartment_counter) = priority_vec(i);
+submesh_ind_1(compartment_counter) = i;
+submesh_ind_2(compartment_counter) = k;
+
+end
+end
+
+n_compartments = 0;
+for k = 1 : length(reuna_p)
+n_compartments = n_compartments + max(1,length(submesh_cell{k}));
+end
+
 x_lim = [min(reuna_p{end}(:,1)) max(reuna_p{end}(:,1))];
 y_lim = [min(reuna_p{end}(:,2)) max(reuna_p{end}(:,2))];
 z_lim = [min(reuna_p{end}(:,3)) max(reuna_p{end}(:,3))];
@@ -160,6 +182,10 @@ nodes_b = nodes;
 if isequal(evalin('base','zef.mesh_labeling_approach'),2)
     johtavuus_ind = johtavuus_ind_2;
 end
+
+[priority_val priority_ind] = min(priority_vec_aux(johtavuus_ind),[],2);
+priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_ind);
+[johtavuus_ind] = johtavuus_ind(priority_ind);
 
 close(h);
 
