@@ -28,12 +28,12 @@ zef.h_streamline_color.Value = zef.streamline_color;
 zef.h_n_streamline.Value = num2str(zef.n_streamline);
 zef.h_colortune_param.Value = num2str(zef.colortune_param);
 
-zef.h_zef_graphics_options.Name = 'ZEFFIRO Interface: Graphics processing options';
-set(findobj(zef.h_zef_graphics_options.Children,'-property','FontUnits'),'FontUnits','pixels');
-set(findobj(zef.h_zef_graphics_options.Children,'-property','FontSize'), 'FontSize', zef.font_size);
+zef.h_zef_graphics_processing_options.Name = 'ZEFFIRO Interface: Graphics processing options';
+set(findobj(zef.h_zef_graphics_processing_options.Children,'-property','FontUnits'),'FontUnits','pixels');
+set(findobj(zef.h_zef_graphics_processing_options.Children,'-property','FontSize'), 'FontSize', zef.font_size);
 
-set(zef.h_zef_graphics_options,'AutoResizeChildren','off');
-zef.graphics_options_current_size = get(zef.h_zef_graphics_options,'Position');
-set(zef.h_zef_graphics_options,'SizeChangedFcn','zef.graphics_options_current_size = zef_change_size_function(zef.h_zef_graphics_options,zef.graphics_options_current_size);');
+set(zef.h_zef_graphics_processing_options,'AutoResizeChildren','off');
+zef.graphics_options_current_size = get(zef.h_zef_graphics_processing_options,'Position');
+set(zef.h_zef_graphics_processing_options,'SizeChangedFcn','zef.graphics_options_current_size = zef_change_size_function(zef.h_zef_graphics_processing_options,zef.graphics_options_current_size);');
 
 clear zef_data;
