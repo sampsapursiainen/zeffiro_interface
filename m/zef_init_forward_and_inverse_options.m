@@ -16,6 +16,10 @@ if not(isfield(zef,'streamline_linewidth'));
 zef.streamline_linewidth = 1;
 end
 
+if not(isfield(zef,'normalize_lead_field')); 
+zef.normalize_lead_field = 4;
+end
+
 if not(isfield(zef,'streamline_color')); 
 zef.streamline_color = 'blue';
 end

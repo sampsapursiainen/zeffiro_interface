@@ -22,6 +22,7 @@ zef.h_inv_hyperprior.Value = zef.inv_hyperprior;
 zef.h_inv_hyperprior_tail_length_db.Value = num2str(zef.inv_hyperprior_tail_length_db);
 zef.h_inv_snr.Value = num2str(zef.inv_snr);
 zef.h_inv_prior_over_measurement_db.Value = num2str(zef.inv_prior_over_measurement_db);
+zef.h_inv_amplitude_db.Value = num2str(-zef.inv_amplitude_db);
 
 zef.h_zef_gaussian_prior_options.Name = 'ZEFFIRO Interface: Gaussian prior options';
 set(findobj(zef.h_zef_gaussian_prior_options.Children,'-property','FontUnits'),'FontUnits','pixels');

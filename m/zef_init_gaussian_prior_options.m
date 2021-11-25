@@ -13,6 +13,11 @@ if not(isfield(zef,'inv_hyperprior'));
     zef.inv_hyperprior = 1; 
 end; 
 
+if not(isfield(zef,'inv_amplitude_db')); 
+    zef.inv_amplitude_db = 20; 
+end; 
+
+
 if not(isfield(zef,'inv_hyperprior_weight')); 
     zef.inv_hyperprior_weight = 1; 
 end; 

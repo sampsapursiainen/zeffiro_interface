@@ -17,6 +17,7 @@
     zef.mesh_optimization_parameter = str2num(zef.h_mesh_optimization_parameter.Value);
     zef.mesh_labeling_approach =  zef.h_mesh_labeling_approach.Value;
     zef.source_space_creation_iterations = str2num(zef.h_source_space_creation_iterations.Value);
+    zef.normalize_lead_field = str2num(zef.h_normalize_lead_field.Value);
     
 if gpuDeviceCount > 0 & zef.use_gpu == 1
     gpuDevice(zef.gpu_num);

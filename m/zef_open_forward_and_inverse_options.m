@@ -36,6 +36,7 @@ zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach;
 zef.h_smoothing_steps_ele.Value =  num2str(zef.smoothing_steps_ele);
 zef.h_source_space_creation_iterations.Value =  num2str(zef.source_space_creation_iterations);
 
+zef.h_normalize_lead_field.Value =  num2str(zef.normalize_lead_field);
 
 zef.h_zef_forward_and_inverse_processing_options.Name = 'ZEFFIRO Interface: Forward and inverse processing options';
 set(findobj(zef.h_zef_forward_and_inverse_processing_options.Children,'-property','FontUnits'),'FontUnits','pixels');
