@@ -70,9 +70,9 @@ size_L_aux = zeros(length(L_aux),1);
 for i = 1 : length(L_aux)
    
     if isequal(approach,'fuchs')
-    fro_L_aux{i} = diag(std(y_aux{i}(:,y_ind_1:y_ind_2)'));
-    elseif isequal(approach,'whitening')
-     fro_L_aux{i} = chol(cov(y_aux{i}(:,y_ind_1:y_ind_2)'));
+    fro_L_aux{i} = chol(cov(y_aux{i}(:,y_ind_1:y_ind_2)'));
+    elseif isequal(approach,'source_space_std')
+    fro_L_aux{i} = std(L_aux{i},0,2);
     elseif isequal(approach,'frobenius')
     fro_L_aux{i} = norm(L_aux{i},'fro')/size(L_aux{i},1);
     end
@@ -88,8 +88,8 @@ max_amp_L_aux = max(amp_L_aux);
 
 for i = 1 : length(L_aux)
     
-    L_aux{i} = fro_L_aux{i}\L_aux{i};
-    y_aux{i} = fro_L_aux{i}\y_aux{i};
+    L_aux{i} = L_aux{i}./repmat(fro_L_aux{i},1,size(L_aux{i},2));
+    y_aux{i} = y_aux{i}./repmat(fro_L_aux{i},1,size(y_aux{i},2));
    
     L(subs_ind + 1:subs_ind + size_L_aux(i), :) = L_aux{i};
     y(subs_ind + 1:subs_ind + size_L_aux(i), :) = y_aux{i};
