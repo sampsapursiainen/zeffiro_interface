@@ -27,7 +27,8 @@ c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrah
 
  FB = freeBoundary(D);
  
-h = evalin('caller','h_axes_image');
+ h = evalin('caller','h_axes_image');
+ axes(h);
  hold(h,'on');
  h_resection = trimesh(FB,nodes(:,1),nodes(:,2),nodes(:,3));
  set(h_resection,'facecolor',resection_color);
@@ -35,9 +36,9 @@ h = evalin('caller','h_axes_image');
  if alpha_value == 0
  set(h_resection,'tag','additional');
  else 
-     set(h_resection,'facealpha',alpha_value);
+ set(h_resection,'facealpha',alpha_value);
  end
  set(h_resection,'facelighting','phong');
- hold(h,'off');
+ %hold(h,'off');
  
 end
