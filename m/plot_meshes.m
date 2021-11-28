@@ -7,6 +7,12 @@ f_ind = 1;
 void = [];
 sensors_point_like = [];
 
+if evalin('base','zef.toggle_figure_control_status')==1
+    colorbar_position = [0.60 0.647 0.01 0.29];
+else
+    colorbar_position = [0.8769 0.647 0.01 0.29];
+end
+
 loop_movie = 1;
 length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
@@ -17,7 +23,11 @@ compartment_tags = evalin('base','zef.compartment_tags');
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])
     s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
-    s_i_ind_2 =  evalin('base','zef.source_interpolation_ind{1}');
+        if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
+s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [1,2])
+    s_i_ind_2 = evalin('base','zef.brain_ind');
+        end
 end
 
 if evalin('base','zef.use_parcellation')
@@ -54,7 +64,7 @@ if ismember(evalin('base','zef.visualization_type'), [3])
             else
                 reconstruction = sqrt(sum(reconstruction.^2))';
             end
-            reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
+            reconstruction = sum(reconstruction(s_i_ind_2),2)/size(s_i_ind_2,2);
             max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
             min_rec = min([min_rec ; (reconstruction(:))]);
             max_rec = max_abs_reconstruction;
@@ -86,7 +96,7 @@ if ismember(evalin('base','zef.visualization_type'), [3])
         else
             reconstruction = sqrt(sum(reconstruction.^2))';
         end
-        reconstruction = sum(reconstruction(s_i_ind_2),2)/4;
+        reconstruction = sum(reconstruction(s_i_ind_2),2)/size(s_i_ind_2,2);
         max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
         min_rec = min([min_rec ; (reconstruction(:))]);
         max_rec = max_abs_reconstruction;
@@ -710,7 +720,8 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
                                 cb_done = 1;
-                                h_colorbar = colorbar('EastOutside','Position',[0.60 0.647 0.01 0.29],'Units','Normalized');
+                                h_colorbar = colorbar('EastOutside','Position',colorbar_position,'Units','Normalized');
+                                set(h_colorbar,'Tag','rightcolorbar');
                                 h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                                 set(h_axes_text,'tag','image_details');
                                 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
@@ -782,6 +793,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             cb_done = 1;
                             h_colorbar = colorbar('EastOutside','Position',[0.65 0.647 0.01 0.29],'Units','Normalized');
+                            set(h_colorbar,'Tag','rightcolorbar');
                             h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                             set(h_axes_text,'tag','image_details');
                             h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);

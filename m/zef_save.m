@@ -153,7 +153,7 @@ end
 if zef.save_switch == 9
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.fig'},'Save figures as...',zef.save_file_path); 
 if not(isequal(zef.file,0)); 
-zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Figure tool');
+zef.h_fig_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface: Figure tool*');
 savefig(zef.h_fig_aux,[zef.save_file_path zef.file]); 
 rmfield(zef,'h_fig_aux');
 end;

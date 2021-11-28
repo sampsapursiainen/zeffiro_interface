@@ -10,6 +10,8 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.toggle_figure_control_status = 1;
+zef_data.volumetric_distribution_mode = 1;
 zef_data.normalize_lead_field = 4;
 zef_data.source_space_creation_iterations = 2;
 zef_data.name_tags = cell(0);

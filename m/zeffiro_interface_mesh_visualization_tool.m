@@ -1,47 +1,12 @@
 zef_data = zeffiro_interface_mesh_visualization_tool_app;
 
-zef.h_mesh_visualization_tool = zef_data.h_mesh_visualization_tool;
-zef.h_pushbutton31 = zef_data.h_pushbutton31;
-zef.h_pushbutton20 = zef_data.h_pushbutton20;
-zef.h_pushbutton22 = zef_data.h_pushbutton22;
-zef.h_checkbox14 = zef_data.h_checkbox14;
-zef.h_checkbox15 = zef_data.h_checkbox15;
-zef.h_edit80 = zef_data.h_edit80;
-zef.h_edit81 = zef_data.h_edit81;
-zef.h_edit82 = zef_data.h_edit82;
-zef.h_visualization_type = zef_data.h_visualization_type;
-zef.h_frame_start = zef_data.h_frame_start;
-zef.h_frame_stop = zef_data.h_frame_stop;
-zef.h_frame_step = zef_data.h_frame_step;
-zef.h_orbit = zef_data.h_orbit;
-zef.h_orbit_2 = zef_data.h_orbit_2;
-zef.h_cp2_on = zef_data.h_cp2_on;
-zef.h_cp2_a = zef_data.h_cp2_a;
-zef.h_cp3_on = zef_data.h_cp3_on;
-zef.h_cp2_b = zef_data.h_cp2_b;
-zef.h_cp2_c = zef_data.h_cp2_c;
-zef.h_cp2_d = zef_data.h_cp2_d;
-zef.h_cp3_a = zef_data.h_cp3_a;
-zef.h_cp3_b = zef_data.h_cp3_b;
-zef.h_cp3_c = zef_data.h_cp3_c;
-zef.h_cp3_d = zef_data.h_cp3_d;
-zef.h_layer_transparency = zef_data.h_layer_transparency;
-zef.h_reconstruction_type = zef_data.h_reconstruction_type;
-zef.h_checkbox_cp_on = zef_data.h_checkbox_cp_on;
-zef.h_edit_cp_a = zef_data.h_edit_cp_a;
-zef.h_edit_cp_b = zef_data.h_edit_cp_b;
-zef.h_edit_cp_c = zef_data.h_edit_cp_c;
-zef.h_edit_cp_d = zef_data.h_edit_cp_d;
-zef.h_inv_scale = zef_data.h_inv_scale;
-zef.h_inv_colormap = zef_data.h_inv_colormap;
-zef.h_cp_mode = zef_data.h_cp_mode;
-zef.h_brain_transparency = zef_data.h_brain_transparency;
-zef.h_inv_dynamic_range = zef_data.h_inv_dynamic_range;
-zef.h_submesh_num = zef_data.h_submesh_num;
-zef.h_use_inflated_surfaces = zef_data.h_use_inflated_surfaces;
-zef.h_explode_everything = zef_data.h_explode_everything;
-zef.h_cone_draw = zef_data.h_cone_draw;
-zef.h_streamline_draw = zef_data.h_streamline_draw;
+zef.fieldnames = fieldnames(zef_data);
+for zef_i = 1:length(zef.fieldnames)
+zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+if isprop(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn')
+set(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn','zef_update_mesh_visualization_tool;');
+end
+end   
 
 %*******
 
@@ -60,6 +25,7 @@ set(zef.h_streamline_draw,'value',zef.streamline_draw);
 set(zef.h_visualization_type,'Items',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
 set(zef.h_visualization_type,'Value',zef.visualization_type);
+set(zef.h_volumetric_distribution_mode,'Value',num2str(zef.volumetric_distribution_mode));
 
 set(zef.h_frame_start,'value',num2str(zef.frame_start));
 set(zef.h_frame_stop,'value',num2str(zef.frame_stop));
@@ -90,7 +56,6 @@ set(zef.h_edit_cp_b,'value',num2str(zef.cp_b));
 set(zef.h_edit_cp_c,'value',num2str(zef.cp_c));
 set(zef.h_edit_cp_d,'value',num2str(zef.cp_d));
 
-set(zef.h_inv_scale,'value',num2str(zef.inv_scale));
 set(zef.h_inv_scale,'Items',{'Logarithmic','Linear','Square root'});
 zef.h_inv_scale.ItemsData = [1:length(zef.h_inv_scale.Items)];
 set(zef.h_inv_scale,'Value',zef.inv_scale);
@@ -110,46 +75,6 @@ set(zef.h_brain_transparency,'value',num2str(1 - zef.brain_transparency));
 set(zef.h_inv_dynamic_range,'value',num2str(1./zef.inv_dynamic_range));
 
 set(zef.h_submesh_num,'value',num2str(zef.submesh_num));
-
-
-set(zef.h_checkbox14,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
-set(zef.h_checkbox15,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
-set(zef.h_edit80,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_edit81,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
-set(zef.h_edit82,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
-set(zef.h_visualization_type,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_frame_start,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_frame_stop,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_frame_step,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_orbit,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_orbit_2,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp2_on,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp2_a,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp3_on,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp2_b,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp2_c,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp2_d,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp3_a,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp3_b,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp3_c,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp3_d,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_layer_transparency,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_reconstruction_type,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_checkbox_cp_on,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_edit_cp_a,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_edit_cp_b,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_edit_cp_c,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_edit_cp_d,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_inv_scale,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_inv_colormap,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cp_mode,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_brain_transparency,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_inv_dynamic_range,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_submesh_num,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_use_inflated_surfaces,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_explode_everything,'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-set(zef.h_cone_draw,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
-set(zef.h_streamline_draw,'ValueChangedFcn','zef_update_mesh_visualization_tool;'); 
 
 
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);

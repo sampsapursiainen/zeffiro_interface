@@ -8,6 +8,13 @@ void = [];
 
 sensors_point_like = [];
 
+
+if evalin('base','zef.toggle_figure_control_status')==1
+    colorbar_position = [0.60 0.647 0.01 0.29];
+else
+    colorbar_position = [0.8769 0.647 0.01 0.29];
+end
+
 loop_movie = 1;
 length_reconstruction_cell = 1;
 movie_fps = evalin('base','zef.movie_fps');
@@ -368,8 +375,12 @@ frame_start = 1;
 frame_stop = 1;
 frame_step = 1;
 if ismember(evalin('base','zef.visualization_type'), [2,4])
+    if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
-end
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [1,2])
+    s_i_ind = evalin('base','zef.brain_ind');
+    end
+    end
 
 if evalin('base','zef.use_parcellation')
 selected_list = evalin('base','zef.parcellation_selected');
@@ -401,7 +412,7 @@ reconstruction = (1/sqrt(3))*sum(reconstruction)';
 else    
 reconstruction = sqrt(sum(reconstruction.^2))';
 end
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind),2)/size(s_i_ind,2);
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
@@ -429,7 +440,7 @@ reconstruction = (1/sqrt(3))*sum(reconstruction)';
 else    
 reconstruction = sqrt(sum(reconstruction.^2))';
 end
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind),2)/size(s_i_ind,2);
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
 max_rec = max_abs_reconstruction;
@@ -519,7 +530,7 @@ elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
 if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind),2)/size(s_i_ind,2);
 reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
 I_3_rec = I_3;
@@ -535,9 +546,9 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
-rec_x = sum(rec_x(s_i_ind),2)/4;
-rec_y = sum(rec_y(s_i_ind),2)/4;
-rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = sum(rec_x(s_i_ind),2)/size(s_i_ind,2);
+rec_y = sum(rec_y(s_i_ind),2)/size(s_i_ind,2);
+rec_z = sum(rec_z(s_i_ind),2)/size(s_i_ind,2);
 rec_x = rec_x(I_2);
 rec_y = rec_y(I_2);
 rec_z = rec_z(I_2);
@@ -668,7 +679,8 @@ set(h_surf_2,'AlphaDataMapping','none');
 end
 
 if ismember(evalin('base','zef.visualization_type'),[2])
-h_colorbar = colorbar('EastOutside','Position',[0.60 0.647 0.01 0.29]);
+h_colorbar = colorbar('EastOutside','Position',colorbar_position);
+set(h_colorbar,'Tag','rightcolorbar');
 end
 %set(h_colorbar,'layer','bottom');
 lighting phong;
@@ -782,7 +794,7 @@ elseif evalin('base','zef.reconstruction_type') == 6
 reconstruction = (1/sqrt(3))*sum(reconstruction)';
 end
 if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
-reconstruction = sum(reconstruction(s_i_ind),2)/4;
+reconstruction = sum(reconstruction(s_i_ind),2)/size(s_i_ind,2);
 reconstruction = reconstruction(I_2_b_rec);
 reconstruction = reconstruction(I_2_rec(I_1_rec));
 end
@@ -791,9 +803,9 @@ if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
 rec_x = reconstruction(1,:)';
 rec_y = reconstruction(2,:)';
 rec_z = reconstruction(3,:)';
-rec_x = sum(rec_x(s_i_ind),2)/4;
-rec_y = sum(rec_y(s_i_ind),2)/4;
-rec_z = sum(rec_z(s_i_ind),2)/4;
+rec_x = sum(rec_x(s_i_ind),2)/size(s_i_ind,2);
+rec_y = sum(rec_y(s_i_ind),2)/size(s_i_ind,2);
+rec_z = sum(rec_z(s_i_ind),2)/size(s_i_ind,2);
 rec_x = rec_x(I_2_b_rec);
 rec_y = rec_y(I_2_b_rec);
 rec_z = rec_z(I_2_b_rec);
