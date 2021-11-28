@@ -4,6 +4,22 @@ function [void] = print_meshes(void);
  
 f_ind = 1;
 
+if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
+    volumetric_distribution = evalin('base','zef.reconstruction');
+elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
+        volumetric_distribution = repmat(evalin('base','zef.sigma(:,1)')',3,1)/sqrt(3);
+        volumetric_distribution = volumetric_distribution(:);
+ elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)
+     volumetric_distribution = evalin('base','y_ES');
+if iscell(volumetric_distribution)
+         for i = 1 : length(volumetric_distribution)
+            volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};  
+         end
+else
+    volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
+end
+end
+
 void = []; 
 
 sensors_point_like = [];
@@ -60,8 +76,8 @@ cp3_b = evalin('base','zef.cp3_b');
 cp3_c = evalin('base','zef.cp3_c');
 cp3_d = evalin('base','zef.cp3_d');
 
-if iscell(evalin('base','zef.reconstruction'))
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+if iscell(volumetric_distribution)
+length_reconstruction_cell = length(volumetric_distribution);
 else
 length_reconstruction_cell = 1;
 end
@@ -85,7 +101,7 @@ else
 is_video = 0;
 end
 
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
 video_quality = str2num(evalin('base','zef.video_codec'));
@@ -400,16 +416,20 @@ frame_stop = 1;
 frame_step = 1;
 
 if ismember(evalin('base','zef.visualization_type'), [2,4])
+    if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
-end
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+    s_i_ind = evalin('base','zef.brain_ind');
+    end
+    end
 
 if evalin('base','zef.use_parcellation')
 selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 end
 
-if iscell(evalin('base','zef.reconstruction')) &&  evalin('base','zef.visualization_type') == 2
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+if iscell(volumetric_distribution) &&  evalin('base','zef.visualization_type') == 2
+length_reconstruction_cell = length(volumetric_distribution);
 frame_start = evalin('base','zef.frame_start');
 frame_stop = evalin('base','zef.frame_stop');
 frame_step = evalin('base','zef.frame_step');
@@ -425,7 +445,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+reconstruction = volumetric_distribution{f_ind};
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -453,7 +473,7 @@ end
 end
 elseif  evalin('base','zef.visualization_type') == 2
 %s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -481,7 +501,7 @@ end
 end
 
 if ismember(evalin('base','zef.visualization_type'),[2])
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2
+if  iscell(volumetric_distribution) & evalin('base','zef.visualization_type') == 2
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
 end
@@ -489,7 +509,7 @@ end
 
 f_ind_aux = 1;
 for f_ind = frame_start : frame_start
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
+if  iscell(volumetric_distribution) & evalin('base','zef.visualization_type') == 2    
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
 end
@@ -534,10 +554,10 @@ end
 if ismember(evalin('base','zef.visualization_type'),[2])
 
 %******************************************************
-if iscell(evalin('base','zef.reconstruction')) 
+if iscell(volumetric_distribution) 
 reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -557,10 +577,10 @@ length_reconstruction = length(reconstruction);
 
 
 %******************************************************
-if iscell(evalin('base','zef.reconstruction')) 
+if iscell(volumetric_distribution) 
 reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -578,10 +598,10 @@ a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
 %******************************************************
 
-if iscell(evalin('base','zef.reconstruction'))
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+if iscell(volumetric_distribution)
+reconstruction = volumetric_distribution{f_ind};
 else
-reconstruction = evalin('base','zef.reconstruction');  
+reconstruction = volumetric_distribution;  
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -787,7 +807,7 @@ end
 end
 end
 
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 else
 view(get(evalin('base','zef.h_axes1'),'view'));
@@ -821,7 +841,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-sensor_patches = findobj(evalin('base','zef.h_axes_image'),'Type','Patch','Tag','sensor');
+sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
 uistack(sensor_patches,'top');
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
@@ -829,7 +849,7 @@ zef_set_sliders_print(1,h_axes_image);
     
 %drawnow;
   
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2
 
   if is_video  
   if file_index == 1; 
@@ -875,7 +895,7 @@ tic;
 for f_ind = frame_start + frame_step : frame_step : frame_stop
 pause(1/30);
 f_ind_aux = f_ind_aux + 1;
-if  iscell(evalin('base','zef.reconstruction')) & evalin('base','zef.visualization_type') == 2    
+if  iscell(volumetric_distribution) & evalin('base','zef.visualization_type') == 2    
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']); 
 set(h_waitbar,'handlevisibility','off');
 end
@@ -887,10 +907,10 @@ hold on;
 
 
 %******************************************************
-if iscell(evalin('base','zef.reconstruction'))
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+if iscell(volumetric_distribution)
+reconstruction = volumetric_distribution{f_ind};
 else
-reconstruction = evalin('base','zef.reconstruction');  
+reconstruction = volumetric_distribution;  
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -908,10 +928,10 @@ a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
 %******************************************************
 
-if iscell(evalin('base','zef.reconstruction'))
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+if iscell(volumetric_distribution)
+reconstruction = volumetric_distribution{f_ind};
 else
-reconstruction = evalin('base','zef.reconstruction');  
+reconstruction = volumetric_distribution;  
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -1087,13 +1107,13 @@ end
 
 
 
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
 close(h_aviobj);
 warning off; delete('avi_file'); warning on
 movefile(avi_file_temp, avi_file, 'f');
 end
 close(h_fig_aux);
-if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 2    
+if  iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2    
 close(h_waitbar);     
 end
 %**************************************************************************
@@ -1107,8 +1127,8 @@ end
 else
 
 if ismember(evalin('base','zef.visualization_type'),[3,4])  
-if iscell(evalin('base','zef.reconstruction'))
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+if iscell(volumetric_distribution)
+length_reconstruction_cell = length(volumetric_distribution);
 else
 length_reconstruction_cell = 1;
 end
@@ -1161,7 +1181,7 @@ end
 
 
 
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
 video_quality = str2num(evalin('base','zef.video_codec'));
@@ -1183,9 +1203,13 @@ end
 
 submesh_num = evalin('base','zef.submesh_num');
 
-if ismember(evalin('base','zef.visualization_type'),[3, 4])
-s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
-s_i_ind_2 =  evalin('base','zef.source_interpolation_ind{1}');
+if ismember(evalin('base','zef.visualization_type'), [3,4])
+    s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
+        if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
+s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+    s_i_ind_2 = evalin('base','zef.brain_ind');
+        end
 end
 
 if evalin('base','zef.use_parcellation')
@@ -1197,8 +1221,8 @@ if ismember(evalin('base','zef.visualization_type'),[3])
 max_abs_reconstruction = 0;
 min_rec = Inf;
 max_rec = -Inf;
-if iscell(evalin('base','zef.reconstruction'))
-length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
+if iscell(volumetric_distribution)
+length_reconstruction_cell = length(volumetric_distribution);
 frame_start = evalin('base','zef.frame_start');
 frame_stop = evalin('base','zef.frame_stop');
 frame_step = evalin('base','zef.frame_step');
@@ -1214,7 +1238,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
+reconstruction = single(volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -1245,7 +1269,7 @@ frame_start = 1;
 frame_stop = 1;
 frame_step = 1;
 number_of_frames = 1;    
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(evalin('base','zef.reconstruction_type'), 6)
@@ -1718,7 +1742,7 @@ aux_brain_visible_ind = [aux_brain_visible_ind i];
 
 if ismember(evalin('base','zef.visualization_type'),[3])
 if  i == aux_brain_visible_ind
-if  iscell(evalin('base','zef.reconstruction')) 
+if  iscell(volumetric_distribution) 
 h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);    
 set(h_waitbar,'handlevisibility','off');
 end    
@@ -1748,10 +1772,10 @@ max_rec = size(evalin('base','zef.parcellation_colormap'),1);
 else
 
 %******************************************************
-if iscell(evalin('base','zef.reconstruction')) 
+if iscell(volumetric_distribution) 
 reconstruction = evalin('base',['zef.reconstruction{' int2str(frame_start) '}']);
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -1770,10 +1794,10 @@ length_reconstruction = length(reconstruction);
 %******************************************************
     
 
-if iscell(evalin('base','zef.reconstruction')) 
+if iscell(volumetric_distribution) 
 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 end
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -2033,7 +2057,7 @@ end
 end
 end
 
-if iscell(evalin('base','zef.reconstruction')) &&  ismember(evalin('base','zef.visualization_type'),[3])
+if iscell(volumetric_distribution) &&  ismember(evalin('base','zef.visualization_type'),[3])
 view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 else
 view(get(evalin('base','zef.h_axes1'),'view'));
@@ -2063,7 +2087,7 @@ camtarget(c_ta);
 camproj(c_p); 
 camup(c_u);
 
-        sensor_patches = findobj(evalin('base','zef.h_axes_image'),'Type','Patch','Tag','sensor');
+        sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
@@ -2074,7 +2098,7 @@ end
 
 %drawnow;
 
-if iscell(evalin('base','zef.reconstruction')) &&  ismember(evalin('base','zef.visualization_type'),[3])
+if iscell(volumetric_distribution) &&  ismember(evalin('base','zef.visualization_type'),[3])
 
   if is_video  
   if file_index == 1; 
@@ -2160,10 +2184,10 @@ set(h_waitbar,'handlevisibility','off');
 %******************************************************
 
 if ismember(evalin('base','zef.visualization_type'),[3])
-if iscell(evalin('base','zef.reconstruction')) 
-reconstruction = evalin('base',['zef.reconstruction{' int2str(f_ind) '}']);
+if iscell(volumetric_distribution) 
+reconstruction = volumetric_distribution{f_ind};
 else
-reconstruction = evalin('base','zef.reconstruction');
+reconstruction = volumetric_distribution;
 end
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -2183,7 +2207,7 @@ length_reconstruction = length(reconstruction);
 
 for i = intersect(aux_brain_ind, aux_brain_visible_ind)
 ab_ind = find(aux_brain_ind == i);
-reconstruction = single(evalin('base',['zef.reconstruction{' int2str(f_ind) '}']));
+reconstruction = single(volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
@@ -2485,13 +2509,13 @@ end;
 end
 
 
-if iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
+if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
 close(h_aviobj);
 warning off; delete('avi_file'); warning on
 movefile(avi_file_temp, avi_file, 'f');
 end
 close(h_fig_aux);
-if  iscell(evalin('base','zef.reconstruction')) &  evalin('base','zef.visualization_type') == 3    
+if  iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 3    
 close(h_waitbar);     
 end
 

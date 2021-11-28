@@ -26,9 +26,9 @@ if isequal(get(h(i),'Tag'),'togglecontrolsbutton')
     set(h(i),'units','normalized');
 togglecontrolsbuttonposition = get(h(i),'position');
     if toggle_status == 1; 
-        set(h(i),'Position',[0.8 0.95 0.15 0.05])
+        set(h(i),'Position',[0.82 0.95 0.15 0.05])
     else
-         set(h(i),'Position',[0.5 0.95 0.15 0.05])
+         set(h(i),'Position',[0.51 0.95 0.15 0.05])
     end
     set(h(i),'units','pixels');    
 end
@@ -41,13 +41,13 @@ end
  axes_position = get(h_axes1,'position');
 if toggle_status == 1 || isequal(toggle_mode,'finalize')
     set(h_axes1,'Position',[0.05 0.34 0.9 0.6]);
-    h_colorbar = findobj(h,'Tag','rightcolorbar');
+    h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))
         set(h_colorbar,'Position',[0.8769 0.647 0.01 0.29]);
     end
 else
     set(h_axes1,'Position',[0.05 0.34 0.6 0.6])
-        h_colorbar = findobj(h,'Tag','rightcolorbar');
+        h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))
         set(h_colorbar,'Position',[0.6 0.647 0.01 0.29]);
     end

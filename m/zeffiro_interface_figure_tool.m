@@ -33,7 +33,7 @@ zef.h_zeffiro = figure(...
 
 addToolbarExplorationButtons(zef.h_zeffiro);
 
-zef.h_reset_figure_tool_sliders = uicontrol('Tag','togglecontrolsbutton','Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.5 0.95 0.15 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
+zef.h_reset_figure_tool_sliders = uicontrol('Tag','togglecontrolsbutton','Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.51 0.95 0.15 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
 
 zef.stop_movie = 0;
 zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.34 0.60 0.60],'FontSize',0.587962962962963,'Tag','axes1');
