@@ -240,7 +240,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 A = gpuArray(A);
 A_K = gpuArray(A_K);
 B = gpuArray(B); 
-K = gpuArray(K)
+K = gpuArray(K);
 sum_B = gpuArray(sum_B);
 sum_A = gpuArray(sum_A);
 end
