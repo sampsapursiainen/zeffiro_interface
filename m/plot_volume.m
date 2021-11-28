@@ -4,6 +4,11 @@ function [void] = plot_volume(void);
 
 f_ind = 1;
 
+h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'-regexp','tag','Colorbar');
+if not(isempty(h_colorbar))
+    delete(h_colorbar(:));
+end
+
 void = [];
 
 sensors_point_like = [];
@@ -35,7 +40,7 @@ if not(isempty(h_axes_text))
 delete(h_axes_text); 
 h_axes_text = [];
 end
-h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','Colorbar');
+h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'-regexp','tag','Colorbar');
 if not(isempty(h_colorbar))
 delete(h_colorbar(:));
 h_colorbar = [];
@@ -680,7 +685,7 @@ end
 
 if ismember(evalin('base','zef.visualization_type'),[2])
 h_colorbar = colorbar('EastOutside','Position',colorbar_position);
-set(h_colorbar,'Tag','rightcolorbar');
+set(h_colorbar,'Tag','rightColorbar');
 end
 %set(h_colorbar,'layer','bottom');
 lighting phong;

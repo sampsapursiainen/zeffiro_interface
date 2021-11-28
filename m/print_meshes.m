@@ -743,7 +743,7 @@ end
 
 if ismember(evalin('base','zef.visualization_type'),[2])
 h_colorbar = colorbar('EastOutside','Position',[0.92 0.647 0.01 0.29]);
-set(h_colorbar,'Tag','rightcolorbar');
+set(h_colorbar,'Tag','rightColorbar');
 h_colorbar_axes = get(h_colorbar,'axes');
 set(h_colorbar_axes,'fontsize',1500);
 end
@@ -1904,7 +1904,7 @@ end
 if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
 cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
-set(h_colorbar,'Tag','rightcolorbar');
+set(h_colorbar,'Tag','rightColorbar');
 h_colorbar_axes = get(h_colorbar,'axes');
 set(h_colorbar_axes,'fontsize',1500);
 h_axes_hist = axes('position',[0.03 0.035 0.2 0.1],'visible','off');
@@ -2000,7 +2000,7 @@ end
 
 cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
-set(h_colorbar,'Tag','rightcolorbar');
+set(h_colorbar,'Tag','rightColorbar');
 h_colorbar_axes = get(h_colorbar,'axes');
 set(h_colorbar_axes,'fontsize',1500);
 axes(h_axes_image); set(h_fig_aux,'visible','on');

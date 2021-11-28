@@ -4,6 +4,11 @@ function [void] = plot_meshes(~)
 
 f_ind = 1;
 
+h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'-regexp','tag','Colorbar');
+if not(isempty(h_colorbar))
+    delete(h_colorbar(:));
+end
+
 void = [];
 sensors_point_like = [];
 
@@ -202,7 +207,7 @@ if not(isempty(h_axes_text))
     delete(h_axes_text);
     h_axes_text = [];
 end
-h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'tag','Colorbar');
+h_colorbar = findobj(evalin('base','zef.h_zeffiro'),'-regexp','tag','Colorbar');
 if not(isempty(h_colorbar))
     delete(h_colorbar(:));
 end
@@ -721,7 +726,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
                                 cb_done = 1;
                                 h_colorbar = colorbar('EastOutside','Position',colorbar_position,'Units','Normalized');
-                                set(h_colorbar,'Tag','rightcolorbar');
+                                set(h_colorbar,'Tag','rightColorbar');
                                 h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                                 set(h_axes_text,'tag','image_details');
                                 h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
@@ -793,7 +798,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             
                             cb_done = 1;
                             h_colorbar = colorbar('EastOutside','Position',[0.65 0.647 0.01 0.29],'Units','Normalized');
-                            set(h_colorbar,'Tag','rightcolorbar');
+                            set(h_colorbar,'Tag','rightColorbar');
                             h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                             set(h_axes_text,'tag','image_details');
                             h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
