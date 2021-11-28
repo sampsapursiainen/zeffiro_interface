@@ -35,7 +35,7 @@ zef.use_inflated_surfaces = zef.h_use_inflated_surfaces.Value;
 zef.explode_everything = zef.h_explode_everything.Value;
 zef.cone_draw = zef.h_cone_draw.Value;
 zef.streamline_draw = zef.h_streamline_draw.Value;
-zef.volumetric_distribution_mode = str2num(zef.h_volumetric_distribution_mode.Value);
+zef.volumetric_distribution_mode = zef.h_volumetric_distribution_mode.Value;
 
 if zef.inv_dynamic_range == 0
 zef.inv_dynamic_range = Inf;

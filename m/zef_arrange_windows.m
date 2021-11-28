@@ -68,6 +68,19 @@ else
     set(h_aux(i),'position',[position_grid_1(i) position_grid_2(i) 1/n_1 1/n_2])
 end
 end
+
+for i = 1 : length(h_aux)
+figure(h_aux(i));
+evalin('base',get(h_aux(i),'SizeChangedFcn'));
+end
+
+for i = 1 : length(h_aux)
+figure(h_aux(i));
+evalin('base',get(h_aux(i),'SizeChangedFcn'));
+end
+
+figure(evalin('base','zef.h_zeffiro_window_main'));
+
 end
 
 if isequal(arrange_function,'maximize')
