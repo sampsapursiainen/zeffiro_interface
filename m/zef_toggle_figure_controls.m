@@ -24,7 +24,7 @@ end
 if isequal(get(h(i),'Tag'),'togglecontrolsbutton')
     h_togglecontrolsbutton = h(i);
     set(h(i),'units','normalized');
-togglecontrolsbuttonposition = get(h(i),'position')
+togglecontrolsbuttonposition = get(h(i),'position');
     if toggle_status == 1; 
         set(h(i),'Position',[0.8 0.95 0.15 0.05])
     else
