@@ -22,10 +22,13 @@ set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_cone_draw,'value',zef.cone_draw);
 set(zef.h_streamline_draw,'value',zef.streamline_draw);
 
-set(zef.h_visualization_type,'Items',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
+set(zef.h_visualization_type,'Items',{'Domain','Distribution (volume)','Distribution (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
 set(zef.h_visualization_type,'Value',zef.visualization_type);
-set(zef.h_volumetric_distribution_mode,'Value',num2str(zef.volumetric_distribution_mode));
+
+set(zef.h_volumetric_distribution_mode,'Items',{'Reconstruction','Conductivity','Stimulation'});
+zef.h_volumetric_distribution_mode.ItemsData = [1:length(zef.h_volumetric_distribution_mode.Items)];
+set(zef.h_volumetric_distribution_mode,'Value',zef.volumetric_distribution_mode);
 
 set(zef.h_frame_start,'value',num2str(zef.frame_start));
 set(zef.h_frame_stop,'value',num2str(zef.frame_stop));
