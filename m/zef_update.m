@@ -147,6 +147,7 @@ for zef_i = 1 : length(zef.h_aux)
 if not(isempty(strfind(zef.h_aux(zef_i).Name,'[')))
 zef.h_aux(zef_i).Name = strtrim(zef.h_aux(zef_i).Name(1:strfind(zef.h_aux(zef_i).Name,'[')-1));
 end
+if not(isempty(zef.project_tag))
 zef.h_aux(zef_i).Name = [zef.h_aux(zef_i).Name ' [' zef.project_tag ']' ];
 end
 
