@@ -664,7 +664,9 @@ colormap_cell = evalin('base','zef.colormap_cell');
 set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','reconstruction');
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
+end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -901,8 +903,9 @@ end
 
 %h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'CData',reconstruction);
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(evalin('base','zef.h_axes1'), f_ind);
-
+end
 
 %set(gca,'CLim',[min_rec max_rec]); 
 %set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');

@@ -736,7 +736,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 set(h_surf_2{ab_ind},'FaceAlpha','interp');
                                 set(h_surf_2{ab_ind},'AlphaDataMapping','none');
                             end
+                            if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+                            end
 
                             
                             if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
@@ -781,7 +783,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             set(h_surf_2{i},'Tag','reconstruction');
                             end
                            
+                           if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+                           end
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                             set(gca,'CLim',gather([min_rec max_rec]));
                             %set(h_surf_2{i},'specularstrength',0.2);
@@ -978,7 +982,10 @@ zef_plot_dpq('dynamical');
                         %axes(evalin('base','zef.h_axes1'));
                         %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                         set(h_surf_2{ab_ind},'CData',reconstruction);
-                        zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+                        if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
+                            zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+                        end
+
 
                         %set(gca,'CLim',[min_rec max_rec]);
                         %set(h_surf_2{ab_ind},'specularstrength',0.2);
@@ -1022,7 +1029,9 @@ zef_plot_dpq('dynamical');
                     axes(evalin('base','zef.h_axes1'));
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
+                    if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                     zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
+                    end
 
                     %set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                     %set(gca,'CLim',gather([min_rec max_rec]));

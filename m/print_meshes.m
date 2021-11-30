@@ -726,7 +726,9 @@ set(h_fig_aux,'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_co
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','sensor');
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(h_axes_image,'CLim',[min_rec max_rec]);
@@ -1027,7 +1029,10 @@ end
 
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','reconstruction');
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
+
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -1890,7 +1895,10 @@ else
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
+
 
 %marker here
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -1991,7 +1999,10 @@ else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
 end
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
+
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',gather([min_rec max_rec])); 
 %set(h_surf_2{i},'specularstrength',0.2);
@@ -2299,7 +2310,10 @@ else
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
+
 
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
@@ -2355,7 +2369,10 @@ else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
 end
+if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
+end
+
 
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
