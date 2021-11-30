@@ -141,6 +141,17 @@ if contains(zef.h_aux(zef_i).Label,'ZEFFIRO Interface:')
 end
 end
 
+zef.project_tag = get(zef.h_project_tag,'Value');
+zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*');
+for zef_i = 1 : length(zef.h_aux)
+if not(isempty(strfind(zef.h_aux(zef_i).Name,'[')))
+zef.h_aux(zef_i).Name = strtrim(zef.h_aux(zef_i).Name(1:strfind(zef.h_aux(zef_i).Name,'[')-1));
+end
+if not(isempty(zef.project_tag))
+zef.h_aux(zef_i).Name = [zef.h_aux(zef_i).Name ' [' zef.project_tag ']' ];
+end
+end
+
 zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 zef.h_windows_open = zef.h_windows_open(find(ismember(zef.h_windows_open,zef.h_aux)));
 zef.h_windows_open = [zef.h_windows_open ; setdiff(zef.h_aux, zef.h_windows_open)];
@@ -148,8 +159,8 @@ zef.h_windows_open = [zef.h_windows_open ; setdiff(zef.h_aux, zef.h_windows_open
 
 for zef_i = 1 : length(zef.h_windows_open)
 zef.aux_field_1 = sum(contains(get(zef.h_windows_open(1:zef_i),'Name'),get(zef.h_windows_open(zef_i),'Name')));
-if isequal(zef.h_windows_open(zef_i).Name,'ZEFFIRO Interface: Figure tool')
-uimenu(zef.h_menu_window,'label',[zef.h_windows_open(zef_i).Name ' ' num2str(zef.aux_field_1)],'callback',['figure(evalin(''base'', ''zef.h_windows_open(' num2str(zef_i) ')'')); zef.h_zeffiro = gcf; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');']); 
+if contains(zef.h_windows_open(zef_i).Name,'ZEFFIRO Interface: Figure tool')
+uimenu(zef.h_menu_window,'label',[zef.h_windows_open(zef_i).Name],'callback',['figure(evalin(''base'', ''zef.h_windows_open(' num2str(zef_i) ')'')); zef.h_zeffiro = gcf; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');']); 
 else
 uimenu(zef.h_menu_window,'label',[zef.h_windows_open(zef_i).Name ' ' num2str(zef.aux_field_1)],'callback',['figure(evalin(''base'', ''zef.h_windows_open(' num2str(zef_i) ')''))']);
 end
@@ -175,7 +186,6 @@ zef.h_project_notes.Value = zef.project_notes;
 else
 zef.project_notes = zef.h_project_notes.Value;
 end
-
 
 if not(ismember(zef.current_sensors,zef.sensor_tags))
     zef.current_sensors = [];
