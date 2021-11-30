@@ -6,22 +6,17 @@ end
 
 set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',{'Inactive','Constrained field','Unconstrained field','Active surface'},'numeric'})
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
-
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_sensors_name_table,'columnformat',{'numeric','char','logical'});
-
 set(zef.h_sensors_table,'columnformat',{'numeric','char',{'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'},'logical','logical','logical','logical','logical'});
 set(zef.h_parameters_table,'columnformat',{'char','numeric'});
-
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_arrange_windows(''close'',''windows'',''all''); rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
-
+set(zef.h_project_tag,'ValueChangedFcn','zef_update;');
 set(zef.h_compartment_table,'CellEditCallback','zef_update;');
 set(zef.h_sensors_table,'CellEditCallback','zef_update;');
 set(zef.h_transform_table,'CellEditCallback','zef_update_transform;');
 set(zef.h_sensors_name_table,'CellEditCallback','zef_update_sensors_name_table;');
 set(zef.h_parameters_table,'CellEditCallback','zef_update_parameters;');
-
-
 set(zef.h_compartment_table,'CellSelectionCallback',@zef_compartment_table_selection);
 set(zef.h_transform_table,'CellSelectionCallback',@zef_transform_table_selection);
 set(zef.h_sensors_table,'CellSelectionCallback',@zef_sensors_table_selection);
@@ -33,7 +28,6 @@ set(zef.h_menu_delete_sensors,'MenuSelectedFcn','zef_delete_sensors;');
 set(zef.h_menu_import_sensor_names,'MenuSelectedFcn','zef_import_sensor_names;');
 set(zef.h_menu_delete_transform,'MenuSelectedFcn','zef_delete_transform;');
 set(zef.h_menu_add_transform,'MenuSelectedFcn','zef_add_transform;');
-
 set(zef.h_menu_lock_transforms_on,'MenuSelectedFcn','zef.lock_transforms_on = abs(zef.lock_transforms_on - 1); zef_toggle_lock_transforms_on;');
 set(zef.h_menu_lock_sensor_names_on,'MenuSelectedFcn','zef.lock_sensor_names_on = abs(zef.lock_sensor_names_on - 1); zef_toggle_lock_sensor_names_on;');
 set(zef.h_menu_lock_sensor_sets_on,'MenuSelectedFcn','zef.lock_sensor_sets_on = abs(zef.lock_sensor_sets_on - 1); zef_toggle_lock_sensor_sets_on;');
@@ -48,8 +42,6 @@ set(zef.h_menu_stl,'MenuSelectedFcn','zef.surface_mesh_type = 1; zef.file = 0;[f
 set(zef.h_menu_dat_points,'MenuSelectedFcn','zef.surface_mesh_type = 2; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
 set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = 3; zef.file = 0;[file file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
 set(zef.h_menu_export_fem_mesh_as,'MenuSelectedFcn','zef_export_fem_mesh_as;');
-
-
 set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;end;');
 set(zef.h_menu_open,'MenuSelectedFcn','zef_load;');
 set(zef.h_menu_save                                  ,'MenuSelectedFcn','zef.save_switch=7;zef_save;zef_update;');
@@ -72,9 +64,7 @@ set(zef.h_menu_import_measurement_data               ,'MenuSelectedFcn','zef.inv
 set(zef.h_menu_import_noise_data                     ,'MenuSelectedFcn','zef.inv_import_type = 4; zef_inv_import;zef_update;');
 set(zef.h_menu_import_reconstruction                 ,'MenuSelectedFcn','zef.inv_import_type = 2; zef_inv_import;zef_update;');
 set(zef.h_menu_import_current_pattern                ,'MenuSelectedFcn','zef.inv_import_type = 3; zef_inv_import;zef_update;');
-
 set(zef.h_menu_import_resection_points              ,'MenuSelectedFcn','zef_import_resection_points;');
-
 set(zef.h_menu_reset_lead_field                      ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the lead field?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.L = []; end;zef_update;');
 set(zef.h_menu_reset_volume_data                     ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset volume data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.nodes=[];zef.nodes_b=[];zef.tetra=[];zef.tetra_aux=[];zef.sigma_ind=[];zef.sigma_vec=[];zef.surface_triangles=[];zef.brain_ind=[];zef.source_ind=[];zef.sigma_prisms=[];zef.prisms=[];end;zef_update;');
 set(zef.h_menu_reset_measurement_data                ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the measurement data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.measurements = []; end;zef_update;');
@@ -90,31 +80,24 @@ set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_par
 set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef_update;');
 set(zef.h_menu_graphics_options                               ,'MenuSelectedFcn','zef_open_graphics_options;zef_update;');
 set(zef.h_menu_gaussian_prior_options                               ,'MenuSelectedFcn','zef_open_gaussian_prior_options;zef_update;');
-
 set(zef.h_menu_maximize_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''maximize'',''windows'',''all'');zef_update;');
 set(zef.h_menu_maximize_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''maximize'',''tools'',''all'');zef_update;');
 set(zef.h_menu_maximize_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''maximize'',''figs'',''all'');zef_update;');
-
 set(zef.h_menu_minimize_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''minimize'',''windows'',''all'');zef_update;');
 set(zef.h_menu_minimize_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''minimize'',''tools'',''all'');zef_update;');
 set(zef.h_menu_minimize_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''minimize'',''figs'',''all'');zef_update;');
-
 set(zef.h_menu_tile_onscreen_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''windows'',''on-screen'');zef_update;');
 set(zef.h_menu_tile_onscreen_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''tools'',''on-screen'');zef_update;');
 set(zef.h_menu_tile_onscreen_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''figs'',''on-screen'');zef_update;');
-
 set(zef.h_menu_tile_all_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''windows'',''all'');zef_update;');
 set(zef.h_menu_tile_all_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''tools'',''all'');zef_update;');
 set(zef.h_menu_tile_all_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''tile'',''figs'',''all'');zef_update;');
-
 set(zef.h_menu_close_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''close'',''windows'',''all'');zef_update;');
 set(zef.h_menu_close_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''close'',''tools'',''all'');zef_update;');
 set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''close'',''figs'',''all'');zef_update;');
-
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef_update;');
 set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for EEG/MEG brain imaging.''};{[]}; {''Version: '' num2str(zef.current_version)} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''About'');');
 set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef_reopen_segmentation_tool;');
-
 set(zef.h_menu_inverse_tools,'Tag','inverse_tools');
 set(zef.h_menu_forward_tools,'Tag','forward_tools');
 set(zef.h_menu_multi_tools,'Tag','multi_tools');
@@ -130,6 +113,8 @@ zef.h_project_notes.ValueChangedFcn = 'zef_update;';
 zef.mlapp = 1;
 
 clear zef_data;
+
+zef.h_project_tag.Value = zef.project_tag;
 
 set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
 zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');

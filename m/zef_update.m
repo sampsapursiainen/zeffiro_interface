@@ -141,6 +141,15 @@ if contains(zef.h_aux(zef_i).Label,'ZEFFIRO Interface:')
 end
 end
 
+zef.project_tag = get(zef.h_project_tag,'Value');
+zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*');
+for zef_i = 1 : length(zef.h_aux)
+if not(isempty(strfind(zef.h_aux(zef_i).Name,'[')))
+zef.h_aux(zef_i).Name = strtrim(zef.h_aux(zef_i).Name(1:strfind(zef.h_aux(zef_i).Name,'[')-1));
+end
+zef.h_aux(zef_i).Name = [zef.h_aux(zef_i).Name ' [' zef.project_tag ']' ];
+end
+
 zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 zef.h_windows_open = zef.h_windows_open(find(ismember(zef.h_windows_open,zef.h_aux)));
 zef.h_windows_open = [zef.h_windows_open ; setdiff(zef.h_aux, zef.h_windows_open)];
@@ -175,7 +184,6 @@ zef.h_project_notes.Value = zef.project_notes;
 else
 zef.project_notes = zef.h_project_notes.Value;
 end
-
 
 if not(ismember(zef.current_sensors,zef.sensor_tags))
     zef.current_sensors = [];
