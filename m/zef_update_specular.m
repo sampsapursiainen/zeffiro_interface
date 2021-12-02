@@ -1,20 +1,20 @@
 function  specular_val = zef_update_specular(varargin)
 
-specular_val = evalin('base','zef.h_update_specular.Value');
-
-
 if not(isempty(varargin))
-     h = varargin{1}.Children;
+h_figure = varargin{1};
 else
-    h = evalin('base','zef.h_axes1.Children');
+h_figure = evalin('base','zef.h_zeffiro');
 end
 
-if not(isempty(varargin))
-if length(varargin) > 1
-specular_val = varargin{2};
-end
+h = findobj(get(h_figure,'Children'),'Tag','axes1');
+h_object= findobj(get(h_figure,'Children'),'Tag','update_specular_slider');
+if isempty(h_object)
+h_figure = evalin('base','zef.h_zeffiro');    
+h_object = findobj(get(h_figure,'Children'),'Tag','update_specular_slider');
 end
 
+specular_val = h_object.Value;
+h = h.Children;
 
 for i = 1 : length(h)
 

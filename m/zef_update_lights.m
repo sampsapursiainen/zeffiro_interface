@@ -1,10 +1,12 @@
 function lights_vec = zef_update_lights(varargin)
 
 if not(isempty(varargin))
-    h_1 = varargin{1};
+    h_figure = varargin{1};
 else
-    h_1 = evalin('base','findobj(get(gcf,''Children''),''Tag'',''axes1'');');
+    h_figure = evalin('base','zef.h_zeffiro');
 end
+
+h_1 = evalin('base','findobj(get(gcf,''Children''),''Tag'',''axes1'');');
 
 h_2 = evalin('base','findobj(get(gcf,''Children''),''Tag'',''lightsselection'');');
 h_3 = findobj(h_1.Children,'Type','Light');

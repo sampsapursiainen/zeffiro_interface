@@ -3,20 +3,19 @@
 function [void] = plot_volume(void);
 
 f_ind = 1;
-
 if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
-    volumetric_distribution = evalin('base','zef.reconstruction');
+volumetric_distribution = evalin('base','zef.reconstruction');
 elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
-        volumetric_distribution = repmat(evalin('base','zef.sigma(:,1)')',3,1)/sqrt(3);
-        volumetric_distribution = volumetric_distribution(:);
- elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)
-     volumetric_distribution = evalin('base','y_ES');
+volumetric_distribution = repmat(evalin('base','zef.sigma(:,1)')',3,1)/sqrt(3);
+volumetric_distribution = volumetric_distribution(:);
+elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)
+volumetric_distribution = evalin('base','y_ES');
 if iscell(volumetric_distribution)
-         for i = 1 : length(volumetric_distribution)
-            volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};  
-         end
+for i = 1 : length(volumetric_distribution)
+volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};  
+end
 else
-    volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
+volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
 end
 end
 
@@ -29,11 +28,10 @@ void = [];
 
 sensors_point_like = [];
 
-
 if evalin('base','zef.toggle_figure_control_status')==1
-    colorbar_position = [0.60 0.647 0.01 0.29];
+colorbar_position = [0.60 0.647 0.01 0.29];
 else
-    colorbar_position = [0.8769 0.647 0.01 0.29];
+colorbar_position = [0.8769 0.647 0.01 0.29];
 end
 
 loop_movie = 1;
@@ -86,11 +84,12 @@ sensors_color_table = evalin('base',['zef.' sensor_tag '_color_table']);
 sensors_name = evalin('base',['zef.' sensor_tag '_name_list']);
 aux_scale_val = evalin('base','zef.sensors_visual_size');
 if not(isempty(sensors_visible))
-    sensors = sensors(sensors_visible,:);
-     sensors_name = sensors_name(sensors_visible);
-      sensors_color_table = sensors_color_table(sensors_visible,:);
+sensors = sensors(sensors_visible,:);
+sensors_name = sensors_name(sensors_visible);
+sensors_color_table = sensors_color_table(sensors_visible,:);
 end
 %April 2021
+
 [X_s, Y_s, Z_s] = sphere(50); 
 sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
@@ -100,9 +99,9 @@ surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 
 if size(sensors,2) == 6 & ismember(evalin('base','zef.imaging_method'), [1 4 5])
-    electrode_model = 2;
+electrode_model = 2;
 else
-    electrode_model = 1;
+electrode_model = 1;
 end
 
 aux_ind = []; 
@@ -153,7 +152,7 @@ aux_ind = [];
 
 %April 2021
 if not(evalin('base','zef.attach_electrodes'))
-    sensors_name_points = sensors(:,1:3);
+sensors_name_points = sensors(:,1:3);
 end
 sensors_aux = sensors;
 %April 2021

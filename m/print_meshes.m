@@ -58,6 +58,7 @@ set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
 %light('Position',[0 0 -1],'Style','infinite');
 if not(evalin('base','zef.axes_visible'))
 h_axes_image = axes('visible','off');
+set(h_axes_image,'Tag','axes1'); 
 else
 h_axes_image = axes;
 end
@@ -1390,6 +1391,7 @@ set(h_fig_aux,'paperposition',[0 0 fliplr(snapshot_resolution)]);
 light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 h_axes_image = get(h_fig_aux,'currentaxes');
+set(h_axes_image,'Tag','axes1');
 hold on;
 %April 2021
 sensors = evalin('base','zef.sensors');

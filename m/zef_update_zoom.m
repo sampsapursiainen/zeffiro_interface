@@ -1,22 +1,19 @@
 function kappa = zef_update_zoom(varargin)
 
-kappa = evalin('base','zef.h_update_zoom.Value');
-
-
 if not(isempty(varargin))
-    h = varargin{1};
+h_figure = varargin{1};
 else
-    h = evalin('base','zef.h_axes1');
+h_figure = evalin('base','zef.h_zeffiro');
 end
 
-
-if not(isempty(varargin))
-if length(varargin) > 1
-kappa = varargin{1};
+h = findobj(get(h_figure,'Children'),'Tag','axes1');
+h_object = findobj(get(h_figure,'Children'),'Tag','update_zoom_slider');
+if isempty(h_object)
+h_figure = evalin('base','zef.h_zeffiro');    
+h_object = findobj(get(h_figure,'Children'),'Tag','update_zoom_slider');
 end
-end
 
-
+kappa = h_object.Value;
 h.CameraViewAngle = kappa;
 
 

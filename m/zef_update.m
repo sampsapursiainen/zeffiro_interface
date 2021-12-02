@@ -150,6 +150,11 @@ end
 if not(isempty(zef.project_tag))
 zef.h_aux(zef_i).Name = [zef.h_aux(zef_i).Name ' [' zef.project_tag ']' ];
 end
+end
+
+
+
+
 
 zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 zef.h_windows_open = zef.h_windows_open(find(ismember(zef.h_windows_open,zef.h_aux)));

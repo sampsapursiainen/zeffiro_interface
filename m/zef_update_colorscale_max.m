@@ -1,26 +1,35 @@
 function slider_value_new = zef_update_colorscale_max(varargin)
 
-slider_value_old = evalin('base','zef.colorscale_max_slider');
-slider_value_new = evalin('base','zef.h_colorscale_max_slider.Value');
 
 if not(isempty(varargin))
-      h = varargin{1};
+h_figure = varargin{1};
 else
-    h = evalin('base','zef.h_axes1');
+h_figure = evalin('base','zef.h_zeffiro');
 end
 
-if not(isempty(varargin))
-if length(varargin) > 1
-slider_value_old = varargin{2};
+h = findobj(get(h_figure,'Children'),'Tag','axes1');
+h_object = findobj(get(h_figure,'Children'),'Tag','colorscale_max_slider');
+if isempty(h_object)
+h_figure = evalin('base','zef.h_zeffiro');    
+h_object = findobj(get(h_figure,'Children'),'Tag','colorscale_max_slider');
 end
-if length(varargin) > 2
-slider_value_new = varargin{3};
+
+slider_value_new = h_object.Value;
+
+if isempty(h_object.UserData)
+    slider_value_old = 0;
+else
+    slider_value_old = h_object.UserData;
 end
-end
+
+h_object.UserData = slider_value_new;
 
 clim_vec = h.CLim;
-clim_vec(2) = clim_vec(2)/10^(slider_value_old);
-clim_vec(2) = clim_vec(2)*10^(slider_value_new);
+if length(slider_value_new) == 1 
+clim_vec(2) = clim_vec(2)*10^(slider_value_new - slider_value_old);
+else
+clim_vec(2) = clim_vec(2)*10^(slider_value_new - slider_value_old);
+end
 
 h.CLim = clim_vec;
 

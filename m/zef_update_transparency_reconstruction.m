@@ -1,37 +1,31 @@
 function slider_value_new = zef_update_transparency_reconstruction(varargin)
 
-slider_value_old = evalin('base','zef.update_transparency_reconstruction');
-slider_value_new = evalin('base','zef.h_update_transparency_reconstruction.Value');
-
 if not(isempty(varargin))
-      h = varargin{1}.Children;
+h_figure = varargin{1};
 else
-    h = evalin('base','zef.h_axes1.Children');
+h_figure = evalin('base','zef.h_zeffiro');
 end
 
+h = findobj(get(h_figure,'Children'),'Tag','axes1');
+h_object = findobj(get(h_figure,'Children'),'Tag','transparency_reconstruction_slider');
+if isempty(h_object)
+h_figure = evalin('base','zef.h_zeffiro');    
+h_object = findobj(get(h_figure,'Children'),'Tag','transparency_reconstruction_slider');
+end
 
-if(not(isempty(varargin)))
-if length(varargin) > 1
-slider_value_old = varargin{2};
-end
-if length(varargin) > 2
-slider_value_new = varargin{3};
-end
-end
+slider_value_new = h_object.Value;
 
 h = findobj(h,'Tag','reconstruction');
 
-kappa = 1.05.^(-100*(slider_value_new-slider_value_old));
+kappa = 1.05.^(-100*(slider_value_new));
 
 for i = 1 : length(h)
 
 if not(isnumeric(h(i).FaceAlpha))
 h(i).FaceAlpha = min(1,kappa);
 else
-h(i).FaceAlpha = min(1,kappa*h(i).FaceAlpha);
+h(i).FaceAlpha = min(1,kappa);
 end
-
-
 
 end
 
