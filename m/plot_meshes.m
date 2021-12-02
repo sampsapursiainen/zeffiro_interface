@@ -28,7 +28,7 @@ end
 void = [];
 sensors_point_like = [];
 
-if evalin('base','zef.h_zeffiro.UserData')==1 || isempty(evalin('base','zef.h_zeffiro.UserData'))
+if isequal(evalin('base','zef.h_zeffiro.UserData'),1) || isempty(evalin('base','zef.h_zeffiro.UserData'))
     colorbar_position = [0.60 0.647 0.01 0.29];
 else
     colorbar_position = [0.8769 0.647 0.01 0.29];
