@@ -44,7 +44,7 @@ set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = 3; zef.f
 set(zef.h_menu_export_fem_mesh_as,'MenuSelectedFcn','zef_export_fem_mesh_as;');
 set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;end;');
 set(zef.h_menu_open,'MenuSelectedFcn','zef_load;');
-set(zef.h_menu_open_figure,'MenuSelectedFcn','zef_import_figure;');
+set(zef.h_menu_open_figure,'MenuSelectedFcn','zef_import_figure;zef_size_change;');
 set(zef.h_menu_save                                  ,'MenuSelectedFcn','zef.save_switch=7;zef_save;zef_update;');
 set(zef.h_menu_save_as                               ,'MenuSelectedFcn','zef.save_switch=1;zef_save;zef_update;');
 set(zef.h_menu_save_figures_as                        ,'MenuSelectedFcn','zef.save_switch=9;zef_save;zef_update;');
