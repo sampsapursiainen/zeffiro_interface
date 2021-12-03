@@ -12,6 +12,7 @@ if isvalid(evalin('base','zef.h_axes1'))
 if set_mode == 0
 
 evalin('base','zef.h_update_colormap.Value = zef.inv_colormap;');
+evalin('base','zef.h_update_colorscale.Value = 1;');
 evalin('base','zef.h_update_zoom.Value = 7;');
 evalin('base','zef.h_update_transparency_reconstruction.Value = 0;');
 evalin('base','zef.h_update_transparency_surface.Value = 0;');
@@ -33,6 +34,7 @@ evalin('base','zef.update_lights = 1; zef.h_update_lights.Value = 1;');
 else
     
 evalin('base','zef.h_update_colormap.Value = zef.update_colormap;');
+evalin('base','zef.h_update_colorscale.Value = zef.update_colorscale;');
 evalin('base','zef.h_update_zoom.Value = zef.update_zoom;');
 evalin('base','zef.h_update_transparency_reconstruction.Value = zef.update_transparency_reconstruction;');
 evalin('base','zef.h_update_transparency_surface.Value = zef.update_transparency_surface;');
@@ -52,6 +54,7 @@ evalin('base','zef.h_colorscale_max_slider.Value = zef.colorscale_max_slider;');
 end
 
 evalin('base','zef.update_colormap = zef.h_update_colormap.Value; zef.h_axes1.Colormap = zef_colormap(zef.h_update_colormap.Value);');
+evalin('base','zef.update_colorscale = zef_update_colorscale;');
 evalin('base','zef.update_ambience = zef_update_ambience;');
 evalin('base','zef.update_diffusion = zef_update_diffusion;');
 evalin('base','zef.update_specular = zef_update_specular;');

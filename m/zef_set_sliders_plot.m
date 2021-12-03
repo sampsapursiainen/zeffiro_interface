@@ -3,6 +3,7 @@ function zef_set_sliders_plot(mode)
 if mode == 1
 
 evalin('base','zef.h_axes1.Colormap = zef_colormap(zef.h_update_colormap.Value);');
+evalin('base','zef_update_colorscale;');
 evalin('base','zef_update_ambience;');
 evalin('base','zef_update_diffusion;');
 evalin('base','zef_update_specular;');

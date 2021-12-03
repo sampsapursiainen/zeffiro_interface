@@ -10,6 +10,7 @@ zef_data.imaging_method= 1;
 zef_init_compartments;
 zef_init_sensors;
 
+zef_data.update_colorscale = 1;
 zef_data.project_tag = '';
 zef_data.volumetric_distribution_mode = 1;
 zef_data.normalize_lead_field = 4;

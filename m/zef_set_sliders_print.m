@@ -8,6 +8,7 @@ h_axes_image.Colormap = zef_colormap(evalin('base','zef.h_update_colormap.Value'
 zef_update_ambience(h_figure);
 zef_update_diffusion(h_figure);
 zef_update_specular(h_figure);
+zef_update_colorscale(h_figure);
 if evalin('base','zef.update_brightness') || evalin('base','zef.update_contrast')
 zef_update_contrast_and_brightness(h_figure); 
 end;
