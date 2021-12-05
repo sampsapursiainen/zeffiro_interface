@@ -292,7 +292,7 @@ end
 
 johtavuus = evalin('base','zef.sigma');
 johtavuus = johtavuus(:,2);
-
+    
 if evalin('base','zef.use_gpu_graphic') == 1 & evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 I = gpuArray(uint32(find(ismember(johtavuus,visible_vec))));
 tetra = gpuArray(uint32(evalin('base','zef.tetra')));

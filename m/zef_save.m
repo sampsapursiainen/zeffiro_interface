@@ -24,42 +24,30 @@ if zef.save_switch == 2
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export lead field',zef.save_file_path);
 else
-[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export lead field');
+[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export lead field');
 end
 if not(isequal(zef.file,0));
-if zef.file_index == 1
 save([zef.file_path zef.file],'-struct','zef','L','-v7.3');
-else 
-save([zef.file_path zef.file],'-struct','zef','L','-ascii');
-end
 end
 end
 if zef.save_switch == 3
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
-[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export source positions',zef.save_file_path);
+[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export source space',zef.save_file_path);
 else
-[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export source positions');
+[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export source space');
 end
 if not(isequal(zef.file,0));
-if zef.file_index == 1
-save([zef.file_path zef.file],'-struct','zef','source_positions','-v7.3');
-else 
-save([zef.file_path zef.file],'-struct','zef','source_positions','-ascii');
-end
+save([zef.file_path zef.file],'-struct','zef','source_positions','source_directions','-v7.3');
 end
 end
 if zef.save_switch == 4
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)      
-[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export source directions',zef.save_file_path);
+[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export sensors',zef.save_file_path);
 else
-[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export source directions');
+[zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export sensors');
 end
 if not(isequal(zef.file,0));
-if zef.file_index == 1
-save([zef.file_path zef.file],'-struct','zef','source_directions','-v7.3');
-else 
-save([zef.file_path zef.file],'-struct','zef','source_directions','-ascii');
-end
+save([zef.file_path zef.file],'-struct','zef',[zef.current_sensors '_points'],[zef.current_sensors '_directions'],'-v7.3');
 end
 end
 if zef.save_switch == 5

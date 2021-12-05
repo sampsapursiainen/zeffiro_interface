@@ -51,11 +51,11 @@ set(zef.h_menu_save_figures_as                        ,'MenuSelectedFcn','zef.sa
 set(zef.h_menu_print_to_file                         ,'MenuSelectedFcn','zef.save_switch=10;zef_save;zef_update;');
 set(zef.h_menu_exit                                  ,'MenuSelectedFcn','zef_arrange_windows(''close'',''windows'',''all''); close(zef.h_zeffiro_window_main);');
 set(zef.h_menu_export_volume_data                    ,'MenuSelectedFcn','zef.save_switch=6;zef_save;zef_update;');
-set(zef.h_menu_segmentation_data                     ,'MenuSelectedFcn','zef.save_switch=5;zef_save;zef_update;');
-set(zef.h_menu_lead_field                            ,'MenuSelectedFcn','zef.save_switch=2;zef_save;zef_update;');
-set(zef.h_menu_source_positions                      ,'MenuSelectedFcn','zef.save_switch=3;zef_save;zef_update;');
-set(zef.h_menu_source_directions                     ,'MenuSelectedFcn','zef.save_switch=4;zef_save;zef_update;');
-set(zef.h_menu_reconstruction                        ,'MenuSelectedFcn','zef.save_switch=8;zef_save;zef_update;');
+set(zef.h_menu_export_segmentation_data                     ,'MenuSelectedFcn','zef.save_switch=5;zef_save;zef_update;');
+set(zef.h_menu_export_lead_field                            ,'MenuSelectedFcn','zef.save_switch=2;zef_save;zef_update;');
+set(zef.h_menu_export_source_space                      ,'MenuSelectedFcn','zef.save_switch=3;zef_save;zef_update;');
+set(zef.h_menu_export_sensors                     ,'MenuSelectedFcn','zef.save_switch=4;zef_save;zef_update;');
+set(zef.h_menu_export_reconstruction                        ,'MenuSelectedFcn','zef.save_switch=8;zef_save;zef_update;');
 set(zef.h_menu_new_segmentation_from_folder          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import an ASCII segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_segmentation;zef_build_compartment_table;end;');
 set(zef.h_menu_import_segmentation_update_from_folder,'MenuSelectedFcn','zef_import_segmentation;zef_update;');
 set(zef.h_menu_import_new_project_from_folder        ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import an ASCII  project from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_project;zef_build_compartment_table;end;');

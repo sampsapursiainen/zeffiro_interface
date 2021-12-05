@@ -2,6 +2,7 @@
 zef.h = waitbar(0,'Downsampling surfaces.');
 zef.temp_time = now;
 zef.number_of_compartments = length(zef.compartment_tags);
+
 for zef_k = 1 : zef.number_of_compartments
         zef.temp_var_0 = zef.compartment_tags{zef_k};    
 
@@ -70,8 +71,21 @@ end
 waitbar(zef_k/zef.number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (zef.number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
 end
 close(zef.h);
+
+if isfield(zef,'temp_patch_data')
 zef = rmfield(zef,'temp_patch_data');
+end
+
+if isfield(zef,'temp_patch_data_aux')
 zef = rmfield(zef,'temp_patch_data_aux');
+end
+
+if isfield(zef,'temp_var_0')
 zef = rmfield(zef,'temp_var_0');
+end
+
+if isfield(zef,'temp_time')
 zef = rmfield(zef,'temp_time');
+end
+
 clear zef_i zef_j zef_k

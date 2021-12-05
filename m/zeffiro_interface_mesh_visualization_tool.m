@@ -22,7 +22,7 @@ set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_cone_draw,'value',zef.cone_draw);
 set(zef.h_streamline_draw,'value',zef.streamline_draw);
 
-set(zef.h_visualization_type,'Items',{'Domain','Distribution (volume)','Distribution (surface)','Parcellation','Topography'});
+set(zef.h_visualization_type,'Items',{'Domain labels','Distribution (volume)','Distribution (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
 set(zef.h_visualization_type,'Value',zef.visualization_type);
 
