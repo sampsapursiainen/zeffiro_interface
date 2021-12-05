@@ -18,7 +18,7 @@ h = get(h_figure,'children');
 
 for i = 1 : length(h)
 
-if contains(get(h(i),'Tag'),{'slidertext','slider','colormapselection','colormapselectiontext'})
+if contains(get(h(i),'Tag'),{'slidertext','slider','colormapselection','colormapselectiontext','colorscaleselection'})
 if get(h(i),'Visible') 
     set(h(i),'Visible','off')
 else
