@@ -27,7 +27,7 @@ thresh_val = evalin('base','zef.mesh_optimization_parameter');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_brain_ind = zeros(1,length(compartment_tags));
-aux_skull_ind = [0 0];
+aux_skull_ind = [0];
 
 if evalin('base','zef.import_mode')
     
@@ -133,12 +133,7 @@ if evalin('base','zef.refinement_on');
 J_c = [];
  if evalin('base','zef.refinement_type') == 1 || evalin('base','zef.refinement_type') == 3 ;
 tetra = evalin('base','zef.tetra_aux');
-     I = find(johtavuus_aux==aux_brain_ind(1));
-  I = [I ; find(johtavuus_aux==aux_brain_ind(2))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(3))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(4))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(5))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(6))];
+     I = find(ismember(johtavuus_aux,aux_brain_ind));
 tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
@@ -165,7 +160,7 @@ clear tetra_sort;
  
   if evalin('base','zef.refinement_type') == 2 || evalin('base','zef.refinement_type') == 3 ;
       tetra = evalin('base','zef.tetra_aux'); 
-  I = find(johtavuus_aux==aux_skull_ind(1));
+  I = find(ismember(johtavuus_aux,aux_skull_ind));
 tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
