@@ -18,6 +18,7 @@ function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
 
 %This code was created by A. Koulouri 29.2.2020
 %modified 28.4.2020
+%modified to be stable (icreased accuracy) 04.12.2021
 
 [m,~]=size(L);
 A = 1/sigma*L;
@@ -29,8 +30,6 @@ reg = sqrt(0.5*pi/m)*norm(L,'fro');
  for iter = 1 : maxiter
     D = spdiags(abs(x)./(gamma),0,size(A,2),size(A,2));
     ADA_T = A*(D*A');
-    %x = D*(A'*((ADA_T + reg*eye(size(ADA_T)))\b));
     x = D*(A'*((ADA_T + reg*trace(D)*eye(size(ADA_T)))\b));
-    %x = D*(A'*((ADA_T + eye(size(ADA_T)))\b))/sqrt(reg*trace(D));
 end
 end
