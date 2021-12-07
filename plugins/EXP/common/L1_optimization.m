@@ -24,8 +24,6 @@ function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
 A = 1/sigma*L;
 b = 1/sigma*y;
 
-x = x0; %initialization...
-
 reg = sqrt(0.5*pi/m)*norm(L,'fro');
  for iter = 1 : maxiter
     D = spdiags(abs(x)./(gamma),0,size(A,2),size(A,2));
