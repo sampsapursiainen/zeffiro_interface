@@ -133,7 +133,7 @@ if evalin('base','zef.refinement_on');
 J_c = [];
  if evalin('base','zef.refinement_type') == 1 || evalin('base','zef.refinement_type') == 3 ;
 tetra = evalin('base','zef.tetra_aux');
-     I = find(ismember(johtavuus_aux,aux_brain_ind));
+     I = brain_ind;
 tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
