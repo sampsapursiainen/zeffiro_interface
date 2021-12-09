@@ -14,6 +14,8 @@ zef = rmfield(zef,'fieldnames');
 
 clear zef_data;
 
+
+
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
 zef.h_as_opt_2.Value = num2str(zef.preconditioner_tolerance);
@@ -21,6 +23,7 @@ zef.h_as_opt_3.Value = num2str(zef.smoothing_steps_surf);
 zef.h_as_opt_4.Value = num2str(zef.smoothing_steps_vol);
 zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
 zef.h_as_opt_5.ItemsData = [1:length(zef.h_as_opt_5.Items)];
+zef.h_as_opt_5.Multiselect = 'on';
 zef.h_as_opt_5.Value = zef.refinement_type;
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
