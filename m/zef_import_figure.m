@@ -13,6 +13,7 @@ h_fig.CurrentAxes.Units = 'pixels';
 axes_position = h_fig.CurrentAxes.Position;
 fig_position = h_fig.Position; 
 user_data = h_fig.UserData;
+set(h_fig,'SizeChangedFcn','');
 
 if isequal(user_data,1)
     
