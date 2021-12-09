@@ -12,10 +12,11 @@ h_fig.Units = 'pixels';
 h_fig.CurrentAxes.Units = 'pixels';
 axes_position = h_fig.CurrentAxes.Position;
 fig_position = h_fig.Position; 
-user_data = h_fig.UserData;
-set(h_fig,'SizeChangedFcn','');
+tgb = findobj(get(gcf,'Children'),'Tag','togglecontrolsbutton');
+user_data = tgb.UserData;
+set(h_fig,'SizeChangedFcn',''); 
 
-if isequal(user_data,1)
+if isequal(user_data,2)
     
     fig_position(3) = round(axes_position(3)/0.9);
     fig_position(4) = round(axes_position(4)/0.6);
@@ -30,6 +31,12 @@ end
 end
     
 end
+
+
+
+
+
+
 
 
 

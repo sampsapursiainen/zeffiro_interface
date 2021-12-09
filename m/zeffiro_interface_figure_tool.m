@@ -40,7 +40,7 @@ uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','norm
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color max:','HorizontalAlignment','left','Position',[0.68 0.80 0.12 0.03]);
 
 %Start controls
-zef.h_reset_figure_tool_sliders = uicontrol('Tag','togglecontrolsbutton','Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.51 0.95 0.15 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
+zef.h_reset_figure_tool_sliders = uicontrol('Tag','togglecontrolsbutton','UserData',1,'Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.51 0.95 0.15 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
 zef.h_colorscale_min_slider = uicontrol('Tag','colorscale_min_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.85 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.colorscale_min_slider = zef_update_colorscale_min; else; zef_update_colorscale_min(gcf); end;');
 zef.h_colorscale_min_slider.UserData = zef.colorscale_min_slider; 
 zef.h_colorscale_max_slider = uicontrol('Tag','colorscale_max_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.80 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.colorscale_max_slider = zef_update_colorscale_max; else; zef_update_colorscale_max(gcf); end;');

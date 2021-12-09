@@ -1,15 +1,16 @@
 function zef_toggle_figure_controls
 
 toggle_mode = 'unlocked';
-current_figure = evalin('base','gcf');
-toggle_status = current_figure.UserData;
+current_figure = gcf; 
+tgb = findobj(get(gcf,'Children'),'Tag','togglecontrolsbutton');
+toggle_status = tgb.UserData;
 if isempty(toggle_status) 
 toggle_status = 1;
-current_figure.UserData = 2;
+tgb.UserData = 2;
 elseif isequal(toggle_status,1)
-    current_figure.UserData = 2; 
+    tgb.UserData = 2; 
 elseif isequal(toggle_status,2)
-    current_figure.UserData = 1;
+    tgb.UserData = 1;
 end
 
 h_figure = evalin('base','gcf');
@@ -57,11 +58,6 @@ end
 
  set(h_axes,'units','pixels');
  
- if toggle_status == 2 
-     evalin('base','zef.toggle_figure_control_status = 1;');
- else
-     evalin('base','zef.toggle_figure_control_status = 2;');
- end
 
 end
 
