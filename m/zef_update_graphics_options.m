@@ -10,3 +10,4 @@ zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value')
     zef.streamline_color = get(zef.h_streamline_color,'value');
     zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
     zef.colortune_param = str2num(get(zef.h_colortune_param,'Value'));
+     zef.sensors_visual_size = str2num(get(zef.h_sensors_visual_size,'value'));

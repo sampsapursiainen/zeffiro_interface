@@ -2,8 +2,7 @@ zef_data = zef_system_settings;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end 
-clear zef_data;
+end   
 
 zef.ini_cell = readcell([zef.program_path '/zeffiro_interface.ini'],'FileType','text');
 zef.h_system_settings_table.Data = zef.ini_cell;
