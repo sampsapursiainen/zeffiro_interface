@@ -19,17 +19,14 @@ zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.code_path = zef.code_path;
 zef_data.program_path = zef.program_path;
-zef_data.parallel_processes = zef.parallel_processes;
-zef_data.save_file_path = zef.save_file_path;
-zef_data.video_codec = zef.video_codec;
-zef_data.use_gpu = zef.use_gpu;
-zef_data.gpu_num = zef.gpu_num;
-zef_data.parallel_vectors = zef.parallel_vectors;
-zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
-zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
-zef_data.movie_fps = zef.movie_fps;
-zef_data.font_size = zef.font_size ;
-zef_data.mlapp = zef.mlapp;
+
+zef.ini_cell = readcell('zeffiro_interface.ini','FileType','text');
+for zef_i = 1 : size(zef.ini_cell,1)
+evalin('base',['zef_data.' zef.ini_cell{zef_i,3} ' = zef.' zef.ini_cell{zef_i,3} ';']);
+end
+zef = rmfield(zef,'ini_cell');
+
+zef_data.mlapp = 1;
 
  zef.fieldnames = fieldnames(zef_data);
  for zef_i = 1:length(zef.fieldnames)

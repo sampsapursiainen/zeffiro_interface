@@ -79,6 +79,12 @@ zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
 zef_data.parallel_processes = zef.parallel_processes;
 
+zef.ini_cell = readcell('zeffiro_interface.ini','FileType','text');
+for zef_i = 1 : size(zef.ini_cell,1)
+evalin('base',['zef_data.' zef.ini_cell{zef_i,3} ' = zef.' zef.ini_cell{zef_i,3} ';']);
+end
+zef = rmfield(zef,'ini_cell');
+
 zef_data.gpu_num = zef.gpu_num;
 zef_data.parallel_vectors = zef.parallel_vectors;
 zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
