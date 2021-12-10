@@ -8,6 +8,9 @@ switch type
     case 'data'
         data.measurements=zef.measurements;
         
+            case 'noisedata'
+        data.noisedata=zef.noise_data;
+        
         
     case 'reconstruction'
         if iscell(zef.reconstruction)

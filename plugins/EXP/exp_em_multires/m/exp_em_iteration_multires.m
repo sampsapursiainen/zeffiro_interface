@@ -244,6 +244,6 @@ z{f_ind} = z_vec_aux/(n_decompositions*weight_vec_aux);
 end
 
 z = zef_postProcessInverse(z, procFile);
-%z = zef_normalizeInverseReconstruction(z);
+z = zef_normalizeInverseReconstruction(z);
 
 close(h);

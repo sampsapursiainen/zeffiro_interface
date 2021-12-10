@@ -35,7 +35,7 @@ plot_vec(plot_vec==Inf) = -Inf;
 mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
-pm_val = 10.^(-(pm_val+amplitude_db)/20);
+amplitude_val = 10.^(-(pm_val + amplitude_db)/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
@@ -53,7 +53,7 @@ h_line = line(evalin('base','zef.h_axes1'),[mean_val mean_val],y_lim_vec);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-');
 h_line = line(evalin('base','zef.h_axes1'),[tail_val tail_val],y_lim_vec);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-.');
-h_line = line(evalin('base','zef.h_axes1'),[pm_val pm_val],y_lim_vec);
+h_line = line(evalin('base','zef.h_axes1'),[amplitude_val amplitude_val],y_lim_vec);
 set(h_line,'color',[0 0 0],'linewidth',2,'linestyle',':');
 [min_val,min_ind] = min(abs(sqrt(t)-mean_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);

@@ -21,7 +21,8 @@ n_decompositions = evalin('base','zef.relax_multires_n_decompositions');
 M = evalin('base','zef.relax_preconditioner');
 perm_vec = evalin('base','zef.relax_preconditioner_permutation');
 gamma = 10^(-relax_db/20);
-tol_val = 10^(-relax_tolerance/20);
+tol_val = 10^(-(snr_val - relax_tolerance)/20);
+
 
 reconstruction_information.tag = 'Relaxation';
 reconstruction_information.inv_time_1 = evalin('base','zef.relax_time_1');

@@ -2,6 +2,8 @@
 
 zef.dataBank.app=zef_dataBank_app;
 
+zef_dataBank_init;
+
 
 %intitial values
 
@@ -15,19 +17,19 @@ else
     zef.dataBank.app.savetodiskSwitch.Enable=true;
     zef.dataBank.app.savetodiskSwitch.Value=zef.dataBank.save2disk;
 end
-zef.dataBank.DataTableHashList=cell(0,0);
-zef.dataBank.workingHashes=cell(0,0);
+%zef.dataBank.DataTableHashList=cell(0,0);
+%zef.dataBank.workingHashes=cell(0,0);
 %set button functions
     
 zef.dataBank.app.addButton.ButtonPushedFcn='zef_dataBank_addButtonPress;';
-
-zef.dataBank.types={'data', 'leadfield', 'reconstruction', 'gmm', 'custom', 'import'}; %%%% edit for new datatype!
+zef.dataBank.app.combineButton.ButtonPushedFcn='[zef.L, zef.measurements] = zef_dataBank_combineLeadFields(zef.dataBank.tree, zef.dataBank.workingHashes,zef.dataBank.app.combineMenu.Value,zef.dataBank.var_starttime,zef.dataBank.var_endtime,zef.dataBank.var_sampling_frequency);';
+zef.dataBank.app.StarttimeSpinner.ValueChangedFcn = 'zef_dataBank_update;';
+zef.dataBank.app.EndtimeSpinner.ValueChangedFcn = 'zef_dataBank_update;';
+zef.dataBank.app.SfreqSpinner.ValueChangedFcn = 'zef_dataBank_update;';
+zef.dataBank.app.WorkingdataClear.MenuSelectedFcn = ' zef.dataBank.app.currentTable.Data = cell(0);zef.dataBank.workingHashes=cell(0);';
+zef.dataBank.types={'data', 'noisedata', 'leadfield', 'reconstruction', 'gmm', 'custom', 'import'}; %%%% edit for new datatype!
 zef.dataBank.app.Entrytype.Items=zef.dataBank.types;
-
-
-
-
-
+zef.dataBank.app.Entrytype.ValueChangedFcn = '[zef.dataBank.app.DataTable.Data, zef.dataBank.app.DataTable.ColumnName, zef.dataBank.DataTableHashList]=zef_databank_showAll(zef.dataBank.tree, zef.dataBank.app.Entrytype.Value);';
 
 
 
@@ -54,19 +56,6 @@ zef.dataBank.app.FunctionsDropDown.ValueChangedFcn='zef_dataBank_FunctionsDropDo
 zef.dataBank.app.importButton.ButtonPushedFcn='zef_dataBank_importNodeButtonPress;';
 zef.dataBank.app.exportButton.ButtonPushedFcn='zef_dataBank_exportButtonPress;';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 %set funtions for the treeMenu
 %zef.dataBank.app.treeMenu.ContextMenuOpeningFcn ='gco';
 
@@ -81,7 +70,7 @@ zef.dataBank.app.modifyMenu.MenuSelectedFcn=strcat('zef.dataBank.selectMultiple=
 zef.dataBank.app.changeNameMenu.MenuSelectedFcn='zef_dataBank_startNameChange';
 zef.dataBank.app.showinformationMenu.MenuSelectedFcn='zef_dataBank_getHashForMenu; disp(zef.dataBank.tree.(zef.dataBank.hash)); disp(zef.dataBank.tree.(zef.dataBank.hash).data);';
 
-
+zef.dataBank.app.showworkingHashes.ButtonPushedFcn = '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);';
 zef.dataBank.app.loadMenuData.MenuSelectedFcn='zef.dataBank.loadParents=false; zef_dataBank_getHashForMenu;zef_dataBank_setData;';
 zef.dataBank.app.loadwithparentsMenuData.MenuSelectedFcn='zef.dataBank.loadParents=true; zef_dataBank_getHashForMenu;zef_dataBank_setData;';
 zef.dataBank.app.showinformationMenuData.MenuSelectedFcn='zef_dataBank_getHashForTableMenu; disp(zef.dataBank.tree.(zef.dataBank.hash{1})); disp(zef.dataBank.tree.(zef.dataBank.hash{1}).data);';
@@ -95,6 +84,10 @@ zef.dataBank.app.modifyMenuData.MenuSelectedFcn=strcat('zef.dataBank.selectMulti
             '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);');
 
 
+set(zef.dataBank.app.DataBank,'AutoResizeChildren','off');
+zef.zeffiro_dataBank_current_size = get(zef.dataBank.app.DataBank,'Position');
+zef.zeffiro_dataBank_relative_size = zef_get_relative_size(zef.dataBank.app.DataBank);
+set(zef.dataBank.app.DataBank,'SizeChangedFcn','zef.zeffiro_dataBank_current_size = zef_change_size_function(zef.dataBank.app.DataBank,zef.zeffiro_dataBank_current_size,zef.zeffiro_dataBank_relative_size);');
 
 
 % load all data and stuff
@@ -108,5 +101,6 @@ end
 zef.dataBank.loadParents=false;
 zef.dataBank.selectMultiple=false;
 
-
+[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_showCurrent(zef, zef.dataBank.app.Entrytype.Value);
+[zef.dataBank.app.DataTable.Data, zef.dataBank.app.DataTable.ColumnName, zef.dataBank.DataTableHashList]=zef_databank_showAll(zef.dataBank.tree, zef.dataBank.app.Entrytype.Value);
 

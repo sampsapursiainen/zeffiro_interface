@@ -21,7 +21,6 @@ clear zef_csm_names
 
 %_ Initial values _
 zef.CSM_csm_n_iter.Value = '10';
-zef.CSM.inv_snr.Value = '30';
 zef.CSM.inv_sampling_frequency.Value = '1025';
 zef.CSM.inv_low_cut_frequency.Value = '7';
 zef.CSM.inv_high_cut_frequency.Value = '9';
@@ -54,7 +53,6 @@ end
 %_ Functions _
 zef.CSM.csm_type.ValueChangedFcn = 'zef.csm_type = str2num(zef.CSM.csm_type.Value); if zef.csm_type == 1 || zef.csm_type == 2; zef.CSM.csm_n_iter.Enable = ''off''; else zef.CSM.csm_n_iter.Enable = ''on''; end;';
 zef.CSM_csm_n_iter.ValueChangedFcn = 'zef.csm_n_iter = str2num(zef.CSM.csm_n_iter.Value);';
-zef.CSM.inv_snr.ValueChangedFcn = 'zef.inv_snr = str2num(zef.CSM.inv_snr.Value);';
 zef.CSM.inv_sampling_frequency.ValueChangedFcn = 'zef.inv_sampling_frequency = str2num(zef.CSM.inv_sampling_frequency.Value);';
 zef.CSM.inv_low_cut_frequency.ValueChangedFcn = 'zef.inv_low_cut_frequency = str2num(zef.CSM.inv_low_cut_frequency.Value);';
 zef.CSM.inv_high_cut_frequency.ValueChangedFcn = 'zef.inv_high_cut_frequency = str2num(zef.CSM.inv_high_cut_frequency.Value);';

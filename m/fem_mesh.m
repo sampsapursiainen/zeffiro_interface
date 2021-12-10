@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [nodes, nodes_b, tetra, johtavuus_ind, surface_triangles,name_tags] = fem_mesh(void)
 
+void = [];
+
 h = waitbar(0,'Initial mesh.');
 
 mesh_res = evalin('base','zef.mesh_resolution');
@@ -34,6 +36,28 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 submesh_cell{i} = evalin('base',var_3);
 name_tags{i} = evalin('base',var_4); 
+
+end
+end
+
+n_compartments = 0;
+for k = 1 : length(reuna_p)
+n_compartments = n_compartments + max(1,length(submesh_cell{k}));
+end
+
+priority_vec_aux = zeros(n_compartments,1);
+compartment_counter = 0;
+submesh_ind_1 = ones(n_compartments,1);
+submesh_ind_2 = ones(n_compartments,1);
+
+for i = 1 :  length(reuna_p)
+       
+for k = 1 : max(1,length(submesh_cell{i}))
+    
+compartment_counter = compartment_counter + 1;
+priority_vec_aux(compartment_counter) = priority_vec(i);
+submesh_ind_1(compartment_counter) = i;
+submesh_ind_2(compartment_counter) = k;
 
 end
 end
@@ -99,6 +123,7 @@ I_2 = [1 : length(I)]';
 
 compartment_counter = 0;
 sigma_counter = 0;
+
 for i = 1 : length(reuna_p)
     
 for k = 1 : max(1,length(submesh_cell{i}))
@@ -154,12 +179,19 @@ tetra_ind(I+1) = 1;
 I = find(tetra_ind == 0);
 tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
 surface_triangles = tetra(tetra_ind);
+surface_triangles = surface_triangles(:,[1 3 2]);
 
 nodes_b = nodes;
 
 if isequal(evalin('base','zef.mesh_labeling_approach'),2)
     johtavuus_ind = johtavuus_ind_2;
 end
+
+[priority_val priority_ind] = min(priority_vec_aux(johtavuus_ind),[],2);
+priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_ind);
+[johtavuus_ind] = johtavuus_ind(priority_ind);
+
+
 
 close(h);
 

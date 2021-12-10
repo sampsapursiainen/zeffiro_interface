@@ -43,6 +43,7 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
 
+
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
 end
@@ -76,8 +77,9 @@ end
     
     if method_type == 1 || method_type == 2
         
-    S_mat = (std_lhood^2/theta0)*eye(size(L,1));
-              if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+            S_mat = (std_lhood^2/theta0)*eye(size(L,1));
+    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+
         S_mat = gpuArray(S_mat);
     end
     

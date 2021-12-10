@@ -1,6 +1,3 @@
-%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-
 %This is the startup script for GMModel app. One must add this as launch
 %script to zeffiro_plugins file:
 %GMMing, inverse_tools, GMModel_start
@@ -71,6 +68,8 @@ end
 zef_GMM_values{20} = '';
 %amplitude estimation type 
 zef_GMM_values{21} = '1';
+%Parameters to estimate via GMM
+zef_GMM_values{22} = '1';
 
 zef_i = length(zef_GMM_values);
 zef.GMM.meta{1} = zef_i;
@@ -199,6 +198,7 @@ zef.GMM.apps.main.GMM_c_startframe.ValueChangedFcn = 'zef.GMM.parameters{17,2}={
 zef.GMM.apps.main.GMM_c_stopframe.ValueChangedFcn = 'zef.GMM.parameters{18,2}={zef.GMM.apps.main.GMM_c_stopframe.Value};';
 zef.GMM.apps.main.GMM_ampframe.ValueChangedFcn = 'zef.GMM.parameters{20,2}={zef.GMM.apps.main.GMM_ampframe.Value};';
 zef.GMM.apps.main.GMM_amptype.ValueChangedFcn = 'zef.GMM.parameters{21,2} = {zef.GMM.apps.main.GMM_amptype.Value};';
+zef.GMM.apps.main.GMM_estimate.ValueChangedFcn = 'zef.GMM.parameters{22,2} = {zef.GMM.apps.main.GMM_estimate.Value};';
 
 zef.GMM.apps.main.GMM_markercolor.ValueChangedFcn = 'zef.GMM.parameters{7,2}={zef.GMM.apps.main.GMM_markercolor.Value};';
 zef.GMM.apps.main.GMM_markersize.ValueChangedFcn = 'zef.GMM.parameters{8,2}={zef.GMM.apps.main.GMM_markersize.Value};';

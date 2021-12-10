@@ -27,7 +27,9 @@ balance_snr = varargin{4};
 end
 
 if length(varargin) > 4
+if balance_snr
 w_param = 0.5 - 0.05*(varargin{5}-1);
+end
 end
 
 if isempty(L)
@@ -57,7 +59,7 @@ snr_vec_limited = max(1,snr_vec);
 end
 
 relative_noise_std = 10.^(-snr_vec_limited/20);
-    
+
 scale_param = source_strength.^2 .* relative_noise_std.^2 ./ (source_space_size);
 
 end

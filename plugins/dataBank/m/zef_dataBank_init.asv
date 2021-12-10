@@ -1,0 +1,13 @@
+if not(isfield(zef,'dataBank_starttime'))
+zef.dataBank_starttime = 0;
+end
+
+if not(isfield(zef,'dataBank_endtime'))
+zef.dataBank_endtime = 0;
+end
+
+if not(isfield(zef,'dataBank_sampling_frequency'))
+zef.dataBank_sampling_frequency = 0;
+end
+
+    

@@ -27,7 +27,8 @@ thresh_val = evalin('base','zef.mesh_optimization_parameter');
 compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_brain_ind = zeros(1,length(compartment_tags));
-aux_skull_ind = [0 0];
+aux_skull_ind = [0];
+aux_skin_ind = [0];
 
 if evalin('base','zef.import_mode')
     
@@ -63,6 +64,10 @@ if isequal(compartment_tags{k},'sk')
 aux_skull_ind = i;
 end
 
+if isequal(compartment_tags{k},'sc')
+aux_skin_ind = i;
+end
+
 end
 end
 
@@ -89,6 +94,7 @@ submesh_ind_2(compartment_counter) = k;
 end
 end
 
+sigma_anisotropy = double(evalin('base','zef.sigma_anisotropy'));
 johtavuus_ind = double(evalin('base','zef.sigma_ind'));
 [priority_val priority_ind] = min(priority_vec_aux(johtavuus_ind),[],2);
 priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_ind);
@@ -123,14 +129,17 @@ nodes = evalin('base','zef.nodes_b');
 tetra = evalin('base','zef.tetra_aux');
 N = size(nodes, 1);
 
+
+
 % nodes_b = evalin('base','zef.nodes_b');
 if evalin('base','zef.mesh_smoothing_on');
     
 tetra_aux = evalin('base','zef.tetra_aux');
-    
+tetra = tetra_aux;    
+
 length_waitbar = 4+length(priority_vec);    
 
-nodes = evalin('base','zef.nodes_b');
+%nodes = evalin('base','zef.nodes_b');
 sensors = evalin('base','zef.sensors');
 
 for smoothing_repetition_ind  = 1 : evalin('base','zef.mesh_smoothing_repetitions')
@@ -178,7 +187,7 @@ J = setdiff(tetra(:),K);
 
 waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
-tetra = evalin('base','zef.tetra_aux');
+tetra = tetra_aux; %evalin('base','zef.tetra_aux');
 
 smoothing_ok = 0;
 
@@ -240,7 +249,7 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 A = gpuArray(A);
 A_K = gpuArray(A_K);
 B = gpuArray(B); 
-K = gpuArray(K)
+K = gpuArray(K);
 sum_B = gpuArray(sum_B);
 sum_A = gpuArray(sum_A);
 end
@@ -358,6 +367,10 @@ clear tetra_vec;
 
 end
 
+
+%*************************************************************************
+
+
 if evalin('base','zef.refinement_on');
     
  length_waitbar = 11;   
@@ -365,14 +378,21 @@ if evalin('base','zef.refinement_on');
  
  %I = find(johtavuus_aux==aux_skull_ind);
 J_c = [];
- if evalin('base','zef.refinement_type') == 1 || evalin('base','zef.refinement_type') == 3 ;
-tetra = evalin('base','zef.tetra_aux');
-     I = find(johtavuus_aux==aux_brain_ind(1));
-  I = [I ; find(johtavuus_aux==aux_brain_ind(2))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(3))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(4))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(5))];
-  I = [I ; find(johtavuus_aux==aux_brain_ind(6))];
+
+
+for ref_ind = 1: length(evalin('base','zef.refinement_type'))
+  if ismember(evalin('base','zef.refinement_type'),ref_ind) 
+%tetra = evalin('base','zef.tetra_aux');
+tetra = tetra_aux;
+
+if ref_ind == 1
+I = brain_ind;
+elseif ref_ind == 2
+I = find(johtavuus_aux==aux_skull_ind);
+elseif ref_ind == 3
+I = find(johtavuus_aux==aux_skin_ind);
+end
+
 tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
@@ -397,34 +417,9 @@ J_c = [J_c ;  unique(surface_triangles)];
 clear tetra_sort;
  end
  
-  if evalin('base','zef.refinement_type') == 2 || evalin('base','zef.refinement_type') == 3 ;
-      tetra = evalin('base','zef.tetra_aux'); 
-  I = find(johtavuus_aux==aux_skull_ind(1));
-tetra = tetra(I,:);
-
- ind_m = [ 2 4 3 ;
-           1 3 4 ;
-           1 4 2 ; 
-           1 2 3 ];
-
-tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 2 3]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
-tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
-tetra_sort = sortrows(tetra_sort,[1 2 3]);
-tetra_ind = zeros(size(tetra_sort,1),1);
-I = find(sum(abs(tetra_sort(2:end,1:3)-tetra_sort(1:end-1,1:3)),2)==0);
-tetra_ind(I) = 1;
-tetra_ind(I+1) = 1;
-I = find(tetra_ind == 0);
-tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
-surface_triangles = [ tetra(tetra_ind)];
-J_c = [J_c ;  unique(surface_triangles)];
-clear tetra_sort;
- end
+end
     
-tetra = evalin('base','zef.tetra_aux');
+tetra = tetra_aux;;
 
 waitbar(1/length_waitbar,h,'Refinement.'); 
 
@@ -639,11 +634,19 @@ non_source_ind = intersect(brain_ind, non_source_ind);
 
 close(h)
 
+[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
 
 end
 
-johtavuus = [johtavuus(:) johtavuus_aux(:)] ;
+%*************************************************************************
 
+
+if not(isempty(sigma_anisotropy))
+johtavuus = [johtavuus(:) johtavuus_aux(:) sigma_anisotropy] ;
+else
+    johtavuus = [johtavuus(:) johtavuus_aux(:)] ;
+end
+    
 end
 
 %brain_ind = single(brain_ind);

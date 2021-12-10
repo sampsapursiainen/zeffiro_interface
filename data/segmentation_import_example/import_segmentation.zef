@@ -1,0 +1,71 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER START %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Do not change or remove this header. This file allows one to import a
+segmentation, volume mesh and variables into the data structure of Zeffiro
+Interface (ZI), (c) 2018- Sampsa Pursiainen & ZI Team. For importing, this
+file should be placed in the folder containing the files and opened via
+ZI's import menu item 'Import segmentation from folder'. One can import 
+MAT files containing arbitrary variables, DAT files with ASCII data or ASC
+files exported from the FreeSurfer Software Suite, (c) Freesufer, 2013.
+
+The data item identifiers are the following:
+
+mat_struct, sensor_points, sensor_directions, white_matter, grey_matter, 
+csf, skull, skin, detail_1, detail_2, ..., detail_22.
+
+Each item is specified by a single comma-separated line with one of the 
+following forms. General form for meshes and variables: 
+
+filename, item identifier, scaling, sigma, priority, activity, name,
+invert, extension, x-translation, y-translation, z-translation
+
+Form for sensor points and directions:
+
+filename, item identifier, scaling, x-translation, y-translation,
+z-translation, xy-rotation, yz-rotation, zx-rotation, xcorr, ycorr, zcorr
+
+Here, the filename appears without any extensions and item identifier is 
+as in the list above; sigma and priority parameters are as in ZI's
+segmentation window with 0 corresponding to the default value; activity is
+a number describing the activity of the compartment (0 = inactive, 1 =
+constrained activity, 2 = unconstrained activity, or 3 = inner cortex [for
+white_matter only]); name is the compartment name as it appears in ZI;
+invert is for inverting an inward-pointing surface normal (0=not inverted,
+1=inverted); and extension is either ASC (asc) or DAT (dat) for FreeSurfer
+and other meshes, respectively. The scaling, translating and rotation 
+parameters are as they appear in ZI's segmentation tool. 
+
+In the case of DAT, the folder must contain two files per each triangular 
+tissue surface mesh (filename_points.dat and filename_triangles.dat), 
+whereas in the with ASC a single file is needed (filename.asc) per a mesh.
+
+Any compartment-specific parameter can be imported only once. In case
+there are multiple definitions in the list for a single compartment, only
+the first one counts. The parcellation tool will distinguish the meshes 
+merged into a single compartment displaying them as part 1, 2, etc. in
+the respective order. 
+
+Identifier mat_struct allows importing any variables included in a 
+MAT file as fields in the struct variable 'zef' of ZI. The fields that are
+already included in the data structure will be overwritten, while the new 
+ones will be added. 
+
+The segmentation list starts after the header. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**************%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+outer_skin,scalp,1,0.33,0,0,Scalp,0,DAT,0,0,0
+outer_skull,skull,1,0.0064,0,0,Skull,0,DAT,0,0,0
+inner_skull,csf,1,1.79,0,0,Cerebrospinal fluid,0,DAT,0,0,0
+lh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
+rh_CerebellumCortex,detail_1,1,0.33,0,2,Cerebellum Cortex,0,ASC,0,0,0
+lh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
+rh_pial,grey_matter,1,0.33,0,1,Grey matter,0,ASC,0,0,0
+lh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
+rh_white,white_matter,1,0.14,0,3,White matter,0,ASC,0,0,0
+cem_electrodes,sensor_points,0,0,0,0,0,0,0,0,0,0
+
+
+
+

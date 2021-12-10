@@ -1,4 +1,4 @@
-function [file, file_path, mesh_type] = zef_surface_mesh_type
+function [file, file_path, mesh_type] = zef_import_surface_mesh_type
 
 file = 0;
 file_path = 0;

@@ -50,6 +50,12 @@ end
 clear zef_i;
 zef.lf_tag = zef.imaging_method_cell{zef.imaging_method};
 [~,~,~,zef.source_ind] = zef_decompose_dof_space(zef.nodes,zef.tetra,zef.aux_vec,[],zef.n_sources,2);
+zef.n_sources_aux = zef.n_sources;
+for zef_i = 1 : zef.source_space_creation_iterations
+    zef.n_sources_aux = round(zef.n_sources*zef.n_sources_aux/length(zef.source_ind));
+[~,~,~,zef.source_ind] = zef_decompose_dof_space(zef.nodes,zef.tetra,zef.aux_vec,[],zef.n_sources_aux,2);
+end
+zef = rmfield(zef,'n_sources_aux');
 zef.source_ind = zef.aux_vec(zef.source_ind);
 zef.n_sources_mod = 0;
 %end

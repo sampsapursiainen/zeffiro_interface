@@ -15,8 +15,12 @@ zef.save_file_path = zef.file_path;
 load([zef.file_path zef.file]);  
 zef_remove_object_fields;
 
+zef_data.matlab_release = version('-release');
+zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
+zef_data.code_path = zef.code_path;
+zef_data.program_path = zef.program_path;
+zef_data.parallel_processes = zef.parallel_processes;
 zef_data.save_file_path = zef.save_file_path;
-zef_data.save_file = zef.save_file;
 zef_data.video_codec = zef.video_codec;
 zef_data.use_gpu = zef.use_gpu;
 zef_data.gpu_num = zef.gpu_num;

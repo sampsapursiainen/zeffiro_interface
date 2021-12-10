@@ -1,19 +1,18 @@
-%Copyright © 2018- Joonas Lahtinen, Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-
-%Function that substitutes given GMM structure (struct) to zef.GMM while updating it to the most recent layout. 
-%Usually zef_GMM_update function need to be called after this one.
 function zef_load_GMM(struct)
 
 if evalin('base','isfield(zef,''GMM'')')
     GMM = evalin('base','zef.GMM');
-    n_params = 35;       
+    if strcmp(GMM.parameters.Tags{end},'saved')
+        n_params = 36;       
+    else
+        n_params = 35;
+    end
 else
     if isfield(struct,'parameters')
     GMM_Tags ={'clustnum','MaxIter','covtype','covident','threshold',...
                 'alpha','markercolor','markersize','markerwidth','headtrans',...
                 'plotellip','elliptrans','startframe','stopframe','reg','veclength','c_startframe',...
-                'c_stopframe','domain','ampframe','amptype','model_criterion','initial_mode','replicates',...
+                'c_stopframe','domain','ampframe','amptype','estimate','model_criterion','initial_mode','replicates',...
                 'logpost_threshold','comp_prob','smooth_std','comp_ord','dip_num','ellip_num',...
                 'dip_comp','ellip_comp','ellip_coloring','colors','saved'}';
     n_params = length(GMM_Tags);
@@ -46,7 +45,7 @@ if isfield(struct,'parameters')
         GMM_Tags ={'clustnum','MaxIter','covtype','covident','threshold',...
                 'alpha','markercolor','markersize','markerwidth','headtrans',...
                 'plotellip','elliptrans','startframe','stopframe','reg','veclength','c_startframe',...
-                'c_stopframe','domain','ampframe','amptype','model_criterion','initial_mode','replicates',...
+                'c_stopframe','domain','ampframe','amptype','estimate','model_criterion','initial_mode','replicates',...
                 'logpost_threshold','comp_prob','smooth_std','comp_ord','dip_num','ellip_num',...
                 'dip_comp','ellip_comp','ellip_coloring','colors','saved'}';
         GMM.parameters = table('Size',[length(GMM_Tags),3],'VariableTypes',{'string','cell','string'},'VariableNames',{'Parameter Names','Values','Tags'});
@@ -59,8 +58,8 @@ if isfield(struct,'parameters')
                 n=min(n+1,size(struct.parameters,1));
             end
         end
-        GMM.meta{1} = 21;
-        GMM.meta{2} = 27;
+        GMM.meta{1} = 22;
+        GMM.meta{2} = 28;
         
     end
     

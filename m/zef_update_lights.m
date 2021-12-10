@@ -1,13 +1,16 @@
 function lights_vec = zef_update_lights(varargin)
 
 if not(isempty(varargin))
-    h_1 = varargin{1};
+    h_figure = varargin{1};
 else
-    h_1 = evalin('base','zef.h_axes1');
+    h_figure = evalin('base','zef.h_zeffiro');
 end
 
-h_2 = evalin('base','zef.h_update_lights');
+h_1 = evalin('base','findobj(get(gcf,''Children''),''Tag'',''axes1'');');
+
+h_2 = evalin('base','findobj(get(gcf,''Children''),''Tag'',''lightsselection'');');
 h_3 = findobj(h_1.Children,'Type','Light');
+h_axes1 = evalin('base','zef.h_axes1');
 lights_vec = evalin('base','zef.update_lights');
 
 if h_2.Value == 1
@@ -51,6 +54,10 @@ elseif h_2.Value == 6
 camlight(h_1,'headlight')
 lights_vec = [lights_vec ; 6];
     
+end
+
+if not(isequal(h_1,h_axes1))
+    lights_vec = evalin('base','zef.update_lights');
 end
 
 end

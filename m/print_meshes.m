@@ -420,7 +420,7 @@ if ismember(evalin('base','zef.visualization_type'), [2,4])
     if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
-    s_i_ind = evalin('base','zef.brain_ind');
+     s_i_ind = [1:evalin('base','size(zef.tetra,1)')]';
     end
     end
 
@@ -522,10 +522,15 @@ end
 hold on;
 %**************************************************************************
 if ismember(evalin('base','zef.visualization_type'),[2,4])
+if ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+brain_ind_aux = [1:evalin('base','size(zef.tetra,1)')]';
+brain_ind = [1:length(I_aux)]';
+I_2  = I_aux;
+else
 brain_ind_aux = evalin('base','zef.brain_ind');
 brain_ind = brain_ind_aux;
-[aux_vec, brain_ind, I_2] = intersect(I_aux,brain_ind);
-clear aux_vec;
+[~, brain_ind, I_2] = intersect(I_aux,brain_ind);
+end
 johtavuus(aux_ind(brain_ind))=0;
 I_3 = find(ismember(tetra_ind,brain_ind));
 

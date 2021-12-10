@@ -1,6 +1,3 @@
-%Copyright © 2018- Joonas Lahtinen, Frank Neugebauer, Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-    
 function [GMModel,GMModelDipoles,GMModelAmplitudes,GMModelTimeVariables] = zef_GMModeling
 h = waitbar(0,['Gaussian mixature model.']);
 GMModelTimeVariables = [];
@@ -68,6 +65,7 @@ I_aux = [3*I_aux(:)-2,3*I_aux(:)-1,3*I_aux(:)];
 end
 clear p_ind_aux_1 p_ind_aux_2 p_ind p_selected source_ind_aux
 
+estim_param = str2num(parameters{22}); 
 threshold = str2num(parameters{5});
 reg_value = str2num(parameters{15});
 amp_est_type = str2num(parameters{21});
@@ -158,7 +156,11 @@ for t=t_start:T
     activity_pos = source_positions(ind,:);
     activity_dir = [atan2(sqrt(sum((direct(ind,[1,2]).^2),2)),direct(ind,3)),atan2(direct(ind,2),direct(ind,1))];
     
-    activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];    
+    if estim_param == 1
+        activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];
+    elseif estim_param == 2
+        activity_space = activity_pos(cumsum(ind2),:);
+    end
     
     if strcmp(initial_mode,'1')
         %calculate Gaussian mixature models:
@@ -177,7 +179,7 @@ for t=t_start:T
         counter=0;
         index_vec2=index_vec1;
 
-        while length(unique(index_vec2))~=k &&counter<256/logpdfThreshold
+        while length(unique(index_vec2))~=k && counter<256/logpdfThreshold
             index_vec2=index_vec1;
             counter=counter+1;
             ind1=find(mylogpdf<max(mylogpdf)-counter*logpdfThreshold);
@@ -258,6 +260,7 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel{t}.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid point current densities at the frame ',num2str(t),': ',num2str(J(ind2)'/max(J))])
+        if estim_param == 1
         GMModelDipoles{t} = [cos(GMModel{t}.mu(:,5)).*sin(GMModel{t}.mu(:,4)),sin(GMModel{t}.mu(:,5)).*sin(GMModel{t}.mu(:,4)),cos(GMModel{t}.mu(:,4))];
         if amp_est_type == 1
             amp = J(ind2);
@@ -268,6 +271,12 @@ for t=t_start:T
         end
         GMModelDipoles{t} = amp.*GMModelDipoles{t};
         GMModelAmplitudes{t} = amp;
+        elseif estim_param == 2
+            GMModelDipoles{t} = NaN;
+            amp = GMM2amplitude(ones(size(GMModel{t}.mu,1),3),ind2,t,2)*1e3;
+            GMModelAmplitudes{t} = amp;
+        end 
+        
         waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
@@ -275,7 +284,7 @@ for t=t_start:T
             [~,ind2(k)] = min(sum((GMModel.mu(k,1:3)-source_positions).^2,2));
         end
         disp(['Relative centroid point current densities: ',num2str(J(ind2)'/max(J))]) 
-        %GMModelDipoles = J(ind2).*GMModel.mu(:,4:6);
+        if estim_param == 1
         GMModelDipoles = [cos(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),sin(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),cos(GMModel.mu(:,4))];
         if amp_est_type == 1
             amp = J(ind2);
@@ -286,10 +295,15 @@ for t=t_start:T
         end
         GMModelDipoles = amp.*GMModelDipoles;
         GMModelAmplitudes = amp;
+        elseif estim_param == 2
+            GMModelDipoles{t} = NaN;
+            amp = GMM2amplitude(ones(size(GMModel.mu,1),3),ind2,t,2)*1e3;
+            GMModelAmplitudes = amp;
+        end 
     end
 
 end     %end of t loop
 
 close(h);
 end
-
+    
