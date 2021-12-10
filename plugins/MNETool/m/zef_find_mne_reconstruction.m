@@ -192,6 +192,7 @@ end
 
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.mne_normalize_data'),0);
 
+
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 L = gpuArray(L);
 end

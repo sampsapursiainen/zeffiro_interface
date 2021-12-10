@@ -79,6 +79,7 @@ end
         
             S_mat = (std_lhood^2/theta0)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+
         S_mat = gpuArray(S_mat);
     end
     
@@ -105,7 +106,7 @@ end
     
 elseif method_type == 3
     
-        S_mat = max(f.^2,[],'all')*(std_lhood^2)*eye(size(L,1));
+        S_mat = (std_lhood^2)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         S_mat = gpuArray(S_mat);
     end

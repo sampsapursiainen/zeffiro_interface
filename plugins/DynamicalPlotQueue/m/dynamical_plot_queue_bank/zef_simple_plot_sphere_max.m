@@ -14,10 +14,12 @@ radius_val = 10;
 color_val = [1 0 0];
 end
 
+
 [X,Y,Z] = sphere(100);
 h_axes = evalin('caller','h_axes_image');
+
 axes(h_axes);
-hold on;
+
 
 f_ind = evalin('caller','f_ind');
 delete(findobj(h_axes,'Tag','additional: max sphere'));

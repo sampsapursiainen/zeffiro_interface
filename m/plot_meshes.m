@@ -6,7 +6,7 @@ f_ind = 1;
 
 if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
     volumetric_distribution = evalin('base','zef.reconstruction');
-elseif isequaz(evalin('base','zef.volumetric_distribution_mode'),2)
+elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
         volumetric_distribution = repmat(evalin('base','zef.sigma(:,1)')',3,1)/sqrt(3);
         volumetric_distribution = volumetric_distribution(:);
  elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)

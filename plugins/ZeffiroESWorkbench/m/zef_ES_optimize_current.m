@@ -145,7 +145,9 @@ if max(sum(abs(y_ES))) >= evalin('base', 'zef.ES_solvermaximumcurrent')
 end
 
 [~,y_ES] = zef_ES_rwnnz(y_ES, evalin('base','zef.ES_relativeweightnnz'), evalin('base','zef.ES_scoredose'));
-y_ES = y_ES - mean(y_ES);
+%y_ES = y_ES - mean(y_ES);
+y_idx = y_ES ~= 0;
+y_ES(y_idx) = y_ES(y_idx)-mean(y_ES(y_idx));
 
 try
 if not(isempty(active_electrodes))
