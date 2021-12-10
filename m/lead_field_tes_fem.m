@@ -767,7 +767,7 @@ if not(isempty(find(tol_val < relres_vec)))
 end
 time_val = toc; 
 
-waitbar(i*block_size/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i*block_size/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i*block_size) - 1)*time_val/86400)) '.']);
 
 end
 
