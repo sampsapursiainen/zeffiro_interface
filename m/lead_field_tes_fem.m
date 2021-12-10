@@ -1,4 +1,4 @@
-% %%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
+% %%Copyright Â© 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [L_tes, S_tes, dof_positions, dof_directions, dof_ind, dof_count] = lead_field_tes_fem(nodes,elements,sigma,electrodes,varargin)
 % 17.6.2020
@@ -767,7 +767,7 @@ if not(isempty(find(tol_val < relres_vec)))
 end
 time_val = toc; 
 
-waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+waitbar(i*block_size/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 
 end
 
