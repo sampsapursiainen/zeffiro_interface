@@ -12,7 +12,7 @@ evalin('base',['zef.h_system_settings_table.Data{zef_i,2} = zef.' zef.ini_cell{z
 end
 zef = rmfield(zef,'ini_cell');
 zef.h_system_settings_save.ButtonPushedFcn = 'zef_save_system_settings;';
-set(zef.h_compartment_table,'columnformat',{'char','char','char'})
+set(zef.h_system_settings_table,'columnformat',{'char','char','char'})
 
 set(findobj(zef.h_system_settings.Children,'-property','FontSize'),'FontSize',zef.font_size);
 set(zef.h_system_settings,'AutoResizeChildren','off');
