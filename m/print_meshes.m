@@ -18,6 +18,9 @@ if iscell(volumetric_distribution)
 else
     volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
 end
+elseif isequal(evalin('base','zef.volumetric_distribution_mode'),4)
+volumetric_distribution = zef_condition_number(evalin('base','zef.nodes'), evalin('base','zef.tetra'));
+volumetric_distribution = repmat(volumetric_distribution(:)',3,1)/sqrt(3);
 end
 
 void = []; 
@@ -419,7 +422,7 @@ frame_step = 1;
 if ismember(evalin('base','zef.visualization_type'), [2,4])
     if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
-    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
      s_i_ind = [1:evalin('base','size(zef.tetra,1)')]';
     end
     end
@@ -522,7 +525,7 @@ end
 hold on;
 %**************************************************************************
 if ismember(evalin('base','zef.visualization_type'),[2,4])
-if ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+if ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
 brain_ind_aux = [1:evalin('base','size(zef.tetra,1)')]';
 brain_ind = [1:length(I_aux)]';
 I_2  = I_aux;
@@ -1218,7 +1221,7 @@ if ismember(evalin('base','zef.visualization_type'), [3,4])
     s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
         if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
-    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
+    elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
     s_i_ind_2 = evalin('base','zef.brain_ind');
         end
 end
@@ -2555,7 +2558,10 @@ end
 
 end
 
- 
+
+
+
+end
 
 
  

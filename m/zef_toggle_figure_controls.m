@@ -19,7 +19,7 @@ h = get(h_figure,'children');
 
 for i = 1 : length(h)
 
-if contains(get(h(i),'Tag'),{'slidertext','slider','colormapselection','colormapselectiontext','colorscaleselection'})
+if contains(get(h(i),'Tag'),{'slidertext','slider','toggleedgesbutton'})
 if get(h(i),'Visible') 
     set(h(i),'Visible','off')
 else
@@ -32,9 +32,9 @@ if isequal(get(h(i),'Tag'),'togglecontrolsbutton')
     set(h(i),'units','normalized');
     togglecontrolsbuttonposition = get(h(i),'position');
     if toggle_status == 1 
-        set(h(i),'Position',[0.82 0.95 0.15 0.05])
+        set(h(i),'Position',[0.83 0.95 0.14 0.05])
     else
-         set(h(i),'Position',[0.51 0.95 0.15 0.05])
+         set(h(i),'Position',[0.68 0.95 0.14 0.05])
     end
     set(h(i),'units','pixels');    
 end

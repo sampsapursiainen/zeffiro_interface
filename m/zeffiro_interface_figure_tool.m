@@ -32,22 +32,23 @@ addToolbarExplorationButtons(zef.h_zeffiro);
 
 zef.stop_movie = 0;
 zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.34 0.60 0.60],'FontSize',0.587962962962963,'Tag','axes1');
-uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Loop count:','HorizontalAlignment','left','Position',[0.68 0.1 0.12 0.03]);
-uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Loop on:','HorizontalAlignment','left','Position',[0.68 0.15 0.12 0.03]);
+uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Loop on/count:','HorizontalAlignment','left','Position',[0.68 0.10 0.12 0.03]);
 
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Time:','HorizontalAlignment','left','Position',[0.68 0.90 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color min:','HorizontalAlignment','left','Position',[0.68 0.85 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color max:','HorizontalAlignment','left','Position',[0.68 0.80 0.12 0.03]);
 
 %Start controls
-zef.h_reset_figure_tool_sliders = uicontrol('Tag','togglecontrolsbutton','UserData',1,'Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.51 0.95 0.15 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
+zef.h_toggle_controls = uicontrol('Tag','togglecontrolsbutton','UserData',1,'Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.68 0.95 0.14 0.05],'String','Toggle controls','Callback','zef_toggle_figure_controls;');
+zef.h_toggle_edges = uicontrol('Tag','toggleedgesbutton','UserData',1,'Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.83 0.95 0.14 0.05],'String','Toggle edges','Callback','zef_toggle_edges;');
+
 zef.h_colorscale_min_slider = uicontrol('Tag','colorscale_min_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.85 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.colorscale_min_slider = zef_update_colorscale_min; else; zef_update_colorscale_min(gcf); end;');
 zef.h_colorscale_min_slider.UserData = zef.colorscale_min_slider; 
 zef.h_colorscale_max_slider = uicontrol('Tag','colorscale_max_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.80 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.colorscale_max_slider = zef_update_colorscale_max; else; zef_update_colorscale_max(gcf); end;');
 zef.h_colorscale_max_slider.UserData = zef.colorscale_min_slider;
-zef.h_update_colormap = uicontrol('Tag','colormapselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.96 0.08 0.03],'string',zef.colormap_items,'Value',zef.update_colormap,'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_colormap = zef.h_update_colormap.Value; end; zef.h_aux = findobj(get(gcf,''Children''),''Tag'',''axes1'').Colormap; zef.h_aux = zef_colormap(zef.h_update_colormap.Value); zef = rmfield(zef,''h_aux''); zef_update_contrast_and_brightness(gcf);');
+zef.h_update_colormap = uicontrol('Tag','colormapselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.15 0.08 0.03],'string',zef.colormap_items,'Value',zef.update_colormap,'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_colormap = zef.h_update_colormap.Value; end; zef.h_aux = findobj(get(gcf,''Children''),''Tag'',''axes1'').Colormap; zef.h_aux = zef_colormap(zef.h_update_colormap.Value); zef = rmfield(zef,''h_aux''); zef_update_contrast_and_brightness(gcf);');
 
-zef.h_update_colorscale = uicontrol('Tag','colorscaleselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.89 0.96 0.08 0.03],'string',{'Linear','Logarithmic'},'Value',zef.update_colorscale,'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_colorscale = zef_update_colorscale; else; zef_update_colorscale(gcf); end;');
+zef.h_update_colorscale = uicontrol('Tag','colorscaleselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.89 0.15 0.08 0.03],'string',{'Linear','Logarithmic'},'Value',zef.update_colorscale,'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_colorscale = zef_update_colorscale; else; zef_update_colorscale(gcf); end;');
 zef.h_update_zoom = uicontrol('Tag','update_zoom_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.75 0.17 0.03],'Min',0.1,'Max',100,'Value',zef.update_zoom,'Sliderstep',[0.001 0.001],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_zoom = zef_update_zoom; else; zef_update_zoom(gcf); end;');
 zef.h_update_transparency_reconstruction = uicontrol('Tag','transparency_reconstruction_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.70 0.17 0.03],'Min',0,'Max',1,'Value',zef.update_transparency_reconstruction,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_transparency_reconstruction = zef_update_transparency_reconstruction; else; zef_update_transparency_reconstruction(gcf); end;');
 zef.h_update_transparency_surface = uicontrol('Tag','transparency_surface_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.65 0.17 0.03],'Min',0,'Max',1,'Value',zef.update_transparency_surface,'Sliderstep',[0.01 0.01],'Callback','if isequal(zef.h_axes1.Parent, zef.h_zeffiro); zef.update_transparency_surface = zef_update_transparency_surface; else; zef_update_transparency_surface(gcf); end;');
@@ -65,11 +66,11 @@ zef.h_slider=uicontrol('Tag','slider','Style','slider','Parent',zef.h_zeffiro,'U
 zef.h_reset_figure_tool_sliders = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.68 0.03 0.09 0.05],'String','Reset','Callback','zef_set_figure_tool_sliders(0);zef.h_reset_figure_tool_sliders.Value=0;');
 zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.78 0.03 0.09 0.05],'String','Stop','Callback',@zef_callbackstop);
 zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.88 0.03 0.09 0.05],'String','Pause','Callback',@zef_callbackpause);
-zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.15 0.03 0.03],'Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
-zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.1 0.03 0.03],'String','Loop visualization','Callback','zef.loop_movie_count = str2num(get(zef.h_loop_movie_count,''string''));','HorizontalAlignment','right');
+zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.89 0.10 0.03 0.03],'Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
+zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.10 0.03 0.03],'String','Loop visualization','Callback','zef.loop_movie_count = str2num(get(zef.h_loop_movie_count,''string''));','HorizontalAlignment','right');
 %End controls
 
-uicontrol('Tag','colormapselectiontext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Colormap:','HorizontalAlignment','left','Position',[0.68 0.96 0.12 0.03]);
+uicontrol('Tag','colormapselectiontext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Colormap:','HorizontalAlignment','left','Position',[0.68 0.15 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Distance:','HorizontalAlignment','left','Position',[0.68 0.75 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Transp. rec.:','HorizontalAlignment','left','Position',[0.68 0.70 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Transp. surf.:','HorizontalAlignment','left','Position',[0.68 0.65 0.12 0.03]);

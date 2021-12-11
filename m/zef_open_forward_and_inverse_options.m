@@ -14,7 +14,9 @@ zef = rmfield(zef,'fieldnames');
 
 clear zef_data;
 
-
+[~, ~,zef.aux_field] = zef_get_active_compartments('name'); 
+zef.h_as_opt_5.Items = {'Brain', zef.aux_field{:}}; 
+zef = rmfield(zef,'aux_field');
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
