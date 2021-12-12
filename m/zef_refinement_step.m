@@ -9,13 +9,12 @@ J_c = [];
 
 I = [];
 refinement_type = evalin('base','zef.refinement_type');
-if ismember(refinement_type,1)
+if find(ismember(refinement_type,1))
 I = brain_ind(:);
 end
 refinement_type = setdiff(refinement_type,1) - 1;
 
  I = [I ; find(ismember(johtavuus_aux,refinement_type(:)))];
-    
 
 tetra = tetra_aux;
 
