@@ -728,7 +728,7 @@ if isequal(electrode_model,'PEM')
 b = zeros(length(A),length(block_ind));
 tol_val = ones(1,length(block_ind))*tol_val_eff;
 for j =  1 : length(block_ind)
-b(ele_ind(block_ind),j) = 1;
+b(ele_ind(block_ind(j)),j) = 1;
 end
 end
 if isequal(electrode_model,'CEM')    
@@ -753,7 +753,7 @@ aux_vec = S1 \ r;
 p = S2 \ aux_vec;
 m = 0;
 while( not(isempty(find(sqrt(sum(r.^2))./norm_b(block_iter_sub) > tol_val(block_iter_sub)))) & (m < m_max) )
-    a = A * p;
+  a = A * p;
   a_dot_p = sum(a.*p);
   aux_val = sum(r.*p);
   lambda = aux_val ./ a_dot_p;
@@ -771,7 +771,7 @@ relres_cell{block_iter} = sqrt(sum(r.^2))./norm_b(block_iter_sub);
 end
 
 for block_iter = 1 : length(block_iter_ind)
- block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
 x_block(:,block_iter_sub) = x_block_cell{block_iter};
 relres_vec(block_iter_sub) = relres_cell{block_iter};
 end
@@ -795,12 +795,9 @@ if not(isempty(find(tol_val < relres_vec)))
     return
 end
 time_val = toc; 
-if isequal(electrode_model,'PEM')
-waitbar((i+block_size-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/(i+block_size-1) - 1)*time_val/86400)) '.']);
-end
-if isequal(electrode_model,'CEM')
+
 waitbar((i+block_size-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+block_size-1) - 1)*time_val/86400)) '.']);
-end
+
 end
 
 %******************************************************
@@ -813,6 +810,12 @@ clear S r p x aux_vec inv_M_r a b;
 
 waitbar(0,h,'Interpolation.');
 
+if isequal(electrode_model,'PEM')
+L_eeg_fi(1,:) = 0;
+if source_model == 2
+L_eeg_ew(1,:) = 0;
+end
+end
 
 if isequal(electrode_model,'CEM')
 Aux_mat = inv(Aux_mat);
@@ -828,7 +831,6 @@ if source_model == 2
 L_eeg_ew = Aux_mat_2*L_eeg_ew;  
 end
 
-
 if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
 if evalin('base','zef.surface_sources')
@@ -841,8 +843,6 @@ M2 = size(source_nonzero_ind,1);
 else
 L_eeg = L_eeg_fi;
 end
-
-
 
 if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
@@ -874,7 +874,6 @@ end
 end
 end
 
-
 if source_model == 1
 tic;
  for i = 1 : M2
@@ -896,7 +895,7 @@ end
 end
 end    
 
-    end
+end
 
 waitbar(1,h);
 
