@@ -219,6 +219,7 @@ if electrode_model == 1 | not(ismember(evalin('base','zef.imaging_method'),[1,4,
 for i = 1 : size(sensors,1)
 h = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
 h.Tag = 'sensor';
+h.EdgeColor = 'none';
 %April 2021
 if evalin('base',['zef.' evalin('base','zef.current_sensors') '_names_visible'])
 h_text = text(sensors(i,1),sensors(i,2),sensors(i,3),sensors_name{i});
@@ -251,9 +252,9 @@ set(h(i),'Tag','sensor');
 set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
 end
 set(h,'edgecolor','none'); 
-%set(h,'specularstrength',0.3);
-%set(h,'diffusestrength',0.7);
-%set(h,'ambientstrength',0.7);
+% set(h,'specularstrength',0.3);
+% set(h,'diffusestrength',0.7);
+% set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 set(h,'edgealpha',evalin('base','zef.layer_transparency'));
     end
@@ -265,10 +266,10 @@ set(h(i),'facecolor',sensors_color_table(sensors_point_like_id(i),:));
 set(h(i),'Tag','sensor');
 end
 %April 2021
-set(h,'edgecolor','none'); 
-%set(h,'specularstrength',0.3);
-%set(h,'diffusestrength',0.7);
-%set(h,'ambientstrength',0.7);
+set(h,'edgecolor','none');
+% set(h,'specularstrength',0.3);
+% set(h,'diffusestrength',0.7);
+% set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
@@ -277,18 +278,18 @@ sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',evalin('base',['zef.' sensor_tag 'color']));
 set(h,'edgecolor','none'); 
-%set(h,'specularstrength',0.3);
-%set(h,'diffusestrength',0.7);
-%set(h,'ambientstrength',0.7);
+% set(h,'specularstrength',0.3);
+% set(h,'diffusestrength',0.7);
+% set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 if size(sensors,2) == 9
 sensors(:,7:9) = sensors(:,7:9)./repmat(sqrt(sum(sensors(:,7:9).^2,2)),1,3);
 h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 set(h,'facecolor',0.9*[0 1 1]);
 set(h,'edgecolor','none'); 
-%set(h,'specularstrength',0.3);
-%set(h,'diffusestrength',0.7);
-%set(h,'ambientstrength',0.7);
+% set(h,'specularstrength',0.3);
+% set(h,'diffusestrength',0.7);
+% set(h,'ambientstrength',0.7);
 set(h,'facealpha',evalin('base','zef.layer_transparency'));
 end
 end
