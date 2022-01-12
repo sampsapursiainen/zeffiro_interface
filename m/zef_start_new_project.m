@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-clear zef_data;
+zef_data = struct;
 zef_close_tools; 
 zef_init; 
 zef_reopen_segmentation_tool;

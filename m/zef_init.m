@@ -4,6 +4,13 @@
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
+ zef.fieldnames = fieldnames(zef);
+       
+for zef_i = 1 : length(zef.fieldnames)
+    zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
+end
+    
+
 zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'}; 
 
 zef_data.update_colorscale = 1;
@@ -280,20 +287,10 @@ zef_data.sensors_attached_volume = [];
    zef_data.mesh_optimization_parameter = 1E-5; 
     zef_data.mesh_labeling_approach = 1; 
     
-       zef.fieldnames = fieldnames(zef);
-       
-for zef_i = 1 : length(zef.fieldnames)
-    zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
-end
-       
+         
  zef = zef_data;
  
- if isfield(zef,'h_zeffiro_window_main')
-     if isvalid(zef.h_zeffiro_window_main)
- zef.zeffiro_window_main_current_size = get(zef.h_zeffiro_window_main,'Position');
-  zef.zeffiro_window_main_relative_size = zef_get_relative_size(zef.h_zeffiro_window_main);
-     end
- end
+
  clear zef_i zef_data;
  
  zef_apply_init_profile;
