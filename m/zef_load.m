@@ -50,6 +50,9 @@ zeffiro_interface_mesh_visualization_tool;
 zef_close_figs;
 zef_update;
 zef_set_figure_tool_sliders
+
+zef_plugin;
+
 end;
 
 

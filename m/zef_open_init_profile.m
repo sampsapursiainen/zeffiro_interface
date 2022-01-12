@@ -1,14 +1,17 @@
 zef_data = zef_init_profile;
 zef_assign_data;
 
-
-zef.h_init_profile_table.Data = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_init.ini'],'filetype','text','delimiter',',');
-
+if isempty(zef.init_profile)
+zef.init_profile = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_init.ini'],'filetype','text','delimiter',',');
+end
+zef.h_init_profile_table.Data = zef.init_profile;
+ 
 set(zef.h_init_profile_table,'CellSelectionCallback',@zef_init_profile_table_selection);
 
-set(zef.h_init_profile_save,'ButtonPushedFcn','writecell(zef.h_init_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');');
-set(zef.h_init_profile_apply,'ButtonPushedFcn','writecell(zef.h_init_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');zef_apply_init_profile;');
+set(zef.h_init_profile_save,'ButtonPushedFcn','zef.init_profile = zef.h_init_profile_table.Data;writecell(zef.h_init_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');');
+set(zef.h_init_profile_apply,'ButtonPushedFcn','zef.init_profile = zef.h_init_profile_table.Data;writecell(zef.h_init_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');zef_apply_init_profile;');
 
+set(zef.h_init_profile_update_from_profile,'ButtonPushedFcn','zef.init_profile = readcell([zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');zef.h_init_profile_table.Data = zef.init_profile;');
 
 set(zef.h_init_profile_table,'columnformat',{'char','char','char',{'number','string'}});
 
