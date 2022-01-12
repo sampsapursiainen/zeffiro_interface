@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
 
-sigma_ind_vec = evalin('base','zef.sigma(zef.brain_ind,2)');
+domain_labels = evalin('base','zef.domain_labels(zef.brain_ind)');
 submesh_ind_vec = evalin('base','zef.submesh_ind');
 parcellation_compartment = evalin('base','zef.parcellation_compartment');
 
@@ -38,7 +38,7 @@ priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = evalin('base',var_4);
-if evalin('base',['zef.' compartment_tags{k} '_sources']);
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -114,7 +114,7 @@ parcellation_interpolation_ind{p_ind-1}{1} = [];
 
 if not(p_cortex(p_ind-1) == 1)
 
-sigma_ind = find(sigma_ind_vec==p_compartment(p_ind-1,1));
+sigma_ind = find(domain_labels==p_compartment(p_ind-1,1));
 parcellation_interpolation_ind{p_ind-1}{1} = sigma_ind(find(submesh_ind_vec(sigma_ind)==p_compartment(p_ind-1,2))); 
     
 else

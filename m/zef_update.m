@@ -2,6 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if isvalid(zef.h_zeffiro_window_main)
+    
 
 zef.aux_field_1 = zef.h_compartment_table.Data;
 zef.aux_field_2 = zeros(size(zef.aux_field_1,1),1); 
@@ -31,8 +32,19 @@ evalin('base',['zef.' zef.compartment_tags{zef_j}, '_on = ' num2str(double(zef.a
 evalin('base',['zef.' zef.compartment_tags{zef_j}, '_visible = ' num2str(double(zef.aux_field_1{zef_i,4})) ';']);
 evalin('base',['zef.' zef.compartment_tags{zef_j}, '_merge = ' num2str(double(zef.aux_field_1{zef_i,5})) ';']);
 evalin('base',['zef.' zef.compartment_tags{zef_j}, '_invert = ' num2str(double(zef.aux_field_1{zef_i,6})) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_sources = ' num2str(find(ismember(zef.h_compartment_table.ColumnFormat{7},zef.aux_field_1{zef_i,7}),1)-1) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_sigma = ' num2str(zef.aux_field_1{zef_i,8}) ';']);
+evalin('base',['zef.' zef.compartment_tags{zef_j}, '_sources = ' num2str(find(ismember(zef.h_compartment_table.ColumnFormat{7},zef.aux_field_1{zef_i,7}),1)-2) ';']);
+
+zef_n = 0;
+for zef_k =  1  : size(zef.parameter_profile,1)
+     if isequal(zef.parameter_profile{zef_k,8},'Segmentation') && isequal(zef.parameter_profile{zef_k,6},'On') && isequal(zef.parameter_profile{zef_k,7},'On')
+ zef_n = zef_n + 1; 
+ if isequal(zef.parameter_profile{zef_k,3},'Scalar')
+  evalin('base',['zef.' zef.compartment_tags{zef_j} '_' zef.parameter_profile{zef_k,2} '='  num2str(zef.aux_field_1{zef_i, 7+zef_n}) ';']);
+   elseif isequal(zef.parameter_profile{zef_k,3},'String')
+  evalin('base',['zef.' zef.compartment_tags{zef_j} '_' zef.parameter_profile{zef_k,2} '='  (zef.aux_field_1{zef_i, 7+zef_n}) ';']);  
+ end
+    end
+end
 else
 zef.aux_field_4 = fieldnames(zef); 
 zef.aux_field_4 = zef.aux_field_4(find(startsWith(zef.aux_field_4,[zef.compartment_tags{zef_j} '_'])));
@@ -124,8 +136,19 @@ zef.aux_field_1{zef_i,3} = logical(evalin('base',['zef.' zef.compartment_tags{ze
 zef.aux_field_1{zef_i,4} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_visible']));
 zef.aux_field_1{zef_i,5} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_merge']));
 zef.aux_field_1{zef_i,6} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_invert']));
-zef.aux_field_1{zef_i,7} = zef.compartment_activity{evalin('base',['zef.' zef.compartment_tags{zef_i} '_sources'])+1};
-zef.aux_field_1{zef_i,8} = evalin('base',['zef.' zef.compartment_tags{zef_i} '_sigma']);
+zef.aux_field_1{zef_i,7} = zef.compartment_activity{evalin('base',['zef.' zef.compartment_tags{zef_i} '_sources'])+2};
+zef_n = 0; 
+for zef_k =  1  : size(zef.parameter_profile,1)
+     if isequal(zef.parameter_profile{zef_k,8},'Segmentation') && isequal(zef.parameter_profile{zef_k,6},'On') && isequal(zef.parameter_profile{zef_k,7},'On')
+  zef_n = zef_n + 1; 
+    zef.h_compartment_table.ColumnName{zef_n+7} = zef.parameter_profile{zef_k,1};
+   if isequal(zef.parameter_profile{zef_k,3},'Scalar')
+        zef.aux_field_1{zef_i,zef_n+7} = num2str(evalin('base',['zef.' zef.compartment_tags{zef_i} '_' zef.parameter_profile{zef_k,2}]));
+   elseif isequal(zef.parameter_profile{zef_k,3},'String')
+  zef.aux_field_1{zef_i,zef_n + 7} = (evalin('base',['zef.' zef.compartment_tags{zef_i} '_' zef.parameter_profile{zef_k,2} ]));
+   end
+    end
+end
 
 end
 
@@ -203,6 +226,6 @@ zef_toggle_lock_sensor_sets_on;
 zef_toggle_lock_sensor_names_on;
 zef_toggle_lock_transforms_on;
 
-clear zef_i zef_j;
+clear zef_i zef_j zef_k zef_n;
 
 end

@@ -3,7 +3,7 @@ zef.aux_data_1 = cell(0);
 zef.aux_data_2 = evalin('base',['zef.' zef.current_sensors '_name_list']);
 zef.aux_data_3 = evalin('base',['zef.' zef.current_sensors '_points']);
 for zef_i = length(zef.aux_data_2) + 1 : size(zef.aux_data_3,1)
-zef.aux_data_2{zef_i} = zef_i;
+zef.aux_data_2{zef_i} = num2str(zef_i);
 evalin('base',['zef.' zef.current_sensors '_name_list{' num2str(zef_i) '} =''' num2str(zef_i) ''';']);
 end
 if evalin('base',['zef.' zef.current_sensors '_visible'])

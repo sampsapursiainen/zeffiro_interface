@@ -2,7 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if zef.mlapp == 1 
-    zef.mesh_smoothing_on = zef.h_checkbox_mesh_smoothing_on.Value;
+    
+zef.mesh_smoothing_on = zef.h_checkbox_mesh_smoothing_on.Value;
 zef.refinement_on = zef.h_refinement_on.Value;
 zef.source_interpolation_on = zef.h_source_interpolation_on.Value;
 zef.downsample_surfaces = zef.h_downsample_surfaces.Value;
@@ -15,8 +16,12 @@ zef.solver_tolerance = (zef.h_edit76.Value);
 zef.n_sources = (zef.h_edit75.Value);
 zef.max_surface_face_count = zef.h_max_surface_face_count.Value ;
 zef.inflate_n_iterations = (zef.h_inflate_n_iterations.Value);
-zef.inflate_strength = zef.h_inflate_strength.Value ;
-
+zef.inflate_strength = zef.h_inflate_strength.Value;
+zef.forward_simulation_script = char(join(string(zef.h_forward_simulation_script.Value'),' '));
+if not(isempty(zef.forward_simulation_selected))
+zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1),zef.forward_simulation_column_selected} = zef.forward_simulation_script;
+end
+zef.forward_simulation_table = zef.h_forward_simulation_table.Data;
 else
 
 if zef.cp_on

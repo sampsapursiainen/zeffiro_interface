@@ -4,11 +4,11 @@ for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end   
 
-set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',{'Inactive','Constrained field','Unconstrained field','Active surface'},'numeric'})
+set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',zef.compartment_activity,'numeric'})
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_sensors_name_table,'columnformat',{'numeric','char','logical'});
-set(zef.h_sensors_table,'columnformat',{'numeric','char',{'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'},'logical','logical','logical','logical','logical'});
+set(zef.h_sensors_table,'columnformat',{'numeric','char',zef.imaging_method_cell,'logical','logical','logical','logical','logical'});
 set(zef.h_parameters_table,'columnformat',{'char','numeric'});
 set(zef.h_zeffiro_window_main,'DeleteFcn','if not(isdeployed); zef.h_zeffiro = []; zef_arrange_windows(''close'',''windows'',''all''); rmpath([zef.program_path zef.code_path]); rmpath([zef.program_path ''/fig'']); end; clear zef;');
 set(zef.h_project_tag,'ValueChangedFcn','zef_update;');
@@ -31,8 +31,8 @@ set(zef.h_menu_add_transform,'MenuSelectedFcn','zef_add_transform;');
 set(zef.h_menu_lock_transforms_on,'MenuSelectedFcn','zef.lock_transforms_on = abs(zef.lock_transforms_on - 1); zef_toggle_lock_transforms_on;');
 set(zef.h_menu_lock_sensor_names_on,'MenuSelectedFcn','zef.lock_sensor_names_on = abs(zef.lock_sensor_names_on - 1); zef_toggle_lock_sensor_names_on;');
 set(zef.h_menu_lock_sensor_sets_on,'MenuSelectedFcn','zef.lock_sensor_sets_on = abs(zef.lock_sensor_sets_on - 1); zef_toggle_lock_sensor_sets_on;');
-set(zef.h_menu_delete_compartment,'MenuSelectedFcn','zef_delete_compartment;');
-set(zef.h_menu_sensor_dat_points,'MenuSelectedFcn','zef_get_sensor_points;');
+set(zef.h_menu_delete_compartment,'MenuSelectedFcn','zef_delete_compartment;zef_init_sensors_parameter_profile;');
+set(zef.h_menu_sensor_dat_points,'MenuSelectedFcn','zef_get_sensor_points;zef_init_sensors_parameter_profile;');
 set(zef.h_menu_sensor_dat_directions,'MenuSelectedFcn','zef_get_sensor_directions;');
 set(zef.h_menu_add_compartment,'MenuSelectedFcn','zef_add_compartment;');
 set(zef.h_menu_add_sensor_sets,'MenuSelectedFcn','zef_add_sensors;');
@@ -67,7 +67,7 @@ set(zef.h_menu_import_reconstruction                 ,'MenuSelectedFcn','zef.inv
 set(zef.h_menu_import_current_pattern                ,'MenuSelectedFcn','zef.inv_import_type = 3; zef_inv_import;zef_update;');
 set(zef.h_menu_import_resection_points              ,'MenuSelectedFcn','zef_import_resection_points;');
 set(zef.h_menu_reset_lead_field                      ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the lead field?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.L = []; end;zef_update;');
-set(zef.h_menu_reset_volume_data                     ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset volume data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.nodes=[];zef.nodes_b=[];zef.tetra=[];zef.tetra_aux=[];zef.sigma_ind=[];zef.sigma_vec=[];zef.surface_triangles=[];zef.brain_ind=[];zef.source_ind=[];zef.sigma_prisms=[];zef.prisms=[];end;zef_update;');
+set(zef.h_menu_reset_volume_data                     ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset volume data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.nodes=[];zef.nodes_raw=[];zef.tetra=[];zef.tetra_raw=[];zef.domain_labels_aux=[];zef.sigma_vec=[];zef.surface_triangles=[];zef.brain_ind=[];zef.source_ind=[];zef.sigma_prisms=[];zef.prisms=[];end;zef_update;');
 set(zef.h_menu_reset_measurement_data                ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the measurement data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.measurements = []; end;zef_update;');
 set(zef.h_menu_reset_reconstruction                  ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset the reconstruction?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.reconstruction = []; end;zef_update;');
 set(zef.h_menu_merge_lead_field                      ,'MenuSelectedFcn','merge_lead_field;zef_update;');
@@ -81,6 +81,7 @@ set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_par
 set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef_update;');
 set(zef.h_menu_graphics_options                               ,'MenuSelectedFcn','zef_open_graphics_options;zef_update;');
 set(zef.h_menu_system_settings                               ,'MenuSelectedFcn','zef_open_system_settings;');
+set(zef.h_menu_plugin_settings                               ,'MenuSelectedFcn','zef_open_plugin_settings;');
 set(zef.h_menu_gaussian_prior_options                               ,'MenuSelectedFcn','zef_open_gaussian_prior_options;zef_update;');
 set(zef.h_menu_maximize_windows                         ,'MenuSelectedFcn','zef_arrange_windows(''maximize'',''windows'',''all'');zef_update;');
 set(zef.h_menu_maximize_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''maximize'',''tools'',''all'');zef_update;');
@@ -100,6 +101,11 @@ set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_arr
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef_update;');
 set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for EEG/MEG brain imaging.''};{[]}; {''Version: '' num2str(zef.current_version)} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''About'');');
 set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef_reopen_segmentation_tool;');
+set(zef.h_menu_parameter_profile                  ,'MenuSelectedFcn','zef_open_parameter_profile;');
+set(zef.h_menu_segmentation_profile                  ,'MenuSelectedFcn','zef_open_segmentation_profile;');
+set(zef.h_menu_init_profile                  ,'MenuSelectedFcn','zef_open_init_profile;');
+
+
 set(zef.h_menu_inverse_tools,'Tag','inverse_tools');
 set(zef.h_menu_forward_tools,'Tag','forward_tools');
 set(zef.h_menu_multi_tools,'Tag','multi_tools');

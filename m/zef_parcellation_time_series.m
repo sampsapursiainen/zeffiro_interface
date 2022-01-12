@@ -92,7 +92,7 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if evalin('base',['zef.' compartment_tags{k} '_sources']);
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -116,7 +116,7 @@ aux_brain_visible_ind = [];
 for k = 1 : length(compartment_tags)
 
         on_val = evalin('base',['zef.' compartment_tags{k} '_on']);
-        visible_val = evalin('base',['zef.' compartment_tags{k} '_sources']);
+        visible_val = evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
         color_str =  evalin('base',['zef.' compartment_tags{k} '_color']);
    
 if on_val  

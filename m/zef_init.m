@@ -4,22 +4,11 @@
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
-zef_data.imaging_method_cell = {'EEG', 'MEG magnetometers', 'MEG gradiometers', 'EIT', 'tES'}; 
-zef_data.imaging_method= 1;
+zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'}; 
 
-zef_init_compartments;
-zef_init_sensors;
-
-zef_data.sigma_anisotropy = [];
 zef_data.update_colorscale = 1;
-zef_data.project_tag = '';
-zef_data.volumetric_distribution_mode = 1;
-zef_data.normalize_lead_field = 4;
-zef_data.source_space_creation_iterations = 2;
-zef_data.name_tags = cell(0);
+
 zef_data.dof_decomposition_type = 2;
-zef_data.dynamical_plot_queue_table = cell(0);
-zef_data.dpq_selected = 1;
 zef_data.update_lights = 1;
 zef_data.update_colormap = 1;
 zef_data.update_zoom = 6;
@@ -42,7 +31,7 @@ zef_data.colormap_size = 2048;
 zef_data.colorscale_min_slider = 0;
 zef_data.colorscale_max_slider = 0;
 zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation'};
-zef_data.smoothing_steps_ele = 100;
+zef_data.smoothing_steps_ele = 0.2;
 zef_data.use_pem = 0;
 zef_data.default_impedance_value = 5E3;
 zef_data.cone_alpha = 1;
@@ -67,36 +56,37 @@ zef_data.lock_sensors_on = 0;
 zef_data.lock_transform_on = 0;
 zef_data.sensors_visual_size = 3.5;
 zef_data.project_notes = '';
-zef_data.current_version = 3.0;
+zef_data.current_version = 4.0;
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
-zef_data.code_path = zef.code_path;
-zef_data.program_path = zef.program_path;
-zef_data.save_file_path = zef.save_file_path;
-zef_data.save_file = zef.save_file;
-zef_data.video_codec = zef.video_codec;
-zef_data.use_gpu = zef.use_gpu;
-zef_data.parallel_processes = zef.parallel_processes;
 
-zef.ini_cell = readcell([zef.program_path '/zeffiro_interface.ini'],'FileType','text');
-for zef_i = 1 : size(zef.ini_cell,1)
-evalin('base',['zef_data.' zef.ini_cell{zef_i,3} ' = zef.' zef.ini_cell{zef_i,3} ';']);
-end
-zef = rmfield(zef,'ini_cell');
+%zef_init_system_settings;
 
-zef_data.gpu_num = zef.gpu_num;
-zef_data.parallel_vectors = zef.parallel_vectors;
-zef_data.snapshot_vertical_resolution = zef.snapshot_vertical_resolution;
-zef_data.snapshot_horizontal_resolution = zef.snapshot_horizontal_resolution;
-zef_data.movie_fps = zef.movie_fps;
-zef_data.mlapp = zef.mlapp;
+zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.bypass_inflate = 0;
+zef_data.imaging_method= 1;
+zef_data.dynamical_plot_queue_table = cell(0);
+zef_data.dpq_selected = 1;
+zef_data.name_tags = cell(0);
+zef_data.project_tag = '';
+zef_data.volumetric_distribution_mode = 1;
+zef_data.normalize_lead_field = 4;
+zef_data.source_space_creation_iterations = 2;
+zef_data.exclude_box = 0;
+zef_data.fix_outer_surface = 1;
+zef_data.mesh_relabeling = 1;
+zef_data.pml_outer_radius_unit = 1;
+zef_data.pml_outer_radius = 1.1;
+zef_data.pml_max_size_unit = 1;
+zef_data.pml_max_size = 2;
+zef_data.initial_mesh_mode = 1; 
+zef_data.sigma_anisotropy = [];
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
           zef_data.multi_lead_field = 0;
-          zef_data.imaging_method_cell = {'EEG'; 'MEG magnetometers'; 'MEG gradiometers'; 'EIT'; 'tES';}; 
           zef_data.colortune_param = 1;
           zef_data.submesh_num = 0;
           zef_data.parcellation_plot_type = 1;
@@ -162,14 +152,15 @@ zef_data.top_reconstruction = [];
                 zef_data.tetra  = [];
                 zef_data.save_file_path = './data/';
                 zef_data.save_file = 'default_project.mat';
-                zef_data.tetra_aux = [];
-                zef_data.nodes_b = [];
+                zef_data.tetra_raw = [];
+                zef_data.nodes_raw = [];
 
                  zef_data.cam_va = 6;
          zef_data.preconditioner = 2;
       zef_data.solver_tolerance = 1e-6;
 zef_data.preconditioner_tolerance= 0.001;
-               zef_data.sigma_ind=[];
+               zef_data.domain_labels_raw=[];
+               zef_data.domain_labels = [];
                zef_data.sigma=[];
                zef_data.sigma_vec=[];
                zef_data.sigma_mod=0;
@@ -196,16 +187,29 @@ zef_data.sensors_attached_volume = [];
 
        zef_data.mesh_smoothing_on = 0;
 
+       zef_data.forward_simulation_selected = [];
+       zef_data.forward_simulation_table = cell(0);
        zef_data.prism_layers = 0;
        zef_data.n_prism_layers = 2;
        zef_data.prism_size = 0.01;
        zef_data.prisms = [];
        zef_data.sigma_prisms = [];
+       zef_data.smoothing_strength = 0.40;
+       zef_data.smoothing_steps_surf = 0.10;
+       zef_data.smoothing_steps_vol = 0.90;
        zef_data.refinement_on = 0;
-       zef_data.smoothing_strength = 0.25;
-       zef_data.smoothing_steps_surf = 1000;
-       zef_data.smoothing_steps_vol = 2;
-       zef_data.refinement_type = 1;
+       zef_data.refinement_volume_on = 0;
+       zef_data.refinement_volume_number = 1;
+       zef_data.refinement_volume_on_2 = 0;
+       zef_data.refinement_volume_number_2 = 1;
+       zef_data.refinement_surface_number = 1;
+       zef_data.refinement_surface_number_2 = 1;
+       zef_data.refinement_surface_on = 0;
+       zef_data.refinement_surface_on_2 = 0;
+       zef_data.refinement_volume_compartments = 1;
+       zef_data.refinement_volume_compartments_2 = 1;
+       zef_data.refinement_surface_compartments = 1;
+       zef_data.refinement_surface_compartments_2 = 1;
        zef_data.surface_sources = 0; 
        zef_data.visualization_type = 1;
        zef_data.source_interpolation_on = 0;
@@ -265,21 +269,17 @@ zef_data.sensors_attached_volume = [];
        zef_data.explode_everything = 1;
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
        zef_data.parcellation_compartment = {'g'};
+       zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
        
     zef_data.mesh_smoothing_repetitions = 1; 
     zef_data.mesh_optimization_repetitions = 10; 
    zef_data.mesh_optimization_parameter = 1E-5; 
     zef_data.mesh_labeling_approach = 1; 
-
-       
+    
        zef.fieldnames = fieldnames(zef);
        
-       
-
 for zef_i = 1 : length(zef.fieldnames)
-    if isobject(evalin('base',['zef.' zef.fieldnames{zef_i}]))
     zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
-    end
 end
        
  zef = zef_data;
@@ -292,4 +292,8 @@ end
  end
  clear zef_i zef_data;
  
-
+ zef_apply_init_profile;
+ zef_init_compartments;
+zef_init_sensors;
+ zef_apply_parameter_profile;
+ 

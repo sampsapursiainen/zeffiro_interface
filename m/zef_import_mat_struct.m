@@ -24,7 +24,7 @@ if isfield(mat_struct,'tetra')
 end
 
 if isfield(mat_struct,'nodes')
-    [mat_struct.nodes_b] = mat_struct.nodes;
+    [mat_struct.nodes_aux] = mat_struct.nodes;
 end
 
 f_names = fieldnames(mat_struct); 

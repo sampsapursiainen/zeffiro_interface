@@ -6,7 +6,7 @@ taubin_lambda = 1;
 taubin_mu = -1;
 smoothing_param = 0.25;
 
- [zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);
+ [zef.sensors_attached_volume] = zef_attach_sensors_volume(zef.sensors);
 L = zef_electrode_struct;
 
 if not(isempty(L))

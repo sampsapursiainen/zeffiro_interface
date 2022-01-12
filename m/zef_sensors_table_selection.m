@@ -16,17 +16,17 @@ evalin('base', ['zef.current_tag = ''' current_tag ''';']);
 evalin('base', ['zef.imaging_method = ''' imaging_method ''';']);
 evalin('base','zef.h_parameters_table.Data = [];');
 
-if ismember(imaging_method_name,{'EEG','EIT','tES'})
-    if size(evalin('base',['zef.' current_tag '_points']),2)==3
-    sensors_aux = evalin('base',['zef.' current_tag '_points']);
-    sensors_aux = [sensors_aux zeros(size(sensors_aux,1),3) ];
-    if not(evalin('base','zef.use_depth_electrodes'))
-      sensors_aux(:,5) = 1;  
-    end
-    sensors_aux(:,6) = evalin('base','zef.default_impedance_value');
-    evalin('base',['zef.' current_tag '_points = reshape([' num2str(sensors_aux(:)') '],' num2str(size(sensors_aux,1)) ',' num2str(size(sensors_aux,2)) ');'])
-    end
-end
+% if evalin('base','zef.use_cem') && evalin('base','isequal(zef.imaging_method,1)')
+%     if size(evalin('base',['zef.' current_tag '_points']),2)==3
+%     sensors_aux = evalin('base',['zef.' current_tag '_points']);
+%     sensors_aux = [sensors_aux zeros(size(sensors_aux,1),3) ];
+%     if not(evalin('base','zef.use_depth_electrodes'))
+%       sensors_aux(:,5) = 1;  
+%     end
+%     sensors_aux(:,6) = evalin('base','zef.default_impedance_value');
+%     evalin('base',['zef.' current_tag '_points = reshape([' num2str(sensors_aux(:)') '],' num2str(size(sensors_aux,1)) ',' num2str(size(sensors_aux,2)) ');'])
+%     end
+% end
 
 evalin('base','run(''zef_update'')');
 evalin('base','run(''zef_init_transform'')');

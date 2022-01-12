@@ -7,7 +7,7 @@ zef.aux_field{zef_i,3} = evalin('base',['zef.' zef.compartment_tags{1} '_on']);
 zef.aux_field{zef_i,4} = evalin('base',['zef.' zef.compartment_tags{1} '_visible']);
 zef.aux_field{zef_i,5} = evalin('base',['zef.' zef.compartment_tags{1} '_merge']);
 zef.aux_field{zef_i,6} = evalin('base',['zef.' zef.compartment_tags{1} '_invert']);
-zef.aux_field{zef_i,7} = zef.h_compartment_table.ColumnFormat{7}{1+evalin('base',['zef.' zef.compartment_tags{1} '_sources'])};
+zef.aux_field{zef_i,7} = zef.h_compartment_table.ColumnFormat{7}{2+evalin('base',['zef.' zef.compartment_tags{1} '_sources'])};
 zef.aux_field{zef_i,8} = evalin('base',['zef.' zef.compartment_tags{1} '_sigma']);
 
 zef.h_compartment_table.Data = zef.aux_field;
