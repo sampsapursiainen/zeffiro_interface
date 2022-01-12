@@ -30,7 +30,7 @@ if evalin('base','zef.attach_electrodes')
     sensors(:,4) = 0;
     I_aux = find(sensors(:,5)~=0);
     sensors(I_aux,5) = 1; %#ok<*FNDSB>
-    sensors = attach_sensors_volume(sensors);
+    sensors = zef_attach_sensors_volume(sensors);
     unique_sensors_point_like = unique(sensors(:,1));
     sensors_point_like = zeros(length(unique_sensors_point_like),3);
     for spl_ind = 1:length(unique_sensors_point_like)
