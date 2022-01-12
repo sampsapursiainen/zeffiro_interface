@@ -15,7 +15,7 @@ on_val = evalin('base',var_0);
 visible_val = evalin('base',var_3);
 if on_val
 i = i + 1;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])  && visible_val;
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0  && visible_val;
     aux_brain_ind = [aux_brain_ind i];
 end
 end
