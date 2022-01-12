@@ -65,7 +65,7 @@ priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = submesh_ind;
-if evalin('base',['zef.' compartment_tags{k} '_sources']);
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
     aux_dir_mode = [aux_dir_mode evalin('base',['zef.' compartment_tags{k} '_sources'])-1];
 end

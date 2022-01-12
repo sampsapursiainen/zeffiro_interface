@@ -14,6 +14,7 @@ zef = rmfield(zef,'fieldnames');
 
 clear zef_data;
 
+zef.h_sensors_visual_size.Value = num2str(zef.sensors_visual_size);
 zef.h_use_gpu_graphic.Value = zef.use_gpu_graphic;
 zef.h_parcellation_type.ItemsData = [1:length(zef.h_parcellation_type.Items)];
 zef.h_parcellation_type.Value = zef.parcellation_type;

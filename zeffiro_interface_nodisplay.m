@@ -23,23 +23,24 @@ addpath([zef.program_path '/fig']);
 addpath([zef.program_path zef.code_path]); 
 addpath(genpath([zef.program_path '/plugins']));
 end;
-zef.h_zeffiro = fopen('zeffiro_interface.ini');
-zef.ini_cell = textscan(zef.h_zeffiro,'%s');
-zef.save_file_path = zef.ini_cell{1}{2};
-zef.save_file = zef.ini_cell{1}{4};
-zef.video_codec = zef.ini_cell{1}{6};
-zef.use_gpu = str2num(zef.ini_cell{1}{8});
-zef.gpu_num = str2num(zef.ini_cell{1}{10});
+
+zef.ini_cell = readcell('zeffiro_interface.ini','FileType','text');
+for zef_i = 1 : size(zef.ini_cell,1)
+    if isequal(zef.ini_cell{zef_i,4},'number')
+        if isstring(zef.ini_cell{zef_i,2})
+      zef.ini_cell{zef_i,2} = str2num(zef.ini_cell{zef_i,2});  
+        end
+        end
+evalin('base',['zef.' zef.ini_cell{zef_i,3} '= evalin(''base'',''zef.ini_cell{zef_i,2}'');']);
+end
+zef = rmfield(zef,'ini_cell');
+
 if gpuDeviceCount > 0 & zef.use_gpu == 1
 gpuDevice(zef.gpu_num);
 end
-zef.parallel_vectors = str2num(zef.ini_cell{1}{12});
-zef.snapshot_vertical_resolution = str2num(zef.ini_cell{1}{14});
-zef.snapshot_horizontal_resolution = str2num(zef.ini_cell{1}{16});
-zef.movie_fps = str2num(zef.ini_cell{1}{18});
-zef.font_size = str2num(zef.ini_cell{1}{20});
-zef.mlapp = str2num(zef.ini_cell{1}{22});
-zef = rmfield(zef,'ini_cell');
+
+zef.mlapp = 1;
+
 zef_init;
 
 zef.clear_axes1 = 0;

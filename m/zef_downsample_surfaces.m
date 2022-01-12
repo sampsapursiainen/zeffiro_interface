@@ -45,10 +45,14 @@ if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_submesh_ind));'])
      zef.temp_patch_data.vertice_ind_aux(zef.temp_patch_data.unique_faces_ind) = [1:length(zef.temp_patch_data.unique_faces_ind)];
      zef.temp_patch_data.faces = zef.temp_patch_data.vertice_ind_aux(zef.temp_patch_data.faces);
       zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all(zef.temp_patch_data.unique_faces_ind,:);
-      zef.temp_patch_data_aux = reducepatch(zef.temp_patch_data,min(1,zef.max_surface_face_count/size(zef.temp_patch_data.faces,1)));
+      zef.temp_patch_data_aux = zef_set_surface_resolution(zef.temp_patch_data,zef.max_surface_face_count);
       if evalin('base',['zef.' zef.temp_var_0 '_sources'])
-          [zef.temp_patch_data_aux.vertices_inflated] = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
-       evalin('base',['zef.' zef.temp_var_0 '_points_inf = [zef.' zef.temp_var_0 '_points_inf ;  zef.temp_patch_data_aux.vertices_inflated];']);
+          if isempty(zef.temp_patch_data_aux.vertices) || isempty(zef.temp_patch_data_aux.vertices) || zef.bypass_inflate
+          zef.temp_patch_data_aux.vertices_inflated = [];
+          else
+              [zef.temp_patch_data_aux.vertices_inflated] = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
+          end
+              evalin('base',['zef.' zef.temp_var_0 '_points_inf = [zef.' zef.temp_var_0 '_points_inf ;  zef.temp_patch_data_aux.vertices_inflated];']);
     end
      evalin('base',['zef.' zef.temp_var_0 '_triangles = [zef.' zef.temp_var_0 '_triangles; zef.temp_patch_data_aux.faces+size(zef.' zef.temp_var_0 '_points,1)];']);
     evalin('base',['zef.' zef.temp_var_0 '_points = [zef.' zef.temp_var_0 '_points ;  zef.temp_patch_data_aux.vertices];']);
@@ -58,8 +62,8 @@ if evalin('base',['not(isempty(zef.' zef.temp_var_0 '_submesh_ind));'])
 else 
    zef.temp_patch_data.faces = zef.temp_patch_data.faces_all;
    zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all;
-   zef.temp_patch_data_aux = reducepatch(zef.temp_patch_data,min(1,zef.max_surface_face_count/size(zef.temp_patch_data.faces,1)));
-        if evalin('base',['zef.' zef.temp_var_0 '_sources'])
+   zef.temp_patch_data_aux = zef_set_surface_resolution(zef.temp_patch_data,zef.max_surface_face_count);
+        if evalin('base',['zef.' zef.temp_var_0 '_sources']) > 0
      zef.temp_patch_data_aux.vertices_inflated = inflate_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
    evalin('base',['zef.' zef.temp_var_0 '_points_inf = [zef.' zef.temp_var_0 '_points_inf ;  zef.temp_patch_data_aux.vertices_inflated];']);
         end
@@ -69,7 +73,9 @@ end
 end
 
 waitbar(zef_k/zef.number_of_compartments,zef.h,['Downsampling surfaces. Ready approx.: ' datestr(now + (zef.number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
+
 end
+
 close(zef.h);
 
 if isfield(zef,'temp_patch_data')

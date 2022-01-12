@@ -1,7 +1,7 @@
 
-[zef.sensors,zef.reuna_p,zef.reuna_t,zef.reuna_p_inf] = process_meshes(zef.explode_everything); 
+zef_process_meshes(zef.explode_everything); 
 zef.on_screen = 2;
-zef_update_fig_details;plot_meshes([]); 
+zef_update_fig_details;zef_plot_meshes([]); 
 zef.stop_movie = 0; 
 
 zef.frame_start=str2double(zef.h_frame_start.Value);

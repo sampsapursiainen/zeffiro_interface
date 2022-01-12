@@ -1,4 +1,4 @@
-function [surface_triangles, surface_nodes] = zef_surface_mesh(tetra, varargin)
+function [surface_triangles, surface_nodes, tetra_ind] = zef_surface_mesh(tetra, varargin)
 
 I = [];
 surface_nodes = [];
@@ -34,6 +34,8 @@ I = find(tetra_ind == 0);
 tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
 surface_triangles = tetra(tetra_ind);
 surface_triangles = surface_triangles(:,[1 3 2]);
+
+tetra_ind = tetra_sort(I,5);
 
 if not(isempty(nodes))
 [u_val, ~, u_ind] = unique(surface_triangles);

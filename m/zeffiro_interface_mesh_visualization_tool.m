@@ -26,7 +26,7 @@ set(zef.h_visualization_type,'Items',{'Domain labels','Distribution (volume)','D
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
 set(zef.h_visualization_type,'Value',zef.visualization_type);
 
-set(zef.h_volumetric_distribution_mode,'Items',{'Reconstruction','Conductivity','Stimulation'});
+set(zef.h_volumetric_distribution_mode,'Items',{'Reconstruction','Conductivity','Stimulation','Condition'});
 zef.h_volumetric_distribution_mode.ItemsData = [1:length(zef.h_volumetric_distribution_mode.Items)];
 set(zef.h_volumetric_distribution_mode,'Value',zef.volumetric_distribution_mode);
 

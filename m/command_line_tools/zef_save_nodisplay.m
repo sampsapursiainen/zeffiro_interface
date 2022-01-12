@@ -49,7 +49,7 @@ end
 end
 if zef.save_switch == 5
 if not(isequal(zef.file,0));
-[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
+zef_process_meshes;
 zef.surface_mesh_nodes = zef.reuna_p;
 zef.surface_mesh_triangles = zef.reuna_t;
 if zef.imaging_method== 1
@@ -69,11 +69,11 @@ end
 end
 if zef.save_switch == 6
 if not(isequal(zef.file,0));
-[zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
+zef_process_meshes;
 zef.tetrahedra = zef.tetra;
-%[zef.sigma,zef.brain_ind] = zef_sigma([]);
+%[zef.sigma,zef.brain_ind] = zef_postprocess_fem_mesh([]);
 if zef.imaging_method== 1
-[zef.sensors_attached_volume] = attach_sensors_volume([]);
+[zef.sensors_attached_volume] = zef_attach_sensors_volume([]);
 save([zef.file_path zef.file],'-struct','zef','sensors','nodes','tetrahedra','prisms','surface_triangles','sigma','sigma_prisms','sensors_attached_volume','brain_ind','-v7.3');
 zef = rmfield(zef,{'sensors_attached_volume','tetrahedra'});
 else

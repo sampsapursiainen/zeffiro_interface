@@ -50,8 +50,8 @@ elseif isequal(zef.h_eit_sensitivity_tool_distribution.Value,zef.h_eit_sensitivi
 
     %Sigma 2, excl. surface
  %   if isequal(questdlg(['Apply: ' zef.h_eit_sensitivity_tool_distribution.Items{4} '?']),'Yes')
-zef.aux_vec_sigma_index = unique(zef.sigma(:,2));
-zef.aux_vec_sigma_index = find(not(ismember(zef.brain_ind, find(ismember(zef.sigma(:,2),zef.aux_vec_sigma_index(end-1:end))))));
+zef.aux_vec_sigma_index = unique(zef.domain_labels);
+zef.aux_vec_sigma_index = find(not(ismember(zef.brain_ind, find(ismember(zef.domain_labels,zef.aux_vec_sigma_index(end-1:end))))));
 zef.sigma(zef.brain_ind(zef.aux_vec_sigma_index),1) = 1/4*(zef.eit_sensitivity_tool_data_2.avg(zef.source_interpolation_ind{1}(zef.aux_vec_sigma_index,1)) +  zef.eit_sensitivity_tool_data_2.avg(zef.source_interpolation_ind{1}(zef.aux_vec_sigma_index,2)) +  zef.eit_sensitivity_tool_data_2.avg(zef.source_interpolation_ind{1}(zef.aux_vec_sigma_index,3)) +  zef.eit_sensitivity_tool_data_2.avg(zef.source_interpolation_ind{1}(zef.aux_vec_sigma_index,4)))';
 zef.reconstruction = repmat(zef.eit_sensitivity_tool_data_2.avg,3,1);
 zef.reconstruction = zef.reconstruction(:);

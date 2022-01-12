@@ -3,14 +3,17 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
-h = waitbar(0,['Interpolation 1.']);   
 
-
+source_interpolation_ind = [];
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
 nodes = evalin('base','zef.nodes');
 tetra = evalin('base','zef.tetra');
 
+if not(isempty(brain_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
+
+    h = waitbar(0,['Interpolation 1.']);   
+    
 if evalin('base','zef.location_unit_current') == 2 
 source_positions = 10*source_positions;
 end
@@ -61,7 +64,7 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if evalin('base',['zef.' compartment_tags{k} '_sources']);
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -115,6 +118,8 @@ source_interpolation_ind{3} = knnsearch(MdlKDT,source_positions);
 waitbar(1,h,['Interpolation 3.']);
 
 close(h)
+
+end
 
 end
 

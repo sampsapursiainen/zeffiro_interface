@@ -221,7 +221,7 @@ triangle_data = stl_data.ConnectivityList;
 elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'VOL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'vol')
 
 volume_count_ind = volume_count_ind + 1; 
-[triangle_data, point_data] = zef_surface_mesh(evalin('base','zef.tetra'),evalin('base','zef.nodes'),evalin('base',['find(zef.sigma_ind<=' num2str(volume_count_ind) ');']));
+[triangle_data, point_data] = zef_surface_mesh(evalin('base','zef.tetra'),evalin('base','zef.nodes'),evalin('base',['find(zef.domain_labels<=' num2str(volume_count_ind) ');']));
     
 else 
       

@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [void] = plot_meshes(void);
+function [void] = zef_plot_meshes(void);
   
 void = [];
 sensors_point_like = [];
@@ -639,9 +639,9 @@ else
 end
 
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
-sensors = attach_sensors_volume(sensors,'geometry');
+sensors = zef_attach_sensors_volume(sensors,'geometry');
 elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
-  sensors_aux = attach_sensors_volume(sensors,'geometry');
+  sensors_aux = zef_attach_sensors_volume(sensors,'geometry');
   sensors_point_like_index = find(sensors_aux(:,4)==0);
   sensors_point_like = zeros(length(sensors_point_like_index),3);
 for spl_ind = 1 : length(sensors_point_like_index)

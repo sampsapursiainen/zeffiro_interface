@@ -24,6 +24,10 @@ if not(isfield(zef,'parcellation_quantile'));
     zef.parcellation_quantile = 0.98; 
 end; 
 
+if not(isfield(zef,'sensors_visual_size')); 
+    zef.sensors_visual_size = 3.5; 
+end; 
+
 if not(isfield(zef,'use_gpu_graphic')); 
     zef.use_gpu_graphic = 1; 
 end;

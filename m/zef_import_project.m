@@ -14,7 +14,7 @@ h_import = fopen([folder_name file_name]);
 ini_cell = textscan(h_import,'%s','HeaderLines',22,'Delimiter',',');
 n_columns = 3;
 
-compartment_cell = {'eeg', 'meg_magnetometers', 'meg_gradiometers', 'eit', 'none'};
+compartment_cell = {evalin('base','zef.imaging_method_cell{1}'), evalin('base','zef.imaging_method_cell{2}'), evalin('base','zef.imaging_method_cell{3}'), 'none'};
 
 name_cell = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','w','g','c','sk','sc'};
 
@@ -30,7 +30,7 @@ else
 waitbar(i/n_project,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_project) '.']); 
 end
     
-if isequal(ini_cell{1}{n_columns*(i-1)+2},'eeg') 
+if isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{1}) 
         
 file_name = [ini_cell{1}{n_columns*(i-1)+1} '.zef']; 
 
@@ -50,7 +50,7 @@ if isvalid(evalin('base','zef.h_mesh_tool'))
 evalin('base','zef_update_mesh_tool;');
 end
 
-elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'meg_magnetometers') 
+elseif isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{2}) 
         
 file_name = [ini_cell{1}{n_columns*(i-1)+1} '.zef']; 
 
@@ -70,7 +70,7 @@ end
 
 evalin('base','zef_update;');
 
-elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'meg_gradiometers') 
+elseif isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{3}) 
         
 file_name = [ini_cell{1}{n_columns*(i-1)+1} '.zef']; 
 
@@ -90,12 +90,12 @@ end
 
 evalin('base','zef_update;');
 
-elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'eit') 
-        
-file_name = [ini_cell{1}{n_columns*(i-1)+1} '.zef']; 
-
-evalin('base',['zef.lf_tag = ''' ini_cell{1}{n_columns*(i-1)+3} ''';']);
-evalin('base',['zef.imaging_method = 4;']);
+% elseif isequal(ini_cell{1}{n_columns*(i-1)+2},'eit') 
+%         
+% file_name = [ini_cell{1}{n_columns*(i-1)+1} '.zef']; 
+% 
+% evalin('base',['zef.lf_tag = ''' ini_cell{1}{n_columns*(i-1)+3} ''';']);
+% evalin('base',['zef.imaging_method = 4;']);
 
 zef_import_segmentation(file_name, folder_name);
 

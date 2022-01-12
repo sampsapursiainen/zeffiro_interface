@@ -22,7 +22,7 @@ s_a = sqrt(s_a./max(s_a));
 s_o = repmat(s_a,1,3).*s_o;
 s_o = repmat(s_length,1,3).*s_o;
 h_axes1 = evalin('base','zef.h_axes1');
-plot_meshes([]);
+zef_plot_meshes([]);
 hold(h_axes1,'on');
 h_synth_source = zeros(size(s_p,1),1);
 for i = 1 : size(s_p,1)
