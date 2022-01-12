@@ -42,8 +42,8 @@ for zef_i = 1:length(zef.lf_bank_storage)
         end
         zef_update;
         
-        [zef.sensors,zef.reuna_p,zef.reuna_t] = process_meshes([]);
-        [zef.sensors_attached_volume] = attach_sensors_volume(zef.sensors);
+        zef_process_meshes; 
+        zef_attach_sensors_volume(zef.sensors);
         lead_field_matrix;    
         
         zef.lf_bank_storage{zef_i}.source_interpolation_ind = zef.source_interpolation_ind;
