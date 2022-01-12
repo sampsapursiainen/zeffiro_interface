@@ -66,6 +66,10 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef.active_compartment_ind = [];
+zef.plugin_cell = [];
+zef_data.init_profile = [];
+zef_data.forward_simulation_table = [];
 zef_data.bypass_inflate = 0;
 zef_data.imaging_method= 1;
 zef_data.dynamical_plot_queue_table = cell(0);
@@ -138,7 +142,7 @@ zef_data.top_reconstruction = [];
                 zef_data.azimuth= 0;
            zef_data.axes_visible= 0;
               zef_data.n_sources= 10000;
-        zef_data.mesh_resolution= 2;
+        zef_data.mesh_resolution= 3;
       zef_data.attach_electrodes= 1;
 
  zef_data.source_direction_mode = 2;
@@ -181,7 +185,7 @@ zef_data.sensors_attached_volume = [];
             zef_data.cp_b        = 0;
             zef_data.cp_c        = 0;
             zef_data.cp_d        = 0;
-       zef_data.meshing_accuracy = 5000;
+       zef_data.meshing_accuracy = 1;
        zef_data.on_screen        = 0;
        zef_data.import_mode      = 0;
 
@@ -262,7 +266,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.inv_prior_over_measurement_db = 20;
        zef_data.inv_snr = 30;
        zef_data.downsample_surfaces = 1;
-       zef_data.max_surface_face_count = 5000;
+       zef_data.max_surface_face_count = 1;
        zef_data.inflate_n_iterations = 500;
        zef_data.inflate_strength = 0.8;
        zef_data.use_inflated_surfaces = 0;
