@@ -73,8 +73,8 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
-zef.active_compartment_ind = [];
-zef.plugin_cell = [];
+zef_data.plugin_cell = [];
+zef_data.active_compartment_ind = [];
 zef_data.init_profile = [];
 zef_data.forward_simulation_table = [];
 zef_data.bypass_inflate = 0;
