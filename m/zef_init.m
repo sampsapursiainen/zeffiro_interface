@@ -114,7 +114,7 @@ zef_data.top_reconstruction = [];
           zef_data.parcellation_selected = [];
           zef_data.parcellation_type = [1];
           zef_data.parcellation_quantile = [0.98];
-          zef_data.use_gpu_graphic = 1;
+          zef_data.use_gpu_graphic = 0;
           
           zef_data.loop_movie = [0];
           zef_data.loop_movie_count = [5];
