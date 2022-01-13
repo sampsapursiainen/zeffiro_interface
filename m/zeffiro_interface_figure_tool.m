@@ -136,3 +136,5 @@ zef = rmfield(zef,'h');
 
 set(zef.h_zeffiro,'handlevisibility','on');
 set(zef.h_zeffiro,'WindowButtonDownFcn','zef.h_zeffiro = zef.h_zeffiro; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');')
+
+zef.h_zeffiro.GraphicsSmoothing = 'off';
