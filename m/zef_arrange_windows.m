@@ -91,7 +91,7 @@ end
 
 if isequal(arrange_function,'minimize')
     for i = 1 : length(h_aux)
-    if not(isequal(get(h_aux(i),'Name'),'ZEFFIRO Interface: Segmentation tool'))
+    if not(isequal(get(h_aux(i),'Name'),'ZEFFIRO Interface: Segmentation tool*'))
     set(h_aux(i),'WindowState','minimized');
     end
     end
@@ -99,7 +99,7 @@ end
 
 if isequal(arrange_function,'close')
     for i = 1 : length(h_aux)
-    if not(isequal(get(h_aux(i),'Name'),'ZEFFIRO Interface: Segmentation tool'))
+    if not(isequal(get(h_aux(i),'Name'),'ZEFFIRO Interface: Segmentation tool*'))
     close(h_aux(i));
     end
     end
