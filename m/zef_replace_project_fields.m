@@ -28,7 +28,9 @@ if zef.current_version < 4
     end
     
     if isfield(zef,'sigma') && isempty(zef.domain_labels) 
+        if not(isempty(zef.sigma))
     zef.domain_labels= zef.sigma(:,2);
+        end
     end
     
     if isfield(zef,'nodes_b') && isempty(zef.nodes_raw)
