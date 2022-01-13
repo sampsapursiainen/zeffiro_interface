@@ -1,12 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-if ismac
+
 zef.h_find_synthetic_source = open('find_synthetic_source.fig');
-elseif ispc
-zef.h_find_synthetic_source = open('find_synthetic_source.fig');
-else
-zef.h_find_synthetic_source = open('find_synthetic_source.fig');
-end
 set(zef.h_find_synthetic_source,'Name','ZEFFIRO Interface: Find synthetic source');
 set(findobj(zef.h_find_synthetic_source.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_find_synthetic_source.Children,'-property','FontSize'),'FontSize',zef.font_size);
