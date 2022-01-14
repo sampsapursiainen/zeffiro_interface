@@ -22,6 +22,7 @@ addpath(genpath([zef.program_path '/mlapp']));
 addpath([zef.program_path '/fig']);  
 addpath([zef.program_path zef.code_path]); 
 addpath(genpath([zef.program_path '/plugins']));
+addpath(genpath([zef.program_path '/profile']));
 end;
 
 zef_apply_system_settings;
