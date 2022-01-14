@@ -146,9 +146,9 @@ taubin_mu = -1;
 %end
 %end
 
-if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
-nodes = gpuArray(nodes);
-end
+%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%nodes = gpuArray(nodes);
+%end
 
 if smoothing_steps_surf(smoothing_repetition_ind) > 0  
     if smoothing_steps_surf(smoothing_repetition_ind) < 1
