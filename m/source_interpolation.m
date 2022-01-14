@@ -3,7 +3,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
-
 source_interpolation_ind = [];
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
@@ -117,14 +116,16 @@ source_interpolation_ind{3} = knnsearch(MdlKDT,source_positions);
 
 waitbar(1,h,['Interpolation 3.']);
 
+if nargout == 0
+assignin('base','zef_data', source_interpolation_ind);
+evalin('base','zef.source_interpolation_ind = zef_data; clear zef_data;');
+end
+
 close(h)
 
-if nargout == 0
-assignin('base','zef_data', struct('source_interpolation_ind',source_interpolation_ind));
-evalin('base','zef_assign_data'); 
 end
 
-end
+
 
 end
 
