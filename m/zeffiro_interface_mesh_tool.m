@@ -12,7 +12,7 @@ set(zef.h_plot_condition,'ButtonPushedFcn','zef_plot_condition;');
 %set(zef.h_make_all,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef.source_interpolation_on = 1; set(zef.h_source_interpolation_on,''value'',1); zef_postprocess_fem_mesh;  zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;zef_process_meshes; zef_attach_sensors_volume(zef.sensors);lead_field_matrix;');
 set(zef.h_pushbutton21,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef_process_meshes; zef_create_fem_mesh; zef_postprocess_fem_mesh; zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;');
 %set(zef.h_pushbutton14,'ButtonPushedFcn','zef_delete_original_field;zef_process_meshes;zef_attach_sensors_volume(zef.sensors);lead_field_matrix;');
-set(zef.h_interpolate,'ButtonPushedFcn','zef.source_interpolation_ind = source_interpolation;');
+set(zef.h_interpolate,'ButtonPushedFcn','source_interpolation;');
 set(zef.h_field_downsampling,'ButtonPushedFcn','zef_field_downsampling;');
 set(zef.h_surface_downsampling,'ButtonPushedFcn','zef_downsample_surfaces; zef_process_meshes; source_interpolation;');
 
