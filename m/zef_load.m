@@ -14,8 +14,8 @@ zef_close_tools;
 zef_close_figs;    
 zef_init;    
 load([zef.file_path zef.file]);  
-zef_data.save_file = zef.file; 
-zef_data.save_file_path = zef.file_path; 
+zef_data.save_file = zef.file;
+zef_data.save_file_path = zef.file_path;
 zef_remove_object_fields;
 zef_remove_system_fields;
 
@@ -37,6 +37,9 @@ zef_data.mlapp = 1;
  zef = rmfield(zef,'fieldnames');
  
  zef_apply_system_settings;
+ 
+ zef.save_file = zef_data.save_file;
+ zef.save_file_path = zef_data.save_file_path;
  
  zef_replace_project_fields;
  
