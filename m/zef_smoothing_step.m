@@ -133,22 +133,22 @@ end
 taubin_lambda = 1;
 taubin_mu = -1;
 
-if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
-if mod(smoothing_repetition_ind,2)==0
-A = gpuArray(A);
-A_K = gpuArray(A_K);
-sum_A = gpuArray(sum_A);
-K = gpuArray(K);
-end
-if smoothing_steps_vol(smoothing_repetition_ind) > 0
-B = gpuArray(B); 
-sum_B = gpuArray(sum_B);
-end
-end
+%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%if mod(smoothing_repetition_ind,2)==0
+%%A = gpuArray(A);
+%A_K = gpuArray(A_K);
+%sum_A = gpuArray(sum_A);
+%K = gpuArray(K);
+%end
+%if smoothing_steps_vol(smoothing_repetition_ind) > 0
+%B = gpuArray(B); 
+%sum_B = gpuArray(sum_B);
+%end
+%end
 
-if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
-nodes = gpuArray(nodes);
-end
+%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%nodes = gpuArray(nodes);
+%end
 
 if smoothing_steps_surf(smoothing_repetition_ind) > 0  
     if smoothing_steps_surf(smoothing_repetition_ind) < 1
