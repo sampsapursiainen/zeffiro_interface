@@ -121,7 +121,7 @@ close(h)
 
 if nargout == 0
 assignin('base','zef_data', struct('source_interpolation_ind',source_interpolation_ind));
-evalin('base','zef_assign_data');
+evalin('base','zef_assign_data'); 
 end
 
 end
