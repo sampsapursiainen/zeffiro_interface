@@ -7,6 +7,10 @@ clear zef_i
 
 if zef.current_version < 4
     
+    if not(isfield(zef,'active_compartment_ind')) &&  isfield(zef,'brain_ind')
+        zef.active_compartment_ind = zef.brain_ind;
+    end
+    
     if not(isfield(zef,'domain_labels_raw'))
         zef.domain_labels_raw = [];
     end
