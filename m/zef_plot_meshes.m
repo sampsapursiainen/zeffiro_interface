@@ -42,12 +42,23 @@ nodes = evalin('base','zef.nodes');
 sensor_tag = evalin('base','zef.current_sensors');
 compartment_tags = evalin('base','zef.compartment_tags');
 
+reuna_p = evalin('base','zef.reuna_p');
+reuna_p_inf = evalin('base','zef.reuna_p_inf');
+reuna_t = evalin('base','zef.reuna_t');
+reuna_type = evalin('base','zef.reuna_type');
+if isequal(reuna_type{end,1},-1)
+reuna_p = reuna_p(1:end-1);
+reuna_p_inf = reuna_p_inf(1:end-1);
+reuna_t = reuna_t(1:end-1);
+compartment_tags = compartment_tags(1:end-1);
+end
+
 if ismember(evalin('base','zef.visualization_type'), [3,4])
     s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
         if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
-    s_i_ind_2 = evalin('base','zef.brain_ind');
+    s_i_ind_2 = evalin('base','zef.active_compartment_ind');
         end
 end
 
@@ -186,7 +197,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
 for k = 1 : length(compartment_tags)
@@ -209,7 +220,7 @@ for k = 1 : length(compartment_tags)
         visible_vec(i,1) = i*visible_val;
         submesh_cell{i} = submesh_ind;
         if evalin('base',['zef.' compartment_tags{k} '_sources']) > 0;
-            aux_brain_ind = [aux_brain_ind i];
+            aux_active_compartment_ind = [aux_active_compartment_ind i];
         end
     end
 end
@@ -247,9 +258,7 @@ sphere_scale = aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
-reuna_p = evalin('base','zef.reuna_p');
-reuna_p_inf = evalin('base','zef.reuna_p_inf');
-reuna_t = evalin('base','zef.reuna_t');
+
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     for i = 1 : length(reuna_t)
         reuna_t{i} = uint32(reuna_t{i});
@@ -364,8 +373,8 @@ if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','z
         if evalin('base','zef.cp_mode') == 1
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
             if ismember(evalin('base','zef.visualization_type'),[3 4])
-                if ismember(i, aux_brain_ind)
-                    ab_ind = find(aux_brain_ind==i);
+                if ismember(i, aux_active_compartment_ind)
+                    ab_ind = find(aux_active_compartment_ind==i);
                     s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
                     if evalin('base','zef.use_parcellation')
                         for p_ind = selected_list
@@ -379,8 +388,8 @@ if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','z
             aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
             if ismember(evalin('base','zef.visualization_type'),[3 4])
-                if ismember(i, aux_brain_ind)
-                    ab_ind = find(aux_brain_ind==i);
+                if ismember(i, aux_active_compartment_ind)
+                    ab_ind = find(aux_active_compartment_ind==i);
                     s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
                     if evalin('base','zef.use_parcellation')
                         for p_ind = selected_list
@@ -391,13 +400,13 @@ if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','z
                 end
             end
         elseif evalin('base','zef.cp_mode') == 3
-            if ismember(i, aux_brain_ind)
+            if ismember(i, aux_active_compartment_ind)
                 aux_ind_2{i} = reuna_t{i};
             else
                 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
             end
         elseif evalin('base','zef.cp_mode') == 4
-            if ismember(i, aux_brain_ind)
+            if ismember(i, aux_active_compartment_ind)
                 aux_ind_2{i} = reuna_t{i};
             else
                 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
@@ -410,8 +419,8 @@ elseif submesh_num > 0
         if not(isempty(aux_ind_2{i}))
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
             if ismember(evalin('base','zef.visualization_type'),[3 4])
-                if ismember(i, aux_brain_ind)
-                    ab_ind = find(aux_brain_ind==i);
+                if ismember(i, aux_active_compartment_ind)
+                    ab_ind = find(aux_active_compartment_ind==i);
                     s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
                     if evalin('base','zef.use_parcellation')
                         for p_ind = selected_list
@@ -580,9 +589,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
             if on_val
                 i = i + 1;
                 if visible_val
-                    if ismember(i, aux_brain_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
+                    if ismember(i, aux_active_compartment_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
                         aux_brain_visible_ind = [aux_brain_visible_ind i];
-                        ab_ind = find(aux_brain_ind==i);
+                        ab_ind = find(aux_active_compartment_ind==i);
                         
                         
                         colormap_size = evalin('base','zef.colormap_size');
@@ -694,7 +703,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                         if ismember(evalin('base','zef.visualization_type'),[3,4])
                             
                             %**********************************************
-                            if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+                            if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
                                
                            
                             h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
@@ -741,7 +750,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             end
 
                             
-                            if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
+                            if ismember(i,aux_active_compartment_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
                                 cb_done = 1;
                                 h_colorbar = colorbar('EastOutside','Position',colorbar_position,'Units','Normalized');
                                 set(h_colorbar,'Tag','rightColorbar');
@@ -775,7 +784,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             end
                             reconstruction = reconstruction(:);
                             
-                            if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+                            if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
                             else
@@ -894,8 +903,8 @@ zef_plot_dpq('dynamical');
                 
                 
                 if ismember(evalin('base','zef.visualization_type'),[3])
-                    for i = intersect(aux_brain_ind,aux_brain_visible_ind)
-                        ab_ind = find(aux_brain_ind == i);
+                    for i = intersect(aux_active_compartment_ind,aux_brain_visible_ind)
+                        ab_ind = find(aux_active_compartment_ind == i);
                         reconstruction = single(volumetric_distribution{f_ind});
                         reconstruction = reconstruction(:);
                         reconstruction = reshape(reconstruction,3,length(reconstruction)/3);

@@ -301,7 +301,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
 for k = 1 : length(compartment_tags)
@@ -324,7 +324,7 @@ color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = submesh_ind;
 if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
-    aux_brain_ind = [aux_brain_ind i];
+    aux_active_compartment_ind = [aux_active_compartment_ind i];
 end
 end
 end
@@ -371,11 +371,11 @@ elseif evalin('base','zef.cp_mode') == 2
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
 tetra = tetra(aux_ind,:);   
 elseif evalin('base','zef.cp_mode') == 3
-aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_active_compartment_ind)));
 tetra = tetra(aux_ind,:);  
 elseif evalin('base','zef.cp_mode') == 4
 aux_ind = setdiff([1:size(tetra,1)]',aux_ind);
-aux_ind = union(aux_ind,find(ismember(johtavuus,aux_brain_ind)));
+aux_ind = union(aux_ind,find(ismember(johtavuus,aux_active_compartment_ind)));
 tetra = tetra(aux_ind,:);  
 end
 else
@@ -526,16 +526,16 @@ hold on;
 %**************************************************************************
 if ismember(evalin('base','zef.visualization_type'),[2,4])
 if ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
-brain_ind_aux = [1:evalin('base','size(zef.tetra,1)')]';
-brain_ind = [1:length(I_aux)]';
+active_compartment_ind_aux = [1:evalin('base','size(zef.tetra,1)')]';
+active_compartment_ind = [1:length(I_aux)]';
 I_2  = I_aux;
 else
-brain_ind_aux = evalin('base','zef.brain_ind');
-brain_ind = brain_ind_aux;
-[~, brain_ind, I_2] = intersect(I_aux,brain_ind);
+active_compartment_ind_aux = evalin('base','zef.active_compartment_ind');
+active_compartment_ind = active_compartment_ind_aux;
+[~, active_compartment_ind, I_2] = intersect(I_aux,active_compartment_ind);
 end
-johtavuus(aux_ind(brain_ind))=0;
-I_3 = find(ismember(tetra_ind,brain_ind));
+johtavuus(aux_ind(active_compartment_ind))=0;
+I_3 = find(ismember(tetra_ind,active_compartment_ind));
 
 if evalin('base','zef.use_parcellation')
 reconstruction_p_1 = ones(size(I_3,1),1);
@@ -543,7 +543,7 @@ reconstruction_p_2 = zeros(size(I_3,1),1);
 p_rec_aux = ones(size(nodes,1),1)*evalin('base','zef.layer_transparency'); 
 p_cell = cell(0);
 for p_ind = selected_list
-p_ind_aux = brain_ind_aux(p_i_ind{p_ind}{1});
+p_ind_aux = active_compartment_ind_aux(p_i_ind{p_ind}{1});
 [p_ind_aux,p_ind_aux_1,p_ind_aux_2] = intersect(I_aux, p_ind_aux);
 [p_ind_aux] = find(ismember(tetra_ind(I_3),p_ind_aux_1));
 reconstruction_p_1(p_ind_aux) = p_ind+1;
@@ -626,7 +626,7 @@ reconstruction = reconstruction(I_2);
 I_2_b_rec = I_2;
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
-I_2(brain_ind) = [1:length(brain_ind)]';
+I_2(active_compartment_ind) = [1:length(active_compartment_ind)]';
 I_2_rec = I_2;
 I_1 = tetra_ind(I_3);
 I_1_rec = I_1;
@@ -646,7 +646,7 @@ rec_z = rec_z(I_2);
 I_2_b_rec = I_2;
 I_3_rec = I_3;
 I_2 = zeros(length(aux_ind),1);
-I_2(brain_ind) = [1:length(brain_ind)]';
+I_2(active_compartment_ind) = [1:length(active_compartment_ind)]';
 I_2_rec = I_2;
 I_1 = tetra_ind(I_3);
 I_1_rec = I_1;
@@ -810,7 +810,7 @@ set(h_surf,'Tag','surface');
 %set(h_surf,'specularstrength',0.1);
 %set(h_surf,'diffusestrength',0.5);
 %set(h_surf,'ambientstrength',0.85);
-if not(ismember(evalin('base','zef.visualization_type'),[2,4])) || not(ismember(i,aux_brain_ind))
+if not(ismember(evalin('base','zef.visualization_type'),[2,4])) || not(ismember(i,aux_active_compartment_ind))
 set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
 end
 lighting phong;
@@ -1139,6 +1139,17 @@ end
 %**************************************************************************
 
 else
+    
+reuna_p = evalin('base','zef.reuna_p');
+reuna_p_inf = evalin('base','zef.reuna_p_inf');
+reuna_t = evalin('base','zef.reuna_t');
+reuna_type = evalin('base','zef.reuna_type');
+if isequal(reuna_type{end,1},-1)
+reuna_p = reuna_p(1:end-1);
+reuna_p_inf = reuna_p_inf(1:end-1);
+reuna_t = reuna_t(1:end-1);
+compartment_tags = compartment_tags(1:end-1);
+end
 
 if ismember(evalin('base','zef.visualization_type'),[3,4])  
 if iscell(volumetric_distribution)
@@ -1222,7 +1233,7 @@ if ismember(evalin('base','zef.visualization_type'), [3,4])
         if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
 s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
-    s_i_ind_2 = evalin('base','zef.brain_ind');
+    s_i_ind_2 = evalin('base','zef.active_compartment_ind');
         end
 end
 
@@ -1359,7 +1370,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
 for k = 1 : length(compartment_tags)
@@ -1382,7 +1393,7 @@ color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = submesh_ind;
 if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
-    aux_brain_ind = [aux_brain_ind i];
+    aux_active_compartment_ind = [aux_active_compartment_ind i];
 end
 end
 end
@@ -1419,10 +1430,7 @@ end
 sphere_scale = aux_scale_val;    
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
-Z_s = sphere_scale*Z_s;
-reuna_p_inf = evalin('base','zef.reuna_p_inf');
-reuna_p = evalin('base','zef.reuna_p');
-reuna_t = evalin('base','zef.reuna_t');  
+Z_s = sphere_scale*Z_s; 
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     for i = 1 : length(reuna_t)
         reuna_t{i} = uint32(reuna_t{i});
@@ -1544,8 +1552,8 @@ for i = 1 : length(reuna_t)
 if evalin('base','zef.cp_mode') == 1
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 if ismember(evalin('base','zef.visualization_type'), [3,4])
-if ismember(i, aux_brain_ind)
-ab_ind = find(aux_brain_ind==i);
+if ismember(i, aux_active_compartment_ind)
+ab_ind = find(aux_active_compartment_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 if evalin('base','zef.use_parcellation')
 for p_ind = selected_list
@@ -1559,8 +1567,8 @@ elseif evalin('base','zef.cp_mode') == 2
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);   
 if ismember(evalin('base','zef.visualization_type'), [3,4])
-if ismember(i, aux_brain_ind)
-ab_ind = find(aux_brain_ind==i);
+if ismember(i, aux_active_compartment_ind)
+ab_ind = find(aux_active_compartment_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 if evalin('base','zef.use_parcellation')
 for p_ind = selected_list
@@ -1571,13 +1579,13 @@ end
 end;
 end
 elseif evalin('base','zef.cp_mode') == 3
-if ismember(i, aux_brain_ind)
+if ismember(i, aux_active_compartment_ind)
 aux_ind_2{i} = reuna_t{i};
 else
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 end
 elseif evalin('base','zef.cp_mode') == 4
-if ismember(i, aux_brain_ind)
+if ismember(i, aux_active_compartment_ind)
 aux_ind_2{i} = reuna_t{i};
 else  
 aux_ind_2{i} = setdiff([1:size(reuna_t{i},1)]',aux_ind_2{i});
@@ -1590,8 +1598,8 @@ for i = 1 : length(reuna_t)
     if not(isempty(aux_ind_2{i}))
 reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
 if ismember(evalin('base','zef.visualization_type'),[3 4])
-if ismember(i, aux_brain_ind)
-ab_ind = find(aux_brain_ind==i);
+if ismember(i, aux_active_compartment_ind)
+ab_ind = find(aux_active_compartment_ind==i);
 s_i_ind{ab_ind} = s_i_ind{ab_ind}(aux_ind_2{i},:);
 if evalin('base','zef.use_parcellation')
 for p_ind = selected_list
@@ -1751,8 +1759,8 @@ for k = 1 : length(compartment_tags)
 if on_val  
 i = i + 1;    
 if visible_val
-if ismember(i, aux_brain_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
-ab_ind = find(aux_brain_ind==i);
+if ismember(i, aux_active_compartment_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
+ab_ind = find(aux_active_compartment_ind==i);
 aux_brain_visible_ind = [aux_brain_visible_ind i];
 
 if ismember(evalin('base','zef.visualization_type'),[3])
@@ -1898,7 +1906,7 @@ end
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 
-if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 else   
@@ -1943,7 +1951,7 @@ set(h_surf_2{ab_ind},'FaceAlpha','interp');
 set(h_surf_2{ab_ind},'AlphaDataMapping','none'); 
 end
 
-if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
+if ismember(i,aux_active_compartment_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
 cb_done = 1;
 h_colorbar = colorbar(h_axes_image,'EastOutside','Position',[0.94 0.675 0.01 0.29],'fontsize',1500);
 set(h_colorbar,'Tag','rightColorbar');
@@ -2002,7 +2010,7 @@ reconstruction = evalin('base','zef.top_reconstruction');
 end
 reconstruction = reconstruction(:);    
 
-if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
 else
@@ -2226,8 +2234,8 @@ a_hist = max(0,real(log10(a_hist)));
 length_reconstruction = length(reconstruction);
 %******************************************************
 
-for i = intersect(aux_brain_ind, aux_brain_visible_ind)
-ab_ind = find(aux_brain_ind == i);
+for i = intersect(aux_active_compartment_ind, aux_brain_visible_ind)
+ab_ind = find(aux_active_compartment_ind == i);
 reconstruction = single(volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);  
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
@@ -2313,7 +2321,7 @@ delete(h_surf_2{ab_ind});
 
 axes(h_axes_image); set(h_fig_aux,'visible','on');
 
-if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 else
@@ -2372,7 +2380,7 @@ axes(h_axes_image);
 %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 delete(h_surf_2{i});
 
-if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
+if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
 else
