@@ -8,6 +8,7 @@ if not(isequal(file_name,0));
     
 h_fig = open([folder_name '/' file_name]);
 
+set(h_fig,'MenuBar','figure');
 h_fig.Units = 'pixels';
 h_fig.CurrentAxes.Units = 'pixels';
 axes_position = h_fig.CurrentAxes.Position;
