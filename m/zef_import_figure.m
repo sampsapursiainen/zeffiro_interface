@@ -29,6 +29,14 @@ else
     
 end
 
+h_fig.Name = [h_fig.Name ' ' '{' file_name '}'];
+h_aux_1 = findobj(h_fig.Children,'Style','listbox');
+h_aux_2 = findobj(h_aux_1,'Tag','system_information');
+if isempty(h_aux_2)
+h_aux_2 = h_aux_1(1);
+end
+h_aux_2.String{length(h_aux_2.String)+1} = ['File name: ' file_name];
+h_aux_2.String{length(h_aux_2.String)+1} = ['Folder name: ' folder_name];
 
 end
     

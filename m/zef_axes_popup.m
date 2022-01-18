@@ -1,7 +1,6 @@
 
 zef.h_figure_aux = gcf;
-zef.h_axes_aux = findobj(zef.h_figure_aux.Children,'Tag','axes1');
-zef.h_zeffiro_popup = figure(...
+zef.h_zeffiro_axes_popup = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
 'Units','normalized',...
 'Position',[0.6942    0.7    0.40    0.5134],...
@@ -28,15 +27,22 @@ zef.h_zeffiro_popup = figure(...
 'PaperType',get(0,'defaultfigurePaperType'),...
 'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
 'ScreenPixelsPerInchMode','manual' );
-
-zef.h_object_aux_new = copyobj(zef.h_axes_aux.Children,zef.h_axes_aux);
-zef.h_axes_aux_new = axes(zef.h_zeffiro_popup,'Tag','axes1'); 
+ 
+zef.h_object_aux_new = copyobj(findobj(zef.h_figure_aux.Children,'Tag','axes1','-or','Type','colorbar'),zef.h_figure_aux);
 for zef_i = 1 : length(zef.h_object_aux_new) 
-    zef.h_object_aux_new(zef_i).Parent = zef.h_axes_aux_new; 
+    if isequal(zef.h_object_aux_new(zef_i).Tag,'axes1')
+    zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup;
+    zef.h_object_aux_new(zef_i).Units = 'normalized';
+    zef.h_object_aux_new(zef_i).Position  = [0.2 0.2 0.6 0.6];
+    end
 end
-axis equal
+for zef_i = 1 : length(zef.h_object_aux_new)
+if isequal(zef.h_object_aux_new(zef_i).Type,'colorbar')
+    zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup; 
+end
+end
 
-zef = rmfield(zef,{'h_figure_aux', 'h_axes_aux', 'h_axes_aux_new','h_object_aux_new'});
+zef = rmfield(zef,{'h_figure_aux','h_object_aux_new'});
 
 clear zef_i
 
