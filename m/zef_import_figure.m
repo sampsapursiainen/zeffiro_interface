@@ -43,6 +43,7 @@ for i = 1 : length(h_c)
     h_c(i).OuterPosition(1) = h_c(i).OuterPosition(1) - scale_param*scale_factor*min_x + (1-scale_param)*figure_width/2;
     h_c(i).OuterPosition(2) = h_c(i).OuterPosition(2) - scale_param*scale_factor*min_y + (1-scale_param)*figure_height/2;
 end
+ h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/4;
 
 
 h_fig.Tag = '';
