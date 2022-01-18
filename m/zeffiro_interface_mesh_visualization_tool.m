@@ -13,6 +13,7 @@ end
 set(zef.h_pushbutton31,'ButtonPushedFcn','zef_visualize_volume;');
 set(zef.h_pushbutton20,'ButtonPushedFcn','zef_visualize_surfaces;'); 
 set(zef.h_pushbutton22,'ButtonPushedFcn','zef_snapshot_movie;');
+set(zef.h_axes_popup,'ButtonPushedFcn','zef_axes_popup;');
 
 set(zef.h_checkbox14,'value',zef.attach_electrodes);
 set(zef.h_checkbox15,'value',zef.axes_visible);

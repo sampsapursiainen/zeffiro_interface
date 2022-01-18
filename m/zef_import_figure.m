@@ -14,8 +14,10 @@ h_fig.CurrentAxes.Units = 'pixels';
 axes_position = h_fig.CurrentAxes.Position;
 fig_position = h_fig.Position; 
 tgb = findobj(get(gcf,'Children'),'Tag','togglecontrolsbutton');
+if not(isempty(tgb))
 user_data = tgb.UserData;
-set(h_fig,'SizeChangedFcn',''); 
+end
+%set(h_fig,'SizeChangedFcn',''); 
 
 if isequal(user_data,2)
     
@@ -29,6 +31,16 @@ else
     
 end
 
+h_fig.Name = [h_fig.Name ' ' '{' file_name '}'];
+h_aux_1 = findobj(h_fig.Children,'Style','listbox');
+h_aux_2 = findobj(h_aux_1,'Tag','system_information');
+if not(isempty(h_aux_1))
+if isempty(h_aux_2)
+h_aux_2 = h_aux_1(1);
+end
+h_aux_2.String{length(h_aux_2.String)+1} = ['File name: ' file_name];
+h_aux_2.String{length(h_aux_2.String)+1} = ['Folder name: ' folder_name];
+end
 
 end
     
