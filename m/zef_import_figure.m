@@ -11,30 +11,43 @@ h_fig = open([folder_name '/' file_name]);
 set(h_fig,'MenuBar','figure');
 h_fig.Units = 'pixels';
 h_fig.CurrentAxes.Units = 'pixels';
-axes_position = h_fig.CurrentAxes.Position;
-fig_position = h_fig.Position; 
-tgb = findobj(get(h_fig,'Children'),'Tag','togglecontrolsbutton');
-if not(isempty(tgb))
-user_data = tgb.UserData;
-%set(h_fig,'SizeChangedFcn',''); 
 
-if isequal(user_data,2)
-    
-    fig_position(3) = round(axes_position(3)/0.9);
-    fig_position(4) = round(axes_position(4)/0.6);
-    
-else 
-    
-    fig_position(3) = round(axes_position(3)/0.6);
-    fig_position(4) = round(axes_position(4)/0.6);
-    
+set(h_fig,'SizeChangedFcn','');
+
+scale_param = 0.94; 
+figure_width = h_fig.Position(3);
+figure_height = h_fig.Position(4);
+
+h_c = h_fig.Children; 
+min_x = Inf; 
+max_x = 0;
+min_y = Inf; 
+max_y = 0;
+for i = 1 : length(h_c)
+    h_c(i).Units = 'pixels';
+    min_x = min(h_c(i).OuterPosition(1),min_x);
+    max_x = max(sum(h_c(i).OuterPosition([1 3])),max_x);
+    min_y = min(h_c(i).OuterPosition(2),min_y);
+    max_y = max(sum(h_c(i).OuterPosition([2 4])),max_y);
 end
+scale_factor_x = figure_width/(max_x-min_x);
+scale_factor_y = figure_height/(max_y-min_y);
+scale_factor = min(scale_factor_x, scale_factor_y);
+if scale_factor_y < scale_factor_x
+  h_fig.Position(3) = (scale_factor_y/scale_factor_x)*h_fig.Position(3);
+else
+  h_fig.Position(4) = (scale_factor_x/scale_factor_y)*h_fig.Position(4);
+end
+for i = 1 : length(h_c)
+    h_c(i).OuterPosition = scale_param*scale_factor*h_c(i).OuterPosition; 
+    h_c(i).OuterPosition(1) = h_c(i).OuterPosition(1) - scale_param*scale_factor*min_x + (1-scale_param)*figure_width/2;
+    h_c(i).OuterPosition(2) = h_c(i).OuterPosition(2) - scale_param*scale_factor*min_y + (1-scale_param)*figure_height/2;
 end
 
 
 h_fig.Tag = '';
 if contains(get(h_fig,'Name'),'ZEFFIRO Interface: Figure tool')
-     set(h_fig,'Name',[get(h_fig,'Name') ' ' num2str(zef_fig_num)]);
+     set(h_fig,'Name',['ZEFFIRO Interface: Figure tool ' num2str(zef_fig_num)]);
 else
     set(h_fig,'Name',['ZEFFIRO Interface: Figure tool ' num2str(zef_fig_num)]);
 end
