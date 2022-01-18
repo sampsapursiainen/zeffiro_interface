@@ -16,7 +16,6 @@ fig_position = h_fig.Position;
 tgb = findobj(get(h_fig,'Children'),'Tag','togglecontrolsbutton');
 if not(isempty(tgb))
 user_data = tgb.UserData;
-end
 %set(h_fig,'SizeChangedFcn',''); 
 
 if isequal(user_data,2)
@@ -30,6 +29,20 @@ else
     fig_position(4) = round(axes_position(4)/0.6);
     
 end
+end
+
+
+h_fig.Tag = '';
+if contains(get(h_fig,'Name'),'ZEFFIRO Interface: Figure tool')
+     set(h_fig,'Name',[get(h_fig,'Name') ' ' num2str(zef_fig_num)]);
+else
+    set(h_fig,'Name',['ZEFFIRO Interface: Figure tool ' num2str(zef_fig_num)]);
+end
+set(h_fig,'AutoResizeChildren','off');
+assignin('base','zef_data',get(h_fig,'Position'));
+evalin('base','zef.zeffiro_current_size{zef_fig_num} = zef_data; clear zef_data;');
+set(h_fig,'Tag',num2str(zef_fig_num));
+set(h_fig,'SizeChangedFcn','zef.zeffiro_current_size{str2num(get(gcf,''Tag''))} = zef_change_size_function(gcf,zef.zeffiro_current_size{str2num(get(gcf,''Tag''))},[],{''Colorbar'',''image_details''});');
 
 h_fig.Name = [h_fig.Name ' ' '{' file_name '}'];
 h_aux_1 = findobj(h_fig.Children,'Style','listbox');
