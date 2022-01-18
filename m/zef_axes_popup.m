@@ -33,7 +33,7 @@ for zef_i = 1 : length(zef.h_object_aux_new)
     if isequal(zef.h_object_aux_new(zef_i).Tag,'axes1')
     zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup;
     zef.h_object_aux_new(zef_i).Units = 'normalized';
-    zef.h_object_aux_new(zef_i).Position  = [0.2 0.2 0.6 0.6];
+    zef.h_object_aux_new(zef_i).OuterPosition  = [0.2 0.2 0.6 0.6];
     end
 end
 for zef_i = 1 : length(zef.h_object_aux_new)
