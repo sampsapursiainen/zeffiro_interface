@@ -13,7 +13,7 @@ h_fig.Units = 'pixels';
 h_fig.CurrentAxes.Units = 'pixels';
 axes_position = h_fig.CurrentAxes.Position;
 fig_position = h_fig.Position; 
-tgb = findobj(get(gcf,'Children'),'Tag','togglecontrolsbutton');
+tgb = findobj(get(h_fig,'Children'),'Tag','togglecontrolsbutton');
 if not(isempty(tgb))
 user_data = tgb.UserData;
 end
