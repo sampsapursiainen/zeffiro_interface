@@ -58,7 +58,7 @@ if find(ismember(properties(h_c(i)),'FontSize'))
     h_c(i).FontSize = scale_factor*h_c(i).FontSize;
 end
 end
- h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/8;
+% h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/8;
 
 
 h_fig.Tag = '';
