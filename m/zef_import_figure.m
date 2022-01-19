@@ -2,23 +2,35 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef_import_figure
 
+if evalin('base','zef.use_display')
 [file_name folder_name] = uigetfile({'*.fig'},'Open figure file',evalin('base','zef.save_file_path'));
+else
+    file_name = evalin('base','zef.file');
+    folder_name = evalin('base','zef.file_path');
+end
 
 if not(isequal(file_name,0));   
     
 h_fig = open([folder_name '/' file_name]);
 
-set(h_fig,'MenuBar','figure');
-h_fig.Units = 'pixels';
-h_fig.CurrentAxes.Units = 'pixels';
-
 set(h_fig,'SizeChangedFcn','');
+set(h_fig,'MenuBar','figure');
+h_fig.Units = 'normalized';
+set(h_fig,'AutoResizeChildren','off');
+h_fig.Position = [0.25 0.25 0.4 0.5];
+h_fig.Units = 'pixels';
+h_c = h_fig.Children;  
+for i = 1 : length(h_c)
+h_c(i).Units = 'pixels';
+end
+
+
 
 scale_param = 0.94; 
 figure_width = h_fig.Position(3);
 figure_height = h_fig.Position(4);
 
-h_c = h_fig.Children; 
+
 min_x = Inf; 
 max_x = 0;
 min_y = Inf; 
@@ -42,8 +54,11 @@ for i = 1 : length(h_c)
     h_c(i).OuterPosition = scale_param*scale_factor*h_c(i).OuterPosition; 
     h_c(i).OuterPosition(1) = h_c(i).OuterPosition(1) - scale_param*scale_factor*min_x + (1-scale_param)*figure_width/2;
     h_c(i).OuterPosition(2) = h_c(i).OuterPosition(2) - scale_param*scale_factor*min_y + (1-scale_param)*figure_height/2;
+if find(ismember(properties(h_c(i)),'FontSize'))
+    h_c(i).FontSize = scale_factor*h_c(i).FontSize;
 end
- h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/4;
+end
+ h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/8;
 
 
 h_fig.Tag = '';

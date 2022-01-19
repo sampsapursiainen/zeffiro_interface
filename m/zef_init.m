@@ -73,6 +73,7 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.zeffiro_current_size = {[0.33 0.33 0.33 0.33]};
 zef_data.plugin_cell = [];
 zef_data.active_compartment_ind = [];
 zef_data.init_profile = [];
