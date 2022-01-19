@@ -15,7 +15,6 @@ gpuDeviceCount = 0;
 end
 zef = rmfield(zef, 'ver');
 zef.program_path = cd; 
-if not(isdeployed)
 zef.code_path = '/m';
 addpath(genpath([zef.program_path '/m']));
 addpath(genpath([zef.program_path '/mlapp']));
@@ -23,9 +22,12 @@ addpath([zef.program_path '/fig']);
 addpath([zef.program_path zef.code_path]); 
 addpath(genpath([zef.program_path '/plugins']));
 addpath(genpath([zef.program_path '/profile']));
-end;
 
 zef_apply_system_settings;
+
+if not(zef.use_display)
+    addpath(genpath([zef.program_path '/m_no_display']));
+end
 
 if gpuDeviceCount > 0 & zef.use_gpu == 1
 gpuDevice(zef.gpu_num);
