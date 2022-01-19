@@ -1,7 +1,11 @@
 function zef_export_fem_mesh_as
 
-
+if evalin('base','zef.use_display')
 [file path] = uiputfile('*.mat','Export FEM mesh as...',evalin('base','zef.save_file_path'));
+else 
+    file = evalin('base','zef.file');
+    path = evalin('base','zef.file_path');
+end
 
 if not(isequal(file,0)); 
 

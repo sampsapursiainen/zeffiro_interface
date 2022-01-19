@@ -1,11 +1,13 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if zef.save_switch == 1
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
+    end
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
@@ -21,41 +23,49 @@ zef_update;
 end
 end
 if zef.save_switch == 2
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export lead field',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export lead field');
 end
+    end
 if not(isequal(zef.file,0));
 save([zef.file_path zef.file],'-struct','zef','L','-v7.3');
 end
 end
 if zef.save_switch == 3
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export source space',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export source space');
 end
+    end
 if not(isequal(zef.file,0));
 save([zef.file_path zef.file],'-struct','zef','source_positions','source_directions','-v7.3');
 end
 end
 if zef.save_switch == 4
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)      
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export sensors',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export sensors');
 end
+    end
 if not(isequal(zef.file,0));
 save([zef.file_path zef.file],'-struct','zef',[zef.current_sensors '_points'],[zef.current_sensors '_directions'],'-v7.3');
 end
 end
 if zef.save_switch == 5
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export segmentation data',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export segmentation data');
 end
+    end
 if not(isequal(zef.file,0));
 zef_process_meshes([]);
 zef.surface_mesh_nodes = zef.reuna_p;
@@ -76,11 +86,13 @@ end
 end
 end
 if zef.save_switch == 6
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
     [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export volume data',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat'},'Export volume data');
 end
+    end
 if not(isequal(zef.file,0));
 zef_process_meshes;
 zef.tetrahedra = zef.tetra;
@@ -107,11 +119,13 @@ zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
 zef_update;
 else
+    if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');   
 end
+    end
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
@@ -125,10 +139,12 @@ end
 end
 end
 if zef.save_switch == 8
+if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export reconstruction',zef.save_file_path);
 else
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.mat';'*.dat'},'Export reconstruction');
+end
 end
 if not(isequal(zef.file,0));
 if zef.file_index == 1
@@ -139,7 +155,9 @@ end
 end
 end
 if zef.save_switch == 9
+    if zef.use_display
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.fig'},'Save figures as...',zef.save_file_path); 
+    end
 if not(isequal(zef.file,0)); 
 zef.h_fig_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface: Figure tool*');
 savefig(zef.h_fig_aux,[zef.save_file_path zef.file]); 
@@ -147,7 +165,9 @@ rmfield(zef,'h_fig_aux');
 end;
 end;
 if zef.save_switch == 10
+    if zef.use_display
 [zef.file zef.file_path zef.file_index] = uiputfile({'*.png';'*.jpg';'*.tiff'},'Print figure to file as...',zef.save_file_path); 
+    end
 if not(isequal(zef.file,0)); 
     if zef.file_index == 1
 print(gcf,'-dpng','-r200',[zef.file_path zef.file]); 

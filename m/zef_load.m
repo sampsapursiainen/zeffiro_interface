@@ -3,10 +3,12 @@
 
 zef_data = struct;
 
+if zef.use_display
 if not(isempty(zef.save_file_path)) && not(isequal(zef.save_file_path,0))  
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project',zef.save_file_path);
 else
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project');
+end
 end
 if not(isequal(zef.file,0))
     

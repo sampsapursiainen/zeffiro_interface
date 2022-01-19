@@ -4,8 +4,13 @@ function zef_import_segmentation(file_name, folder_name)
 
 void = [];
 
+if evalin('base','zef.use_display')
 if nargin < 2
 [file_name folder_name] = uigetfile({'*.zef'},'ASCII segmentation data file and folder',evalin('base','zef.save_file_path'));
+end
+else
+    file_name = evalin('base','zef.file');
+    folder_name = evalin('base','zef.file_path');
 end
 
 if not(isequal(file_name,0));   

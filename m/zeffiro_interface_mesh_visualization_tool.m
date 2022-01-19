@@ -1,4 +1,5 @@
-zef_data = zeffiro_interface_mesh_visualization_tool_app;
+zef_data = zeffiro_interface_mesh_visualization_tool_app_exported;
+zef_data.h_mesh_visualization_tool.Visible=zef.use_display;
 
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
@@ -81,11 +82,17 @@ set(zef.h_inv_dynamic_range,'value',num2str(1./zef.inv_dynamic_range));
 set(zef.h_submesh_num,'value',num2str(zef.submesh_num));
 
 
+zef.h_mesh_visualization_tool.Units = 'normalized';
+zef.h_mesh_visualization_tool.Position = [0.3 0.3 zef.h_mesh_visualization_tool.Position(3:4)];
+zef.h_mesh_visualization_tool.Units = 'pixels';
+
+
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 set(zef.h_mesh_visualization_tool,'AutoResizeChildren','off');
 zef.mesh_visualization_tool_current_size = get(zef.h_mesh_visualization_tool,'Position');
 set(zef.h_mesh_visualization_tool,'SizeChangedFcn','zef.mesh_visualization_tool_current_size = zef_change_size_function(zef.h_mesh_visualization_tool,zef.mesh_visualization_tool_current_size);');
+
 
 
 clear zef_data;

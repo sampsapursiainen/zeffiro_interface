@@ -1,4 +1,7 @@
-zef_data = zeffiro_interface_segmentation_tool_app;
+set(groot,'defaultFigureVisible','off')
+zef_data = zeffiro_interface_segmentation_tool_app_exported;
+zef_data.h_zeffiro_window_main.Visible = zef.use_display;
+set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
