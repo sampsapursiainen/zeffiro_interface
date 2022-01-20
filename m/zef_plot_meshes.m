@@ -3,6 +3,11 @@
 function [void] = zef_plot_meshes(~)
 
 f_ind = 1;
+cdata_counter = 1;
+
+cdata_info.frame_start = evalin('base','zef.frame_start');
+cdata_info.frame_stop = evalin('base','zef.frame_stop');
+cdata_info.frame_step = evalin('base','zef.frame_step');
 
 if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
     volumetric_distribution = evalin('base','zef.reconstruction');
@@ -87,6 +92,11 @@ if ismember(evalin('base','zef.visualization_type'), [3])
         frame_stop = max(frame_stop,1);
         frame_stop = min(length_reconstruction_cell,frame_stop);
         number_of_frames = length([frame_start : frame_step : frame_stop]);
+        
+cdata_info.frame_start = frame_start;
+cdata_info.frame_step = frame_step;
+cdata_info.frame_stop = frame_stop;
+        
         for f_ind = frame_start : frame_step : frame_stop
             reconstruction = single(volumetric_distribution{f_ind});
             reconstruction = reconstruction(:);
@@ -169,6 +179,11 @@ if ismember(evalin('base','zef.visualization_type'), [5])
         frame_stop = max(frame_stop,1);
         frame_stop = min(length_reconstruction_cell,frame_stop);
         number_of_frames = length([frame_start : frame_step : frame_stop]);
+        
+        cdata_info.frame_start = frame_start;
+cdata_info.frame_step = frame_step;
+cdata_info.frame_stop = frame_stop;
+        
         for f_ind = frame_start : frame_step : frame_stop
             reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(f_ind) '}']));
             reconstruction = reconstruction(:);
@@ -181,6 +196,11 @@ if ismember(evalin('base','zef.visualization_type'), [5])
         frame_stop = 1;
         frame_step = 1;
         number_of_frames = 1;
+        
+        cdata_info.frame_start = frame_start;
+cdata_info.frame_step = frame_step;
+cdata_info.frame_stop = frame_stop;
+
         reconstruction = evalin('base','zef.top_reconstruction');
         reconstruction = reconstruction(:);
         max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
@@ -756,8 +776,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 set(h_colorbar,'Tag','rightColorbar');
                                 h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                                 set(h_axes_text,'tag','image_details');
-                                h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
-                                set(h_text,'visible','on');
+                                 h_text = findobj(get(gcf,'Children'),'Tag','time_text');
+  set(h_text,'String',['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+                                set(h_text,'visible','on','Tag','time_text');
                                 set(h_axes_text,'layer','bottom');
                                 axes(evalin('base','zef.h_axes1'));
                             end
@@ -830,8 +851,9 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             set(h_colorbar,'Tag','rightColorbar');
                             h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                             set(h_axes_text,'tag','image_details');
-                            h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
-                            set(h_text,'visible','on');
+                             h_text = findobj(get(gcf,'Children'),'Tag','time_text');
+  set(h_text,'String',['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+                            set(h_text,'visible','on','Tag','time_text');
                             set(h_axes_text,'layer','bottom');
                             axes(evalin('base','zef.h_axes1'));
                             
@@ -882,12 +904,20 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
+        zef_store_cdata(cdata_counter,cdata_info);
+        cdata_counter = cdata_counter + 1;
+        
+       
         
         if ismember(evalin('base','zef.visualization_type'),[3,5])
             
+            
+                 evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+
+            
             f_ind_aux = 1;
             for f_ind = frame_start + frame_step : frame_step : frame_stop
-                evalin('base',['zef.h_slider.Value=' num2str(f_ind*frame_step/(frame_stop-frame_start+frame_step)) ';']);
+
                 pause(0.01);
                 stop_movie = evalin('base','zef.stop_movie');
                 pause(0.01);
@@ -1078,7 +1108,6 @@ zef_plot_dpq('dynamical');
 zef_plot_dpq('dynamical');
                 zef_set_sliders_plot(2);
                 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
-               
                 
                 
                 %delete(h_text);
@@ -1095,7 +1124,13 @@ zef_plot_dpq('dynamical');
                 set(h_axes_text,'layer','bottom');
 
                drawnow limitrate;
+               
+                zef_store_cdata(cdata_counter,cdata_info);
+                cdata_counter = cdata_counter + 1;
              
+                 evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+
+                
             end
             
         end
@@ -1147,6 +1182,8 @@ zef_plot_dpq('dynamical');
         zef_plot_dpq('static');
         zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
+        zef_store_cdata(cdata_counter,cdata_info);
+        cdata_counter = cdata_counter + 1;
         
         
     end

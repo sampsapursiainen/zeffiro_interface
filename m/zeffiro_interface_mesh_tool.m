@@ -73,6 +73,9 @@ set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+zef.h_mesh_tool.Units = 'normalized';
+zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
+zef.h_mesh_tool.Units = 'pixels';
 set(zef.h_mesh_tool,'AutoResizeChildren','off');
 zef.mesh_tool_current_size = get(zef.h_mesh_tool,'Position');
 zef.mesh_tool_relative_size = zef_get_relative_size(zef.h_mesh_tool);

@@ -16,7 +16,7 @@ if isfield(zef_data,'program_path')
 zef_data = rmfield(zef_data,'program_path');
 end
 
-zef.ini_cell = readcell('zeffiro_interface.ini','FileType','text');
+zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 for zef_i = 1 : size(zef.ini_cell,1)
 evalin('base',['zef_data = rmfield(zef_data''' zef.ini_cell{zef_i,3} ''');']);
 end
