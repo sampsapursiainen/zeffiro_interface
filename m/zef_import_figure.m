@@ -42,10 +42,12 @@ min_y = Inf;
 max_y = 0;
 for i = 1 : length(h_c)
        if find(ismember(properties(h_c(i)),'Position')) 
+           if not(isequal(get(h_c(i),'Type'),'colorbar'))
     min_x = min(h_c(i).Position(1),min_x);
     max_x = max(sum(h_c(i).Position([1 3])),max_x);
     min_y = min(h_c(i).Position(2),min_y);
     max_y = max(sum(h_c(i).Position([2 4])),max_y);
+           end
        end
 end
 scale_factor_x = figure_width/(max_x-min_x);
@@ -62,9 +64,11 @@ for i = 1 : length(h_c)
     %h_c(i).OuterPosition(1) = h_c(i).OuterPosition(1) - scale_param*scale_factor*min_x + (1-scale_param*scale_factor*(max_x-min_x))/2;
     %h_c(i).OuterPosition(2) = h_c(i).OuterPosition(2) - scale_param*scale_factor*min_y + (1-scale_param*scale_factor*(max_y-min_y))/2;
     if find(ismember(properties(h_c(i)),'Position'))
+            if not(isequal(get(h_c(i),'Type'),'colorbar'))
     h_c(i).Position = scale_param*scale_factor*h_c(i).Position; 
     h_c(i).Position(1) = h_c(i).Position(1) - scale_param*scale_factor*min_x + (1-scale_param*scale_factor*(max_x-min_x))/2;
     h_c(i).Position(2) = h_c(i).Position(2) - scale_param*scale_factor*min_y + (1-scale_param*scale_factor*(max_y-min_y))/2;
+            end
      end
     if find(ismember(properties(h_c(i)),'FontSize'))
     h_c(i).FontSize = scale_param*scale_factor*h_c(i).FontSize;
