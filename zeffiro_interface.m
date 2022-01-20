@@ -18,8 +18,8 @@ zef.program_path = cd;
 zef.code_path = '/m';
 addpath(genpath([zef.program_path '/m']));
 addpath(genpath([zef.program_path '/mlapp']));
-addpath([zef.program_path '/fig']);  
-addpath([zef.program_path zef.code_path]); 
+addpath(genpath([zef.program_path '/fig']));  
+addpath(genpath([zef.program_path zef.code_path])); 
 addpath(genpath([zef.program_path '/plugins']));
 addpath(genpath([zef.program_path '/profile']));
 
