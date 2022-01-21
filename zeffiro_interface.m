@@ -1,13 +1,10 @@
 
 if not(exist('zef'))
     zef = struct;
+else
+        error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear variable ''zef'' in the base workspace.')
 end
 
-if isfield(zef,'h_zeffiro_window_main')
-    if isvalid(zef.h_zeffiro_window_main)
-        error('Another instance of Zeffiro interface already open.')
-    end
-end
 clear zef;
 zef.ver = ver;
 if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))

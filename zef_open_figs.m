@@ -1,3 +1,9 @@
+if not(exist('zef'))
+    zef = struct;
+else
+        error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear variable ''zef'' in the base workspace.')
+end
+
 zef.program_path = pwd;
 addpath(genpath([zef.program_path '/m']));
 addpath(genpath([pwd '/data']));
