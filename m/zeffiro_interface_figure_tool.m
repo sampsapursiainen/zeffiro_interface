@@ -138,6 +138,10 @@ uicontrol(...
 'Position',[0.45 0.23 0.20 0.03],...
 'Children',[],'FontSize',0.461256944444443);
 
+uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Copyright © 2018- Sampsa Pursiainen & ZI Development Team. See: https://github.com/sampsapursiainen/zeffiro_interface','HorizontalAlignment','left','Position',[0.03 0.005 0.6 0.02],'Tag','copyright_text');
+
+
+
 zef_update_fig_details;
 
 zef.h = get(zef.h_zeffiro,'Children');
