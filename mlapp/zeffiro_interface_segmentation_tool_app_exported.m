@@ -5,6 +5,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
         h_zeffiro_window_main           matlab.ui.Figure
         h_menu_project                  matlab.ui.container.Menu
         h_menu_new                      matlab.ui.container.Menu
+        h_menu_new_empty                matlab.ui.container.Menu
         h_menu_open                     matlab.ui.container.Menu
         h_menu_open_figure              matlab.ui.container.Menu
         h_menu_save                     matlab.ui.container.Menu
@@ -23,6 +24,8 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
         h_menu_import                   matlab.ui.container.Menu
         h_menu_new_segmentation_from_folder  matlab.ui.container.Menu
         h_menu_import_segmentation_update_from_folder  matlab.ui.container.Menu
+        h_menu_new_segmentation_from_folder_legacy  matlab.ui.container.Menu
+        h_menu_import_segmentation_update_from_folder_legacy  matlab.ui.container.Menu
         h_menu_import_new_project_from_folder  matlab.ui.container.Menu
         h_menu_import_project_update_from_folder  matlab.ui.container.Menu
         h_menu_import_volume_data       matlab.ui.container.Menu
@@ -169,7 +172,11 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_new
             app.h_menu_new = uimenu(app.h_menu_project);
             app.h_menu_new.Separator = 'on';
-            app.h_menu_new.Text = 'New';
+            app.h_menu_new.Text = 'New project from profile';
+
+            % Create h_menu_new_empty
+            app.h_menu_new_empty = uimenu(app.h_menu_project);
+            app.h_menu_new_empty.Text = 'New empty project';
 
             % Create h_menu_open
             app.h_menu_open = uimenu(app.h_menu_project);
@@ -242,6 +249,14 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_import_segmentation_update_from_folder
             app.h_menu_import_segmentation_update_from_folder = uimenu(app.h_menu_import);
             app.h_menu_import_segmentation_update_from_folder.Text = 'Import segmentation update from folder';
+
+            % Create h_menu_new_segmentation_from_folder_legacy
+            app.h_menu_new_segmentation_from_folder_legacy = uimenu(app.h_menu_import);
+            app.h_menu_new_segmentation_from_folder_legacy.Text = 'Import new segmentation from folder (legacy)';
+
+            % Create h_menu_import_segmentation_update_from_folder_legacy
+            app.h_menu_import_segmentation_update_from_folder_legacy = uimenu(app.h_menu_import);
+            app.h_menu_import_segmentation_update_from_folder_legacy.Text = 'Import segmentation update from folder (legacy)';
 
             % Create h_menu_import_new_project_from_folder
             app.h_menu_import_new_project_from_folder = uimenu(app.h_menu_import);
