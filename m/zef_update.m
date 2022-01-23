@@ -210,7 +210,11 @@ else
 zef.project_notes = zef.h_project_notes.Value;
 end
 
-if not(ismember(zef.current_sensors,zef.sensor_tags))
+if isempty(zef.sensor_tags)
+    zef.current_sensors = [];
+    zef.h_sensors_name_table.Data = [];
+    zef.h_parameters_table.Data = []; 
+elseif not(ismember(zef.current_sensors,zef.sensor_tags))
     zef.current_sensors = [];
     zef.h_sensors_name_table.Data = [];
     zef.h_parameters_table.Data = [];

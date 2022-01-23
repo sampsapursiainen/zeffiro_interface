@@ -9,7 +9,7 @@ field_cell_update = varargin{2};
     end
 end
 
-field_cell_default =  {{'on', '0'       }
+field_cell_default =  {{'on', '1'       }
     {'color',   '0.3 + 0.7*rand(1,3)'   }
     {'priority', ['length(' zef_struct_name '.compartment_tags) + 1']   }
     {'sources',  '0'  }

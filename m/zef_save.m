@@ -1,13 +1,13 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if zef.save_switch == 1
-    if zef.use_display
+if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
-    end
+ end
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
@@ -119,13 +119,13 @@ zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
 zef_update;
 else
-    if zef.use_display
+if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)  
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');   
 end
-    end
+end
 if not(isequal(zef.file,0));
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;

@@ -32,4 +32,4 @@ end
 
 zef_init_sensors_name_table;
 
-    end
+end

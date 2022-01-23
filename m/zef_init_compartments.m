@@ -4,6 +4,8 @@
 zef.compartment_tags = cell(0);
 zef.compartment_transform_name = cell(0);
 
+if not(zef.new_empty_project)
+
 zef.segmentation_profile_aux = readcell([zef.program_path '/profile/' zef.profile_name  '/zeffiro_segmentation.ini'],'filetype','text','delimiter',',');
 [zef_i] = find(ismember(char(zef.segmentation_profile_aux{:,2}),{'compartment_tags'}));
 
@@ -34,6 +36,8 @@ end
 zef = rmfield(zef,{'segmentation_profile_aux','compartment_structure_aux','compartment_tags_aux'});
 
 clear zef_i zef_j zef_k;
+
+end
           
 
        

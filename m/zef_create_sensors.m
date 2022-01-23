@@ -1,5 +1,8 @@
 function zef_create_sensors(sensor_tag, varargin)
 
+if isequal(sensor_tag,'s') || isequal(sensor_tag,'s1')
+evalin('base',['zef.current_sensors =''' sensor_tag ''';']);
+end
 zef_struct_name = 'zef';
 field_cell_update = cell(0);
 if not(isempty(varargin))
@@ -9,10 +12,9 @@ field_cell_update = varargin{2};
     end
 end
 
-
 field_cell_default =  {{'on', '1'}
 {'color', '[0.1 0.1 0.1]'}
-    {'visible', '1'   }
+    {'visible', '0'   }
     {'directions', '[]' }
     {'points'  , '[]'  }
     {'merge'  , '0'  }
