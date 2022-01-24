@@ -85,7 +85,7 @@ set(zef.h_menu_butterfly_plot                        ,'MenuSelectedFcn','zef_but
 set(zef.h_menu_find_synthetic_source                 ,'MenuSelectedFcn','find_synthetic_source;zef_update;');
 set(zef.h_menu_generate_eit_data                     ,'MenuSelectedFcn','find_synthetic_eit_data;zef_update;');
 set(zef.h_menu_mesh_tool                             ,'MenuSelectedFcn','zef_mesh_tool;zef_update;');
-set(zef.h_menu_mesh_visualization_tool                             ,'MenuSelectedFcn','zeffiro_interface_mesh_visualization_tool;zef_update;');
+set(zef.h_menu_mesh_visualization_tool               ,'MenuSelectedFcn','zeffiro_interface_mesh_visualization_tool;zef_update;');
 set(zef.h_menu_figure_tool                           ,'MenuSelectedFcn','zef_figure_tool;zef_update;');
 set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_parcellation_tool;zef_update;');
 set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef_update;');
