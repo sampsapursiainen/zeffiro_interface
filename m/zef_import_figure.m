@@ -41,6 +41,7 @@ max_x = 0;
 min_y = Inf; 
 max_y = 0;
 for i = 1 : length(h_c)
+
        if find(ismember(properties(h_c(i)),'Position')) 
            if not(isequal(get(h_c(i),'Type'),'colorbar'))
     min_x = min(h_c(i).Position(1),min_x);
@@ -91,11 +92,14 @@ if contains(get(h_fig,'Name'),'ZEFFIRO Interface: Figure tool')
 else
     set(h_fig,'Name',['ZEFFIRO Interface: Figure tool ' num2str(zef_fig_num)]);
 end
+
 set(h_fig,'AutoResizeChildren','off');
 assignin('base','zef_data',get(h_fig,'Position'));
 evalin('base','zef.zeffiro_current_size{zef_fig_num} = zef_data; clear zef_data;');
 set(h_fig,'Tag',num2str(zef_fig_num));
+
 set(h_fig,'SizeChangedFcn','zef_set_figure_current_size;');
+
 
 h_fig.Name = [h_fig.Name ' ' '{' file_name '}'];
 h_aux_1 = findobj(h_fig.Children,'Style','listbox');

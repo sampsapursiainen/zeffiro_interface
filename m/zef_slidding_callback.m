@@ -13,6 +13,8 @@ evalin('base','zef_visualize_volume');
 elseif isequal(evalin('base','zef.visualization_type'),3)
 evalin('base','zef_visualize_surfaces');
 end
+
 end
+
 end
 
