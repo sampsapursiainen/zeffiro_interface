@@ -52,6 +52,7 @@ if isequal(h_waitbar.Visible,'on') || isequal(h_waitbar.Visible,1)
 
 h_axes = h_waitbar.CurrentAxes;
 h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
+h_text.String = progress_bar_text;
 h_bar = barh(h_axes,[progress_value 1-progress_value; 0 0],'barlayout','stacked','showbaseline','off','edgecolor','none');
 
 h_bar(1).FaceColor = [ 0 1 1];
