@@ -44,7 +44,9 @@ h_waitbar = figure(...
 h_axes = axes(h_waitbar,'Position',[0.1 0.2 0.8 0.6]);
 h_axes.Visible = 'off';
 
-h_text = uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.6 0.8 0.2]);
+uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.6 0.8 0.2]);
+
+
 
 end
 
@@ -60,11 +62,21 @@ h_bar(2).FaceColor = [ 0.145   0.624    0.631];
 h_axes.Visible = 'off';
 uistack(h_text,'top');
 
-set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
-set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',evalin('base','zef.font_size'));
 pause(1e-6)
 
 
 end
+
+if not(ishandle(varargin{2}))
+    
+    set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
+set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',evalin('base','zef.font_size'));
+
+
+  %  set(h_waitbar,'AutoResizeChildren','off');
+%h_waitbar.UserData = get(h_waitbar,'Position');
+%set(h_waitbar,'SizeChangedFcn','set(gcf,''UserData'', zef_change_size_function(gcf,get(gcf,''UserData'')));');
+
+    end
 
 end
