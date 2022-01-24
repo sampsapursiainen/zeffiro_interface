@@ -29,7 +29,7 @@ h_waitbar = figure(...
 'Name','ZEFFIRO Interface: Progress bar',...
 'NumberTitle','off',...
 'HandleVisibility','callback',...
-'DeleteFcn','',...
+'DeleteFcn','delete(gcf);',...
 'Tag','progress_bar',...
 'UserData',[],...
 'WindowStyle',get(0,'defaultfigureWindowStyle'),...
@@ -46,10 +46,10 @@ h_axes.Visible = 'off';
 
 h_text = uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.6 0.8 0.2]);
 
-
-
 end
-figure(h_waitbar)
+
+if isequal(h_waitbar.Visible,'on') || isequal(h_waitbar.Visible,1)
+
 h_axes = h_waitbar.CurrentAxes;
 h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
 h_bar = barh(h_axes,[progress_value 1-progress_value; 0 0],'barlayout','stacked','showbaseline','off','edgecolor','none');
@@ -61,6 +61,9 @@ uistack(h_text,'top');
 
 set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',evalin('base','zef.font_size'));
-pause(0.02);
+pause(1e-6)
+
+
+end
 
 end
