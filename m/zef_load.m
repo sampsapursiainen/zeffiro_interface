@@ -48,7 +48,6 @@ zef_data.mlapp = 1;
  zef_init_init_profile;
  zef_init_parameter_profile;
  
-zef_apply_system_settings;
 if ismember(zef.start_mode,{'nodisplay','display'})
 zef.use_display = 0;
 end
