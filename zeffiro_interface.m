@@ -41,6 +41,7 @@ while option_counter <= length(varargin)
 if isequal(varargin{option_counter},lower('open_project'))
 open_project_file = varargin{option_counter+1};
 [file_path, file_1, file_2] = fileparts(open_project_file);
+file_path = [file_path filesep];
 if isempty(file_path)
     file_path = './data/';
 end
@@ -57,14 +58,34 @@ option_counter = option_counter + 2;
 elseif isequal(varargin{option_counter},lower('import_segmentation'))
 import_segmentation_file = varargin{option_counter+1};
 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
+file_path = [file_path filesep];
 if isempty(file_path)
     file_path = './data/';
 end
 if isempty(file_2)
     file_2 = '.mat';
 end
-zef_data.file_path = [file_path]
-zef_data.file = [file_1 file_2]
+zef_data.file_path = [file_path];
+zef_data.file = [file_1 file_2];
+zef_data.new_empty_project = 1;
+assignin('base','zef_data',zef_data);
+evalin('base','zef_assign_data;');
+clear zef_data;
+evalin('base','zef_start_new_project;zef_import_segmentation');
+option_counter = option_counter + 2;
+elseif isequal(varargin{option_counter},lower('import_update'))
+import_segmentation_file = varargin{option_counter+1};
+[file_path, file_1, file_2] = fileparts(import_segmentation_file);
+file_path = [file_path filesep];
+if isempty(file_path)
+    file_path = './data/';
+end
+if isempty(file_2)
+    file_2 = '.mat';
+end
+zef_data.file_path = [file_path];
+zef_data.file = [file_1 file_2];
+zef_data.new_empty_project = 0;
 assignin('base','zef_data',zef_data);
 evalin('base','zef_assign_data;');
 clear zef_data;
@@ -73,14 +94,34 @@ option_counter = option_counter + 2;
 elseif isequal(varargin{option_counter},lower('import_segmentation_legacy'))
 import_segmentation_file = varargin{option_counter+1};
 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
+file_path = [file_path filesep];
 if isempty(file_path)
     file_path = './data/';
 end
 if isempty(file_2)
     file_2 = '.mat';
 end
-zef_data.file_path = [file_path]
-zef_data.file = [file_1 file_2]
+zef_data.file_path = [file_path];
+zef_data.file = [file_1 file_2];
+zef_data.new_empty_project = 0;
+assignin('base','zef_data',zef_data);
+evalin('base','zef_assign_data;');
+clear zef_data;
+evalin('base','zef_start_new_project:zef_import_segmentation_legacy');
+option_counter = option_counter + 2;
+elseif isequal(varargin{option_counter},lower('import_segmentation_update_legacy'))
+import_segmentation_file = varargin{option_counter+1};
+[file_path, file_1, file_2] = fileparts(import_segmentation_file);
+file_path = [file_path filesep];
+if isempty(file_path)
+    file_path = './data/';
+end
+if isempty(file_2)
+    file_2 = '.mat';
+end
+zef_data.file_path = [file_path];
+zef_data.file = [file_1 file_2];
+zef_data.new_empty_project = 0;
 assignin('base','zef_data',zef_data);
 evalin('base','zef_assign_data;');
 clear zef_data;
@@ -89,6 +130,7 @@ option_counter = option_counter + 2;
 elseif isequal(varargin{option_counter},lower('save_project'))
 save_project_file = varargin{option_counter+1};
 [file_path, file_1, file_2] = fileparts(save_project_file);
+file_path = [file_path filesep];
 if isempty(file_path)
     file_path = './data/';
 end
@@ -106,6 +148,7 @@ option_counter = option_counter + 2;
 elseif isequal(varargin{option_counter},lower('export_fem_mesh'))
 export_fem_mesh_file = varargin{option_counter+1};
 [file_path, file_1, file_2] = fileparts(export_fem_mesh_file );
+file_path = [file_path filesep];
 if isempty(file_path)
 file_path = './data/';
 end
@@ -129,6 +172,7 @@ if not(iscell(open_figure_file))
 end
 for i = 1 : length(open_figure_file)
 [file_path, file_1, file_2] = fileparts(open_figure_file{i});
+file_path = [file_path filesep];
 if isempty(file_path)
     file_path = './fig/';
 end
@@ -185,7 +229,8 @@ end
 end
 
 
-if exist('zef.h_zeffiro_window_main')
+if evalin('base','isfield(zef,''h_zeffiro_window_main'');')
+if evalin('base','isvalid(zef.h_zeffiro_window_main);')
 if ismember(start_mode,'display')
 zef_data.start_mode = start_mode;
 assignin('base','zef_data',zef_data);
@@ -194,6 +239,7 @@ clear zef_data;
 evalin('base','zef.h_zeffiro.Visible = 1;');
 evalin('base','zef.h_zeffiro_window_main.Visible = 1;');
 evalin('base','zef.h_mesh_tool.Visible = 1;');
+end
 end
 end
 
