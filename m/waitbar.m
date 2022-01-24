@@ -61,6 +61,6 @@ uistack(h_text,'top');
 
 set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',evalin('base','zef.font_size'));
-
+pause(0.02);
 
 end
