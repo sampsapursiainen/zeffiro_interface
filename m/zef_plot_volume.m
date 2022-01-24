@@ -3,6 +3,12 @@
 function zef_plot_volume(varargin)
 
 f_ind = 1;
+cdata_counter = 1;
+
+cdata_info.frame_start = evalin('base','zef.frame_start');
+cdata_info.frame_stop = evalin('base','zef.frame_stop');
+cdata_info.frame_step = evalin('base','zef.frame_step');
+
 if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
 volumetric_distribution = evalin('base','zef.reconstruction');
 elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
@@ -426,6 +432,11 @@ frame_start = min(length_reconstruction_cell,frame_start);
 frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
+
+cdata_info.frame_start = frame_start;
+cdata_info.frame_step = frame_step;
+cdata_info.frame_stop = frame_stop;
+
 for f_ind = frame_start : frame_step : frame_stop
 reconstruction = single(volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);  
@@ -664,7 +675,7 @@ end
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 end
-    
+  
 colormap_size = evalin('base','zef.colormap_size');
 colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
@@ -677,6 +688,7 @@ end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
 set(gca,'CLim',[min_rec max_rec]); 
+
 %set(h_surf_2,'specularstrength',0.2);
 %set(h_surf_2,'specularexponent',0.8);
 %set(h_surf_2,'SpecularColorReflectance',0.8);
@@ -757,8 +769,9 @@ end
  if evalin('base','zef.visualization_type') == 2
   h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
   set(h_axes_text,'tag','image_details');
-  h_text = text(0, 0.5, ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
-  set(h_text,'visible','on');
+  h_text = findobj(get(gcf,'Children'),'Tag','time_text');
+  set(h_text,'String',['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+  set(h_text,'visible','on','Tag','time_text');
   set(h_axes_text,'layer','bottom');
 end
 if evalin('base','zef.axes_visible')
@@ -775,6 +788,9 @@ end
 %drawnow;
 hold off;
 
+ evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+
+
 end
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
@@ -782,13 +798,17 @@ end
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
+        
+          zef_store_cdata(cdata_counter,cdata_info);
+        cdata_counter = cdata_counter + 1;
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
 
 
 for f_ind = frame_start + frame_step : frame_step : frame_stop
-              evalin('base',['zef.h_slider.Value=' num2str(f_ind*frame_step/(frame_stop-frame_start+frame_step)) ';']);
+             
 pause(0.01);
 stop_movie = evalin('base','zef.stop_movie');
 pause(0.01);
@@ -957,7 +977,13 @@ camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('ba
   set(h_axes_text,'layer','bottom');
   drawnow limitrate;
   %drawnow;
+  
+    zef_store_cdata(cdata_counter,cdata_info);
+        cdata_counter = cdata_counter + 1;
  
+  
+  evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+                 
 end
 
 if iscell(volumetric_distribution) && evalin('base','zef.visualization_type') == 2

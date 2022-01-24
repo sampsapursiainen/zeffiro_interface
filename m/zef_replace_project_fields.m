@@ -7,24 +7,8 @@ clear zef_i
 
 if zef.current_version < 4
     
-    if not(isfield(zef,'active_compartment_ind')) &&  isfield(zef,'brain_ind')
+    if isempty(zef.active_compartment_ind) &&  isfield(zef,'brain_ind')
         zef.active_compartment_ind = zef.brain_ind;
-    end
-    
-    if not(isfield(zef,'domain_labels_raw'))
-        zef.domain_labels_raw = [];
-    end
-    
-    if not(isfield(zef,'domain_labels'))
-        zef.domain_labels = [];
-    end
-    
-    if not(isfield(zef,'nodes_raw'))
-        zef.domain_labels = [];
-    end
-    
-    if not(isfield(zef,'tetra_raw'))
-        zef.tetra_raw = [];
     end
     
     if isfield(zef,'sigma_ind') && isempty(zef.domain_labels_raw)

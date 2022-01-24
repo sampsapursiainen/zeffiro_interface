@@ -281,8 +281,8 @@ zef_data.reuna_t = reuna_t;
 zef_data.reuna_p_inf = reuna_p_inf; 
 zef_data.reuna_submesh_ind = reuna_submesh_ind; 
 zef_data.reuna_type = reuna_type;
-assignin('base','zef_data',zef_data);
-evalin('base','zef_assign_data;');
+assignin('base', 'zef_data', zef_data);
+evalin('base', 'zef_assign_data;');
 end
 
 

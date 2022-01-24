@@ -1,4 +1,14 @@
-[zef.apply_transform_sensors,zef.apply_transform_reuna_p,zef.apply_transform_reuna_t] = process_meshes;
+for zef_i = 1 : length(zef.compartment_tags)
+if evalin('base',['zef.' zef.compartment_tags{zef_i} '_on'])
+    if evalin('base',['isfield(zef,''' zef.compartment_tags{zef_i} '_points_original_surface_mesh'')'])
+   evalin('base',['zef.' zef.compartment_tags{zef_i} '_points' '= zef.' zef.compartment_tags{zef_i} '_points_original_surface_mesh;'])
+   evalin('base',['zef.' zef.compartment_tags{zef_i} '_triangles' '= zef.' zef.compartment_tags{zef_i} '_triangles_original_surface_mesh;'])
+  evalin('base',['zef.' zef.compartment_tags{zef_i} '_submesh_ind' '= zef.' zef.compartment_tags{zef_i} '_submesh_ind_original_surface_mesh;'])
+    end
+end
+end
+
+[zef.apply_transform_sensors,zef.apply_transform_reuna_p,zef.apply_transform_reuna_t] = zef_process_meshes;
 
 evalin('base',['zef.' evalin('base','zef.current_sensors') '_points = zef.apply_transform_sensors(:,1:3);']);
 
@@ -37,6 +47,16 @@ for zef_i = 1 : length(zef.apply_transform_compartment_tags)
         
     end
     
+end
+
+for zef_i = 1 : length(zef.compartment_tags)
+    if evalin('base',['zef.' zef.compartment_tags{zef_i} '_on'])
+if evalin('base',['isfield(zef,''' zef.compartment_tags{zef_i} '_points_original_surface_mesh'')'])
+   evalin('base',['zef.' zef.compartment_tags{zef_i} '_points_original_surface_mesh' '= zef.' zef.compartment_tags{zef_i} '_points;']);
+    evalin('base',['zef.' zef.compartment_tags{zef_i} '_triangles_original_surface_mesh' '= zef.' zef.compartment_tags{zef_i} '_triangles;']);
+    evalin('base',['zef.' zef.compartment_tags{zef_i} '_submesh_ind_original_surface_mesh' '= zef.' zef.compartment_tags{zef_i} '_submesh_ind;']);  
+end
+    end
 end
 
 zef = rmfield(zef,{'apply_transform_sensors','apply_transform_reuna_p','apply_transform_reuna_t','apply_transform_compartment_tags'});

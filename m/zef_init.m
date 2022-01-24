@@ -73,6 +73,7 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.zeffiro_current_size = cell(0);
 zef_data.plugin_cell = [];
 zef_data.active_compartment_ind = [];
 zef_data.init_profile = [];
@@ -287,10 +288,8 @@ zef_data.sensors_attached_volume = [];
    zef_data.mesh_optimization_parameter = 1E-5; 
     zef_data.mesh_labeling_approach = 1; 
     
-         
  zef = zef_data;
  
-
  clear zef_i zef_data;
  
  zef_apply_init_profile;

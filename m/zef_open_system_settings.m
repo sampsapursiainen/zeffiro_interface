@@ -6,7 +6,7 @@ end
 
 set(zef.h_system_settings_table,'CellSelectionCallback',@zef_system_settings_table_selection);
 
-zef.ini_cell = readcell([zef.program_path '/zeffiro_interface.ini'],'FileType','text');
+zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 zef.h_system_settings_table.Data = zef.ini_cell;
 for zef_i = 1 : size(zef.ini_cell,1)
 evalin('base',['zef.h_system_settings_table.Data{zef_i,2} = zef.' zef.ini_cell{zef_i,3} ';']);

@@ -127,4 +127,73 @@ end;
    
 end
 
+
+if isequal(file_type,'asc')
+    
+file_name_1 = file_str;  
+
+fid = fopen(file_name_1);
+aux_dim = textscan(fid,'%s',1,'delimiter','\n', 'headerlines',1);
+aux_dim = str2num(aux_dim{1}{1});
+aux_dim = aux_dim(1:2);
+
+point_data = zeros(aux_dim(1),3);
+triangle_data = zeros(aux_dim(1),3);
+
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
+
+point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+point_data = cell2mat(point_data);
+point_data(:,1) = point_data(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
+point_data(:,2) = point_data(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
+point_data(:,3) = point_data(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
+
+fid = fopen(file_name_1);
+aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
+
+triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+triangle_data = cell2mat(triangle_data)+1;
+
+if merge_on    
+l1_points = evalin('base',['zef.' field_id '_points']);
+l2_points = point_data; 
+mesh_data_1 = [l1_points; l2_points];
+else
+mesh_data_1 = point_data; 
+end
+
+if merge_on
+l1_triangles = evalin('base',['zef.' field_id '_triangles']); 
+l2_triangles = triangle_data;
+if invert_on
+    l2_triangles = l2_triangles(:,[2 1 3]);
+end
+if isempty(l1_triangles)
+    max_val = 0;
+else
+    max_val = max(l1_triangles(:));
+end
+
+mesh_data_2 = [l1_triangles; l2_triangles+max_val];
+
+else
+
+mesh_data_2 = triangle_data;
+
+
+if invert_on
+    mesh_data_2 = mesh_data_1(:,[2 1 3]);
+end
+    end
+
+
+if merge_on
+    submesh_data = [submesh_data size(mesh_data_2,1)]; 
+else
+   submesh_data = [size(mesh_data_2,1)]; 
+end;       
+    
+end
+
 end

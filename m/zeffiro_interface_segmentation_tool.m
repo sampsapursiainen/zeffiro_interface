@@ -1,4 +1,7 @@
-zef_data = zeffiro_interface_segmentation_tool_app;
+set(groot,'defaultFigureVisible','off')
+zef_data = zeffiro_interface_segmentation_tool_app_exported;
+zef_data.h_zeffiro_window_main.Visible = zef.use_display;
+set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
@@ -32,8 +35,8 @@ set(zef.h_menu_lock_transforms_on,'MenuSelectedFcn','zef.lock_transforms_on = ab
 set(zef.h_menu_lock_sensor_names_on,'MenuSelectedFcn','zef.lock_sensor_names_on = abs(zef.lock_sensor_names_on - 1); zef_toggle_lock_sensor_names_on;');
 set(zef.h_menu_lock_sensor_sets_on,'MenuSelectedFcn','zef.lock_sensor_sets_on = abs(zef.lock_sensor_sets_on - 1); zef_toggle_lock_sensor_sets_on;');
 set(zef.h_menu_delete_compartment,'MenuSelectedFcn','zef_delete_compartment;zef_init_sensors_parameter_profile;');
-set(zef.h_menu_sensor_dat_points,'MenuSelectedFcn','zef_get_sensor_points;zef_init_sensors_parameter_profile;');
-set(zef.h_menu_sensor_dat_directions,'MenuSelectedFcn','zef_get_sensor_directions;');
+set(zef.h_menu_sensor_dat_points,'MenuSelectedFcn','[zef.file zef.file_path] = uigetfile(''*.dat''); zef_get_sensor_points;zef_init_sensors_parameter_profile;zef_update;');
+set(zef.h_menu_sensor_dat_directions,'MenuSelectedFcn','[zef.file zef.file_path] = uigetfile(''*.dat''); zef_get_sensor_directions;zef_init_sensors_parameter_profile;zef_update;');
 set(zef.h_menu_add_compartment,'MenuSelectedFcn','zef_add_compartment;');
 set(zef.h_menu_add_sensor_sets,'MenuSelectedFcn','zef_add_sensors;');
 set(zef.h_menu_delete_sensor_sets,'MenuSelectedFcn','zef_delete_sensor_sets;');
@@ -42,23 +45,30 @@ set(zef.h_menu_stl,'MenuSelectedFcn','zef.surface_mesh_type = ''stl''; zef.file 
 set(zef.h_menu_dat_points,'MenuSelectedFcn','zef.surface_mesh_type = ''points''; zef.file = 0;[zef.file zef.file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
 set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = ''triangles''; zef.file = 0;[zef.file zef.file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;');
 set(zef.h_menu_export_fem_mesh_as,'MenuSelectedFcn','zef_export_fem_mesh_as;');
-set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;end;');
+set(zef.h_menu_new_empty,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.new_empty_project = 1; zef_start_new_project;end;');
+
+set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.new_empty_project = 0; zef_start_new_project;end;');
 set(zef.h_menu_open,'MenuSelectedFcn','zef_load;');
 set(zef.h_menu_open_figure,'MenuSelectedFcn','zef_import_figure;zef_size_change;');
 set(zef.h_menu_save                                  ,'MenuSelectedFcn','zef.save_switch=7;zef_save;zef_update;');
 set(zef.h_menu_save_as                               ,'MenuSelectedFcn','zef.save_switch=1;zef_save;zef_update;');
 set(zef.h_menu_save_figures_as                        ,'MenuSelectedFcn','zef.save_switch=9;zef_save;zef_update;');
 set(zef.h_menu_print_to_file                         ,'MenuSelectedFcn','zef.save_switch=10;zef_save;zef_update;');
-set(zef.h_menu_exit                                  ,'MenuSelectedFcn','zef_arrange_windows(''close'',''windows'',''all''); close(zef.h_zeffiro_window_main);');
+set(zef.h_menu_exit                                  ,'MenuSelectedFcn','zef_close_all;');
 set(zef.h_menu_export_volume_data                    ,'MenuSelectedFcn','zef.save_switch=6;zef_save;zef_update;');
 set(zef.h_menu_export_segmentation_data                     ,'MenuSelectedFcn','zef.save_switch=5;zef_save;zef_update;');
 set(zef.h_menu_export_lead_field                            ,'MenuSelectedFcn','zef.save_switch=2;zef_save;zef_update;');
 set(zef.h_menu_export_source_space                      ,'MenuSelectedFcn','zef.save_switch=3;zef_save;zef_update;');
 set(zef.h_menu_export_sensors                     ,'MenuSelectedFcn','zef.save_switch=4;zef_save;zef_update;');
 set(zef.h_menu_export_reconstruction                        ,'MenuSelectedFcn','zef.save_switch=8;zef_save;zef_update;');
-set(zef.h_menu_new_segmentation_from_folder          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import an ASCII segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_segmentation;zef_build_compartment_table;end;');
-set(zef.h_menu_import_segmentation_update_from_folder,'MenuSelectedFcn','zef_import_segmentation;zef_update;');
-set(zef.h_menu_import_new_project_from_folder        ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import an ASCII  project from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_project;zef_build_compartment_table;end;');
+
+set(zef.h_menu_new_segmentation_from_folder_legacy          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.new_empty_project = 0;zef_start_new_project; zef_import_segmentation_legacy;zef_build_compartment_table;end;');
+set(zef.h_menu_import_segmentation_update_from_folder_legacy,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation_legacy;zef_update;');
+
+set(zef.h_menu_new_segmentation_from_folder          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.new_empty_project = 1;zef_start_new_project; zef_import_segmentation;zef_build_compartment_table;end;');
+set(zef.h_menu_import_segmentation_update_from_folder,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation;zef_update;');
+
+set(zef.h_menu_import_new_project_from_folder        ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a project from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_project;zef_build_compartment_table;end;');
 set(zef.h_menu_import_project_update_from_folder    ,'MenuSelectedFcn','zef_import_project;zef_update;');
 set(zef.h_menu_import_volume_data                    ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a new mesh and conductivity?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_start_new_project;[zef.nodes,zef.tetra,zef.sigma,zef.brain_ind,zef.surface_triangles]=zef_import([]); zef_update_fig_details; zef.import_mode = 1; end;');
 set(zef.h_menu_import_measurement_data               ,'MenuSelectedFcn','zef.inv_import_type = 1; zef_inv_import;zef_update;');
@@ -75,7 +85,7 @@ set(zef.h_menu_butterfly_plot                        ,'MenuSelectedFcn','zef_but
 set(zef.h_menu_find_synthetic_source                 ,'MenuSelectedFcn','find_synthetic_source;zef_update;');
 set(zef.h_menu_generate_eit_data                     ,'MenuSelectedFcn','find_synthetic_eit_data;zef_update;');
 set(zef.h_menu_mesh_tool                             ,'MenuSelectedFcn','zef_mesh_tool;zef_update;');
-set(zef.h_menu_mesh_visualization_tool                             ,'MenuSelectedFcn','zeffiro_interface_mesh_visualization_tool;zef_update;');
+set(zef.h_menu_mesh_visualization_tool               ,'MenuSelectedFcn','zeffiro_interface_mesh_visualization_tool;zef_update;');
 set(zef.h_menu_figure_tool                           ,'MenuSelectedFcn','zef_figure_tool;zef_update;');
 set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_parcellation_tool;zef_update;');
 set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef_update;');
@@ -130,3 +140,6 @@ zef.zeffiro_window_main_relative_size = zef_get_relative_size(zef.h_zeffiro_wind
 set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_size = zef_change_size_function(zef.h_zeffiro_window_main,zef.zeffiro_window_main_current_size,zef.zeffiro_window_main_relative_size);');
 
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
+
+set(zef.h_zeffiro_window_main,'DeleteFcn','zef_close_all;');
+

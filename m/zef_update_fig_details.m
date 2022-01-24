@@ -3,6 +3,7 @@
 
 zef.aux_field = cell(0);
 zef_j = 0;
+if isfield(zef,[zef.current_sensors '_points'])
     if size(evalin('base',['zef.' zef.current_sensors '_visible_list']),1)==size(evalin('base',['zef.' zef.current_sensors '_points']),1)
 for zef_i = 1 : size(evalin('base',['zef.' zef.current_sensors '_points']),1)
 if evalin('base',['zef.' zef.current_sensors '_visible_list(' num2str(zef_i) ')'])
@@ -11,6 +12,7 @@ if evalin('base',['zef.' zef.current_sensors '_visible_list(' num2str(zef_i) ')'
 end
 end
     end
+end
 set(zef.h_sensor_visible_color,'String',zef.aux_field);
 zef.aux_field = cell(0);
 zef_j = 0;

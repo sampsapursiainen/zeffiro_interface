@@ -32,27 +32,32 @@ if isequal(get(h(i),'Tag'),'togglecontrolsbutton')
     set(h(i),'units','normalized');
     togglecontrolsbuttonposition = get(h(i),'position');
     if toggle_status == 1 
-        set(h(i),'Position',[0.83 0.95 0.14 0.05])
+        toggle_scale = 83/68;
+        set(h(i),'Position',[toggle_scale*h(i).Position(1) h(i).Position(2:4) ])
     else
-         set(h(i),'Position',[0.68 0.95 0.14 0.05])
+        toggle_scale = 68/83;
+         set(h(i),'Position',[toggle_scale*h(i).Position(1) h(i).Position(2:4)])
     end
     set(h(i),'units','pixels');    
 end
 end
 
-set(h_axes,'units','normalize');
-axes_position = get(h_axes,'position');
+set(h_axes,'units','normalized');
+h_colorbar = findobj(h,'Tag','rightColorbar');
+set(h_colorbar,'units','normalized');
 if toggle_status == 1 
-    set(h_axes,'Position',[0.05 0.34 0.9 0.6]);
+    toggle_scale = 83/68;
+    set(h_axes,'Position',[toggle_scale*h_axes.Position(1) h_axes.Position(2:4) ]);
     h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))
-        set(h_colorbar,'Position',[0.8769 0.647 0.01 0.29]);
+        set(h_colorbar,'Position',[toggle_scale*h_colorbar.Position(1) h_colorbar.Position(2:4) ]);
     end
 else
-    set(h_axes,'Position',[0.05 0.34 0.6 0.6])
+    toggle_scale = 68/83;
+    set(h_axes,'Position',[toggle_scale*h_axes.Position(1) h_axes.Position(2:4) ])
         h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))
-        set(h_colorbar,'Position',[0.6 0.647 0.01 0.29]);
+        set(h_colorbar,'Position',[toggle_scale*h_colorbar.Position(1) h_colorbar.Position(2:4) ]);
     end
 end
 

@@ -4,7 +4,7 @@ zef.h_zeffiro = figure(...
 'Units','normalized',...
 'Position',[0.2    0.3    0.40    0.5134],...
 'Renderer',get(0,'defaultfigureRenderer'),...
-'Visible',get(0,'defaultfigureVisible'),...
+'Visible',zef.use_display,...
 'Color',get(0,'defaultfigureColor'),...
 'CloseRequestFcn','closereq;',...
 'CurrentAxesMode','manual',...
@@ -38,6 +38,9 @@ zef.stop_movie = 0;
 zef.h_axes1 = uiaxes('Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.05 0.34 0.60 0.60],'FontSize',0.587962962962963,'Tag','axes1');
 uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Loop on/count:','HorizontalAlignment','left','Position',[0.68 0.10 0.12 0.03]);
 
+uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','','HorizontalAlignment','left','Position',[0.03 0.95 0.3 0.03],'Tag','time_text');
+
+
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Time:','HorizontalAlignment','left','Position',[0.68 0.90 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color min:','HorizontalAlignment','left','Position',[0.68 0.85 0.12 0.03]);
 uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Color max:','HorizontalAlignment','left','Position',[0.68 0.80 0.12 0.03]);
@@ -49,7 +52,7 @@ zef.h_toggle_edges = uicontrol('Tag','toggleedgesbutton','UserData',1,'Style','p
 zef.h_colorscale_min_slider = uicontrol('Tag','colorscale_min_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.85 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.colorscale_min_slider = zef_update_colorscale_min; else; zef_update_colorscale_min(gcf); end;');
 zef.h_colorscale_min_slider.UserData = zef.colorscale_min_slider; 
 zef.h_colorscale_max_slider = uicontrol('Tag','colorscale_max_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.80 0.17 0.03],'Min',-1,'Max',1,'Value',0,'Sliderstep',[0.01 0.01],'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.colorscale_max_slider = zef_update_colorscale_max; else; zef_update_colorscale_max(gcf); end;');
-zef.h_colorscale_max_slider.UserData = zef.colorscale_min_slider;
+zef.h_colorscale_max_slider.UserData = zef.colorscale_max_slider;
 zef.h_update_colormap = uicontrol('Tag','colormapselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.15 0.08 0.03],'string',zef.colormap_items,'Value',zef.update_colormap,'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.update_colormap = zef.h_update_colormap.Value; end; zef.h_aux = findobj(get(gcf,''Children''),''Tag'',''axes1'').Colormap; zef.h_aux = zef_colormap(zef.h_update_colormap.Value); zef = rmfield(zef,''h_aux''); zef_update_contrast_and_brightness(gcf);');
 
 zef.h_update_colorscale = uicontrol('Tag','colorscaleselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.89 0.15 0.08 0.03],'string',{'Linear','Logarithmic'},'Value',zef.update_colorscale,'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.update_colorscale = zef_update_colorscale; else; zef_update_colorscale(gcf); end;');
@@ -66,12 +69,16 @@ zef.h_update_diffusion = uicontrol('Tag','update_diffusion_slider','Style','slid
 zef.h_update_specular = uicontrol('Tag','update_specular_slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.25 0.17 0.03],'Min',0,'Max',1,'Value',zef.update_specular,'Sliderstep',[0.01 0.01],'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.update_specular = zef_update_specular; else; zef_update_specular(gcf);end');
 zef.h_update_lights = uicontrol('Tag','lightsselection','Style','popupmenu','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.20 0.17 0.03],'string',{'Default (vertical)','Lights off','Add x-lights','Add y-lights','Add z-lights','Add headlight'},'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.update_lights = zef_update_lights; else; zef.update_lights = zef_update_lights(gcf);end');
 
-zef.h_slider=uicontrol('Tag','slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.90 0.17 0.03],'Min',1e-6,'Max',1,'Value',1e-5,'Sliderstep',[1e-5 0.1],'Callback','zef_slidding_callback;');
-zef.h_reset_figure_tool_sliders = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.68 0.03 0.09 0.05],'String','Reset','Callback','zef_set_figure_tool_sliders(0);zef.h_reset_figure_tool_sliders.Value=0;');
-zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.78 0.03 0.09 0.05],'String','Stop','Callback',@zef_callbackstop);
-zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.88 0.03 0.09 0.05],'String','Pause','Callback',@zef_callbackpause);
-zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.89 0.10 0.03 0.03],'Callback','zef.loop_movie = get(zef.h_loop_movie,''value'');','HorizontalAlignment','left');
-zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.10 0.03 0.03],'String','Loop visualization','Callback','zef.loop_movie_count = str2num(get(zef.h_loop_movie_count,''string''));','HorizontalAlignment','right');
+
+zef.h_reset_figure_tool_sliders = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.68 0.03 0.065 0.05],'String','Reset','Callback','zef_set_figure_tool_sliders(0);zef.h_reset_figure_tool_sliders.Value=0;');
+zef.h_play_movie = uicontrol('Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.755 0.03 0.065 0.05],'String','Play','Callback','zef_play_cdata(max(1,double(get(findobj(get(gcf,''Children''),''Tag'',''loop_movie''),''UserData''))*get(findobj(get(gcf,''Children''),''Tag'',''loop_count''),''UserData'')));');
+zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.83 0.03 0.065 0.05],'String','Stop','Callback',@zef_callbackstop);
+zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.905 0.03 0.065 0.05],'String','Pause','Callback',@zef_callbackpause);
+
+
+zef.h_slider=uicontrol('Tag','slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.90 0.17 0.03],'Min',1e-6,'Max',1,'Value',1e-5,'Sliderstep',[0.01 0.01],'Callback','zef_slidding_callback;');
+zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.89 0.10 0.03 0.03],'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.loop_movie = get(gcbo,''value''); end;  set(gcbo,''UserData'',get(gcbo,''value''));','HorizontalAlignment','left','Tag','loop_movie');
+zef.h_loop_movie_count = uicontrol('Style','Edit','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.94 0.10 0.03 0.03],'String','Loop visualization','Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.loop_movie_count = str2num(get(gcbo,''string'')); end; set(gcbo,''UserData'',str2num(get(gcbo,''string'')));','HorizontalAlignment','right','Tag','loop_count');
 %End controls
 
 uicontrol('Tag','colormapselectiontext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Colormap:','HorizontalAlignment','left','Position',[0.68 0.15 0.12 0.03]);
@@ -131,6 +138,10 @@ uicontrol(...
 'Position',[0.45 0.23 0.20 0.03],...
 'Children',[],'FontSize',0.461256944444443);
 
+uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Copyright © 2018- Sampsa Pursiainen & ZI Development Team. See: https://github.com/sampsapursiainen/zeffiro_interface','HorizontalAlignment','left','Position',[0.03 0.005 0.6 0.02],'Tag','copyright_text');
+
+
+
 zef_update_fig_details;
 
 zef.h = get(zef.h_zeffiro,'Children');
@@ -142,3 +153,6 @@ set(zef.h_zeffiro,'handlevisibility','on');
 set(zef.h_zeffiro,'WindowButtonDownFcn','zef.h_zeffiro = zef.h_zeffiro; zef.h_axes1 = findobj(get(zef.h_zeffiro,''Children''),''Tag'',''axes1'');')
 
 zef.h_zeffiro.GraphicsSmoothing = 'off';
+
+set(findobj(get(gcf,'Children'),'Tag','loop_count'),'UserData',str2num(get(findobj(get(gcf,'Children'),'Tag','loop_count'),'String')));
+set(findobj(get(gcf,'Children'),'Tag','loop_movie'),'UserData',get(findobj(get(gcf,'Children'),'Tag','loop_count'),'Value'));

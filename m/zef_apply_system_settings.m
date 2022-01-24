@@ -1,4 +1,4 @@
-zef.ini_cell = readcell([zef.program_path '/zeffiro_interface.ini'],'FileType','text');
+zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 for zef_i =  1 : size(zef.ini_cell,1)   
 if isequal(zef.ini_cell{zef_i,4},'number')
 evalin('base',['zef.' zef.ini_cell{zef_i,3} ' = ' num2str(zef.ini_cell{zef_i,2}) ';']);

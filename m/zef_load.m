@@ -3,10 +3,12 @@
 
 zef_data = struct;
 
+if zef.use_display 
 if not(isempty(zef.save_file_path)) && not(isequal(zef.save_file_path,0))  
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project',zef.save_file_path);
 else
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project');
+end
 end
 if not(isequal(zef.file,0))
     
@@ -46,6 +48,11 @@ zef_data.mlapp = 1;
  zef_init_init_profile;
  zef_init_parameter_profile;
  
+zef_apply_system_settings;
+if ismember(zef.start_mode,{'nodisplay','display'})
+zef.use_display = 0;
+end
+ 
 clear zef_data;
 zef_reopen_segmentation_tool;
 zef_mesh_tool;
@@ -55,6 +62,8 @@ zef_update;
 zef_set_figure_tool_sliders
 
 zef_plugin;
+
+
 
 end;
 
