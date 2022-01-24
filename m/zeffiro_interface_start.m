@@ -11,7 +11,7 @@ zef.use_display = 0;
 end
     
 if not(zef.use_display)
-    addpath(genpath([zef.program_path '/m_no_display']));
+    addpath(genpath([zef.program_path '/nodisplay']));
 end
 
 if gpuDeviceCount > 0 & zef.use_gpu == 1
