@@ -103,6 +103,23 @@ evalin('base','zef_assign_data;');
 clear zef_data;
 evalin('base','zef_save');
 option_counter = option_counter + 2;
+elseif isequal(varargin{option_counter},lower('export_fem_mesh'))
+export_fem_mesh_file = varargin{option_counter+1};
+[file_path, file_1, file_2] = fileparts(export_fem_mesh_file );
+if isempty(file_path)
+file_path = './data/';
+end
+if isempty(file_2)
+file_2 = '.mat';
+end
+zef_data.file_path = [file_path];
+zef_data.file = [file_1 file_2];
+zef_data.save_switch = 1; 
+assignin('base','zef_data',zef_data);
+evalin('base','zef_assign_data;');
+clear zef_data;
+evalin('base','zef_export_fem_mesh_as');
+option_counter = option_counter + 2;
 elseif ismember(varargin{option_counter},lower('open_figure'))
 open_figure_file = varargin{option_counter+1};
 if not(iscell(open_figure_file))
