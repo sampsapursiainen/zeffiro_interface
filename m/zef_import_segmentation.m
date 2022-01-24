@@ -145,7 +145,7 @@ for i = 1 : size(ini_cell,1)
             end
         end
 
-        evalin('base','zef_init_parameter_profile;'); 
+    %    evalin('base','zef_init_parameter_profile;'); 
         evalin('base','zef_apply_parameter_profile;'); 
         evalin('base','zef_build_compartment_table;');
         
@@ -220,7 +220,7 @@ for i = 1 : size(ini_cell,1)
         end
        
 
-        evalin('base','zef_init_sensors_parameter_profile;'); 
+       % evalin('base','zef_init_sensors_parameter_profile;'); 
         evalin('base','zef_apply_parameter_profile;'); 
 evalin('base','zef_build_sensors_table;');
         
