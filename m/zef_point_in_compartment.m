@@ -133,7 +133,7 @@ time_val = toc;
 
 if not(isempty(compartment_info))
 if mod(i_ind,bar_ind)==0
-waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+waitbar([i/length_I compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 end
 end
 
@@ -195,7 +195,7 @@ time_val = toc;
 
 if not(isempty(compartment_info))
     if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-waitbar(restart_ind/n_restarts,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
     end
 
@@ -217,7 +217,7 @@ end
 
 
 if not(isempty(compartment_info))
-waitbar(1,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
+waitbar([1 compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
 end
 
 
