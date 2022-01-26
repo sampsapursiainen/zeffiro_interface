@@ -24,7 +24,7 @@ size_center_points = size(source_points,2);
 center_points = source_points;
 
 if n_rep == 1
-h = waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']); 
+h = waitbar([0 0],['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']); 
 end
 
 multires_dec{n_rep}{n_levels} = [1:size_center_points]';
@@ -54,7 +54,7 @@ MdlKDT = KDTreeSearcher(source_points');
 source_interpolation_aux = knnsearch(MdlKDT,center_points');
 
 
-waitbar((n_rep*(n_decompositions-1)+k)/(n_levels*n_decompositions),h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
+waitbar([k/n_levels n_rep/n_decompositions],h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
 
 multires_ind{n_rep}{k} = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
