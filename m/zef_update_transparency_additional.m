@@ -1,4 +1,4 @@
-function slider_value_new = zef_update_transparency_additional(varargin)
+   function slider_value_new = zef_update_transparency_additional(varargin)
 
 if not(isempty(varargin))
 h_figure = varargin{1};
@@ -16,7 +16,7 @@ end
 
 slider_value_new = h_object.Value;
 
-h = findobj(h,'Tag','additional');
+h = findobj(h,'-regexp','Tag','additional*');
 
 kappa = 1.05.^(-100*(slider_value_new));
 
