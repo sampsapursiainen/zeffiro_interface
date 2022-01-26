@@ -31,7 +31,6 @@ MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind{1} = knnsearch(MdlKDT,center_points);
 source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_ind), length(brain_ind), 4); 
 
-waitbar(1,h,['Interpolation 1. Ready: ' datestr(datevec(now)) '.']);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -74,7 +73,7 @@ source_positions_aux = source_positions;
 
 for ab_ind = 1 : length(aux_brain_ind)
     
-    waitbar(0,h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
+    waitbar((ab_ind+1)/(length(aux_brain_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
 
 aux_point_ind = unique(gather(source_interpolation_ind{1}));
 source_positions = source_positions_aux(aux_point_ind,:);
@@ -91,13 +90,12 @@ source_interpolation_ind{2}{ab_ind} = (s_ind_1{ab_ind}(source_interpolation_aux)
 triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triangles); 
 
-waitbar(1,h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
 
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-waitbar(0,h,['Interpolation 3.']);
+waitbar(1,h,['Interpolation 3.']);
 
 aux_p = [];
 aux_t = [];
@@ -114,7 +112,7 @@ center_points = (1/3)*(aux_p(aux_t(:,1),:) + aux_p(aux_t(:,2),:) + aux_p(aux_t(:
 MdlKDT = KDTreeSearcher(center_points);
 source_interpolation_ind{3} = knnsearch(MdlKDT,source_positions);
 
-waitbar(1,h,['Interpolation 3.']);
+
 
 if nargout == 0
 assignin('base','zef_data', source_interpolation_ind);
