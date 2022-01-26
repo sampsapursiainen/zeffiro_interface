@@ -13,9 +13,10 @@ end
 
 lattice_res = evalin('base','zef.cone_lattice_resolution');
 s_p = evalin('base','zef.source_positions');
+
 cone_field_size = size(s_p,1);
 
-aux_ind_1 = [1:cone_field_size];
+aux_ind_1 = unique(evalin('base','zef.source_interpolation_ind{1}'));
 
 clipped = 0;
 
@@ -75,14 +76,14 @@ if iscell(cone_field)
 cone_field = cone_field{rec_ind};
 end
 
-cone_field = reshape(cone_field,3,cone_field_size)';
+cone_field = reshape(cone_field,3,length(cone_field(:))/3)';
 norm_cone_field = sqrt(sum(cone_field.^2,2));
 
 cone_field = cone_field(aux_ind_1,:)./max(norm_cone_field);
 
 norm_cone_field = norm_cone_field(aux_ind_1);
 
-n_colormap = 2048;
+n_colormap = evalin('base','zef.colormap_size');
 cone_colormap = zef_blue_brain_1_colormap(evalin('base','zef.colortune_param'),n_colormap);
 
 min_x = min(s_p(:,1));
