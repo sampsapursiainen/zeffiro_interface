@@ -4,15 +4,23 @@ function h_waitbar = waitbar(varargin)
 progress_value = varargin{1};
 progress_value = min(1,progress_value(:));
 progress_value = max(0,progress_value(:));
+progress_bar_text = '';
 
 
 visible_value = evalin('base','zef.h_zeffiro.Visible');
 
 if ishandle(varargin{2})
     h_waitbar = varargin{2};
+    if length(varargin)>2
      progress_bar_text = varargin{3};
+    else
+    h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
+    progress_bar_text = h_text.String; 
+    end
 else
+    if length(varargin) > 1
     progress_bar_text = varargin{2};
+    end
 h_waitbar = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
 'Units','normalized',...
