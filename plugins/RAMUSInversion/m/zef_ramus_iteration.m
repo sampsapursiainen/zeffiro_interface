@@ -3,7 +3,7 @@
 function [z,reconstruction_information] = zef_ramus_iteration(void)
 
 
-h = waitbar(0,['RAMUS iteration.']);
+h = waitbar([0 0],['RAMUS iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 n_multires = evalin('base','zef.ramus_multires_n_levels');
@@ -77,7 +77,7 @@ z_vec = ones(size(L_aux,2),1);
 [f] = zef_getTimeStep(f_data, f_ind, true); 
 
 if f_ind == 1
-waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+waitbar([0 ],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 n_ias_map_iter = evalin('base','zef.ramus_n_map_iterations');
 
@@ -165,9 +165,9 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;    
-waitbar(i/n_iter(j),h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+waitbar([i/n_iter(j) n_rep/n_decompositions],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar(i/n_iter(j),h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar([i/n_iter(j) n_rep/n_decompositions],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
 end;
 d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
