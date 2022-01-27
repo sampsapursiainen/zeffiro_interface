@@ -124,9 +124,6 @@ aux_vec_3 = sqrt(sum(aux_vec_5.*aux_vec_5));
 aux_vec_3 = (aux_vec_3.*aux_vec_3).*aux_vec_3;
 aux_vec_6 = sum(aux_vec_2./aux_vec_3)/(4*pi);
 ind_vec_aux(block_ind) = aux_vec_6(:);
-
-
-
 time_val = toc;
 
 
@@ -197,8 +194,8 @@ if not(isempty(compartment_info))
     if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
 waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
-    end
-
+end
+    
 end
 
 ind_inc = 0;
@@ -222,10 +219,11 @@ end
 
 
 
+end
+
+
 ind_vec(I) = gather(ind_vec_aux);
 I = find(ind_vec > evalin('base','zef.meshing_threshold'));
-
-
 
 end
 
