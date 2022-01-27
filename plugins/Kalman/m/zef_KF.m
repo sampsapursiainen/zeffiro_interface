@@ -82,6 +82,7 @@ iter_ind = 0;
 source_count_aux = 0;
 
 for n_rep = 1:n_decompositions
+    waitbar([n_rep/n_decompositions, 0],h,['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.']);
     iter_ind = iter_ind + 1;
     n_mr_dec = length(multires_dec{n_rep}{1});
     
@@ -115,7 +116,9 @@ for n_rep = 1:n_decompositions
     P_store = cell(0);
         
     for f_ind = 1: number_of_frames
-        waitbar(f_ind/number_of_frames,h,['Kalman iterations ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        waitbar([n_rep/n_decompositions, f_ind/number_of_frames],h,...
+            ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
+            'Filtering ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
         f = zef_getTimeStep(f_data, f_ind, true);
         % Prediction 
         [m,P] = kf_predict(m, P, A, Q);
@@ -134,7 +137,9 @@ for n_rep = 1:n_decompositions
     z_inverse_results{number_of_frames}{n_rep} = m_s(mr_ind);
 
     for f_ind = number_of_frames - 1:-1:1
-        waitbar(f_ind/number_of_frames,h,['Kalman RTS smoothing ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        waitbar([n_rep/n_decompositions, f_ind/number_of_frames],h,...
+            ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
+            'Smoothing' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     
         P = P_store{f_ind};
         m = z_inverse{f_ind};
