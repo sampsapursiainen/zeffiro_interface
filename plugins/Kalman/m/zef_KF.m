@@ -137,15 +137,21 @@ for n_rep = 1:n_decompositions
     z_inverse_results{number_of_frames}{n_rep} = m_s(mr_ind);
 
     for f_ind = number_of_frames - 1:-1:1
-        waitbar([n_rep/n_decompositions, f_ind/number_of_frames],h,...
+        waitbar([n_rep/n_decompositions, 1 - f_ind/number_of_frames],h,...
             ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
-            'Smoothing' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+            'Smoothing ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     
         P = P_store{f_ind};
         m = z_inverse{f_ind};
-        P_ = A * P * A' + Q;
-        m_ = A * m;
-        G =  (P * A) / P_;
+        if (isdiag(A) && all(diag(A) - 1) < eps)
+            P_ = P + Q;
+            m_ = m;
+            G =  P / P_;
+        else
+            P_ = A * P * A' + Q;
+            m_ = A * m;
+            G =  (P * A) / P_;
+        end
         m_s = m + G * (m_s - m_);
         z_inverse_smoothed{f_ind} = m_s;
         z_inverse_results{f_ind}{n_rep} = m_s(mr_ind);
