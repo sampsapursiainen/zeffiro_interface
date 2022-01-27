@@ -3,6 +3,20 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [source_interpolation_ind] = source_interpolation(void)
 
+
+    if evalin('base','isequal(size(zef.L,2),size(zef.source_directions,1))')
+    evalin('base','zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L),1)))),:);');
+    elseif evalin('base','isequal(size(zef.L,2),3*size(zef.source_directions,1))')
+    evalin('base','zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
+    end
+    if evalin('base','isequal(size(zef.L,2),size(zef.source_positions,1))')
+    evalin('base','zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L),1)))),:);');
+        evalin('base','zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))))');
+    elseif evalin('base','isequal(size(zef.L,2),3*size(zef.source_positions,1))')
+          evalin('base','zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
+        evalin('base','zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))));');
+    end
+
 source_interpolation_ind = [];
 brain_ind = evalin('base','zef.brain_ind');
 source_positions = evalin('base','zef.source_positions');
@@ -10,7 +24,7 @@ nodes = evalin('base','zef.nodes');
 tetra = evalin('base','zef.tetra');
 
 if not(isempty(brain_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
-
+ 
     h = waitbar(0,['Interpolation 1.']);   
     
 if evalin('base','zef.location_unit_current') == 2 
@@ -21,7 +35,6 @@ if evalin('base','zef.location_unit_current') == 3
 zef.source_positions = 1000*source_positions;
 end
 
-
 [center_points I center_points_ind] = unique(tetra(brain_ind,:));
 source_interpolation_ind{1} = zeros(length(center_points),1);
 source_interpolation_aux = source_interpolation_ind{1};
@@ -30,8 +43,6 @@ center_points = nodes(center_points,:);
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind{1} = knnsearch(MdlKDT,center_points);
 source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_ind), length(brain_ind), 4); 
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -111,8 +122,6 @@ center_points = (1/3)*(aux_p(aux_t(:,1),:) + aux_p(aux_t(:,2),:) + aux_p(aux_t(:
 
 MdlKDT = KDTreeSearcher(center_points);
 source_interpolation_ind{3} = knnsearch(MdlKDT,source_positions);
-
-
 
 if nargout == 0
 assignin('base','zef_data', source_interpolation_ind);
