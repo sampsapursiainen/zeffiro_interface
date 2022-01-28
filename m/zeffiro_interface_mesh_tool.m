@@ -46,7 +46,9 @@ set(zef.h_pushbutton23,'ButtonPushedFcn','zef_apply_transform;');
 set(zef.h_pushbutton34,'ButtonPushedFcn','zef_postprocess_finite_element_mesh');
 set(zef.h_forward_simulation_update_from_profile,'ButtonPushedFcn','zef.forward_simulation_table = readcell([zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_forward_simulation.ini''],''filetype'',''tex'',''delimiter'','','');zef.h_forward_simulation_table.Data = zef.forward_simulation_table;');
 
+
 set(zef.h_forward_simulation_table,'CellEditCallback','zef.h_forward_simulation_script.Value = zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1), zef.forward_simulation_column_selected};')
+set(zef.h_forward_simulation_table,'HandleVisibility','off');
 set(zef.h_forward_simulation_script,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'DisplayDataChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'CellSelectionCallback',@zef_forward_simulation_table_selection);
