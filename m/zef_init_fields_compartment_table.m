@@ -1,6 +1,7 @@
 zef.compartment_table_size = 9;
 zef.h_compartment_table.ColumnName(1:zef.compartment_table_size) =     {'ID','On','Name','Visible','Surface nodes','Surface triangles','Merge','Invert normal','Activity' };
 zef.h_compartment_table.ColumnEditable(1:zef.compartment_table_size) = logical([1 1 1 1 0 0 1 1 1]);
+zef.h_compartment_table.ColumnEditable(zef.compartment_table_size:end) = true;
 zef.h_compartment_table.ColumnFormat(1:zef.compartment_table_size) = {'numeric','logical','char','logical','numeric','numeric','logical','logical',zef.compartment_activity};
 zef.aux_field_1{zef_i,1} = zef_i;
 zef.aux_field_1{zef_i,2}  = evalin('base',['zef.' zef.compartment_tags{zef_j} '_on']);

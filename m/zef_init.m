@@ -295,5 +295,5 @@ zef_data.sensors_attached_volume = [];
  zef_apply_init_profile;
  zef_init_compartments;
 zef_init_sensors;
- zef_apply_parameter_profile;
+ zef_init_parameter_profile;
  
