@@ -7,7 +7,6 @@ for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end   
 
-set(zef.h_compartment_table,'columnformat',{'numeric','char','logical','logical','logical','logical',zef.compartment_activity,'numeric'})
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_sensors_name_table,'columnformat',{'numeric','char','logical'});

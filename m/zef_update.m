@@ -17,7 +17,7 @@ if not(isnan(zef.aux_field_1{zef_i,1}))
 evalin('base',['zef.' zef.compartment_tags{zef_j}, '_priority = ' num2str(zef.aux_field_1{zef_i,1}) ';']);
 zef.aux_field_2(zef_j) = 1;
  zef.aux_field_3(zef_i) = 1;
-elseif isnan(zef.aux_field_1{zef_i,1}) && zef.aux_field_1{zef_i,3}
+elseif isnan(zef.aux_field_1{zef_i,1}) && zef.aux_field_1{zef_i,2}
 evalin('base',['zef.' zef.compartment_tags{zef_j}, '_priority = ' num2str(zef_i) ';']);
 zef.aux_field_2(zef_j) = 1;
 zef.aux_field_3(zef_i) = 1;
@@ -27,13 +27,9 @@ zef.aux_field_3(zef_i) = 0;
 end
 
 if zef.aux_field_2(zef_j)
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_name = ''' zef.aux_field_1{zef_i,2} ''';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_on = ' num2str(double(zef.aux_field_1{zef_i,3})) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_visible = ' num2str(double(zef.aux_field_1{zef_i,4})) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_merge = ' num2str(double(zef.aux_field_1{zef_i,5})) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_invert = ' num2str(double(zef.aux_field_1{zef_i,6})) ';']);
-evalin('base',['zef.' zef.compartment_tags{zef_j}, '_sources = ' num2str(find(ismember(zef.h_compartment_table.ColumnFormat{7},zef.aux_field_1{zef_i,7}),1)-2) ';']);
 
+    zef_get_data_compartment_table;
+    
 zef_n = 0;
 for zef_k =  1  : size(zef.parameter_profile,1)
      if isequal(zef.parameter_profile{zef_k,8},'Segmentation') && isequal(zef.parameter_profile{zef_k,6},'On') && isequal(zef.parameter_profile{zef_k,7},'On')
@@ -127,34 +123,9 @@ end
 [~, zef.aux_field_2] = sort(zef.aux_field_2);
 zef.compartment_tags = zef.compartment_tags(zef.aux_field_2);
 
-for zef_i = 1 : length(zef.compartment_tags)
-
-zef.aux_field_1{zef_i,1} = zef_i;
-evalin('base',['zef.' zef.compartment_tags{zef_i} '_priority = ' num2str( zef_i ) ';']);
-zef.aux_field_1{zef_i,2} = evalin('base',['zef.' zef.compartment_tags{zef_i} '_name']);
-zef.aux_field_1{zef_i,3} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_on']));
-zef.aux_field_1{zef_i,4} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_visible']));
-zef.aux_field_1{zef_i,5} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_merge']));
-zef.aux_field_1{zef_i,6} = logical(evalin('base',['zef.' zef.compartment_tags{zef_i} '_invert']));
-zef.aux_field_1{zef_i,7} = zef.compartment_activity{evalin('base',['zef.' zef.compartment_tags{zef_i} '_sources'])+2};
-zef_n = 0; 
-for zef_k =  1  : size(zef.parameter_profile,1)
-     if isequal(zef.parameter_profile{zef_k,8},'Segmentation') && isequal(zef.parameter_profile{zef_k,6},'On') && isequal(zef.parameter_profile{zef_k,7},'On')
-  zef_n = zef_n + 1; 
-    zef.h_compartment_table.ColumnName{zef_n+7} = zef.parameter_profile{zef_k,1};
-   if isequal(zef.parameter_profile{zef_k,3},'Scalar')
-        zef.aux_field_1{zef_i,zef_n+7} = num2str(evalin('base',['zef.' zef.compartment_tags{zef_i} '_' zef.parameter_profile{zef_k,2}]));
-   elseif isequal(zef.parameter_profile{zef_k,3},'String')
-  zef.aux_field_1{zef_i,zef_n + 7} = (evalin('base',['zef.' zef.compartment_tags{zef_i} '_' zef.parameter_profile{zef_k,2} ]));
-   end
-    end
-end
-
-end
+zef_update_compartment_table_data;
 
 zef.compartment_tags = fliplr(zef.compartment_tags);
-
-zef.h_compartment_table.Data = zef.aux_field_1;
 
 zef.h_aux = allchild(zef.h_menu_window);
 
