@@ -29,6 +29,9 @@ for i = 1 : length(h_c)
     if find(ismember(properties(h_c(i)),'Units'))
 h_c(i).Units = 'normalized';
     end
+        if find(ismember(properties(h_c(i)),'FontUnits'))
+h_c(i).FontUnits = 'normalized';
+    end
 end
 h_fig.Position = [0.25 0.25 0.4 0.5];
 
@@ -83,6 +86,11 @@ for i = 1 : length(h_c)
     if find(ismember(properties(h_c(i)),'Units'))
         if not(isequal(h_c(i).Type,'colorbar'))
 h_c(i).Units = 'pixels';
+        end
+    end
+        if find(ismember(properties(h_c(i)),'FontUnits'))
+        if not(isequal(h_c(i).Type,'colorbar'))
+h_c(i).FontUnits = 'pixels';
         end
     end
 end
