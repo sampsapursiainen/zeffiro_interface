@@ -50,6 +50,7 @@ weight_vec_aux = (sparsity_factor.^[0:n_multires-1]');
 
 %get ellipse filteres full measurement data. f_data: "sensors" x "time points"
 [f_data] = zef_getFilteredData; 
+timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true), 1:number_of_frames, 'UniformOutput', false);
 
 % m_0 = prior mean
 m = zeros(size(L,2), 1);
@@ -114,7 +115,8 @@ for n_rep = 1:n_decompositions
     if number_of_frames > 1
     z_inverse = cell(0);
     P_store = cell(0);
-        
+      
+%% KALMAN FILTER    
     for f_ind = 1: number_of_frames
         waitbar([n_rep/n_decompositions, f_ind/number_of_frames],h,...
             ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
@@ -128,21 +130,30 @@ for n_rep = 1:n_decompositions
         z_inverse{f_ind} = m;
     end
 
-    m_s = z_inverse{end};
-    
+%% RTS SMOOTHING    
+    m_s = z_inverse{end};    
     P_s = P_store{end};
+    
+    P_s_store = cell(0);
+    m_s_store = cell(0);
+    G_store = cell(0);
+    % Last G (not calculated in loop)
+    P = P_store{end};
+    P_ = A * P * A' + Q;
+    G_store{number_of_frames} = (P * A) / P_;
+    P_s_store{number_of_frames} = P;
+    m_s_store{number_of_frames} = m_s;
     % TODO Make separate RTS smoothing function
-    z_inverse_smoothed = cell(0);
-    z_inverse_smoothed{number_of_frames} = m_s;
     z_inverse_results{number_of_frames}{n_rep} = m_s(mr_ind);
 
     for f_ind = number_of_frames - 1:-1:1
         waitbar([n_rep/n_decompositions, 1 - f_ind/number_of_frames],h,...
             ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
-            'Smoothing ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+            'Smoothing ' int2str(number_of_frames -f_ind) ' of ' int2str(number_of_frames) '.']);
     
         P = P_store{f_ind};
         m = z_inverse{f_ind};
+        % if A is Identity
         if (isdiag(A) && all(diag(A) - 1) < eps)
             P_ = P + Q;
             m_ = m;
@@ -153,14 +164,22 @@ for n_rep = 1:n_decompositions
             G =  (P * A) / P_;
         end
         m_s = m + G * (m_s - m_);
-        z_inverse_smoothed{f_ind} = m_s;
+        P_s = P + G *(P_s - P_)*G';
+        P_s_store{f_ind} = P_s;
+        G_store{f_ind} = G;
+        m_s_store{f_ind} = m_s;
         z_inverse_results{f_ind}{n_rep} = m_s(mr_ind);
     end
     
+%% Q ESTIMATION
+[sigma, phi, B, C, D] =Q_quantities(P_s_store,m_s_store,G_store,timeSteps);
+Q = sigma - C * A' - A * C' + A * phi * A';
+
+% 
     
 
 
-    end
+     end
 
 
 end
@@ -168,14 +187,15 @@ end
 % TODO make a independent kalman function
 
 
-
+%% COMPOSITIONS 
 for i = 1:size(z_inverse_results,2)
     z_inverse_results{i} = mean([z_inverse_results{i}{:}],2);
 end
 
+%% POSTPROCESSING
 [z] = zef_postProcessInverse(z_inverse_results, procFile);
 %normalize the reconstruction so that the highest value is equal to 1
 [z] = zef_normalizeInverseReconstruction(z);
-% CALCULATION ENDS HERE
+%% CALCULATION ENDS HERE
 close(h);
 end
