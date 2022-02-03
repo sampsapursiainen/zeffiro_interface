@@ -18,7 +18,7 @@ zef.max_surface_face_count = zef.h_max_surface_face_count.Value ;
 zef.inflate_n_iterations = (zef.h_inflate_n_iterations.Value);
 zef.inflate_strength = zef.h_inflate_strength.Value;
 zef.forward_simulation_script = char(join(string(zef.h_forward_simulation_script.Value'),' '));
-if not(isempty(zef.forward_simulation_selected))
+if not(isempty(zef.forward_simulation_selected)) && not(isempty(zef.forward_simulation_script))
 zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1),zef.forward_simulation_column_selected} = zef.forward_simulation_script;
 end
 zef.forward_simulation_table = zef.h_forward_simulation_table.Data;
