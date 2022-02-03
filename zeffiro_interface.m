@@ -24,17 +24,37 @@ if not(isempty(varargin))
 
 option_counter = 1;
 
-if ismember(varargin{option_counter},{lower('display'),lower('nodisplay')})
+start_mode = 'display';
+
+while option_counter <= length(varargin)
+
+if ismember(lower(varargin{option_counter}),{lower('display'),lower('nodisplay')}) 
 start_mode = lower(varargin{option_counter});
 option_counter = option_counter + 1;
+elseif  ismember(lower(varargin{option_counter}),{'start_mode'}) 
+start_mode = lower(varargin{option_counter+1});
+option_counter = option_counter + 2;
+elseif ismember(varargin{option_counter},lower('profile_name'))
+zef_data.ini_cell_mod = {'Profile name',varargin{option_counter+1},'profile_name','string'};
+assignin('base','zef_data',zef_data);
+evalin('base','zef_assign_data;');
+clear zef_data;
+option_counter = option_counter + 2;
 else
-start_mode = 'nodisplay';
+option_counter = option_counter + 1;
 end
+
+
+end
+
+
 zef_data.start_mode = 'nodisplay';
 assignin('base','zef_data',zef_data);
 evalin('base','zef_assign_data;');
 clear zef_data;
 evalin('base','zeffiro_interface_start');
+
+option_counter = 1;
 
 while option_counter <= length(varargin)
     
@@ -223,11 +243,9 @@ elseif ismember(varargin{option_counter},lower('quit_matlab'))
 evalin('base','quit force;');
 option_counter = option_counter + 1;
 else
-error('Option not found in the argument list.')
-return
+option_counter = option_counter + 1;
 end
 end
-
 
 if evalin('base','isfield(zef,''h_zeffiro_window_main'');')
 if evalin('base','isvalid(zef.h_zeffiro_window_main);')
