@@ -41,7 +41,7 @@ n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
 
 weight_vec_aux = (sparsity_factor.^[0:n_multires-1]');
 
-
+norms = [];
 % mr_dec = multires_dec{1}{2};
 %mr_dec_xyz = [mr_dec ; mr_dec + size(source_positions,1);mr_dec + 2*size(source_positions,1)];
 
@@ -82,6 +82,8 @@ h = waitbar(0,('Kalman iterations.'));
 iter_ind = 0;
 source_count_aux = 0;
 
+q_estimation = false;
+Q_est = 0;
 for n_rep = 1:n_decompositions
     waitbar([n_rep/n_decompositions, 0],h,['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.']);
     iter_ind = iter_ind + 1;
@@ -102,98 +104,70 @@ for n_rep = 1:n_decompositions
     end
     
     L_aux = L(:,mr_dec);
+    L_aux = gpuArray(L_aux);
     % m_0 = prior mean
     m = zeros(size(L_aux,2), 1);
+    m = gpuArray(m);
     [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L_aux,2),evalin('base','zef.normalize_data'),0);
-    P = eye(size(L_aux,2)) * theta0;
+    
     % Transition matrix is Identity matrix
+    P = eye(size(L_aux,2)) * theta0;
+    P = gpuArray(P);
     A = eye(size(L_aux,2));
-    Q = 3e-10 * eye(size(L_aux,2));
+    A = gpuArray(A);
+    if q_estimation
+        Q = gpuArray(Q_est);
+    else
+        Q = gpuArray(3e-10*eye(size(L_aux,2)));
+
+    end
     % std_lhood
     R = std_lhood^2 * eye(size(L_aux,1));
-
-    if number_of_frames > 1
-    z_inverse = cell(0);
-    P_store = cell(0);
+    R = gpuArray(R);
       
 %% KALMAN FILTER    
-    for f_ind = 1: number_of_frames
-        waitbar([n_rep/n_decompositions, f_ind/number_of_frames],h,...
-            ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
-            'Filtering ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
-        f = zef_getTimeStep(f_data, f_ind, true);
-        % Prediction 
-        [m,P] = kf_predict(m, P, A, Q);
-        % Update 
-        [m, P] = kf_update(m, P, f, L_aux, R); 
-        P_store{f_ind} = P;
-        z_inverse{f_ind} = m;
-    end
+[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 
-%% RTS SMOOTHING    
-    m_s = z_inverse{end};    
-    P_s = P_store{end};
-    
-    P_s_store = cell(0);
-    m_s_store = cell(0);
-    G_store = cell(0);
-    % Last G (not calculated in loop)
-    P = P_store{end};
-    P_ = A * P * A' + Q;
-    G_store{number_of_frames} = (P * A) / P_;
-    P_s_store{number_of_frames} = P;
-    m_s_store{number_of_frames} = m_s;
-    % TODO Make separate RTS smoothing function
-    z_inverse_results{number_of_frames}{n_rep} = m_s(mr_ind);
-
-    for f_ind = number_of_frames - 1:-1:1
-        waitbar([n_rep/n_decompositions, 1 - f_ind/number_of_frames],h,...
-            ['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.'...
-            'Smoothing ' int2str(number_of_frames -f_ind) ' of ' int2str(number_of_frames) '.']);
-    
-        P = P_store{f_ind};
-        m = z_inverse{f_ind};
-        % if A is Identity
-        if (isdiag(A) && all(diag(A) - 1) < eps)
-            P_ = P + Q;
-            m_ = m;
-            G =  P / P_;
-        else
-            P_ = A * P * A' + Q;
-            m_ = A * m;
-            G =  (P * A) / P_;
-        end
-        m_s = m + G * (m_s - m_);
-        P_s = P + G *(P_s - P_)*G';
-        P_s_store{f_ind} = P_s;
-        G_store{f_ind} = G;
-        m_s_store{f_ind} = m_s;
-        z_inverse_results{f_ind}{n_rep} = m_s(mr_ind);
-    end
+%% RTS SMOOTHING
+smoothing = evalin('base','zef.kf_smoothing');
+if (smoothing == 2)
+Q = gather(Q);
+A = gather(A);
+[P_s_store, m_s_store, G_store] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
+z_inverse = m_s_store; 
+end
     
 %% Q ESTIMATION
+if (smoothing == 2)
 [sigma, phi, B, C, D] =Q_quantities(P_s_store,m_s_store,G_store,timeSteps);
-Q = sigma - C * A' - A * C' + A * phi * A';
-
+Q_est = sigma - C * A' - A * C' + A * phi * A';
+q_estimation = true;
+norms = [norms, norm(Q-Q_est, 'fro')];
+end
 % 
     
 
 
-     end
 
 
 end
 
-% TODO make a independent kalman function
 
+%% COMPOSITIONS
 
-%% COMPOSITIONS 
+% average
+% for i = 1:size(z_inverse_results,2)
+%     z_inverse_results{i} = mean([z_inverse_results{i}{:}],2);
+% end
+
+%last
 for i = 1:size(z_inverse_results,2)
-    z_inverse_results{i} = mean([z_inverse_results{i}{:}],2);
+    z_inverse_results{i} = z_inverse_results{i}{end};
 end
+
 
 %% POSTPROCESSING
-[z] = zef_postProcessInverse(z_inverse_results, procFile);
+[z] = zef_postProcessInverse(z_inverse, procFile);
 %normalize the reconstruction so that the highest value is equal to 1
 [z] = zef_normalizeInverseReconstruction(z);
 %% CALCULATION ENDS HERE

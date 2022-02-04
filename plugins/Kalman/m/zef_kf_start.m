@@ -18,6 +18,7 @@ zef.KF.inv_multires_n_levels.Value = '3';
 zef.KF.inv_multires_sparsity.Value = '10';
 zef.KF.inv_multires_n_decompositions.Value = '20';
 
+
 %set parameters if saved in ZI: 
 %(Naming concept: zef.KF."field" = zef."field")
 zef_props = properties(zef.KF);
@@ -45,6 +46,7 @@ zef.KF.inv_time_2.ValueChangedFcn = 'zef.inv_time_2 = str2num(zef.KF.inv_time_2.
 zef.KF.number_of_frames.ValueChangedFcn = 'zef.number_of_frames = str2num(zef.KF.number_of_frames.Value);';
 zef.KF.inv_time_3.ValueChangedFcn = 'zef.inv_time_3 = str2num(zef.KF.inv_time_3.Value);';
 zef.KF.normalize_data.ValueChangedFcn = 'zef.normalize_data = str2num(zef.KF.normalize_data.Value);';
+zef.KF.kf_smoothing.ValueChangedFcn = 'zef.kf_smoothing = str2num(zef.KF.kf_smoothing.Value);';
 zef.KF.StartButton.ButtonPushedFcn = '[zef.reconstruction, zef.reconstruction_information] = zef_KF;';
 zef.KF.ApplyButton.ButtonPushedFcn = 'zef_props = properties(zef.KF); for zef_i = 1:length(zef_props); if isprop(zef.KF.(zef_props{zef_i}),''Value''); zef.(zef_props{zef_i}) = str2num(zef.KF.(zef_props{zef_i}).Value); end; end; clear zef_props zef_i;';
 zef.KF.CloseButton.ButtonPushedFcn = 'delete(zef.KF);';
