@@ -1150,6 +1150,7 @@ zef_plot_dpq('dynamical');
                 i = i + 1;
                 if visible_val
                     [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
+                    if not(isempty(min_n_aux))
                     h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
                     set(h_surf,'Tag','surface');
                     %set(h_surf,'specularstrength',0.1);
@@ -1157,6 +1158,7 @@ zef_plot_dpq('dynamical');
                     %set(h_surf,'ambientstrength',0.85);
                     set(h_surf,'facealpha',evalin('base','zef.layer_transparency'));
                     lighting phong;
+                    end
                 end
             end
         end

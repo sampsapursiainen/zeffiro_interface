@@ -4,6 +4,8 @@ smoothing_param = smoothing_parameter;
 smoothing_steps_surf = n_smoothing;   
 N = size(nodes,1);
 
+if N > 0
+
 A = sparse(N, N, 0);
 
 for i = 1 : 3
@@ -43,3 +45,11 @@ nodes(K,:) =  nodes(K,:) + taubin_mu*smoothing_param*nodes_aux;
 end
 
 smoothed_nodes = nodes;
+
+else 
+    
+    smoothed_nodes = [];
+
+end
+
+end

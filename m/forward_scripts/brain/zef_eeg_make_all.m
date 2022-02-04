@@ -1,8 +1,5 @@
 warning('off');
-zef.lead_field_type = 1; 
-if zef.downsample_surfaces == 1; 
-    zef_downsample_surfaces; 
-end; 
+zef.lead_field_type = 1;  
 zef.source_interpolation_on = 1; 
 set(zef.h_source_interpolation_on,'value',1);
 zef_create_finite_element_mesh;
