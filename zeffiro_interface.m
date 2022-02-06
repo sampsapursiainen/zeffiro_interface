@@ -1,5 +1,5 @@
 function zeffiro_interface(varargin)
-
+ 
 if evalin('base','exist(''zef'');')
 error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear zef by command ''clear zef'' in the base workspace.')
 end
