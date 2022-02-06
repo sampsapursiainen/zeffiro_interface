@@ -1,25 +1,26 @@
 Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team,
-is an open source code package constituting an accessible tool for finite
-element (FE) based forward and inverse simulations in EEG/MEG and can be
-used also in other bioelectromagnetical imaging applications targeting the
-brain. With ZI, one can segment a realistic multilayer geometry and
-generate a multi-compartment FE mesh, if triangular ASCII surface grids
-(in DAT or ASC file format) are available. A suitable surface segmentation
-can be produced, for example, with the FreeSurfer software suite
-(Copyright © FreeSurfer, 2013). Such a segmentation can be imported at
-once from a folder containing a set of ASCII files. An example folder can
-be found in the repository.  ZI allows also importing a parcellation
-created with FreeSurfer to enable distinguishing different brain regions
-and, thereby, analysing the connectivity of the brain function over a time
-series. Different compartments can be defined as active, allowing the
-analysis of the sub-cortical strucures. In each compartment, the
-orientation of the activity can be either normally constrained or
-unconstrained. The main routines of ZI can be accelerated significantly in
-a computer equipped with a graphics computing unit (GPU). It is especially
-recommendable to perform the forward simulation process, i.e., to generate
-the FE mesh, the lead field matrix and to interpolate between different
-point sets, utilizing a GPU. After the forward simulation phase, the model
-can be processed also without GPU acceleration.
+is an open source code package constituting an accessible tool for
+multidisciplinary finite element (FE) based forward and inverse
+simulations in complex geometries.
+
+With ZI, one can segment a realistic multilayer geometry and generate a
+multi-compartment FE mesh, if triangular ASCII surface grids (in DAT or
+ASC file format) are available. A suitable surface segmentation can be
+produced, for example, with the FreeSurfer software suite (Copyright ©
+FreeSurfer, 2013). Such a segmentation can be imported at once from a
+folder containing a set of ASCII files. An example folder can be found in
+the repository.  ZI allows also importing a parcellation created with
+FreeSurfer to enable distinguishing different brain regions and, thereby,
+analysing the connectivity of the brain function over a time series.
+Different compartments can be defined as active, allowing the analysis of
+the sub-cortical strucures. In each compartment, the orientation of the
+activity can be either normally constrained or unconstrained. The main
+routines of ZI can be accelerated significantly in a computer equipped
+with a graphics computing unit (GPU). It is especially recommendable to
+perform the forward simulation process, i.e., to generate the FE mesh, the
+lead field matrix and to interpolate between different point sets,
+utilizing a GPU. After the forward simulation phase, the model can be
+processed also without GPU acceleration.
 
 A brief introduction to the essential features of the interface can be
 found at:
@@ -28,9 +29,9 @@ https://github.com/sampsapursiainen/zeffiro_interface/wiki
 
 The interface itself has been introduced in:
 
-He, Q., Rezaei, A. & Pursiainen, S. (2019). Zeffiro User Interface for 
-Electromagnetic Brain Imaging: a GPU Accelerated FEM Tool for Forward and 
-Inverse Computations in Matlab. Neuroinformatics, 
+He, Q., Rezaei, A. & Pursiainen, S. (2019). Zeffiro User Interface for
+Electromagnetic Brain Imaging: a GPU Accelerated FEM Tool for Forward and
+Inverse Computations in Matlab. Neuroinformatics,
 doi:10.1007/s12021-019-09436-9
 
 The essential mathematical techniques used in the interface have been
@@ -72,7 +73,7 @@ Electroencephalography (EEG) forward modeling via H (div) finite element
 sources with focal interpolation. Physics in Medicine & Biology, 61(24),
 8502.
 
-ZI is not designed to be used in clinical applications. The authors do 
-not take the responsibility of the results obtained with ZI using 
-clinical data.
+ZI is not designed to be used in clinical applications. The authors do not
+take the responsibility of the results obtained with ZI using clinical
+data.
 
