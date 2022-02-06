@@ -3,7 +3,7 @@ function zeffiro_downloader(varargin)
 %'zeffiro_interface' of the current folder. If the subfolder already
 %exists, please remove that first. The default profile to be used can be
 %defined in the argument, for example:
-%zeffiro_downloader('profile_name','multicompartment_head').
+%zeffiro_downloader('profile_name','multicompartment_head'). 'moimoi'
 !git clone https://github.com/sampsapursiainen/zeffiro_interface 
 if not(isempty(varargin))
 zef_i = 1; 
