@@ -21,7 +21,7 @@ h_w = waitbar(0,'Wireframe optimization');
     n_mesh_refinement = 0;
     edge_threshold = 0;
     scaling_constant = 1;
-    n_iter = 10000;
+    n_iter = evalin('base','zef.wireframe_n_iter');
     filling_vec = filling_vec(:);
     
     if length(filling_vec) == 1 
