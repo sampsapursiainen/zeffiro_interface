@@ -4,7 +4,7 @@ zef.h_github_updater.Name = 'ZEFFIRO Interface: GitHub updater tool';
 zef.h_github_message.Value = 'Regular push.';
 zef.h_github_author.Value = zef.user_tag;
 
-zef.h_github_updater_button.ButtonPushedFcn = 'zef_githup_update_script;';
+zef.h_github_updater_button.ButtonPushedFcn = 'zef_githup_updater_script;';
 
 
 set(findobj(zef.h_github_updater.Children,'-property','FontSize'),'FontSize',zef.font_size);
