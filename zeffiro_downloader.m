@@ -3,7 +3,7 @@ function zeffiro_downloader(varargin)
 %exists, please remove that first. The default profile to be used can be
 %defined in the argument, for example:
 %zeffiro_downloader('profile_name','multicompartment_head'). 
-
+%koe
 install_directory = userpath;
 branch_name = 'master';
 profile_name = 'multicompartment_head';
