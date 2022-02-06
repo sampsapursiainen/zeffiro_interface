@@ -20,10 +20,11 @@ function zeffiro_downloader(varargin)
 % zeffiro_interface-branch_name. The number of arguments is variable. By
 % calling the function without arguments the default settings will be used.
 % By default the installation directory will be Matlab's working directory,
-% branch will be master, and profile will be multicompartment_head. Some
-% other branch than the master should be used, for example, the regular
-% monthly branch, should be used when pushing changes from the local
-% repository to the remote origin.
+% branch will be master, and profile will be multicompartment_head. 
+
+% Note:Some other branch than the master should be used, for example, the 
+% MonthlyUpdatedBranchForDevelopment, should be used when pushing changes 
+% from the local repository to the remote origin.
 
 install_directory = userpath;
 branch_name = 'master';
@@ -32,7 +33,7 @@ profile_name = 'multicompartment_head';
 if not(isempty(varargin))
 zef_i = 1; 
 while zef_i <= length(varargin)
-eval([varargin{zef_i} '= ' varargin{zef_i+1}]);
+eval([varargin{zef_i} '= ''' varargin{zef_i+1} ''';']);
 zef_i = zef_i + 2; 
 end
 end
