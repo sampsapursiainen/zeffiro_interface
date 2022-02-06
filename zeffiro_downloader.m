@@ -1,9 +1,8 @@
 function zeffiro_downloader(varargin)
-%This function downloads Zeffiro Interface in the subfolder
-%'zeffiro_interface' of the current folder. If the subfolder already
+%This function downloads Zeffiro Interface in the subfolder a given folder. If the subfolder already
 %exists, please remove that first. The default profile to be used can be
 %defined in the argument, for example:
-%zeffiro_downloader('profile_name','multicompartment_head'). 'moimoi'
+%zeffiro_downloader('profile_name','multicompartment_head'). 
 
 install_directory = userpath;
 branch_name = 'master';
