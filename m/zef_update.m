@@ -2,7 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if isvalid(zef.h_zeffiro_window_main)
-    
 
 zef.aux_field_1 = zef.h_compartment_table.Data;
 zef.aux_field_2 = zeros(size(zef.aux_field_1,1),1); 
@@ -203,4 +202,12 @@ zef_toggle_lock_transforms_on;
 
 clear zef_i zef_j zef_k zef_n;
 
+end
+
+if isvalid(zef.h_mesh_visualization_tool)
+    zef_update_mesh_visualization_tool;
+end
+
+if isvalid(zef.h_mesh_tool)
+    zef_update_mesh_tool;
 end

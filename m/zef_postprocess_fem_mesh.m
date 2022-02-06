@@ -237,8 +237,6 @@ brain_ind = brain_ind(:);
 submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(brain_ind);
 
-
-
 if evalin('base','zef.exclude_box')  
     
 I = find(not(ismember(domain_labels,find(pml_vec,1))));
@@ -289,7 +287,7 @@ end
 
 end
 
-
+condition_number = zef_condition_number(nodes,tetra);
 
 close(h);
 
@@ -303,7 +301,8 @@ aux_struct = struct(...
 'nodes',nodes,...
 'tetra',tetra,...
 'surface_triangles',surface_triangles,...
-'submesh_ind',submesh_ind);
+'submesh_ind',submesh_ind,...
+'condition_number',condition_number);
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 

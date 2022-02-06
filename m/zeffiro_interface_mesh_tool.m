@@ -53,7 +53,7 @@ set(zef.h_forward_simulation_script,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'DisplayDataChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'CellSelectionCallback',@zef_forward_simulation_table_selection);
 if isempty(zef.forward_simulation_table)
-zef.forward_simulation_table = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_forward_simulation.ini'],'filetype','tex','delimiter',',');
+zef.forward_simulation_table = readcell([zef.program_path  filesep 'profile' filesep zef.profile_name filesep 'zeffiro_forward_simulation.ini'],'filetype','tex','delimiter',',');
 end
 zef.h_forward_simulation_table.Data = zef.forward_simulation_table;
 set(zef.h_checkbox_mesh_smoothing_on,'ValueChangedFcn','zef_update_mesh_tool;');
