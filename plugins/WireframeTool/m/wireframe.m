@@ -12,6 +12,8 @@
 
 function [m_triangles,m_nodes,filling_vec,w_vec,shape_vec] = wireframe(tetra,nodes,domain_labels,filling_vec,varargin)
 
+h_w = waitbar(0,'Wireframe optimization');
+
     R = 4/3*pi*(0.5)^3;
     overlap_param = R^(1/3)/2;
     printer_buffer = sqrt(3);
@@ -19,7 +21,7 @@ function [m_triangles,m_nodes,filling_vec,w_vec,shape_vec] = wireframe(tetra,nod
     n_mesh_refinement = 0;
     edge_threshold = 0;
     scaling_constant = 1;
-    n_iter = 10000;
+    n_iter = evalin('base','zef.wireframe_n_iter');
     filling_vec = filling_vec(:);
     
     if length(filling_vec) == 1 
@@ -97,6 +99,8 @@ tetra_sort = [
               tetra(:,[3 4]) 6*ones(size(tetra,1),1) [1:size(tetra,1)]' domain_labels tetra(:,[1 2]);
               ];
           
+
+          
 tetra_sort(:,1:2) = sort(tetra_sort(:,1:2),2);
 tetra_sort = sortrows(tetra_sort,[1 2]);
 tetra_ind = zeros(size(tetra_sort,1),1);
@@ -138,14 +142,21 @@ D_mat_inv = spdiags(1./tilavuus',0,n_tetra,n_tetra);
 %w_vec = E_mat_2'*D_mat*filling_vec;
 w_vec = zeros(size(E_mat_2,2),1);
 
-reg_param = 1;
+
+
+reg_param = evalin('base','zef.wireframe_regularization_parameter');
 i = 0;
 norm_val = norm(filling_vec - D_mat_inv*E_mat_2*w_vec)/norm(filling_vec);
-while norm_val >= 0.01 && i < n_iter
+bar_val = 0; 
+while norm_val >= evalin('base','zef.wireframe_tolerance') && i < n_iter
     i = i + 1;
     w_vec = w_vec + reg_param*E_mat_2'*(filling_vec - D_mat_inv*E_mat_2*w_vec);
     w_vec = max(0,w_vec);
+    norm_val_old = norm_val;
     norm_val = norm(filling_vec - D_mat_inv*E_mat_2*w_vec)/norm(D_mat*filling_vec);
+    bar_val = max(bar_val,evalin('base','zef.wireframe_tolerance')/norm_val);
+    bar_val = min(1,bar_val);
+    waitbar(bar_val,h_w,'Wireframe optimization');
 end
 
 
@@ -173,6 +184,8 @@ w_vec = w_vec(I);
 shape_vec = shape_vec(I);
 edges = edges(I,:);
 
+waitbar(1,h_w,'Wireframe optimization');
+
 m_triangles = zeros(8*size(edges,1),3);
 m_nodes = zeros(6*size(edges,1),3);
 
@@ -186,7 +199,8 @@ for j = 1 : size(edges,1)
     0.2887         0-shape_vec(j)*overlap_param      0.5000
     0.2887    1.0000+shape_vec(j)*overlap_param    0.5000
     ];
-   
+  
+
 d_edge = nodes(edges(j,2),:) - nodes(edges(j,1),:);
 edge_length = sqrt(sum(d_edge.^2,2));
 d_edge = d_edge/edge_length;
@@ -198,13 +212,18 @@ d_cross_1(m_ind) = -2*d_edge(n_ind(1))*d_edge(n_ind(2))/d_edge(m_ind);
 d_cross_1 = d_cross_1/sqrt(sum(d_cross_1.^2,2));
 d_cross_2 = cross(d_cross_1', d_edge')';
 
+
 m_triangles((j-1)*8+1:j*8,:) = p_triangles + (j-1)*6;
 m_nodes((j-1)*6+1:j*6,:) = p_nodes*edge_length*[shape_vec(j)*d_cross_1 ; d_edge;  shape_vec(j)*d_cross_2] + nodes(edges(j,1)*ones(6,1),:);
+
 
 end
 
 m_triangles = m_triangles(:,[1 3 2]);                 
      
+
+
+close(h_w); 
 
 end
 
@@ -217,8 +236,9 @@ tetra_sort = [tetra(:,[1 2]);
               tetra(:,[2 4]);
               tetra(:,[3 4]);              
               ];
+         
           
-tetra_sort = sort(tetra_sort,2);
+          tetra_sort = sort(tetra_sort,2);
 [edges,edges_ind_1,edges_ind_2] = unique(tetra_sort,'rows');
 edges_ind = reshape(edges_ind_2,size(edges_ind_2,1)/6,6);
 
@@ -226,6 +246,8 @@ edges_ind = edges_ind + size(nodes,1);
 nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))]; 
 
 interp_vec = repmat([1:size(tetra,1)]',8,1); 
+
+
 
 tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                        edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ; 
@@ -236,8 +258,7 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                          edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) edges_ind(:,5) ;
                          edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)                       
                          ];
-                         
-                         
+                                               
 
  end
 

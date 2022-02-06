@@ -11,6 +11,7 @@ end
 
 %*******
 
+set(zef.h_plot_graph,'ButtonPushedFcn','zef_plot_graph;');
 set(zef.h_pushbutton31,'ButtonPushedFcn','zef_visualize_volume;');
 set(zef.h_pushbutton20,'ButtonPushedFcn','zef_visualize_surfaces;'); 
 set(zef.h_pushbutton22,'ButtonPushedFcn','zef_snapshot_movie;');
@@ -24,11 +25,37 @@ set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_cone_draw,'value',zef.cone_draw);
 set(zef.h_streamline_draw,'value',zef.streamline_draw);
 
+
+set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters);
+zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visualization_parameter_list.Items)];
+
+if not(isfield(zef,'mesh_visualization_parameter_selected'))
+    zef.mesh_visualization_parameter_selected = 1;
+end
+set(zef.h_mesh_visualization_parameter_list,'value',zef.mesh_visualization_parameter_selected);
+
+zef.mesh_visualization_graph_list = cell(0);
+zef.dir_aux = dir([zef.program_path filesep 'm' filesep 'graph_bank']);
+for zef_i = 3 : length(zef.dir_aux)
+zef.mesh_visualization_graph_list{1}{zef_i-2} = help([zef.dir_aux(zef_i).folder filesep zef.dir_aux(zef_i).name]);
+[~, zef.mesh_visualization_graph_list{2}{zef_i-2}] = fileparts(zef.dir_aux(zef_i).name);
+end
+
+set(zef.h_mesh_visualization_graph_list,'Items',zef.mesh_visualization_graph_list{1});
+zef.h_mesh_visualization_graph_list.ItemsData = [1:length(zef.h_mesh_visualization_graph_list.Items)];
+
+
+if not(isfield(zef,'mesh_visualization_graph_selected'))
+    zef.mesh_visualization_graph_selected = 1;
+end
+set(zef.h_mesh_visualization_graph_list,'value',zef.mesh_visualization_graph_selected);
+
+
 set(zef.h_visualization_type,'Items',{'Domain labels','Distribution (volume)','Distribution (surface)','Parcellation','Topography'});
 zef.h_visualization_type.ItemsData = [1:length(zef.h_visualization_type.Items)];
 set(zef.h_visualization_type,'Value',zef.visualization_type);
 
-set(zef.h_volumetric_distribution_mode,'Items',{'Reconstruction','Conductivity','Stimulation','Condition'});
+set(zef.h_volumetric_distribution_mode,'Items',{'Reconstruction','Parameter real','Parameter imaginary'});
 zef.h_volumetric_distribution_mode.ItemsData = [1:length(zef.h_volumetric_distribution_mode.Items)];
 set(zef.h_volumetric_distribution_mode,'Value',zef.volumetric_distribution_mode);
 

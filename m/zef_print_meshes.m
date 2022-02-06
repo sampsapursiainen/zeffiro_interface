@@ -7,20 +7,14 @@ f_ind = 1;
 if isequal(evalin('base','zef.volumetric_distribution_mode'),1)
     volumetric_distribution = evalin('base','zef.reconstruction');
 elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
-        volumetric_distribution = repmat(evalin('base','zef.sigma(:,1)')',3,1)/sqrt(3);
-        volumetric_distribution = volumetric_distribution(:);
- elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)
-     volumetric_distribution = evalin('base','y_ES');
-if iscell(volumetric_distribution)
-         for i = 1 : length(volumetric_distribution)
-            volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};  
-         end
-else
-    volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
-end
-elseif isequal(evalin('base','zef.volumetric_distribution_mode'),4)
-volumetric_distribution = zef_condition_number(evalin('base','zef.nodes'), evalin('base','zef.tetra'));
-volumetric_distribution = repmat(volumetric_distribution(:)',3,1)/sqrt(3);
+variable_index_aux = evalin('base','zef.mesh_visualization_parameter_selected');
+[~, variable_name_aux]  = zef_get_profile_parameters(variable_index_aux);
+volumetric_distribution = repmat(evalin('base',[variable_name_aux '(:,1)'])',3,1)/sqrt(3);
+volumetric_distribution = real(volumetric_distribution(:));
+elseif isequal(evalin('base','zef.volumetric_distribution_mode'),3)
+[~, variable_name_aux]  = zef_get_profile_parameters(variable_index_aux);
+volumetric_distribution = repmat(evalin('base',[variable_name_aux '(:,1)'])',3,1)/sqrt(3);
+volumetric_distribution = imag(volumetric_distribution(:));
 end
 
 void = []; 

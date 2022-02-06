@@ -147,7 +147,6 @@ end
 clear X Y Z;
 
 labeling_flag = 1;
-
 zef_mesh_labeling_step;
 
 refinement_compartments_aux = evalin('base','zef.refinement_surface_compartments');
@@ -165,6 +164,7 @@ refinement_flag = 1;
 surface_refinement_on = evalin('base','zef.refinement_surface_on');
 n_surface_refinement = evalin('base','zef.refinement_surface_number');
   
+if evalin('base','zef.refinement_on')
 if surface_refinement_on
     
     if length(n_surface_refinement) == 1
@@ -202,8 +202,20 @@ end
 end
         
     end
+    
+
 
 end
+
+else
+
+    pml_ind = [];
+label_ind = uint32(tetra);
+labeling_flag = 2;
+zef_mesh_labeling_step;
+
+end
+
 
 if evalin('base','zef.refinement_on')
 if evalin('base','zef.refinement_volume_on')
