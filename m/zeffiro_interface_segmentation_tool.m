@@ -131,6 +131,20 @@ zef.mlapp = 1;
 
 clear zef_data;
 
+zef.aux_dir = dir([zef.program_path filesep 'profile']);
+zef.aux_cell = cell(0); 
+zef_j = 0; 
+for zef_i = 3 : length(zef.aux_dir)
+    if zef.aux_dir(zef_i).isdir
+        zef_j = zef_j + 1; 
+   zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name; 
+    end
+end
+zef.h_profile_name.Items = zef.aux_cell;
+zef = rmfield(zef,{'aux_dir','aux_cell'});
+zef.h_profile_name.Value = zef.profile_name;
+zef.h_profile_name.ValueChangedFcn = 'zef.profile_name = zef.h_profile_name.Value;';    
+
 zef.h_project_tag.Value = zef.project_tag;
 
 set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
