@@ -1,5 +1,5 @@
 function zeffiro_interface(varargin)
-%This fuction starts Zeffiro Interface. It can be run with a variable
+%'moi' This fuction starts Zeffiro Interface. It can be run with a variable
 %number of arguments, which can be called as a list of name-value pairs as
 %follows: 
 %
