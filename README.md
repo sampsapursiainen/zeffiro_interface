@@ -5,7 +5,7 @@ simulations in complex geometries. Install ZI using zeffiro_downloader.m
 to allow automatic updates between the local and remote repositories. To 
 obtain the downloader in matlab command line, use: 
 
-urlwrite(['https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_downloader.m'],'zeffiro_downloader.m');
+urlwrite('https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_downloader.m','zeffiro_downloader.m');
 
 With ZI, one can segment a realistic multilayer geometry and generate a
 multi-compartment FE mesh, if triangular ASCII surface grids (in DAT or
