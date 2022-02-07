@@ -1,7 +1,8 @@
 Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team,
 is an open source code package constituting an accessible tool for
 multidisciplinary finite element (FE) based forward and inverse
-simulations in complex geometries.
+simulations in complex geometries. Install ZI using zeffiro_downloader.m 
+to allow automatic updates between the local and remote repositories.
 
 With ZI, one can segment a realistic multilayer geometry and generate a
 multi-compartment FE mesh, if triangular ASCII surface grids (in DAT or
