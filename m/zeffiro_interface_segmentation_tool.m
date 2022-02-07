@@ -108,7 +108,7 @@ set(zef.h_menu_close_windows                         ,'MenuSelectedFcn','zef_arr
 set(zef.h_menu_close_tools                           ,'MenuSelectedFcn','zef_arrange_windows(''close'',''tools'',''all'');zef_update;');
 set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''close'',''figs'',''all'');zef_update;');
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef_update;');
-set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for EEG/MEG brain imaging.''};{[]}; {''Version: '' num2str(zef.current_version)} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''About'');');
+set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for complex geometries.''};{[]}; {[''Version: '' num2str(zef.current_version)]} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''ZEFFIRO Interface: About'');');
 set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef_reopen_segmentation_tool;');
 set(zef.h_menu_parameter_profile                  ,'MenuSelectedFcn','zef_open_parameter_profile;');
 set(zef.h_menu_segmentation_profile                  ,'MenuSelectedFcn','zef_open_segmentation_profile;');
@@ -130,6 +130,20 @@ zef.h_project_notes.ValueChangedFcn = 'zef_update;';
 zef.mlapp = 1;
 
 clear zef_data;
+
+zef.aux_dir = dir([zef.program_path filesep 'profile']);
+zef.aux_cell = cell(0); 
+zef_j = 0; 
+for zef_i = 3 : length(zef.aux_dir)
+    if zef.aux_dir(zef_i).isdir
+        zef_j = zef_j + 1; 
+   zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name; 
+    end
+end
+zef.h_profile_name.Items = zef.aux_cell;
+zef = rmfield(zef,{'aux_dir','aux_cell'});
+zef.h_profile_name.Value = zef.profile_name;
+zef.h_profile_name.ValueChangedFcn = 'zef.profile_name = zef.h_profile_name.Value;';    
 
 zef.h_project_tag.Value = zef.project_tag;
 

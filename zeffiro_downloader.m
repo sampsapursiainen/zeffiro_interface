@@ -1,4 +1,4 @@
-function zeffiro_downloader(varargin)
+function zeffiro_downloader(varargin) 
 % This function downloads Zeffiro Interface in a given folder and sets it
 % to be a local repository of the remote origin at 
 % 
@@ -21,7 +21,7 @@ function zeffiro_downloader(varargin)
 % calling the function without arguments the default settings will be used.
 % By default the installation directory will be Matlab's working directory,
 % branch will be master, and profile will be multicompartment_head. 
-
+% 
 % Note:Some other branch than the master should be used, for example, the 
 % MonthlyUpdatedBranchForDevelopment, should be used when pushing changes 
 % from the local repository to the remote origin.

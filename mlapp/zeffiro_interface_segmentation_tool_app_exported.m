@@ -102,6 +102,8 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
         h_project_notes                 matlab.ui.control.TextArea
         ProjecttagEditFieldLabel        matlab.ui.control.Label
         h_project_tag                   matlab.ui.control.EditField
+        ProfileDropDownLabel            matlab.ui.control.Label
+        h_profile_name                  matlab.ui.control.DropDown
         h_menu_compartment_table        matlab.ui.container.ContextMenu
         h_menu_lock_on                  matlab.ui.container.Menu
         h_menu_add_compartment          matlab.ui.container.Menu
@@ -602,6 +604,16 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
             % Create h_project_tag
             app.h_project_tag = uieditfield(app.h_zeffiro_window_main, 'text');
             app.h_project_tag.Position = [474 582 100 22];
+
+            % Create ProfileDropDownLabel
+            app.ProfileDropDownLabel = uilabel(app.h_zeffiro_window_main);
+            app.ProfileDropDownLabel.HorizontalAlignment = 'right';
+            app.ProfileDropDownLabel.Position = [248 582 43 22];
+            app.ProfileDropDownLabel.Text = 'Profile:';
+
+            % Create h_profile_name
+            app.h_profile_name = uidropdown(app.h_zeffiro_window_main);
+            app.h_profile_name.Position = [297 582 100 22];
 
             % Create h_menu_compartment_table
             app.h_menu_compartment_table = uicontextmenu(app.h_zeffiro_window_main);
