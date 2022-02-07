@@ -1,30 +1,30 @@
 function zeffiro_downloader(varargin) 
-% This function downloads Zeffiro Interface in a given folder and sets it
-% to be a local repository of the remote origin at 
-% 
-% https://github.com/sampsapursiainen/zeffiro_interface
-% 
-% After downloading the local repository will be updated in each startup
-% (each time when running zeffiro_interface.m).
-% 
-% Set up instructions: 
-% 
-% The installation directory (install_directory), branch (branch_name) and
-% default profile name (profile_name) can be set by calling the function as
-% follows: 
-% 
-% zeffiro_downloader('install_directory',<directory string>,...
-% 'branch_name',<branch name string>,'profile_name',<profile name string>);
-% 
-% The folder name of the repository will be of the form
-% zeffiro_interface-branch_name. The number of arguments is variable. By
-% calling the function without arguments the default settings will be used.
-% By default the installation directory will be Matlab's working directory,
-% branch will be master, and profile will be multicompartment_head. 
+This function downloads Zeffiro Interface in a given folder and sets it
+to be a local repository of the remote origin at 
 
-% Note:Some other branch than the master should be used, for example, the 
-% MonthlyUpdatedBranchForDevelopment, should be used when pushing changes 
-% from the local repository to the remote origin.
+https://github.com/sampsapursiainen/zeffiro_interface
+
+After downloading the local repository will be updated in each startup
+(each time when running zeffiro_interface.m).
+
+Set up instructions: 
+
+The installation directory (install_directory), branch (branch_name) and
+default profile name (profile_name) can be set by calling the function as
+follows: 
+
+zeffiro_downloader('install_directory',<directory string>,...
+'branch_name',<branch name string>,'profile_name',<profile name string>);
+
+The folder name of the repository will be of the form
+zeffiro_interface-branch_name. The number of arguments is variable. By
+calling the function without arguments the default settings will be used.
+By default the installation directory will be Matlab's working directory,
+branch will be master, and profile will be multicompartment_head. 
+
+Note:Some other branch than the master should be used, for example, the 
+MonthlyUpdatedBranchForDevelopment, should be used when pushing changes 
+from the local repository to the remote origin.
 
 install_directory = userpath;
 branch_name = 'master';
