@@ -9,7 +9,7 @@ function zeffiro_interface(varargin)
 %different operations. The list of properties (and their values) is the
 %following: 
 %
-%start_mode
+%start_mode (display/nodisplay), 
 
 if evalin('base','exist(''zef'');')
 error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear zef by command ''clear zef'' in the base workspace.')
