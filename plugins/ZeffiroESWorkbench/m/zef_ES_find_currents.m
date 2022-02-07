@@ -2,7 +2,7 @@
 try
     [TolFun, reg_param, k_val] = zef_ES_find_parameters;
     switch evalin('base','zef.ES_search_method')
-        case {1,2}
+        case {1,2} 
             if evalin('base','zef.ES_search_method') == 1
                 param_val_aux = TolFun;
             elseif evalin('base','zef.ES_search_method') ==2
