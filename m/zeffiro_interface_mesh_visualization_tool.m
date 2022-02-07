@@ -29,9 +29,7 @@ set(zef.h_streamline_draw,'value',zef.streamline_draw);
 set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters);
 zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visualization_parameter_list.Items)];
 
-if not(isfield(zef,'mesh_visualization_parameter_selected'))
-    zef.mesh_visualization_parameter_selected = 1;
-end
+zef.mesh_visualization_parameter_selected = 1;
 set(zef.h_mesh_visualization_parameter_list,'value',zef.mesh_visualization_parameter_selected);
 
 zef.mesh_visualization_graph_list = cell(0);
