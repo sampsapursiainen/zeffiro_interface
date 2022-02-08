@@ -7,7 +7,7 @@ set(zef.h_parameter_profile_table,'CellSelectionCallback',@zef_parameter_profile
 
 set(zef.h_parameter_profile_table,'columnformat',{'char','char',{'Scalar','String'},'char','char',{'On','Off'},{'On','Off'},{'Segmentation','Sensors'}});
 
-set(zef.h_parameter_profile_from_project,'ButtonPushedFcn','zef.h_parameter_profile_table.Data = zef.parameter_profile');
+set(zef.h_parameter_profile_from_project,'ButtonPushedFcn','zef.h_parameter_profile_table.Data = zef.parameter_profile;');
 
 set(zef.h_parameter_profile_apply,'ButtonPushedFcn','writecell(zef.h_parameter_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_parameters.ini''],''filetype'',''text'',''delimiter'','','');  zef_apply_parameter_profile');
 
@@ -17,6 +17,8 @@ set(zef.h_menu_parameter_profile_table_add,'MenuSelectedFcn','zef.h_parameter_pr
 set(zef.h_menu_parameter_profile_table_delete,'MenuSelectedFcn','zef.h_parameter_profile_table.Data = zef.h_parameter_profile_table.Data(find(not(ismember([1:size(zef.h_parameter_profile_table.Data,1)],zef.parameter_profile_selected))),:);');
 
 set(findobj(zef.h_parameter_profile.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+zef.h_parameter_profile.Name = 'ZEFFIRO Interface: Parameter profile';
 
 set(zef.h_parameter_profile,'AutoResizeChildren','off');
 zef.parameter_profile_current_size = get(zef.h_parameter_profile,'Position');

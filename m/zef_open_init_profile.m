@@ -25,3 +25,5 @@ set(zef.h_init_profile,'AutoResizeChildren','off');
 zef.init_profile_current_size = get(zef.h_init_profile,'Position');
 zef.init_profile_relative_size = zef_get_relative_size(zef.h_init_profile);
 set(zef.h_init_profile,'SizeChangedFcn','zef.init_profile_current_size = zef_change_size_function(zef.h_init_profile,zef.init_profile_current_size,zef.init_profile_relative_size);');
+
+zef.h_init_profile.Name = 'ZEFFIRO Interface: Initialization profile';
