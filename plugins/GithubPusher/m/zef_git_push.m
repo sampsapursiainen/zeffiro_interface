@@ -18,6 +18,9 @@ end
 
 
 eval(['!git remote set-url origin https://sampsapursiainen:' my_key '@github.com/sampsapursiainen/zeffiro_interface']);
+
+eval(['!git remote set-url origin https://sampsapursiainen:' my_key '@github.com/sampsapursiainen/zeffiro_interface'])
+
 !git add -A
 eval(['!git commit -m "' message '"']);
 !git push -u origin
