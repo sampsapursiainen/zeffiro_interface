@@ -1,6 +1,6 @@
 function zef_git_push(my_key,varargin)
 
-message = '''Regular push.''';
+message = 'Regular push.';
 
 if not(isempty(varargin))
     zef_i = 1;
