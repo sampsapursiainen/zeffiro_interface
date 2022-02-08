@@ -37,7 +37,7 @@ while not(isempty(I_5))
 I_3 = find(sum(sign(I(label_ind)),2)>=size(label_ind,2));
 [~,~,I_4] = zef_surface_mesh(label_ind(I_3,:));
 I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
-I_4 = find(I_4 >= 3);
+I_4 = find(I_4 > 1);
 I_5 = setdiff([1:size(I_3,1)]',I_4);
 I_4 = unique(label_ind(I_3(I_4),:));
 I_5 = unique(label_ind(I_3(I_5),:));
@@ -125,6 +125,14 @@ domain_labels(tetra_ind_aux) = min(max_compartments, unique_domain_labels(domain
 
 end
 
+I_3 = 0;
+while not(isempty(I_3)) && compartment_counter < max_compartments
+I_1 = find(domain_labels <= compartment_counter);
+[~,~,I_2] = zef_surface_mesh(label_ind(I_1,:));
+I_3 = accumarray(I_2,ones(size(I_2)),[size(I_1,1) 1]);
+I_3 = find(I_3 >1);
+domain_labels(I_1(I_3)) = compartment_counter+1;
+end
 
 % tetra_ind_aux = 0; 
 % while not(isempty(tetra_ind_aux)) 
