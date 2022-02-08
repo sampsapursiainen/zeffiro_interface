@@ -193,6 +193,8 @@ zef.imaging_method = find(ismember(zef.imaging_method_cell,evalin('base',['zef.'
 zef_init_sensors_name_table;
 end
 
+zef.h_profile_name.Value = zef.profile_name;
+
 zef_update_fig_details;
 
 zef_toggle_lock_on;
