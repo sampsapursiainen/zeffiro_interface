@@ -4,10 +4,10 @@ if zef.use_github
     !git pull
 end
 
-
+%%hi
 
 zef.ver = ver;
-if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
+if not(license('test','distrib_computing_toolbox')) ||not(license('test','parallel_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
 gpuDeviceCount = 0;
 end
 zef = rmfield(zef, 'ver');
