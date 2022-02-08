@@ -1,1 +1,0 @@
-This folder includes a few files which can be imported using the included script import_segmentation.zef. Zeffiro Interface's menu import segmentation legacy can be used to open the script and import.
