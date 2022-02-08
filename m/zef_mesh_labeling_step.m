@@ -37,7 +37,7 @@ while not(isempty(I_5))
 I_3 = find(sum(sign(I(label_ind)),2)>=size(label_ind,2));
 [~,~,I_4] = zef_surface_mesh(label_ind(I_3,:));
 I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
-I_4 = find(I_4 > 1);
+I_4 = find(I_4 >= 3);
 I_5 = setdiff([1:size(I_3,1)]',I_4);
 I_4 = unique(label_ind(I_3(I_4),:));
 I_5 = unique(label_ind(I_3(I_5),:));
