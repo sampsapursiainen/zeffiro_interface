@@ -11,9 +11,6 @@ if not(isempty(varargin))
     end
 end
 
-message
-varargin{2}
-
 eval(['!git remote set-url origin https://sampsapursiainen:' my_key '@github.com/sampsapursiainen/zeffiro_interface'])
 !git add -A
 eval(['!git commit -m ' message])
