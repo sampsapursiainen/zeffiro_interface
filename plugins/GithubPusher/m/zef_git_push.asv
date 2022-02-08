@@ -10,6 +10,7 @@ if not(isempty(varargin))
         if isequal(varargin {zef_i},'message')
             aux_var = char(join(string(aux_var)));
         end
+         keyboard
         eval([varargin{zef_i} '= ''' aux_var ''';']);
         zef_i = zef_i + 2;
     end
@@ -17,9 +18,9 @@ end
 
 
 
-eval(['!git remote set-url origin https://sampsapursiainen:' my_key '@github.com/sampsapursiainen/zeffiro_interface']);
+eval(['!git remote set-url origin https://sampsapursiainen:' my_key '@github.com/sampsapursiainen/zeffiro_interface'])
 !git add -A
-eval(['!git commit -m "' message '"']);
+eval(['!git commit -m "' message''])
 !git push -u origin
 
 end
