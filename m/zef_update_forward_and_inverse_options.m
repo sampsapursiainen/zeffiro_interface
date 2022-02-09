@@ -26,6 +26,9 @@
     zef.fix_outer_surface = zef.h_fix_outer_surface.Value;
     zef.exclude_box = zef.h_exclude_box.Value;
     
+    zef.use_fem_mesh_inflation = zef.h_use_fem_mesh_inflation.Value;
+    zef.fem_mesh_inflation_strength = str2num(get(zef.h_fem_mesh_inflation_strength,'Value'));
+    
     zef.surface_sources = get(zef.h_as_opt_6,'Value');
     zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'Value');
     zef.source_model = get(zef.h_source_model,'Value');

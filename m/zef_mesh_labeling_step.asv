@@ -135,12 +135,42 @@ domain_labels(I_1(I_3)) = compartment_counter+1;
 end
 
 
-end
-end
-end
+I_1 = find(domain_labels <= compa);
+tri = zef_surface_mesh(tetra(I_1,:));
+nodes = zef_inflate_surface(tri,reuna_t{compartment_counter},reuna_t{compartment_counter},tetra,nodes,'bisection');
+
+
+% tetra_ind_aux = 0; 
+% while not(isempty(tetra_ind_aux)) 
+% 
+% I_1 = find(domain_labels <= compartment_counter);
+% [I_2, ~, I_3] = zef_surface_mesh(label_ind(I_1,:));
+% [I_4, ~, I_5] = unique(I_2);
+% I_6 = find(test_ind(I_4) < 0);
+% I_7 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
+% test_ind(I_4(I_6)) = 0;
+% test_ind(I_4(I_6(I_7))) = 1;
+% I_4 = test_ind(I_4,1);
+% I_4 = reshape(I_4(I_5),size(I_2));
+% [I_4, ~] = find(I_4==0);
+% tetra_ind_aux = I_1(I_3(I_4));
+% domain_labels(tetra_ind_aux) = min(max_compartments, unique_domain_labels(domain_label_ind + 1));
+% 
+% end
+% 
+% I_5 = 0;
+% while not(isempty(I_4))
+% I_3 = find(domain_labels <= compartment_counter);
+% [~, ~, I_4] = zef_surface_mesh(label_ind(I_3,:));
+% I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
+% I_4 = find(I_4 < 3);
+% domain_labels(I_3(I_4)) = min(max_compartments, unique_domain_labels(domain_label_ind + 1));
+% end
 
 end
-
+end
+end
+end
  
 %**************************************************************
 
@@ -148,6 +178,3 @@ end
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = domain_labels(priority_ind);
 
-if evalin('base','zef.use_fem_mesh_inflation')
-nodes = zef_inflate_surfaces(nodes,tetra,domain_labels);
-end
