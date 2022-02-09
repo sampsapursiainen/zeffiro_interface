@@ -31,13 +31,19 @@ for compartment_counter = 1 : compartment_length
 tri = zef_surface_mesh(tetra(find(domain_labels<=compartment_counter),:));
 tri_ref = reuna_t{compartment_counter};
 nodes_tri_ref = reuna_p{compartment_counter};
- 
+
 [u_tri,~,u_tri_pos] = unique(tri);
 im_ind = ismember(tetra, u_tri);
 tetra_ind = find(sum(im_ind,2));
 tetra_aux = tetra(tetra_ind,:);
 
-waitbar([0 0], h, 'Inflating.');
+n_nearest_neighbors = 500;
+center_points = (1/3)*(nodes_tri_ref(tri_ref(:,1),:)+nodes_tri_ref(tri_ref(:,2),:)+nodes_tri_ref(tri_ref(:,3),:));
+n_nearest_neighbors = min(n_nearest_neighbors,size(center_points,1));
+MdlKDT = KDTreeSearcher(center_points);
+nearest_neighbor_ind = knnsearch(MdlKDT,nodes(u_tri,:),'K',n_nearest_neighbors);
+
+waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
 length_u_tri = length(u_tri);
 par_num = evalin('base','zef.parallel_processes');
@@ -89,10 +95,10 @@ p_min = p_tetra(sort_ind(test_ind));
 vec_1_aux = nodes(p_min,:) - p;
 
 
-vec_1 = vec_1_aux(ones(size(tri_ref,1),1),:);
-d_vec = p(ones(size(tri_ref,1),1),:)  - nodes_tri_ref(tri_ref(:,1),:);
-vec_2 = nodes_tri_ref(tri_ref(:,2),:) - nodes_tri_ref(tri_ref(:,1),:);
-vec_3 = nodes_tri_ref(tri_ref(:,3),:) - nodes_tri_ref(tri_ref(:,1),:);
+vec_1 = vec_1_aux(ones(n_nearest_neighbors,1),:);
+d_vec = p(ones(n_nearest_neighbors,1),:)  - nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),1),:);
+vec_2 = nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),2),:) - nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),1),:);
+vec_3 = nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),3),:) - nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),1),:);
 
 [lambda_1, lambda_2, lambda_3] = zef_3by3_solver(vec_1,vec_2,vec_3,d_vec);
 I = find(lambda_1<0 & lambda_1 > -1 & lambda_2 >0 & lambda_2<1 & lambda_3>0 & lambda_3 <1); 
