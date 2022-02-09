@@ -37,7 +37,7 @@ im_ind = ismember(tetra, u_tri);
 tetra_ind = find(sum(im_ind,2));
 tetra_aux = tetra(tetra_ind,:);
 
-n_nearest_neighbors = 500;
+n_nearest_neighbors = 25;
 center_points = (1/3)*(nodes_tri_ref(tri_ref(:,1),:)+nodes_tri_ref(tri_ref(:,2),:)+nodes_tri_ref(tri_ref(:,3),:));
 n_nearest_neighbors = min(n_nearest_neighbors,size(center_points,1));
 MdlKDT = KDTreeSearcher(center_points);
