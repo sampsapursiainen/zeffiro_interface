@@ -123,7 +123,6 @@ priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_i
 [domain_labels] = submesh_ind_1(domain_labels(priority_ind));
 
 
-
 nodes = evalin('base','zef.nodes_raw');
 tetra_aux = evalin('base','zef.tetra_raw');
 tetra = tetra_aux;
@@ -218,6 +217,10 @@ domain_labels(I_3(I_5)) = max_domain_labels;
 end 
 
 end
+
+
+[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+
 
 brain_ind = [];
 for k = 1 : length(compartment_tags)

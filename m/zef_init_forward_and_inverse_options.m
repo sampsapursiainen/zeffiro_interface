@@ -6,6 +6,13 @@ if not(isfield(zef,'smoothing_steps_ele'));
 zef.smoothing_steps_ele = 100;
 end
 
+if not(isfield(zef,'use_fem_mesh_inflation')); 
+zef.use_fem_mesh_inflation = 1;
+end
+
+if not(isfield(zef,'fem_mesh_inflation_strength')); 
+zef.fem_mesh_inflation_strength = 0.3;
+end
 
 if not(isfield(zef,'source_space_creation_iterations')); 
 zef.source_space_creation_iterations = 2;

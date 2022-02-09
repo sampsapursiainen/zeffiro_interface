@@ -30,6 +30,9 @@ zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
 zef.h_as_opt_5.ItemsData = [1:length(zef.h_as_opt_5.Items)];
 zef.h_as_opt_5.Multiselect = 'on';
 
+zef.h_use_fem_mesh_inflation.Value = zef.use_fem_mesh_inflation;
+zef.h_fem_mesh_inflation_strength.Value = num2str(zef.fem_mesh_inflation_strength);
+
 if max(zef.refinement_surface_compartments) < length(zef.h_as_opt_5.ItemsData)
 zef.h_as_opt_5.Value = zef.refinement_surface_compartments;
 else

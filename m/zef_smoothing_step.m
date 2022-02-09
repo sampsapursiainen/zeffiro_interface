@@ -269,6 +269,10 @@ end
 
 nodes = gather(nodes);
 
+if evalin('base','zef.use_fem_mesh_inflation')
+nodes = zef_inflate_surfaces(nodes,tetra,domain_labels);
+end
+
 optimizer_counter = 1;
 optimizer_flag = -1; 
 while optimizer_flag < 0 && optimizer_counter <= evalin('base','zef.mesh_optimization_repetitions')
@@ -349,6 +353,7 @@ return;
 end
 
 clear A B;
+
 
 
 end
