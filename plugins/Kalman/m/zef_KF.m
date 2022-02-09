@@ -116,9 +116,10 @@ for n_rep = 1:n_decompositions
     A = eye(size(L_aux,2));
     
     if q_estimation
-        Q = Q_est;
+        load('q_est.mat', 'Q')
     else
         Q = 3e-10*eye(size(L_aux,2));
+        
 
     end
     % std_lhood
@@ -137,24 +138,27 @@ for n_rep = 1:n_decompositions
 %% KALMAN FILTER
 %[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 
-z_inverse = EnKF(m,A,Q,L_aux,R,timeSteps,number_of_frames);
+z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames);
 
 
 %% RTS SMOOTHING
 smoothing = evalin('base','zef.kf_smoothing');
 if (smoothing == 2)
+for i = 1:20
+
 Q = gather(Q);
 A = gather(A);
 [P_s_store, m_s_store, G_store] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
-z_inverse = m_s_store;k 
-end
+%z_inverse = m_s_store;
+
     
 %% Q ESTIMATION
-if (smoothing == 2)
 [sigma, phi, B, C, D] =Q_quantities(P_s_store,m_s_store,G_store,timeSteps);
 Q_est = sigma - C * A' - A * C' + A * phi * A';
 q_estimation = true;
 norms = [norms, norm(Q-Q_est, 'fro')];
+Q = Q_est;
+end
 end
 % 
     
