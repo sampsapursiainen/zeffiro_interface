@@ -104,29 +104,41 @@ for n_rep = 1:n_decompositions
     end
     
     L_aux = L(:,mr_dec);
-    L_aux = gpuArray(L_aux);
+
     % m_0 = prior mean
     m = zeros(size(L_aux,2), 1);
-    m = gpuArray(m);
+    
     [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L_aux,2),evalin('base','zef.normalize_data'),0);
     
     % Transition matrix is Identity matrix
     P = eye(size(L_aux,2)) * theta0;
-    P = gpuArray(P);
+
     A = eye(size(L_aux,2));
-    A = gpuArray(A);
+    
     if q_estimation
-        Q = gpuArray(Q_est);
+        Q = Q_est;
     else
-        Q = gpuArray(3e-10*eye(size(L_aux,2)));
+        Q = 3e-10*eye(size(L_aux,2));
 
     end
     % std_lhood
     R = std_lhood^2 * eye(size(L_aux,1));
-    R = gpuArray(R);
+    
+    useGpu = false;
+    if useGpu
+        R = gpuArray(R);
+        A = gpuArray(A);
+        Q = gpuArray(Q);
+        P = gpuArray(P);
+        L_aux = gpuArray(L_aux);
+        m = gpuArray(m);
+    end
       
-%% KALMAN FILTER    
-[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
+%% KALMAN FILTER
+%[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
+
+z_inverse = EnKF(m,A,Q,L_aux,R,timeSteps,number_of_frames);
+
 
 %% RTS SMOOTHING
 smoothing = evalin('base','zef.kf_smoothing');
@@ -134,7 +146,7 @@ if (smoothing == 2)
 Q = gather(Q);
 A = gather(A);
 [P_s_store, m_s_store, G_store] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
-z_inverse = m_s_store; 
+z_inverse = m_s_store;k 
 end
     
 %% Q ESTIMATION
