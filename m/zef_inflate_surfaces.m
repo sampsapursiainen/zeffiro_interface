@@ -40,7 +40,7 @@ ones_vec_nearest = ones(n_nearest_neighbors,1);
 center_points = (1/3)*(nodes_tri_ref(tri_ref(:,1),:)+nodes_tri_ref(tri_ref(:,2),:)+nodes_tri_ref(tri_ref(:,3),:));
 n_nearest_neighbors = min(n_nearest_neighbors,size(center_points,1));
 MdlKDT = KDTreeSearcher(center_points);
-nearest_neighbor_ind = knnsearch(MdlKDT,nodes(u_tri,:),'K',n_nearest_neighbors);
+nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(u_tri,:)),'K',n_nearest_neighbors);
 
 waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
