@@ -18,13 +18,15 @@ end
 
 program_path = pwd;
 zef_data.program_path = program_path;
-zef_data.code_path = '/m';
+zef_data.code_path = [zef_data.program_path filesep 'm'];
+zef_data.cluster_path =  [zef_data.program_path filesep 'cluster'];
 
 addpath(genpath([zef_data.program_path '/mlapp']));
 addpath(genpath([zef_data.program_path '/fig']));  
 addpath(genpath([zef_data.program_path zef_data.code_path])); 
 addpath(genpath([zef_data.program_path '/plugins']));
 addpath(genpath([zef_data.program_path '/profile']));
+addpath(genpath([zef_data.program_path '/cluster']));
 
 zef_data.start_mode = 'default';
 
