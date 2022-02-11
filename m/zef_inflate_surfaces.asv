@@ -147,7 +147,6 @@ nearest_neighbor_ind = gpuArray(nearest_neighbor_ind);
 tetra_aux = gpuArray(tetra_aux);
 u_tri = gpuArray(u_tri);
 nodes_tri_ref = gpuArray(nodes_tri_ref);
-tri_ref = gpuArray(tri_ref);
 
 length_u_tri = length(u_tri);
 par_num = 1;
