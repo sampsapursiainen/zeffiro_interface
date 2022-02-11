@@ -90,8 +90,9 @@ if not(isempty(p_tetra))
     I = [];
     test_ind = 0; 
     p = nodes(p_ind,:);
-    [~, sort_ind] = sort(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
- while isempty(I) && test_ind < length(p_tetra)
+    [~, sort_ind] = min(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
+ %   [~, sort_ind] = sort(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
+ %while isempty(I) && test_ind < length(p_tetra)
  test_ind = test_ind + 1;
 
 p_min = p_tetra(sort_ind(test_ind));
@@ -112,7 +113,7 @@ nodes_cell_aux{j}(k,:) = p + lambda_1.*vec_1_aux;
 nodes_ind_cell_aux{j}(k,:) = p_ind;
 
 end
-end
+%end
 end
 end
 end
@@ -193,9 +194,10 @@ if not(isempty(p_tetra))
     I = [];
     test_ind = 0; 
     p = nodes(p_ind,:);
-    [~, sort_ind] = sort(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
+     [~, sort_ind] = min(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
+%    [~, sort_ind] = sort(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
     
- while isempty(I) && test_ind < length(p_tetra)
+ %while isempty(I) && test_ind < length(p_tetra)
  test_ind = test_ind + 1;
 
 p_min = p_tetra(sort_ind(test_ind));
@@ -216,7 +218,7 @@ nodes_cell_aux{j}(k,:) = p + lambda_1.*vec_1_aux;
 nodes_ind_cell_aux{j}(k,:) = p_ind;
 
 end
-end
+%end
 end
 end
 end
