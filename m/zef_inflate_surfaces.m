@@ -44,7 +44,7 @@ nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(u_tri,:)),'K',n_nearest_nei
 
 waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
-if gpuDeviceCount == 0 || not(evalin('base','zef.use_gpu'))
+if 0==0 || gpuDeviceCount == 0 || not(evalin('base','zef.use_gpu'))
 
 %%%%%%%% CPU Version %%%%%%%%
 
