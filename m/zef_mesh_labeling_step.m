@@ -31,21 +31,6 @@ if not(isequal(i_labeling,pml_ind_aux))
 I_1 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_2,:),[compartment_counter n_compartments]);
 I(I_2(I_1)) = compartment_counter;
 
-% if size(label_ind,2) == 4
-% I_5 = 0;
-% while not(isempty(I_5))
-% I_3 = find(sum(sign(I(label_ind)),2)>=size(label_ind,2));
-% [~,~,I_4] = zef_surface_mesh(label_ind(I_3,:));
-% I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
-% I_4 = find(I_4 > 1);
-% I_5 = setdiff([1:size(I_3,1)]',I_4);
-% I_4 = unique(label_ind(I_3(I_4),:));
-% I_5 = unique(label_ind(I_3(I_5),:));
-% I_5 = find(not(ismember(I_4,I_5)));
-% I(I_4(I_5)) = 0;
-% end
-% end
-
 I_2 = find(I==0);
 
 else
@@ -132,6 +117,16 @@ I_1 = find(domain_labels <= compartment_counter);
 I_3 = accumarray(I_2,ones(size(I_2)),[size(I_1,1) 1]);
 I_3 = find(I_3 >1);
 domain_labels(I_1(I_3)) = compartment_counter+1;
+end
+
+I_3 = 0;
+while not(isempty(I_3)) && compartment_counter < max_compartments
+I_1 = find(domain_labels <= compartment_counter);
+[~,~,~,~,I_2] = zef_surface_mesh(label_ind,[],I_1);
+I_2 = I_2(find(I_2));
+I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
+I_3 = find(I_3 >= 3);
+domain_labels(I_3) = compartment_counter;
 end
 
 

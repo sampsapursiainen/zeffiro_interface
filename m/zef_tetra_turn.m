@@ -1,4 +1,4 @@
-function [nodes, tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
+function [tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
 
 flag_val = 1;
 
@@ -17,7 +17,7 @@ while not(isempty(tetra_ind)) & iter_ind_aux_0 < evalin('base','zef.mesh_optimiz
     
 waitbar(0, h,'Mesh optimization.'); 
  
-condition_number_thresh = thresh_val*max(condition_number);
+condition_number_thresh = max(0,thresh_val*max(condition_number));
 
 tetra_ind = find(condition_number < condition_number_thresh);
      rejected_elements = length(tetra_ind);
@@ -105,9 +105,8 @@ k_min_2 = 0;
          
 end
     
-         if mod(i,ceil(length(tetra_ind)/100)) == 0 
+if mod(i,ceil(length(tetra_ind)/100)) == 0 
 waitbar(i/length(tetra_ind),h,['Mesh optimization. Rejected elements: ' num2str(rejected_elements)]);  
-
 end
 
 end
@@ -119,12 +118,12 @@ end
 
 close(h)
 
-if min(condition_number) < thresh_val*max(condition_number) 
+if min(condition_number) < max(0,thresh_val*max(condition_number))
 flag_val = -1; 
 else
 flag_val = 1;
 end
 
-nodes_ind = unique(tetra(find(condition_number < thresh_val*max(condition_number)),:));
+nodes_ind = unique(tetra(find(condition_number < max(0,thresh_val*max(condition_number))),:));
 
 end

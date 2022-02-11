@@ -285,7 +285,7 @@ non_source_ind = intersect(brain_ind, non_source_ind);
 end
 
     if refinement_flag == 2
-[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+[tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
     end
     
 tetra_aux = tetra;
