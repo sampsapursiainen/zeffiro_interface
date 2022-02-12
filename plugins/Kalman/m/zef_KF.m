@@ -136,9 +136,14 @@ for n_rep = 1:n_decompositions
     end
       
 %% KALMAN FILTER
-%[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
+[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 
-z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames);
+%z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames);
+
+
+for i= 1:number_of_frames
+    z_inverse_results{i}{n_rep} = z_inverse{i}(mr_ind);
+end
 
 
 %% RTS SMOOTHING
@@ -162,10 +167,6 @@ end
 end
 % 
     
-
-
-
-
 end
 
 
@@ -183,7 +184,7 @@ end
 
 
 %% POSTPROCESSING
-[z] = zef_postProcessInverse(z_inverse, procFile);
+[z] = zef_postProcessInverse(z_inverse_results, procFile);
 %normalize the reconstruction so that the highest value is equal to 1
 [z] = zef_normalizeInverseReconstruction(z);
 %% CALCULATION ENDS HERE

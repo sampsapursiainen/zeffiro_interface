@@ -14,9 +14,9 @@ zef.KF.inv_time_1.Value = '0';
 zef.KF.inv_time_2.Value = '0';
 zef.KF.number_of_frames.Value = '0';
 zef.KF.inv_time_3.Value = '0';
-zef.KF.inv_multires_n_levels.Value = '3';
-zef.KF.inv_multires_sparsity.Value = '10';
-zef.KF.inv_multires_n_decompositions.Value = '20';
+zef.KF.inv_multires_n_levels.Value = '1';
+zef.KF.inv_multires_sparsity.Value = '1';
+zef.KF.inv_multires_n_decompositions.Value = '1';
 
 
 %set parameters if saved in ZI: 
