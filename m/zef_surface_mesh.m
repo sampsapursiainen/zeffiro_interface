@@ -1,4 +1,4 @@
-function [surface_triangles, surface_nodes, tetra_ind] = zef_surface_mesh(tetra, varargin)
+function [surface_triangles, surface_nodes, tetra_ind, tetra_ind_global, tetra_ind_diff,node_ind,node_pair] = zef_surface_mesh(tetra, varargin)
 
 I = [];
 surface_nodes = [];
@@ -12,7 +12,13 @@ end
 end
 
 if not(isempty(I))
+    I_global = [1 : size(tetra,1)]';
+if nargout > 4
+    I_diff = setdiff(I_global,I);
+    tetra_diff = tetra(I_diff,:);
+end
 tetra = tetra(I,:);
+I_global = I_global(I);
 end
 
  ind_m = [ 2 4 3 ;
@@ -37,10 +43,62 @@ surface_triangles = surface_triangles(:,[1 3 2]);
 
 tetra_ind = tetra_sort(I,5);
 
+if nargout > 4
+surface_triangles_aux = surface_triangles;
+end
 if not(isempty(nodes))
 [u_val, ~, u_ind] = unique(surface_triangles);
 surface_nodes = nodes(u_val,:);
 surface_triangles = reshape(u_ind,size(surface_triangles));
 end
+
+if nargout > 3
+    tetra_ind_global = I_global(tetra_ind);
+end
+
+if nargout > 4
+tetra_ind_diff = [];
+end
+
+if nargout > 4 && nargin > 2
+     
+    surface_triangles_aux = sort(surface_triangles_aux,2); 
+    [~, tetra_ind_diff] = ismember(surface_triangles_aux, sort(tetra_diff(:,[2 4 3]),2),'rows');
+    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 3 4]),2),'rows');
+    tetra_ind_diff = tetra_ind_diff + I;
+    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 4 2]),2),'rows');
+    tetra_ind_diff = tetra_ind_diff + I;
+    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 2 3]),2),'rows');
+    tetra_ind_diff = tetra_ind_diff + I;
+   
+    if nargout > 5  && nargin > 2
+        
+
+    node_ind = zeros(size(tetra_ind_diff,1),1);
+    I_aux_1 = find(tetra_ind_diff);
+    tetra_aux = tetra_diff(tetra_ind_diff(I_aux_1),:); 
+    
+    [I,J] = find(not(ismember(tetra_aux,surface_triangles)));
+    I_aux_2 = sub2ind(size(tetra_aux), I, J);
+    node_ind(I_aux_1(I)) = tetra_aux(I_aux_2); 
+    
+    node_pair = [surface_triangles(:,1) node_ind; ...
+                surface_triangles(:,2) node_ind; ...
+                surface_triangles(:,3) node_ind];
+    node_pair = node_pair(find(node_pair(:,2)),:);
+    [~, I_aux_1] = unique(node_pair(:,1));
+    node_pair = node_pair(I_aux_1,:);
+    
+    end
+    
+    I = find(tetra_ind_diff);
+    tetra_ind_diff(I) = I_diff(tetra_ind_diff(I));     
+    
+end
+
+
+
+
+
 
 end

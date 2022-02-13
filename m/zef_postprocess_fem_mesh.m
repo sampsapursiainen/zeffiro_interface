@@ -194,7 +194,7 @@ waitbar(i/n_refinement,h,'Volume refinement.');
 
 end
 
-%[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+%[tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
 
 % if evalin('base','zef.mesh_relabeling')
 % 
@@ -219,7 +219,19 @@ end
 end
 
 
-[nodes, tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+[nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
+if optimizer_flag == 1
+[tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+end
+
+%  if evalin('base','zef.mesh_relabeling')
+%  
+%  pml_ind = [];
+%  label_ind = uint32(tetra);
+%  labeling_flag = 2;
+%  zef_mesh_labeling_step;
+%  
+%  end
 
 
 brain_ind = [];
@@ -277,18 +289,12 @@ end
 %brain_ind = single(brain_ind);
 %tetra = single(tetra);
 
-% if evalin('base','zef.mesh_relabeling')
-% 
-% pml_ind = [];
-% label_ind = uint32(tetra);
-% labeling_flag = 2;
-% zef_mesh_labeling_step;
-% 
-% end
+
 
 
 
 end
+
 
 condition_number = zef_condition_number(nodes,tetra);
 

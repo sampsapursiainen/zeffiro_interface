@@ -42,7 +42,9 @@ zef_data.mlapp = 1;
  
  zef.save_file = zef_data.save_file;
  zef.save_file_path = zef_data.save_file_path;
+ if isfield(zef_data,'profile_name')
  zef.profile_name = zef_data.profile_name;
+ end
  
  zef_replace_project_fields;
  

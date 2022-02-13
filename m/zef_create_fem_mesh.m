@@ -167,7 +167,7 @@ n_surface_refinement = evalin('base','zef.refinement_surface_number');
 if evalin('base','zef.refinement_on')
 if surface_refinement_on
     
-    if length(n_surface_refinement) == 1
+if length(n_surface_refinement) == 1
     
 for i_surface_refinement = 1 : n_surface_refinement   
     
@@ -175,7 +175,7 @@ zef_refinement_step;
 
 if evalin('base','zef.mesh_relabeling')
 
-    pml_ind = [];
+pml_ind = [];
 label_ind = uint32(tetra);
 labeling_flag = 2;
 zef_mesh_labeling_step;
