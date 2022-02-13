@@ -277,8 +277,12 @@ optimizer_counter = 1;
 optimizer_flag = -1; 
 while optimizer_flag < 0 && optimizer_counter <= evalin('base','zef.mesh_optimization_repetitions')
 optimizer_counter = optimizer_counter + 1;
+
+[nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
+if optimizer_flag == 1
     [tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
-%     if optimizer_flag == -1
+end
+    %     if optimizer_flag == -1
 % if smoothing_steps_vol(smoothing_repetition_ind) > 0 
 % if smoothing_steps_vol(smoothing_repetition_ind) < 1
 %     convergence_criterion = Inf;

@@ -1,5 +1,6 @@
 function [tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
 
+
 flag_val = 1;
 
  h = waitbar(0,'Mesh optimization.'); 
@@ -28,8 +29,7 @@ roi_ind = find(sum(ismember(tetra,tetra(tetra_ind,:)),2)==3);
 
 tetra_aux_1 = tetra(tetra_ind,:);
 
-for i = 1 : length(tetra_ind)
-    
+for i = 1 : length(tetra_ind)   
     
     flipped_tetra = 0;
     
@@ -97,11 +97,11 @@ k_min_2 = 0;
          if [k_min_1 k_min_2] > 0 & min_val < Inf
          
          tetra_1 = reshape(tetra_aux_3(1,:,k_min_1(k_min_2),k_min_2),1,4);   
-         tetra_2 =  reshape(tetra_aux_3(2,:,k_min_1(k_min_2),k_min_2),1,4);
+         tetra_2 = reshape(tetra_aux_3(2,:,k_min_1(k_min_2),k_min_2),1,4);
          tetra(tetra_ind(i),:) = tetra_1;
-         tetra(tetra_aux_ind(k_min_2),:) = tetra_2;
-  
+         tetra(tetra_aux_ind(k_min_2),:) = tetra_2;   
          condition_number([tetra_ind(i); tetra_aux_ind(k_min_2)]) = zef_condition_number(nodes,[tetra_1 ; tetra_2]);
+         %tetra = zef_fix_inverted_pair([tetra_ind(i); tetra_aux_ind(k_min_2)],tetra,nodes);
          
 end
     

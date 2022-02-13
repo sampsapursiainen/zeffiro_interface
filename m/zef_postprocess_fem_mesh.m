@@ -219,7 +219,10 @@ end
 end
 
 
+[nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
+if optimizer_flag == 1
 [tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+end
 
 %  if evalin('base','zef.mesh_relabeling')
 %  
@@ -291,6 +294,7 @@ end
 
 
 end
+
 
 condition_number = zef_condition_number(nodes,tetra);
 

@@ -143,6 +143,3 @@ end
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = domain_labels(priority_ind);
 
-if evalin('base','zef.use_fem_mesh_inflation')
-nodes = zef_inflate_surfaces(nodes,tetra,domain_labels);
-end
