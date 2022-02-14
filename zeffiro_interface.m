@@ -21,6 +21,7 @@ zef_data.program_path = program_path;
 zef_data.code_path = [zef_data.program_path filesep 'm'];
 zef_data.cluster_path =  [zef_data.program_path filesep 'cluster'];
 
+addpath(genpath([zef_data.program_path '/m']));
 addpath(genpath([zef_data.program_path '/mlapp']));
 addpath(genpath([zef_data.program_path '/fig']));  
 addpath(genpath([zef_data.program_path zef_data.code_path])); 
