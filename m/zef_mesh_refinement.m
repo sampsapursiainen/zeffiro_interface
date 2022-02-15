@@ -21,7 +21,7 @@ end
 if not(isempty(compartment_ind))
 %***************************************************
 
-if compartment_ind == 0 && not(isempty(tetra_ref_ind))
+if compartment_ind == 0 
 I = tetra_ref_ind; 
 else
     I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
