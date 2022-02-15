@@ -73,6 +73,7 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.compartment_table_size = 9;
 zef_data.adaptive_refinement_on = 0; 
 zef_data.adaptive_refinement_thresh_val = 2;
 zef_data.adaptive_refinement_k_param = 50; 
