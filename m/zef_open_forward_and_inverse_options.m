@@ -91,6 +91,10 @@ zef.h_mesh_relabeling.Value =  zef.mesh_relabeling;
 zef.h_exclude_box.Value =  zef.exclude_box;
 
 
+zef.h_adaptive_refinement_on.Value = zef.adaptive_refinement_on;
+zef.h_adaptive_refinement_thresh_val.Value = num2str(zef.adaptive_refinement_thresh_val);
+zef.h_adaptive_refinement_k_param.Value = num2str(zef.adaptive_refinement_k_param);
+
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
 zef.h_source_model.ItemsData = [1:length(zef.h_source_model.Items)];

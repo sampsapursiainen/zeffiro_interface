@@ -6,19 +6,27 @@ function [nodes,tetra,domain_labels_aux] = zef_mesh_refinement(nodes,tetra,domai
 eps_val = 15;
 
 compartment_ind = [];
+tetra_ref_ind = [];
 tetra_aux = tetra;
 nodes_aux = nodes;
 domain_labels_aux_2 = domain_labels_aux;
 
 if not(isempty(varargin))
     compartment_ind = varargin{1};
+    if length(varargin)>1
+        tetra_ref_ind = varargin{2};
+    end
 end
 
 if not(isempty(compartment_ind))
 %***************************************************
 
-I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
-johtavuus_aux = domain_labels_aux;
+if compartment_ind == 0 && not(isempty(tetra_ref_ind))
+I = tetra_ref_ind; 
+else
+    I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
+end
+    johtavuus_aux = domain_labels_aux;
 J_c = [];
 
 tetra = tetra(I,:);

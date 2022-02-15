@@ -45,10 +45,14 @@ vec_2 = nodes(setdiff(tetra_c(g(I(1)),:),tetra_c(c(i),:)),:);
 tetra_ind = find(sum(ismember(tetra_c,tetra_c(c(i),j)),2));
 tri = zef_surface_mesh(tetra_c, [], tetra_ind);
 u_tri = unique(tri);
-vec_3 = mean(nodes(u_tri,:));
+
+
+u_tri_rand = randperm(length(u_tri));
+vec_3 = mean(nodes(u_tri(u_tri_rand(1:end-3)),:));
+
 
 p_in_c = zef_point_in_cluster(nodes,tri,vec_3);
-if p_in_c < evalin('base','zef.meshing_threshold') 
+if isempty(p_in_c)
 [~, lambda_1] = zef_find_intersecting_triangle(vec_1, vec_2,1,tri,nodes,'nonconvex');
 if not(isempty(lambda_1))
 vec_3 = vec_1 - lambda_1*(vec_2 - vec_1);
@@ -60,6 +64,7 @@ end
 end
 
 node_ind = 0;
+if not(isempty(vec_3))
 p_in_c = zef_point_in_cluster(nodes,tri,vec_3);
 while  isempty(p_in_c)  && node_ind < length(u_tri)
 node_ind = node_ind + 1;
@@ -69,6 +74,9 @@ if not(isempty(lambda_1))
 vec_3 = vec_3 - fix_param*lambda_1*(vec_2 - vec_3);
 end
 end
+end
+
+
 
 nodes(tetra_c(c(i),j),:) = vec_3;
 

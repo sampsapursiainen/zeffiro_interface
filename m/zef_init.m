@@ -73,6 +73,9 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.adaptive_refinement_on = 0; 
+zef_data.adaptive_refinement_thresh_val = 2;
+zef_data.adaptive_refinement_k_param = 50; 
 zef_data.zeffiro_current_size = cell(0);
 zef_data.plugin_cell = [];
 zef_data.active_compartment_ind = [];

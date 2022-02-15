@@ -9,7 +9,11 @@ function zeffiro_interface(varargin)
 %different operations. The list of properties (and their values) is the
 %following: 
 %
-%start_mode (display/nodisplay), open_project (project file name), 
+%start_mode (display/nodisplay), open_project (project file name),
+%import_segmentation (file name), import_update (file name), import_segmentation_legacy (file name),
+%import_segmentation_update_legacy (file name), save_project (file name),
+%export_fem_mesh (file name), open_figure (file name), open_figure_folder
+%(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
  
 if evalin('base','exist(''zef'');')

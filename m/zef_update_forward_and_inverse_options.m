@@ -26,6 +26,10 @@
     zef.fix_outer_surface = zef.h_fix_outer_surface.Value;
     zef.exclude_box = zef.h_exclude_box.Value;
     
+    zef.adaptive_refinement_on = get(zef.h_adaptive_refinement_on,'Value');
+     zef.adaptive_refinement_k_param = str2num(get(zef.h_adaptive_refinement_k_param,'Value'));
+    zef.adaptive_refinement_thresh_val = str2num(get(zef.h_adaptive_refinement_thresh_val,'Value'));
+    
     zef.use_fem_mesh_inflation = zef.h_use_fem_mesh_inflation.Value;
     zef.fem_mesh_inflation_strength = str2num(get(zef.h_fem_mesh_inflation_strength,'Value'));
     
