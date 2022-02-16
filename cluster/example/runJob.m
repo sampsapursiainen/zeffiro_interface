@@ -1,0 +1,1 @@
+zeffiro_interface('start_mode','nodisplay','open_project', 'C:\Users\Paavo\Documents\MATLAB\zeffiro_interface\data\P20N20_SEP_timeseries_multiLF.mat' )
