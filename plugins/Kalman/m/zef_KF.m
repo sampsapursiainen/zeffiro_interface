@@ -11,7 +11,7 @@ sampling_freq = evalin('base','zef.inv_sampling_frequency');
 high_pass = evalin('base','zef.inv_low_cut_frequency');
 low_pass = evalin('base','zef.inv_high_cut_frequency');
 number_of_frames = evalin('base','zef.number_of_frames');
-source_direction_mode = evalin('base','zef.source_direction_mode');
+source_direction_mode = evalin('base','zef.source_direction_mode'); 
 source_directions = evalin('base','zef.source_directions');
 source_positions = evalin('base', 'zef.source_positions');
 
@@ -42,8 +42,6 @@ n_decompositions = evalin('base','zef.inv_multires_n_decompositions');
 weight_vec_aux = (sparsity_factor.^[0:n_multires-1]');
 
 norms = [];
-% mr_dec = multires_dec{1}{2};
-%mr_dec_xyz = [mr_dec ; mr_dec + size(source_positions,1);mr_dec + 2*size(source_positions,1)];
 
 %%
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
@@ -136,9 +134,9 @@ for n_rep = 1:n_decompositions
     end
       
 %% KALMAN FILTER
-[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
+%[P_store, z_inverse] = kalman_filter(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 
-%z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames);
+z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames, 100);
 
 
 for i= 1:number_of_frames
