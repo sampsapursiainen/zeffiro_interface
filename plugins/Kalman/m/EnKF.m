@@ -1,6 +1,5 @@
-function [z_inverse] = EnKF(m, A, P, Q, L, R, timeSteps, number_of_frames)
+function [z_inverse] = EnKF(m, A, P, Q, L, R, timeSteps, number_of_frames, n_ensembles)
 %ENKF Summary of this function goes here
-n_ensembles = 50000;
 %x_ensemble = mvnrnd(zeros(size(m)), 100* ones(size(m,1)), n_ensembles)';
 x_ensemble = mvnrnd(zeros(size(m)), P, n_ensembles)';
 z_inverse = cell(0);
@@ -11,8 +10,15 @@ for f_ind = 1:number_of_frames
     f = timeSteps{f_ind};
     w = mvnrnd(zeros(size(m)), Q, n_ensembles)';
     % Forecasts
+    
     x_f = A * x_ensemble + w;
     C = cov(x_f');
+    correlationLocalization = false;
+    if correlationLocalization 
+    T = corrcoef(x_f');
+    T(T < 0.001) = 0;
+    C = C .* T;
+    end
     
     % Update
     K = C * L' / (L * C * L' + R);
