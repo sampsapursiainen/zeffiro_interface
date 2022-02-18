@@ -199,7 +199,7 @@ for i = 1 : 4
         end
  
           
-
+ 
        I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
     if length(I) > 0
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,1))  edge_mat(ind_aux(I),col_ind_aux(1)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
