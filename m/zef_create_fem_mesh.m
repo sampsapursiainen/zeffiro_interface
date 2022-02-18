@@ -240,7 +240,7 @@ for i = 1 : n_refinement
         k_param = evalin('base','zef.adaptive_refinement_k_param');
          thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
          tetra_ind = zef_get_tetra_to_refine(zef_compartment_to_subcompartment(refinement_compartments), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-         [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,0,tetra_ind);
+         [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments, tetra_ind);
     else
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments);
     end
@@ -253,7 +253,6 @@ labeling_flag = 2;
 zef_mesh_labeling_step;
 
 end
-
 end
     
 else
@@ -267,7 +266,7 @@ for i = 1 : n_refinement(j)
         k_param = evalin('base','zef.adaptive_refinement_k_param');
          thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
          tetra_ind = zef_get_tetra_to_refine(zef_compartment_to_subcompartment(refinement_compartments(j)), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-        [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,0,tetra_ind);
+        [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j),tetra_ind);
     else
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j));
       end
@@ -283,10 +282,11 @@ end
 
 waitbar(i/length(n_refinement(j)),h,'Volume refinement.'); 
 
-
+end
 end
 
-end
+
+
 
 end
 

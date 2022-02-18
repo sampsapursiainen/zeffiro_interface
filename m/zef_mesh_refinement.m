@@ -21,10 +21,13 @@ end
 if not(isempty(compartment_ind))
 %***************************************************
 
-if compartment_ind == 0 
+if isequal(compartment_ind,0) || (isempty(compartment_ind) && not(isempty(tetra_ref_ind)))
 I = tetra_ref_ind; 
 else
     I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
+if not(isempty(tetra_ref_ind))
+I = intersect(tetra_ref_ind,I);
+end
 end
     johtavuus_aux = domain_labels_aux;
 J_c = [];
@@ -196,13 +199,47 @@ for i = 1 : 4
         end
  
           
-    I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
-    
+
+       I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
+    if length(I) > 0
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,1))  edge_mat(ind_aux(I),col_ind_aux(1)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
     johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I),:),3,1)];
     tetra(J_3(I),:) = [edge_mat(ind_aux(I),col_ind_aux(1))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
+    end
+    
+    I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==1);
+    if length(I)>0
+        for j_ind = 1 : length(I)
+    [zero_ind_aux, ~] = find(edge_mat(ind_aux(I(j_ind)),col_ind_aux)' == 0);
+        switch zero_ind_aux
+        case 1
+            col_ind_aux_2 = col_ind_aux([2 3]);
+            k_ind = 3;
+            i_ind = [1 2];
+        case 2
+            col_ind_aux_2 = col_ind_aux([1 3]);
+            k_ind = 1;
+            i_ind = [3 2];
+        case 3
+            col_ind_aux_2 = col_ind_aux([2 1]);
+            k_ind = 2;
+            i_ind = [1 3];
+        end
+   
+ if tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) > tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))
+ i_ind = fliplr(i_ind); 
+ col_ind_aux_2 = fliplr(col_ind_aux_2);
+ end
+ tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(k_ind))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))]; 
+    tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
+ johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I(j_ind)),:),2,1)];
+    tetra(J_3(I(j_ind)),:) = [tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
+        end
+    end
+    
+    
     
 end
 

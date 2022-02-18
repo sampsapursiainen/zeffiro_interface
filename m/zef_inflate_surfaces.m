@@ -29,17 +29,10 @@ for compartment_counter = 1 : compartment_length
 interior_ind = find(domain_labels<=compartment_counter);
 [~,~,~,~,~,~,node_list] = zef_surface_mesh(tetra,[],interior_ind);
 
+if not(isempty(node_list))
 
 tri_ref = reuna_t{compartment_counter};
 nodes_tri_ref = reuna_p{compartment_counter};
-
-
-%[u_tri,~,u_tri_pos] = unique(tri);
-%im_ind = ismember(tetra, u_tri);
-%tetra_ind = find(sum(im_ind,2));
-
-%tetra_aux = tetra(tetra_ind,:);
-
 
 n_nearest_neighbors = 25;
 ones_vec_nearest = ones(n_nearest_neighbors,1);
@@ -137,6 +130,7 @@ end
 
 %%%%%%%% CPU Version %%%%%%%%
 
+end
 end
 
 if waitbar_opened

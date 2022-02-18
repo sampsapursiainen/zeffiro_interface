@@ -1,6 +1,10 @@
 function tetra_ind = zef_get_tetra_to_refine(domain_ind, thresh_val, k_param, nodes, tetra, domain_labels, reuna_p,reuna_t)
 
 tetra_ind = [];
+I_aux = find(sum(ismember(domain_labels,domain_ind),2));
+tetra = tetra(I_aux,:); 
+domain_labels = domain_labels(I_aux);
+
 
 for i = 1 : length(domain_ind)
 
@@ -26,6 +30,8 @@ ref_ind = find(sum(ismember(aux_ind,dist_vec_ind),2));
 tetra_ind = [tetra_ind ; find(sum(ismember(tetra,u_domain_tri_ind(ref_ind)),2))];
 
 end
+
+tetra_ind = I_aux(tetra_ind);
 
 end
 
