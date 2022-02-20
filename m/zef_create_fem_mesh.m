@@ -198,24 +198,21 @@ labeling_flag = 2;
 zef_mesh_labeling_step;
 
 end
- end
 end
-        
-    end
-    
-
+end
+end
+   
 
 end
 
 else
 
-    pml_ind = [];
+pml_ind = [];
 label_ind = uint32(tetra);
 labeling_flag = 2;
 zef_mesh_labeling_step;
 
 end
-
 
 if evalin('base','zef.refinement_on')
 if evalin('base','zef.refinement_volume_on')
@@ -236,14 +233,7 @@ if length(n_refinement) == 1
 waitbar(0,h,'Volume refinement.');
     
 for i = 1 : n_refinement
-    if evalin('base','zef.adaptive_refinement_on')
-        k_param = evalin('base','zef.adaptive_refinement_k_param');
-         thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
-         tetra_ind = zef_get_tetra_to_refine(zef_compartment_to_subcompartment(refinement_compartments), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-         [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments, tetra_ind);
-    else
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments);
-    end
 waitbar(i/n_refinement,h,'Volume refinement.'); 
 if evalin('base','zef.mesh_relabeling')
     
@@ -262,14 +252,7 @@ waitbar(0/length(n_refinement),h,'Volume refinement.');
 for j = 1 : length(n_refinement)    
 for i = 1 : n_refinement(j)
     
-      if evalin('base','zef.adaptive_refinement_on')
-        k_param = evalin('base','zef.adaptive_refinement_k_param');
-         thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
-         tetra_ind = zef_get_tetra_to_refine(zef_compartment_to_subcompartment(refinement_compartments(j)), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-        [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j),tetra_ind);
-    else
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j));
-      end
 
 if evalin('base','zef.mesh_relabeling')
       
@@ -291,6 +274,78 @@ end
 end
 
 end
+
+
+%*********************
+if evalin('base','zef.adaptive_refinement_on')
+
+n_refinement = evalin('base','zef.adaptive_refinement_number');
+refinement_compartments_aux = sort(evalin('base','zef.adaptive_refinement_compartments'));
+
+refinement_compartments = []; 
+if ismember(1,refinement_compartments_aux)
+refinement_compartments = aux_brain_ind(:);
+end
+
+refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
+refinement_compartments = [refinement_compartments ; refinement_compartments_aux(:)];
+
+if length(n_refinement) == 1
+    
+waitbar(0,h,'Adaptive volume refinement.');
+    
+for i = 1 : n_refinement
+        k_param = evalin('base','zef.adaptive_refinement_k_param');
+         thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
+tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
+[nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments, tetra_refine_ind);
+tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
+waitbar(i/n_refinement,h,'Adaptive volume refinement.'); 
+if evalin('base','zef.mesh_relabeling')
+    
+pml_ind = [];
+label_ind = uint32(tetra);
+    labeling_flag = 3;
+zef_mesh_labeling_step;
+
+end
+end
+    
+else
+    
+waitbar(0/length(n_refinement),h,'Adaptive volume refinement.'); 
+
+for j = 1 : length(n_refinement)    
+for i = 1 : n_refinement(j)
+
+        k_param = evalin('base','zef.adaptive_refinement_k_param');
+         thresh_val  = evalin('base','zef.adaptive_refinement_thresh_val');
+         tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
+        [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j),tetra_refine_ind);
+  tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
+
+
+if evalin('base','zef.mesh_relabeling')
+      
+pml_ind = [];  
+label_ind = uint32(tetra);
+    labeling_flag = 3;
+zef_mesh_labeling_step;
+  
+end
+
+waitbar(i/length(n_refinement(j)),h,'Adaptive volume refinement.'); 
+
+end
+end
+
+
+
+
+end
+
+end
+%*********************
  
 end
  

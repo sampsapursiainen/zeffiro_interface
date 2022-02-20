@@ -18,6 +18,7 @@ clear zef_data;
 zef.h_as_opt_5.Items = {'Active compartments', zef.aux_field{:}}; 
 zef.h_refinement_volume_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
 zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_field{:}}; 
+zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
 zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
 zef = rmfield(zef,'aux_field');
 
@@ -63,6 +64,14 @@ else
     zef.h_refinement_surface_compartments.Value = 1;
 end
 
+zef.h_adaptive_refinement_compartments.ItemsData = [1:length(zef.h_adaptive_refinement_compartments.Items)];
+zef.h_adaptive_refinement_compartments.Multiselect = 'on';
+if max(zef.adaptive_refinement_compartments) < length(zef.h_adaptive_refinement_compartments.ItemsData)
+zef.h_adaptive_refinement_compartments.Value = zef.adaptive_refinement_compartments;
+else
+    zef.h_adaptive_refinement_compartments.Value = 1;
+end
+
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;
 zef.h_refinement_volume_number.Value = num2str(zef.refinement_volume_number);
 zef.h_refinement_volume_on_2.Value = zef.refinement_volume_on_2;
@@ -72,6 +81,8 @@ zef.h_refinement_surface_number.Value = num2str(zef.refinement_surface_number);
 zef.h_refinement_surface_on_2.Value = zef.refinement_surface_on_2;
 zef.h_refinement_surface_number_2.Value = num2str(zef.refinement_surface_number_2);
 zef.h_fix_outer_surface.Value = zef.fix_outer_surface;
+
+zef.h_adaptive_refinement_number.Value = num2str(zef.adaptive_refinement_number);
 
 
 zef.h_initial_mesh_mode.Items = {'Regular 1','Regular 2'};

@@ -1,20 +1,25 @@
 %Copyright © 2021- Sampsa Pursiainen & GPU-ToRRe-3D Development Team
 %See: https://github.com/sampsapursiainen/GPU-Torre-3D
 
-function [nodes,tetra,domain_labels_aux] = zef_mesh_refinement(nodes,tetra,domain_labels_aux,varargin)
+function [nodes,tetra,domain_labels_aux,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels_aux,varargin)
 
 eps_val = 15;
 
 compartment_ind = [];
 tetra_ref_ind = [];
 tetra_aux = tetra;
+tetra_interp_vec = [1 : size(tetra,1)]';
 nodes_aux = nodes;
 domain_labels_aux_2 = domain_labels_aux;
+tetra_interp_vec_2 = tetra_interp_vec;
 
 if not(isempty(varargin))
     compartment_ind = varargin{1};
     if length(varargin)>1
         tetra_ref_ind = varargin{2};
+        if isempty(tetra_ref_ind)
+            tetra_ref_ind = 0 ;
+        end
     end
 end
 
@@ -26,9 +31,14 @@ I = tetra_ref_ind;
 else
     I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
 if not(isempty(tetra_ref_ind))
-I = intersect(tetra_ref_ind,I);
+tetra_ref_ind = intersect(tetra_ref_ind,I);
+I = tetra_ref_ind;
 end
 end
+
+if not(isempty(I))
+
+    
     johtavuus_aux = domain_labels_aux;
 J_c = [];
 
@@ -55,7 +65,7 @@ surface_triangles = [ tetra(tetra_ind)];
 J_c = [J_c ;  unique(surface_triangles)];
 clear tetra_sort;
 
-tetra = tetra_aux;;
+tetra = tetra_aux;
 
 tetra_vec = sum(ismember(tetra,J_c),2);    
 J = find(tetra_vec); 
@@ -130,11 +140,13 @@ tetra_new = [];
 
 clear J_aux;
 johtavuus_aux_new = [];
+tetra_interp_vec_new = [];
 
 for i = 1 : 7
     
 tetra_new = [ tetra_new ; t_ind_2(:,t_ind_1(i,:)) ];
 johtavuus_aux_new = [johtavuus_aux_new ; johtavuus_aux(J,:)];
+tetra_interp_vec_new = [tetra_interp_vec_new ; tetra_interp_vec(J)];
 
 end
 
@@ -144,10 +156,12 @@ clear t_ind_1 t_ind_2;
 
 tetra = [tetra ; tetra_new ];
 johtavuus_aux = [johtavuus_aux ; (johtavuus_aux_new)];
+tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_new];
 
 ind_aux = length(J) + [1 : length(J_2)]';
 tetra_new = [];
 johtavuus_aux_new = [];
+tetra_interp_vec_new = [];
 
 for i = 1 : 6
     switch i
@@ -170,17 +184,19 @@ for i = 1 : 6
     
     tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
     johtavuus_aux_new = [johtavuus_aux_new ; johtavuus_aux(J_2(I),:)];
+    tetra_interp_vec_new = [tetra_interp_vec_new ; tetra_interp_vec(J_2(I));];
     tetra(J_2(I),:) = [edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,2)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
         
 end
 
-
 tetra = [tetra ; tetra_new];
 johtavuus_aux = [johtavuus_aux ; (johtavuus_aux_new)];
+tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_new];
 
 ind_aux = length(J) + length(J_2) + [1 : length(J_3)]';
 tetra_new = [];
 johtavuus_aux_new = [];
+tetra_interp_vec_new = [];
 
 for i = 1 : 4
     switch i
@@ -206,6 +222,7 @@ for i = 1 : 4
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
     johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I),:),3,1)];
+    tetra_interp_vec_new = [tetra_interp_vec_new; repmat(tetra_interp_vec(J_3(I)),3,1)];
     tetra(J_3(I),:) = [edge_mat(ind_aux(I),col_ind_aux(1))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
     end
     
@@ -235,7 +252,8 @@ for i = 1 : 4
  tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(k_ind))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))]; 
     tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
  johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I(j_ind)),:),2,1)];
-    tetra(J_3(I(j_ind)),:) = [tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
+ tetra_interp_vec_new = [tetra_interp_vec_new ;  repmat(tetra_interp_vec(J_3(I(j_ind))),2,1)]; 
+ tetra(J_3(I(j_ind)),:) = [tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
         end
     end
     
@@ -245,6 +263,7 @@ end
 
 tetra = [tetra ; tetra_new];
 johtavuus_aux = [johtavuus_aux ; (johtavuus_aux_new)];
+tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_new];
 
 clear tetra_new_ind tetra_new_out;
 
@@ -263,21 +282,34 @@ domain_labels_aux = johtavuus_aux;
 tetra_aux_2 = tetra; 
 nodes_aux_2 = nodes;
 domain_labels_aux_2_2 = domain_labels_aux;
+tetra_interp_vec_2_2 = tetra_interp_vec;
 
 %***************************************************
 %***************************************************
 
+if not(isempty(tetra_ref_ind))
+I = find(not(ismember(tetra_interp_vec_2_2,tetra_ref_ind)));
+else
 I = find(not(ismember(domain_labels_aux_2_2,compartment_ind)));
+end
 
 tetra_aux_2 = tetra_aux_2(I,:);
 domain_labels_aux_2_2 = domain_labels_aux_2_2(I,:);
+tetra_interp_vec_2_2 = tetra_interp_vec_2_2(I);
 [unique_vec_1, ~, unique_vec_3] = unique(tetra_aux_2);
 tetra_aux_2 = reshape(unique_vec_3,size(tetra_aux_2));
 nodes_aux_2 = nodes_aux_2(unique_vec_1,:);
 
+
+if not(isempty(tetra_ref_ind))
+I = tetra_ref_ind;
+else
 I = find(ismember(domain_labels_aux_2,compartment_ind));
+end
+
 tetra = tetra_aux(I,:);
 domain_labels_aux = domain_labels_aux_2(I,:);
+tetra_interp_vec = tetra_interp_vec_2(I);
 nodes = nodes_aux;
 
 [unique_vec_1, ~, unique_vec_3] = unique(tetra);
@@ -301,6 +333,7 @@ nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))];
 
 interp_vec = repmat([1:size(tetra,1)]',8,1); 
 domain_labels_aux = domain_labels_aux(interp_vec);
+tetra_interp_vec = tetra_interp_vec(interp_vec);
 
 tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ; 
@@ -311,7 +344,7 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) edges_ind(:,5) ;
                      edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)                       
                          ];                 
-                     
+                
                      
                      
 %***************************************************
@@ -320,9 +353,12 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
 tetra = [tetra; size(nodes,1) + tetra_aux_2];
 nodes = [nodes ; nodes_aux_2];
 domain_labels_aux = [domain_labels_aux ; domain_labels_aux_2_2];
+tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_2_2];
 [~, unique_vec_2, unique_vec_3] = unique(round(nodes,eps_val),'rows');
 nodes = nodes(unique_vec_2,:);
 tetra = unique_vec_3(tetra);
+
+end 
     
 %***************************************************
 else
@@ -342,8 +378,8 @@ edges_ind = reshape(edges_ind_2,size(edges_ind_2,1)/6,6);
 edges_ind = edges_ind + size(nodes,1);
 nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))]; 
 
-interp_vec = repmat([1:size(tetra,1)]',8,1); 
-domain_labels_aux = domain_labels_aux(interp_vec);
+tetra_interp_vec = repmat([1:size(tetra,1)]',8,1); 
+domain_labels_aux = domain_labels_aux(tetra_interp_vec);
 
 tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ; 
@@ -354,6 +390,7 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) edges_ind(:,5) ;
                      edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)                      
                          ];
+                     
                          
 end
 

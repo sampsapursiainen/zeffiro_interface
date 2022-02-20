@@ -21,6 +21,7 @@ MdlKDT = KDTreeSearcher(p_tetra);
 aux_ind = knnsearch(MdlKDT,p_tri);
 dist_vec = sqrt(sum((p_tetra(aux_ind,:) - p_tri).^2,2));
 dist_vec_ind = find(dist_vec > thresh_val*median(dist_vec));
+%dist_vec_ind = find(dist_vec > quantile(dist_vec,thresh_val));
 
 MdlKDT = KDTreeSearcher(p_tri);
 aux_ind = knnsearch(MdlKDT,p_tetra,'K',k_param);

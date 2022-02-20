@@ -5,6 +5,8 @@
     zef.smoothing_steps_surf = str2num(get(zef.h_as_opt_3,'Value'));
     zef.smoothing_steps_vol = str2num(get(zef.h_as_opt_4,'Value'));
     zef.meshing_threshold = str2num(get(zef.h_meshing_threshold,'Value'));
+    zef.adaptive_refinement_compartments = get(zef.h_adaptive_refinement_compartments,'Value');
+        zef.adaptive_refinement_number = str2num(get(zef.h_adaptive_refinement_number,'Value'));
     zef.refinement_surface_compartments = get(zef.h_refinement_surface_compartments,'Value');
         zef.refinement_surface_number = str2num(get(zef.h_refinement_surface_number,'Value'));
     zef.refinement_surface_on = get(zef.h_refinement_surface_on,'Value');
