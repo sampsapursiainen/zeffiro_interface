@@ -1,7 +1,7 @@
 %Copyright © 2018, Sampsa Pursiainen
-function [L_eit,  bg_data, source_locations, source_directions] = lead_field_gravity_grad(nodes,elements,rho,sensors,varargin) 
+function [L_eit,  bg_data, source_locations, source_directions] = lead_field_gravity_grad(nodes,elements,rho,sensors,varargin)
 % function [L_eeg, source_locations, source_directions] = lead_field_gravity_grad(nodes,elements,rho,sensors,gravity_ind,source_ind,additional_options)
-% 
+%
 % Input:
 % ------
 % - nodes              = N x 3
@@ -11,25 +11,25 @@ function [L_eit,  bg_data, source_locations, source_directions] = lead_field_gra
 % - gravity_ind          = P x 1 (The set of elements that potentially contain source currents, by default contains all elements)
 % - source_ind         = R x 1 (The set of elements that are allowed to contain source currents, a subset of gravity_ind, by default equal to gravity_ind)
 % - additional_options = Struct, see below
-% 
-% Fields of additional_options: 
+%
+% Fields of additional_options:
 % -----------------------------
 %
 % - additional_options.direction_mode: Source directions; Values: 'mesh based' (default) or 'Cartesian' (optional).
-%   Note: If Cartesian directions are used, the columns of the lead field matrix correspond 
+%   Note: If Cartesian directions are used, the columns of the lead field matrix correspond
 %   to directions x y z x y z x y z ..., respectively.
 % - additional_options.precond: Preconditioner type; Values: 'cholinc' (Incomplete Cholesky, default) or 'ssor' (SSOR, optional)
 % - additional_options.cholinc_tol: Tolerance of the Incomplete Cholesky; Values: Numeric (default is 0.001) or '0' (complete Cholesky)
-% - additional_options.pcg_tol: Tolerance of the PCG iteration; Values: Numeric (default is 1e-6) 
+% - additional_options.pcg_tol: Tolerance of the PCG iteration; Values: Numeric (default is 1e-6)
 % - additional_options.maxit: Maximum number of PCG iteration steps; Values: Numeric (default is 3*floor(sqrt(N)))
 % - additional_options.source_mode: Element-wise source direction mode; Values: '1' (direction of the source moment, default) or '2' (line segment between nodes 4 and 5 with the numbering given in Pursiainen et al 2011)
-% - additional_options.permutation: Permutation of the linear system; Values: 'symamd' (default), 'symmmd' (optional), 'symrcm' (optional), or 'none' (optional) 
+% - additional_options.permutation: Permutation of the linear system; Values: 'symamd' (default), 'symmmd' (optional), 'symrcm' (optional), or 'none' (optional)
 %
 % Output:
 % -------
-% - L_gravity             = L x K 
+% - L_gravity             = L x K
 % - source_locations   = K x 3 (or K/3 x 3, if Cartesian are used)
-% - source_directions  = K x 3 
+% - source_directions  = K x 3
 %
 
 N = size(nodes,1);
@@ -51,18 +51,18 @@ if iscell(elements)
         waitbar_length = 4;
     end
     clear elements;
-            
+
     if iscell(rho)
         rho{1} = rho{1}';
-        if size(rho{1},1) == 1   
+        if size(rho{1},1) == 1
         rho_tetrahedra = [repmat(rho{1},3,1) ; zeros(3,size(rho{1},2))];
         else
-        rho_tetrahedra = rho{1};    
+        rho_tetrahedra = rho{1};
         end
         rho_prisms = [];
         if length(rho)>1
-        rho{2} = rho{2}';    
-        if size(rho{2},1) == 1   
+        rho{2} = rho{2}';
+        if size(rho{2},1) == 1
         rho_prisms = [repmat(rho{2},3,1) ; zeros(3,size(rho{2},2))];
         else
         rho_prisms = rho{2};
@@ -70,7 +70,7 @@ if iscell(elements)
         end
     else
         rho = rho';
-        if size(rho,1) == 1   
+        if size(rho,1) == 1
         rho_tetrahedra = [repmat(rho,3,1) ; zeros(3,size(rho,2))];
         else
         rho_tetrahedra = rho;
@@ -85,18 +85,18 @@ if iscell(elements)
     permutation = 'symamd';
     direction_mode = 'mesh based';
     source_mode = 1;
-    gravity_ind = [1:size(tetrahedra,1)]'; 
-    source_ind = [1:size(tetrahedra,1)]';   
+    gravity_ind = [1:size(tetrahedra,1)]';
+    source_ind = [1:size(tetrahedra,1)]';
     cholinc_tol = 1e-3;
-    
+
     L = size(sensors,1);
-    
+
     n_varargin = length(varargin);
     if n_varargin >= 1
     if not(isstruct(varargin{1}))
     gravity_ind = varargin{1};
     end
-    end   
+    end
     if n_varargin >= 2
     if not(isstruct(varargin{2}))
     source_ind = varargin{2};
@@ -119,28 +119,25 @@ if iscell(elements)
     if isfield(varargin{n_varargin},'source_mode');
     source_mode = varargin{n_varargin}.source_mode;
     end
-  
+
     if isfield(varargin{n_varargin},'cholinc_tol')
     cholinc_tol = varargin{n_varargin}.cholinc_tol;
-    end    
+    end
     if isfield(varargin{n_varargin},'permutation')
     permutation = varargin{n_varargin}.permutation;
-    end  
+    end
     end
     end
     K = size(tetrahedra,1);
     K3 = length(source_ind);
     K4 = length(gravity_ind);
-    
 
 
-Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1); 
+
 ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-                - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-                + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
+tilavuus = volume(nodes, tetrahedra, ind_m);
 
-c_tet = 0.25*(nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:) + nodes(tetrahedra(:,4),:));         
+c_tet = 0.25*(nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:) + nodes(tetrahedra(:,4),:));
 
 [eit_ind, eit_count] = make_gravity_dec(nodes,tetrahedra,gravity_ind,source_ind);
 
@@ -157,7 +154,7 @@ bg_data = zeros(3*L,1);
 
  for i = 1 : K4
 
-diff_vec_aux = repmat(c_tet(gravity_ind(i),:),L,1) - sensors;       
+diff_vec_aux = repmat(c_tet(gravity_ind(i),:),L,1) - sensors;
 r_aux_vec = -tilavuus(gravity_ind(i)).*sum(directions.*diff_vec_aux,2)./(sqrt(sum(diff_vec_aux.^2,2)).^5);
 aux_vec = diff_vec_aux.*repmat(r_aux_vec,1,3);
 L_eit(:,eit_ind(i)) = L_eit(:,eit_ind(i)) + aux_vec(:);
@@ -167,15 +164,15 @@ L_eit(:,eit_ind(i)) = L_eit(:,eit_ind(i)) + aux_vec(:);
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(gravity_ind(i))*eit_count(eit_ind(i));
 
-if mod(i,floor(K4/50))==0 
+if mod(i,floor(K4/50))==0
 time_val = toc;
 waitbar(i/K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
 end
  end
- 
+
  for i = 1 : K
 
-diff_vec_aux = repmat(c_tet(i,:),L,1) - sensors;       
+diff_vec_aux = repmat(c_tet(i,:),L,1) - sensors;
 r_aux_vec = -tilavuus(i).*sum(directions.*diff_vec_aux,2)./(sqrt(sum(diff_vec_aux.^2,2)).^5);
 aux_vec = diff_vec_aux.*repmat(r_aux_vec,1,3);
 bg_data = bg_data + rho_tetrahedra(1,i)*aux_vec(:);
@@ -185,15 +182,15 @@ bg_data = bg_data + rho_tetrahedra(1,i)*aux_vec(:);
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(gravity_ind(i))*eit_count(eit_ind(i));
 
-if mod(i,floor(K/50))==0 
+if mod(i,floor(K/50))==0
 time_val = toc;
 waitbar(i/K,h,['Background Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
  end
 
- 
+
  elseif evalin('base','zef.gravity_field_type') == 1
-     
+
 L_eit = zeros(L, K3);
 %tilavuus_vec_aux = zeros(1, K3);
 sensors = evalin('base','zef.sensors(:,1:3)');
@@ -203,43 +200,43 @@ bg_data = zeros(L,1);
 
  for i = 1 : K4
 
-diff_vec_aux = repmat(c_tet(gravity_ind(i),:),L,1) - sensors;     
+diff_vec_aux = repmat(c_tet(gravity_ind(i),:),L,1) - sensors;
 aux_vec = tilavuus(gravity_ind(i)).*sum(directions.*diff_vec_aux,2)./(sqrt(sum(diff_vec_aux.^2,2)).^4);
 L_eit(:,eit_ind(i)) = L_eit(:,eit_ind(i)) + aux_vec(:);
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(gravity_ind(i))*eit_count(eit_ind(i));
 
-if mod(i,floor(K4/50))==0 
+if mod(i,floor(K4/50))==0
 time_val = toc;
 waitbar(i/K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
 end
  end
- 
+
  for i = 1 : K
 
-diff_vec_aux = repmat(c_tet(i,:),L,1) - sensors;     
+diff_vec_aux = repmat(c_tet(i,:),L,1) - sensors;
 aux_vec = tilavuus(i).*sum(directions.*diff_vec_aux,2)./(sqrt(sum(diff_vec_aux.^2,2)).^4);
 bg_data = bg_data + rho_tetrahedra(1,i)*aux_vec(:);
 
 %tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(gravity_ind(i))*eit_count(eit_ind(i));
 
-if mod(i,floor(K/50))==0 
+if mod(i,floor(K/50))==0
 time_val = toc;
 waitbar(i/K,h,['Background. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
  end
- 
+
 end
 
 close(h);
- 
+
 L_eit = (6.67408E-11)*L_eit;
 bg_data = (6.67408E-11)*bg_data;
 
 %for i = length(source_ind)
-%L_eit_aux(:,i) = L_eit_aux(:,i); %/tilavuus_vec_aux(i); 
+%L_eit_aux(:,i) = L_eit_aux(:,i); %/tilavuus_vec_aux(i);
 %end
- 
+
  source_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  source_directions = ones(size(source_locations));
 
