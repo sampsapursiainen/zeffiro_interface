@@ -267,8 +267,7 @@ tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_new];
 
 clear tetra_new_ind tetra_new_out;
 
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = volume(nodes, tetra, ind_m);
+tilavuus = volume(nodes, tetra);
 
 I = find(tilavuus > 0);
 tetra(I,:) = tetra(I,[2 1 3 4]);

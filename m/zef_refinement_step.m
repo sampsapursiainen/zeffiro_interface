@@ -275,8 +275,7 @@ clear tetra_new_ind tetra_new_out;
 
 waitbar(10/length_waitbar,h,'Surface refinement.');
 
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = volume(nodes, tetrahedra, ind_m);
+tilavuus = volume(nodes, tetrahedra);
 
 I = find(tilavuus > 0);
 tetra(I,:) = tetra(I,[2 1 3 4]);
