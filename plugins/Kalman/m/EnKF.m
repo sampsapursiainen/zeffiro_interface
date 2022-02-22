@@ -13,10 +13,11 @@ for f_ind = 1:number_of_frames
     
     x_f = A * x_ensemble + w;
     C = cov(x_f');
-    correlationLocalization = false;
+    correlationLocalization = true;
     if correlationLocalization 
     T = corrcoef(x_f');
-    T(T < 0.001) = 0;
+    % explain How to find 0.05
+    T(abs(T) < 0.05) = 0;
     C = C .* T;
     end
     
