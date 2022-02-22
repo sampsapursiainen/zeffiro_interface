@@ -1,6 +1,6 @@
-function V = volume(nodes, tetrahedra, ind_m)
+function V = volume(nodes, tetrahedra)
 % TILAVUUS - Calculates a volume V from a given set of finite element nodes,
-% the corresponding tetrahedra and suitable index matrix ind_m.
+% the corresponding tetrahedra and suitable index matrix.
 %
 % TODO: Explain the structure of the nodes and tetrahedra.
 
@@ -15,7 +15,11 @@ function V = volume(nodes, tetrahedra, ind_m)
             nodes(tetrahedra(:,3),:)'
         ] - repmat(nodes(tetrahedra(:,4),:)',3,1);
 
-    % The volume itself
+    % Index matrix used in the determinant calculation.
+
+    ind_m = [1 4 7; 2 5 8 ; 3 6 9];
+
+    % The volume itself as a determinant
 
     V = 1 / 6 * abs(               ...
             aux_mat(ind_m(1,1),:)  ...

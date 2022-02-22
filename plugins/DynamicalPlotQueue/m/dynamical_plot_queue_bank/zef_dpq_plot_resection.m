@@ -19,8 +19,7 @@ D = delaunayTriangulation(resection_points(:,1),resection_points(:,2),resection_
 nodes = D.Points;
 tetrahedra = D.ConnectivityList;
 
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = volume(nodes, tetrahera, ind_m);
+tilavuus = volume(nodes, tetrahedra);
 
 c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrahedra(:,3),:)+nodes(tetrahedra(:,4),:));
 

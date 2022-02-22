@@ -124,8 +124,7 @@ if iscell(elements)
     A = spalloc(N,N,0);
     D_A = zeros(K,10);
 
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = volume(nodes, tetrahedra, ind_m);
+tilavuus = volume(nodes, tetrahedra);
 
 ind_m = [ 2 3 4 ;
           3 4 1 ;
