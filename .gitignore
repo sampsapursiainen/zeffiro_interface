@@ -1,3 +1,25 @@
+# Disallow everything
+
+*
+
+# Allow specific files
+
+!.gitignore
+!LICENSE
+
+# Allow file types (in subfolders) with a !
+
+!**/
+!*.m
+!*.mlapp
+!*.md
+!*.png
+!*.fig
+!*.txt
+!README
+
+# These are apparently not a part of the app itself, so keep ignoring them
+
 profile
 data
 cluster
