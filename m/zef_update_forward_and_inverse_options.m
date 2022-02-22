@@ -5,6 +5,8 @@
     zef.smoothing_steps_surf = str2num(get(zef.h_as_opt_3,'Value'));
     zef.smoothing_steps_vol = str2num(get(zef.h_as_opt_4,'Value'));
     zef.meshing_threshold = str2num(get(zef.h_meshing_threshold,'Value'));
+    zef.adaptive_refinement_compartments = get(zef.h_adaptive_refinement_compartments,'Value');
+        zef.adaptive_refinement_number = str2num(get(zef.h_adaptive_refinement_number,'Value'));
     zef.refinement_surface_compartments = get(zef.h_refinement_surface_compartments,'Value');
         zef.refinement_surface_number = str2num(get(zef.h_refinement_surface_number,'Value'));
     zef.refinement_surface_on = get(zef.h_refinement_surface_on,'Value');
@@ -25,6 +27,10 @@
     zef.mesh_relabeling = zef.h_mesh_relabeling.Value;
     zef.fix_outer_surface = zef.h_fix_outer_surface.Value;
     zef.exclude_box = zef.h_exclude_box.Value;
+    
+    zef.adaptive_refinement_on = get(zef.h_adaptive_refinement_on,'Value');
+     zef.adaptive_refinement_k_param = str2num(get(zef.h_adaptive_refinement_k_param,'Value'));
+    zef.adaptive_refinement_thresh_val = str2num(get(zef.h_adaptive_refinement_thresh_val,'Value'));
     
     zef.use_fem_mesh_inflation = zef.h_use_fem_mesh_inflation.Value;
     zef.fem_mesh_inflation_strength = str2num(get(zef.h_fem_mesh_inflation_strength,'Value'));

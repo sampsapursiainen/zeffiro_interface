@@ -16,17 +16,16 @@ resection_points = evalin('base','zef.resection_points');
 end
 
 D = delaunayTriangulation(resection_points(:,1),resection_points(:,2),resection_points(:,3));
-nodes = D.Points; 
-tetrahedra = D.ConnectivityList; 
-Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1); 
+nodes = D.Points;
+tetrahedra = D.ConnectivityList;
+
 ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-                - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-                + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
-c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrahedra(:,3),:)+nodes(tetrahedra(:,4),:)); 
+tilavuus = volume(nodes, tetrahera, ind_m);
+
+c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrahedra(:,3),:)+nodes(tetrahedra(:,4),:));
 
  FB = freeBoundary(D);
- 
+
  h = evalin('caller','h_axes_image');
  axes(h);
  hold(h,'on');
@@ -35,10 +34,10 @@ c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrah
  set(h_resection,'edgecolor','none');
  if alpha_value == 0
  set(h_resection,'tag','additional');
- else 
+ else
  set(h_resection,'facealpha',alpha_value);
  end
  set(h_resection,'facelighting','phong');
  %hold(h,'off');
- 
+
 end

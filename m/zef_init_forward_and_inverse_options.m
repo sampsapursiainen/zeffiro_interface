@@ -14,6 +14,18 @@ if not(isfield(zef,'fem_mesh_inflation_strength'));
 zef.fem_mesh_inflation_strength = 0.3;
 end
 
+if not(isfield(zef,'adaptive_refinement_on')); 
+zef.adaptive_refinement_on = 0; 
+end
+
+if not(isfield(zef,'adaptive_refinement_thresh_val')); 
+zef.adaptive_refinement_thresh_val = 2;
+end
+
+if not(isfield(zef,'adaptive_refinement_k_param')); 
+zef.adaptive_refinement_k_param = 5; 
+end
+
 if not(isfield(zef,'source_space_creation_iterations')); 
 zef.source_space_creation_iterations = 2;
 end
@@ -93,8 +105,14 @@ end;
 if not(isfield(zef,'refinement_volume_number')); 
     zef.refinement_volume_number = 1; 
 end;
+if not(isfield(zef,'adaptive_refinement_number')); 
+    zef.adaptive_refinement_number = 1; 
+end;
 if not(isfield(zef,'refinement_volume_compartments')); 
     zef.refinement_volume_compartments = 1; 
+end;
+if not(isfield(zef,'adaptive_refinement_compartments')); 
+    zef.adaptive_refinement_compartments = 1; 
 end;
 if not(isfield(zef,'refinement_volume_on_2')); 
     zef.refinement_volume_on_2 = 0; 

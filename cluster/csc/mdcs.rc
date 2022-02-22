@@ -1,0 +1,56 @@
+# The content of the mdcs.rc file will be used to fill out the cluster profile.
+# Comment any fields not required or leave them empty.
+
+########################################   REQUIRED   ########################################
+
+# The location of MATLAB as compared to the cluster: remote, local, remotesubmission.
+# remote: MATLAB client does not have access to the cluster file system and does not
+# have access to the scheduler utilities.  MATLAB is most likely running on a user's machine.
+# local: MATLAB client has access to the cluster file system and has the scheduler
+# utilities available.  MATLAB is most likely running directly on the cluster.
+# remotesubmission: MATLAB client has access to the cluster file system, but does not
+# have the scheduler utilities available.
+
+Type = remote
+
+
+# MATLAB Parallel Server Worker Count
+# Number must not exceed total MATLAB Parallel Server licenses available.
+
+NumWorkers = 500
+
+
+########################################   OPTIONAL   ########################################
+
+# MATLAB Parallel Server Root Installation
+# Location of the MATLAB Parallel Server installation on the cluster.
+# Required if type is remote or remoteSubmission.
+# Specify multiple versions by a comma seperated list.
+# For example: R2017a:/usr/local/R2017a,R2019a:/usr/local/R2019a
+
+ClusterMatlabRoot = R2017b:/appl/soft/math/matlab/r2017b,R2018a:/appl/soft/math/matlab/r2018a,R2018b:/appl/soft/math/matlab/r2018b,R2019a:/appl/soft/math/matlab/r2019a,R2019b:/appl/soft/math/matlab/r2019b,R2020a:/appl/soft/math/matlab/r2020a,R2020b:/appl/soft/math/matlab/r2020b,R2021a:/appl/soft/math/matlab/r2021a,R2021b:/appl/soft/math/matlab/r2021b
+
+
+# Headnode Hostname
+# Required if type is remote or remoteSubmission.
+
+ClusterHost = puhti.csc.fi
+
+
+# If using local submission, optionally specify the directory to be used as the job storage location.
+# If left empty, the user's home directory will be used, which is fine in most scenarios.
+# Specify an alternative path, if the user's home directory is not a good place to use as the job storage location.
+
+LocalJobStorageLocation = 
+
+
+# Directory on the cluster file system to be used as the remote job storage location.
+# Required if type is remote or remoteSubmission and MATLAB client is a PC.
+
+RemoteJobStorageLocation = /users
+
+
+# Windows UNC Path to the cluster job storage location.
+# Required if type is remoteSubmission and MATLAB client is a PC.
+
+JobStorageLocationOnPC = 

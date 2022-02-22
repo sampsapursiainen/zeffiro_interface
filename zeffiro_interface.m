@@ -9,7 +9,11 @@ function zeffiro_interface(varargin)
 %different operations. The list of properties (and their values) is the
 %following: 
 %
-%start_mode (display/nodisplay), open_project (project file name), 
+%start_mode (display/nodisplay), open_project (project file name),
+%import_segmentation (file name), import_update (file name), import_segmentation_legacy (file name),
+%import_segmentation_update_legacy (file name), save_project (file name),
+%export_fem_mesh (file name), open_figure (file name), open_figure_folder
+%(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
  
 if evalin('base','exist(''zef'');')
@@ -21,6 +25,7 @@ zef_data.program_path = program_path;
 zef_data.code_path = [zef_data.program_path filesep 'm'];
 zef_data.cluster_path =  [zef_data.program_path filesep 'cluster'];
 
+addpath(genpath([zef_data.program_path '/m']));
 addpath(genpath([zef_data.program_path '/mlapp']));
 addpath(genpath([zef_data.program_path '/fig']));  
 addpath(genpath([zef_data.program_path zef_data.code_path])); 
