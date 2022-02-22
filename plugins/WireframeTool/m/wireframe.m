@@ -64,8 +64,7 @@ end
 n_nodes = size(nodes,1);
 n_tetra = size(tetra,1);
 
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = volume(nodes, tetra, ind_m);
+tilavuus = volume(nodes, tetra);
 
 p_triangles = [
      4     2     1

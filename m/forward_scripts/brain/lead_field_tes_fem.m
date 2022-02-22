@@ -185,11 +185,7 @@ clear electrodes;
 % A
 A = spalloc(N,N,0);
 
-ind_m = [ 1 4 7;
-          2 5 8;
-          3 6 9];
-
-tilavuus = volume(nodes, tetrahedra, ind_m);
+tilavuus = volume(nodes, tetrahedra);
 
 clear Aux_mat;
 
