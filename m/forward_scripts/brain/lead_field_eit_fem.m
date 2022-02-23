@@ -124,7 +124,7 @@ if iscell(elements)
     A = spalloc(N,N,0);
     D_A = zeros(K,10);
 
-tilavuus = volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra);
 
 h=waitbar(0,'System matrices.');
 waitbar_ind = 0;

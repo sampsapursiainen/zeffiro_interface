@@ -197,7 +197,7 @@ Aux_mat = [
     - ...
     repmat(nodes(tetrahedra(:,4),:)',3,1);
 
-tilavuus = volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra);
 
 h=waitbar(0,'System matrices.');
 waitbar_ind = 0;
