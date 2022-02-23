@@ -1,4 +1,4 @@
-function gradients = volume_gradient(nodes, tetrahedra, node_index)
+function gradients = zef_volume_gradient(nodes, tetrahedra, node_index)
 % Calculates all of the ∇𝑉 of tetrahedra in the generated finite element mesh
 % as a triple product a ⋅ (b × c). See https://math.stackexchange.com/q/797845
 % for the general idea.
