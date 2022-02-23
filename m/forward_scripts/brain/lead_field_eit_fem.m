@@ -132,7 +132,7 @@ waitbar_ind = 0;
 D_A_count = 0;
 for i = 1 : 4
 
-grad_1 = volume_gradient(nodes, tetrahedra, i);
+grad_1 = zef_volume_gradient(nodes, tetrahedra, i);
 
 for j = i : 4
 
@@ -141,7 +141,7 @@ D_A_count = D_A_count + 1;
 if i == j
 grad_2 = grad_1;
 else
-grad_2 = volume_gradient(nodes, tetrahedra, j);
+grad_2 = zef_volume_gradient(nodes, tetrahedra, j);
 end
 
 entry_vec = zeros(1,size(tetrahedra,1));
