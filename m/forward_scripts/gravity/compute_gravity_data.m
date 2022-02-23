@@ -110,7 +110,7 @@ if iscell(elements)
     A = spalloc(N,N,0);
     D_A = zeros(K,10);
 
-tilavuus = volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra);
 
 roi_ind_vec = [];
 

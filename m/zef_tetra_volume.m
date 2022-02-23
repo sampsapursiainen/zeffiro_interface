@@ -1,4 +1,4 @@
-function V = volume(nodes, tetrahedra)
+function V = zef_tetra_volume(nodes, tetrahedra)
 % TILAVUUS - Calculates a volume V from a given set of finite element nodes,
 % the corresponding tetrahedra and suitable index matrix.
 %
