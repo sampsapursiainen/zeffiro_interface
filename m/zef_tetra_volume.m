@@ -53,5 +53,4 @@ function V = zef_tetra_volume(nodes, tetrahedra)
             aux_mat(ind_m(3,1),:)) ...
     );
 
-    return V
 end
