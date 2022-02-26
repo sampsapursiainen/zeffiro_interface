@@ -185,26 +185,20 @@ clear electrodes;
 % A
 A = spalloc(N,N,0);
 
-tilavuus = volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra);
 
 clear Aux_mat;
 
-ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
 h = waitbar(0,'System matrices.');
 waitbar_ind = 0;
 
 for i = 1 : 4
-    grad_1 = cross(nodes(tetrahedra(:,ind_m(i,2)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)', nodes(tetrahedra(:,ind_m(i,3)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)')/2;
-    grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(:,i),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)'))),3,1).*grad_1;
+    grad_1 = zef_volume_gradient(nodes, tetrahedra, i);
     for j = i : 4
         if i == j
             grad_2 = grad_1;
         else
-            grad_2 = cross(nodes(tetrahedra(:,ind_m(j,2)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)', nodes(tetrahedra(:,ind_m(j,3)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)')/2;
-            grad_2 = repmat(sign(dot(grad_2,(nodes(tetrahedra(:,j),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)'))),3,1).*grad_2;
+            grad_2 = zef_volume_gradient(nodes, tetrahedra, j);
         end
         entry_vec = zeros(1,size(tetrahedra,1));
         for k = 1 : 6
