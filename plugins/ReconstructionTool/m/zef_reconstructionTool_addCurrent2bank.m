@@ -1,5 +1,4 @@
 
-
 zef.reconstructionTool.bankSize=zef.reconstructionTool.bankSize+1;
 
 zef.reconstructionTool.bankInfo(zef.reconstructionTool.bankSize, 1:6)=zef.reconstructionTool.currentInfo;
@@ -15,23 +14,12 @@ zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.rec
 if ~isfield(zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information, 'tag')
     zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.tag=zef.reconstructionTool.currentInfo{1};
 end
-    
+
 if ~isfield(zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information, 'lead_field_id')
     zef.reconstructionTool.bankReconstruction{zef.reconstructionTool.bankSize,1}.reconstruction_information.lead_field_id=zef.reconstructionTool.currentInfo{6};
 end
 
-
-
 zef.reconstructionTool.bankInfo{zef.reconstructionTool.bankSize,7}=false;
 
 zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
-
-
-
-
-
-
-
-
-
 

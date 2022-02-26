@@ -6,7 +6,7 @@ output_mode = 1;
 if not(isempty(varargin))
    output_mode = varargin{1};
 end
-   
+
 mesh_data_1 = [];
 mesh_data_2 = [];
 submesh_data = [];
@@ -26,9 +26,9 @@ invert_on = evalin('base',['zef.' field_id '_invert']);
 
 if isequal(file_type,'points')
 
-if merge_on    
+if merge_on
 l1_points = evalin('base',['zef.' field_id '_points']);
-l2_points = load(file_str); 
+l2_points = load(file_str);
 mesh_data_1 = [l1_points; l2_points];
 else
 mesh_data_1 = load(file_str);
@@ -39,7 +39,7 @@ end
 if isequal(file_type,'triangles')
 
 if merge_on
-l1_triangles = evalin('base',['zef.' field_id '_triangles']); 
+l1_triangles = evalin('base',['zef.' field_id '_triangles']);
 l2_triangles = load(file_str);
 if invert_on
     l2_triangles = l2_triangles(:,[2 1 3]);
@@ -69,31 +69,28 @@ end
     end
 end
 
- 
 if merge_on
-    submesh_data = [submesh_data size(mesh_data_2,1)]; 
+    submesh_data = [submesh_data size(mesh_data_2,1)];
 else
-   submesh_data = [size(mesh_data_2,1)]; 
-end;       
+   submesh_data = [size(mesh_data_2,1)];
+end;
 
 end
-
 
 if isequal(file_type,'stl')
 
-stl_data = stlread(file_str);     
-    
-if merge_on    
-l1_points = evalin('base',['zef.' field_id '_points']);
-l2_points = stl_data.Points; 
-mesh_data_1 = [l1_points; l2_points];
-else
-mesh_data_1 = stl_data.Points; 
-end
-
+stl_data = stlread(file_str);
 
 if merge_on
-l1_triangles = evalin('base',['zef.' field_id '_triangles']); 
+l1_points = evalin('base',['zef.' field_id '_points']);
+l2_points = stl_data.Points;
+mesh_data_1 = [l1_points; l2_points];
+else
+mesh_data_1 = stl_data.Points;
+end
+
+if merge_on
+l1_triangles = evalin('base',['zef.' field_id '_triangles']);
 l2_triangles = stl_data.ConnectivityList;
 if invert_on
     l2_triangles = l2_triangles(:,[2 1 3]);
@@ -110,27 +107,22 @@ else
 
 mesh_data_2 = stl_data.ConnectivityList;
 
-
 if invert_on
     mesh_data_2 = mesh_data_1(:,[2 1 3]);
 end
     end
 
-
 if merge_on
-    submesh_data = [submesh_data size(mesh_data_2,1)]; 
+    submesh_data = [submesh_data size(mesh_data_2,1)];
 else
-   submesh_data = [size(mesh_data_2,1)]; 
-end;       
+   submesh_data = [size(mesh_data_2,1)];
+end;
 
-
-   
 end
 
-
 if isequal(file_type,'asc')
-    
-file_name_1 = file_str;  
+
+file_name_1 = file_str;
 
 fid = fopen(file_name_1);
 aux_dim = textscan(fid,'%s',1,'delimiter','\n', 'headerlines',1);
@@ -143,7 +135,7 @@ triangle_data = zeros(aux_dim(1),3);
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
 
-point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+point_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false);
 point_data = cell2mat(point_data);
 point_data(:,1) = point_data(:,1) + str2num(ini_cell{1}{n_columns*(i-1)+10});
 point_data(:,2) = point_data(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11});
@@ -152,19 +144,19 @@ point_data(:,3) = point_data(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
 fid = fopen(file_name_1);
 aux_data = textscan(fid,'%s',aux_dim(2),'delimiter','\n', 'headerlines',2+aux_dim(1));
 
-triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false); 
+triangle_data = cellfun(@(v) zef_import_asc(v),aux_data{1},'uniformoutput',false);
 triangle_data = cell2mat(triangle_data)+1;
 
-if merge_on    
+if merge_on
 l1_points = evalin('base',['zef.' field_id '_points']);
-l2_points = point_data; 
+l2_points = point_data;
 mesh_data_1 = [l1_points; l2_points];
 else
-mesh_data_1 = point_data; 
+mesh_data_1 = point_data;
 end
 
 if merge_on
-l1_triangles = evalin('base',['zef.' field_id '_triangles']); 
+l1_triangles = evalin('base',['zef.' field_id '_triangles']);
 l2_triangles = triangle_data;
 if invert_on
     l2_triangles = l2_triangles(:,[2 1 3]);
@@ -181,19 +173,17 @@ else
 
 mesh_data_2 = triangle_data;
 
-
 if invert_on
     mesh_data_2 = mesh_data_1(:,[2 1 3]);
 end
     end
 
-
 if merge_on
-    submesh_data = [submesh_data size(mesh_data_2,1)]; 
+    submesh_data = [submesh_data size(mesh_data_2,1)];
 else
-   submesh_data = [size(mesh_data_2,1)]; 
-end;       
-    
+   submesh_data = [size(mesh_data_2,1)];
+end;
+
 end
 
 end

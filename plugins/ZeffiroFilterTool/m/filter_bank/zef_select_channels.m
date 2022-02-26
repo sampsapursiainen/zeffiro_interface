@@ -3,7 +3,7 @@ function [processed_data] = zef_select_channels(f, select_channels)
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 %This function processes the N-by-M data array f for N channels and M time
 %steps. The other arguments can be controlled via the ZI user interface.
-%The desctiption and argument definitions shown in ZI are listed below. 
+%The desctiption and argument definitions shown in ZI are listed below.
 %Description: Select channels
 %Input: 1 Selected channels [Default: '']
 %Output: Data for selected channels.
@@ -17,4 +17,3 @@ end
 
 processed_data = f(select_channels,:);
 
-   

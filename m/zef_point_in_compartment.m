@@ -80,7 +80,7 @@ bar_ind = ceil(length_I/(50*par_num));
 i_ind = 0;
 
 for i = 1 : par_num : length_I
-    
+
 i_ind = i_ind + 1;
 block_ind = [i: min(i+par_num-1,length_I)];
 aux_vec = nodes_aux(:,block_ind);
@@ -146,7 +146,7 @@ if not(isempty(compartment_info))
 waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
 end
-    
+
 end
 
 ind_inc = 0;

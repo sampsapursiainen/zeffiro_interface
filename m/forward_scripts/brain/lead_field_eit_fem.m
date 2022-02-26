@@ -395,7 +395,6 @@ if isequal(electrode_model,'CEM')
 
     C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
 
-
 end
 
 if isequal(permutation,'symamd')
@@ -566,7 +565,6 @@ x_block(:,block_iter_sub) = x_block_cell{block_iter};
 relres_vec(block_iter_sub) = relres_cell{block_iter};
 end
 
-
 %Substitute matrices
 if isequal(electrode_model,'CEM')
 L_eit(block_ind,:) = x_block';
@@ -605,7 +603,6 @@ L_eit = Aux_mat*L_eit;
 end
 
 Aux_mat_6 = eye(L,L) - (1/L)*ones(L,L);
-
 
 if isfield(evalin('base','zef'),'redo_eit_dec')
 if evalin('base','zef.redo_eit_dec') == 1

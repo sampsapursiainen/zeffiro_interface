@@ -1,12 +1,12 @@
 function [h_cone_field, h_streamlines, h_colorbar] = zef_plot_cone_field(h_axes, varargin)
 
-if evalin('base','zef.cone_draw') || evalin('base','zef.streamline_draw') 
+if evalin('base','zef.cone_draw') || evalin('base','zef.streamline_draw')
 
 rec_ind = 1;
 position_case = 1;
 if not(isempty(varargin))
     rec_ind = varargin{1};
-    if length(varargin) > 1 
+    if length(varargin) > 1
         position_case = varargin{2};
     end
 end
@@ -48,7 +48,7 @@ if clipped
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
-end  
+end
 clipped = 1;
 end
 
@@ -64,7 +64,7 @@ if clipped
 aux_ind_1 =  zef_clipping_plane(s_p,clipping_plane,aux_ind_1);
 else
 aux_ind_1 = zef_clipping_plane(s_p,clipping_plane);
-end   
+end
 clipped = 1;
 end
 
@@ -93,7 +93,7 @@ max_y = max(s_p(:,2));
 min_z = min(s_p(:,3));
 max_z = max(s_p(:,3));
 
-lattice_constant = lattice_res/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3); 
+lattice_constant = lattice_res/((max_x - min_x)*(max_y - min_y)*(max_z - min_z))^(1/3);
 lattice_res_x = floor(lattice_constant*(max_x - min_x));
 lattice_res_y = floor(lattice_constant*(max_y - min_y));
 lattice_res_z = floor(lattice_constant*(max_z - min_z));
@@ -116,10 +116,10 @@ Y_field = zeros(size(Y_lattice));
 Z_field = zeros(size(Z_lattice));
 C_field = X_lattice;
 
-lattice_ind_aux = [max(1,ceil(lattice_res_x*(s_p(:,1)-min(s_p(:,1)))./(max(s_p(:,1))-min(s_p(:,1))))) ... 
+lattice_ind_aux = [max(1,ceil(lattice_res_x*(s_p(:,1)-min(s_p(:,1)))./(max(s_p(:,1))-min(s_p(:,1))))) ...
     max(1,ceil(lattice_res_y*(s_p(:,2)-min(s_p(:,2)))./(max(s_p(:,2))-min(s_p(:,2)))))...
     max(1,ceil(lattice_res_z*(s_p(:,3)-min(s_p(:,3)))./(max(s_p(:,3))-min(s_p(:,3)))))];
-    
+
 lattice_ind_aux = (lattice_ind_aux(:,3)-1)*lattice_res_x*lattice_res_y + (lattice_ind_aux(:,1)-1)*lattice_res_y + lattice_ind_aux(:,2);
 
 X_field(lattice_ind_aux) = cone_field(:,1);
@@ -136,15 +136,14 @@ I = [1:size(s_p,1)];
 I = I(1:round(length(I)/(evalin('base','zef.n_streamline')-1)):end);
 
 if evalin('base','zef.cone_draw')
-   
+
 h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
 set(h_cone_field,'facecolor','interp');
 set(h_cone_field,'edgecolor','none');
 set(h_cone_field,'facealpha',evalin('base','zef.cone_alpha'));
 set(h_cone_field,'Tag','cones');
 
-end 
-
+end
 
 if evalin('base','zef.streamline_draw')
 h_streamline = streamline(stream3(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,s_p(I,1),s_p(I,2),s_p(I,3)));
@@ -163,11 +162,6 @@ h_colorbar = colorbar('SouthOutside','Position',position_vec);
 set(h_colorbar,'limits',[min(norm_cone_field(:)) max(norm_cone_field(:))]);
 axes(h_axes);
 
-
 end
 end
-
-
-
-
 

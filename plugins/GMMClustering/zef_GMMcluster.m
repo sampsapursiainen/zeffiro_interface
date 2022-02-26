@@ -1,7 +1,7 @@
 function [GMModel,GMModelDipoles] = zef_GMMcluster
 h = waitbar(0,['Gaussian mixature model.']);
 
-%Options 
+%Options
 options = statset('MaxIter',evalin('base','zef.GMMcluster_MaxIter'));
 if evalin('base','zef.GMMcluster_covtype')==1
     Sigma = 'full';
@@ -113,8 +113,8 @@ for t=t_start:T
     ind2(z_cum-z(ind)+1)=1;
     activity_pos = source_positions(ind,:);
     activity_dir = direct(ind,:);
-    
-    activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];    
+
+    activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];
     %calculate Gaussian mixature models:
     try
         GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
@@ -123,7 +123,7 @@ for t=t_start:T
         GMModel_aux = fitgmdist(activity_space,k,'CovarianceType',Sigma, ...
             'SharedCovariance',SharedCovariance,'RegularizationValue',reg_value,'Options',options);
     end
-    
+
     if GMModel_aux.BIC < best_BIC
             best_BIC = GMModel_aux.BIC;
         if T>1
@@ -132,13 +132,13 @@ for t=t_start:T
             GMModel = GMModel_aux;
         end
     end
-    
+
     if T==1
       waitbar(k/K(t),h,['Step ',num2str(k),' of ',num2str(K(t)),'. ',date_str]);
     end
-    
+
     end     %end of k loop
-    
+
     if T > 1
         ind2 = [];
         for k = 1:size(GMModel{t}.mu,1)
@@ -152,7 +152,7 @@ for t=t_start:T
         for k = 1:size(GMModel.mu,1)
             [~,ind2(k)] = min(sum((GMModel.mu(k,1:3)-source_positions).^2,2));
         end
-        disp(['Relative centroid current densities: ',num2str(J(ind2)'/max(J))]) 
+        disp(['Relative centroid current densities: ',num2str(J(ind2)'/max(J))])
         GMModelDipoles = J(ind2).*GMModel.mu(:,4:6);
     end
 
@@ -160,11 +160,4 @@ end     %end of t loop
 
 close(h);
 end
-    
-    
-    
-        
-        
-        
-    
-    
+

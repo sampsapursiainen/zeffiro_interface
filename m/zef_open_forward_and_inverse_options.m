@@ -8,18 +8,18 @@ zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 if find(ismember(properties(zef.(zef.fieldnames{zef_i})),'ValueChangedFcn'))
 zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_forward_and_inverse_options;';
 end
-end  
+end
 
 zef = rmfield(zef,'fieldnames');
 
 clear zef_data;
 
-[~, ~,zef.aux_field] = zef_get_active_compartments('name'); 
-zef.h_as_opt_5.Items = {'Active compartments', zef.aux_field{:}}; 
-zef.h_refinement_volume_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
-zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_field{:}}; 
-zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
-zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}}; 
+[~, ~,zef.aux_field] = zef_get_active_compartments('name');
+zef.h_as_opt_5.Items = {'Active compartments', zef.aux_field{:}};
+zef.h_refinement_volume_compartments.Items = {'Active compartments', zef.aux_field{:}};
+zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_field{:}};
+zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}};
+zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef = rmfield(zef,'aux_field');
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
@@ -84,7 +84,6 @@ zef.h_fix_outer_surface.Value = zef.fix_outer_surface;
 
 zef.h_adaptive_refinement_number.Value = num2str(zef.adaptive_refinement_number);
 
-
 zef.h_initial_mesh_mode.Items = {'Regular 1','Regular 2'};
 zef.h_initial_mesh_mode.ItemsData = [1:length(zef.h_initial_mesh_mode.Items)];
 zef.h_initial_mesh_mode.Value = zef.initial_mesh_mode;
@@ -100,7 +99,6 @@ zef.h_pml_max_size_unit.Value = zef.pml_max_size_unit;
 zef.h_pml_max_size.Value =  num2str(zef.pml_max_size);
 zef.h_mesh_relabeling.Value =  zef.mesh_relabeling;
 zef.h_exclude_box.Value =  zef.exclude_box;
-
 
 zef.h_adaptive_refinement_on.Value = zef.adaptive_refinement_on;
 zef.h_adaptive_refinement_thresh_val.Value = num2str(zef.adaptive_refinement_thresh_val);

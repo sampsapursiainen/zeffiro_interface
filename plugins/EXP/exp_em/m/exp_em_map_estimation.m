@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if  ismac
 zef.h_exp_em_map_estimation = open('exp_em_map_estimation.fig');
-elseif ispc 
+elseif ispc
 zef.h_exp_em_map_estimation = open('exp_em_map_estimation.fig');
 else
 zef.h_exp_em_map_estimation = open('exp_em_map_estimation.fig');
@@ -17,11 +17,11 @@ if iscell(zef.measurements)
     set(zef.h_exp_em_data_segment,'enable','on');
 end
 if not(iscell(zef.measurements))
-    set(zef.h_exp_em_data_segment,'enable','off'); 
+    set(zef.h_exp_em_data_segment,'enable','off');
 end
 end
-uistack(flipud([zef.h_exp_em_beta ; zef.h_exp_em_theta0; 
+uistack(flipud([zef.h_exp_em_beta ; zef.h_exp_em_theta0;
     zef.h_exp_em_snr ; zef.h_exp_em_n_map_iterations ; zef.h_exp_em_n_L1_iterations ;
-    zef.h_exp_em_sampling_frequency ; zef.h_exp_em_low_cut_frequency ; 
-    zef.h_exp_em_high_cut_frequency ; zef.h_exp_em_time_1 ; zef.h_exp_em_time_2; zef.h_exp_em_number_of_frames; zef.h_exp_em_time_3; zef.h_exp_em_data_segment ; zef.h_exp_em_cancel ; 
-    zef.h_exp_em_apply; zef.h_exp_em_start  ]),'top'); 
+    zef.h_exp_em_sampling_frequency ; zef.h_exp_em_low_cut_frequency ;
+    zef.h_exp_em_high_cut_frequency ; zef.h_exp_em_time_1 ; zef.h_exp_em_time_2; zef.h_exp_em_number_of_frames; zef.h_exp_em_time_3; zef.h_exp_em_data_segment ; zef.h_exp_em_cancel ;
+    zef.h_exp_em_apply; zef.h_exp_em_start  ]),'top');

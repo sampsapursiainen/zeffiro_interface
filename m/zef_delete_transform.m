@@ -8,7 +8,7 @@ transforms_selected = evalin('base','zef.transforms_selected');
 for i = 1 : length(transforms_selected)
 
     evalin('base',['zef.h_transform_table.Data{' num2str(table_data{transforms_selected(i),1}) '} = NaN;'])
- 
+
 end
 
 evalin('base','run(''zef_update_transform'')');

@@ -1,8 +1,4 @@
 
-
-
-
-
 zef.dataBank.app.Tree.Enable='off';
 
 zef.dataBank.selectMultiple=false;
@@ -18,57 +14,6 @@ zef.dataBank.nameChangeapp.OkButton.ButtonPushedFcn=strcat("zef.dataBank.tree.(z
     "zef.dataBank.app.Tree.Enable='on';", ...
     "zef.dataBank.nameChangeapp.delete;" );
 
-
 zef.dataBank.nameChangeapp.CancelButton.ButtonPushedFcn=strcat("zef.dataBank.app.Tree.Enable='on';", ...
     "zef.dataBank.nameChangeapp.delete;" );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

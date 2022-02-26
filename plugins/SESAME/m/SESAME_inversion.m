@@ -2,7 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = SESAME_inversion(void)
 
-
 h = waitbar(0,['SESAME iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
@@ -21,7 +20,7 @@ source_positions = source_positions(s_ind_1,:);
 
 if source_direction_mode == 2
 
-[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
+[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}');
 
 i = 0;
 length_reuna = 0;
@@ -41,19 +40,19 @@ switch k
     color_str = evalin('base','zef.d1_color');
      case 2
         var_0 = 'zef.d2_on';
-        var_1 = 'zef.d2_sigma';   
+        var_1 = 'zef.d2_sigma';
         var_2 = 'zef.d2_priority';
         var_3 = 'zef.d2_visible';
         color_str = evalin('base','zef.d2_color');
      case 3
         var_0 = 'zef.d3_on';
-        var_1 = 'zef.d3_sigma';   
+        var_1 = 'zef.d3_sigma';
         var_2 = 'zef.d3_priority';
         var_3 = 'zef.d3_visible';
         color_str = evalin('base','zef.d3_color');
      case 4
         var_0 = 'zef.d4_on';
-        var_1 = 'zef.d4_sigma';   
+        var_1 = 'zef.d4_sigma';
         var_2 = 'zef.d4_priority';
         var_3 = 'zef.d4_visible';
         color_str = evalin('base','zef.d4_color');
@@ -65,49 +64,49 @@ switch k
     color_str = evalin('base','zef.d5_color');
      case 6
         var_0 = 'zef.d6_on';
-        var_1 = 'zef.d6_sigma';   
+        var_1 = 'zef.d6_sigma';
         var_2 = 'zef.d6_priority';
         var_3 = 'zef.d6_visible';
         color_str = evalin('base','zef.d6_color');
      case 7
         var_0 = 'zef.d7_on';
-        var_1 = 'zef.d7_sigma';   
+        var_1 = 'zef.d7_sigma';
         var_2 = 'zef.d7_priority';
         var_3 = 'zef.d7_visible';
         color_str = evalin('base','zef.d7_color');
      case 8
         var_0 = 'zef.d8_on';
-        var_1 = 'zef.d8_sigma';   
+        var_1 = 'zef.d8_sigma';
         var_2 = 'zef.d8_priority';
         var_3 = 'zef.d8_visible';
         color_str = evalin('base','zef.d8_color');
     case 9
         var_0 = 'zef.d9_on';
-        var_1 = 'zef.d9_sigma';   
+        var_1 = 'zef.d9_sigma';
         var_2 = 'zef.d9_priority';
         var_3 = 'zef.d9_visible';
         color_str = evalin('base','zef.d9_color');
      case 10
         var_0 = 'zef.d10_on';
-        var_1 = 'zef.d10_sigma';   
+        var_1 = 'zef.d10_sigma';
         var_2 = 'zef.d10_priority';
         var_3 = 'zef.d10_visible';
         color_str = evalin('base','zef.d10_color');
      case 11
         var_0 = 'zef.d11_on';
-        var_1 = 'zef.d11_sigma';   
+        var_1 = 'zef.d11_sigma';
         var_2 = 'zef.d11_priority';
         var_3 = 'zef.d11_visible';
         color_str = evalin('base','zef.d11_color');
      case 12
         var_0 = 'zef.d12_on';
-        var_1 = 'zef.d12_sigma';   
+        var_1 = 'zef.d12_sigma';
         var_2 = 'zef.d12_priority';
         var_3 = 'zef.d12_visible';
         color_str = evalin('base','zef.d12_color');
      case 13
         var_0 = 'zef.d13_on';
-        var_1 = 'zef.d13_sigma';   
+        var_1 = 'zef.d13_sigma';
         var_2 = 'zef.d13_priority';
         var_3 = 'zef.d13_visible';
         color_str = evalin('base','zef.d13_color');
@@ -119,55 +118,55 @@ switch k
     color_str = evalin('base','zef.d14_color');
   case 15
         var_0 = 'zef.d15_on';
-        var_1 = 'zef.d15_sigma';   
+        var_1 = 'zef.d15_sigma';
         var_2 = 'zef.d15_priority';
         var_3 = 'zef.d15_visible';
         color_str = evalin('base','zef.d15_color');
      case 16
         var_0 = 'zef.d16_on';
-        var_1 = 'zef.d16_sigma';   
+        var_1 = 'zef.d16_sigma';
         var_2 = 'zef.d16_priority';
         var_3 = 'zef.d16_visible';
         color_str = evalin('base','zef.d16_color');
      case 17
         var_0 = 'zef.d17_on';
-        var_1 = 'zef.d17_sigma';   
+        var_1 = 'zef.d17_sigma';
         var_2 = 'zef.d17_priority';
         var_3 = 'zef.d17_visible';
         color_str = evalin('base','zef.d17_color');
     case 18
         var_0 = 'zef.d18_on';
-        var_1 = 'zef.d18_sigma';   
+        var_1 = 'zef.d18_sigma';
         var_2 = 'zef.d18_priority';
         var_3 = 'zef.d18_visible';
         color_str = evalin('base','zef.d18_color');
      case 19
         var_0 = 'zef.d19_on';
-        var_1 = 'zef.d19_sigma';   
+        var_1 = 'zef.d19_sigma';
         var_2 = 'zef.d19_priority';
         var_3 = 'zef.d19_visible';
         color_str = evalin('base','zef.d19_color');
      case 20
         var_0 = 'zef.d20_on';
-        var_1 = 'zef.d20_sigma';   
+        var_1 = 'zef.d20_sigma';
         var_2 = 'zef.d20_priority';
         var_3 = 'zef.d20_visible';
         color_str = evalin('base','zef.d20_color');
      case 21
         var_0 = 'zef.d21_on';
-        var_1 = 'zef.d21_sigma';   
+        var_1 = 'zef.d21_sigma';
         var_2 = 'zef.d21_priority';
         var_3 = 'zef.d21_visible';
         color_str = evalin('base','zef.d21_color');
      case 22
         var_0 = 'zef.d22_on';
-        var_1 = 'zef.d22_sigma';   
+        var_1 = 'zef.d22_sigma';
         var_2 = 'zef.d22_priority';
         var_3 = 'zef.d22_visible';
         color_str = evalin('base','zef.d22_color');
     case 23
         var_0 = 'zef.w_on';
-        var_1 = 'zef.w_sigma';    
+        var_1 = 'zef.w_sigma';
         var_2 = 'zef.w_priority';
         var_3 = 'zef.w_visible';
         color_str = evalin('base','zef.w_color');
@@ -196,8 +195,8 @@ switch k
         var_3 = 'zef.sc_visible';
         color_str = evalin('base','zef.sc_color');
      end
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
 priority_val = evalin('base',var_2);
 visible_val = evalin('base',var_3);
 if on_val
@@ -400,7 +399,7 @@ end
 
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
-data_norm = max(abs(f(:)).^2); 
+data_norm = max(abs(f(:)).^2);
 %std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==2;
 data_norm = max((sum(abs(f).^2)));
@@ -434,15 +433,14 @@ date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400))
 end;
 
 if source_direction_mode == 1 || source_direction_mode == 2
-z_aux = zeros(size(L_aux,2),1); 
+z_aux = zeros(size(L_aux,2),1);
 end
 if source_direction_mode == 3
 z_aux = zeros(3*size(L_aux,2),1);
 end
-z_vec = ones(size(L_aux,2),1); 
+z_vec = ones(size(L_aux,2),1);
 
-
-if size(f_org,2) > 1  
+if size(f_org,2) > 1
 if evalin('base','zef.SESAME_time_2') >=0 0 && evalin('base','zef.SESAME_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.SESAME_time_1') <= size(f_org,2);
 f = f_org(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.SESAME_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.SESAME_time_3'))) : min(size(f_org,2), 1 + floor(sampling_freq*(evalin('base','zef.SESAME_time_1') + evalin('base','zef.SESAME_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.SESAME_time_3'))));
 end
@@ -458,7 +456,7 @@ end
 
 %if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 %f = gpuArray(f);
-%end 
+%end
 
 z_vec_aux = zeros(size(L_aux,2),size(f,2));
 
@@ -481,10 +479,10 @@ qv_data = mean(p_data.QV_estimated(3*(d_ind-1)+1:3*d_ind,:),2);
 %[~,max_ind] = max(p_data.Q_estimated(d_ind,:));
 %qv_data = p_data.QV_estimated(3*(d_ind-1)+1:3*d_ind,max_ind);
 %qv_data = p_data.QV_estimated(3*(d_ind-1)+1:3*d_ind,:);
-z_vec([-2 -1 0]'+3*d_est(d_ind)) = qv_data; 
+z_vec([-2 -1 0]'+3*d_est(d_ind)) = qv_data;
 end
 %z_vec = sum(p_data.pmap(:,end,:),2);
-%z_vec = z_vec(:,[1 1 1])'; 
+%z_vec = z_vec(:,[1 1 1])';
 %z_vec = z_vec(:);
 
 %assignin('base','reconstruction_aux',z_vec);
@@ -494,17 +492,16 @@ end
 
 if source_direction_mode == 2
 z_vec_aux = (z_vec(s_ind_4) + z_vec(n_interp+s_ind_4) + z_vec(2*n_interp+s_ind_4))/3;
-z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1); 
-z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2); 
-z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3); 
+z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1);
+z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2);
+z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3);
 %z_vec = z_vec(:);
 end
 
-if source_direction_mode == 3 
+if source_direction_mode == 3
 z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';
 %z_vec = z_vec(:);
 end
-
 
 if source_direction_mode == 1 || source_direction_mode == 2
 z_aux(s_ind_1) = z_vec;
@@ -529,7 +526,7 @@ end;
 % z{f_ind} = z{f_ind}./max(aux_norm_vec);
 % end;
 % else
-% aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2)); 
+% aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2));
 % z = z./max(aux_norm_vec);
 % end;
 close(h);

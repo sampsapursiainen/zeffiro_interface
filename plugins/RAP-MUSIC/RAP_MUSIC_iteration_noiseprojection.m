@@ -40,15 +40,13 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 reconstruction_information.leadfield_lambda = lambda_L;
 reconstruction_information.n_dipoles = n_dipoles;
 
-
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
 if evalin('base','zef.inv_hyperprior') == 1
 [~, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
-elseif evalin('base','zef.inv_hyperprior') == 2 
+elseif evalin('base','zef.inv_hyperprior') == 2
 [~, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),[],size(L,2));
 end
-
 
 if number_of_frames > 1
 z = cell(number_of_frames,1);
@@ -62,17 +60,16 @@ f_data = zef_getFilteredData;
 tic;
 %------------------ TIME LOOP STARTS HERE ------------------------------
 for f_ind = 1 : number_of_frames
-time_val = toc; 
+time_val = toc;
 if f_ind > 1
 date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end
 
-
-if ismember(source_direction_mode, [1,2]) 
+if ismember(source_direction_mode, [1,2])
 z_aux = zeros(size(L,2),1);
 Var_aux = zeros(size(L,2),1);
 end
-if source_direction_mode == 3 
+if source_direction_mode == 3
 z_aux = zeros(3*size(L,2),1);
 Var_aux = zeros(3*size(L,2),1);
 end
@@ -91,7 +88,7 @@ end
 
 %---------------CALCULATIONS STARTS HERE----------------------------------
 %Data covariance matrix (assuming that this is John Mosher's "sample covariance
-%matrix" \hat{R} 
+%matrix" \hat{R}
 if size(f,2) > 1
     C = cov(f');
 else
@@ -108,7 +105,7 @@ if source_direction_mode == 1  || source_direction_mode == 2
 elseif source_direction_mode == 3
     nn = length(s_ind_1);
     L_ind = round(transpose(1:nn));
-end    
+end
     nn = size(L_ind,1);
     %Initial objects
     Proj=1;     %Projection matrix \Pi^\perp_{A_{k-1}} by J. Mosher
@@ -124,7 +121,7 @@ end
                 date_str = [];
             end
         end
-        
+
         s_max = -1; % maximum eigenvalue of subspace correlations
         ind_space(end+1) = nan;
         %go trough every source point from search_space to find the one
@@ -145,14 +142,14 @@ end
             %(problematic!)
             Proj = eye(size(A_mat,1))-A_mat*((A_mat'*A_mat+lambda_L*eye(size(A_mat,2)))\transpose(A_mat));
             search_space = setdiff(search_space,ind_space(d_iter)); %extract the found dipole location from searched nodes.
-            
-        if f_ind > 1;    
+
+        if f_ind > 1;
          waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
             waitbar(d_iter/n_dipoles,h,['RAP MUSIC iteration ',num2str(d_iter),' of ',num2str(n_dipoles),'. Ready: ' date_str '.']);
         end;
     end
-    
+
     %forming the reconstruction from the A_mat and orientation
     An_interp = size(A_mat,2)/3;
     %Amplitude leadfield a.k.a gain matrix:
@@ -161,11 +158,10 @@ end
         A_mat = gpuArray(A_mat);
     end
     z_amp = A_mat'*((A_mat*A_mat'+S_mat)\f);    %amplitude estimation
-    z_vec = zeros(size(L,2),1); 
+    z_vec = zeros(size(L,2),1);
     z_vec(reshape(L_ind(ind_space,:),[],1)) = reshape(z_amp'.*orj,[],1); %couple the amplitude with the orjentation.
     %Notice that L_ind(ind_space,:) and orj are structurally same, and
     %reshape form order similar with s_ind indexing.
-    
 
 z{f_ind} = z_vec;
 end;

@@ -58,7 +58,6 @@ if iscell(elements)
     source_ind = [1:size(tetrahedra,1)]';
     cholinc_tol = 1e-3;
 
-
     n_varargin = length(varargin);
     if n_varargin >= 1
     if not(isstruct(varargin{1}))
@@ -125,7 +124,6 @@ for j = 1 : size(roi_sphere,1)
 r_aux = find(sqrt(sum((center_points'-c_roi(:,j*ones(1,size(center_points,1)))).^2))<=r_roi(j));
 rho_tetrahedra(1:3,r_aux) =  rho_tetrahedra(1:3,r_aux) + roi_perturbation(j);
 
-
 end
 
 ind_m = [ 2 3 4 ;
@@ -159,7 +157,6 @@ end
 
 elseif evalin('base','zef.imaging_method') == 3
 
-
 eit_data_vec = zeros(L, 1);
 %tilavuus_vec_aux = zeros(1, 1);
 
@@ -175,7 +172,6 @@ time_val = toc;
 waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
 end
  end
-
 
 elseif evalin('base','zef.imaging_method') == 2
 eit_data_vec = zeros(3*L, 1);
@@ -204,7 +200,6 @@ end
 
 elseif evalin('base','zef.imaging_method') == 1
 
-
 eit_data_vec = zeros(L, 1);
 %tilavuus_vec_aux = zeros(1, 1);
 
@@ -225,13 +220,11 @@ waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*tim
 end
  end
 
-
 end
 
 waitbar(1,h);
 
 close(h);
-
 
 %eit_data_vec = eit_data_vec/tilavuus_vec_aux;
 eit_data_vec = (6.67408E-11)*eit_data_vec;

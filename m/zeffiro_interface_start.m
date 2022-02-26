@@ -15,7 +15,7 @@ zef = rmfield(zef, 'ver');
 if ismember(zef.start_mode,{'nodisplay','display'})
 zef.use_display = 0;
 end
-    
+
 if not(zef.use_display)
     addpath(genpath([zef.program_path '/nodisplay']));
 end
@@ -25,33 +25,32 @@ gpuDevice(zef.gpu_num);
 end
 
 zef.mlapp = 1;
-zef.new_empty_project = 0; 
+zef.new_empty_project = 0;
 
 zef_data = struct;
 
 zef_init;
 if zef.mlapp == 1
-zeffiro_interface_segmentation_tool; 
+zeffiro_interface_segmentation_tool;
 else
 zef.h_zeffiro_window_main = open('zeffiro_interface_segmentation_tool.fig');
 end
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
-
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-for zef_k = 1 : length(zef.h_temp); 
+for zef_k = 1 : length(zef.h_temp);
 if zef_k <= length(zef.menu_accelerator_vec)
-    set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k))); 
+    set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));
 end
 end
 zef_plugin;
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools},'accelerator','');
-for zef_j = 1 : length(zef.h_temp); 
+for zef_j = 1 : length(zef.h_temp);
 if zef_k + zef_j <= length(zef.menu_accelerator_vec)
-    set(zef.h_temp(zef_j),'accelerator',char(zef.menu_accelerator_vec(zef_k+zef_j))); 
+    set(zef.h_temp(zef_j),'accelerator',char(zef.menu_accelerator_vec(zef_k+zef_j)));
 end
 end
 clear zef_j zef_k
@@ -60,12 +59,12 @@ zef = rmfield(zef,'menu_accelerator_vec');
 
 zef.o_h = findall(zef.h_zeffiro_window_main);
 %zef.h_axes2 = findobj(zef.o_h,'Type','Axes');
-%zef.h_axes2  = zef.h_axes2(1); 
+%zef.h_axes2  = zef.h_axes2(1);
 zef=rmfield(zef,'o_h');
 zef.clear_axes1 = 0;
 
 if not(isequal(zef.mlapp,1))
-    
+
 set(zef.h_pushbutton2,'Callback',[get(zef.h_pushbutton2,'Callback') 'if zef.w_merge; zef.w_submesh_ind = [zef.w_submesh_ind size(zef.w_triangles,1)]; else zef.w_submesh_ind = [size(zef.w_triangles,1)]; end;']);
 set(zef.h_pushbutton4,'Callback',[get(zef.h_pushbutton4,'Callback') 'if zef.g_merge; zef.g_submesh_ind = [zef.g_submesh_ind size(zef.g_triangles,1)]; else zef.g_submesh_ind = [size(zef.g_triangles,1)]; end;']);
 set(zef.h_pushbutton6,'Callback',[get(zef.h_pushbutton6,'Callback') 'if zef.c_merge; zef.c_submesh_ind = [zef.c_submesh_ind size(zef.c_triangles,1)]; else zef.c_submesh_ind = [size(zef.c_triangles,1)]; end;']);
@@ -93,12 +92,11 @@ set(zef.h_d19_button_2,'Callback',[get(zef.h_d19_button_2,'Callback') 'if zef.d1
 set(zef.h_d20_button_2,'Callback',[get(zef.h_d20_button_2,'Callback') 'if zef.d20_merge; zef.d20_submesh_ind = [zef.d20_submesh_ind size(zef.d20_triangles,1)]; else zef.d20_submesh_ind = [size(zef.d20_triangles,1)]; end;']);
 set(zef.h_d21_button_2,'Callback',[get(zef.h_d21_button_2,'Callback') 'if zef.d21_merge; zef.d21_submesh_ind = [zef.d21_submesh_ind size(zef.d21_triangles,1)]; else zef.d21_submesh_ind = [size(zef.d21_triangles,1)]; end;']);
 set(zef.h_d22_button_2,'Callback',[get(zef.h_d22_button_2,'Callback') 'if zef.d22_merge; zef.d22_submesh_ind = [zef.d22_submesh_ind size(zef.d22_triangles,1)]; else zef.d22_submesh_ind = [size(zef.d22_triangles,1)]; end;']);
-    
+
 end
 
 zef_figure_tool;
 zef_mesh_tool;
 zeffiro_interface_mesh_visualization_tool;
 zef_update;
-
 

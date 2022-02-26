@@ -2,7 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = zef_relax_iteration(void)
 
-
 h = waitbar(0,['Relaxation iteration.']);
 n_multires = evalin('base','zef.relax_multires_n_levels');
 sparsity_factor = evalin('base','zef.relax_multires_sparsity');
@@ -23,7 +22,6 @@ perm_vec = evalin('base','zef.relax_preconditioner_permutation');
 gamma = 10^(-relax_db/20);
 tol_val = 10^(-(snr_val - relax_tolerance)/20);
 
-
 reconstruction_information.tag = 'Relaxation';
 reconstruction_information.inv_time_1 = evalin('base','zef.relax_time_1');
 reconstruction_information.inv_time_2 = evalin('base','zef.relax_time_2');
@@ -38,8 +36,7 @@ reconstruction_information.snr_val = evalin('base','zef.relax_snr');
 
 [L, n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-[f_data] = zef_getFilteredData; 
-
+[f_data] = zef_getFilteredData;
 
 tic;
 
@@ -48,14 +45,14 @@ z_inverse = cell(0);
 tic;
 for f_ind = 1 : number_of_frames
 
-time_val = toc; 
-if f_ind > 1; 
+time_val = toc;
+if f_ind > 1;
 date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
-z_vec = ones(size(L, 2),1); 
+z_vec = ones(size(L, 2),1);
 
-[f] = zef_getTimeStep(f_data, f_ind, true); 
+[f] = zef_getTimeStep(f_data, f_ind, true);
 
 if f_ind == 1
 waitbar(0,h,['Iterative relaxation. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
@@ -67,28 +64,28 @@ z_vec_aux = zeros(size(L,2),1);
 for n_rep = 1 : length(M)
 
 L = L_aux(:,perm_vec{n_rep}{1});
-    
+
 if isequal(evalin('base','zef.relax_iteration_type'),1)
 
 L_aux_2 = M{n_rep}\L';
 norm_f = norm(L'*f);
 z_vec = gamma*L_aux_2*f;
-    
+
 elseif isequal(evalin('base','zef.relax_iteration_type'),2)
-    
+
 b = L'*f;
 z_vec = zeros(size(L,2),1);
 norm_b = norm(b);
 r = b;
-p = r; 
+p = r;
 
 end
 
 for i = 1 : n_iter
-if f_ind > 1;    
+if f_ind > 1;
 waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 
 if isequal(evalin('base','zef.relax_iteration_type'),1)
@@ -137,9 +134,7 @@ z_inverse{f_ind} = z_vec;
 
 end
 
-
 close(h);
 
 end
-
 

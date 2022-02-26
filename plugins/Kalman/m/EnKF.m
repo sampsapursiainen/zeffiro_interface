@@ -10,20 +10,20 @@ for f_ind = 1:number_of_frames
     f = timeSteps{f_ind};
     w = mvnrnd(zeros(size(m)), Q, n_ensembles)';
     % Forecasts
-    
+
     x_f = A * x_ensemble + w;
     C = cov(x_f');
     correlationLocalization = true;
-    if correlationLocalization 
+    if correlationLocalization
     T = corrcoef(x_f');
     % explain How to find 0.05
     T(abs(T) < 0.05) = 0;
     C = C .* T;
     end
-    
+
     % Update
     K = C * L' / (L * C * L' + R);
-    
+
     v = mvnrnd(zeros(size(R,1),1), R, n_ensembles);
     x_ensemble = x_f + K *(f + v' - L*x_f);
     % x_ensemble = x_ensemble';

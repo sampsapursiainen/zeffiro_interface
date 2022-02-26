@@ -156,7 +156,7 @@ if useJobArrays
         jobArraySizes = numel(tasks);
     end
     taskIDGroupsForJobArrays = mat2cell(taskIDs,jobArraySizes);
-    
+
     jobName = sprintf('Job%d',job.ID);
     numJobArrays = numel(taskIDGroupsForJobArrays);
     commandsToRun = cell(numJobArrays, 1);
@@ -171,17 +171,17 @@ if useJobArrays
         % during Slurm submission.
         environmentVariables = [variables; ...
             {'PARALLEL_SERVER_TASK_ID_OFFSET', num2str(taskOffset)}];
-        
+
         % Create a character vector with the ranges of IDs to submit.
         jobArrayString = iCreateJobArrayString(schedulerJobArrayIndices{ii});
-        
+
         logFileName = iGenerateLogFileName(ii, maxJobArraySizeToUse);
         % Choose a file for the output. Please note that currently,
         % JobStorageLocation refers to a directory on disk, but this may
         % change in the future.
         logFile = sprintf('%s%s%s', remoteJobDirectory, fileSeparator, logFileName);
         quotedLogFile = sprintf('%s%s%s', quote, logFile, quote);
-        
+
         % Create a script to submit a Slurm job - this
         % will be created in the job directory
         dctSchedulerMessage(5, '%s: Generating script for job array %i', currFilename, ii);
@@ -204,16 +204,16 @@ else
             environmentVariables = [variables; ...
             {'PARALLEL_SERVER_TASK_LOCATION', taskLocation}];
         end
-        
+
         % Choose a file for the output. Please note that currently,
         % JobStorageLocation refers to a directory on disk, but this may
         % change in the future.
         logFile = sprintf('%s%s%s', remoteJobDirectory, fileSeparator, sprintf('Task%d.log', taskIDs(ii)));
         quotedLogFile = sprintf('%s%s%s', quote, logFile, quote);
-        
+
         % Submit one task at a time
         jobName = sprintf('Job%d.%d', job.ID, taskIDs(ii));
-        
+
         % Create a script to submit a Slurm job - this will be created in
         % the job directory
         dctSchedulerMessage(5, '%s: Generating script for task %i', currFilename, ii);
@@ -414,7 +414,7 @@ function logFileName = iGenerateLogFileName(subArrayIdx, jobArraySize)
 % Slurm to tell it where each task's output should go. This will be equal
 % to TaskX.log where X is the MATLAB ID. Slurm will not accept a job array
 % index greater than its MaxArraySize parameter. As a result MATLAB IDs
-% must be shifted down below MaxArraySize. To ensure that the log file for 
+% must be shifted down below MaxArraySize. To ensure that the log file for
 % Task X is called TaskX.log, round the maximum array size down to the
 % nearest power of 10 and manually construct the log file specifier. For
 % example, for a MaxArraySize of 1500, the Slurm job arrays will be of
@@ -427,7 +427,7 @@ function logFileName = iGenerateLogFileName(subArrayIdx, jobArraySize)
 %    1000-1999 | 000-999  | Task1%3a.log
 %    2000-2999 | 000-999  | Task2%3a.log
 %    3000      | 000      | Task3%3a.log
-% 
+%
 % Note that Slurm expands %a to the Slurm ID, and %3a to the Slurm ID
 % padded with zeros to 3 digits.
 if subArrayIdx == 1

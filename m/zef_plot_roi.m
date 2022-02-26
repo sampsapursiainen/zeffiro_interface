@@ -5,7 +5,7 @@ h_inv_roi_sphere_1 = evalin('base','zef.h_inv_roi_sphere_1');
 h_inv_roi_sphere_2 = evalin('base','zef.h_inv_roi_sphere_2');
 h_inv_roi_sphere_3 = evalin('base','zef.h_inv_roi_sphere_3');
 h_inv_roi_sphere_4 = evalin('base','zef.h_inv_roi_sphere_4');
-inv_roi_sphere = str2num(get(h_inv_roi_sphere_1 ,'string')); 
+inv_roi_sphere = str2num(get(h_inv_roi_sphere_1 ,'string'));
 inv_roi_sphere = inv_roi_sphere(:);
 inv_roi_sphere = [ inv_roi_sphere ...
 reshape(str2num(get(h_inv_roi_sphere_2 ,'string')),size(inv_roi_sphere,1),size(inv_roi_sphere,2)) ...

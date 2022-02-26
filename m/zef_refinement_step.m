@@ -28,7 +28,6 @@ if length(n_surface_refinement) > 1
     refinement_type = refinement_type(j_surface_refinement);
 end
 
-
 if ismember(1,refinement_type)
 if refinement_flag == 1
 I = find(ismember(domain_labels,zef_compartment_to_subcompartment(aux_brain_ind(:))));
@@ -64,7 +63,6 @@ tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4
 surface_triangles = [ tetra(tetra_ind)];
 J_c = [J_c ;  unique(surface_triangles)];
 clear tetra_sort;
-
 
 tetra = tetra_aux;
 
@@ -190,7 +188,6 @@ for i = 1 : 6
             nodes_aux_vec = [3 4 1 2];
     end
 
-
     I = find(edge_mat(ind_aux,i));
 
     tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
@@ -198,8 +195,6 @@ for i = 1 : 6
     tetra(J_2(I),:) = [edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,2)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
 
 end
-
-
 
 tetra = [tetra ; tetra_new];
 domain_labels = [domain_labels ; (domain_labels_new)];
@@ -224,7 +219,6 @@ for i = 1 : 4
             nodes_ind_aux = [2 3 4 1];
             col_ind_aux = [4 6 5];
     end
-
 
     I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
     if length(I) > 0
@@ -265,7 +259,6 @@ for i = 1 : 4
         end
     end
 
-
 end
 
 tetra = [tetra ; tetra_new];
@@ -298,7 +291,6 @@ end
 sigma = sigma_vec(domain_labels);
 
 end
-
 
 waitbar(1,h,'Surface refinement.');
 

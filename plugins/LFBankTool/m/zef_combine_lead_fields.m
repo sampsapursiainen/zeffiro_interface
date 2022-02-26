@@ -18,13 +18,13 @@ for zef_ii = sort(zef.lf_item_selected)
     [zef.L_aux, zef.measurements_aux] = zef.aux_field(zef_ii);
     zef.measurements = [zef.measurements ; zef.measurements_aux];
     zef.L = [zef.L ; zef.L_aux];
-    
+
     if zef_jj == 1
         zef.source_positions = [zef.lf_bank_storage{zef_ii}.source_positions];
         zef.source_directions = [zef.lf_bank_storage{zef_ii}.source_directions];
         zef.source_interpolation_ind = [zef.lf_bank_storage{zef_ii}.source_interpolation_ind];
         zef.parcellation_interp_ind = [zef.lf_bank_storage{zef_ii}.parcellation_interp_ind];
-        
+
         zef.imaging_method = find(ismember(zef.imaging_method_cell, zef.lf_bank_storage{zef_ii}.imaging_method),1);
         zef.sensors = zef.lf_bank_storage{zef_ii}.sensors;
         if isvalid(zef.h_mesh_tool)
@@ -44,7 +44,7 @@ for zef_ii = sort(zef.lf_item_selected)
         zef.s_yz_rotation = 0;
         zef.s_zx_rotation = 0;
         zef_update;
-        
+
     end
 end
 

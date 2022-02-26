@@ -1,10 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-zef_data = zeffiro_interface_lf_bank_tool; 
+zef_data = zeffiro_interface_lf_bank_tool;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end        
+end
 clear zef_i zef_data;
 set(zef.h_lf_bank_tool,'Name','ZEFFIRO Interface: Multi lead field tool');
 set(findobj(zef.h_lf_bank_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
@@ -22,7 +22,6 @@ zef.h_lf_bank_update_measurements.ButtonPushedFcn = '[zef.yesno] = questdlg(''Su
 zef.h_lf_bank_update_noise_data.ButtonPushedFcn = '[zef.yesno] = questdlg(''Substitute the noise data of the selected lead field items with the current noise data?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef_lf_bank_update_noise_data; end;';
 zef.h_lf_bank_make_all.ButtonPushedFcn = '[zef.yesno] = questdlg(''Create a mesh and calculate the lead field matrices for the selected items?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.source_interpolation_on = 1; if isfield(zef,''h_source_interpolation_on''); if isvalid(''zef.h_source_interpolation_on''); set(zef.h_source_interpolation_on,''value'',1); end; end; zef_process_meshes; zef_create_fem_mesh; zef_postprocess_fem_mesh; zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;zef_lf_bank_compute_lead_fields; end;';
 zef_init_lf_bank_tool;
-
 
 set(zef.h_lf_bank_tool,'AutoResizeChildren','off');
 zef.lf_bank_tool_current_size = get(zef.h_lf_bank_tool,'Position');

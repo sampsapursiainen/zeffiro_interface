@@ -2,7 +2,7 @@ function [relative_size] = zef_get_relative_size(object_handle)
 
 set(object_handle,'units','pixels')
 object_size = get(object_handle,'position');
-object_children = get(object_handle,'children'); 
+object_children = get(object_handle,'children');
 relative_size = get(object_children,'position');
 
 for i = 1 : length(relative_size)

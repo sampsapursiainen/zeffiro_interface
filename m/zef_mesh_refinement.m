@@ -38,7 +38,6 @@ end
 
 if not(isempty(I))
 
-
     johtavuus_aux = domain_labels_aux;
 J_c = [];
 
@@ -179,7 +178,6 @@ for i = 1 : 6
             nodes_aux_vec = [3 4 1 2];
     end
 
-
     I = find(edge_mat(ind_aux,i));
 
     tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
@@ -213,8 +211,6 @@ for i = 1 : 4
             nodes_ind_aux = [2 3 4 1];
             col_ind_aux = [4 6 5];
         end
-
-
 
        I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
     if length(I) > 0
@@ -257,8 +253,6 @@ for i = 1 : 4
         end
     end
 
-
-
 end
 
 tetra = [tetra ; tetra_new];
@@ -295,7 +289,6 @@ tetra_interp_vec_2_2 = tetra_interp_vec_2_2(I);
 [unique_vec_1, ~, unique_vec_3] = unique(tetra_aux_2);
 tetra_aux_2 = reshape(unique_vec_3,size(tetra_aux_2));
 nodes_aux_2 = nodes_aux_2(unique_vec_1,:);
-
 
 if not(isempty(tetra_ref_ind))
 I = tetra_ref_ind;
@@ -341,8 +334,6 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)
                          ];
 
-
-
 %***************************************************
 %***************************************************
 
@@ -387,21 +378,7 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                      edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)
                          ];
 
-
 end
 
-
 end
-
-
-
-
-
-
-
-
-
-
-
-
 

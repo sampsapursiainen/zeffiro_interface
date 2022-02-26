@@ -25,7 +25,6 @@ comma-separated line of the following form:
 filename, compartment name, scaling, sigma, priority, activity, name,
 invert, extension
 
-
 Here, the filename appears without any extensions; compartment_name is as
 in the list above, scaling, sigma and priority parameters are as in ZI's
 segmentation window with 0 corresponding to the default value; activity is
@@ -51,9 +50,8 @@ Any compartment-specific parameter can be imported only once. In case
 there are multiple definitions in the list for a single compartment, only
 the first one counts.
 
-
 The segmentation list starts after the header and can be edited freely by
-the user. 
+the user.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 electrodes, sensor_points, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum cortex, 0, ASC,0,0,0
@@ -91,8 +89,4 @@ lh.wm, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC,0,0,0
 rh.wm, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC,0,0,0
 lh.pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC,0,0,0
 rh.pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC,0,0,0
-
-
-
-
 

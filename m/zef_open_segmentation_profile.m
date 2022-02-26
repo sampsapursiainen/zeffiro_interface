@@ -9,7 +9,6 @@ set(zef.h_segmentation_profile_save,'ButtonPushedFcn','writecell(zef.h_segmentat
 
 set(zef.h_segmentation_profile_table,'columnformat',{'char','char',{'number','string'}});
 
-
 set(zef.h_menu_segmentation_profile_table_add_row,'MenuSelectedFcn','zef.h_segmentation_profile_table.Data{end+1,1} = []; zef.h_segmentation_profile_table.Data = [zef.h_segmentation_profile_table.Data(1:zef.segmentation_profile_row_selected(1),:) ; zef.h_segmentation_profile_table.Data(end,:) ; zef.h_segmentation_profile_table.Data(zef.segmentation_profile_row_selected(1)+1:end-1,:)];');
 set(zef.h_menu_segmentation_profile_table_add_column,'MenuSelectedFcn','zef.h_segmentation_profile_table.Data{1,end+1} = []; zef.h_segmentation_profile_table.Data = [zef.h_segmentation_profile_table.Data(:,1:zef.segmentation_profile_column_selected(1))  zef.h_segmentation_profile_table.Data(:,end)  zef.h_segmentation_profile_table.Data(:,zef.segmentation_profile_column_selected(1)+1:end-1)];');
 

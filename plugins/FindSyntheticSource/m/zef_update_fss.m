@@ -21,10 +21,10 @@ for zef_j = 1:length(selected_source_ind)
     zef.inv_synth_source(zef_j,6) = str2num(zef.synth_source_data{zef_n}.parameters{6,2});
     zef.inv_synth_source(zef_j,7) = str2num(zef.synth_source_data{zef_n}.parameters{7,2});
     zef.inv_synth_source(zef_j,8) = str2num(zef.synth_source_data{zef_n}.parameters{8,2});
-    
+
     zef.inv_synth_source(zef_j,9) = str2num(zef.synth_source_data{zef_n}.parameters{15,2});
     zef.inv_synth_source(zef_j,10) = str2num(zef.synth_source_data{zef_n}.parameters{16,2});
-    
+
     zef.inv_synth_sampling_frequency{zef_j} = str2num(zef.synth_source_data{zef_n}.parameters{9,2});
     zef.inv_pulse_peak_time{zef_j} = str2num(zef.synth_source_data{zef_n}.parameters{10,2});
     zef.inv_pulse_amplitude{zef_j} = str2num(zef.synth_source_data{zef_n}.parameters{11,2});
@@ -52,10 +52,10 @@ for zef_n = 1:length(zef.synth_source_data)
     zef.inv_synth_source(zef_n,6) = str2num(zef.synth_source_data{zef_n}.parameters{6,2});
     zef.inv_synth_source(zef_n,7) = str2num(zef.synth_source_data{zef_n}.parameters{7,2});
     zef.inv_synth_source(zef_n,8) = str2num(zef.synth_source_data{zef_n}.parameters{8,2});
-    
+
     zef.inv_synth_source(zef_n,9) = str2num(zef.synth_source_data{zef_n}.parameters{15,2});
     zef.inv_synth_source(zef_n,10) = str2num(zef.synth_source_data{zef_n}.parameters{16,2});
-    
+
     zef.inv_synth_sampling_frequency{zef_n} = str2num(zef.synth_source_data{zef_n}.parameters{9,2});
     zef.inv_pulse_peak_time{zef_n} = str2num(zef.synth_source_data{zef_n}.parameters{10,2});
     zef.inv_pulse_amplitude{zef_n} = str2num(zef.synth_source_data{zef_n}.parameters{11,2});

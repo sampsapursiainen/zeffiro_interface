@@ -15,4 +15,4 @@ longest_edge = max(sqrt([sum((nodes(tetra(:,4),:) - nodes(tetra(:,1),:)).^2,2),.
 
 condition_number = - 12*volume(:)./(sqrt(2)*longest_edge.^3);
 
-end 
+end

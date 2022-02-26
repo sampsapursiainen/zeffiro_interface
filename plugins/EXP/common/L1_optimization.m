@@ -1,8 +1,7 @@
 function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
 
-
 %MAP estimate using EM algorithm
-%L1 norm minimization problem (LASSO): 
+%L1 norm minimization problem (LASSO):
 %0.5|1/sigma(Lx-y)\|_2^2+0.5*\sum_i [gamma_i |x_i|]
 
 % L : lead field matrix

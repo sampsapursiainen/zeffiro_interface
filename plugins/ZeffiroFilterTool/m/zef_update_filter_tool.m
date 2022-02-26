@@ -3,11 +3,10 @@
 set(zef.h_filter_pipeline_list,'Value',cell(0),'Items',cell(0),'Multiselect','on');
 zef.filter_pipeline_list = cell(0);
 
-
-for zef_i = 1 : length(zef.filter_pipeline) 
+for zef_i = 1 : length(zef.filter_pipeline)
 zef.filter_pipeline_list{zef_i} = ['Tag: ' zef.filter_pipeline{zef_i}.filter_tag  ', Type: ' zef.filter_pipeline{zef_i}.name ];
 end
- 
+
 if isempty(zef.filter_pipeline)
         set(zef.h_filter_parameter_list,'data',cell(0));
 else

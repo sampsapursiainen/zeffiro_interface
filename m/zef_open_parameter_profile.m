@@ -25,4 +25,3 @@ zef.parameter_profile_current_size = get(zef.h_parameter_profile,'Position');
 zef.parameter_profile_relative_size = zef_get_relative_size(zef.h_parameter_profile);
 set(zef.h_parameter_profile,'SizeChangedFcn','zef.parameter_profile_current_size = zef_change_size_function(zef.h_parameter_profile,zef.parameter_profile_current_size,zef.parameter_profile_relative_size);');
 
-
