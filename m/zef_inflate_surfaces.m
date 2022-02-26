@@ -12,7 +12,7 @@ else
       h = waitbar([0 0],'Inflating.');
       waitbar_opened = 1; 
 end
-    
+     
 inflation_strength = evalin('base','zef.fem_mesh_inflation_strength');
 reuna_t = evalin('base','zef.reuna_t');
 reuna_p = evalin('base','zef.reuna_p');

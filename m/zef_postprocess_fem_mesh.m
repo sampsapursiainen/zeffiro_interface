@@ -5,7 +5,7 @@ function [domain_labels,brain_ind,non_source_ind,nodes,tetra,surface_triangles,s
 h = waitbar(0,'Mesh post-processing');
 
 parameter_profile = evalin('base','zef.parameter_profile');
-
+ 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 
 eval([parameter_profile{zef_j,2} '_vec = [];']); 
