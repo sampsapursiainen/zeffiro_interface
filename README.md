@@ -1,9 +1,9 @@
 Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team,
-is an open source code package constituting an accessible tool for 
+is an open source code package constituting an accessible tool for
 multidisciplinary finite element (FE) based forward and inverse
-simulations in complex geometries. Install ZI using zeffiro_downloader.m 
-to allow automatic updates between the local and remote repositories. The 
-downloader and then ZI can be obtained on matlab's command line as follows: 
+simulations in complex geometries. Install ZI using zeffiro_downloader.m
+to allow automatic updates between the local and remote repositories. The
+downloader and then ZI can be obtained on matlab's command line as follows:
 
 urlwrite('https://tinyurl.com/zeffiro','zeffiro_downloader.m');
 zeffiro_downloader;
@@ -26,9 +26,9 @@ the sub-cortical strucures. In each compartment, the orientation of the
 activity can be either normally constrained or unconstrained. The main
 routines of ZI can be accelerated significantly in a computer equipped
 with a graphics computing unit (GPU). It is especially recommendable to
-perform the forward simulation process, i.e., to generate the finite 
-element mesh, the lead field matrix and to interpolate between different 
-point sets, utilizing a GPU. After the forward simulation phase, the 
+perform the forward simulation process, i.e., to generate the finite
+element mesh, the lead field matrix and to interpolate between different
+point sets, utilizing a GPU. After the forward simulation phase, the
 model can be processed also without GPU acceleration.
 
 A brief introduction to the essential features of the interface can be

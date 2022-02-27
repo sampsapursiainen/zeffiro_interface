@@ -72,11 +72,11 @@ switch evalin('base','zef.ES_objfun')
             obj_funct_threshold = obj_funct;
             %[Idx] = find(abs(obj_funct_threshold(:)) >= max(abs(obj_funct_threshold(:)))./(100/evalin('base','zef.ES_acceptable_threshold')))
             [Idx] = find(obj_funct_threshold(:) >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:)) ).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
-        end       
+        end
 end
 
 switch evalin('base','zef.ES_objfun_2')
-    case {1,3,4}     
+    case {1,3,4}
         obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun_2')});
         [~,Idx_2] = min(obj_funct_2(Idx));
     case 2
@@ -98,17 +98,17 @@ end
 % else
 %     C_idx = (1:length(C(:)))';
 % end
-% 
+%
 % if evalin('base','zef.ES_scoredose_checkbox') == 0
 %     D_idx = find(D <= evalin('base','zef.ES_scoredose'));
 %     %D_idx = find(D == evalin('base','zef.ES_scoredose'));
 % else
 %     D_idx = (1:length(D(:)))';
 % end
-% 
+%
 % vec_aux = vec(1,[2,5,6,8]);
 % objfun = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun')});
-% 
+%
 % Accept_idx = intersect(C_idx,D_idx);
 % [~,star_idx] = min(objfun(Accept_idx));
 % star_idx = Accept_idx(star_idx);

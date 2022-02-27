@@ -1,36 +1,34 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
-if not(isfield(zef,'lf_bank_scaling_factor')); 
-   zef.lf_bank_scaling_factor = 1; 
+if not(isfield(zef,'lf_bank_scaling_factor'));
+   zef.lf_bank_scaling_factor = 1;
 end;
 
-if not(isfield(zef,'lf_item_type')); 
-   zef.lf_item_type = ''; 
+if not(isfield(zef,'lf_item_type'));
+   zef.lf_item_type = '';
 end;
 
-if not(isfield(zef,'lf_tag')); 
-   zef.lf_tag = 'EEG'; 
+if not(isfield(zef,'lf_tag'));
+   zef.lf_tag = 'EEG';
 end;
 
-if not(isfield(zef,'lf_normalization')); 
-   zef.lf_normalization = 1; 
+if not(isfield(zef,'lf_normalization'));
+   zef.lf_normalization = 1;
 end;
 
-if not(isfield(zef,'lf_bank_storage')); 
-   zef.lf_bank_storage = cell(0); 
+if not(isfield(zef,'lf_bank_storage'));
+   zef.lf_bank_storage = cell(0);
 end;
 
-if not(isfield(zef,'lf_bank_storage')); 
+if not(isfield(zef,'lf_bank_storage'));
 zef.lf_item_list = cell(0);
 end;
 
-if not(isfield(zef,'lf_item_selected')); 
-   zef.lf_item_selected = []; 
+if not(isfield(zef,'lf_item_selected'));
+   zef.lf_item_selected = [];
 end;
 
-
-    
 zef.lf_normalization_functions_dir = which('zef_init_lf_bank_tool.m');
 zef.lf_normalization_functions_dir = [fileparts(zef.lf_normalization_functions_dir) '/' 'lead_field_normalization_functions/*.m'];
 

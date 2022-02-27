@@ -428,7 +428,6 @@ if not(isempty(prisms))
 
 end
 
-
 if isequal(electrode_model,'CEM')
 
     I_triangles = find(ele_ind(:,4)>0);
@@ -508,7 +507,6 @@ if isequal(electrode_model,'CEM')
     C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
 
 end
-
 
 if isequal(electrode_model,'PEM')
     A(ele_ind(1),:) = 0;
@@ -919,7 +917,6 @@ clear S r p x aux_vec inv_M_r a b;
 
 waitbar(0,h,'Interpolation.');
 
-
 if isequal(electrode_model,'CEM')
 
     Aux_mat = inv(Aux_mat);
@@ -936,7 +933,6 @@ L_eeg_fi = Aux_mat_2*L_eeg_fi;
 if source_model == 2
     L_eeg_ew = Aux_mat_2*L_eeg_ew;
 end
-
 
 if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
@@ -983,7 +979,6 @@ if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'
             end
         end
     end
-
 
     if source_model == 1
 

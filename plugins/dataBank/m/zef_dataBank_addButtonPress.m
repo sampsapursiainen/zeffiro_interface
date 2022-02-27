@@ -1,11 +1,8 @@
 
-
 dbtype=zef.dataBank.app.Entrytype.Value;
 
-
-
 if isempty(zef.dataBank.app.Tree.SelectedNodes) %either no selected or no node in tree, either way start on first level
-    
+
     newNode= uitreenode(zef.dataBank.app.Tree);
     dbParentHash='node';
 
@@ -14,7 +11,7 @@ else
         disp('cannot add to multiple nodes!');
         return;
     end
-    
+
     newNode=uitreenode(zef.dataBank.app.Tree.SelectedNodes);
     dbParentHash=zef.dataBank.app.Tree.SelectedNodes.NodeData;
 
@@ -31,20 +28,11 @@ if strcmp(zef.dataBank.save2disk, 'On')
     folderName=strcat(zef.dataBank.folder, newNode.NodeData);
     save(folderName, '-struct', 'nodeData');
     zef.dataBank.tree.(newNode.NodeData).data=matfile(folderName);
-    
+
     clear nodeData folderName
 end
 
-
-
 newNode.ContextMenu=zef.dataBank.app.treeMenu;
-
-
-
-
-
-
-
 
 if isempty(zef.dataBank.app.Tree.SelectedNodes)
 expand(zef.dataBank.app.Tree, 'all');
@@ -53,17 +41,4 @@ expand(zef.dataBank.app.Tree.SelectedNodes);
 end
 
 clear dbtype dbParentHash newNode;
-
-
-
-
-
-
-
-
-
-
-
-
-
 

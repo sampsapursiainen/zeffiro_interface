@@ -3,10 +3,10 @@ function [processed_data] = zef_ellip_low_pass_filter(f, filter_order, ripple, a
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 %This function processes the N-by-M data array f for N channels and M time
 %steps. The other arguments can be controlled via the ZI user interface.
-%The desctiption and argument definitions shown in ZI are listed below. 
+%The desctiption and argument definitions shown in ZI are listed below.
 %Description: Elliptic low-pass filter
-%Input: 1 Polynomial order [Default: 3], 2 Peak-to-peak ripple (dB) [Default: 3], 
-%3 Attenuation (dB) [Default: 80], 4 Edge frequency (Hz) [Default: 0], 
+%Input: 1 Polynomial order [Default: 3], 2 Peak-to-peak ripple (dB) [Default: 3],
+%3 Attenuation (dB) [Default: 80], 4 Edge frequency (Hz) [Default: 0],
 %5 Sampling frequency (Hz) [Default: filter_sampling_rate]
 %Output: Low-pass filtered data.
 

@@ -36,13 +36,13 @@ field_cell_default =  {{'on', '1'}
 
 for i = 1 : length(field_cell_default)
 
-evalin('base',[zef_struct_name '.' sensor_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]); 
+evalin('base',[zef_struct_name '.' sensor_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
 
 end
 
 for i = 1 : length(field_cell_update)
 
-evalin('base',[zef_struct_name '.' sensor_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]); 
+evalin('base',[zef_struct_name '.' sensor_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]);
 
 end
 

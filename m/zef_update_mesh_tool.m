@@ -1,8 +1,8 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
-if zef.mlapp == 1 
-    
+if zef.mlapp == 1
+
 zef.mesh_smoothing_on = zef.h_checkbox_mesh_smoothing_on.Value;
 zef.refinement_on = zef.h_refinement_on.Value;
 zef.source_interpolation_on = zef.h_source_interpolation_on.Value;
@@ -25,9 +25,9 @@ zef.forward_simulation_table = zef.h_forward_simulation_table.Data;
 else
 
 if zef.cp_on
-zef.enable_str = 'on';    
+zef.enable_str = 'on';
 else
-zef.enable_str = 'off';   
+zef.enable_str = 'off';
 end;
 
 set(zef.h_edit_cp_a, 'enable', zef.enable_str);
@@ -36,6 +36,5 @@ set(zef.h_edit_cp_c, 'enable', zef.enable_str);
 set(zef.h_edit_cp_d, 'enable', zef.enable_str);
 
 set(zef.h_popupmenu1,'value',zef.imaging_method);
-
 
 end

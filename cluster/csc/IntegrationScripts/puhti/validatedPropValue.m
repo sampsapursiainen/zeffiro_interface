@@ -3,7 +3,7 @@ function val = validatedPropValue(cluster, prop, type, defaultValue)
 % This function will be used to determine the value of a property,
 % whether it is an assigned value or a default value.  If no property
 % value is assgined by the user, a default value for that data type will
-% be used.  Some properties will have a different default value, so for 
+% be used.  Some properties will have a different default value, so for
 % those values, we will include a default value we want them to be set to.
 
 % Copyright 2019 The MathWorks, Inc.

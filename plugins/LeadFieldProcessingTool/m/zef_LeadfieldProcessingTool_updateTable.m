@@ -3,7 +3,6 @@
 
 zef_LeadFieldProcessingTool_TableUpdate_index=zef.LeadFieldProcessingTool.bankPosition;
 
-
 if zef_LeadFieldProcessingTool_TableUpdate_index > size(zef.LeadFieldProcessingTool.app.BankTable.Data,1) %new data
     zef.LeadFieldProcessingTool.TableData={'', '', '', '', '', false};
 else
@@ -14,7 +13,6 @@ if isempty(zef.LeadFieldProcessingTool.app.BankTable.Data)
     zef.LeadFieldProcessingTool.app.BankTable.Data=cell(1,6);
 end
 
-
 zef.LeadFieldProcessingTool.app.BankTable.Data(zef_LeadFieldProcessingTool_TableUpdate_index,:) = {...
     zef.LeadFieldProcessingTool.TableData{1},...
     zef.LeadFieldProcessingTool.bank{zef_LeadFieldProcessingTool_TableUpdate_index}.imaging_method_Name,...
@@ -23,8 +21,5 @@ zef.LeadFieldProcessingTool.app.BankTable.Data(zef_LeadFieldProcessingTool_Table
     zef.LeadFieldProcessingTool.bank{zef_LeadFieldProcessingTool_TableUpdate_index}.lead_field_id, ...
     zef.LeadFieldProcessingTool.TableData{6}   };
 
-
 clear zef_LeadFieldProcessingTool_TableUpdate_index;
-
-
 

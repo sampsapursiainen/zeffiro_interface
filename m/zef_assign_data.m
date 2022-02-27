@@ -10,7 +10,7 @@ for zef_i = 1 : length(fieldnames_aux)
     if isempty(field_extension)
 evalin('base',['zef.' fieldnames_aux{zef_i} ' = zef_data.' fieldnames_aux{zef_i} ';' ]);
     else
-evalin('base',['zef.' field_extension  fieldnames_aux{zef_i} ' = zef_data.' fieldnames_aux{zef_i} ';']);      
+evalin('base',['zef.' field_extension  fieldnames_aux{zef_i} ' = zef_data.' fieldnames_aux{zef_i} ';']);
     end
 end
 

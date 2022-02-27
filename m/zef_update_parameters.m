@@ -7,13 +7,11 @@ zef.aux_field_2 = {'scaling','x_correction','y_correction','z_correction','xy_ro
 for zef_i = 1 : size(zef.aux_field_1,1)
 
    evalin('base',['zef.' zef.current_tag '_' zef.aux_field_2{zef_i} '(' num2str(zef.current_transform) ')=' num2str(zef.aux_field_1{zef_i,2}) ';']);
-    
+
 end
 
-
 elseif isequal(zef.current_parameters,'sensor')
-    
-        
+
 if ismember(evalin('base',['zef.'  zef.current_sensors '_imaging_method_name']),evalin('base',['zef.imaging_method_cell{1}']))
 zef.aux_field_2 = {
     {'points','1'}
@@ -57,8 +55,8 @@ for zef_i = 1 : size(zef.aux_field_1,1)
    evalin('base',['zef.' zef.current_sensors '_' zef.aux_field_2{zef_i}{1} '(' num2str(zef.current_sensor_name) ',' zef.aux_field_2{zef_i}{2} ') = ' num2str(zef.aux_field_1{zef_i,2}) ';']);
 
 end
-    
-end 
+
+end
 
 zef = rmfield(zef,{'aux_field_1','aux_field_2'});
 clear zef_i;

@@ -8,20 +8,20 @@ if isequal(labeling_flag,1)
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
- 
+
 compartment_counter = 0;
 pml_counter = 0;
 
-for i_labeling = 1 : length(reuna_p) 
+for i_labeling = 1 : length(reuna_p)
 for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
-    
+
 compartment_counter = compartment_counter + 1;
 
-if isempty(submesh_cell{i_labeling}) 
-reuna_t_aux = reuna_t{i_labeling};   
+if isempty(submesh_cell{i_labeling})
+reuna_t_aux = reuna_t{i_labeling};
 else
 if k_labeling == 1
-reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);     
+reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
 else
 reuna_t_aux = reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
 end
@@ -66,33 +66,33 @@ max_compartments = max(domain_labels);
 
 unique_domain_labels = unique(domain_labels);
 
-for i_labeling = 1 : length(reuna_p) 
+for i_labeling = 1 : length(reuna_p)
 for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
-    
+
 compartment_counter = compartment_counter + 1;
 
 domain_label_ind = find(ismember(unique_domain_labels,compartment_counter));
 
 if domain_label_ind
-    
+
 if compartment_counter == max_compartments
     break
 end
 
-if isempty(submesh_cell{i_labeling}) 
-reuna_t_aux = reuna_t{i_labeling};   
+if isempty(submesh_cell{i_labeling})
+reuna_t_aux = reuna_t{i_labeling};
 else
 if k_labeling == 1
-reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);     
+reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
 else
 reuna_t_aux = reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
 end
 end
-   
-tetra_ind_aux = 0; 
+
+tetra_ind_aux = 0;
 test_ind = -ones(size(nodes,1),1);
 
-while not(isempty(tetra_ind_aux)) 
+while not(isempty(tetra_ind_aux))
 
 I_1 = find(domain_labels <= compartment_counter);
 [I_2] = zef_surface_mesh(label_ind(I_1,:));
@@ -129,13 +129,10 @@ I_3 = find(I_3 >= 3);
 domain_labels(I_3) = compartment_counter;
 end
 
-
 end
 end
 end
 
-
- 
 %**************************************************************
 elseif isequal(labeling_flag,3)
 %**************************************************************
@@ -147,41 +144,41 @@ max_compartments = max(domain_labels);
 
 unique_domain_labels = unique(domain_labels);
 
-for i_labeling = 1 : length(reuna_p) 
+for i_labeling = 1 : length(reuna_p)
 for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
-    
+
 compartment_counter = compartment_counter + 1;
 
 domain_label_ind = find(ismember(unique_domain_labels,compartment_counter));
 
 if domain_label_ind
-    
+
 if compartment_counter == max_compartments
     break
 end
 
-if isempty(submesh_cell{i_labeling}) 
-reuna_t_aux = reuna_t{i_labeling};   
+if isempty(submesh_cell{i_labeling})
+reuna_t_aux = reuna_t{i_labeling};
 else
 if k_labeling == 1
-reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);     
+reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
 else
 reuna_t_aux = reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
 end
 end
-   
-tetra_ind_aux = 0; 
-test_ind = -ones(size(nodes,1),1);
-loop_steps = 0; 
 
-while not(isempty(tetra_ind_aux)) 
+tetra_ind_aux = 0;
+test_ind = -ones(size(nodes,1),1);
+loop_steps = 0;
+
+while not(isempty(tetra_ind_aux))
 
 I_1_0 = find(domain_labels <= compartment_counter);
 I_1 = intersect(I_1_0,tetra_refine_ind);
 if isempty(I_1)
     tetra_ind_aux = [];
 else
-    loop_steps = loop_steps + 1; 
+    loop_steps = loop_steps + 1;
 [I_2] = zef_surface_mesh(label_ind(I_1,:));
 I_1 = setdiff([1:size(domain_labels,1)]',I_1);
 [I_2, ~] = find(ismember(label_ind(I_1,:),I_2));
@@ -199,7 +196,7 @@ tetra_ind_aux = intersect(tetra_ind_aux,tetra_refine_ind);
 end
 end
 
-if loop_steps > 0 
+if loop_steps > 0
 I_3 = 0;
 while not(isempty(I_3)) && compartment_counter < max_compartments
 I_1 = find(domain_labels <= compartment_counter);
@@ -220,14 +217,12 @@ domain_labels(I_3) = compartment_counter;
 end
 end
 
-
 end
 end
 end
 
 end
 
- 
 %**************************************************************
 
 [priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);

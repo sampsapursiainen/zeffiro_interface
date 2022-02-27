@@ -9,10 +9,9 @@ end
 h = findobj(get(h_figure,'Children'),'Tag','axes1');
 h_object = findobj(get(h_figure,'Children'),'Tag','update_ambience_slider');
 if isempty(h_object)
-h_figure = evalin('base','zef.h_zeffiro');    
+h_figure = evalin('base','zef.h_zeffiro');
 h_object = findobj(get(h_figure,'Children'),'Tag','update_ambience_slider');
 end
-
 
 ambience_val = h_object.Value;
 h = h.Children;

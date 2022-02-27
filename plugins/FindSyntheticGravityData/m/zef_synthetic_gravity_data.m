@@ -28,7 +28,7 @@ else
 zef.lf_param.pcg_tol = 1e-8;
 end
 zef.aux_vec = [];
-if isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || not(zef.wm_sources == zef.wm_sources_old) 
+if isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || not(zef.wm_sources == zef.wm_sources_old)
 if isempty(zef.non_source_ind)
 zef.aux_vec = zef.brain_ind;
 else
@@ -45,7 +45,6 @@ zef.nodes_aux = zef.nodes;
 
 zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3);
 
-
 zef.lf_param.dipole_mode = 1;
 
 if ismember(zef.imaging_method, [1 2 3 4])
@@ -53,5 +52,4 @@ if ismember(zef.imaging_method, [1 2 3 4])
 end
 
 zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec'});
-
 

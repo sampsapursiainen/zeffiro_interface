@@ -34,7 +34,7 @@ else
             zef.inv_rec_source(d_ind,4:6) = zef.inv_rec_source(d_ind,4:6)./zef.inv_rec_source(d_ind,7);
             end
             %zef.inv_rec_source(:,7)=mean(zef.SESAME_time_serie{zef_j}.Q_estimated,2);
-            
+
             zef.h_rec_source = zef_plot_source(2);
             zef_boolean = 1;
         else
@@ -44,11 +44,11 @@ else
             hold(h_axes1,'off');
             zef_boolean = 0;
         end
-        
+
         zef.h_synth_source = zef_plot_active_source(zef_time_val);
-        
+
         if not(isempty(h_axes_text))
-            delete(h_axes_text); 
+            delete(h_axes_text);
             h_axes_text = [];
         end
         h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');

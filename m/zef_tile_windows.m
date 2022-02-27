@@ -24,24 +24,24 @@ h_aux = [];
 if isequal(arrange_mode,'on-screen')
     if isequal(arrange_target,'windows')
 h_aux = evalin('base','findall(groot,''-regexp'',''Name'',''ZEFFIRO Interface:*'',''WindowState'',''normal'')');
-elseif isequal(arrange_target,'figs')   
+elseif isequal(arrange_target,'figs')
     h_aux = evalin('base','findall(groot,''-regexp'',''Name'',''ZEFFIRO Interface: Figure tool*'',''WindowState'',''normal'')');
- elseif isequal(arrange_target,'tools')  
+ elseif isequal(arrange_target,'tools')
      h_aux = evalin('base','findall(groot,''Name'',''ZEFFIRO Interface:*'',''-not'',''-regexp'',''Name'',''ZEFFIRO Interface: Figure tool*'',''WindowState'',''normal'')');
     end
 elseif isequal(arrange_mode,'all')
     if isequal(arrange_target,'windows')
 h_aux = evalin('base','findall(groot,''-regexp'',''Name'',''ZEFFIRO Interface:*'')');
-elseif isequal(arrange_target,'figs')  
+elseif isequal(arrange_target,'figs')
 h_aux = evalin('base','findall(groot,''-regexp'',''Name'',''ZEFFIRO Interface: Figure tool*'')');
- elseif isequal(arrange_target,'tools')  
+ elseif isequal(arrange_target,'tools')
 h_aux = evalin('base','findall(groot,''Name'',''ZEFFIRO Interface:*'',''-not'',''-regexp'',''Name'',''ZEFFIRO Interface: Figure tool*'')');
     end
 end
 
 if isequal(arrange_mode,'tile')
 
-tile_mat = [1 : n_tiles]; 
+tile_mat = [1 : n_tiles];
 tile_mat = tile_mat'*tile_mat;
 screen_size = get(0, 'ScreenSize');
 thresh_val_1 = ceil(screen_size(4)/screen_size(3));
@@ -54,7 +54,7 @@ end
 tile_mat(find(tile_mat < length(h_aux))) = Inf;
 [~, tile_mat_ind] = min(abs(tile_mat(:)-length(h_aux)));
 [n_1,n_2] = ind2sub(size(tile_mat),tile_mat_ind);
-[position_grid_1, position_grid_2] = meshgrid(linspace(0,1-1/n_1,n_1),linspace(0,1-1/n_2,n_2)); 
+[position_grid_1, position_grid_2] = meshgrid(linspace(0,1-1/n_1,n_1),linspace(0,1-1/n_2,n_2));
 for i = 1 : length(h_aux)
 unit_mode = get(h_aux(i),'units');
 if isequal(arrange_mode,'all')

@@ -425,10 +425,7 @@ if isequal(electrode_model,'CEM')
 
     C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
 
-
 end
-
-
 
 % 22.06.2020 Start
 if isequal(electrode_model,'PEM')
@@ -444,7 +441,6 @@ if isequal(electrode_model,'PEM')
     A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
      end
     C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
-
 
     else
 
@@ -571,7 +567,6 @@ if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
 %     end
     tic;
 
-
     for i = 1 : L
 %        if isequal(electrode_model,'PEM')
 %            if i == L
@@ -675,7 +670,6 @@ tol_val_eff = tol_val;
 
     R_tes = zeros(size(B,1),L);
 
-
 %Define block size
 delete(gcp('nocreate'))
 parallel_processes = evalin('base','zef.parallel_processes');
@@ -690,11 +684,9 @@ block_ind = [i : min(L,i+block_size-1)];
 b = full(B(:,block_ind));
 tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 
-
 if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
               b = zeros(size(b));
  end
-
 
 %Iterate
 x_block_cell = cell(0);
@@ -735,7 +727,6 @@ for block_iter = 1 : length(block_iter_ind)
 x_block(:,block_iter_sub) = x_block_cell{block_iter};
 relres_vec(block_iter_sub) = relres_cell{block_iter};
 end
-
 
 %Substitute matrices
  R_tes(:,block_ind) =  x_block;

@@ -13,10 +13,10 @@ elseif isequal(evalin('base','zef.volumetric_distribution_mode'),2)
      volumetric_distribution = evalin('base','y_ES');
 if iscell(volumetric_distribution)
          for i = 1 : length(volumetric_distribution)
-            volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};  
+            volumetric_distribution{i} = evalin('base','zef.L')*volumetric_distribution{i};
          end
 else
-    volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;  
+    volumetric_distribution = evalin('base','zef.L')*volumetric_distribution;
 end
 end
 
@@ -89,7 +89,7 @@ if ismember(evalin('base','zef.visualization_type'), [3])
             max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
             min_rec = min([min_rec ; (reconstruction(:))]);
             max_rec = max_abs_reconstruction;
-            
+
         end
         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
             if evalin('base','zef.inv_scale') == 1
@@ -137,7 +137,6 @@ if ismember(evalin('base','zef.visualization_type'), [3])
     end
 end
 
-
 if ismember(evalin('base','zef.visualization_type'), [5])
     max_abs_reconstruction = 0;
     min_rec = Inf;
@@ -177,7 +176,6 @@ if ismember(evalin('base','zef.visualization_type'), [5])
         max_rec = max_abs_reconstruction;
     end
 end
-
 
 cb_done = 0;
 i = 0;
@@ -278,9 +276,9 @@ if evalin('base','zef.cp_on')
     cp_b = evalin('base','zef.cp_b');
     cp_c = evalin('base','zef.cp_c');
     cp_d = evalin('base','zef.cp_d');
-    
+
     clipping_plane = {cp_a,cp_b,cp_c,cp_d};
-    
+
     if clipped
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
@@ -293,7 +291,7 @@ if evalin('base','zef.cp_on')
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
-  clipped = 1;  
+  clipped = 1;
 end
 
 if evalin('base','zef.cp2_on')
@@ -301,10 +299,10 @@ if evalin('base','zef.cp2_on')
     cp2_b = evalin('base','zef.cp2_b');
     cp2_c = evalin('base','zef.cp2_c');
     cp2_d = evalin('base','zef.cp2_d');
-    
+
     clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
-    
-    if clipped 
+
+    if clipped
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
@@ -324,10 +322,10 @@ if evalin('base','zef.cp3_on')
     cp3_b = evalin('base','zef.cp3_b');
     cp3_c = evalin('base','zef.cp3_c');
     cp3_d = evalin('base','zef.cp3_d');
-    
+
      clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
-    
-    if clipped 
+
+    if clipped
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
     else
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane);
@@ -341,7 +339,6 @@ if evalin('base','zef.cp3_on')
     end
     clipped = 1;
 end
-
 
 if evalin('base','zef.cp_on') || evalin('base','zef.cp2_on') || evalin('base','zef.cp3_on')
     if evalin('base','zef.cp_mode') == 1
@@ -429,7 +426,6 @@ aux_ind_1 = [];
 aux_ind_2 = cell(1,length(reuna_t));
 triangle_c = cell(1,length(reuna_t));
 
-
 if ismember(evalin('base','zef.imaging_method'), [1 4 5])  & size(sensors,2) == 6
     electrode_model = 2;
 elseif ismember(evalin('base','zef.imaging_method'), [1 4 5])
@@ -471,14 +467,14 @@ end
 loop_count = 0;
 while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
     loop_count = loop_count + 1;
-    
+
     axes(evalin('base','zef.h_axes1'));
     cla(evalin('base','zef.h_axes1'));
     set(evalin('base','zef.h_axes1'),'YDir','normal');
     light('Position',[0 0 1],'Style','infinite');
     light('Position',[0 0 -1],'Style','infinite');
     hold on;
-    
+
     if evalin('base',['zef.' sensor_tag '_visible'])
         if electrode_model == 1 || not(ismember(evalin('base','zef.imaging_method'),[1,4,5]))
             for i = 1 : size(sensors,1)
@@ -537,7 +533,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                 set(h,'facealpha',evalin('base','zef.layer_transparency'));
             end
         end
-        
+
         if ismember(evalin('base','zef.imaging_method'),[2 3])
             sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
             h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
@@ -559,20 +555,17 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
             end
         end
     end
-    
-    
-    
-    
+
     if ismember(evalin('base','zef.visualization_type'),[3,4,5])
-        
+
         if ismember(evalin('base','zef.visualization_type'),[3,5])
             f_ind = frame_start;
         end
-        
+
         i = 0;
-        
+
         aux_brain_visible_ind = [];
-        
+
         for k = 1 : length(compartment_tags)
             on_val = evalin('base',['zef.' compartment_tags{k} '_on']);
             visible_val = evalin('base',['zef.' compartment_tags{k} '_visible']);
@@ -583,16 +576,14 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                     if ismember(i, aux_brain_ind) &&  (ismember(evalin('base','zef.visualization_type'), [3,4]))
                         aux_brain_visible_ind = [aux_brain_visible_ind i];
                         ab_ind = find(aux_brain_ind==i);
-                        
-                        
+
                         colormap_size = evalin('base','zef.colormap_size');
                         colortune_param = evalin('base','zef.colortune_param');
                         colormap_cell = evalin('base','zef.colormap_cell');
                         set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
-                        
+
                         if ismember(evalin('base','zef.visualization_type'),[4])
-                            
-                            
+
                             if evalin('base','zef.use_parcellation')
                                 reconstruction = ones(size(reuna_t{i},1),1);
                                 p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
@@ -604,7 +595,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             min_rec = 1;
                             max_rec = size(evalin('base','zef.parcellation_colormap'),1);
                         elseif ismember(evalin('base','zef.visualization_type'),[3])
-                            
+
                             if iscell(volumetric_distribution)
                                 reconstruction = single(evalin('base',['zef.reconstruction{' int2str(frame_start) '}']));
                             else
@@ -612,7 +603,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             end
                             reconstruction = reconstruction(:);
                             reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
-                            
+
                             if ismember(evalin('base','zef.reconstruction_type'),[1 7])
                                 reconstruction = sqrt(sum(reconstruction.^2))';
                             elseif evalin('base','zef.reconstruction_type') == 6
@@ -621,7 +612,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
                                 reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
                             end
-                            
+
                             if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
                                 rec_x = reconstruction(1,:)';
                                 rec_y = reconstruction(2,:)';
@@ -633,43 +624,43 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                     reuna_p{i}(reuna_t{i}(:,3),:)' - reuna_p{i}(reuna_t{i}(:,1),:)')';
                                 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
                             end
-                            
+
                             if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
                                 reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
                             end
-                            
+
                             if evalin('base','zef.reconstruction_type') == 3
                                 reconstruction = sqrt((rec_x - rec_x.*abs(n_vec_aux(:,1))).^2 + (rec_y - rec_y.*abs(n_vec_aux(:,2))).^2 + (rec_z - rec_z.*abs(n_vec_aux(:,3))).^2);
                             end
-                            
+
                             if evalin('base','zef.reconstruction_type') == 4
                                 aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
                                 I_aux_rec = find(aux_rec > 0);
                                 reconstruction(I_aux_rec) = 0;
                                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
                             end
-                            
+
                             if evalin('base','zef.reconstruction_type') == 5
                                 aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
                                 I_aux_rec = find(aux_rec <= 0);
                                 reconstruction(I_aux_rec) = 0;
                                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
                             end
-                            
+
                             if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
                                 reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
                             end
-                            
+
                             if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
                                 if evalin('base','zef.inv_scale') == 1
-                                    reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));                          
+                                    reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
   elseif evalin('base','zef.inv_scale') == 2
                                     reconstruction = (max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                                 elseif evalin('base','zef.inv_scale') == 3
                                     reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                                 end
                             end
-                            
+
                             if evalin('base','zef.use_parcellation')
                                 reconstruction_aux = zeros(size(reconstruction));
                                 p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
@@ -690,20 +681,19 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 reconstruction = reconstruction_aux;
                             end
                         end
-                        
+
                         if ismember(evalin('base','zef.visualization_type'),[3,4])
-                            
+
                             %**********************************************
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                               
-                           
+
                             h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','reconstruction');
                             else
                             h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','reconstruction');
                             end
-                           
+
                             %**********************************************
                             set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                             set(gca,'CLim',[min_rec max_rec]);
@@ -740,7 +730,6 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
                             end
 
-                            
                             if ismember(i,aux_brain_ind) && cb_done == 0 && ismember(evalin('base','zef.visualization_type'),[3])
                                 cb_done = 1;
                                 h_colorbar = colorbar('EastOutside','Position',colorbar_position,'Units','Normalized');
@@ -752,29 +741,28 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 set(h_axes_text,'layer','bottom');
                                 axes(evalin('base','zef.h_axes1'));
                             end
-                            
+
                         end
-                        
+
                         lighting phong;
-                        
-                        
+
                     else
-                        
+
                         if ismember(evalin('base','zef.visualization_type'),[5]) && i == length(reuna_p)
                             %%%%%Topography reconstruction.
-                            
+
                             colormap_size = evalin('base','zef.colormap_size');
                             colortune_param = evalin('base','zef.colortune_param');
                             colormap_cell = evalin('base','zef.colormap_cell');
                             set(evalin('base','zef.h_zeffiro'),'colormap', evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
-                            
+
                             if iscell(evalin('base','zef.top_reconstruction'))
                                 reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(frame_start) '}']));
                             else
                                 reconstruction = evalin('base','zef.top_reconstruction');
                             end
                             reconstruction = reconstruction(:);
-                            
+
                             if ismember(i,aux_brain_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
@@ -782,7 +770,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
                             end
-                           
+
                            if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
                            end
@@ -815,7 +803,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                                 set(h_surf_2{i},'FaceAlpha','interp');
                                 set(h_surf_2{i},'AlphaDataMapping','none');
                             end
-                            
+
                             cb_done = 1;
                             h_colorbar = colorbar('EastOutside','Position',[0.65 0.647 0.01 0.29],'Units','Normalized');
                             set(h_colorbar,'Tag','rightColorbar');
@@ -825,13 +813,13 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             set(h_text,'visible','on');
                             set(h_axes_text,'layer','bottom');
                             axes(evalin('base','zef.h_axes1'));
-                            
+
                             lighting phong;
-                            
+
                             %%%% End of topography reconstruction
-                            
+
                         else
-                            
+
                             [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
                             h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
                             set(h_surf,'Tag','surface');
@@ -843,18 +831,18 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             lighting phong;
                             %end
                         end
-                        
+
                     end
                 end
             end
         end
-        
+
         if loop_count == 1
             view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
             axis('image');
         end
         camva(evalin('base','zef.cam_va'));
-        
+
         if evalin('base','zef.axes_visible')
             set(evalin('base','zef.h_axes1'),'visible','on');
             set(evalin('base','zef.h_axes1'),'xGrid','on');
@@ -867,15 +855,15 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
             set(evalin('base','zef.h_axes1'),'zGrid','off');
         end
         %drawnow;
-        
+
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
 zef_plot_dpq('static');
 zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
-        
+
         if ismember(evalin('base','zef.visualization_type'),[3,5])
-            
+
             f_ind_aux = 1;
             for f_ind = frame_start + frame_step : frame_step : frame_stop
                 evalin('base',['zef.h_slider.Value=' num2str(f_ind*frame_step/(frame_stop-frame_start+frame_step)) ';']);
@@ -891,15 +879,14 @@ zef_plot_dpq('dynamical');
                 end
                 f_ind_aux = f_ind_aux + 1;
                 %waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
-                
-                
+
                 if ismember(evalin('base','zef.visualization_type'),[3])
                     for i = intersect(aux_brain_ind,aux_brain_visible_ind)
                         ab_ind = find(aux_brain_ind == i);
                         reconstruction = single(volumetric_distribution{f_ind});
                         reconstruction = reconstruction(:);
                         reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
-                        
+
                         if ismember(evalin('base','zef.reconstruction_type'),[1 7])
                             reconstruction = sqrt(sum(reconstruction.^2))';
                         elseif evalin('base','zef.reconstruction_type') == 6
@@ -908,7 +895,7 @@ zef_plot_dpq('dynamical');
                         if ismember(evalin('base','zef.reconstruction_type'), [1 6 7])
                             reconstruction = sum(reconstruction(s_i_ind{ab_ind}),2)/3;
                         end
-                        
+
                         if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
                             rec_x = reconstruction(1,:)';
                             rec_y = reconstruction(2,:)';
@@ -920,33 +907,33 @@ zef_plot_dpq('dynamical');
                                 reuna_p{i}(reuna_t{i}(:,3),:)' - reuna_p{i}(reuna_t{i}(:,1),:)')';
                             n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
                         end
-                        
+
                         if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5])
                             reconstruction = sqrt((rec_x.*n_vec_aux(:,1)).^2 + (rec_y.*n_vec_aux(:,2)).^2 + (rec_z.*n_vec_aux(:,3)).^2);
                         end
-                        
+
                         if evalin('base','zef.reconstruction_type') == 3
                             reconstruction = sqrt((rec_x - rec_x.*abs(n_vec_aux(:,1))).^2 + (rec_y - rec_y.*abs(n_vec_aux(:,2))).^2 + (rec_z - rec_z.*abs(n_vec_aux(:,3))).^2);
                         end
-                        
+
                         if evalin('base','zef.reconstruction_type') == 4
                             aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
                             I_aux_rec = find(aux_rec > 0);
                             reconstruction(I_aux_rec) = 0;
                             %reconstruction = reconstruction./max(abs(reconstruction(:)));
                         end
-                        
+
                         if evalin('base','zef.reconstruction_type') == 5
                             aux_rec = rec_x.*n_vec_aux(:,1) + rec_y.*n_vec_aux(:,2) + rec_z.*n_vec_aux(:,3);
                             I_aux_rec = find(aux_rec <= 0);
                             reconstruction(I_aux_rec) = 0;
                             %reconstruction = reconstruction./max(abs(reconstruction(:)));
                         end
-                        
+
                         if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
                             reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
                         end
-                        
+
                         if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
                             if evalin('base','zef.inv_scale') == 1
                                 reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
@@ -956,9 +943,9 @@ zef_plot_dpq('dynamical');
                                 reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/evalin('base','zef.inv_dynamic_range')));
                             end
                         end
-                        
+
                         %delete(h_surf_2{ab_ind});
-                        
+
                         if evalin('base','zef.use_parcellation')
                             reconstruction_aux = zeros(size(reconstruction));
                             p_rec_aux =  ones(size(reuna_p{i},1),1).*evalin('base','zef.layer_transparency');
@@ -978,14 +965,13 @@ zef_plot_dpq('dynamical');
                             end
                             reconstruction = reconstruction_aux;
                         end
-                        
+
                         %axes(evalin('base','zef.h_axes1'));
                         %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                         set(h_surf_2{ab_ind},'CData',reconstruction);
                         if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                             zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
                         end
-
 
                         %set(gca,'CLim',[min_rec max_rec]);
                         %set(h_surf_2{ab_ind},'specularstrength',0.2);
@@ -1017,15 +1003,14 @@ zef_plot_dpq('dynamical');
                             set(h_surf_2{ab_ind},'FaceAlpha','interp');
                             set(h_surf_2{ab_ind},'AlphaDataMapping','none');
                         end
-                        
+
                     end
                 elseif ismember(evalin('base','zef.visualization_type'),[5])
                     %Topography reconstruction.
-                    
-                    
+
                     reconstruction = single(evalin('base',['zef.top_reconstruction{' int2str(f_ind) '}']));
                     reconstruction = reconstruction(:);
-                    
+
                     axes(evalin('base','zef.h_axes1'));
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
@@ -1062,16 +1047,14 @@ zef_plot_dpq('dynamical');
                         set(h_surf_2{i},'FaceAlpha','interp');
                         set(h_surf_2{i},'AlphaDataMapping','none');
                     end
-                    
+
                     %End of topography reconstruction.
                 end
-                
+
 zef_plot_dpq('dynamical');
                 zef_set_sliders_plot(2);
                 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
-               
-                
-                
+
                 %delete(h_text);
                 %delete(h_axes_text);
                 axes(h_axes_text);% = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
@@ -1081,23 +1064,20 @@ zef_plot_dpq('dynamical');
                 elseif ismember(evalin('base','zef.visualization_type'),[5])
                     set(h_text,'string', ['Time: ' num2str(evalin('base','zef.top_time_1') + evalin('base','zef.top_time_2')/2 + frame_step*(f_ind - 1)*evalin('base','zef.top_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
                 end
-                
+
                 set(h_text,'visible','on');
                 set(h_axes_text,'layer','bottom');
 
                drawnow limitrate;
-             
+
             end
-            
+
         end
-        
-        
+
     else
-        
-        
-        
+
         i = 0;
-        
+
         for k = 1 : length(compartment_tags)
             on_val = evalin('base',['zef.' compartment_tags{k} '_on']);
             visible_val = evalin('base',['zef.'  compartment_tags{k} '_visible']);
@@ -1116,7 +1096,7 @@ zef_plot_dpq('dynamical');
                 end
             end
         end
-        
+
         view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
         axis('image');
         camva(evalin('base','zef.cam_va'));
@@ -1131,25 +1111,22 @@ zef_plot_dpq('dynamical');
             set(evalin('base','zef.h_axes1'),'yGrid','off');
             set(evalin('base','zef.h_axes1'),'zGrid','off');
         end
-        
-        
+
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
         zef_plot_dpq('static');
         zef_plot_dpq('dynamical');
         zef_set_sliders_plot(1);
-        
-        
+
     end
-    
-    
+
     if iscell(volumetric_distribution) && evalin('base','zef.visualization_type') == 3
         loop_movie = evalin('base','zef.loop_movie');
     else
         loop_movie = 0;
     end
     hold off;
-    
+
 end
 
 rotate3d on;

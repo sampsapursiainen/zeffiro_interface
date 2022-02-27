@@ -2,19 +2,17 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if zef.mlapp == 1
-zeffiro_interface_mesh_tool; 
+zeffiro_interface_mesh_tool;
 else
-
 
 zef.h_mesh_tool = open('zeffiro_interface_mesh_tool.fig');
 set(findobj(zef.h_mesh_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
-
 zef.aux_handle_vec = [zef.h_pushbutton31;
 zef.h_pushbutton20;
-zef.h_pushbutton22; 
-zef.h_checkbox14; 
+zef.h_pushbutton22;
+zef.h_checkbox14;
 zef.h_checkbox15;
 zef.h_checkbox_cp_on;
 zef.h_edit_cp_a;
@@ -31,7 +29,7 @@ zef.h_pushbutton34;
 zef.h_checkbox_mesh_smoothing_on;
 zef.h_refinement_on;
 zef.h_edit65;
-zef.h_edit_meshing_accuracy; 
+zef.h_edit_meshing_accuracy;
 zef.h_edit75;
 zef.h_smoothing_strength;
 zef.h_pushbutton14;
@@ -50,7 +48,7 @@ set(zef.h_pushbutton34,'callback','zef_postprocess_fem_mesh;zef_update_fig_detai
 set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Basis'});
 set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
 set(zef.h_pushbutton31,'string','Visualize volume');
-set(zef.h_checkbox14,'value',zef.attach_electrodes); 
+set(zef.h_checkbox14,'value',zef.attach_electrodes);
 set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
 set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
 set(zef.h_checkbox15,'value',zef.axes_visible);
@@ -80,7 +78,3 @@ zef_update_mesh_tool;
 
 end
 
-
-   
-
-   

@@ -9,5 +9,4 @@ evalin('base',['zef.forward_simulation_column_selected =[' num2str(forward_simul
 aux_char = char(evalin('base',['zef.h_forward_simulation_table.Data{' num2str(forward_simulation_selected(1)) ',' num2str(forward_simulation_column_selected) '}']));
 evalin('base',['zef.h_forward_simulation_script.Value = ''' aux_char ''';']);
 
-
 end

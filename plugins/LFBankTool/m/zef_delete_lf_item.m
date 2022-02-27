@@ -2,7 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 zef.lf_item_selected = get(zef.h_lf_item_list,'value');
- 
 
 zef_j = 0;
 for zef_i = 1 : length(zef.lf_bank_storage)

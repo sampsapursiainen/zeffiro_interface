@@ -24,23 +24,23 @@ if zef.mlapp == 1
     zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value'));
     zef.cone_scale = str2num(get(zef.h_cone_scale,'Value'));
     zef.smoothing_steps_ele = str2num(get(zef.h_smoothing_steps_ele,'Value'));
-    
+
     zef.streamline_linestyle = get(zef.h_streamline_linestyle,'value');
     zef.streamline_linewidth = str2num(get(zef.h_streamline_linewidth,'value'));
     zef.streamline_color = get(zef.h_streamline_color,'value');
     zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
-    
+
     zef.colormap_size = str2num(get(zef.h_colormap_size,'value'));
-    
+
     zef.mesh_smoothing_repetitions = str2num(zef.h_mesh_smoothing_repetitions.Value);
     zef.mesh_optimization_repetitions = str2num(zef.h_mesh_optimization_repetitions.Value);
     zef.mesh_optimization_parameter = str2num(zef.h_mesh_optimization_parameter.Value);
     zef.mesh_labeling_approach =  zef.h_mesh_labeling_approach.Value;
-    
+
     zef.cone_alpha = 1 - str2num(get(zef.h_cone_alpha,'value'));
-    
+
 else
-    
+
     zef.submesh_num = str2num(get(zef.h_submesh_num,'string'));
     zef.reconstruction_type = get(zef.h_reconstruction_type,'value');
     zef.parcellation_type = get(zef.h_parcellation_type,'value');
@@ -72,7 +72,7 @@ else
     zef.surface_sources = get(zef.h_as_opt_6,'value');
     zef.inv_hyperprior = get(zef.h_inv_hyperprior,'value');
     zef.inv_hyperprior_weight = get(zef.h_inv_hyperprior_weight,'value');
-    
+
     if str2num(get(zef.h_inv_dynamic_range,'string'))== 0
         zef.inv_dynamic_range = Inf;
     else
@@ -88,7 +88,7 @@ else
     zef.frame_step = str2num(get(zef.h_frame_step,'string'));
     zef.orbit_1 = str2num(get(zef.h_orbit_1,'string'));
     zef.orbit_2 = str2num(get(zef.h_orbit_2,'string'));
-    
+
     if zef.cp2_on
         zef.h_cp2_a.Enable = 'on';
         zef.h_cp2_b.Enable = 'on';
@@ -100,7 +100,7 @@ else
         zef.h_cp2_c.Enable = 'off';
         zef.h_cp2_d.Enable = 'off';
     end
-    
+
     if zef.cp3_on
         zef.h_cp3_a.Enable = 'on';
         zef.h_cp3_b.Enable = 'on';

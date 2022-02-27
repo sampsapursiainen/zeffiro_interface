@@ -12,8 +12,8 @@ else
     folder_name = evalin('base','zef.file_path');
 end
 
-if not(isequal(file_name,0));   
-    
+if not(isequal(file_name,0));
+
 h_fig = open([folder_name '/' file_name]);
 set(h_fig,'Tag','');
 set(h_fig,'SizeChangedFcn','');
@@ -24,7 +24,7 @@ set(h_fig,'MenuBar','figure');
 h_fig.Units = 'normalized';
 set(h_fig,'AutoResizeChildren','off');
 h_fig.Units = 'normalized';
-h_c = h_fig.Children;  
+h_c = h_fig.Children;
 for i = 1 : length(h_c)
     if find(ismember(properties(h_c(i)),'Units'))
 h_c(i).Units = 'normalized';
@@ -35,17 +35,17 @@ h_c(i).FontUnits = 'normalized';
 end
 h_fig.Position = [0.25 0.25 0.4 0.5];
 
-scale_param = 0.9; 
+scale_param = 0.9;
 figure_width = 1;
 figure_height = 1;
 
-min_x = Inf; 
+min_x = Inf;
 max_x = 0;
-min_y = Inf; 
+min_y = Inf;
 max_y = 0;
 for i = 1 : length(h_c)
 
-       if find(ismember(properties(h_c(i)),'Position')) 
+       if find(ismember(properties(h_c(i)),'Position'))
            if not(isequal(get(h_c(i),'Type'),'colorbar')) && not(isequal(get(h_c(i),'Visible'),false))
     min_x = min(h_c(i).Position(1),min_x);
     max_x = max(sum(h_c(i).Position([1 3])),max_x);
@@ -65,12 +65,12 @@ scale_factor = min(scale_factor_x, scale_factor_y)
 
 for i = 1 : length(h_c)
     % if find(ismember(properties(h_c(i)),'OuterPosition'))
-    %h_c(i).OuterPosition = scale_param*scale_factor*h_c(i).OuterPosition; 
+    %h_c(i).OuterPosition = scale_param*scale_factor*h_c(i).OuterPosition;
     %h_c(i).OuterPosition(1) = h_c(i).OuterPosition(1) - scale_param*scale_factor*min_x + (1-scale_param*scale_factor*(max_x-min_x))/2;
     %h_c(i).OuterPosition(2) = h_c(i).OuterPosition(2) - scale_param*scale_factor*min_y + (1-scale_param*scale_factor*(max_y-min_y))/2;
     if find(ismember(properties(h_c(i)),'Position'))
             if not(isequal(get(h_c(i),'Type'),'colorbar'))
-    h_c(i).Position = scale_param*scale_factor*h_c(i).Position; 
+    h_c(i).Position = scale_param*scale_factor*h_c(i).Position;
     h_c(i).Position(1) = h_c(i).Position(1) - scale_param*scale_factor*min_x + (1-scale_param*scale_factor*(max_x-min_x))/2;
     h_c(i).Position(2) = h_c(i).Position(2) - scale_param*scale_factor*min_y + (1-scale_param*scale_factor*(max_y-min_y))/2;
             end
@@ -80,7 +80,6 @@ for i = 1 : length(h_c)
 end
 end
 % h_fig.Position(4) = h_fig.Position(4) - (1-scale_param)*figure_width/8;
-
 
 h_fig.Units = 'normalized';
 for i = 1 : length(h_c)
@@ -109,7 +108,6 @@ set(h_fig,'Tag',num2str(zef_fig_num));
 
 set(h_fig,'SizeChangedFcn','zef_set_figure_current_size;');
 
-
 h_fig.Name = [h_fig.Name ' ' '{' file_name '}'];
 h_aux_1 = findobj(h_fig.Children,'Style','listbox');
 h_aux_2 = findobj(h_aux_1,'Tag','system_information');
@@ -122,18 +120,8 @@ h_aux_2.String{length(h_aux_2.String)+1} = ['Folder name: ' folder_name];
 end
 
 end
-  
+
 evalin('base','zef = rmfield(zef,''zeffiro_current_size_aux'');');
 
 end
-
-
-
-
-
-
-
-
-
-
 
