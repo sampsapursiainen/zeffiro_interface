@@ -7,6 +7,6 @@ set(findobj(zef.h_find_synthetic_source_legacy.Children,'-property','FontUnits')
 set(findobj(zef.h_find_synthetic_source_legacy.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 zef_init_fss_legacy;
-uistack(flipud([zef.h_inv_synth_source_1;  zef.h_inv_synth_source_2;  zef.h_inv_synth_source_3;  
+uistack(flipud([zef.h_inv_synth_source_1;  zef.h_inv_synth_source_2;  zef.h_inv_synth_source_3;
 zef.h_inv_synth_source_4; zef.h_inv_synth_source_5;  zef.h_inv_synth_source_6; zef.h_inv_synth_source_7; zef.h_inv_synth_source_8;
- zef.h_inv_synth_source_9; zef.h_inv_synth_source_10  ]),'top'); 
+ zef.h_inv_synth_source_9; zef.h_inv_synth_source_10  ]),'top');

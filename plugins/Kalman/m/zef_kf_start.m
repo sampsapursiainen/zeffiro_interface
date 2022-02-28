@@ -18,8 +18,7 @@ zef.KF.inv_multires_n_levels.Value = '1';
 zef.KF.inv_multires_sparsity.Value = '1';
 zef.KF.inv_multires_n_decompositions.Value = '1';
 
-
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.KF."field" = zef."field")
 zef_props = properties(zef.KF);
 for zef_i = 1:length(zef_props)

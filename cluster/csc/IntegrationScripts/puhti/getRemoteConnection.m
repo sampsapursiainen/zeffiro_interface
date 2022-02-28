@@ -48,11 +48,11 @@ else
             'Expected cluster''s UserData to be a structure, but found %s'], ...
             class(cluster.UserData));
     end
-    
+
     if isfield(cluster.UserData, 'RemoteConnection')
         % Get the remote connection out of the cluster user data
         remoteConnection = cluster.UserData.RemoteConnection;
-        
+
         % And check it is of the type that we expect
         if isempty(remoteConnection)
             needToCreateNewConnection = true;
@@ -64,7 +64,7 @@ else
                     'Expected the RemoteConnection field of the UserData to contain an object of type %s, but found %s.'], ...
                     clusterAccessClassname, class(remoteConnection));
             end
-            
+
             if useUniqueSubfolders
                 username = remoteConnection.Username;
                 expectedRemoteJobStorageLocation = iBuildUniqueSubfolder(remoteJobStorageLocation, ...
@@ -72,7 +72,7 @@ else
             else
                 expectedRemoteJobStorageLocation = remoteJobStorageLocation;
             end
-            
+
             if ~remoteConnection.IsConnected
                 needToCreateNewConnection = true;
             elseif ~(strcmpi(remoteConnection.Hostname, clusterHost) && ...

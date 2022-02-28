@@ -1,4 +1,4 @@
-number_of_points = 10000; 
+number_of_points = 10000;
 grey_matter_ind = 15;
 
 surface_triangles = zef_get_surface_triangles(zef.tetra,zef.sigma(:,2),grey_matter_ind);

@@ -15,8 +15,6 @@ end
 
     y_ES = evalin('base','zef.y_ES_interval.y_ES');
 
-    
-
 %% Ensure window is of odd length and that the contents to print are within the calculated range
 if not(mod(window_size,2))
     window_size = window_size+1;

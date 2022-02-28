@@ -14,7 +14,7 @@ for zef_i = 2:length(zef_props)
     end
 end
    end
-   
+
 %_ Advanced modeling options
 if isempty(zef.GMM.parameters.Values{zef_n+1})
     zef.GMM.parameters.Values{zef_n+1} =  '1';
@@ -34,7 +34,6 @@ end
 if isempty(zef.GMM.parameters.Values{zef_n+6})
     zef.GMM.parameters.Values{zef_n+6} =  '0';
 end
-
 
 if isfield(zef.GMM.apps,'ModelingOpt')
     if isvalid(zef.GMM.apps.ModelingOpt)
@@ -79,13 +78,13 @@ if isfield(zef.GMM.apps,'PlotOpt')
             end
         end
         if strcmp(zef.GMM.apps.PlotOpt.GMM_comp_ord.Value,'3')
-            zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'on'; 
+            zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'on';
             zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = 'on';
         else
             zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'off';
             zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = 'off';
         end
-        
+
         if strcmp(zef.GMM.apps.PlotOpt.GMM_ellip_coloring.Value,'2')
             zef.GMM.apps.PlotOpt.GMM_colors.Enable = 'on';
         else
@@ -94,8 +93,8 @@ if isfield(zef.GMM.apps,'PlotOpt')
     else
         zef.GMM.apps = rmfield(zef.GMM.apps,'PlotOpt');
     end
-end 
-   
+end
+
 %_ Export options _
 if isfield(zef.GMM.apps,'Export')
     if isvalid(zef.GMM.apps.Export)

@@ -1,12 +1,11 @@
 function [X, Y, Z, pml_ind] = zef_pml_mesh(inner_radius,outer_radius,lattice_size,max_size)
 
-
 growth_param = 1 + 1e-15;
 
 convergence_value = Inf;
 
 while convergence_value > 1e-5
-    
+
 extra_layers = round(log(((outer_radius-inner_radius)*(growth_param - 1))/(lattice_size*growth_param) + 1)/log(growth_param));
 
 growth_param_new = exp(log(max_size/lattice_size)/extra_layers);
@@ -38,18 +37,16 @@ Z_inner = inner_radius.*Z(pml_ind)./R_aux;
 R_new = inner_radius + lattice_size.*growth_param*(1-growth_param.^N)./(1-growth_param);
 R_old = inner_radius + N*lattice_size;
 
-
 X(pml_ind) = R_new.*X(pml_ind)./R_old;
 Y(pml_ind) = R_new.*Y(pml_ind)./R_old;
 Z(pml_ind) = R_new.*Z(pml_ind)./R_old;
 
-s = max(abs([X(:) ; Y(:); Z(:)])); 
+s = max(abs([X(:) ; Y(:); Z(:)]));
 X = outer_radius*X/s;
 Y = outer_radius*Y/s;
 Z = outer_radius*Z/s;
 
-
-%figure(1); clf;  
+%figure(1); clf;
 %scatter3(X(:),Y(:),Z(:));
 %axis equal
 

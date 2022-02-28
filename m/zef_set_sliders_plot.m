@@ -18,7 +18,7 @@ evalin('base','if abs(zef.colorscale_min_slider); zef_update_colorscale_min(zef.
 evalin('base','if abs(zef.colorscale_max_slider); zef_update_colorscale_max(zef.h_zeffiro); end;');
 evalin('base','zef_set_lights(zef.update_lights);');
 
-elseif mode == 2 
+elseif mode == 2
 
 if evalin('base','zef.brain_transparency') < 1 || evalin('base','zef.use_parcellation')
 evalin('base','if zef.update_transparency_reconstruction; zef_update_transparency_reconstruction(zef.h_zeffiro); end;');

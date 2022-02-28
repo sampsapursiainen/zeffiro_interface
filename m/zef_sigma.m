@@ -5,12 +5,12 @@ function [johtavuus,brain_ind,non_source_ind,nodes,tetra,johtavuus_prisms,prisms
 tetra = [];
 prisms = [];
 johtavuus_prisms = [];
-non_source_ind = []; 
+non_source_ind = [];
 
 optimizer_flag = 1;
 
 if evalin('base','zef.sigma_bypass')
-    
+
    johtavuus = evalin('base','zef.sigma');
    brain_ind = evalin('base','zef.brain_ind');
    non_source_ind = evalin('base','zef.non_source_ind');
@@ -19,18 +19,17 @@ if evalin('base','zef.sigma_bypass')
    johtavuus_prisms = evalin('base','zef.sigma_prisms');
    prisms = evalin('base','zef.prisms');
    submesh_ind = evalin('base','zef.submesh_ind');
-   
+
 else
-    
+
 thresh_val = evalin('base','zef.mesh_optimization_parameter');
 
 compartment_tags = evalin('base','zef.compartment_tags');
 
 aux_compartment_ind = zeros(1,length(compartment_tags));
 
-
 if evalin('base','zef.import_mode')
-    
+
    johtavuus = evalin('base','zef.sigma');
    brain_ind = evalin('base','zef.brain_ind');
    nodes = evalin('base','zef.nodes');
@@ -43,16 +42,16 @@ length_reuna = 0;
 sigma_vec = [];
 priority_vec = [];
 submesh_cell = cell(0);
-for k = 1 : length(compartment_tags) 
-    
+for k = 1 : length(compartment_tags)
+
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
-priority_val = evalin('base',var_2);  
+
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
+priority_val = evalin('base',var_2);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
@@ -62,7 +61,6 @@ aux_compartment_ind(k) = i;
 
 end
 end
-
 
 n_compartments = 0;
 for k = 1 : evalin('base','length(zef.reuna_p)')
@@ -75,9 +73,9 @@ submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
 for i = 1 :  evalin('base','length(zef.reuna_p)')
-       
+
 for k = 1 : max(1,length(submesh_cell{i}))
-    
+
 compartment_counter = compartment_counter + 1;
 priority_vec_aux(compartment_counter) = priority_vec(i);
 submesh_ind_1(compartment_counter) = i;
@@ -100,13 +98,13 @@ johtavuus_aux = johtavuus;
 brain_ind = [];
 for k = 1 : length(compartment_tags)
 if evalin('base',['zef.' compartment_tags{k} '_sources']) && not(evalin('base',['zef.' compartment_tags{k} '_sources'])==3)
-if not(aux_compartment_ind(k)==0) 
+if not(aux_compartment_ind(k)==0)
 [brain_ind]= [brain_ind ; find(johtavuus==aux_compartment_ind(k))];
 end
 end
 end
- 
-if sum(aux_compartment_ind) == 0 
+
+if sum(aux_compartment_ind) == 0
 brain_ind = find(johtavuus);
 end
 
@@ -122,27 +120,21 @@ tetra_aux = evalin('base','zef.tetra_aux');
 tetra = tetra_aux;
 N = size(nodes, 1);
 
-
 zef_smoothing_step;
 zef_refinement_step
-
 
 if not(isempty(sigma_anisotropy))
 johtavuus = [johtavuus(:) johtavuus_aux(:) sigma_anisotropy] ;
 else
     johtavuus = [johtavuus(:) johtavuus_aux(:)] ;
 end
-    
+
 end
 
 %brain_ind = single(brain_ind);
 %tetra = single(tetra);
 
 end
- 
+
 end
-
-
-
-
 

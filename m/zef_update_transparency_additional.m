@@ -9,10 +9,9 @@ end
 h = findobj(get(h_figure,'Children'),'Tag','axes1');
 h_object = findobj(get(h_figure,'Children'),'Tag','transparency_additional_slider');
 if isempty(h_object)
-h_figure = evalin('base','zef.h_zeffiro');    
+h_figure = evalin('base','zef.h_zeffiro');
 h_object = findobj(get(h_figure,'Children'),'Tag','transparency_additional_slider');
 end
-
 
 slider_value_new = h_object.Value;
 

@@ -8,7 +8,7 @@ if isfield(zef,[zef.current_sensors '_points'])
 for zef_i = 1 : size(evalin('base',['zef.' zef.current_sensors '_points']),1)
 if evalin('base',['zef.' zef.current_sensors '_visible_list(' num2str(zef_i) ')'])
     zef_j = zef_j + 1;
-    zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.current_sensors '_name_list{' num2str(zef_i) '}']) '</BODY></HTML>'  ];   
+    zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.current_sensors '_color_table(' num2str(zef_i) ',3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.current_sensors '_name_list{' num2str(zef_i) '}']) '</BODY></HTML>'  ];
 end
 end
     end
@@ -19,7 +19,7 @@ zef_j = 0;
 for zef_i = 1 : length(zef.compartment_tags)
     if evalin('base',['zef.' zef.compartment_tags{zef_i} '_on']) && evalin('base',['zef.' zef.compartment_tags{zef_i} '_visible'])
     zef_j = zef_j + 1;
-        zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.compartment_tags{zef_i} '_name']) '</BODY></HTML>'  ];   
+        zef.aux_field{zef_j} = ['<HTML><BODY>' '&nbsp <SPAN bgcolor="rgb(' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(1)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(2)']))) ',' num2str(round(255*evalin('base',['zef.' zef.compartment_tags{zef_i} '_color(3)']))) ')"> &nbsp &nbsp &nbsp </SPAN> &nbsp &nbsp ' evalin('base',['zef.' zef.compartment_tags{zef_i} '_name']) '</BODY></HTML>'  ];
     end
 end
 set(zef.h_sensor_visible_color,'Min',1);
@@ -81,6 +81,5 @@ end
 
 set(zef.h_system_information, 'String',zef.aux_field);
 zef = rmfield(zef,'aux_field');
-
 
 clear zef_i;

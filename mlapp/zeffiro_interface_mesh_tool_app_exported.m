@@ -225,7 +225,7 @@ classdef zeffiro_interface_mesh_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_forward_simulation_table_context
             app.h_menu_forward_simulation_table_context = uicontextmenu(app.h_mesh_tool);
-            
+
             % Assign app.h_menu_forward_simulation_table_context
             app.h_forward_simulation_table.ContextMenu = app.h_menu_forward_simulation_table_context;
 

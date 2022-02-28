@@ -9,14 +9,13 @@ appName='dipole_app';
 % zef_bf_names = {'Basic'
 %                 '2nd order Taylor minimum error'
 %                 'Pseudoinverse'};
-%             
+%
 % zef.beamformer.L_reg_type.Items = zef_bf_names;
 % zef.beamformer.L_reg_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
 % zef.beamformer.L_reg_type.Value = '1';
 % if ~isfield(zef,'L_reg_type')
 %     zef.L_reg_type = 1;
 % end
-
 
 %Import or set initial values
 
@@ -35,7 +34,7 @@ end
 
 % % this is quite elegant
 %
-% %set parameters if saved in ZI: 
+% %set parameters if saved in ZI:
 % %(Naming concept: zef.(app)."field" = zef."field")
  zef_props = properties(zef.(appName));
 for zef_i = 1:length(zef_props)
@@ -48,7 +47,6 @@ clear zef_props zef_i
 if zef.L_reg_type==2 || zef.L_reg_type==3
     zef.dipole.inv_leadfield_lambda.Enable = 'off';
 end
-
 
 %_ Functions _
 zef.dipole_app.dipole_type.ValueChangedFcn = 'zef.dipole_type = str2num(zef.dipole_app.dipole_type.Value);';

@@ -39,7 +39,6 @@ for n = 1:length(peak_time)
     end
     waitbar(n/size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
 end
-        
 
 close(h);
 end

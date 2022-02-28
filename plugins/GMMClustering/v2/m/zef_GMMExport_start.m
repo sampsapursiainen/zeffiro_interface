@@ -10,8 +10,7 @@ if isfield(zef.GMM.apps,'Export')
         eval(zef.GMM.apps.Export.UIFigure.CloseRequestFcn);
     end
 end
-    
-    
+
 zef.GMM.apps.Export = GMMExport;
 
 %Set position besides GMM app
@@ -31,7 +30,6 @@ if sum(strcmp(zef.GMM.parameters.Tags,'saved')) == 0
 else
     zef.GMM.apps.Export.ComponentTable.Data=[{'Model';'Dipoles';'Amplitudes';'Time variables';'Parameters';'Reconstruction'},zef.GMM.parameters.Values{end}];
 end
-    
 
 zef.GMM.apps.Export.ComponentTable.DisplayDataChangedFcn = 'zef_ind = find(strcmp(zef.GMM.parameters.Tags,''saved'')); zef.GMM.parameters{zef_ind,2}={zef.GMM.apps.Export.ComponentTable.Data(:,2)}; clear zef_ind';
 zef.GMM.apps.Export.ExportButton.ButtonPushedFcn = 'zef_GMM_export(zef.save_file_path,rmfield(zef.GMM,''apps''),zef.GMM.parameters.Values{find(strcmp(zef.GMM.parameters.Tags,''saved''))});';

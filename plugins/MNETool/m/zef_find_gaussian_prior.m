@@ -35,13 +35,13 @@ if isempty(L)
     snr_vec_limited = snr_vec;
     source_strength = 1e-2;
 else
-   if isequal(normalize_data,'maximum')      
+   if isequal(normalize_data,'maximum')
    source_strength = mean(1./((max(abs(L))').^w_param));
 else
    source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
 end
 
-if balance_snr 
+if balance_snr
 if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
 else

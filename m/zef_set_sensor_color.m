@@ -9,7 +9,7 @@ for zef_k = 1 : length(item_ind_1)
 item_ind_2 = item_ind_1(zef_k);
 zef_j = 0;
 for zef_i = 1 : length(visible_list)
-if visible_list(zef_i) 
+if visible_list(zef_i)
 zef_j = zef_j + 1;
 if zef_j == item_ind_2
 item_ind_2 = zef_i;

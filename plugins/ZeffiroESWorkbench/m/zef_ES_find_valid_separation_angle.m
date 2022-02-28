@@ -1,6 +1,6 @@
 function angles_list = zef_ES_find_valid_separation_angle
 % Function that evaluates all possible separation angles in order to obtain
-% 5 different electrodes for a HD-TDCS 4+1 montage. 
+% 5 different electrodes for a HD-TDCS 4+1 montage.
 % Returns a list in the form of a table.
 
 ell = zeros(360,6);

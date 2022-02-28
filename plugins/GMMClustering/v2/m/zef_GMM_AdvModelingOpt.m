@@ -18,10 +18,10 @@ if zef.GMM.apps.main.UIFigure.Position(3)+zef.GMM.apps.ModelingOpt.UIFigure.Posi
     zef.GMM.apps.ModelingOpt.UIFigure.Position(1) = zef.GMM.apps.main.UIFigure.Position(1)-zef.GMM.apps.ModelingOpt.UIFigure.Position(3);
 else
     zef.GMM.apps.ModelingOpt.UIFigure.Position(1) = zef.GMM.apps.main.UIFigure.Position(1)+zef.GMM.apps.main.UIFigure.Position(3);
-end  
+end
 
 zef_n = length(findobj(zef.GMM.apps.main.UIFigure.Children,'Type','uilabel'));
-        
+
 %set up new tags
 zef_props=findobj(zef.GMM.apps.ModelingOpt.UIFigure,'-property','Value');
 zef_props = flip(get(zef_props,'Tag'));
@@ -31,7 +31,7 @@ else
     zef.GMM.parameters.Tags = [zef.GMM.parameters.Tags(1:zef_n);zef_props;zef.GMM.parameters.Tags((zef_n+length(zef_props)+1):end)];
 end
 
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.GMM.apps.main."field" = zef."field")
 zef_props = properties(zef.GMM.apps.ModelingOpt);
 for zef_i = 2:length(zef_props)
@@ -54,13 +54,13 @@ for zef_i = 2:length(zef_props)
             else
                 zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value=zef.GMM.parameters{zef_n,2}{1};
             end
-        end 
+        end
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i})) && ~strcmp(zef_props{zef_i},'GMM_colors')
             zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
             elseif strcmp(zef_props{zef_i},'GMM_colors') && ~isempty(zef.GMM_colors)
                 if isempty(zef.GMM_colors)
-                   zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value = ''; 
+                   zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value = '';
                 else
                 zef_aux_mat = reshape(zef.GMM_colors',[],1)';
                 zef_aux_str = ['[',num2str(zef_aux_mat(1))];
@@ -72,7 +72,7 @@ for zef_i = 2:length(zef_props)
                     else
                         zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j))];
                     end
-                end 
+                end
                 zef.GMM.apps.ModelingOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
                 clear zef_aux_str zef_aux_mat
                 end
@@ -91,19 +91,18 @@ zef.GMM.meta{2} = zef_n;
 clear zef_props zef_i zef_j zef_n zef_temp_screen_size
 
 if strcmp(zef.GMM.apps.ModelingOpt.GMM_initial_mode.Value,'1')
-    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'on'; 
+    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'on';
     zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = 'off';
     zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = 'off';
 elseif strcmp(zef.GMM.apps.ModelingOpt.GMM_initial_mode.Value,'2')
-    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'off'; 
+    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'off';
     zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = 'on';
     zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = 'off';
 else
-    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'off'; 
+    zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = 'off';
     zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = 'off';
     zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = 'on';
 end
-
 
 zef.GMM.apps.ModelingOpt.GMM_model_criterion.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+1,2} = {zef.GMM.apps.ModelingOpt.GMM_model_criterion.Value};';
 zef.GMM.apps.ModelingOpt.GMM_initial_mode.ValueChangedFcn = 'zef.GMM.parameters{zef.GMM.meta{1}+2,2} = {zef.GMM.apps.ModelingOpt.GMM_initial_mode.Value}; if strcmp(zef.GMM.parameters{zef.GMM.meta{1}+2,2},''1''); zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = ''on''; zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = ''off''; zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = ''off''; elseif strcmp(zef.GMM.parameters{zef.GMM.meta{1}+2,2},''2''); zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = ''off''; zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = ''on''; zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = ''off''; else zef.GMM.apps.ModelingOpt.GMM_replicates.Enable = ''off''; zef.GMM.apps.ModelingOpt.GMM_logpost_threshold.Enable = ''off''; zef.GMM.apps.ModelingOpt.GMM_comp_prob.Enable = ''on''; end;';

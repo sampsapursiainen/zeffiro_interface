@@ -10,7 +10,7 @@ data_table = data_table(aux_ind,:);
 if size(data_table,1) >= aux_ind
 evalin('base',['zef.h_dynamical_plot_queue_script.Value = ''' data_table{aux_ind,1} ''';']);
 evalin('base',['zef.h_dynamical_plot_queue_description.Value = ''' data_table{aux_ind,4} ''';']);
-elseif aux_ind > 1 
+elseif aux_ind > 1
 evalin('base',['zef.h_dynamical_plot_queue_script.Value = ''' data_table{aux_ind-1,1} ''';']);
 evalin('base',['zef.h_dynamical_plot_queue_description.Value = ''' data_table{aux_ind-1,4} ''';']);
 else

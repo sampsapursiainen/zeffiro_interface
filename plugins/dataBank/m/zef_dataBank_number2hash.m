@@ -9,5 +9,4 @@ for i=1:length(number)
     end
 end
 
-
 end

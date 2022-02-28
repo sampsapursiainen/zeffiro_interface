@@ -18,7 +18,7 @@ for n_neighbor = 1:K
     idx = sub2ind(size(A),row_idx' , n_neighbor_ind);
     A(idx) = 1/K;
     % if use weighted avg. D has distances, so it needs adaptation
-    %A(idx) = D(:,n_neighbor); 
+    %A(idx) = D(:,n_neighbor);
 end
 
 % z is indexed as x_1,y_1,z_1,x_2,y_2,z_2,... so on.

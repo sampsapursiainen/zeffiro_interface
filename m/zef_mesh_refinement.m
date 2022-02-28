@@ -1,6 +1,6 @@
 %Copyright © 2021- Sampsa Pursiainen & GPU-ToRRe-3D Development Team
 %See: https://github.com/sampsapursiainen/GPU-Torre-3D
-  
+
 function [nodes,tetra,domain_labels_aux,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels_aux,varargin)
 
 eps_val = 15;
@@ -27,7 +27,7 @@ if not(isempty(compartment_ind))
 %***************************************************
 
 if isequal(compartment_ind,0) || (isempty(compartment_ind) && not(isempty(tetra_ref_ind)))
-I = tetra_ref_ind; 
+I = tetra_ref_ind;
 else
     I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
 if not(isempty(tetra_ref_ind))
@@ -38,7 +38,6 @@ end
 
 if not(isempty(I))
 
-    
     johtavuus_aux = domain_labels_aux;
 J_c = [];
 
@@ -46,12 +45,12 @@ tetra = tetra(I,:);
 
  ind_m = [ 2 4 3 ;
            1 3 4 ;
-           1 4 2 ; 
+           1 4 2 ;
            1 2 3 ];
 
-tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]';
+              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]';
+              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]';
               tetra(:,[1 2 3]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 tetra_sort = sortrows(tetra_sort,[1 2 3]);
@@ -67,8 +66,8 @@ clear tetra_sort;
 
 tetra = tetra_aux;
 
-tetra_vec = sum(ismember(tetra,J_c),2);    
-J = find(tetra_vec); 
+tetra_vec = sum(ismember(tetra,J_c),2);
+J = find(tetra_vec);
 ind_aux = unique(tetra(J,:));
 J = find(sum(ismember(tetra,ind_aux),2)==4);
 ind_aux = unique(tetra(J,:));
@@ -96,16 +95,16 @@ new_node_ind = 0;
 current_edge = [0 0];
 
 for i = 1 : size(edge_ind,1)
-if edge_ind(i,5) == 1 
+if edge_ind(i,5) == 1
 if edge_ind(i,1:2) == current_edge
-edge_ind(i,4) = new_node_ind;   
+edge_ind(i,4) = new_node_ind;
 else
 new_node_ind = new_node_ind + 1;
 current_edge = edge_ind(i,1:2);
-edge_ind(i,4) = new_node_ind;  
+edge_ind(i,4) = new_node_ind;
 end
-else 
-if edge_ind(i,1:2) == current_edge   
+else
+if edge_ind(i,1:2) == current_edge
 edge_ind(i,4) = new_node_ind;
 end
 end
@@ -119,10 +118,10 @@ size_nodes = size(nodes,1);
 nodes = [nodes ; nodes_new];
 clear edge_ind_2 nodes_new;
 
-I =find(edge_ind(:,4)); 
+I =find(edge_ind(:,4));
 edge_ind(I,4) = edge_ind(I,4) + size_nodes;
 edge_ind = sortrows(edge_ind,[5 3 6]);
-edge_mat = reshape(edge_ind(:,4),6,length(J_aux))'; 
+edge_mat = reshape(edge_ind(:,4),6,length(J_aux))';
 clear edge_ind I;
 
 t_ind_1 = [  1     5     6     7
@@ -132,10 +131,10 @@ t_ind_1 = [  1     5     6     7
      4     7    10     9
      5     6     9     8
      6     9     8    10
-     7     9     5     6 ]; 
- 
-t_ind_2 = [tetra(J,:) edge_mat(1:length(J),:)]; 
- 
+     7     9     5     6 ];
+
+t_ind_2 = [tetra(J,:) edge_mat(1:length(J),:)];
+
 tetra_new = [];
 
 clear J_aux;
@@ -143,7 +142,7 @@ johtavuus_aux_new = [];
 tetra_interp_vec_new = [];
 
 for i = 1 : 7
-    
+
 tetra_new = [ tetra_new ; t_ind_2(:,t_ind_1(i,:)) ];
 johtavuus_aux_new = [johtavuus_aux_new ; johtavuus_aux(J,:)];
 tetra_interp_vec_new = [tetra_interp_vec_new ; tetra_interp_vec(J)];
@@ -175,18 +174,17 @@ for i = 1 : 6
             nodes_aux_vec = [2 3 1 4];
         case 5
             nodes_aux_vec = [2 4 1 3];
-        case 6 
+        case 6
             nodes_aux_vec = [3 4 1 2];
     end
- 
-          
+
     I = find(edge_mat(ind_aux,i));
-    
+
     tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
     johtavuus_aux_new = [johtavuus_aux_new ; johtavuus_aux(J_2(I),:)];
     tetra_interp_vec_new = [tetra_interp_vec_new ; tetra_interp_vec(J_2(I));];
     tetra(J_2(I),:) = [edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,2)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
-        
+
 end
 
 tetra = [tetra ; tetra_new];
@@ -213,19 +211,17 @@ for i = 1 : 4
             nodes_ind_aux = [2 3 4 1];
             col_ind_aux = [4 6 5];
         end
- 
-          
- 
+
        I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
     if length(I) > 0
     tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,1))  edge_mat(ind_aux(I),col_ind_aux(1)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
-    tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
-    tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))]; 
+    tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))];
+    tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
     johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I),:),3,1)];
     tetra_interp_vec_new = [tetra_interp_vec_new; repmat(tetra_interp_vec(J_3(I)),3,1)];
     tetra(J_3(I),:) = [edge_mat(ind_aux(I),col_ind_aux(1))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
     end
-    
+
     I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==1);
     if length(I)>0
         for j_ind = 1 : length(I)
@@ -244,21 +240,19 @@ for i = 1 : 4
             k_ind = 2;
             i_ind = [1 3];
         end
-   
+
  if tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) > tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))
- i_ind = fliplr(i_ind); 
+ i_ind = fliplr(i_ind);
  col_ind_aux_2 = fliplr(col_ind_aux_2);
  end
- tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(k_ind))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))]; 
+ tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(k_ind))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
     tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
  johtavuus_aux_new = [johtavuus_aux_new ; repmat(johtavuus_aux(J_3(I(j_ind)),:),2,1)];
- tetra_interp_vec_new = [tetra_interp_vec_new ;  repmat(tetra_interp_vec(J_3(I(j_ind))),2,1)]; 
+ tetra_interp_vec_new = [tetra_interp_vec_new ;  repmat(tetra_interp_vec(J_3(I(j_ind))),2,1)];
  tetra(J_3(I(j_ind)),:) = [tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
         end
     end
-    
-    
-    
+
 end
 
 tetra = [tetra ; tetra_new];
@@ -279,7 +273,7 @@ clear tilavuus I;
 
 domain_labels_aux = johtavuus_aux;
 
-tetra_aux_2 = tetra; 
+tetra_aux_2 = tetra;
 nodes_aux_2 = nodes;
 domain_labels_aux_2_2 = domain_labels_aux;
 tetra_interp_vec_2_2 = tetra_interp_vec;
@@ -300,7 +294,6 @@ tetra_interp_vec_2_2 = tetra_interp_vec_2_2(I);
 tetra_aux_2 = reshape(unique_vec_3,size(tetra_aux_2));
 nodes_aux_2 = nodes_aux_2(unique_vec_1,:);
 
-
 if not(isempty(tetra_ref_ind))
 I = tetra_ref_ind;
 else
@@ -316,37 +309,35 @@ nodes = nodes_aux;
 tetra = reshape(unique_vec_3,size(tetra));
 nodes = nodes(unique_vec_1,:);
 
-tetra_sort = [tetra(:,[1 2]); 
-              tetra(:,[2 3]); 
-              tetra(:,[3 1]); 
+tetra_sort = [tetra(:,[1 2]);
+              tetra(:,[2 3]);
+              tetra(:,[3 1]);
               tetra(:,[1 4]);
               tetra(:,[2 4]);
-              tetra(:,[3 4]);              
+              tetra(:,[3 4]);
               ];
-          
+
 tetra_sort = sort(tetra_sort,2);
 [edges,~,edges_ind_2] = unique(tetra_sort,'rows');
 edges_ind = reshape(edges_ind_2,size(edges_ind_2,1)/6,6);
 
 edges_ind = edges_ind + size(nodes,1);
-nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))]; 
+nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))];
 
-interp_vec = repmat([1:size(tetra,1)]',8,1); 
+interp_vec = repmat([1:size(tetra,1)]',8,1);
 domain_labels_aux = domain_labels_aux(interp_vec);
 tetra_interp_vec = tetra_interp_vec(interp_vec);
 
 tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
-                     edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ; 
+                     edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ;
                      edges_ind(:,3) edges_ind(:,2) tetra(:,3) edges_ind(:,6) ;
                      edges_ind(:,4) edges_ind(:,5) edges_ind(:,6) tetra(:,4) ;
-                     edges_ind(:,3) edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) ; 
+                     edges_ind(:,3) edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) ;
                      edges_ind(:,6) edges_ind(:,5) edges_ind(:,1) edges_ind(:,2) ;
                      edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) edges_ind(:,5) ;
-                     edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)                       
-                         ];                 
-                
-                     
-                     
+                     edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)
+                         ];
+
 %***************************************************
 %***************************************************
 
@@ -358,54 +349,40 @@ tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_2_2];
 nodes = nodes(unique_vec_2,:);
 tetra = unique_vec_3(tetra);
 
-end 
-    
+end
+
 %***************************************************
 else
 
-tetra_sort = [tetra(:,[1 2]); 
-              tetra(:,[2 3]); 
-              tetra(:,[3 1]); 
+tetra_sort = [tetra(:,[1 2]);
+              tetra(:,[2 3]);
+              tetra(:,[3 1]);
               tetra(:,[1 4]);
               tetra(:,[2 4]);
-              tetra(:,[3 4]);              
+              tetra(:,[3 4]);
               ];
-          
+
 tetra_sort = sort(tetra_sort,2);
 [edges,edges_ind_1,edges_ind_2] = unique(tetra_sort,'rows');
 edges_ind = reshape(edges_ind_2,size(edges_ind_2,1)/6,6);
 
 edges_ind = edges_ind + size(nodes,1);
-nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))]; 
+nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))];
 
-tetra_interp_vec = repmat([1:size(tetra,1)]',8,1); 
+tetra_interp_vec = repmat([1:size(tetra,1)]',8,1);
 domain_labels_aux = domain_labels_aux(tetra_interp_vec);
 
 tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
-                     edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ; 
+                     edges_ind(:,1)  tetra(:,2) edges_ind(:,2) edges_ind(:,5)  ;
                      edges_ind(:,3) edges_ind(:,2) tetra(:,3) edges_ind(:,6)  ;
                      edges_ind(:,4) edges_ind(:,5) edges_ind(:,6) tetra(:,4) ;
-                     edges_ind(:,3) edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) ; 
+                     edges_ind(:,3) edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) ;
                      edges_ind(:,6) edges_ind(:,5) edges_ind(:,1) edges_ind(:,2) ;
                      edges_ind(:,4) edges_ind(:,1) edges_ind(:,6) edges_ind(:,5) ;
-                     edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)                      
+                     edges_ind(:,3) edges_ind(:,1) edges_ind(:,2) edges_ind(:,6)
                          ];
-                     
-                         
-end
-
 
 end
-                         
-                  
-                         
-                 
-                         
-                         
-                         
-                         
-                     
-                         
-                         
-                     
-                     
+
+end
+

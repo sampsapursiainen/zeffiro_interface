@@ -1,12 +1,12 @@
 function [def] = clusterDefinition()
 % This function will be used to read in the mdcs.rc and to extract
 % the necessary information in order to build the cluster profile
-% in MATLAB.  clusterDefinition will pass back a structure to 
+% in MATLAB.  clusterDefinition will pass back a structure to
 % configCluster.
 
 % Copyright 2017 The MathWorks, Inc.
 
-% Determine the location of the mdcs.rc file; we assume that 
+% Determine the location of the mdcs.rc file; we assume that
 % it is in the same directory as configCluster.
 mdcsRC = fullfile(fileparts(mfilename('fullpath')),'mdcs.rc');
 
@@ -19,14 +19,14 @@ if mdcsRC < 0
 end
 
 % Ensure mdcs.rc file is closed after read, regardless of this script
-% finishing successfully. 
+% finishing successfully.
 c = onCleanup(@()fclose(mdcsRC));
 
 % Loop through until we reach the end of the file
 while ~feof(mdcsRC)
     % Grab a line from the mdcsRC
     tline = fgetl(mdcsRC);
-    % If the line does not start with a '#' or is not empty, grab the 
+    % If the line does not start with a '#' or is not empty, grab the
     % content of the line.
     if ~strncmp(tline,'#', 1) && ~isempty(strtrim(tline))
         % Use '=' to split the line into a field and value keypair
@@ -49,7 +49,7 @@ if isempty(def.Type)
 else
     def.Type = lower(def.Type);
 end
-    
+
 if ~ismember(def.Type, validSubmissionTypes)
         error(['Invalid submission type specified in the mdcs.rc configuration file.' ...
         10 'Valid configuration options are: local, remote, or remotesubmission.' ])
@@ -65,20 +65,20 @@ if strcmp(def.Type, 'remote') || strcmp(def.Type, 'remotesubmission')
         % user is running MATLAB from, so no check is necessary
         error('When using type %s, specify the ClusterMatlabRoot directory on the cluster in the mdcs.rc configuration file.', def.Type)
     end
-    
+
     % If cluster is running Windows OS, change the second argument to 'pc'
     def.ClusterMatlabRoot = lastCharacterCheck(def.ClusterMatlabRoot, 'unix');
-    
+
     if isempty(def.ClusterHost)
         error('When using type %s, specify the ClusterHost headnode hostname in the mdcs.rc configuration file.', def.Type)
     end
-    
+
     if isempty(def.RemoteJobStorageLocation)
         if strcmp(def.Type, 'remote') || (ispc && strcmp(def.Type, 'remotesubmission'))
             error('When using type %s, specify the RemoteJobStorageLocation on the cluster in the mdcs.rc configuration file.', def.Type)
         end
     end
-    
+
     % If cluster is running Windows OS, change the second argument to 'pc'
     % from 'unix'
     def.RemoteJobStorageLocation = lastCharacterCheck(def.RemoteJobStorageLocation, 'unix');
@@ -110,13 +110,12 @@ if strcmp(def.Type, 'remotesubmission')
     end
 end
 
-
 function out = lastCharacterCheck(in, machineType)
 
 % Verify that the last string is '/' or '\' and if not, append it
 
 % Set a default in case no modifications are required
-out = in; 
+out = in;
 
 % Check to see if we need to append a slash as a last character
 if strcmp(machineType, 'pc')

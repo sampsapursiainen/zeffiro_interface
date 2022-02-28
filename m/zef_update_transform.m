@@ -5,11 +5,11 @@ zef.aux_field_4 = {'transform_name','scaling','x_correction','y_correction','z_c
 zef.aux_field_5 = cell(0);
 
 for zef_i = 1 : size(zef.aux_field_1,1)
-   
+
     if not(isnan(zef.aux_field_1{zef_i,1}))
         zef.aux_field_2 = [zef.aux_field_2 zef.aux_field_1{zef_i,1}];
         zef.aux_field_3 = [zef.aux_field_3 zef_i];
-    
+
     end
 
 end
@@ -20,7 +20,7 @@ zef.aux_field_3 = zef.aux_field_3(zef.aux_field_2);
 for zef_i = 1 : length(zef.aux_field_3)
 
 zef.aux_field_5{zef_i} = zef.aux_field_1{zef.aux_field_3(zef_i),2};
-    
+
 end
 
 for zef_i = 1 : length(zef.aux_field_4)

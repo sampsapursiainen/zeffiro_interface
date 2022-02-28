@@ -16,14 +16,14 @@ for electrode_ind = 1 : length(L)
 for i = 1 : 2
 for j = i : 2
 C_part = sparse(L(electrode_ind).edges(:,i),L(electrode_ind).edges(:,j),double(ones(size(L(electrode_ind).edges,1),1)),N,N);
-if i == j 
+if i == j
 C_sparse = C_sparse + C_part;
 else
 C_sparse = C_sparse + C_part ;
 C_sparse = C_sparse + C_part';
 end
 end
-end  
+end
   C(electrode_ind).mat = full(C_sparse(L(electrode_ind).nodes,L(electrode_ind).nodes));
   C(electrode_ind).sum = sum(C(electrode_ind).mat)';
    C(electrode_ind).sum = C(electrode_ind).sum(:,[1 1 1]);

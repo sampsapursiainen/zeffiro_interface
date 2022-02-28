@@ -35,7 +35,7 @@ if not(isfield(zef,'ES_search_method'))
     zef.ES_search_method = 1;
 end
 if not(isfield(zef,'ES_volumetric_current_density'))
-    zef.ES_volumetric_current_density = []; 
+    zef.ES_volumetric_current_density = [];
 end
 if not(isfield(zef,'ES_optimizer_tolerance'))
     zef.ES_optimizer_tolerance = 1E-06;
@@ -47,7 +47,7 @@ if not(isfield(zef,'ES_regularization_parameter'))
     zef.ES_regularization_parameter = 1e-6;
 end
 if not(isfield(zef,'ES_regularization_parameter_max'))
-    zef.ES_regularization_parameter_max = 1e15; 
+    zef.ES_regularization_parameter_max = 1e15;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];
@@ -59,16 +59,16 @@ if not(isfield(zef,'ES_negativity_constraint'))
     zef.ES_negativity_constraint = [];
 end
 if not(isfield(zef,'ES_maximum_current'))
-    zef.ES_maximum_current = 0.002; 
+    zef.ES_maximum_current = 0.002;
 end
 if not(isfield(zef,'ES_cortex_thickness'))
-    zef.ES_cortex_thickness = 4; 
+    zef.ES_cortex_thickness = 4;
 end
 if not(isfield(zef,'ES_relative_source_amplitude'))
-    zef.ES_relative_source_amplitude = 1; 
+    zef.ES_relative_source_amplitude = 1;
 end
 if not(isfield(zef,'ES_source_density'))
-    zef.ES_source_density = 0.77; 
+    zef.ES_source_density = 0.77;
 end
 if not(isfield(zef,'ES_inv_colormap'))
     zef.ES_inv_colormap = 2;

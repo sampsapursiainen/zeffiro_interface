@@ -3,7 +3,7 @@
 
 zef_data = zef_relax;
 zef.fieldnames = fieldnames(zef_data);
-for zef_i = 1:length(zef.fieldnames) 
+for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 clear zef_data;
@@ -22,6 +22,4 @@ zef_init_relax_inversion_tool;
 set(zef.h_relax_tool,'AutoResizeChildren','off');
 zef.relax_tool_current_size = get(zef.h_relax_tool,'Position');
 set(zef.h_relax_tool,'SizeChangedFcn','zef.relax_tool_current_size = zef_change_size_function(zef.h_relax_tool,zef.relax_tool_current_size);');
-
-
 

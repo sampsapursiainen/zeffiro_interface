@@ -56,5 +56,5 @@ h_rec_source(i) = quiver3(h_axes1,s_p(i,1),s_p(i,2),s_p(i,3),s_length*s_o(i,1),s
 end
 hold(h_axes1,'off');
 h_source = h_rec_source;
-end    
+end
 end

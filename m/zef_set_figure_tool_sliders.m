@@ -32,7 +32,7 @@ evalin('base','zef.h_colorscale_max_slider.Value = 0;');
 evalin('base','zef.update_lights = 1; zef.h_update_lights.Value = 1;');
 
 else
-    
+
 evalin('base','zef.h_update_colormap.Value = zef.update_colormap;');
 evalin('base','zef.h_update_colorscale.Value = zef.update_colorscale;');
 evalin('base','zef.h_update_zoom.Value = zef.update_zoom;');
@@ -70,13 +70,6 @@ evalin('base','zef.colorscale_max_slider = zef_update_colorscale_max;');
 evalin('base','zef_set_lights(zef.update_lights);');
 
 end
-end 
 end
-
-
-
-
-
-
-
+end
 

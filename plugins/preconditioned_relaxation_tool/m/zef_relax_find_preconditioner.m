@@ -1,7 +1,7 @@
 function [relax_preconditioner, relax_preconditioner_permutation] = zef_relax_find_preconditioner
 
-relax_multires_sparsity = evalin('base','zef.relax_multires_sparsity');  
-relax_multires_n_decompositions = evalin('base','zef.relax_multires_n_decompositions'); 
+relax_multires_sparsity = evalin('base','zef.relax_multires_sparsity');
+relax_multires_n_decompositions = evalin('base','zef.relax_multires_n_decompositions');
 relax_multires_n_levels = evalin('base','zef.relax_multires_n_levels');
 relax_preconditioner_type = evalin('base','zef.relax_preconditioner_type');
 
@@ -20,7 +20,6 @@ waitbar(zef_i/relax_multires_n_decompositions,h,'RAMUS preconditioner');
 [relax_preconditioner{zef_i}, relax_preconditioner_permutation{zef_i}] = zef_block_diagonal_preconditioner_uniform_prior(evalin('base','zef.L'), relax_multigrid_dec, relax_multigrid_perm);
 end
 close(h)
-
 
 elseif relax_preconditioner_type == 2
 relax_preconditioner = cell(0);
@@ -45,11 +44,9 @@ h = waitbar(0,'RAMUS preconditioner');
 
 [~,n_interp] = zef_processLeadfields(evalin('base','zef.source_direction_mode'));
 
-
 relax_preconditioner{1} = speye(3*n_interp);
 relax_preconditioner_permutation{1}{1} = [1:3*n_interp]';
 relax_preconditioner_permutation{1}{2} = [1:3*n_interp]';
 close(h);
-
 
 end

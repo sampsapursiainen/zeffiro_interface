@@ -130,10 +130,9 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
         h_menu_import_sensor_names      matlab.ui.container.Menu
     end
 
-    
     methods (Access = private)
         function local_CreateFcn(app, hObject, eventdata, createfcn, appdata)
-            
+
             if ~isempty(appdata)
                names = fieldnames(appdata);
                for i=1:length(names)
@@ -141,7 +140,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
                    setappdata(hObject, name, getfield(appdata,name));
                end
             end
-            
+
             if ~isempty(createfcn)
                if isa(createfcn,'function_handle')
                    createfcn(hObject, eventdata);
@@ -150,9 +149,8 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
                end
             end
         end
-        
+
     end
-    
 
     % Component initialization
     methods (Access = private)
@@ -617,7 +615,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_compartment_table
             app.h_menu_compartment_table = uicontextmenu(app.h_zeffiro_window_main);
-            
+
             % Assign app.h_menu_compartment_table
             app.h_compartment_table.ContextMenu = app.h_menu_compartment_table;
 
@@ -651,7 +649,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create ContextMenu
             app.ContextMenu = uicontextmenu(app.h_zeffiro_window_main);
-            
+
             % Assign app.ContextMenu
             app.h_sensors_table.ContextMenu = app.ContextMenu;
 
@@ -681,7 +679,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create ContextMenu2
             app.ContextMenu2 = uicontextmenu(app.h_zeffiro_window_main);
-            
+
             % Assign app.ContextMenu2
             app.h_transform_table.ContextMenu = app.ContextMenu2;
 
@@ -699,7 +697,7 @@ classdef zeffiro_interface_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create ContextMenu3
             app.ContextMenu3 = uicontextmenu(app.h_zeffiro_window_main);
-            
+
             % Assign app.ContextMenu3
             app.h_sensors_name_table.ContextMenu = app.ContextMenu3;
 
