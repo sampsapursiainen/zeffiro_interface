@@ -163,13 +163,13 @@ sensors_aux = sensors;
 if electrode_model == 1 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
 sensors = zef_attach_sensors_volume(sensors); 
 elseif electrode_model==2 & evalin('base','zef.attach_electrodes') & ismember(evalin('base','zef.imaging_method'),[1 4 5]) 
- sensors = zef_attach_sensors_volume(sensors); 
+  sensors = zef_attach_sensors_volume(sensors); 
   sensors_point_like_index = find(sensors(:,4)==0);
   unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
   sensors_point_like = zeros(length(unique_sensors_point_like),3);
 %April 2021
 sensors_name_points = zef_attach_sensors_volume(sensors_aux,'points');
-sensors_point_like_id = find(sensors(:,4)==0);
+sensors_point_like_id = sensors(find(sensors(:,4)==0),1);
 %April 2021
   for spl_ind = 1 : length(unique_sensors_point_like)
 spl_aux_ind = find(sensors(sensors_point_like_index,1)==unique_sensors_point_like(spl_ind));

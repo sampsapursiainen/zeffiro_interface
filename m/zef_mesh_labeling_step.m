@@ -8,7 +8,7 @@ if isequal(labeling_flag,1)
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
-
+ 
 compartment_counter = 0;
 pml_counter = 0;
 

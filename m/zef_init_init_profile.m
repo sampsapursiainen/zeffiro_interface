@@ -8,6 +8,8 @@ for zef_i = 1 : size(zef.init_profile,1)
     evalin('base',['zef.' zef.init_profile{zef_i,3} '= ''' zef.init_profile{zef_i,2}  ''';']); 
     elseif isequal(zef.init_profile{zef_i,4},'number') 
     evalin('base',['zef.' zef.init_profile{zef_i,3} '= ' zef.init_profile{zef_i,2}  ';']); 
+    elseif isequal(zef.init_profile{zef_i,4},'evaluate') 
+    evalin('base',zef.init_profile{zef_i,2}); 
     end
     
 end

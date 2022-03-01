@@ -119,6 +119,14 @@ sensor_tag = evalin('base','zef.current_sensors');
 
 s_points = evalin('base',['zef.' sensor_tag '_points']);
 s_data_aux = [];
+
+if ismember(evalin('base','zef.imaging_method'),1)
+f_handle = evalin('base','zef.create_patch_sensor');
+if not(isempty(f_handle))
+s_points = f_handle(s_points);
+end
+end
+
 if ismember(evalin('base','zef.imaging_method'),[2 3]) 
 s_directions = evalin('base',['zef.' sensor_tag '_directions(:,1:3)']);
 s_directions_g = [];
