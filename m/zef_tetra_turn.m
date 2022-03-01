@@ -1,8 +1,4 @@
 function [tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
-<<<<<<< HEAD
- 
-=======
->>>>>>> 5b5c6faff4d84098629188095d4264ae682a8077
 
 flag_val = 1;
 
