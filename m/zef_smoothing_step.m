@@ -1,11 +1,6 @@
 if evalin('base','zef.mesh_smoothing_on');
-<<<<<<< HEAD
-       
+     
 length_waitbar = 4+length(priority_vec);    
-=======
-
-length_waitbar = 4+length(priority_vec);
->>>>>>> 5b5c6faff4d84098629188095d4264ae682a8077
 
 %nodes = evalin('base','zef.nodes_raw');
 sensors = evalin('base','zef.sensors');
