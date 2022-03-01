@@ -9,7 +9,7 @@ end
 delete(findobj(h_1.Children,'Type','Light'));
 
 for i = 1 : length(lights_vec)
-    
+
 aux_val = lights_vec(i);
 
 if aux_val == 1

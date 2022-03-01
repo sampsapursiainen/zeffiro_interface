@@ -50,15 +50,15 @@ if ismember(hyper_type,[1,2])
     else
         normalize_data = 'average';
     end
-    
+
     if hyper_type == 1
         balance_spatially = 1;
     else
-        balance_spatially = 0;    
+        balance_spatially = 0;
     end
     if evalin('base','zef.inv_hyperprior') == 1
         [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-    elseif evalin('base','zef.inv_hyperprior') == 2 
+    elseif evalin('base','zef.inv_hyperprior') == 2
         [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
     end
     if q == 1
@@ -78,22 +78,22 @@ n = size(L,2);
 
 tic;
 for f_ind = 1 : number_of_frames
-    
+
         time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
         waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
-    
+
     f=zef_getTimeStep(f_data, f_ind, true);
 
     z_vec = nan(size(L,2),1);
-    
+
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         f = gpuArray(f);
     end
-         
+
 % inversion starts here
 
 if f_ind == 1
@@ -112,35 +112,35 @@ gamma =zeros(length(z_vec),1)+(beta+1/q-1)./theta0;
         %__ Iteration Loop __
         for i = 1 : n_ias_map_iter
         %_Draw waitbar_
-        if f_ind > 1;    
+        if f_ind > 1;
         waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;
         w = 1./(gamma*std_lhood^2*max(f)^2);
-       
+
         z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
         %_ gamma update _
         gamma = (beta+1/q-1)./(theta0+0.5*abs(z_vec).^q);
         end
     else
-        x_old = zeros(n,1)+1e-10;%it seems sensitive to initialization! 
+        x_old = zeros(n,1)+1e-10;%it seems sensitive to initialization!
         %__ Iteration Loop __
         for i = 1 : n_ias_map_iter
         %_Draw waitbar_
-        if f_ind > 1;    
+        if f_ind > 1;
         waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;
         %focal activity
         z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);
-        gamma = beta./(theta0+0.5*abs(z_vec));    
-        
+        gamma = beta./(theta0+0.5*abs(z_vec));
+
         x_old = z_vec;
         end
     end
-    
+
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 z_vec = gather(z_vec);
 end

@@ -1,4 +1,4 @@
-number_of_points = 10; 
+number_of_points = 10;
 grey_matter_ind = 15;
 
 surface_triangles = zef_get_surface_triangles(zef.tetra,zef.sigma(:,2),grey_matter_ind);
@@ -17,7 +17,7 @@ surfa_triangles_wg = [surface_triangles_w; surface_triangles_g+size(surface_node
 surface_nodes_wg = [surface_nodes_w; surface_nodes_g];
 
 for i = 1 : length(distance_vec)
-    
+
     i
 d  =  zef_distance_to_mesh(zef.nodes(nodes_ind_aux(i), surface_nodes_wg, surface_triangles_wg)
 distance_vec(i) = d;

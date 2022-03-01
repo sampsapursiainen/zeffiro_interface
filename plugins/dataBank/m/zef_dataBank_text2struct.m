@@ -5,8 +5,5 @@ for i=1:length(text)
     struct_out.(text{i})=[];
 end
 
-
-
-
 end
 

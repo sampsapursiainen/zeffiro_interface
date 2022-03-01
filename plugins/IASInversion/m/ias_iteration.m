@@ -37,7 +37,6 @@ reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measuremen
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-
 source_count = n_interp;
 if evalin('base','zef.ias_normalize_data')==1;
     normalize_data = 'maximum';
@@ -52,10 +51,9 @@ else
 end
 if evalin('base','zef.inv_hyperprior') == 1
 [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),evalin('base','zef.ias_normalize_data'),balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-elseif evalin('base','zef.inv_hyperprior') == 2 
+elseif evalin('base','zef.inv_hyperprior') == 2
 [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),evalin('base','zef.ias_normalize_data'),balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
-
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 L = gpuArray(L);
@@ -66,27 +64,25 @@ if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 S_mat = gpuArray(S_mat);
 end
 
-
-[f_data] = zef_getFilteredData; 
-
+[f_data] = zef_getFilteredData;
 
 tic;
 
 z_inverse = cell(0);
 
 for f_ind = 1 : number_of_frames
-time_val = toc; 
-if f_ind > 1; 
+time_val = toc;
+if f_ind > 1;
 date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
-if ismember(source_direction_mode,[1,2]) 
-z_aux = zeros(size(L,2),1); 
+if ismember(source_direction_mode,[1,2])
+z_aux = zeros(size(L,2),1);
 end
-if source_direction_mode == 3 
+if source_direction_mode == 3
 z_aux = zeros(3*size(L,2),1);
 end
-z_vec = ones(size(L,2),1); 
+z_vec = ones(size(L,2),1);
 
 if evalin('base','zef.inv_hyperprior') == 1
 if length(theta0) > 1  || length(beta) > 1
@@ -102,7 +98,7 @@ theta = (theta0.*beta)*ones(size(L,2),1);
 end
 end
 
-[f] = zef_getTimeStep(f_data, f_ind, true); 
+[f] = zef_getTimeStep(f_data, f_ind, true);
 
 if f_ind == 1
 waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
@@ -114,10 +110,10 @@ f = gpuArray(f);
 end
 
 for i = 1 : n_ias_map_iter
-if f_ind > 1;    
+if f_ind > 1;
 waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 m_max = sqrt(size(L,2));
 u = zeros(length(z_vec),1);
@@ -126,7 +122,7 @@ d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 d_sqrt = gpuArray(d_sqrt);
 end
-L = L_aux.*repmat(d_sqrt',size(L,1),1); 
+L = L_aux.*repmat(d_sqrt',size(L,1),1);
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
@@ -135,10 +131,9 @@ end
 if evalin('base','zef.inv_hyperprior') == 1
 theta = (theta0+0.5*z_vec.^2)./(beta + 1.5);
 elseif evalin('base','zef.inv_hyperprior') == 2
-theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2)); 
+theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2));
 end
 end;
-
 
 z_inverse{f_ind} = z_vec;
 

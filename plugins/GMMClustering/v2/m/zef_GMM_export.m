@@ -3,12 +3,12 @@
 function zef_GMM_export(save_file_path,GMM,saved_ones)
 
 if not(isempty(save_file_path)) && prod(not(save_file_path==0))
-    [zef_aux_file,zef_aux_path] = uiputfile('*.mat','Select Gaussian Mixature Model',save_file_path); 
+    [zef_aux_file,zef_aux_path] = uiputfile('*.mat','Select Gaussian Mixature Model',save_file_path);
 else
-    [zef_aux_file,zef_aux_path] = uiputfile('*.mat','Save Gaussian Mixature Model'); 
+    [zef_aux_file,zef_aux_path] = uiputfile('*.mat','Save Gaussian Mixature Model');
 end
 
-if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0) 
+if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0)
     if saved_ones{1} == 1
         zef_GMM.model = GMM.model;
     end
@@ -27,9 +27,8 @@ if ~isequal(zef_aux_file,0) && ~isequal(zef_aux_path,0)
     if saved_ones{6} == 1
         zef_GMM.reconstruction = evalin('base','zef.reconstruction');
     end
-    
-    
-    save(fullfile(zef_aux_path,zef_aux_file),'zef_GMM','-v7.3'); 
+
+    save(fullfile(zef_aux_path,zef_aux_file),'zef_GMM','-v7.3');
 end
 
 end

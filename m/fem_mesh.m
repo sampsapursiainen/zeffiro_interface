@@ -25,9 +25,9 @@ for k = 1 : length(compartment_tags)
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
         var_4 = ['zef.' compartment_tags{k} '_name'];
 
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
-priority_val = evalin('base',var_2); 
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
+priority_val = evalin('base',var_2);
 
 if on_val
 i = i + 1;
@@ -35,7 +35,7 @@ i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 submesh_cell{i} = evalin('base',var_3);
-name_tags{i} = evalin('base',var_4); 
+name_tags{i} = evalin('base',var_4);
 
 end
 end
@@ -51,9 +51,9 @@ submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
 for i = 1 :  length(reuna_p)
-       
+
 for k = 1 : max(1,length(submesh_cell{i}))
-    
+
 compartment_counter = compartment_counter + 1;
 priority_vec_aux(compartment_counter) = priority_vec(i);
 submesh_ind_1(compartment_counter) = i;
@@ -84,34 +84,33 @@ n_cubes = (length(x_vec)-1)*(length(y_vec)-1)*(length(z_vec)-1);
 ind_mat_1 = [     3     4     1     7 ;
                   2     3     1     7 ;
                   1     2     7     6 ;
-                  7     1     6     5 ; 
+                  7     1     6     5 ;
                   7     4     1     8 ;
                   7     8     1     5  ];
 
-tetra = zeros(6*n_cubes,4);             
+tetra = zeros(6*n_cubes,4);
 johtavuus_ind = zeros(6*n_cubes,8);
 johtavuus_ind_2 = zeros(6*n_cubes,4);
-i = 1;              
+i = 1;
 
 for i_x = 1 : length(x_vec) - 1
-waitbar(i_x/(length(x_vec)-1),h,'Initial mesh.');    
+waitbar(i_x/(length(x_vec)-1),h,'Initial mesh.');
 for i_y = 1 : length(y_vec) - 1
 for i_z = 1 : length(z_vec) - 1
 
-x_ind = [i_x i_x+1 i_x+1 i_x i_x i_x+1 i_x+1 i_x]';  
-y_ind = [i_y i_y i_y+1 i_y+1 i_y i_y i_y+1 i_y+1]';    
-z_ind = [i_z i_z i_z i_z i_z+1 i_z+1 i_z+1 i_z+1]';    
-ind_mat_2 = sub2ind(size_xyz,y_ind,x_ind,z_ind);   
+x_ind = [i_x i_x+1 i_x+1 i_x i_x i_x+1 i_x+1 i_x]';
+y_ind = [i_y i_y i_y+1 i_y+1 i_y i_y i_y+1 i_y+1]';
+z_ind = [i_z i_z i_z i_z i_z+1 i_z+1 i_z+1 i_z+1]';
+ind_mat_2 = sub2ind(size_xyz,y_ind,x_ind,z_ind);
 
 tetra(i:i+5,:) = ind_mat_2(ind_mat_1);
 johtavuus_ind(i:i+5,:) = ind_mat_2(:,ones(6,1))';
 johtavuus_ind_2(i:i+5,:) = ind_mat_2(ind_mat_1);
 i = i + 6;
-        
+
 end
 end
-end    
-    
+end
 
 johtavuus_ind = uint32(johtavuus_ind);
 johtavuus_ind_2 = uint32(johtavuus_ind_2);
@@ -125,16 +124,16 @@ compartment_counter = 0;
 sigma_counter = 0;
 
 for i = 1 : length(reuna_p)
-    
+
 for k = 1 : max(1,length(submesh_cell{i}))
-    
+
 compartment_counter = compartment_counter + 1;
 
-if isempty(submesh_cell{i}) 
-reuna_t_aux = reuna_t{i};   
+if isempty(submesh_cell{i})
+reuna_t_aux = reuna_t{i};
 else
 if k == 1
-reuna_t_aux = reuna_t{i}(1:submesh_cell{i},:);     
+reuna_t_aux = reuna_t{i}(1:submesh_cell{i},:);
 else
 reuna_t_aux = reuna_t{i}(submesh_cell{i}(k-1)+1: submesh_cell{i}(k),:);
 end
@@ -163,12 +162,12 @@ tetra = I_2(tetra);
 
  ind_m = [ 2 4 3 ;
            1 3 4 ;
-           1 4 2 ; 
+           1 4 2 ;
            1 2 3 ];
 
-tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
-              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]'; 
+tetra_sort = [tetra(:,[2 4 3]) ones(size(tetra,1),1) [1:size(tetra,1)]';
+              tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]';
+              tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]';
               tetra(:,[1 2 3]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';];
 tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
 tetra_sort = sortrows(tetra_sort,[1 2 3]);
@@ -191,10 +190,7 @@ end
 priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_ind);
 [johtavuus_ind] = johtavuus_ind(priority_ind);
 
-
-
 close(h);
 
 end
-
 

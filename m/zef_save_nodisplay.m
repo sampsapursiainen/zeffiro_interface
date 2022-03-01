@@ -23,7 +23,7 @@ if zef.save_switch == 2
 if not(isequal(zef.file,0));
 if zef.file_index == 1
 save([zef.file_path zef.file],'-struct','zef','L','-v7.3');
-else 
+else
 save([zef.file_path zef.file],'-struct','zef','L','-ascii');
 end
 end
@@ -32,7 +32,7 @@ if zef.save_switch == 3
 if not(isequal(zef.file,0));
 if zef.file_index == 1
 save([zef.file_path zef.file],'-struct','zef','source_positions','-v7.3');
-else 
+else
 save([zef.file_path zef.file],'-struct','zef','source_positions','-ascii');
 end
 end
@@ -41,7 +41,7 @@ if zef.save_switch == 4
 if not(isequal(zef.file,0));
 if zef.file_index == 1
 save([zef.file_path zef.file],'-struct','zef','source_directions','-v7.3');
-else 
+else
 save([zef.file_path zef.file],'-struct','zef','source_directions','-ascii');
 end
 end
@@ -61,7 +61,7 @@ clear zef_i;
 save([zef.file_path zef.file],'-struct','zef','sensors','surface_mesh_nodes','surface_mesh_triangles','sensors_attached_surface','-v7.3');
 zef = rmfield(zef,{'min_val','min_ind','sensors_attached_surface'});
 else
-save([zef.file_path zef.file],'-struct','zef','sensors','surface_mesh_nodes','surface_mesh_triangles'); 
+save([zef.file_path zef.file],'-struct','zef','sensors','surface_mesh_nodes','surface_mesh_triangles');
 zef = rmfield(zef,{'surface_mesh_nodes','surface_mesh_triangles'});
 end
 end
@@ -120,29 +120,29 @@ if zef.save_switch == 8
 if not(isequal(zef.file,0));
 if zef.file_index == 1
 save([zef.file_path zef.file],'-struct','zef','reconstruction','-v7.3');
-else 
+else
 save([zef.file_path zef.file],'-struct','zef','reconstruction','-ascii');
 end
 end
 end
 if zef.save_switch == 9
-if not(isequal(zef.file,0)); 
+if not(isequal(zef.file,0));
 zef.h_fig_aux = findall(groot, 'Type','figure','Name','ZEFFIRO Interface: Figure tool');
-savefig(zef.h_fig_aux,[zef.save_file_path zef.file]); 
+savefig(zef.h_fig_aux,[zef.save_file_path zef.file]);
 rmfield(zef,'h_fig_aux');
 end;
 end;
 if zef.save_switch == 10
-if not(isequal(zef.file,0)); 
+if not(isequal(zef.file,0));
     if zef.file_index == 1
-print(zef.h_zeffiro,'-dpng','-r200',[zef.file_path zef.file]); 
+print(zef.h_zeffiro,'-dpng','-r200',[zef.file_path zef.file]);
     end
         if zef.file_index == 2
-print(zef.h_zeffiro,['-djpeg' zef.video_codec],'-r200',[zef.save_file_path zef.file]); 
+print(zef.h_zeffiro,['-djpeg' zef.video_codec],'-r200',[zef.save_file_path zef.file]);
     end
 if zef.file_index == 3
-print(zef.h_zeffiro,'-dtiff','-r200',[zef.file_path zef.file]); 
-    end    
+print(zef.h_zeffiro,'-dtiff','-r200',[zef.file_path zef.file]);
+    end
 end;
 end;
 

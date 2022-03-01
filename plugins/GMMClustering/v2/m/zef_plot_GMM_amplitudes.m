@@ -4,7 +4,6 @@
 %Plot estimated amplitudes as a bar plot
 function zef_plot_GMM_amplitudes
 
-
 %check if the amplitudes exists
 if ~evalin('base','isfield(zef.GMM,''amplitudes'')')
     error('Amplitudes are not saved to zef.GMM structure. Please recalculate Gaussian mixature model.');
@@ -70,14 +69,14 @@ else
                     else
                         colors_num_aux(2) = str2num(colors{zef_j});
                     end
-                    
+
                     if sum(isnan(colors_num_aux)) == 0
                         colors{first_num_ind} = colors_num_aux;
                         colors(first_num_ind+1:last_num_ind) = [];
                         last_ind = length(colors);
                         colors_num_aux = nan(1,3);
                     end
-                end  
+                end
             end
         end
         if length(colors) < length(amp)
@@ -98,7 +97,6 @@ elseif strcmp(comp_ord,'3')
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:length(amp))));
     max_comps = min(length(order),max_comps);
 end
-
 
 %Figure visualization setups
 zef_temp_axis = evalin('base','zef.h_axes1');

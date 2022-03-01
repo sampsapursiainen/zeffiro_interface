@@ -132,8 +132,6 @@ if iscell(elements)
     K3 = length(source_ind);
     K4 = length(gravity_ind);
 
-
-
 tilavuus = zef_tetra_volume(nodes, tetrahedra);
 
 c_tet = 0.25*(nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:) + nodes(tetrahedra(:,4),:));
@@ -187,7 +185,6 @@ waitbar(i/K,h,['Background Ready approx: ' datestr(datevec(now+(K/i - 1)*time_va
 end
  end
 
-
  elseif evalin('base','zef.gravity_field_type') == 1
 
 L_eit = zeros(L, K3);
@@ -238,5 +235,4 @@ bg_data = (6.67408E-11)*bg_data;
 
  source_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  source_directions = ones(size(source_locations));
-
 

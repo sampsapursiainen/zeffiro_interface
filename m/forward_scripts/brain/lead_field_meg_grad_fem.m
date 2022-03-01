@@ -68,7 +68,6 @@ if iscell(elements)
     source_ind = [1:size(tetrahedra,1)]';
     cholinc_tol = 1e-3;
 
-
     n_varargin = length(varargin);
     if n_varargin >= 1
     if not(isstruct(varargin{1}))
@@ -110,7 +109,6 @@ if iscell(elements)
     if not(isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal'))
 source_model = 1;
 end
-
 
 A = spalloc(N,N,0);
 
@@ -270,7 +268,6 @@ for i = 1 : 6
 grad_11 = repmat(1./(dot(normal_vecs_aux,(nodes(prisms(:,i),:)'-nodes(prisms(:,ind_m(i,1)),:)'))),3,1).*normal_vecs_aux;
 grad_12 = cross(nodes(prisms(:,ind_m(i,3)),:)'-nodes(prisms(:,ind_m(i,2)),:)', nodes(prisms(:,ind_m(i,4)),:)'-nodes(prisms(:,ind_m(i,2)),:)');
 grad_12 = repmat(1./dot(nodes(prisms(:,i),:)' - nodes(prisms(:,ind_m(i,2)),:)',grad_12),3,1).*grad_12;
-
 
 for j = 1 : L
 
@@ -442,7 +439,6 @@ A_aux = A(perm_vec,perm_vec);
 A = A_aux;
 clear A_aux;
 
-
 %Form G_fi and T_fi
 %*******************************
 %*******************************
@@ -581,7 +577,6 @@ end
 
 clear cross_mat;
 
-
 waitbar(0,h,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
@@ -649,7 +644,6 @@ S2 = ichol(A,struct('type','nofill'));
 S1 = S2';
 end
 
-
 tol_val_aux = tol_val;
 
 %Define block size
@@ -665,7 +659,6 @@ block_ind = [i : min(L,i+block_size-1)];
 %Define right hand side
 b = full(B(:,block_ind));
 b(zero_ind,:) = 0;
-
 
 tol_val = tol_val_aux.*ones(1,length(block_ind));
 
@@ -709,13 +702,11 @@ x_block(:,block_iter_sub) = x_block_cell{block_iter};
 relres_vec(block_iter_sub) = relres_cell{block_iter};
 end
 
-
 %Substitute matrices
 L_meg_fi(block_ind,:) = L_meg_fi(block_ind,:) + x_block'*G_fi;
 if source_model == 2
 L_meg_ew(block_ind,:) = L_meg_ew(block_ind,:) + x_block'*G_ew;
 end
-
 
 if not(isempty(find(tol_val < relres_vec)))
     close(h);
@@ -759,7 +750,6 @@ dipole_directions = fi_source_directions(aux_rand_perm,:);
 dipole_locations = fi_source_locations(aux_rand_perm,:);
 L_meg = L_meg_fi(:,aux_rand_perm);
 end
-
 
 if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'normal')
 
@@ -818,5 +808,4 @@ end
 waitbar(1,h);
 
 close(h);
-
 

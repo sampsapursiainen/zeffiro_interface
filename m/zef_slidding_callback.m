@@ -1,8 +1,6 @@
 function []=zef_slidding_callback
 
-
-
-if evalin('base','zef.store_cdata')   
+if evalin('base','zef.store_cdata')
 zef_play_cdata(1,get(gcbo,'Value'));
 else
 l_r = evalin('base','(zef.frame_stop-zef.frame_start+zef.frame_step)/zef.frame_step')

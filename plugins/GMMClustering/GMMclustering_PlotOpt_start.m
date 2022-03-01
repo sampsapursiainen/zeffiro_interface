@@ -9,11 +9,11 @@ if zef.GMMclustering.UIFigure.Position(3)+zef.GMM_PlotOpt.UIFigure.Position(3)+z
     zef.GMM_PlotOpt.UIFigure.Position(1) = zef.GMMclustering.UIFigure.Position(1)-zef.GMM_PlotOpt.UIFigure.Position(3);
 else
     zef.GMM_PlotOpt.UIFigure.Position(1) = zef.GMMclustering.UIFigure.Position(1)+zef.GMMclustering.UIFigure.Position(3);
-end  
+end
 
 zef_init_GMMPlotOpts;
 
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.GMMclustering."field" = zef."field")
 zef_props = properties(zef.GMM_PlotOpt);
 for zef_i = 1:length(zef_props)
@@ -34,7 +34,7 @@ for zef_i = 1:length(zef_props)
                 else
                     zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j))];
                 end
-            end 
+            end
             zef.GMM_PlotOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
             clear zef_aux_str zef_aux_mat
             end
@@ -46,10 +46,10 @@ end
 clear zef_props zef_i zef_j zef_temp_screen_size
 
 if zef.GMM_comp_ord == 3
-    zef.GMM_PlotOpt.GMM_dip_comp.Enable = 'on'; 
+    zef.GMM_PlotOpt.GMM_dip_comp.Enable = 'on';
     zef.GMM_PlotOpt.GMM_ellip_comp.Enable = 'on';
 else
-    zef.GMM_PlotOpt.GMM_dip_comp.Enable = 'off'; 
+    zef.GMM_PlotOpt.GMM_dip_comp.Enable = 'off';
     zef.GMM_PlotOpt.GMM_ellip_comp.Enable = 'off';
 end
 

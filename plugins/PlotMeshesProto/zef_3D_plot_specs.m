@@ -2,7 +2,7 @@ function zef_3D_plot_specs(h)
 %Coordinate system's visualization parameters
 head2axes_ratio = 1.0255;   %percentual empty space between surface and coordinate limits
 tick_number_limit = 8;      %maximum number of ticks on visualization
-   
+
 %compartment_tags = evalin('base','zef.compartment_tags');
 compartment_tags = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d12','d13','d14','d15','d16','d17','d18','d19','d20','d21','d22','w','g','c','sk','sc'};
 %Find indices of the visible compartments
@@ -11,7 +11,7 @@ aux_brain_ind = [];
 for k = 1 : length(compartment_tags)
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
-on_val = evalin('base',var_0);      
+on_val = evalin('base',var_0);
 visible_val = evalin('base',var_3);
 if on_val
 i = i + 1;
@@ -116,6 +116,5 @@ set(h,'xGrid','off');
 set(h,'yGrid','off');
 set(h,'zGrid','off');
 end
-
 
 end

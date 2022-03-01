@@ -1,13 +1,13 @@
 if ismember(zef.ES_search_method,[1 2])
-    
+
     if not(isfield(zef,'h_ES_optimizer_properties'))
         zef_ES_optimizer_properties;
     elseif not(isvalid(zef.h_ES_optimizer_properties))
         zef_ES_optimizer_properties;
     end
-    
+
     figure(zef.h_ES_optimizer_properties);
-    
+
     if zef.ES_search_type == 1
         zef.h_ES_optimizer_properties_table.Data{1,1} = 'Current density at source location';
         zef.h_ES_optimizer_properties_table.Data{1,2} = zef.y_ES_single.field_source.magnitude;
@@ -24,7 +24,7 @@ if ismember(zef.ES_search_method,[1 2])
         zef.h_ES_optimizer_properties_table.Data{7,1} = 'Off-field ';
         zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_single.field_source.avg_off_field;
     end
-    
+
     if zef.ES_search_type == 2
         [~, zef.ES_star_row, zef.ES_star_col]         = zef_ES_objective_function;
         zef.h_ES_optimizer_properties_table.Data{1,1} = 'Current density at source location';

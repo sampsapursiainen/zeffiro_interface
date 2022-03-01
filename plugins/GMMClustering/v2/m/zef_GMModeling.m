@@ -5,7 +5,7 @@ if evalin('base','isfield(zef,''reconstruction_information'')')
     reconstruction_information = evalin('base','zef.reconstruction_information');
     if isfield(reconstruction_information,'inv_time_1') && isfield(reconstruction_information,'inv_time_2') &&...
             isfield(reconstruction_information,'inv_time_3')
-        if isfield(reconstruction_information,'inv_sampling_frequency') 
+        if isfield(reconstruction_information,'inv_sampling_frequency')
             GMModelTimeVariables.sampling_freq = reconstruction_information.inv_sampling_frequency;
         elseif isfield(reconstruction_information,'sampling_frequency')
             GMModelTimeVariables.sampling_frequency = reconstruction_information.sampling_frequency;
@@ -15,12 +15,12 @@ if evalin('base','isfield(zef,''reconstruction_information'')')
         GMModelTimeVariables.time_1 = reconstruction_information.inv_time_1;
         GMModelTimeVariables.time_2 = reconstruction_information.inv_time_2;
         GMModelTimeVariables.time_3 = reconstruction_information.inv_time_3;
-        
+
     end
 end
 
 parameters = evalin('base','zef.GMM.parameters.Values');
-%Options 
+%Options
 options = statset('MaxIter',str2num(parameters{2}));
 if strcmp(parameters{3},'1')
     Sigma = 'full';
@@ -49,7 +49,6 @@ source_positions = evalin('base','zef.source_positions');
 %check parcellation
 tag_ind = evalin('base','find(strcmp(zef.GMM.parameters.Tags,''domain''))');
 
-
 if strcmp(parameters{tag_ind},'2')
 source_ind_aux = evalin('base','zef.source_interpolation_ind{1}');
 p_ind_aux_1 = [];
@@ -65,7 +64,7 @@ I_aux = [3*I_aux(:)-2,3*I_aux(:)-1,3*I_aux(:)];
 end
 clear p_ind_aux_1 p_ind_aux_2 p_ind p_selected source_ind_aux
 
-estim_param = str2num(parameters{22}); 
+estim_param = str2num(parameters{22});
 threshold = str2num(parameters{5});
 reg_value = str2num(parameters{15});
 amp_est_type = str2num(parameters{21});
@@ -142,7 +141,7 @@ for t=t_start:T
             z(ind(i)) = G*z(ind);
         end
     end
-  
+
     %Maximally expected sampling step:
     ind = z<threshold;
     z(ind) = 0;
@@ -155,13 +154,13 @@ for t=t_start:T
     ind2(z_cum-z(ind)+1)=1;
     activity_pos = source_positions(ind,:);
     activity_dir = [atan2(sqrt(sum((direct(ind,[1,2]).^2),2)),direct(ind,3)),atan2(direct(ind,2),direct(ind,1))];
-    
+
     if estim_param == 1
         activity_space = [activity_pos(cumsum(ind2),:),activity_dir(cumsum(ind2),:)];
     elseif estim_param == 2
         activity_space = activity_pos(cumsum(ind2),:);
     end
-    
+
     if strcmp(initial_mode,'1')
         %calculate Gaussian mixature models:
         try
@@ -186,7 +185,7 @@ for t=t_start:T
             index_vec2(ind1)=k;
         end
         index_vec1=index_vec2;
-        
+
         if length(unique(index_vec1))~=k
             disp(['The ',num2str(k),'-component GMM was not realized.']);
             break;
@@ -201,7 +200,7 @@ for t=t_start:T
                     index_vec1(ind1)=kk;
                     ind = ind & not(ind1);
                     index_vec1(ind)=k;
-                end      
+                end
              if length(unique(index_vec1))~=k
                 disp(['The ',num2str(k),'-component GMM was not realized.'])
                 break;
@@ -218,7 +217,7 @@ for t=t_start:T
                 'SharedCovariance',SharedCovariance,'Start',index_vec1,'RegularizationValue',reg_value,'Options',options);
         end
     end
-    
+
     if strcmp(model_criterion,'1')
         if T>1
             GMModel{t} = GMModel_aux;
@@ -247,13 +246,13 @@ for t=t_start:T
             end
         end
     end
-    
+
     if T==1
       waitbar(k/K(t),h,['Step ',num2str(k),' of ',num2str(K(t)),'. ',date_str]);
     end
-    
+
     end     %end of k loop
-    
+
     if T > 1
         ind2 = [];
         for k = 1:size(GMModel{t}.mu,1)
@@ -275,15 +274,15 @@ for t=t_start:T
             GMModelDipoles{t} = NaN;
             amp = GMM2amplitude(ones(size(GMModel{t}.mu,1),3),ind2,t,2)*1e3;
             GMModelAmplitudes{t} = amp;
-        end 
-        
+        end
+
         waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
         for k = 1:size(GMModel.mu,1)
             [~,ind2(k)] = min(sum((GMModel.mu(k,1:3)-source_positions).^2,2));
         end
-        disp(['Relative centroid point current densities: ',num2str(J(ind2)'/max(J))]) 
+        disp(['Relative centroid point current densities: ',num2str(J(ind2)'/max(J))])
         if estim_param == 1
         GMModelDipoles = [cos(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),sin(GMModel.mu(:,5)).*sin(GMModel.mu(:,4)),cos(GMModel.mu(:,4))];
         if amp_est_type == 1
@@ -299,11 +298,10 @@ for t=t_start:T
             GMModelDipoles{t} = NaN;
             amp = GMM2amplitude(ones(size(GMModel.mu,1),3),ind2,t,2)*1e3;
             GMModelAmplitudes = amp;
-        end 
+        end
     end
 
 end     %end of t loop
 
 close(h);
 end
-    

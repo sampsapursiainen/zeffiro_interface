@@ -23,8 +23,7 @@ if ~isfield(zef,'RAPMUSIC_n_dipoles')
     zef.RAPMUSIC_n_dipoles = 8;
 end
 
-
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.RAPMUSIC."field" = zef."field")
 zef_props = properties(zef.RAPMUSIC);
 for zef_i = 1:length(zef_props)

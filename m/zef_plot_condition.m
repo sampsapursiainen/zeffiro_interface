@@ -7,7 +7,7 @@ h_axes = evalin('base','zef.h_axes1');
 condition_number = zef_condition_number(evalin('base','zef.nodes'), evalin('base','zef.tetra'));
 condition_number = max(1E-30,condition_number);
 h_hist = histogram(log10(condition_number),10000);
- 
+
 hist_y = log10(h_hist.Values);
 hist_x = 0.5*(h_hist.BinEdges(1:end-1)+h_hist.BinEdges(2:end));
 

@@ -6,6 +6,3 @@ zef.dataBank.folder(strfind(zef.dataBank.folder,'\'))='/'; %ubuntu system works 
 zef.dataBank.app.savetodiskSwitch.Enable=true;
 zef.dataBank.app.DataFolder.Text=zef.dataBank.folder;
 
-
-
-

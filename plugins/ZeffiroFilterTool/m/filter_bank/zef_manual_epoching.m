@@ -3,11 +3,11 @@ function [processed_data] = zef_manual_epoching(f, epoch_points, start_time, end
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 %This function processes the N-by-M data array f for N channels and M time
 %steps. The other arguments can be controlled via the ZI user interface.
-%The desctiption and argument definitions shown in ZI are listed below. 
+%The desctiption and argument definitions shown in ZI are listed below.
 %Description: Averaging over manually selected epochs
-%Input: 1 Manually selected epoch points [Default: filter_epoch_points], 
-%2 Start time w.r.t. point (s) [Default: -0.18], 
-%3 End time w.r.t. point (s) [Default: 0.18], 
+%Input: 1 Manually selected epoch points [Default: filter_epoch_points],
+%2 Start time w.r.t. point (s) [Default: -0.18],
+%3 End time w.r.t. point (s) [Default: 0.18],
 %4 Sampling frequency (Hz) [Default: filter_sampling_rate]
 %Output: Averaged data for the manually selected epochs.
 

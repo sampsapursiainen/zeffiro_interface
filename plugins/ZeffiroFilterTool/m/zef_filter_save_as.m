@@ -20,9 +20,9 @@ zef_data.filter_list_selected = zef.filter_list_selected;
 zef_data.filter_sampling_rate = zef.filter_sampling_rate ;
 zef_data.filter_tag = zef.filter_tag ;
 zef_data.filter_data_segment = zef.filter_data_segment;
-zef_data.filter_pipeline = zef.filter_pipeline; 
+zef_data.filter_pipeline = zef.filter_pipeline;
 zef_data.filter_pipeline_list = zef.filter_pipeline_list;
-zef_data.filter_pipeline_selected = zef.filter_pipeline_selected; 
+zef_data.filter_pipeline_selected = zef.filter_pipeline_selected;
 
 save([zef.file_path zef.file],'zef_data','-v7.3');
 clear zef_data;

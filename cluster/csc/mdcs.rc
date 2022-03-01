@@ -13,12 +13,10 @@
 
 Type = remote
 
-
 # MATLAB Parallel Server Worker Count
 # Number must not exceed total MATLAB Parallel Server licenses available.
 
 NumWorkers = 500
-
 
 ########################################   OPTIONAL   ########################################
 
@@ -30,27 +28,23 @@ NumWorkers = 500
 
 ClusterMatlabRoot = R2017b:/appl/soft/math/matlab/r2017b,R2018a:/appl/soft/math/matlab/r2018a,R2018b:/appl/soft/math/matlab/r2018b,R2019a:/appl/soft/math/matlab/r2019a,R2019b:/appl/soft/math/matlab/r2019b,R2020a:/appl/soft/math/matlab/r2020a,R2020b:/appl/soft/math/matlab/r2020b,R2021a:/appl/soft/math/matlab/r2021a,R2021b:/appl/soft/math/matlab/r2021b
 
-
 # Headnode Hostname
 # Required if type is remote or remoteSubmission.
 
 ClusterHost = puhti.csc.fi
 
-
 # If using local submission, optionally specify the directory to be used as the job storage location.
 # If left empty, the user's home directory will be used, which is fine in most scenarios.
 # Specify an alternative path, if the user's home directory is not a good place to use as the job storage location.
 
-LocalJobStorageLocation = 
-
+LocalJobStorageLocation =
 
 # Directory on the cluster file system to be used as the remote job storage location.
 # Required if type is remote or remoteSubmission and MATLAB client is a PC.
 
 RemoteJobStorageLocation = /users
 
-
 # Windows UNC Path to the cluster job storage location.
 # Required if type is remoteSubmission and MATLAB client is a PC.
 
-JobStorageLocationOnPC = 
+JobStorageLocationOnPC =

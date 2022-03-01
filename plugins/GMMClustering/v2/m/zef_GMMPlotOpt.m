@@ -18,7 +18,7 @@ if zef.GMM.apps.main.UIFigure.Position(3)+zef.GMM.apps.PlotOpt.UIFigure.Position
     zef.GMM.apps.PlotOpt.UIFigure.Position(1) = zef.GMM.apps.main.UIFigure.Position(1)-zef.GMM.apps.PlotOpt.UIFigure.Position(3);
 else
     zef.GMM.apps.PlotOpt.UIFigure.Position(1) = zef.GMM.apps.main.UIFigure.Position(1)+zef.GMM.apps.main.UIFigure.Position(3);
-end  
+end
 
 zef_update_GMMPlotOpts;
 
@@ -33,7 +33,7 @@ else
     zef.GMM.parameters.Tags = [zef.GMM.parameters.Tags(1:zef_n);zef_props;{'saved'}];
 end
 
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.GMM.apps.main."field" = zef."field")
 zef_props = properties(zef.GMM.apps.PlotOpt);
 for zef_i = 2:length(zef_props)
@@ -54,13 +54,13 @@ for zef_i = 2:length(zef_props)
             else
                 zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value=zef.GMM.parameters{zef_n,2}{1};
             end
-        end 
+        end
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i})) && ~strcmp(zef_props{zef_i},'GMM_colors')
             zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
             elseif strcmp(zef_props{zef_i},'GMM_colors') && ~isempty(zef.GMM_colors)
                 if isempty(zef.GMM_colors)
-                   zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = ''; 
+                   zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = '';
                 else
                 zef_aux_mat = reshape(zef.GMM_colors',[],1)';
                 zef_aux_str = ['[',num2str(zef_aux_mat(1))];
@@ -72,7 +72,7 @@ for zef_i = 2:length(zef_props)
                     else
                         zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j))];
                     end
-                end 
+                end
                 zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
                 clear zef_aux_str zef_aux_mat
                 end
@@ -91,10 +91,10 @@ zef.GMM.meta{3} = zef_n;
 clear zef_props zef_i zef_j zef_n zef_temp_screen_size
 
 if strcmp(zef.GMM.apps.PlotOpt.GMM_comp_ord.Value,'3')
-    zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'on'; 
+    zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'on';
     zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = 'on';
 else
-    zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'off'; 
+    zef.GMM.apps.PlotOpt.GMM_dip_comp.Enable = 'off';
     zef.GMM.apps.PlotOpt.GMM_ellip_comp.Enable = 'off';
 end
 

@@ -8,7 +8,7 @@ zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 if find(ismember(properties(zef.(zef.fieldnames{zef_i})),'ValueChangedFcn'))
 zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_gaussian_prior_options;';
 end
-end  
+end
 
 zef = rmfield(zef,'fieldnames');
 

@@ -11,10 +11,10 @@ function [schedulerIDs, numTasks] = getSimplifiedSchedulerIDsForJob(job, data)
 
 % Copyright 2019 The MathWorks, Inc.
 
-if verLessThan('matlab', '9.7') 
+if verLessThan('matlab', '9.7')
     schedulerIDs = data.ClusterJobIDs;
     numTasks = numel(job.Tasks);
-else 
+else
     schedulerIDs = job.getTaskSchedulerIDs();
     numTasks = numel(schedulerIDs);
 end
