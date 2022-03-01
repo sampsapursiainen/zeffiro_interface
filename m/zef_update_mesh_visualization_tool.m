@@ -43,19 +43,18 @@ zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visuali
 zef.mesh_visualization_parameter_selected = zef.h_mesh_visualization_parameter_list.Value;
 zef.mesh_visualization_graph_selected = zef.h_mesh_visualization_graph_list.Value;
 
-
 if zef.inv_dynamic_range == 0
 zef.inv_dynamic_range = Inf;
 else
     zef.inv_dynamic_range = 1./zef.inv_dynamic_range;
-end    
-    
+end
+
 zef.submesh_num = str2num(zef.h_submesh_num.Value);
 
 if zef.cp_on
-zef.enable_str = 'on';    
+zef.enable_str = 'on';
 else
-zef.enable_str = 'off';   
+zef.enable_str = 'off';
 end;
 
 set(zef.h_edit_cp_a, 'enable', zef.enable_str);
@@ -64,9 +63,9 @@ set(zef.h_edit_cp_c, 'enable', zef.enable_str);
 set(zef.h_edit_cp_d, 'enable', zef.enable_str);
 
 if zef.cp2_on
-zef.enable_str = 'on';    
+zef.enable_str = 'on';
 else
-zef.enable_str = 'off';   
+zef.enable_str = 'off';
 end;
 
 set(zef.h_cp2_a, 'enable', zef.enable_str);
@@ -75,9 +74,9 @@ set(zef.h_cp2_c, 'enable', zef.enable_str);
 set(zef.h_cp2_d, 'enable', zef.enable_str);
 
 if zef.cp3_on
-zef.enable_str = 'on';    
+zef.enable_str = 'on';
 else
-zef.enable_str = 'off';   
+zef.enable_str = 'off';
 end;
 
 set(zef.h_cp3_a, 'enable', zef.enable_str);
@@ -85,5 +84,3 @@ set(zef.h_cp3_b, 'enable', zef.enable_str);
 set(zef.h_cp3_c, 'enable', zef.enable_str);
 set(zef.h_cp3_d, 'enable', zef.enable_str);
 
-
-    

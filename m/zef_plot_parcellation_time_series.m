@@ -13,12 +13,12 @@ y_string = get(evalin('base','zef.h_parcellation_plot_type'),'string');
 y_string = y_string{plot_type};
 
 if size(parcellation_colortable,1) > 0
-zef_k = 0; 
+zef_k = 0;
 parcellation_list = cell(0);
 for zef_j = 1 : length(parcellation_colortable)
 for zef_i = 1 : size(parcellation_colortable{zef_j}{2},1)
-    zef_k = zef_k + 1; 
-    parcellation_list{zef_k} = [parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ];   
+    zef_k = zef_k + 1;
+    parcellation_list{zef_k} = [parcellation_colortable{zef_j}{1}  ' ' num2str(zef_i,'%03d') ];
 end
 end
 end
@@ -49,7 +49,6 @@ set(x_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation'
 hold(evalin('base','zef.h_axes1'),'off');
 set(x_labels,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',90, 'Fontsize', 8);
 set(y_label,'HorizontalAlignment','right','VerticalAlignment','top', 'Rotation',90, 'Fontsize', 8);
-
 
 end
 
@@ -86,7 +85,7 @@ hold(evalin('base','zef.h_axes1'),'off');
 end
 
 if plot_mode == 3
-    
+
 if iscell(evalin('base','zef.reconstruction'))
 length_reconstruction_cell = length(evalin('base','zef.reconstruction'));
 frame_start = evalin('base','zef.frame_start');
@@ -117,7 +116,7 @@ color_unique = [1;color_unique];
 line_ind = 0;
 for i = 1 : length(selected_list)
 if color_unique(i+1) == color_unique(i)
-  line_ind = line_ind + 1;  
+  line_ind = line_ind + 1;
 else
     line_ind = 1;
 end

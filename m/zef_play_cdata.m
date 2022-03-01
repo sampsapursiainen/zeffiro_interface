@@ -19,21 +19,21 @@ h_c = h_axes.Children;
 
 for j = 1 : loop_count
 
-last_frame = 0; 
-f_ind = 0; 
+last_frame = 0;
+f_ind = 0;
 
 while not(last_frame)
 
     details_set = 0;
-f_ind = f_ind + 1; 
+f_ind = f_ind + 1;
 if not(isequal(show_frame_number,0))
-    last_frame = 1; 
+    last_frame = 1;
 end
 
 for i = 1 : length(h_c)
-   
+
     if find(ismember(properties(h_c(i)),'CData'))
-        
+
          number_of_frames = h_c(i).UserData(f_ind).number_of_frames;
          if not(isequal(show_frame_number,0))
             f_ind = min(max(1,round(show_frame_number*number_of_frames)),10);
@@ -59,23 +59,19 @@ for i = 1 : length(h_c)
                         return;
                     end
                 end
-                
+
      if isequal(f_ind, length(h_c(i).UserData))
-            last_frame = 1; 
-        end            
-                
+            last_frame = 1;
+        end
+
     end
-                            
-        
-       
-    
+
 end
-    
 
 if isequal(last_frame,0)
            camorbit(h_axes,frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 end
-    
+
 end
 
 end

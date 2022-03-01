@@ -11,7 +11,7 @@ for zef_i = 1:length(zef_fields)
         else
             zef.SESAME_App.(strcat('h_',zef_fields{zef_i})).Value = num2str(zef.(zef_fields{zef_i}));
         end
-    end 
+    end
 end
 
 %initialize fonts of the components

@@ -24,5 +24,5 @@ S_C = diag(S_C);
 if strcmp(chararcter,'max')
     S_C = max(S_C);
 end
-    
+
 end

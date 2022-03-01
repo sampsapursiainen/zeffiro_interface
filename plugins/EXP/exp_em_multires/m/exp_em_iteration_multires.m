@@ -73,22 +73,22 @@ f_data = zef_getFilteredData;
 
 tic;
 for f_ind = 1 : number_of_frames
-    
+
         time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
         waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
-    
+
     f=zef_getTimeStep(f_data, f_ind, true);
-    z_vec = ones(size(L,2),1); 
+    z_vec = ones(size(L,2),1);
     theta = zeros(length(z_vec),1)+(beta+1/q)./theta0;
-    
+
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         f = gpuArray(f);
     end
-         
+
 % inversion starts here
 
 %mr_sparsity = evalin('base','zef.exp_em_multires_sparsity');
@@ -101,7 +101,7 @@ for n_rep = 1 : n_decompositions
 
 if evalin('base','zef.inv_init_guess_mode') == 2
 theta =zeros(size(L,2),1)+(beta+1/q)./theta0;
-end 
+end
 
 if f_ind > 1
     waitbar(n_rep/n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
@@ -111,7 +111,7 @@ end
 
 for j = 1 : n_multires
 
-iter_ind = iter_ind + 1;    
+iter_ind = iter_ind + 1;
 
 n_mr_dec = length(multires_dec{n_rep}{j});
 
@@ -122,10 +122,10 @@ mr_ind = [multires_ind{n_rep}{j} ; multires_ind{n_rep}{j} + n_mr_dec ; multires_
 mr_ind = mr_ind(:);
 end
 
-if source_direction_mode == 3 
-mr_dec = multires_dec{n_rep}{j}; 
+if source_direction_mode == 3
+mr_dec = multires_dec{n_rep}{j};
 mr_dec = mr_dec(:);
-mr_ind = multires_ind{n_rep}{j}; 
+mr_ind = multires_ind{n_rep}{j};
 mr_ind = mr_ind(:);
 end
 
@@ -150,14 +150,13 @@ if ismember(hyper_type,[1,2])
     end
     if evalin('base','zef.inv_hyperprior') == 1
     [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-    elseif evalin('base','zef.inv_hyperprior') == 2 
+    elseif evalin('base','zef.inv_hyperprior') == 2
     [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,normalize_data,balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
     end
     if q == 1
         theta0 = sqrt(theta0);
     end
 end
-
 
 %__ Initialization __
 n = size(L_aux_2,2);
@@ -172,16 +171,16 @@ if q == 1
     x_old = ones(n,1);
     for i = 1 : n_iter(j)
         z_vec = L1_optimization(L_aux_2,std_lhood,f,theta,x_old,n_L1_iter);
-        theta = (beta+1)./(theta0+0.5*abs(z_vec));    
-        
+        theta = (beta+1)./(theta0+0.5*abs(z_vec));
+
         x_old = z_vec;
-        
+
     end
 else
     for i = 1 : n_iter(j)
         w = 1./(theta*std_lhood^2*max(f)^2);
-       
-        z_vec = w.*(L_aux_2'*((L_aux_2*(w.*L_aux_2') + eye(size(L_aux_2,1)))\f));         
+
+        z_vec = w.*(L_aux_2'*((L_aux_2*(w.*L_aux_2') + eye(size(L_aux_2,1)))\f));
        theta = (beta+1/q)./(theta0+0.5*abs(z_vec).^q);
     end
 end
@@ -215,8 +214,6 @@ end
 %theta = sum(theta_aux(:,1:j),2)/sum(w_vec_aux(1:j),2);
 %z_vec = sum(z_vec_aux(:,1:j),2)/sum(w_vec_aux(1:j),2);
 
-
-
 %theta_aux(:,j) = theta;
 %z_vec_aux(:,j) = z_vec;
 
@@ -230,7 +227,6 @@ z_vec_aux = z_vec_aux + z_vec;
 theta_vec_aux = theta_vec_aux + theta;
 %theta = theta_vec_aux/iter_ind;
 end
-
 
 end
 

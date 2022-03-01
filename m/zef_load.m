@@ -3,19 +3,19 @@
 
 zef_data = struct;
 
-if zef.use_display 
-if not(isempty(zef.save_file_path)) && not(isequal(zef.save_file_path,0))  
+if zef.use_display
+if not(isempty(zef.save_file_path)) && not(isequal(zef.save_file_path,0))
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project',zef.save_file_path);
 else
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project');
 end
 end
 if not(isequal(zef.file,0))
-    
+
 zef_close_tools;
-zef_close_figs;    
-zef_init;    
-load([zef.file_path zef.file]);  
+zef_close_figs;
+zef_init;
+load([zef.file_path zef.file]);
 zef_data.save_file = zef.file;
 zef_data.save_file_path = zef.file_path;
 zef_remove_object_fields;
@@ -37,24 +37,24 @@ zef_data.mlapp = 1;
   end
  clear zef_i;
  zef = rmfield(zef,'fieldnames');
- 
+
  zef_apply_system_settings;
- 
+
  zef.save_file = zef_data.save_file;
  zef.save_file_path = zef_data.save_file_path;
  if isfield(zef_data,'profile_name')
  zef.profile_name = zef_data.profile_name;
  end
- 
+
  zef_replace_project_fields;
- 
+
  zef_init_init_profile;
  zef_init_parameter_profile;
- 
+
 if ismember(zef.start_mode,{'nodisplay','display'})
 zef.use_display = 0;
 end
- 
+
 clear zef_data;
 zef_reopen_segmentation_tool;
 zef_mesh_tool;
@@ -65,8 +65,5 @@ zef_set_figure_tool_sliders
 
 zef_plugin;
 
-
-
 end;
-
 

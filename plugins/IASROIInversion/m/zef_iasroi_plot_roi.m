@@ -5,7 +5,7 @@ h_iasroi_roi_sphere_1 = evalin('base','zef.h_iasroi_roi_sphere_1');
 h_iasroi_roi_sphere_2 = evalin('base','zef.h_iasroi_roi_sphere_2');
 h_iasroi_roi_sphere_3 = evalin('base','zef.h_iasroi_roi_sphere_3');
 h_iasroi_roi_sphere_4 = evalin('base','zef.h_iasroi_roi_sphere_4');
-iasroi_roi_sphere = str2num(get(h_iasroi_roi_sphere_1 ,'string')); 
+iasroi_roi_sphere = str2num(get(h_iasroi_roi_sphere_1 ,'string'));
 iasroi_roi_sphere = iasroi_roi_sphere(:);
 iasroi_roi_sphere = [ iasroi_roi_sphere ...
 reshape(str2num(get(h_iasroi_roi_sphere_2 ,'string')),size(iasroi_roi_sphere,1),size(iasroi_roi_sphere,2)) ...

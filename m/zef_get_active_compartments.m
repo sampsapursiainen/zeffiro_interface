@@ -18,17 +18,17 @@ length_reuna = 0;
 sigma_vec = [];
 priority_vec = [];
 submesh_cell = cell(0);
-for k = 1 : length(compartment_tags) 
-    
+for k = 1 : length(compartment_tags)
+
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
         var_4 = ['zef.' compartment_tags{k} '_sources'];
-    
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
-priority_val = evalin('base',var_2);  
+
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
+priority_val = evalin('base',var_2);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
@@ -40,7 +40,6 @@ if ismember(evalin('base',var_4),[1 2])
     aux_brain_ind(k) = i;
 end
 
-    
 end
 
 end

@@ -1,31 +1,35 @@
 function nodes = zef_inflate_surfaces(nodes,tetra,domain_labels)
 
-waitbar_opened = 0; 
+waitbar_opened = 0;
 if evalin('caller','exist(''h'')')
     if evalin('caller','isvalid(h)')
 h = evalin('caller','h');
-    else 
+    else
         h = waitbar([0 0],'Inflating.');
         waitbar_opened = 1;
     end
-else 
+else
       h = waitbar([0 0],'Inflating.');
-      waitbar_opened = 1; 
+      waitbar_opened = 1;
 end
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 5b5c6faff4d84098629188095d4264ae682a8077
 inflation_strength = evalin('base','zef.fem_mesh_inflation_strength');
 reuna_t = evalin('base','zef.reuna_t');
 reuna_p = evalin('base','zef.reuna_p');
 reuna_type = evalin('base','zef.reuna_type');
 
 if isequal(reuna_type{end,1},-1)
-compartment_length = length(reuna_p)-1; 
+compartment_length = length(reuna_p)-1;
 else
-compartment_length = length(reuna_p);     
+compartment_length = length(reuna_p);
 end
 
 for compartment_counter = 1 : compartment_length
-    
+
 interior_ind = find(domain_labels<=compartment_counter);
 [~,~,~,~,~,~,node_list] = zef_surface_mesh(tetra,[],interior_ind);
 
@@ -43,7 +47,6 @@ nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(node_list(:,1),:)),'K',n_ne
 
 waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
-
 length_node_list = size(node_list,1);
 par_num = evalin('base','zef.parallel_processes');
 vec_num = evalin('base','zef.parallel_vectors');
@@ -57,7 +60,7 @@ tic;
 nodes_cell = cell(0);
 nodes_ind_cell = cell(0);
 for restart_ind = 1 : n_restarts
-    
+
 sub_length = sub_ind_aux_1(restart_ind+1)-sub_ind_aux_1(restart_ind);
 par_size = ceil(sub_length/par_num);
 sub_cell_aux_1 = cell(0);
@@ -74,13 +77,12 @@ nodes_cell_aux{j} = zeros(length(block_ind),3);
 nodes_ind_cell_aux{j} = zeros(length(block_ind),1);
 
 for k = 1 : length(block_ind)
-   
-p_ind = node_list(block_ind(k),1);
 
+p_ind = node_list(block_ind(k),1);
 
 %if not(isempty(p_tetra))
     I = [];
-    test_ind = 0; 
+    test_ind = 0;
     p = nodes(p_ind,:);
   %  [~, sort_ind] = min(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
  %   [~, sort_ind] = sort(sqrt(sum((nodes(p_tetra,:) - p).^2,2)));
@@ -96,10 +98,10 @@ vec_2 = nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),2),:) - nodes
 vec_3 = nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),3),:) - nodes_tri_ref(tri_ref(nearest_neighbor_ind(block_ind(k),:),1),:);
 
 [lambda_1, lambda_2, lambda_3] = zef_3by3_solver(vec_1,vec_2,vec_3,d_vec);
-I = find(lambda_1<0 & lambda_1 > -1 & lambda_2 >0 & lambda_2<1 & lambda_3>0 & lambda_3 <1); 
+I = find(lambda_1<0 & lambda_1 > -1 & lambda_2 >0 & lambda_2<1 & lambda_3>0 & lambda_3 <1);
 
 if not(isempty(I))
-    
+
 lambda_1 = inflation_strength*min(abs(lambda_1(I)));
 nodes_cell_aux{j}(k,:) = p + lambda_1.*vec_1_aux;
 nodes_ind_cell_aux{j}(k,:) = p_ind;
@@ -137,8 +139,5 @@ if waitbar_opened
 close(h);
 end
 
-
 end
-
-
 

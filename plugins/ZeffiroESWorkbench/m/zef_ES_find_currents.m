@@ -2,7 +2,7 @@
 try
     [TolFun, reg_param, k_val] = zef_ES_find_parameters;
     switch evalin('base','zef.ES_search_method')
-        case {1,2} 
+        case {1,2}
             if evalin('base','zef.ES_search_method') == 1
                 param_val_aux = TolFun;
             elseif evalin('base','zef.ES_search_method') ==2
@@ -51,18 +51,18 @@ try
                     %% The real task...
                     lattice_size = evalin('base','zef.ES_step_size');
                     zef.y_ES_interval = [];
-                    
+
                     for i = 1:lattice_size
                         for j = 1:lattice_size
                             if getappdata(wait_bar_temp,'canceling')
                                 error('The calculations were interrupted by the user.')
                             end
                             waitbar(waitbar_ind, wait_bar_temp, sprintf('Optimizing: \n %1.2e -- %1.2e', param_val_aux(i), reg_param(j)));
-                            
+
                             tic;
                             [y_ES, volumetric_current_density, residual, flag, source_position_index, source_directions, source_magnitude] = zef_ES_optimize_current(param_val_aux(i), reg_param(j));
                             zef.y_ES_interval.elapsed_time{i,j}                 = toc;
-                            
+
                             zef.y_ES_interval.y_ES{i,j}                         = y_ES;
                             zef.y_ES_interval.volumetric_current_density{i,j}   = volumetric_current_density;
                             zef.y_ES_interval.residual{i,j}                     = residual;
@@ -79,9 +79,9 @@ try
                                 zef.y_ES_interval.field_source(running_index).relative_error{i,j} = norm(vec_1'-vec_2)./norm(vec_1');
                                 zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}      =  mean(sqrt(sum(volumetric_current_density(:, vec_index).^2)));
                             end
-                            
+
                             waitbar_ind = waitbar_ind + 1/(length(reg_param)*length(param_val_aux));
-                            
+
                         end
                     end
                     if evalin('base','zef.ES_search_method') == 1
@@ -93,7 +93,7 @@ try
             end
         case 3
             [y_ES, volumetric_current_density, residual, flag, source_position_index, source_directions, source_magnitude] = zef_ES_optimize_current;
-            
+
             zef.y_ES_4x1.y_ES                                = y_ES;
             zef.y_ES_4x1.volumetric_current_density          = volumetric_current_density;
             zef.y_ES_4x1.residual                            = residual;

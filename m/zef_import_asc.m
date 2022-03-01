@@ -11,7 +11,6 @@ n_2 = varargin{2};
 c_1 = c_1(:,n_1:n_2);
 else
 c_1 = c_1(:,1:3);
-end    
-
+end
 
 end

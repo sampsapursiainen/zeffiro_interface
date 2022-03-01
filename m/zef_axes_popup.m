@@ -27,9 +27,9 @@ zef.h_zeffiro_axes_popup = figure(...
 'PaperType',get(0,'defaultfigurePaperType'),...
 'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
 'ScreenPixelsPerInchMode','manual' );
- 
+
 zef.h_object_aux_new = copyobj(findobj(zef.h_figure_aux.Children,'Tag','axes1','-or','Type','colorbar'),zef.h_figure_aux);
-for zef_i = 1 : length(zef.h_object_aux_new) 
+for zef_i = 1 : length(zef.h_object_aux_new)
     if isequal(zef.h_object_aux_new(zef_i).Tag,'axes1')
     zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup;
     zef.h_object_aux_new(zef_i).Units = 'normalized';
@@ -38,13 +38,11 @@ for zef_i = 1 : length(zef.h_object_aux_new)
 end
 for zef_i = 1 : length(zef.h_object_aux_new)
 if isequal(zef.h_object_aux_new(zef_i).Type,'colorbar')
-    zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup; 
+    zef.h_object_aux_new(zef_i).Parent = zef.h_zeffiro_axes_popup;
 end
 end
 
 zef = rmfield(zef,{'h_figure_aux','h_object_aux_new'});
 
 clear zef_i
-
-
 

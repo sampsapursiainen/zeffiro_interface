@@ -27,7 +27,7 @@ n_burn_in =  evalin('base','zef.inv_n_burn_in');
 
 if source_direction_mode == 2
 
-[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}'); 
+[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}');
 
 i = 0;
 length_reuna = 0;
@@ -45,9 +45,9 @@ for k = 1 : length(compartment_tags)
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);    
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
+    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
 priority_val = evalin('base',var_2);
 visible_val = evalin('base',var_3);
 submesh_ind = evalin('base',var_4);
@@ -142,8 +142,8 @@ end
 
 tic;
 for f_ind = 1 : number_of_frames
-time_val = toc; 
-if f_ind > 1; 
+time_val = toc;
+if f_ind > 1;
 date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
@@ -153,10 +153,9 @@ else
 f = evalin('base','zef.measurements');
 end
 
-
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
-data_norm = max(abs(f(:))); 
+data_norm = max(abs(f(:)));
 %std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==2;
 data_norm = max(sqrt(sum(abs(f).^2)));
@@ -178,15 +177,15 @@ f = filter(hp_f_1,hp_f_2,f')';
 end
 
 if source_direction_mode == 1 || source_direction_mode == 2
-z_aux = zeros(size(L_aux,2),1); 
+z_aux = zeros(size(L_aux,2),1);
 end
 if source_direction_mode == 3
 z_aux = zeros(3*size(L_aux,2),1);
 end
-z_vec = ones(size(L_aux,2),1); 
+z_vec = ones(size(L_aux,2),1);
 theta = theta0*ones(length(z_vec),1);
 
-if size(f,2) > 1  
+if size(f,2) > 1
 if evalin('base','zef.inv_time_2') >=0 0 && evalin('base','zef.inv_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.inv_time_1') <= size(f,2);
 f = f(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.inv_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.inv_time_3'))) : min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.inv_time_3'))));
 end
@@ -204,7 +203,7 @@ n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 f = gpuArray(f);
-end 
+end
 
 multires_dec =  evalin('base','zef.inv_multires_dec');
 multires_ind =  evalin('base','zef.inv_multires_ind');
@@ -224,11 +223,11 @@ iter_counter = 0;
 
 for iter_ind = 1 : n_iterations
 
-n_rep = randperm(n_decompositions,1);    
-    
+n_rep = randperm(n_decompositions,1);
+
 if evalin('base','zef.inv_init_guess_mode') == 2
 theta = theta0*ones(size(L_aux,2),1);
-end 
+end
 
 if iter_ind == 1
 j = 1;
@@ -245,10 +244,10 @@ mr_ind = [multires_ind{n_rep}{j} ; multires_ind{n_rep}{j} + n_mr_dec ; multires_
 mr_ind = mr_ind(:);
 end
 
-if source_direction_mode == 3 
-mr_dec = multires_dec{n_rep}{j}; 
+if source_direction_mode == 3
+mr_dec = multires_dec{n_rep}{j};
 mr_dec = mr_dec(:);
-mr_ind = multires_ind{n_rep}{j}; 
+mr_ind = multires_ind{n_rep}{j};
 mr_ind = mr_ind(:);
 end
 
@@ -258,23 +257,23 @@ theta = theta(mr_dec);
 end
 
 for i = 1 : n_iter(j)
-if f_ind > 1;    
+if f_ind > 1;
 waitbar(iter_ind/n_iterations,h,['Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar(iter_ind/n_iterations,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);   
+waitbar(iter_ind/n_iterations,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 d_sqrt = sqrt(theta);
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 d_sqrt = gpuArray(d_sqrt);
 end
-L = L_aux_2.*repmat(d_sqrt',size(L,1),1); 
+L = L_aux_2.*repmat(d_sqrt',size(L,1),1);
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
 if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
 z_vec = gather(z_vec);
 end
 if evalin('base','zef.inv_hyperprior') == 1;
-theta = theta0*(eta + sqrt((1/(2*theta0))*z_vec.^2 + eta^2)); 
+theta = theta0*(eta + sqrt((1/(2*theta0))*z_vec.^2 + eta^2));
 else
 theta = (theta0+0.5*z_vec.^2)./kappa;
 end;
@@ -298,7 +297,6 @@ if exp_arg_new - exp_arg_old >= log(rand(1))
 acceptance_counter = acceptance_counter+1;
 end
 
-
 if iter_ind > n_burn_in
 z_vec_aux = z_vec_aux + z_vec_current;
 end
@@ -306,22 +304,20 @@ end
 theta_vec_aux = theta_vec_aux + theta;
 theta = theta_vec_aux/iter_ind;
 
-
 end
 
 %acceptance_counter/iter_counter
 z_vec = z_vec_aux/(n_iterations-n_burn_in);
 
-
 if source_direction_mode == 2
 z_vec_aux = (z_vec(s_ind_4) + z_vec(n_interp+s_ind_4) + z_vec(2*n_interp+s_ind_4))/3;
-z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1); 
-z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2); 
-z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3); 
+z_vec(s_ind_4) = z_vec_aux.*source_directions(s_ind_4,1);
+z_vec(n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,2);
+z_vec(2*n_interp+s_ind_4) = z_vec_aux.*source_directions(s_ind_4,3);
 %z_vec = z_vec(:);
 end
 
-if source_direction_mode == 3 
+if source_direction_mode == 3
 z_vec = [z_vec.*source_directions(:,1) ; z_vec.*source_directions(:,2) ;  z_vec.*source_directions(:,3)]';
 %z_vec = z_vec(:);
 end
@@ -348,7 +344,7 @@ for f_ind = 1 : number_of_frames;
 z{f_ind} = z{f_ind}./max(aux_norm_vec);
 end;
 else
-aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2)); 
+aux_norm_vec = sqrt(sum(reshape(z, 3, length(z)/3).^2));
 z = z./max(aux_norm_vec);
 end;
 close(h);

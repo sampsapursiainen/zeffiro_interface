@@ -2,7 +2,7 @@ zef_data = zef_system_settings;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end   
+end
 
 set(zef.h_system_settings_table,'CellSelectionCallback',@zef_system_settings_table_selection);
 
@@ -18,7 +18,6 @@ set(zef.h_system_settings_table,'columnformat',{'char','char','char',{'number','
 
 set(zef.h_menu_system_settings_table_add,'MenuSelectedFcn','zef.h_system_settings_table.Data{end+1,1} = []; zef.h_system_settings_table.Data = [zef.h_system_settings_table.Data(1:zef.system_settings_selected(1),:) ; zef.h_system_settings_table.Data(end,:) ; zef.h_system_settings_table.Data(zef.system_settings_selected(1)+1:end-1,:)];');
 set(zef.h_menu_system_settings_table_delete,'MenuSelectedFcn','zef.h_system_settings_table.Data = zef.h_system_settings_table.Data(find(not(ismember([1:size(zef.h_system_settings_table.Data,1)],zef.system_settings_selected))),:);');
-
 
 set(findobj(zef.h_system_settings.Children,'-property','FontSize'),'FontSize',zef.font_size);
 set(zef.h_system_settings,'AutoResizeChildren','off');

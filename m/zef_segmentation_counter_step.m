@@ -22,10 +22,10 @@ for k = 1 : length(compartment_tags)
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
         var_4 = ['zef.' compartment_tags{k} '_name'];
          var_5 = ['zef.' compartment_tags{k} '_sources'];
-         
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
-priority_val = evalin('base',var_2); 
+
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
+priority_val = evalin('base',var_2);
 
 if on_val
 i = i + 1;
@@ -33,7 +33,7 @@ i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 submesh_cell{i} = evalin('base',var_3);
-name_tags{i} = evalin('base',var_4); 
+name_tags{i} = evalin('base',var_4);
 
 if isequal(evalin('base',var_5),-1)
 pml_ind_aux = i;
@@ -57,9 +57,9 @@ submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
 for i = 1 :  length(reuna_p)
-       
+
 for k = 1 : max(1,length(submesh_cell{i}))
-    
+
 compartment_counter = compartment_counter + 1;
 priority_vec_aux(compartment_counter) = priority_vec(i);
 submesh_ind_1(compartment_counter) = i;

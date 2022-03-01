@@ -2,7 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef_make_butterfly_plot(void)
 
-
 sampling_freq = evalin('base','zef.bf_sampling_frequency');
 high_pass = evalin('base','zef.bf_low_cut_frequency');
 low_pass = evalin('base','zef.bf_high_cut_frequency');
@@ -13,10 +12,9 @@ else
 f = evalin('base','zef.measurements');
 end
 
-
 data_norm = 1;
 if evalin('base','zef.normalize_data')==1;
-data_norm = max(abs(f(:))); 
+data_norm = max(abs(f(:)));
 %std_lhood = std_lhood^2;
 elseif evalin('base','zef.normalize_data')==2;
 data_norm = max(sqrt(sum(abs(f).^2)));
@@ -37,8 +35,7 @@ if size(f,2) > 1 && high_pass > 0
 f = filter(hp_f_1,hp_f_2,f')';
 end
 
-
-if size(f,2) > 1  
+if size(f,2) > 1
 if evalin('base','zef.bf_time_2') >=0 0 && evalin('base','zef.bf_time_1') >= 0 & 1 + sampling_freq*evalin('base','zef.bf_time_1') <= size(f,2);
 t_vec = [max(1, 1 + floor(sampling_freq*evalin('base','zef.bf_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.bf_time_1') + evalin('base','zef.bf_time_2'))))];
 f = f(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.bf_time_1'))): min(size(f,2), 1 + floor(sampling_freq*(evalin('base','zef.bf_time_1') + evalin('base','zef.bf_time_2')))));
@@ -57,7 +54,7 @@ set(h_plot,'linewidth',0.5);
 set(gca,'xlim',[t_vec(1) t_vec(end)]);
 f_range = max(f(:))-min(f(:));
 set(gca,'ylim',[min(f(:))-0.05*f_range max(f(:))+0.05*f_range]);
-set(evalin('base','zef.h_axes1'),'ygrid','on'); 
+set(evalin('base','zef.h_axes1'),'ygrid','on');
 set(evalin('base','zef.h_axes1'),'xgrid','on');
 set(evalin('base','zef.h_axes1'),'fontsize',14);
 set(evalin('base','zef.h_axes1'),'linewidth',0.5);

@@ -1,20 +1,19 @@
-This is the newest installment of the GMM app. The version 2.0 includes new main app and two popup apps for various options. 
+This is the newest installment of the GMM app. The version 2.0 includes new main app and two popup apps for various options.
 For this version zeffiro_plugins.ini initialization line is:
 GMModel, inverse_tools, GMM, GMModelApp_start
 
 MAIN APP WINDOW SYNTAXING
 
-In main app's window, you can mostly input one number per edit field but in the case of the first one "Maximum number of components", 
+In main app's window, you can mostly input one number per edit field but in the case of the first one "Maximum number of components",
 you can give multiple maximum component number in the case of modeling time serie data. In that case possible syntaxes are
 3,3,3,2
 3;3;3;2
 and
 3 3 3 2
 
-
 ADVANCED PLOT OPTIONS SYNTAXING
 
-Pressing "Advanced plot options" from the main app, the Advanced GMM plot options appear. 
+Pressing "Advanced plot options" from the main app, the Advanced GMM plot options appear.
 From this window you can set component order to "Manually selected" when you get access to edit fields "Dipole components" and "Ellipsoid components".
 The possible syntaxing for both of the fields are
 3,1,2

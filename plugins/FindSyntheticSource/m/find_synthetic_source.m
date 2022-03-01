@@ -66,7 +66,7 @@ elseif isfield(zef,'inv_synth_source')
     %Statement that "updates" field construction of zef
     zef_N=size(zef.inv_synth_source,1);
     for zef_n = 1:zef_N
-        zef.find_synth_source.h_source_list.Data{end+1,1} = ['Source(',num2str(zef_n),')']; 
+        zef.find_synth_source.h_source_list.Data{end+1,1} = ['Source(',num2str(zef_n),')'];
         zef.synth_source_data{zef_n}.parameters = zef.synth_source_init;
         zef.synth_source_data{zef_n}.name = zef.find_synth_source.h_source_list.Data{end,1};
         for zef_i = 1:7
@@ -76,7 +76,7 @@ elseif isfield(zef,'inv_synth_source')
         zef.synth_source_data{zef_n}.parameters{15,2} = num2str(evalin('base',['zef.inv_synth_source(',num2str(zef_n),',9)']));
         zef.synth_source_data{zef_n}.parameters{16,2} = num2str(evalin('base',['zef.inv_synth_source(',num2str(zef_n),',10)']));
     end
-    
+
     zef.find_synth_source.selected_source=1;
     zef.synth_source_updated_true = false;
     zef.fss_time_val = [];
@@ -90,7 +90,7 @@ if ~isfield(zef,'fss_bg_noise')
 end
 zef.find_synth_source.h_time_val.Value = num2str(zef.fss_time_val);
 zef.find_synth_source.h_bg_noise.Value = num2str(zef.fss_bg_noise);
-    
+
 zef.find_synth_source.h_add_source.ButtonPushedFcn = 'zef.synth_source_updated_true = false; add_synthetic_source;';
 zef.find_synth_source.h_remove_source.ButtonPushedFcn = 'zef.synth_source_updated_true = false; remove_synthetic_source;';
 zef.find_synth_source.h_source_list.DisplayDataChangedFcn = 'zef.synth_source_data{zef.find_synth_source.selected_source}.name = zef.find_synth_source.h_source_list.Data{zef.find_synth_source.selected_source};';

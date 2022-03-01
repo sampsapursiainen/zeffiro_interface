@@ -17,7 +17,6 @@ set(zef.h_interpolate,'ButtonPushedFcn','source_interpolation;');
 set(zef.h_field_downsampling,'ButtonPushedFcn','zef_field_downsampling;');
 set(zef.h_surface_downsampling,'ButtonPushedFcn','zef_surface_downsampling;');
 
-
 set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
 set(zef.h_refinement_on,'value',zef.refinement_on);
 set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
@@ -46,7 +45,6 @@ set(zef.h_pushbutton23,'ButtonPushedFcn','zef_apply_transform;');
 set(zef.h_pushbutton34,'ButtonPushedFcn','zef_postprocess_finite_element_mesh');
 set(zef.h_forward_simulation_update_from_profile,'ButtonPushedFcn','zef.forward_simulation_table = readcell([zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_forward_simulation.ini''],''filetype'',''tex'',''delimiter'','','');zef.h_forward_simulation_table.Data = zef.forward_simulation_table;');
 
-
 set(zef.h_forward_simulation_table,'CellEditCallback','zef.h_forward_simulation_script.Value = zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1), zef.forward_simulation_column_selected};')
 set(zef.h_forward_simulation_table,'HandleVisibility','on');
 set(zef.h_forward_simulation_script,'ValueChangedFcn','zef_update_mesh_tool;');
@@ -72,7 +70,6 @@ set(zef.h_max_surface_face_count,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_inflate_n_iterations,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 
-
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 zef.h_mesh_tool.Units = 'normalized';
@@ -84,5 +81,4 @@ zef.mesh_tool_relative_size = zef_get_relative_size(zef.h_mesh_tool);
 set(zef.h_mesh_tool,'SizeChangedFcn','zef.mesh_tool_current_size = zef_change_size_function(zef.h_mesh_tool,zef.mesh_tool_current_size,zef.mesh_tool_relative_size);');
 
 clear zef_data;
-
 

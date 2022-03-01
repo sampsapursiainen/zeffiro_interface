@@ -3,9 +3,9 @@ function [processed_data] = zef_simple_ica_cleaning(f, ica_reference_channels)
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 %This function processes the N-by-M data array f for N channels and M time
 %steps. The other arguments can be controlled via the ZI user interface.
-%The desctiption and argument definitions shown in ZI are listed below. 
+%The desctiption and argument definitions shown in ZI are listed below.
 %Description: Simple ICA for data cleaning
-%Input: 1 ICA reference channel indices [Default: ] 
+%Input: 1 ICA reference channel indices [Default: ]
 %Output: Data cleaned via ICA.
 
 %Conversion between string and numeric data types.
@@ -23,13 +23,12 @@ f_2 = zeros(size(f));
 h = waitbar(0,['Simple ICA filter.']);
 
 for i = 1 : size_f
-   
-  Mdl = rica(f(:,[i ica_reference_channels]),n_ica);  
-  aux_vec = transform(Mdl,f(:,[i ica_reference_channels])); 
-  f_2(:,i) = aux_vec(:,1);
-  waitbar(i/size_f,h,['Simple ICA filter.']); 
 
-  
+  Mdl = rica(f(:,[i ica_reference_channels]),n_ica);
+  aux_vec = transform(Mdl,f(:,[i ica_reference_channels]));
+  f_2(:,i) = aux_vec(:,1);
+  waitbar(i/size_f,h,['Simple ICA filter.']);
+
 end
 
 close(h);

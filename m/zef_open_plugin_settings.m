@@ -2,7 +2,7 @@ zef_data = zef_plugin_settings;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end   
+end
 
 set(zef.h_plugin_settings_table,'CellSelectionCallback',@zef_plugin_settings_table_selection);
 if isempty(zef.plugin_cell)

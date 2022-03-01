@@ -5,7 +5,7 @@ set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end   
+end
 
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
@@ -114,7 +114,6 @@ set(zef.h_menu_parameter_profile                  ,'MenuSelectedFcn','zef_open_p
 set(zef.h_menu_segmentation_profile                  ,'MenuSelectedFcn','zef_open_segmentation_profile;');
 set(zef.h_menu_init_profile                  ,'MenuSelectedFcn','zef_open_init_profile;');
 
-
 set(zef.h_menu_inverse_tools,'Tag','inverse_tools');
 set(zef.h_menu_forward_tools,'Tag','forward_tools');
 set(zef.h_menu_multi_tools,'Tag','multi_tools');
@@ -132,18 +131,18 @@ zef.mlapp = 1;
 clear zef_data;
 
 zef.aux_dir = dir([zef.program_path filesep 'profile']);
-zef.aux_cell = cell(0); 
-zef_j = 0; 
+zef.aux_cell = cell(0);
+zef_j = 0;
 for zef_i = 3 : length(zef.aux_dir)
     if zef.aux_dir(zef_i).isdir
-        zef_j = zef_j + 1; 
-   zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name; 
+        zef_j = zef_j + 1;
+   zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name;
     end
 end
 zef.h_profile_name.Items = zef.aux_cell;
 zef = rmfield(zef,{'aux_dir','aux_cell'});
 zef.h_profile_name.Value = zef.profile_name;
-zef.h_profile_name.ValueChangedFcn = 'zef.profile_name = zef.h_profile_name.Value;';    
+zef.h_profile_name.ValueChangedFcn = 'zef.profile_name = zef.h_profile_name.Value;';
 
 zef.h_project_tag.Value = zef.project_tag;
 

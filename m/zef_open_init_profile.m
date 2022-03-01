@@ -5,7 +5,7 @@ if isempty(zef.init_profile)
 zef.init_profile = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_init.ini'],'filetype','text','delimiter',',');
 end
 zef.h_init_profile_table.Data = zef.init_profile;
- 
+
 set(zef.h_init_profile_table,'CellSelectionCallback',@zef_init_profile_table_selection);
 
 set(zef.h_init_profile_save,'ButtonPushedFcn','zef.init_profile = zef.h_init_profile_table.Data;writecell(zef.h_init_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_init.ini''],''filetype'',''text'',''delimiter'','','');');

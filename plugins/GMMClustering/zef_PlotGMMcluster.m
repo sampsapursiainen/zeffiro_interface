@@ -30,7 +30,6 @@ GMMdipoles = evalin('base','zef.GMModelDipoles');
 alpha = evalin('base','zef.GMMcluster_alpha')/100;
 r = sqrt(chi2inv(alpha,3));
 
-
 %colors for confidence ellipsoids:
 if ellip_coloring_type == 1
     colors = [1,0,0;0,1,0;0,0,1;1,0.5,0;0,1,1;0.5,0,1;1,0.5,0.5;0.4,1,0.8;0.2,0.6,1;1,0.8,0.6;0.8,1,0.6;0.6,1,1;0.8,0.6,1];
@@ -56,7 +55,6 @@ else
         end
     end
 end
-                   
 
 h = evalin('base','zef.h_axes1');
 %set temporarly transparencies stated in mesh visualization to temporary
@@ -75,14 +73,14 @@ elseif comp_ord == 3
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
     max_iter = min(length(order),max_iter);
 end
-    
+
 evalin('base','zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMMcluster_startframe; zef.frame_stop=zef.GMMcluster_stopframe;');
 evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
 hold(h,'on')
 if plot_ellipsoids
 if covtype ~= 1
     principal_axes = eye(3);
-end 
+end
 for k = 1:max_iter
     %Determine principal and semi axes of the ellipsoid:
     if identcov == 1
@@ -97,7 +95,7 @@ for k = 1:max_iter
             [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3)));
             semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = r*sqrt(GMModel.Sigma(1:3));            
+            semi_axes = r*sqrt(GMModel.Sigma(1:3));
         end
     end
     %form ellipsoid mesh:
@@ -120,13 +118,13 @@ for k = 1:max_iter
     end
     %transform (0,1,0) vector to the new direction via Rodrigues' formula:
     e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
-    
+
     CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
     ang = real(acosd(CosTheta));
     if ang ~= 0
     rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel.mu(order(k),1:3));
     end
-    
+
 end
 end
 
@@ -147,9 +145,9 @@ else
     if  length(GMModel) < stop_t
         stop_t = length(GMModel);
     end
-    
+
 for t = start_t:stop_t
-max_iter = min(size(GMModel{t}.mu,1),ellip_num);    
+max_iter = min(size(GMModel{t}.mu,1),ellip_num);
 if comp_ord == 1
     order = 1:max_iter;
 elseif comp_ord == 2
@@ -159,7 +157,7 @@ elseif comp_ord == 3
     order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
     max_iter = min(length(order),max_iter);
 end
-    
+
 %set surface visualization frames to go along this for loop:
 assignin('base','zef_t',t);
 evalin('base','zef.frame_start=zef_t; zef.frame_stop=zef_t;');
@@ -183,9 +181,9 @@ for k = 1:max_iter
             [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3)));
             semi_axes = transpose(r./sqrt(diag(semi_axes)));
         else
-            semi_axes = r*sqrt(GMModel{t}.Sigma(1:3));            
+            semi_axes = r*sqrt(GMModel{t}.Sigma(1:3));
         end
-    end   
+    end
     %form ellipsoid mesh:
     [X,Y,Z]=ellipsoid(GMModel{t}.mu(order(k),1),GMModel{t}.mu(order(k),2),GMModel{t}.mu(order(k),3),semi_axes(1),semi_axes(2),semi_axes(3),100);
     s(k) = surf(h,X,Y,Z);
@@ -206,7 +204,7 @@ for k = 1:max_iter
     end
     %transform (0,1,0) vector to the new direction via Rodrigues' formula:
     e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
-    
+
     CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
     ang = real(acosd(CosTheta));
     if ang ~= 0

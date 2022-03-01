@@ -71,7 +71,7 @@ end
 
 zef.lf_param.dipole_mode = 1;
 
-if zef.lead_field_type == 1 
+if zef.lead_field_type == 1
 if size(zef.sensors,2) == 6
 zef.lf_param.impedances = zef.sensors(:,6);
 end
@@ -84,17 +84,17 @@ end
 
 if zef.lead_field_type == 2;
 if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
-[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 else
-[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
 end
 
 if zef.lead_field_type == 3;
 if evalin('base','zef.prism_layers') && not(isempty(zef.prisms))
-[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,{zef.tetra,zef.prisms},{zef.sigma(:,1),zef.sigma_prisms},zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 else
-[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param); 
+[zef.L, zef.source_positions, zef.source_directions] = lead_field_meg_grad_fem(zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
 end
 
@@ -124,17 +124,17 @@ zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec','aux_vec_sources'});
 
 zef.lead_field_time = toc;
 
-if zef.location_unit == 1 
+if zef.location_unit == 1
 zef.source_positions = 1000*zef.source_positions;
 zef.location_unit_current = 1;
 end
 
-if zef.location_unit == 2 
+if zef.location_unit == 2
 zef.source_positions = 100*zef.source_positions;
 zef.location_unit_current = 2;
 end
 
-if zef.location_unit == 3 
+if zef.location_unit == 3
 zef.location_unit_current = 3;
 end
 

@@ -34,7 +34,7 @@ switch evalin('base','zef.ES_search_method')
         end
         L_ES_projection   = [L_aux(J_x_ES,:)  ; L_ES_projection];
         x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
-        
+
         active_electrodes = evalin('base','zef.ES_active_electrodes');
         if not(isempty(active_electrodes))
             L_ES_projection   = L_ES_projection(:,active_electrodes);
@@ -42,10 +42,10 @@ switch evalin('base','zef.ES_search_method')
             active_electrodes = 1:size(L_ES_projection,2);
             L_ES_projection   = L_ES_projection(:,active_electrodes);
         end
-        
+
         M_mat = eye(size(L_ES_projection,2)) - ones(size(L_ES_projection,2))/size(L_ES_projection,2);
         L_ES_projection = L_ES_projection*M_mat;
-        
+
         %% LP setup
         opts = optimset('linprog');
         %opts.TolCon     = 1e-3;
@@ -95,9 +95,9 @@ switch evalin('base','zef.ES_search_method')
             x_ES_projection = [x_ES_projection; 0];
             [y_ES,~,flag_val] = linprog(sum(L_ES_projection)'+reg_param, -L_ES_projection, -x_ES_projection, [], [], lower_bound, upper_bound, opts);
         end
-        
+
         y_ES = M_mat*y_ES;
-        
+
     case 2
         if length(varargin) == 2
             [k_val, reg_param]   = deal(varargin{1:2});
@@ -105,7 +105,7 @@ switch evalin('base','zef.ES_search_method')
         kval_2 = k_val(i)/size(L_ES_projection,1);
         L_ES_projection   = [1*L_aux(J_x_ES,:)  ; kval_2*L_ES_projection];
         x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
-        
+
         active_electrodes = evalin('base','zef.ES_active_electrodes');
         if not(isempty(active_electrodes))
             L_ES_projection   = L_ES_projection(:,active_electrodes);
@@ -113,10 +113,10 @@ switch evalin('base','zef.ES_search_method')
             active_electrodes = 1:size(L_ES_projection,2);
             L_ES_projection   = L_ES_projection(:,active_electrodes);
         end
-        
+
          M_mat = eye(size(L_ES_projection,2)) - ones(size(L_ES_projection,2))/size(L_ES_projection,2);
         L_ES_projection = L_ES_projection*M_mat;
-        
+
         delta = evalin('base','zef.ES_delta_param');
         y_ES = ones(size(L_ES_projection,2),1);
         for inv_iter = 1 : evalin('base','zef.ES_L1_iter')

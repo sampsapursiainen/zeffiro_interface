@@ -27,9 +27,9 @@ end
 
 aux_cell = cell(0);
 for i = 1 : n_decs
-if j == 1 
+if j == 1
 aux_cell{1} = s_ind{i};
-multigrid_dec{i}{j} = aux_cell; 
+multigrid_dec{i}{j} = aux_cell;
 else
 MdlKDT = KDTreeSearcher(center_points(s_ind_old{i},:));
 aux_ind = knnsearch(MdlKDT,center_points(s_ind{i},:));
@@ -38,7 +38,7 @@ for k = 1 : length(unique_aux_ind)
 aux_cell_ind = find(aux_ind == unique_aux_ind(k));
 aux_cell{k} = s_ind{i}(aux_cell_ind);
 end
-multigrid_dec{i}{j} = aux_cell; 
+multigrid_dec{i}{j} = aux_cell;
 end
 end
 

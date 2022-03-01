@@ -8,9 +8,9 @@ end
 
 zef.lf_item_list = cell(0);
  for zef_i = 1 : length(zef.lf_bank_storage)
-    zef.lf_item_list{zef_i} = ['Tag: ' zef.lf_bank_storage{zef_i}.lf_tag  ', Sensors: ' num2str(size(zef.lf_bank_storage{zef_i}.sensors,1)) ', Sources: ' num2str(size(zef.lf_bank_storage{zef_i}.source_positions,1)) ', Method: ' zef.lf_bank_storage{zef_i}.imaging_method ];   
+    zef.lf_item_list{zef_i} = ['Tag: ' zef.lf_bank_storage{zef_i}.lf_tag  ', Sensors: ' num2str(size(zef.lf_bank_storage{zef_i}.sensors,1)) ', Sources: ' num2str(size(zef.lf_bank_storage{zef_i}.source_positions,1)) ', Method: ' zef.lf_bank_storage{zef_i}.imaging_method ];
  end
- 
+
 if isfield(zef,'h_lf_bank_tool')
         if isvalid(zef.h_lf_bank_tool)
 zef.lf_tag = get(zef.h_lf_tag,'value');
@@ -20,6 +20,5 @@ set(zef.h_lf_item_list,'Items',zef.lf_item_list,'ItemsData',[1:length(zef.lf_ite
         end
         end
 end
-
 
 clear zef_i;

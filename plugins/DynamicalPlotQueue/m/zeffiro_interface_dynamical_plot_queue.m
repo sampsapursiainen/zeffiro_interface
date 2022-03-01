@@ -4,7 +4,7 @@ zef_data=zeffiro_interface_dynamical_plot_queue_app;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
 zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-end   
+end
 set(zef.h_dynamical_plot_queue,'Name','ZEFFIRO Interface: Dynamical plot queue');
 set(findobj(zef.h_dynamical_plot_queue.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_dynamical_plot_queue.Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -46,7 +46,4 @@ set(zef.h_dynamical_plot_queue_script,'ValueChangedFcn','zef.h_dynamical_plot_qu
 set(zef.h_dynamical_plot_queue,'AutoResizeChildren','off');
 zef.dynamical_plot_queue_current_size = get(zef.h_dynamical_plot_queue,'Position');
 set(zef.h_dynamical_plot_queue,'SizeChangedFcn','zef.dynamical_plot_queue_current_size = zef_change_size_function(zef.h_dynamical_plot_queue,zef.dynamical_plot_queue_current_size);');
-
-
-
 

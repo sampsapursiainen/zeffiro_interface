@@ -3,7 +3,7 @@ zef_data = zef_eit_sensitivity_tool;
 if not(isfield(zef,'eit_sensitivity_tool_file'))
     zef.eit_sensitivity_tool_file = '';
 end
- 
+
 if not(isfield(zef,'eit_sensitivity_tool_file_2'))
     zef.eit_sensitivity_tool_file_2 = '';
 end
@@ -31,8 +31,8 @@ zef.h_eit_sensitivity_tool_substitute = zef_data.h_eit_sensitivity_tool_substitu
 zef.h_eit_sensitivity_tool_lower_quantile = zef_data.h_eit_sensitivity_tool_lower_quantile;
 zef.h_eit_sensitivity_tool_upper_quantile = zef_data.h_eit_sensitivity_tool_upper_quantile;
 
-zef.sigma_bypass = 0; 
-set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]); 
+zef.sigma_bypass = 0;
+set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]);
 set(zef.h_eit_sensitivity_tool_activate,'text','Inactive');
 
 set(zef.h_eit_sensitivity_tool_activate,'ButtonPushedFcn','if zef.sigma_bypass == 0; zef.sigma_bypass = 1; zef.eit_sensitivity_tool_active = 1; set(zef.h_eit_sensitivity_tool_activate,''fontcolor'',[1 0 0]); set(zef.h_eit_sensitivity_tool_activate,''text'',''Active''); else;  zef.sigma_bypass = 0; zef.eit_sensitivity_tool_active = 0; set(zef.h_eit_sensitivity_tool_activate,''fontcolor'',[0 0 0]); set(zef.h_eit_sensitivity_tool_activate,''text'',''Inactive'');end;');
@@ -51,11 +51,11 @@ set(zef.h_eit_sensitivity_tool,'SizeChangedFcn', 'zef.eit_sensitivity_tool_curre
 zef.h_eit_sensitivity_tool.Name = 'ZEFFIRO Interface: EIT Sensitivity Tool';
 
 if zef.eit_sensitivity_tool_active == 0
-set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]); 
+set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]);
 set(zef.h_eit_sensitivity_tool_activate,'text','Inactive');
-else 
-set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[1 0 0]); 
-set(zef.h_eit_sensitivity_tool_activate,'text','Active'); 
+else
+set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[1 0 0]);
+set(zef.h_eit_sensitivity_tool_activate,'text','Active');
 end
 zef.h_eit_sensitivity_tool_file.Value = zef.eit_sensitivity_tool_file;
 zef.h_eit_sensitivity_tool_file_2.Value = zef.eit_sensitivity_tool_file_2;

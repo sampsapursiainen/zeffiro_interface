@@ -17,7 +17,6 @@ if ppn>0
 end
 commonSubmitArgs = sprintf('%s --ntasks-per-core=1',commonSubmitArgs);
 
-
 %% REQUIRED
 
 % AccountName
@@ -44,7 +43,6 @@ if isempty(wt)
 else
     commonSubmitArgs = [commonSubmitArgs ' -t ' wt];
 end
-
 
 %% OPTIONAL
 

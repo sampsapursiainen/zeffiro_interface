@@ -20,7 +20,7 @@ switch n
         else
             y_ES = evalin('base','zef.y_ES_4x1.y_ES');
         end
-        
+
     case 2
         [sr, sc] = varargin{:};
         load_aux = evalin('base','zef.y_ES_interval.y_ES');
@@ -43,20 +43,19 @@ if n ~= 3
         win_temp = findobj('type','figure','name','ZEFFIRO Interface: Error chart tool');
         win_temp = get(win_temp(1),'Position');
     catch
-        win_temp = [10 800 570 413]; 
+        win_temp = [10 800 570 413];
     end
     f.Position(1) = win_temp(1)+win_temp(3);
     f.Position(2) = win_temp(2)+(win_temp(4)-f.Position(4));
     f.Position(3) = 880;
     f.Position(4) = 500;
-    
+
     if evalin('base','zef.ES_search_method') ~= 3
         sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
     else
         sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
     end
 end
-
 
 h_barplot_ES = bar(y_ES,0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
@@ -87,7 +86,6 @@ if max(abs(y_ES)) == 0
 else
     p_max = max(abs(y_ES)); p_min = -p_max;
 end
-
 
 if p_max > max_current
     h_axes.YLim = [p_min p_max]*1.05;

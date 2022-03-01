@@ -37,18 +37,18 @@ visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
 compartment_tags = evalin('base','zef.compartment_tags');
-for k = 1 : length(compartment_tags)  
+for k = 1 : length(compartment_tags)
         var_0 = ['zef.' compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         color_str = evalin('base',['zef.'  compartment_tags{k}  '_color']);
-on_val = evalin('base',var_0);      
+on_val = evalin('base',var_0);
 if on_val
 i = i + 1;
 
 c_str = compartment_tags{k};
-    
+
 if ismember(evalin('base',['zef.' c_str '_sources']),[1 2])
 I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
 submesh_ind_aux = unique(submesh_ind(I));
@@ -63,7 +63,7 @@ J = unique(s_interp_ind(I(I_aux),:));
 if length(submesh_ind_aux) > 1
 c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name']) ' ' num2str(submesh_ind_aux(ell_ind))];
 else
-c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name'])];    
+c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name'])];
 end
 c_table{t_ind}{3}(c_ind,1:3) = evalin('base',['zef.' c_str '_color']);
 c_table{t_ind}{3}(c_ind,5) =  c_ind;
@@ -79,5 +79,4 @@ c_table{t_ind}{3}(:,1:3) = round(255*c_table{t_ind}{3}(:,1:3));
 c_table{t_ind}{4} = c_table{t_ind}{4}(:);
 
 end
-
 

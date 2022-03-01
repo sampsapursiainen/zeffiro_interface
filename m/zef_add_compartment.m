@@ -2,7 +2,7 @@ zef.aux_field_1 = zef.h_compartment_table.Data;
 
 zef_create_compartment(zef_compartment_tag);
 zef_i = size(zef.aux_field_1,1) + 1;
-zef_j = 1; 
+zef_j = 1;
 
 zef_init_fields_compartment_table;
 

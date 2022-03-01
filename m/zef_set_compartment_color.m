@@ -13,7 +13,7 @@ for zef_i = length(compartment_tags) : -1 : 1
         item_ind = zef_i;
         break;
     end
-    
+
     end
 end
 

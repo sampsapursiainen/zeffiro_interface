@@ -68,7 +68,6 @@ hold(evalin('base','zef.h_axes1'),'off');
 legend(evalin('base','zef.h_axes1'),{'Hyperprior density','Mean','Tail reference','Amplitude reference'},'Location','SouthWest');
 %set(evalin('base','zef.h_axes1'),'fontsize',evalin('base','zef.font_size'))
 
-
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
 y_lim_vec(1)*10.^(0.10*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
 ['SNR = ' num2str(snr_val) ' dB']);
@@ -89,8 +88,6 @@ h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),.
 y_lim_vec(1)*10.^(0.30*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
 ['Scale = ' num2str(d)]);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
-
-
 
 hold(evalin('base','zef.h_axes1'),'off');
 

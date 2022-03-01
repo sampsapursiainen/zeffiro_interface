@@ -1,27 +1,22 @@
 function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode)
 %zef_processLeadfields processes the leadfield in zef and applies all
-%visibility options. 
+%visibility options.
 %L is the leadfield, the procFile has all information needed for the
 %postProcessing step, but should not be needed in the inverse method
 
-
-
 source_directions = evalin('base','zef.source_directions');
-
 
 s_ind_2=[];
 s_ind_3=[];
 s_ind_4=[];
 
-
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
-
 if source_direction_mode == 2
-    
+
     [s_ind_3] = evalin('base','zef.source_interpolation_ind{3}');
-    
+
     i = 0;
     length_reuna = 0;
     sigma_vec = [];
@@ -57,32 +52,32 @@ if source_direction_mode == 2
             end
         end
     end
-    
+
     a_d_i_vec = [];
     aux_p = [];
     aux_t = [];
-    
+
     for ab_ind = 1 : length(aux_brain_ind)
-        
+
         aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
         aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
         a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
-        
+
     end
-    
+
     a_d_i_vec = a_d_i_vec(aux_t(:,1));
     n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
     n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
-    
+
     n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
     n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
     n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
-    
+
     n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
-    
+
     s_ind_4 = find(not(a_d_i_vec(s_ind_3)));
     source_directions = n_vec_aux(s_ind_3,:);
-    
+
 end
 
 if source_direction_mode == 3
@@ -99,13 +94,11 @@ end
 
 s_ind_1 = s_ind_1(:);
 
-
-
 L = evalin('base','zef.L');
 L = L(:,s_ind_1);
 
 if source_direction_mode == 2
-    
+
     L_1 = L(:,1:n_interp);
     L_2 = L(:,n_interp+1:2*n_interp);
     L_3 = L(:,2*n_interp+1:3*n_interp);
@@ -118,11 +111,11 @@ if source_direction_mode == 2
     L(:,n_interp+s_ind_4) = L_0;
     L(:,2*n_interp+s_ind_4) = L_0;
     clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
-    
+
 end
 
 procFile.source_direction_mode=source_direction_mode;
-procFile.source_directions=source_directions; 
+procFile.source_directions=source_directions;
 procFile.s_ind_1=s_ind_1;
 procFile.s_ind_2=s_ind_2;
 procFile.s_ind_3=s_ind_3;
@@ -130,9 +123,6 @@ procFile.s_ind_4=s_ind_4;
 procFile.n_interp=n_interp;
 procFile.sizeL2=size(L,2);
 procFile.s_ind_0=s_ind_0;
-
-
-
 
 end
 
