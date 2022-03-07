@@ -110,12 +110,11 @@ end
         end
 
         if source_direction_mode == 2
-            surf_ind = procFile.s_ind_4(1:round(length(procFile.s_ind_4)/3));
-            for i = 1:length(surf_ind)
-                M = sqrt(P(i,:)*L(:,i));
-                z_vec([i,i+n_interp,i+2*n_interp])=z_vec([i,i+n_interp,i+2*n_interp])/M;
-            end
-            r_ind = setdiff(1:n_interp,surf_ind);
+            r_ind = setdiff(1:n_interp,procFile.s_ind_4);
+            surf_ind = procFile.s_ind_4+[0,n_interp,2*n_interp];
+            surf_ind=surf_ind(:);
+            M = 1./sum(P(surf_ind,:).'.*L(:,surf_ind),1)';
+            z_vec(surf_ind) = M.*z_vec(surf_ind);
             for i = 1:length(r_ind)
                 if number_of_frames <= 1 && i > 1
                     date_str = datestr(datevec(now+(n_interp/(i-1) - 1)*time_val/86400)); %what does that do?
