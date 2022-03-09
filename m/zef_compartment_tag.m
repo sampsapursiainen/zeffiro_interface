@@ -1,4 +1,4 @@
-function compartment_tag = zef_compartment_tag
+function compartment_tag = zef_compartment_tag 
 
 ismember_tag = 1; 
 compartment_counter = 0; 
