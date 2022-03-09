@@ -38,9 +38,9 @@ function gradients = zef_volume_gradient(nodes, tetrahedra, node_index)
     % Dot products between the face normals and the direction vectors between
     % a fixed node and other nodes in a tetrahedron.
 
-    fixed_nodes = nodes(tetrahedra(:,node_index),:)'
-    other_nodes = nodes(tetrahedra(:,ind_m(node_index,1)),:)'
-    direction_vectors = fixed_nodes - other_nodes
+    fixed_nodes = nodes(tetrahedra(:,node_index),:)';
+    other_nodes = nodes(tetrahedra(:,ind_m(node_index,1)),:)';
+    direction_vectors = fixed_nodes - other_nodes;
 
     gradients = normals .* repmat(  ...
         sign(                       ...
