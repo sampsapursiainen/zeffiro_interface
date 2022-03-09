@@ -54,5 +54,4 @@ function gradients = zef_volume_gradient(nodes, tetrahedra, node_index)
         3, 1                        ...
     );
 
-    return gradients
 end
