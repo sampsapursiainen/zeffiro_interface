@@ -63,7 +63,7 @@ end
 n_nodes = size(nodes,1);
 n_tetra = size(tetra,1);
 
-tilavuus = volume(nodes, tetra);
+tilavuus = zef_tetra_volume(nodes, tetra);
 
 p_triangles = [
      4     2     1
