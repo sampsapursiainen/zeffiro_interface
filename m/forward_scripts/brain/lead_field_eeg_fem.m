@@ -189,15 +189,7 @@ end
 
 A = spalloc(N,N,0);
 
-Aux_mat = [
-        nodes(tetrahedra(:,1),:)';
-        nodes(tetrahedra(:,2),:)';
-        nodes(tetrahedra(:,3),:)'
-    ] ...
-    - ...
-    repmat(nodes(tetrahedra(:,4),:)',3,1);
-
-tilavuus = zef_tetra_volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
 h=waitbar(0,'System matrices.');
 waitbar_ind = 0;

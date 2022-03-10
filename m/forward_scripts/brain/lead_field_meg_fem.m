@@ -111,7 +111,7 @@ end
 
 A = spalloc(N,N,0);
 
-tilavuus = zef_tetra_volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
 h=waitbar(0,'MEG load vectors.');
 waitbar_ind = 0;
