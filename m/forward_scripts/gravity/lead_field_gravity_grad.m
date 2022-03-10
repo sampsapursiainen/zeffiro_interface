@@ -132,7 +132,7 @@ if iscell(elements)
     K3 = length(source_ind);
     K4 = length(gravity_ind);
 
-tilavuus = zef_tetra_volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
 c_tet = 0.25*(nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:) + nodes(tetrahedra(:,4),:));
 
