@@ -19,7 +19,7 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, tensor)
 
     % Get the total volume 𝑉 of the domain Ω.
 
-    volume = zef_tetra_volume(nodes, tetrahedra)
+    volume = zef_tetra_volume(nodes, tetrahedra, true)
 
     % Start constructing the elements of 𝐴 iteratively. Summing the integrands
     % ∇ψⱼ ⋅ (𝑇∇ψᵢ) multiplied by volume elements d𝑉 like this corresponds to
