@@ -7,7 +7,7 @@ zef_postprocess_finite_element_mesh;
 zef.n_sources_mod = 1;
 zef.source_ind = [];
 zef_update_fig_details;
-zef_process_meshes; 
+zef_process_meshes;
 zef_attach_sensors_volume(zef.sensors);
 lead_field_matrix;
 warning('on');
