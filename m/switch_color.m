@@ -22,4 +22,3 @@ end;
 else
 set(h,color_str,[0 0 0]);
 end
-

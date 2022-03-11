@@ -193,4 +193,3 @@ priority_ind = sub2ind(size(johtavuus_ind),[1:size(johtavuus_ind,1)]',priority_i
 close(h);
 
 end
-

@@ -46,4 +46,3 @@ end
 clear zef_LeadFieldProcessingTool_index;
 
 zef_update;
-
