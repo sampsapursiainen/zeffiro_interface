@@ -637,7 +637,6 @@ end
 end
 
 if ismember(evalin('base','zef.visualization_type'),[2,4])
-
 if not(ismember(evalin('base','zef.visualization_type'),[4]))
 if evalin('base','zef.use_parcellation')
 
@@ -989,4 +988,3 @@ rotate3d on;
 %if  iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2
 %close(h_waitbar);
 %end
-
