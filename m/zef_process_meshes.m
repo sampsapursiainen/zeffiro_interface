@@ -39,7 +39,6 @@ for k = 1 : length(compartment_tags)
 
 on_val = evalin('base',var_0);
 
-
 if on_val
 i = i + 1;
 reuna_p_inf{i} = evalin('base',var_8);
@@ -75,7 +74,6 @@ switch j
     case 3
         axes_ind = [3 1];
 end
-
 
 if theta_angle_vec(j) ~= 0
 theta_angle = theta_angle_vec(j)*pi/180;
@@ -113,7 +111,6 @@ end
 end
 end
 end
-
 
 sensor_tag = evalin('base','zef.current_sensors');
 
@@ -161,8 +158,6 @@ use_pem = 0;
 if ismember(evalin('base','zef.imaging_method'),[1 5])
 use_pem = evalin('base','zef.use_pem');
 end
-
-
 
 for t_ind = 1 : length(s_scaling)
 
@@ -228,7 +223,6 @@ if use_pem
 sensors = sensors(:,1:3);
 end
 
-
 max_val = 0;
 box_ind = 0;
 for i = 1 : length(reuna_p)
@@ -281,7 +275,6 @@ pml_outer_radius = evalin('base','zef.pml_outer_radius');
 
 end
 
-
 if nargout == 0
 zef_data.sensors = sensors;
 zef_data.reuna_p = reuna_p;
@@ -292,8 +285,6 @@ zef_data.reuna_type = reuna_type;
 assignin('base', 'zef_data', zef_data);
 evalin('base', 'zef_assign_data;');
 end
-
-
 
 end
 

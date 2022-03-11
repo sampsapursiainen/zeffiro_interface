@@ -87,7 +87,6 @@ if ismember(evalin('base',var_4),[1 2])
 aux_brain_ind(i,1) = 1 ;
 end
 
-
 end
 end
 
@@ -121,7 +120,6 @@ domain_labels = double(evalin('base','zef.domain_labels_raw'));
 [priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = submesh_ind_1(domain_labels(priority_ind));
-
 
 nodes = evalin('base','zef.nodes_raw');
 tetra_aux = evalin('base','zef.tetra_raw');
@@ -218,7 +216,6 @@ end
 
 end
 
-
 [nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
 if optimizer_flag == 1
 [tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
@@ -232,7 +229,6 @@ end
 %  zef_mesh_labeling_step;
 %
 %  end
-
 
 brain_ind = [];
 for k = 1 : length(compartment_tags)
@@ -276,7 +272,6 @@ eval([parameter_profile{zef_j,2} '=[' parameter_profile{zef_j,2} '_vec(domain_la
     end
 end
 
-
 J = unique(zef_surface_mesh(tetra));
 tetra_vec = sum(ismember(tetra,J),2);
 non_source_ind = find(tetra_vec > 2);
@@ -284,17 +279,10 @@ clear tetra_vec;
 
 end
 
-
-
 %brain_ind = single(brain_ind);
 %tetra = single(tetra);
 
-
-
-
-
 end
-
 
 condition_number = zef_condition_number(nodes,tetra);
 
@@ -325,9 +313,4 @@ evalin('base','zef_assign_data');
 end
 
 end
-
-
-
-
-
 
