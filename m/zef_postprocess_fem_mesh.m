@@ -282,6 +282,8 @@ end
 %brain_ind = single(brain_ind);
 %tetra = single(tetra);
 
+end
+
 condition_number = zef_condition_number(nodes,tetra);
 
 close(h);
