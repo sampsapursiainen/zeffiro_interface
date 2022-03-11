@@ -10,7 +10,6 @@ for zef_i = 1 : length(zef.fieldnames)
     zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
 end
 
-
 zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'};
 
 zef_data.update_colorscale = 1;
@@ -162,8 +161,6 @@ zef_data.top_reconstruction = [];
 
  zef_data.source_direction_mode = 2;
 
-
-
                zef_data.sensors = [];
                zef_data.reuna_p = cell(0);
                zef_data.reuna_t = cell(0);
@@ -193,7 +190,6 @@ zef_data.sensors_attached_volume = [];
        zef_data.source_directions = [];
               zef_data.brain_ind = [];
              zef_data.source_ind = [];
-
 
             zef_data.cp_on       = 0;
             zef_data.cp_a        = 1;

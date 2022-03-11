@@ -261,7 +261,6 @@ end
 end
 end
 
-
 i = 0;
 length_reuna = 0;
 sigma_vec = [];
@@ -637,9 +636,7 @@ end
 end
 end
 
-
 if ismember(evalin('base','zef.visualization_type'),[2,4])
-
 
 if not(ismember(evalin('base','zef.visualization_type'),[4]))
 if evalin('base','zef.use_parcellation')
@@ -724,7 +721,6 @@ end
 
 %**************************************************************************
 
-
 for i = 1 : n_compartments
 
 if visible_vec(i)
@@ -784,7 +780,6 @@ hold off;
 
  evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
 
-
 end
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
@@ -798,8 +793,6 @@ zef_plot_dpq('dynamical');
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
-
 
 for f_ind = frame_start + frame_step : frame_step : frame_stop
 
@@ -921,7 +914,6 @@ end
 reconstruction = reconstruction.*reconstruction_p_2;
 end
 
-
 %h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'CData',reconstruction);
 if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
@@ -975,7 +967,6 @@ camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('ba
     zef_store_cdata(cdata_counter,cdata_info);
         cdata_counter = cdata_counter + 1;
 
-
   evalin('base',['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
 
 end
@@ -992,7 +983,6 @@ end
 
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-
 
 rotate3d on;
 

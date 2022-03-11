@@ -42,9 +42,7 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
-
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
@@ -53,7 +51,6 @@ end
 z = cell(number_of_frames,1);
 f_data = zef_getFilteredData;
 size_f = size(f_data,2);
-
 
 %_ Time Serie Loop _
 tic;
@@ -75,7 +72,6 @@ waitbar(0,h,['CSM MAP initialization. Time step ' int2str(f_ind) ' of ' int2str(
 end
 
 %___ Calculations start ___
-
 
     if method_type == 1 || method_type == 2 || method_type == 3
 
