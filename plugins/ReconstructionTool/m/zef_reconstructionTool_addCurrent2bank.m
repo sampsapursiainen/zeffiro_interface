@@ -22,4 +22,3 @@ end
 zef.reconstructionTool.bankInfo{zef.reconstructionTool.bankSize,7}=false;
 
 zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
-

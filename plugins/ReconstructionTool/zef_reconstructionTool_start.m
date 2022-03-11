@@ -68,4 +68,3 @@ zef.reconstructionTool.app.FunctionDropDown.Items=extractBetween(zef.reconstruct
 
 %set fonts
 %set(findobj(zef.GMMclustering.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);
-

@@ -37,4 +37,3 @@ zef.LeadFieldProcessingTool.bank{zef.LeadFieldProcessingTool.bankPosition}=zef.L
 zef_LeadfieldProcessingTool_updateTable;
 
 %zef.LeadFieldProcessingTool.auxData=[];
-

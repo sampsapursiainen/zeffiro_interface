@@ -16,4 +16,3 @@ end
 %End of conversion.
 
 processed_data = f(select_channels,:);
-

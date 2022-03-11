@@ -15,4 +15,3 @@ switch zef.dataBank.app.FunctionsDropDown.Value
     case 'mag2grad'
 
 end
-

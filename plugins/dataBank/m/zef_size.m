@@ -14,4 +14,3 @@ size1=sizeOfField(1);
 size2=sizeOfField(2);
 
 end
-

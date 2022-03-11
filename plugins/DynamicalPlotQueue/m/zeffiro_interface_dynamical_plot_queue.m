@@ -46,4 +46,3 @@ set(zef.h_dynamical_plot_queue_script,'ValueChangedFcn','zef.h_dynamical_plot_qu
 set(zef.h_dynamical_plot_queue,'AutoResizeChildren','off');
 zef.dynamical_plot_queue_current_size = get(zef.h_dynamical_plot_queue,'Position');
 set(zef.h_dynamical_plot_queue,'SizeChangedFcn','zef.dynamical_plot_queue_current_size = zef_change_size_function(zef.h_dynamical_plot_queue,zef.dynamical_plot_queue_current_size);');
-

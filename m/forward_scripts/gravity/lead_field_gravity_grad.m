@@ -235,4 +235,3 @@ bg_data = (6.67408E-11)*bg_data;
 
  source_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
  source_directions = ones(size(source_locations));
-

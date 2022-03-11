@@ -302,4 +302,3 @@ time_series = time_series.^2;
 close(h_waitbar);
 
 end
-

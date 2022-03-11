@@ -35,4 +35,3 @@ end
 zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
 
 clear index trueDex newRec nextRec
-
