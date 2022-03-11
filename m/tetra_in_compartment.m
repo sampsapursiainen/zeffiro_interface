@@ -108,4 +108,3 @@ ind_vec(I) = gather(ind_vec_aux);
 I = find(ind_vec > evalin('base','zef.meshing_threshold'));
 
 end
-

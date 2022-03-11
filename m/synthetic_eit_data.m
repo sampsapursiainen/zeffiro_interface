@@ -64,4 +64,3 @@ end
 end
 
 zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec'});
-

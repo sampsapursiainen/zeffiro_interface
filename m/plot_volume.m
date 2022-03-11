@@ -972,4 +972,3 @@ rotate3d on;
 %if  iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2
 %close(h_waitbar);
 %end
-

@@ -5,4 +5,3 @@ zef.reconstructionTool.bankInfo=zef.reconstructionTool.bankInfo(~cell2mat( zef.r
 zef.reconstructionTool.bankSize=size(zef.reconstructionTool.bankInfo,1);
 
 zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;
-

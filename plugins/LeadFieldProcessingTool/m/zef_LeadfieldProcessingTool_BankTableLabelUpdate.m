@@ -6,4 +6,3 @@ for zef_LeadFieldProcessingTool_TableUpdate_index2=1:size(zef.LeadFieldProcessin
 end
 
 clear zef_LeadFieldProcessingTool_TableUpdate_index2;
-

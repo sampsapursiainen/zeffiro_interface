@@ -11,4 +11,3 @@ newRec=newRec/size(reconstruction,2);
 newRec={newRec};
 
 end
-

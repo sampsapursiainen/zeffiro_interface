@@ -19,4 +19,3 @@ for f_ind = 1: number_of_frames
 end
 close(h);
 end
-
