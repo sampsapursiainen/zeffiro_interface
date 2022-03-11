@@ -15,4 +15,3 @@ end
 zef = rmfield(zef,{'aux_field_1','aux_field_2'});
 
 end
-

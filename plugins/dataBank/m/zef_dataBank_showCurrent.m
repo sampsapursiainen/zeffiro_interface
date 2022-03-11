@@ -5,4 +5,3 @@ tree.node.type=type;
 [info, columnNames]=zef_databank_showAll(tree, type);
 
 end
-

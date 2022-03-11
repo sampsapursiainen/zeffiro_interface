@@ -66,4 +66,3 @@ zef_set_figure_tool_sliders
 zef_plugin;
 
 end;
-

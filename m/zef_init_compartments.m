@@ -36,4 +36,3 @@ zef = rmfield(zef,{'segmentation_profile_aux','compartment_structure_aux','compa
 clear zef_i zef_j zef_k;
 
 end
-

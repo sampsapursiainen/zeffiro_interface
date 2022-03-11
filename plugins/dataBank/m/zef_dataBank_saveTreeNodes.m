@@ -14,4 +14,3 @@ for i=1:length(dbFieldNames)
 end
 
 end
-

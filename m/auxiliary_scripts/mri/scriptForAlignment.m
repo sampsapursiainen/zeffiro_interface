@@ -186,4 +186,3 @@ hold on;
 
 %%
 scatter3(res_zef(:,1), res_zef(:,2), res_zef(:,3), '*', 'green');
-

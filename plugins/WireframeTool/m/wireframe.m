@@ -242,4 +242,3 @@ tetra  = [tetra(:,1) edges_ind(:,1) edges_ind(:,3) edges_ind(:,4)  ;
                          ];
 
  end
-

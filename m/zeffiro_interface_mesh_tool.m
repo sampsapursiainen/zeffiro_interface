@@ -81,4 +81,3 @@ zef.mesh_tool_relative_size = zef_get_relative_size(zef.h_mesh_tool);
 set(zef.h_mesh_tool,'SizeChangedFcn','zef.mesh_tool_current_size = zef_change_size_function(zef.h_mesh_tool,zef.mesh_tool_current_size,zef.mesh_tool_relative_size);');
 
 clear zef_data;
-

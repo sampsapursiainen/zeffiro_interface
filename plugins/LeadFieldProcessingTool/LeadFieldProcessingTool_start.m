@@ -50,4 +50,3 @@ zef.LeadFieldProcessingTool.app.BankTable.CellEditCallback='zef_LeadfieldProcess
 
 %set fonts
 %set(findobj(zef.GMMclustering.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);
-
