@@ -1,17 +1,17 @@
-%Copyright © 2018- Sampsa Pursiainen & ZI Development Team 
+%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
  zef.fieldnames = fieldnames(zef);
-       
+
 for zef_i = 1 : length(zef.fieldnames)
     zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
 end
-    
 
-zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'}; 
+
+zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'};
 
 zef_data.update_colorscale = 1;
 
@@ -50,7 +50,7 @@ zef_data.n_streamline = 100;
 zef_data.cone_draw = 0;
 zef_data.cone_lattice_resolution = 10;
 zef_data.cone_scale = 0.5;
-zef_data.lead_field_id = 0; 
+zef_data.lead_field_id = 0;
 zef_data.lead_field_id_max = 0;
 zef_data.inv_amplitude_db = 20;
 zef_data.sigma_bypass = 0;
@@ -75,12 +75,12 @@ zef_data.mlapp = 1;
 %%% Here begins initialization variables
 zef_data.reduce_labeling_outliers = 0;
 zef_data.zef_patch_sensor = [];
-zef_data.adaptive_refinement_number = 1; 
-zef_data.adaptive_refinement_compartments = 1; 
+zef_data.adaptive_refinement_number = 1;
+zef_data.adaptive_refinement_compartments = 1;
 zef_data.compartment_table_size = 9;
-zef_data.adaptive_refinement_on = 0; 
+zef_data.adaptive_refinement_on = 0;
 zef_data.adaptive_refinement_thresh_val = 2;
-zef_data.adaptive_refinement_k_param = 5; 
+zef_data.adaptive_refinement_k_param = 5;
 zef_data.zeffiro_current_size = cell(0);
 zef_data.plugin_cell = [];
 zef_data.active_compartment_ind = [];
@@ -102,7 +102,7 @@ zef_data.pml_outer_radius_unit = 1;
 zef_data.pml_outer_radius = 1.1;
 zef_data.pml_max_size_unit = 1;
 zef_data.pml_max_size = 2;
-zef_data.initial_mesh_mode = 1; 
+zef_data.initial_mesh_mode = 1;
 zef_data.sigma_anisotropy = [];
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
@@ -124,7 +124,7 @@ zef_data.top_reconstruction = [];
           zef_data.parcellation_type = [1];
           zef_data.parcellation_quantile = [0.98];
           zef_data.use_gpu_graphic = 0;
-          
+
           zef_data.loop_movie = [0];
           zef_data.loop_movie_count = [5];
           zef_data.stop_movie = [0];
@@ -135,8 +135,8 @@ zef_data.top_reconstruction = [];
           zef_data.current_pattern = [];
           zef_data.background_data = [];
           zef_data.inv_multires_n_decompositions = [20];
-          zef_data.inv_multires_dec = []; 
-          zef_data.inv_multires_ind = []; 
+          zef_data.inv_multires_dec = [];
+          zef_data.inv_multires_ind = [];
           zef_data.inv_multires_count = [];
           zef_data.inv_multires_n_levels = [3];
           zef_data.inv_multires_sparsity = 8;
@@ -149,8 +149,8 @@ zef_data.top_reconstruction = [];
           zef_data.inv_roi_mode = 3;
           zef_data.inv_roi_threshold = 0.5;
           zef_data.inv_roi_sphere = [0 0 0 15];
-          zef_data.inv_n_sampler = 100; 
-          zef_data.inv_n_burn_in = 10; 
+          zef_data.inv_n_sampler = 100;
+          zef_data.inv_n_burn_in = 10;
           zef_data.reconstruction_type = 7;
           zef_data.h_colorbar   = [];
           zef_data.location_unit= 1;
@@ -162,9 +162,9 @@ zef_data.top_reconstruction = [];
       zef_data.attach_electrodes= 1;
 
  zef_data.source_direction_mode = 2;
-             
-         
-                 
+
+
+
                zef_data.sensors = [];
                zef_data.reuna_p = cell(0);
                zef_data.reuna_t = cell(0);
@@ -186,7 +186,7 @@ zef_data.preconditioner_tolerance= 0.001;
                zef_data.sigma_mod=0;
 zef_data.sensors_attached_volume = [];
       zef_data.surface_triangles = [];
-      zef_data.n_sources_mod     = 0; 
+      zef_data.n_sources_mod     = 0;
       zef_data.n_sources_old     = 10000;
  zef_data.location_unit_current = 1;
                       zef_data.L = [];
@@ -195,7 +195,7 @@ zef_data.sensors_attached_volume = [];
               zef_data.brain_ind = [];
              zef_data.source_ind = [];
 
-            
+
             zef_data.cp_on       = 0;
             zef_data.cp_a        = 1;
             zef_data.cp_b        = 0;
@@ -230,13 +230,13 @@ zef_data.sensors_attached_volume = [];
        zef_data.refinement_volume_compartments_2 = 1;
        zef_data.refinement_surface_compartments = 1;
        zef_data.refinement_surface_compartments_2 = 1;
-       zef_data.surface_sources = 0; 
+       zef_data.surface_sources = 0;
        zef_data.visualization_type = 1;
        zef_data.source_interpolation_on = 0;
        zef_data.measurements = [];
        zef_data.reconstruction = [];
-       zef_data.inv_hyperprior = [1]; 
-       zef_data.inv_hyperprior_weight = [1]; 
+       zef_data.inv_hyperprior = [1];
+       zef_data.inv_hyperprior_weight = [1];
        zef_data.inv_beta = [1.5];
        zef_data.inv_theta0 = [1e-12];
        zef_data.inv_likelihood_std = 0.03;
@@ -257,7 +257,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.cp3_b = 0;
        zef_data.cp3_c = 0;
        zef_data.cp3_d = 0;
-       zef_data.inv_dynamic_range = 1e2; 
+       zef_data.inv_dynamic_range = 1e2;
        zef_data.inv_scale = 2;
        zef_data.inv_colormap = 5;
        zef_data.brain_transparency = 1;
@@ -292,19 +292,18 @@ zef_data.sensors_attached_volume = [];
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
        zef_data.parcellation_compartment = {'g'};
        zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
-       
-    zef_data.mesh_smoothing_repetitions = 1; 
-    zef_data.mesh_optimization_repetitions = 10; 
-   zef_data.mesh_optimization_parameter = 1E-5; 
-    zef_data.mesh_labeling_approach = 1; 
-    
+
+    zef_data.mesh_smoothing_repetitions = 1;
+    zef_data.mesh_optimization_repetitions = 10;
+   zef_data.mesh_optimization_parameter = 1E-5;
+    zef_data.mesh_labeling_approach = 1;
+
  zef = zef_data;
- 
+
  clear zef_i zef_data;
- 
+
  zef_apply_init_profile;
  zef_init_compartments;
 zef_init_sensors;
  zef_apply_parameter_profile;
  % zef_init_parameter_profile;
- 
