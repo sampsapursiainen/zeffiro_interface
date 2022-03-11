@@ -5,22 +5,22 @@ function [domain_labels,brain_ind,non_source_ind,nodes,tetra,surface_triangles,s
 h = waitbar(0,'Mesh post-processing');
 
 parameter_profile = evalin('base','zef.parameter_profile');
- 
+
 for zef_j = 1 : size(parameter_profile,1)
-    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 
-eval([parameter_profile{zef_j,2} '_vec = [];']); 
+    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+eval([parameter_profile{zef_j,2} '_vec = [];']);
     end
 end
 
 tetra = [];
 prisms = [];
 sigma_prisms = [];
-non_source_ind = []; 
+non_source_ind = [];
 
 optimizer_flag = 1;
 
 if evalin('base','zef.sigma_bypass')
-    
+
    sigma = evalin('base','zef.sigma');
    brain_ind = evalin('base','zef.brain_ind');
    non_source_ind = evalin('base','zef.non_source_ind');
@@ -29,15 +29,15 @@ if evalin('base','zef.sigma_bypass')
    sigma_prisms = evalin('base','zef.sigma_prisms');
    prisms = evalin('base','zef.prisms');
    submesh_ind = evalin('base','zef.submesh_ind');
-   
+
 else
-    
+
 thresh_val = evalin('base','zef.mesh_optimization_parameter');
 compartment_tags = evalin('base','zef.compartment_tags');
 aux_compartment_ind = zeros(1,length(compartment_tags));
 
 if evalin('base','zef.import_mode')
-    
+
    sigma = evalin('base','zef.sigma');
    brain_ind = evalin('base','zef.brain_ind');
    nodes = evalin('base','zef.nodes');
@@ -54,23 +54,23 @@ pml_vec = [];
 aux_brain_ind = [];
 submesh_cell = cell(0);
 
-for k = 1 : length(compartment_tags) 
-    
+for k = 1 : length(compartment_tags)
+
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
         var_4 = ['zef.' compartment_tags{k} '_sources'];
-    
-on_val = evalin('base',var_0);      
-sigma_val = evalin('base',var_1);  
-priority_val = evalin('base',var_2);  
+
+on_val = evalin('base',var_0);
+sigma_val = evalin('base',var_1);
+priority_val = evalin('base',var_2);
 if on_val
 i = i + 1;
 
 for zef_j = 1 : size(parameter_profile,1)
-    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 
-        eval([parameter_profile{zef_j,2} '_vec(' num2str(i) ',1) =' num2str(evalin('base',['zef.' compartment_tags{k} '_' parameter_profile{zef_j,2}])) ';']); 
+    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+        eval([parameter_profile{zef_j,2} '_vec(' num2str(i) ',1) =' num2str(evalin('base',['zef.' compartment_tags{k} '_' parameter_profile{zef_j,2}])) ';']);
     end
 end
 
@@ -108,7 +108,7 @@ submesh_ind_2 = ones(n_compartments,1);
 
 for i = 1 :  evalin('base','length(zef.reuna_p)')
 for k = 1 : max(1,length(submesh_cell{i}))
-    
+
 compartment_counter = compartment_counter + 1;
 priority_vec_aux(compartment_counter) = priority_vec(i);
 submesh_ind_1(compartment_counter) = i;
@@ -130,18 +130,18 @@ N = size(nodes, 1);
 
 zef_smoothing_step;
 
-refinement_flag = 2; 
+refinement_flag = 2;
 
 surface_refinement_on = evalin('base','zef.refinement_surface_on_2');
 n_surface_refinement = evalin('base','zef.refinement_surface_number_2');
-  
-if surface_refinement_on
-    
-    if length(n_surface_refinement) == 1
-    
-for i_surface_refinement = 1 : n_surface_refinement   
 
-zef_refinement_step; 
+if surface_refinement_on
+
+    if length(n_surface_refinement) == 1
+
+for i_surface_refinement = 1 : n_surface_refinement
+
+zef_refinement_step;
 
 % if evalin('base','zef.mesh_relabeling')
 % pml_ind = [];
@@ -152,20 +152,20 @@ zef_refinement_step;
 
 end
 
-    else 
-       
+    else
+
  for j_surface_refinement = 1 : length(n_surface_refinement)
  for i_surface_refinement = 1 : n_surface_refinement(j_surface_refinement)
 
-zef_refinement_step; 
+zef_refinement_step;
 
 % if evalin('base','zef.mesh_relabeling')
-% 
+%
 % pml_ind = [];
 % label_ind = uint32(tetra);
 % labeling_flag = 2;
 % zef_mesh_labeling_step;
-% 
+%
 % end
 
  end
@@ -175,11 +175,11 @@ zef_refinement_step;
 end
 
 if evalin('base','zef.refinement_volume_on_2');
-waitbar(0,h,'Volume refinement.'); 
+waitbar(0,h,'Volume refinement.');
 n_refinement = evalin('base','zef.refinement_volume_number_2');
 refinement_compartments_aux = evalin('base','zef.refinement_volume_compartments_2');
 
-refinement_compartments = []; 
+refinement_compartments = [];
 if ismember(1,refinement_compartments_aux)
 refinement_compartments = aux_brain_ind(:);
 end
@@ -188,21 +188,21 @@ refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
 refinement_compartments = [refinement_compartments ; refinement_compartments_aux(:)];
 
 for i = 1 : n_refinement
-   
+
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments);
-waitbar(i/n_refinement,h,'Volume refinement.'); 
+waitbar(i/n_refinement,h,'Volume refinement.');
 
 end
 
 %[tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
 
 % if evalin('base','zef.mesh_relabeling')
-% 
+%
 % pml_ind = [];
 % label_ind = uint32(tetra);
 % labeling_flag = 2;
 % zef_mesh_labeling_step;
-% 
+%
 % end
 
 max_domain_labels = max(domain_labels);
@@ -214,7 +214,7 @@ I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
 I_4 = find(I_4 < 3);
 I_5 = setdiff([1:size(I_3,1)]',I_4);
 domain_labels(I_3(I_5)) = max_domain_labels;
-end 
+end
 
 end
 
@@ -225,25 +225,25 @@ if optimizer_flag == 1
 end
 
 %  if evalin('base','zef.mesh_relabeling')
-%  
+%
 %  pml_ind = [];
 %  label_ind = uint32(tetra);
 %  labeling_flag = 2;
 %  zef_mesh_labeling_step;
-%  
+%
 %  end
 
 
 brain_ind = [];
 for k = 1 : length(compartment_tags)
 if evalin('base',['zef.' compartment_tags{k} '_sources'])>0 && not(evalin('base',['zef.' compartment_tags{k} '_sources'])==3)
-if not(aux_compartment_ind(k)==0) 
+if not(aux_compartment_ind(k)==0)
 [brain_ind]= [brain_ind ; find(domain_labels==aux_compartment_ind(k))];
 end
 end
 end
- 
-if sum(aux_compartment_ind) == 0 
+
+if sum(aux_compartment_ind) == 0
 brain_ind = find(domain_labels);
 end
 
@@ -252,8 +252,8 @@ brain_ind = brain_ind(:);
 submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(brain_ind);
 
-if evalin('base','zef.exclude_box')  
-    
+if evalin('base','zef.exclude_box')
+
 I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I_2 = zeros(size(tetra,1),1);
 I_2(I) = [1:length(I)];
@@ -271,15 +271,15 @@ I_aux = find(not(ismember(domain_labels,find(pml_vec,1))));
 surface_triangles = zef_surface_mesh(tetra(I_aux,:));
 
 for zef_j = 1 : size(parameter_profile,1)
-    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 
-eval([parameter_profile{zef_j,2} '=[' parameter_profile{zef_j,2} '_vec(domain_labels) domain_labels];']); 
+    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+eval([parameter_profile{zef_j,2} '=[' parameter_profile{zef_j,2} '_vec(domain_labels) domain_labels];']);
     end
 end
 
 
 J = unique(zef_surface_mesh(tetra));
-tetra_vec = sum(ismember(tetra,J),2);    
-non_source_ind = find(tetra_vec > 2); 
+tetra_vec = sum(ismember(tetra,J),2);
+non_source_ind = find(tetra_vec > 2);
 clear tetra_vec;
 
 end
@@ -300,7 +300,7 @@ condition_number = zef_condition_number(nodes,tetra);
 
 close(h);
 
-active_compartment_ind = brain_ind; 
+active_compartment_ind = brain_ind;
 
 aux_struct = struct(...
 'domain_labels',domain_labels, ...
@@ -314,8 +314,8 @@ aux_struct = struct(...
 'condition_number',condition_number);
 
 for zef_j = 1 : size(parameter_profile,1)
-    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On') 
-eval(['aux_struct.' parameter_profile{zef_j,2} '=' parameter_profile{zef_j,2} ';']); 
+    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+eval(['aux_struct.' parameter_profile{zef_j,2} '=' parameter_profile{zef_j,2} ';']);
     end
 end
 
