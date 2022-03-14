@@ -13,12 +13,16 @@ face_count_from_surface = size(patch_data.faces,1);
 
 if face_count_from_volume > face_count_from_surface
 
-    n_ref = ceil((log(face_count_from_volume) - log(face_count_from_surface))/log(4));
+    n_ref = floor((log(face_count_from_volume) - log(face_count_from_surface))/log(4));
+    for i = 1 : n_ref
     [patch_data.vertices, patch_data.faces] = zef_triangular_mesh_refinement(patch_data.vertices,patch_data.faces);
-
-end
+    end
+    
+else
 
 patch_data = reducepatch(patch_data,face_count_from_volume);
+
+end
 
 else
 
