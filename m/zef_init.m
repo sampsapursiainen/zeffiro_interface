@@ -73,7 +73,7 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
-zef_data.reduce_labeling_outliers = 1;
+zef_data.reduce_labeling_outliers = 0;
 zef_data.zef_patch_sensor = [];
 zef_data.adaptive_refinement_number = 1; 
 zef_data.adaptive_refinement_compartments = 1; 
@@ -286,7 +286,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.inflate_n_iterations = 500;
        zef_data.inflate_strength = 0.8;
        zef_data.use_inflated_surfaces = 0;
-       zef_data.use_fem_mesh_inflation = 1;
+       zef_data.use_fem_mesh_inflation = 0;
        zef_data.fem_mesh_inflation_strength = 0.05;
        zef_data.explode_everything = 1;
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
