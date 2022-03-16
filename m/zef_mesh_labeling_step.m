@@ -110,6 +110,8 @@ domain_labels(tetra_ind_aux) = min(max_compartments, unique_domain_labels(domain
 
 end
 
+if evalin('base','zef.reduce_labeling_outliers')
+
 I_3 = 0;
 while not(isempty(I_3)) && compartment_counter < max_compartments
 I_1 = find(domain_labels <= compartment_counter);
@@ -127,6 +129,8 @@ I_2 = I_2(find(I_2));
 I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
 I_3 = find(I_3 >= 3);
 domain_labels(I_3) = compartment_counter;
+end
+
 end
 
 end
