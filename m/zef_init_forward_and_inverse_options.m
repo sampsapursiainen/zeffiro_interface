@@ -6,11 +6,11 @@ zef.smoothing_steps_ele = 100;
 end
 
 if not(isfield(zef,'use_fem_mesh_inflation'));
-zef.use_fem_mesh_inflation = 0;
+zef.use_fem_mesh_inflation = 1;
 end
 
 if not(isfield(zef,'reduce_labeling_outliers'));
-zef.reduce_labeling_outliers = 0;
+zef.reduce_labeling_outliers = 1;
 end
 
 if not(isfield(zef,'fem_mesh_inflation_strength'));
