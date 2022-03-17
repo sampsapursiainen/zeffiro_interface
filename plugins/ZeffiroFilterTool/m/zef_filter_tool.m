@@ -40,4 +40,3 @@ zef_init_filter_tool;
 set(zef.h_zef_filter_tool,'AutoResizeChildren','off');
 zef.zef_filter_tool_current_size = get(zef.h_zef_filter_tool,'Position');
 set(zef.h_zef_filter_tool,'SizeChangedFcn','zef.zef_filter_tool_current_size = zef_change_size_function(zef.h_zef_filter_tool,zef.zef_filter_tool_current_size);');
-

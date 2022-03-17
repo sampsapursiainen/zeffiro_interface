@@ -8,7 +8,7 @@ if isequal(labeling_flag,1)
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
- 
+
 compartment_counter = 0;
 pml_counter = 0;
 
@@ -232,4 +232,3 @@ end
 [priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = domain_labels(priority_ind);
-

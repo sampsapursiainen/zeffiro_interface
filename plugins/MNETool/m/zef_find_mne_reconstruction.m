@@ -350,4 +350,3 @@ z = z./max(aux_norm_vec);
 end;
 close(h);
 end
-

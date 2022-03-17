@@ -24,4 +24,3 @@ for zef_ind=1:length(zef.compartment_tags)
 end
 
 zef_LeadFieldProcessingTool_aux2bank; %aux data is deleted in aux2bank
-

@@ -109,7 +109,7 @@ if iscell(elements)
     A = spalloc(N,N,0);
     D_A = zeros(K,10);
 
-tilavuus = zef_tetra_volume(nodes, tetrahedra);
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
 roi_ind_vec = [];
 
@@ -231,4 +231,3 @@ eit_data_vec = (6.67408E-11)*eit_data_vec;
 eit_data_vec = eit_data_vec - evalin('base','zef.inv_bg_data');
 eit_noise = evalin('base','zef.inv_eit_noise');
 eit_data_vec = eit_data_vec + eit_noise*randn(size(eit_data_vec));
-

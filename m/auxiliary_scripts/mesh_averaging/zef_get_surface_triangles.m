@@ -23,4 +23,3 @@ tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4
 surface_triangles = tetra(tetra_ind);
 
 end
-

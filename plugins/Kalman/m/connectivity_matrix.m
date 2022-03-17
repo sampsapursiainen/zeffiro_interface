@@ -26,4 +26,3 @@ end
 % and z component
 A = kron(A,eye(3));
 end
-

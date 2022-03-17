@@ -20,4 +20,3 @@ if ~isempty(node.Children)
 end
 
 end
-
