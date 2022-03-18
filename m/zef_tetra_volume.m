@@ -58,6 +58,6 @@ function V = zef_tetra_volume(nodes, tetrahedra, take_absolute_value)
     );
 
     if take_absolute_value
-        V = abs(V)
+        V = abs(V);
     end
 end
