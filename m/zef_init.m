@@ -72,6 +72,7 @@ zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_dat
 zef_data.mlapp = 1;
 
 %%% Here begins initialization variables
+zef_data.lead_field_filter_quantile = 0.995;
 zef_data.reduce_labeling_outliers = 1;
 zef_data.zef_patch_sensor = [];
 zef_data.adaptive_refinement_number = 1;
