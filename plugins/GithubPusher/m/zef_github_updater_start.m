@@ -4,8 +4,8 @@ zef.h_github_updater.Name = 'ZEFFIRO Interface: GitHub pusher tool';
 zef.h_github_message.Value = 'A regular push adding the changes made in the current local repository to the remote origin. Contents of the folders ./data/ and ./profile/ are ignored. The update necessitates creating a personal access token.';
 zef.h_github_author.Value = zef.user_tag;
 
-zef.h_github_updater_button.ButtonPushedFcn = 'isequal(questdlg(''Push to remote origin?''),''Yes''); eval(''zef_githup_updater_script;''); end;';
-zef.h_github_pull_button.ButtonPushedFcn = 'isequal(questdlg(''Pull from remote origin?''),''Yes''); eval(''!git pull;''); end;';
+zef.h_github_updater_button.ButtonPushedFcn = 'if isequal(questdlg(''Push to remote origin?''),''Yes''); eval(''zef_githup_updater_script;''); end;';
+zef.h_github_pull_button.ButtonPushedFcn = 'if isequal(questdlg(''Pull from remote origin?''),''Yes''); eval(''!git pull;''); end;';
 zef.h_github_reset_button.ButtonPushedFcn = 'if isequal(questdlg(''Reset local repository?''),''Yes''); eval(''!git reset --hard origin; !git fetch --all;''); end;';
 
 
