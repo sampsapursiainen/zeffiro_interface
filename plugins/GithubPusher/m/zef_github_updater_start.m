@@ -5,6 +5,9 @@ zef.h_github_message.Value = 'A regular push adding the changes made in the curr
 zef.h_github_author.Value = zef.user_tag;
 
 zef.h_github_updater_button.ButtonPushedFcn = 'zef_githup_updater_script;';
+zef.h_github_pull_button.ButtonPushedFcn = '!git pull;';
+zef.h_github_reset_button.ButtonPushedFcn = 'if isequal(questdlg(''Reset the local repository to match the remote origin?''),''Yes''); !git reset --hard origin; !git fetch --all';
+
 
 set(findobj(zef.h_github_updater.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
