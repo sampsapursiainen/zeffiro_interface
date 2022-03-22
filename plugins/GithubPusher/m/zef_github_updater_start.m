@@ -7,6 +7,7 @@ zef.h_github_author.Value = zef.user_tag;
 zef.h_github_updater_button.ButtonPushedFcn = 'if isequal(questdlg(''Push to remote origin?''),''Yes''); zef_github_updater_script; end;';
 zef.h_github_reset_button.ButtonPushedFcn = 'if isequal(questdlg(''Reset remote origin?''),''Yes''); eval(''!git reset --hard origin; !git fetch --all;''); end;';
 zef.h_github_pull_button.ButtonPushedFcn = 'if isequal(questdlg(''Pull from remote origin?''),''Yes'');eval(''!git pull;''); end;';
+
 set(findobj(zef.h_github_updater.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 set(zef.h_github_updater,'AutoResizeChildren','off');

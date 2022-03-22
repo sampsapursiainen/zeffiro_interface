@@ -10,4 +10,3 @@ zef.create_dipolar_pair_impedance = zef.h_create_dipolar_pair_table.Data{9,2};
 zef.create_dipolar_pair_color = zef.h_create_dipolar_pair_table.Data{10,2};
 zef.create_dipolar_pair_length = zef.h_create_dipolar_pair_table.Data{11,2};
 zef.create_dipolar_pair_tag = zef.h_create_dipolar_pair_table.Data{12,2};
-

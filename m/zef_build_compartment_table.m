@@ -26,4 +26,3 @@ end
 zef.h_compartment_table.Data = zef.aux_field_1;
 zef = rmfield(zef,'aux_field_1');
 zef_update;
-

@@ -496,4 +496,3 @@ zef.parcellation_interp_ind = zef.eit_sensitivity_tool_L_EEG_parcellation_interp
       %end
 
 end
-

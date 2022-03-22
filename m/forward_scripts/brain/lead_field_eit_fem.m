@@ -682,3 +682,4 @@ L_eit = L_eit_aux;
  dipole_directions = ones(size(dipole_locations));
 
 end
+

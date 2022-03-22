@@ -5,8 +5,16 @@ if not(isfield(zef,'smoothing_steps_ele'));
 zef.smoothing_steps_ele = 100;
 end
 
+if not(isfield(zef,'lead_field_filter_quantile'));
+zef.lead_field_filter_quantile = 0.995;
+end
+
 if not(isfield(zef,'use_fem_mesh_inflation'));
 zef.use_fem_mesh_inflation = 1;
+end
+
+if not(isfield(zef,'reduce_labeling_outliers'));
+zef.reduce_labeling_outliers = 1;
 end
 
 if not(isfield(zef,'fem_mesh_inflation_strength'));

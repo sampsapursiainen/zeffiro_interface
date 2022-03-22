@@ -16,4 +16,3 @@ zef.dataBank.nameChangeapp.OkButton.ButtonPushedFcn=strcat("zef.dataBank.tree.(z
 
 zef.dataBank.nameChangeapp.CancelButton.ButtonPushedFcn=strcat("zef.dataBank.app.Tree.Enable='on';", ...
     "zef.dataBank.nameChangeapp.delete;" );
-

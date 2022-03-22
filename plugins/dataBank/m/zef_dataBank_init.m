@@ -13,4 +13,3 @@ end
 zef.dataBank.app.StarttimeSpinner.Value = zef.dataBank.var_starttime;
 zef.dataBank.app.EndtimeSpinner.Value = zef.dataBank.var_endtime;
 zef.dataBank.app.SfreqSpinner.Value = zef.dataBank.var_sampling_frequency;
-

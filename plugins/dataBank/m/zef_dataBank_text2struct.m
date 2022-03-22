@@ -6,4 +6,3 @@ for i=1:length(text)
 end
 
 end
-

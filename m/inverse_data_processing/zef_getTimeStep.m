@@ -29,4 +29,3 @@ if Optional_averaging_bool && size(f,2) > 1
 end
 
 end
-

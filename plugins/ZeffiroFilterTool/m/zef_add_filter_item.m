@@ -29,4 +29,3 @@ zef.filter_pipeline_selected = [];
 clear zef_i zef_j;
 
 zef_update_filter_tool;
-
