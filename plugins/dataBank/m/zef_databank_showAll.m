@@ -59,4 +59,3 @@ switch type
         case 'gmm'
 
 end
-

@@ -11,4 +11,3 @@ zef.LeadFieldProcessingTool.bankSize=size(zef.LeadFieldProcessingTool.bank,2);
 % end
 %
 % clear zef_LeadFieldProcessingTool_deleteIndex;
-

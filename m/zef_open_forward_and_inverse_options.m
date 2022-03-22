@@ -21,12 +21,14 @@ zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_f
 zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef = rmfield(zef,'aux_field');
+zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers; 
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
 zef.h_as_opt_2.Value = num2str(zef.preconditioner_tolerance);
 zef.h_as_opt_3.Value = num2str(zef.smoothing_steps_surf);
 zef.h_as_opt_4.Value = num2str(zef.smoothing_steps_vol);
+zef.h_lead_field_filter_quantile.Value = num2str(zef.lead_field_filter_quantile);
 zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
 zef.h_as_opt_5.ItemsData = [1:length(zef.h_as_opt_5.Items)];
 zef.h_as_opt_5.Multiselect = 'on';

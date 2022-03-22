@@ -52,4 +52,3 @@ if ismember(zef.imaging_method, [1 2 3 4])
 end
 
 zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec'});
-

@@ -33,4 +33,3 @@ function [sigma, phi, B, C, D] = Q_quantities(P, m, G, y)
     D = D * 1/T;
 
 end
-

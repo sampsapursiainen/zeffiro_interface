@@ -85,4 +85,3 @@ sources with focal interpolation. Physics in Medicine & Biology, 61(24),
 ZI is not designed to be used in clinical applications. The authors do not
 take the responsibility of the results obtained with ZI using clinical
 data.
-

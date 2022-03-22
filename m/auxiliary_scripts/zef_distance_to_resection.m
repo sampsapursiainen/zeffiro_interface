@@ -7,4 +7,3 @@ d(inside_index)=0;
 [~, d(not_inside)]=knnsearch(mesh_points, points(not_inside,:));
 
 end
-

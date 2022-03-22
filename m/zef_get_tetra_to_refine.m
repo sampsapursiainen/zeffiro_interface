@@ -34,4 +34,3 @@ end
 tetra_ind = I_aux(tetra_ind);
 
 end
-

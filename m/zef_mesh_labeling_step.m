@@ -8,7 +8,7 @@ if isequal(labeling_flag,1)
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
- 
+
 compartment_counter = 0;
 pml_counter = 0;
 
@@ -110,6 +110,8 @@ domain_labels(tetra_ind_aux) = min(max_compartments, unique_domain_labels(domain
 
 end
 
+if evalin('base','zef.reduce_labeling_outliers')
+
 I_3 = 0;
 while not(isempty(I_3)) && compartment_counter < max_compartments
 I_1 = find(domain_labels <= compartment_counter);
@@ -127,6 +129,8 @@ I_2 = I_2(find(I_2));
 I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
 I_3 = find(I_3 >= 3);
 domain_labels(I_3) = compartment_counter;
+end
+
 end
 
 end
@@ -228,4 +232,3 @@ end
 [priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = domain_labels(priority_ind);
-

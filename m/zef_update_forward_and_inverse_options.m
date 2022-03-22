@@ -27,7 +27,10 @@
     zef.mesh_relabeling = zef.h_mesh_relabeling.Value;
     zef.fix_outer_surface = zef.h_fix_outer_surface.Value;
     zef.exclude_box = zef.h_exclude_box.Value;
-
+        zef.reduce_labeling_outliers = zef.h_reduce_labeling_outliers.Value;
+zef.lead_field_filter_quantile = str2num(get(zef.h_lead_field_filter_quantile,'Value'));
+    
+        
     zef.adaptive_refinement_on = get(zef.h_adaptive_refinement_on,'Value');
      zef.adaptive_refinement_k_param = str2num(get(zef.h_adaptive_refinement_k_param,'Value'));
     zef.adaptive_refinement_thresh_val = str2num(get(zef.h_adaptive_refinement_thresh_val,'Value'));

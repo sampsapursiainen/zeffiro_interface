@@ -13,4 +13,3 @@ zef.filter_save_file_path = zef.file_path;
 zef.filter_epoch_points = load([zef.file_path zef.file]);
 zef.filter_epoch_points = zef.filter_epoch_points(:);
 zef.filter_epoch_points = zef.filter_epoch_points';
-

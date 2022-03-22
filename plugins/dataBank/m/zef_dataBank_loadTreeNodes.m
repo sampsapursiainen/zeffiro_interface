@@ -15,4 +15,3 @@ folder=strcat(folder, 'node_*');
 delete(folder);
 
 end
-
