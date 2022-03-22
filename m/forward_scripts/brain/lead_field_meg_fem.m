@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [L_meg, dipole_locations, dipole_directions] = lead_field_eeg_fem(nodes,elements,sigma,sensors,varargin) 
+function [L_meg, dipole_locations, dipole_directions] = lead_field_meg_fem(nodes,elements,sigma,sensors,varargin) 
 
 N = size(nodes,1);
 source_model = evalin('base','zef.source_model');
