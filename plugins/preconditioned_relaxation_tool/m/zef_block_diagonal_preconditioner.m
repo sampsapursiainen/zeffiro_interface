@@ -38,4 +38,3 @@ multigrid_perm_output{2} = [3*(multigrid_perm{3}-1)+1;3*(multigrid_perm{3}-1)+2;
 multigrid_perm_output{2} = multigrid_perm_output{2}(:);
 
 end
-

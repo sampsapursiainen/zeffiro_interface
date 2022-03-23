@@ -179,7 +179,7 @@ end
 
 % K
 K = length(brain_ind);
-K3 = length(source_ind);
+
 clear electrodes;
     
 % A  
@@ -812,6 +812,7 @@ clear S r p x aux_vec inv_M_r a b;
     
     clear R_tes;
     
+    K3 = length(dof_count);
     L_tes = zeros(3*K3,L);
 
 % 25.06.2020

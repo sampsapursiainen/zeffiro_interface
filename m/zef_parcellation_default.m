@@ -79,4 +79,3 @@ c_table{t_ind}{3}(:,1:3) = round(255*c_table{t_ind}{3}(:,1:3));
 c_table{t_ind}{4} = c_table{t_ind}{4}(:);
 
 end
-

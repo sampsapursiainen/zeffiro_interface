@@ -63,4 +63,3 @@ end
         zef_LeadFieldProcessingTool_aux2bank_new;
 
         clear zef_LeadFieldProcessingTool_index_combine;
-

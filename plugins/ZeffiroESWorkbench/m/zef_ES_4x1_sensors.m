@@ -66,4 +66,3 @@ p_5 = p_1 + p_1_norm*tan(-pi*separation_angle/180)*v_3;
     [~,m_ind] = min(d_norm);
     ell_idx(5) = source_index(m_ind);
 end
-

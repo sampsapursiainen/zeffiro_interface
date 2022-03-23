@@ -21,4 +21,3 @@ waitbar(1,h,'Field decomposition');
 close(h);
 
 end
-

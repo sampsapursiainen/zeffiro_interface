@@ -20,4 +20,3 @@ K = size(source_positions,1);
         L(:,3*(i-1)+2) = L(:,3*(i-1)+2)/dof_count(i);
         L(:,3*(i-1)+3) = L(:,3*(i-1)+3)/dof_count(i);
     end
-

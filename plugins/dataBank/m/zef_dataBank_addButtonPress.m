@@ -41,4 +41,3 @@ expand(zef.dataBank.app.Tree.SelectedNodes);
 end
 
 clear dbtype dbParentHash newNode;
-

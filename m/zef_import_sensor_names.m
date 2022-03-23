@@ -16,4 +16,3 @@ end
 zef = rmfield(zef,{'h_aux','aux_field'});
 
 clear zef_i;
-

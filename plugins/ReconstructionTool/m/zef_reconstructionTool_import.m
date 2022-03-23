@@ -13,4 +13,3 @@ if isempty(reconstruction_information)
 end
 
 end
-

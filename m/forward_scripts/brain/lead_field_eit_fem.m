@@ -119,7 +119,7 @@ if iscell(elements)
     end
     end
     K = length(brain_ind);
-    K3 = length(source_ind);
+   
     clear electrodes;
     A = spalloc(N,N,0);
     D_A = zeros(K,10);
@@ -635,6 +635,7 @@ bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_6 * bg_data;
 bg_data = bg_data(:);
 
+ K3 = length(eit_count);
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 
 waitbar(0,h,'Interpolation.');
@@ -682,3 +683,4 @@ L_eit = L_eit_aux;
  dipole_directions = ones(size(dipole_locations));
 
 end
+

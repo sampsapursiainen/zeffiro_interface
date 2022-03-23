@@ -154,4 +154,3 @@ set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','zef_close_all;');
-
