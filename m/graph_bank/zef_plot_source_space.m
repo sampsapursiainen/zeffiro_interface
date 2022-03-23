@@ -1,5 +1,5 @@
 function zef_plot_source_space(void)
-%Plot source space
+%Plot spatial degrees of freedom
 
 h_axes = evalin('base','zef.h_axes1'); 
 axes(h_axes);
