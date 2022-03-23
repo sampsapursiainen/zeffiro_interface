@@ -1,4 +1,4 @@
-function zef_plot_source_space(void)
+function zef_plot_dof_space(void)
 %Plot spatial degrees of freedom
 
 h_axes = evalin('base','zef.h_axes1'); 
