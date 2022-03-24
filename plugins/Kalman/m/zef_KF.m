@@ -140,7 +140,7 @@ for q_iter = 1:1
 %% sLORETA
 s_loreta = str2double(evalin('base', 'zef.KF.sLORETA.Value'));
 if s_loreta
-    [P, L_aux, Q] = zef_kf_sLORETA(L_aux, Q, std_lhood, theta0);
+    [P, L_aux, Q] = zef_kf_sLORETA_OLD(L_aux, Q, std_lhood, theta0);
 end
 %% KALMAN FILTER
 filter_type = evalin('base', 'zef.KF.filter_type.Value');
@@ -149,6 +149,8 @@ if filter_type == '1'
 elseif filter_type == '2'
     n_ensembles = str2double(evalin('base', 'zef.KF.number_of_ensembles.Value'));
     z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames, n_ensembles);
+elseif filter_type == '3'
+    [~, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 end
 
 
