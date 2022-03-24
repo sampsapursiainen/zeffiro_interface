@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [L_eit, bg_data, dipole_locations, dipole_directions, eit_ind, eit_count] = lead_field_eit_fem(nodes,elements,sigma,electrodes,varargin) 
+function [L_eit, bg_data, dof_positions, dof_directions, dof_ind, dof_count] = lead_field_eit_fem(nodes,elements,sigma,electrodes,varargin) 
 
 N = size(nodes,1);
 
@@ -621,13 +621,14 @@ Aux_mat_6 = eye(L,L) - (1/L)*ones(L,L);
 
 if isfield(evalin('base','zef'),'redo_eit_dec')
 if evalin('base','zef.redo_eit_dec') == 1
-[eit_ind, eit_count] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+[dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
 else
-eit_ind = evalin('base','zef.eit_ind');
-eit_count = evalin('base','zef.eit_count');
+dof_ind = evalin('base','zef.eit_ind');
+dof_count = evalin('base','zef.eit_count');
+dof_positions = evalin('base','zef.source_positions');
 end
 else
-[eit_ind, eit_count] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+[dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
 end
 
 Current_pattern = evalin('base','zef.current_pattern');
@@ -635,7 +636,7 @@ bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_6 * bg_data;
 bg_data = bg_data(:);
 
- K3 = length(eit_count);
+ K3 = length(dof_count);
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 
 waitbar(0,h,'Interpolation.');
@@ -659,9 +660,9 @@ Aux_mat_3 = Aux_mat_1 + Aux_mat_2 + Aux_mat_2';
 Aux_mat_4 = L_eit(:, tetrahedra(brain_ind(i),:));
 Aux_mat_5 = - Aux_mat_6*(Aux_mat_4*(Aux_mat_3*(Aux_mat_4'*Current_pattern)));
  
-L_eit_aux(:,eit_ind(i)) = L_eit_aux(:,eit_ind(i)) + Aux_mat_5(:);
+L_eit_aux(:,dof_ind(i)) = L_eit_aux(:,dof_ind(i)) + Aux_mat_5(:);
 
-%tilavuus_vec_aux(eit_ind(i)) = tilavuus_vec_aux(eit_ind(i)) + tilavuus(brain_ind(i))*eit_count(eit_ind(i));
+%tilavuus_vec_aux(dof_ind(i)) = tilavuus_vec_aux(dof_ind(i)) + tilavuus(brain_ind(i))*dof_count(dof_ind(i));
 
 if mod(i,floor(K/50))==0 
 time_val = toc;
@@ -679,8 +680,7 @@ close(h);
 
 L_eit = L_eit_aux;
  
- dipole_locations = (nodes(tetrahedra(source_ind,1),:) + nodes(tetrahedra(source_ind,2),:) + nodes(tetrahedra(source_ind,3),:)+ nodes(tetrahedra(source_ind,4),:))/4;
- dipole_directions = ones(size(dipole_locations));
+ dof_directions = ones(size(dof_positions));
 
 end
 
