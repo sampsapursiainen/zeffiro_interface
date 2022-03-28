@@ -415,10 +415,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integral START
-%Tässä kannattaisi rakentaa kolme matriisia. Massamatriisi kertaa diagonaali painotettuna impedanssidiagonaalilla ja 
-%reunaintegraalimatriisi painotettuna impedanssidiagonaalilla. Huom massamatriisista on sekä piste- että pinta-alaan perustuvat 
-%versiot
+%Sampsa 28.3.2022: zef_build_electrodes START
+
 
 if isequal(electrode_model,'CEM')
     
@@ -473,7 +471,7 @@ if isequal(electrode_model,'CEM')
 
 end
 
-%Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integralEND 
+%Sampsa 28.3.2022: zef_build_electrodes END 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
