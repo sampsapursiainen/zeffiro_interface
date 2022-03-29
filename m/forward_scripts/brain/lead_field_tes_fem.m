@@ -465,77 +465,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Sampsa 28.3.2022: zef_gradient_field (sigma kannattaa antaa varargin muuttujana) START
 
-Grad_1 = spalloc(K,N,0);
-Grad_2 = spalloc(K,N,0);
-Grad_3 = spalloc(K,N,0);
 
-ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
+[Grad1, Grad_2, Grad_3] = zef_tetra_gradient_field(nodes, tetrahedra, sigma_tetrahedra, brain_ind, K, N);
 
- for i = 1 : 4
-
-    grad_1 = cross(nodes(tetrahedra(brain_ind,ind_m(i,2)),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)', nodes(tetrahedra(brain_ind,ind_m(i,3)),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)')/6;
-    grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(brain_ind,i),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)'))),3,1).*grad_1;
-    grad_1 = grad_1 ./ tilavuus(brain_ind);
-
-    entry_vec_1 = zeros(1,size(brain_ind,1));
-    entry_vec_2 = zeros(1,size(brain_ind,1));
-    entry_vec_3 = zeros(1,size(brain_ind,1));
-    for k = 1 : 6
-        switch k
-            case 1
-                k_1 = 1;
-                k_2 = 1;
-            case 2
-                k_1 = 2;
-                k_2 = 2;
-            case 3
-                k_1 = 3;
-                k_2 = 3;
-            case 4
-                k_1 = 1;
-                k_2 = 2;
-            case 5
-                k_1 = 1;
-                k_2 = 3;
-            case 6
-                k_1 = 2;
-                k_2 = 3;
-        end
-        if k <= 3
-            switch k_1
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-            end
-        else
-            switch k_1
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-            end
-            switch k_2
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-            end
-        end
-    end
-    Grad_1 = Grad_1 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_1,K,N);
-    Grad_2 = Grad_2 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_2,K,N);
-    Grad_3 = Grad_3 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_3,K,N);
-end
 
 %Sampsa 28.3.2022: zef_gradient_field (sigma kannattaa antaa varargin muuttujana) END
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
