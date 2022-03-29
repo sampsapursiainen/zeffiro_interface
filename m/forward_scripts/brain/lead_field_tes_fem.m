@@ -466,7 +466,7 @@ end
 %Sampsa 28.3.2022: zef_gradient_field (sigma kannattaa antaa varargin muuttujana) START
 
 
-[Grad1, Grad_2, Grad_3] = zef_tetra_gradient_field(nodes, tetrahedra, sigma_tetrahedra, brain_ind, K, N);
+[Grad_1, Grad_2, Grad_3] = zef_tetra_gradient_field(nodes, tetrahedra, tilavuus, sigma_tetrahedra, brain_ind, K, N);
 
 
 %Sampsa 28.3.2022: zef_gradient_field (sigma kannattaa antaa varargin muuttujana) END
