@@ -419,7 +419,7 @@ end
 
 if isequal(electrode_model,'CEM')
 
-    [A, B, C] = zef_build_electrodes(A, ele_ind, N, L);
+    [A, B, C] = zef_build_electrodes(nodes, impedance_vec, impedance_inf, ele_ind, A, N, L);
 
 end
 
