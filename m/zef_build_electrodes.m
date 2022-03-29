@@ -1,10 +1,10 @@
-function [A, B, C] = zef_build_electrodes(A, ele_ind, N, L)
+function [A, B, C] = zef_build_electrodes(nodes, impedance_vec, impedance_inf, ele_ind, A, N, L)
 
-% zef_build_elecrodes: constructs the matrices B and C from a given stiffness
-% matrix A and electrode indices. Notice that the stiffness matrix A is also
-% returned from the function, to avoid the copy-on-write behaviour of Matlab
-% functions due to assignment in place [†]. In other words, the function needs
-% to be called with
+% zef_build_elecrodes: constructs the matrices B and C from given nodes,
+% impedances, a stiffness matrix A and electrode indices. Notice that the
+% stiffness matrix A is also returned from the function, to avoid the
+% copy-on-write behaviour of Matlab functions due to assignment in place [†].
+% In other words, the function needs to be called with
 %
 %     [A, B, C] = zef_build_elecrodes(A, ele_ind, N, L);
 %
