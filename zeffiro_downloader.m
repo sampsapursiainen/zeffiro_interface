@@ -53,4 +53,6 @@ aux_row = find(ismember(ini_cell(:,3),'profile_name'));
 ini_cell{aux_row,2} = profile_name;
 writecell(ini_cell,[program_path filesep 'profile' filesep 'zeffiro_interface.ini'],'FileType','text');
 
+zeffiro_setup;
+
 end
