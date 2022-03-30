@@ -221,49 +221,13 @@ A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 %reunaintegraalimatriisi painotettuna impedanssidiagonaalilla. Huom massamatriisista on sekä piste- että pinta-alaan perustuvat
 %versiot
 
-
-if isequal(electrode_model,'CEM')
-
-    [A, B, C] = zef_build_electrodes(nodes, impedance_vec, impedance_inf, ele_ind, A, N, L);
-
-end
+[A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A, N, L);
 
 %Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integral END
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 22.06.2020 Start
-if isequal(electrode_model,'PEM')
-
-    if impedance_inf == 0
-
-    % B and C
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-    entry_vec = (1./impedance_vec(ele_ind(:,1)));
-     for i = 1 : L
-    B(ele_ind(i),i) = entry_vec;
-    A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
-     end
-    C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
-
-
-    else
-
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-     for i = 1 : L
-    B(ele_ind(i),i) = 1;
-     end
-%Dirichlet boundary condition for a single node.
-    A(ele_ind(1),:) = 0;
-    A(:,ele_ind(1)) = 0;
-    A(ele_ind(1),ele_ind(1)) = 1;
-    C = eye(L);
-
-    end
-end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
