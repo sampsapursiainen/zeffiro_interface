@@ -1,4 +1,4 @@
-function [T, Aux_mat] = zef_transfer_matrix(A, B, C, N, L, permutation, precond, impedance_vec, impedance_inf)
+function [T, Aux_mat] = zef_transfer_matrix(A, B, C, N, L, electrode_model, permutation, precond, impedance_vec, impedance_inf, tol_val, m_max)
 
 % zef_transfer_matrix: builds a transfer matrix T and an auxiliary matrix
 % Aux_mat from a given stiffness matrix A, matrices B and C, sizes N and L, a
@@ -144,7 +144,6 @@ function [T, Aux_mat] = zef_transfer_matrix(A, B, C, N, L, permutation, precond,
                 b = zeros(size(b));
             end
 
-
             %Iterate
 
             x_block_cell = cell(0);
@@ -221,4 +220,8 @@ function [T, Aux_mat] = zef_transfer_matrix(A, B, C, N, L, permutation, precond,
 
         end
     end
+
+    waitbar(1,wb);
+    close(wb);
+
 end
