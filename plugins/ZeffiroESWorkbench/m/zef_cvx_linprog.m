@@ -1,5 +1,5 @@
 function [x, flag_val] = zef_cvx_linprog(z,A,b,varargin)
-%Finds the minimum  min_x z'*x with the constraint A x  - b <= 0
+%Finds the minimum of z'*x with respect to x and with the constraint A x  - b <= 0
 %Outputs: x (size: [n x 1]), flag_val (1 if the solution was found -2
 %otherwise)
 %Arguments: z (size: [n x 1]), A (size: [m x n]), b
