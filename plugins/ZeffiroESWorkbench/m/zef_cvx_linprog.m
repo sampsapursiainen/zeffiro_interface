@@ -1,4 +1,13 @@
-function [x, flag_val] = zef_cvx_linprog(z,L,b,varargin)
+function [x, flag_val] = zef_cvx_linprog(z,A,b,varargin)
+%Finds the minimum  min_x z'*x with the constraint A x  - b <= 0
+%Outputs: x (size: [n x 1]), flag_val (1 if the solution was found -2
+%otherwise)
+%Arguments: z (size: [n x 1]), A (size: [m x n]), b
+%(size: [m x 1])
+%Variable argument list: max_1_norm (size: [1 x 1], maximum 1-norm for x), max_infty_norm (size: [1 x 1], maximum infinity norm for x) 
+
+
+
 
 opts = [];
 
@@ -16,7 +25,7 @@ if not(isempty(varargin))
 end
 
 flag_val = -2;
-n = size(L,2);
+n = size(A,2);
 
 try
 cvx_solver('sdpt3')
@@ -29,7 +38,7 @@ cvx_begin quiet
 variable x(n)
 minimize(sum(z.*x))
 subject to: 
-L*x - b <= 0;
+A*x - b <= 0;
 if not(isempty(max_1_norm))
 sum(abs(x)) <= max_1_norm;
 end
