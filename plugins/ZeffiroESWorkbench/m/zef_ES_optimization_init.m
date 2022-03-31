@@ -1,26 +1,26 @@
-if not(isfield(zef,'ES_L2_reg_ratio_UL'))
-    zef.ES_L2_reg_ratio_UL = 1E3;
+if not(isfield(zef,'ES_L2_UB'))
+    zef.ES_L2_UB = 1E3;
 end
-if not(isfield(zef,'ES_L2_reg_ratio_LL'))
-    zef.ES_L2_reg_ratio_LL = 1E-3;
+if not(isfield(zef,'ES_L2_LB'))
+    zef.ES_L2_LB = 1E-3;
 end
 if not(isfield(zef,'ES_separation_angle'))
     zef.ES_separation_angle = 45;
 end
-if not(isfield(zef,'ES_effectivennz'))
-    zef.ES_effectivennz = 8;
+if not(isfield(zef,'ES_effective_nnz'))
+    zef.ES_effective_nnz = 8;
 end
-if not(isfield(zef,'ES_objfun'))
-    zef.ES_objfun = 3;
+if not(isfield(zef,'ES_obj_fun'))
+    zef.ES_obj_fun = 3;
 end
-if not(isfield(zef,'ES_objfun_2'))
-    zef.ES_objfun_2 = 4;
+if not(isfield(zef,'ES_obj_fun_2'))
+    zef.ES_obj_fun_2 = 4;
 end
-if not(isfield(zef,'ES_solvermaximumcurrent'))
-    zef.ES_solvermaximumcurrent = 0.004;
+if not(isfield(zef,'ES_total_max_current'))
+    zef.ES_total_max_current = 0.004;
 end
-if not(isfield(zef,'ES_relativeweightnnz'))
-    zef.ES_relativeweightnnz = 100;
+if not(isfield(zef,'ES_relative_weight_nnz'))
+    zef.ES_relative_weight_nnz = 100;
 end
 if not(isfield(zef,'ES_fixed_active_electrodes'))
     zef.ES_fixed_active_electrodes = 0;
@@ -37,17 +37,17 @@ end
 if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
-if not(isfield(zef,'ES_optimizer_tolerance'))
-    zef.ES_optimizer_tolerance = 1E-06;
+if not(isfield(zef,'ES_beta'))
+    zef.ES_beta = 1E-06;
 end
-if not(isfield(zef,'ES_optimizer_tolerance_max'))
-    zef.ES_optimizer_tolerance_max = 1E-2;
+if not(isfield(zef,'ES_beta_max'))
+    zef.ES_beta_max = 1E-2;
 end
-if not(isfield(zef,'ES_regularization_parameter'))
-    zef.ES_regularization_parameter = 1e-6;
+if not(isfield(zef,'ES_alpha'))
+    zef.ES_alpha = 1E-6;
 end
-if not(isfield(zef,'ES_regularization_parameter_max'))
-    zef.ES_regularization_parameter_max = 1e15;
+if not(isfield(zef,'ES_alpha_max'))
+    zef.ES_alpha_max = 1E15;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];
@@ -58,8 +58,8 @@ end
 if not(isfield(zef,'ES_negativity_constraint'))
     zef.ES_negativity_constraint = [];
 end
-if not(isfield(zef,'ES_maximum_current'))
-    zef.ES_maximum_current = 0.002;
+if not(isfield(zef,'ES_max_current_channel'))
+    zef.ES_max_current_channel = 0.002;
 end
 if not(isfield(zef,'ES_cortex_thickness'))
     zef.ES_cortex_thickness = 4;
@@ -76,14 +76,14 @@ end
 if not(isfield(zef,'ES_step_size'))
     zef.ES_step_size = 10;
 end
-if not(isfield(zef,'ES_scoredose'))
-    zef.ES_scoredose = 8;
+if not(isfield(zef,'ES_score_dose'))
+    zef.ES_score_dose = 8;
 end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
-if not(isfield(zef,'ES_delta_param'))
-    zef.ES_delta_param = 0.1;
+if not(isfield(zef,'ES_delta'))
+    zef.ES_delta = 0.1;
 end
 if not(isfield(zef,'ES_L1_iter'))
     zef.ES_L1_iter = 3;

@@ -19,11 +19,11 @@ I2 = evalin('base','zef.ES_active_electrodes');
 
 J = evalin('base','zef.ES_separation_angle');
 K = evalin('base','zef.h_ES_search_method.Items{zef.ES_search_method}');
-L = evalin('base','zef.ES_maximum_current');
+L = evalin('base','zef.ES_max_current_channel');
 
-M = evalin('base','zef.ES_relativeweightnnz');
+M = evalin('base','zef.ES_relative_weight_nnz');
 N = evalin('base','zef.ES_cortex_thickness');
-O = evalin('base','zef.ES_solvermaximumcurrent');
+O = evalin('base','zef.ES_total_max_current');
 P = evalin('base','zef.ES_source_density');
 Q = evalin('base','zef.ES_relative_source_amplitude');
 
@@ -53,65 +53,31 @@ vec = array2table({A,B,C,D,E,F,G,H,I1,I2,J,K,L,M,N,O,P,Q}, 'VariableNames', ...
     'Source Density (A/m2)','Relative Source Amplitude'}); %Q R
 
 %% Obj Fun
-%% August version
-%C_idx = find(C <= evalin('base','zef.ES_solvermaximumcurrent'));
-%D_idx = (1:length(D(:)))';
 vec_aux = vec(1,[2,5,6,8]);
 
-switch evalin('base','zef.ES_objfun')
+switch evalin('base','zef.ES_obj_fun')
     case {1,3,4}
-        obj_funct   = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun')});
+        obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
         if evalin('base','zef.ES_acceptable_threshold') <= 100
             obj_funct_threshold = obj_funct;
-            %[Idx] = find(abs(obj_funct_threshold(:)) <= 100/evalin('base','zef.ES_acceptable_threshold').*min(abs(obj_funct_threshold(:))))
-            [Idx] = find(abs(obj_funct_threshold(:)) <= min( obj_funct_threshold(:) )+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+            [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
         end
     case 2
-        obj_funct   = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun')});
+        obj_funct   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun')});
         if evalin('base','zef.ES_acceptable_threshold') <= 100
             obj_funct_threshold = obj_funct;
-            %[Idx] = find(abs(obj_funct_threshold(:)) >= max(abs(obj_funct_threshold(:)))./(100/evalin('base','zef.ES_acceptable_threshold')))
-            [Idx] = find(obj_funct_threshold(:) >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:)) ).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+            [Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
         end
 end
 
-switch evalin('base','zef.ES_objfun_2')
+switch evalin('base','zef.ES_obj_fun_2')
     case {1,3,4}
-        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun_2')});
+        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
         [~,Idx_2] = min(obj_funct_2(Idx));
     case 2
-        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun_2')});
+        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
         [~,Idx_2] = max(obj_funct_2(Idx));
 end
 
 [sr, sc] = ind2sub(size(obj_funct_2),Idx(Idx_2));
-%[sr, sc] = find(obj_funct);
-
-% Accept_idx = intersect(C_idx,D_idx);
-% [~,star_idx] = min(objfun(Accept_idx));
-% star_idx = Accept_idx(star_idx);
-% Accept_idx = intersect(star_idx,D_idx);
-% [sr, sc] = ind2sub(size(D), Accept_idx);
-%% July version
-% if evalin('base','zef.ES_solvermaximumcurrent_checkbox') == 0
-%     C_idx = find(C <= evalin('base','zef.ES_solvermaximumcurrent'));
-% else
-%     C_idx = (1:length(C(:)))';
-% end
-%
-% if evalin('base','zef.ES_scoredose_checkbox') == 0
-%     D_idx = find(D <= evalin('base','zef.ES_scoredose'));
-%     %D_idx = find(D == evalin('base','zef.ES_scoredose'));
-% else
-%     D_idx = (1:length(D(:)))';
-% end
-%
-% vec_aux = vec(1,[2,5,6,8]);
-% objfun = cell2mat(vec_aux{1,evalin('base','zef.ES_objfun')});
-%
-% Accept_idx = intersect(C_idx,D_idx);
-% [~,star_idx] = min(objfun(Accept_idx));
-% star_idx = Accept_idx(star_idx);
-% Accept_idx = intersect(star_idx,D_idx);
-% [sr, sc] = ind2sub(size(D), Accept_idx);
 end

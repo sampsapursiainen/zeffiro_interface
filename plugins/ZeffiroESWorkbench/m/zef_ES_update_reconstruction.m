@@ -18,3 +18,4 @@ switch evalin('base','zef.ES_search_method')
         zef.reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
 end
 zef_visualize_surfaces;
+clear sr sc
