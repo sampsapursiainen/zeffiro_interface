@@ -61,7 +61,7 @@ else
     end
 
     y(intersect(current_score_ind_positive,current_score_ind_negative)) = 0;
-
+    
 end
 
 end
