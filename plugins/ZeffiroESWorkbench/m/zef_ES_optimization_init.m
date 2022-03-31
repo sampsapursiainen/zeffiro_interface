@@ -65,7 +65,7 @@ if not(isfield(zef,'ES_cortex_thickness'))
     zef.ES_cortex_thickness = 4;
 end
 if not(isfield(zef,'ES_relative_source_amplitude'))
-    zef.ES_relative_source_amplitude = 1;
+    zef.ES_relative_source_amplitude = 100; % 100%
 end
 if not(isfield(zef,'ES_source_density'))
     zef.ES_source_density = 0.77;
