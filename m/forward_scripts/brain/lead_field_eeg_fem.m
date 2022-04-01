@@ -157,158 +157,17 @@ if iscell(elements)
 source_model = 1;
 end
 
+% Volume
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
+
+% Stiffness matrix calculation
 
 A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
 clear tilavuus ala sigma_tetrahedra;
 
-if not(isempty(prisms))
-
-ind_m = [ 4 2 3 5;
-          5 3 1 6;
-          6 1 2 4;
-          1 5 6 2;
-          2 6 4 3;
-          3 4 5 1];
-
-normal_vecs_aux = cross(nodes(prisms(:,3),:)'-nodes(prisms(:,1),:)', nodes(prisms(:,2),:)'-nodes(prisms(:,1),:)');
-ala = zeros(3,size(prisms,1));
-ala(1:2,:) = [sqrt(sum((normal_vecs_aux).^2))/2; sqrt(sum((cross(nodes(prisms(:,6),:)'-nodes(prisms(:,4),:)', nodes(prisms(:,5),:)'-nodes(prisms(:,4),:)')).^2))/2];
-ala(3,:) = sqrt(ala(1,:).*ala(2,:));
-normal_vecs_aux = normal_vecs_aux./repmat((2*ala(1,:)),3,1);
-korkeus = abs(dot(nodes(prisms(:,4),:)'-nodes(prisms(:,1),:)', normal_vecs_aux));
-
-int_coeffs_1 = [1/5 1/30 1/10 ; 1/20 1/20 1/15];
-int_coeffs_2 = [1/18 1/18 1/18 ; 1/36 1/36 1/36];
-int_coeffs_3 = [1/12 1/36 1/18];
-coeff_ind_1 =            [1 1 1 2 2 2;
-                          1 1 1 2 2 2;
-                          1 1 1 2 2 2;
-                          2 2 2 1 1 1;
-                          2 2 2 1 1 1;
-                          2 2 2 1 1 1];
-coeff_ind_2 =            [1 2 2 1 2 2;
-                          2 1 2 2 1 2;
-                          2 2 1 2 2 1;
-                          1 2 2 1 2 2;
-                          2 1 2 2 1 2;
-                          2 2 1 2 2 1];
-ala_ind =                [1 1 1 2 2 2;
-                          1 1 1 2 2 2;
-                          1 1 1 2 2 2;
-                          2 2 2 2 2 2;
-                          2 2 2 2 2 2;
-                          2 2 2 2 2 2];
-
-for i = 1 : 6
-
-grad_11 = repmat(1./(dot(normal_vecs_aux,(nodes(prisms(:,i),:)'-nodes(prisms(:,ind_m(i,1)),:)'))),3,1).*normal_vecs_aux;
-grad_12 = cross(nodes(prisms(:,ind_m(i,3)),:)'-nodes(prisms(:,ind_m(i,2)),:)', nodes(prisms(:,ind_m(i,4)),:)'-nodes(prisms(:,ind_m(i,2)),:)');
-grad_12 = repmat(1./dot(nodes(prisms(:,i),:)' - nodes(prisms(:,ind_m(i,2)),:)',grad_12),3,1).*grad_12;
-
-for j = i : 6
-
-if i == j
-grad_21 = grad_11;
-grad_22 = grad_12;
-else
-grad_21 = repmat(1./(dot(normal_vecs_aux,(nodes(prisms(:,j),:)'-nodes(prisms(:,ind_m(j,1)),:)'))),3,1).*normal_vecs_aux;
-grad_22 = cross(nodes(prisms(:,ind_m(j,3)),:)'- nodes(prisms(:,ind_m(j,2)),:)', nodes(prisms(:,ind_m(j,4)),:)'-nodes(prisms(:,ind_m(j,2)),:)');
-grad_22 = repmat(1./dot(nodes(prisms(:,j),:)' - nodes(prisms(:,ind_m(j,2)),:)',grad_22),3,1).*grad_22;
-end
-
-entry_vec = zeros(1,size(prisms,1));
-
-for ell = 1 : 4
-
-    grad_vec_aux = zeros(size(entry_vec));
-
-    for k = 1 : 6
-   switch k
-       case 1
-           k_1 = 1;
-           k_2 = 1;
-       case 2
-           k_1 = 2;
-           k_2 = 2;
-       case 3
-           k_1 = 3;
-           k_2 = 3;
-       case 4
-           k_1 = 1;
-           k_2 = 2;
-       case 5
-           k_1 = 1;
-           k_2 = 3;
-       case 6
-           k_1 = 2;
-           k_2 = 3;
-end
-
-    if k <= 3
-    switch ell
-        case 1
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*grad_11(k_1,:).*grad_21(k_2,:);
-        case 2
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*grad_11(k_1,:).*grad_22(k_2,:);
-        case 3
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*grad_12(k_1,:).*grad_21(k_2,:);
-        case 4
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*grad_12(k_1,:).*grad_22(k_2,:);
-    end
-    else
-           switch ell
-        case 1
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*(grad_11(k_1,:).*grad_21(k_2,:) + grad_11(k_2,:).*grad_21(k_1,:));
-        case 2
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*(grad_11(k_1,:).*grad_22(k_2,:) + grad_11(k_2,:).*grad_22(k_1,:));
-        case 3
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*(grad_12(k_1,:).*grad_21(k_2,:) + grad_12(k_2,:).*grad_21(k_1,:));
-        case 4
-           grad_vec_aux = grad_vec_aux + sigma_prisms(k,:).*(grad_12(k_1,:).*grad_22(k_2,:) + grad_12(k_2,:).*grad_22(k_1,:));
-    end
-  end
-
-end
-
-      switch ell
-        case 1
-           entry_vec = entry_vec + grad_vec_aux.*(int_coeffs_2(coeff_ind_2(i,j),:)*ala).*korkeus;
-        case 2
-           coeff_perm = [ala_ind(1,j) mod(ala_ind(1,j),2)+1 3];
-           entry_vec = entry_vec + grad_vec_aux.*(int_coeffs_3(coeff_perm)*ala).*korkeus;
-        case 3
-           coeff_perm = [ala_ind(1,i) mod(ala_ind(1,i),2)+1 3];
-           entry_vec = entry_vec + grad_vec_aux.*(int_coeffs_3(coeff_perm)*ala).*korkeus;
-        case 4
-            coeff_perm = [ala_ind(i,j) mod(ala_ind(i,j),2)+1 3];
-            entry_vec = entry_vec + grad_vec_aux.*(int_coeffs_1(coeff_ind_1(i,j),coeff_perm)*ala).*korkeus;
-    end
-
-end
-
-A_part = sparse(prisms(:,i),prisms(:,j), entry_vec',N,N);
-
-if i == j
-A = A + A_part;
-else
-A = A + A_part ;
-A = A + A_part';
-end
-
-end
-
-waitbar_ind = waitbar_ind + 1;
-waitbar(waitbar_ind/waitbar_length,h);
-
-end
-
-clear A_part grad_11 grad_12 grad_21 grad_22 ala korkeus prisms sigma_prisms grad_vec_aux entry_vec;
-
-end
-
+% Build electrode matrices
 
 if isequal(electrode_model,'CEM')
 
