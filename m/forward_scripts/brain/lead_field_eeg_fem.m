@@ -157,6 +157,11 @@ if iscell(elements)
 source_model = 1;
 end
 
+% Initialize wait bar
+
+h=waitbar(0,'System matrices.');
+waitbar_ind = 0;
+
 % Volume
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
