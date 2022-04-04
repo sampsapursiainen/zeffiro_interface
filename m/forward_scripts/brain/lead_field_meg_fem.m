@@ -110,14 +110,15 @@ if iscell(elements)
 source_model = 1;
 end
 
-A = spalloc(N,N,0);
+% Calculate volume tilavuus
 
-Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1);
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-                - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-                + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
-clear Aux_mat;
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
+
+% Calculate stiffness matrix A
+
+A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
+
+% Calculate MEG load vector matrix B
 
 ind_m = [ 2 3 4 ;
           3 4 1 ;
@@ -168,72 +169,6 @@ time_val = toc;
 waitbar(1,h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
 
 waitbar(0,h,'System matrices.')
-
-for i = 1 : 4
-
-grad_1 = cross(nodes(tetrahedra(:,ind_m(i,2)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)', nodes(tetrahedra(:,ind_m(i,3)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)')/2;
-grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(:,i),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)'))),3,1).*grad_1;
-
-
-
-for j = i : 4
-
-if i == j
-grad_2 = grad_1;
-else
-grad_2 = cross(nodes(tetrahedra(:,ind_m(j,2)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)', nodes(tetrahedra(:,ind_m(j,3)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)')/2;
-grad_2 = repmat(sign(dot(grad_2,(nodes(tetrahedra(:,j),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)'))),3,1).*grad_2;
-end
-
-entry_vec = zeros(1,size(tetrahedra,1));
-for k = 1 : 6
-   switch k
-       case 1
-           k_1 = 1;
-           k_2 = 1;
-       case 2
-           k_1 = 2;
-           k_2 = 2;
-       case 3
-           k_1 = 3;
-           k_2 = 3;
-       case 4
-           k_1 = 1;
-           k_2 = 2;
-       case 5
-           k_1 = 1;
-           k_2 = 3;
-       case 6
-           k_1 = 2;
-           k_2 = 3;
-end
-
-if k <= 3
-entry_vec = entry_vec + sigma_tetrahedra(k,:).*grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
-else
-entry_vec = entry_vec + sigma_tetrahedra(k,:).*(grad_1(k_1,:).*grad_2(k_2,:) + grad_1(k_2,:).*grad_2(k_1,:))./(9*tilavuus);
-end
-
-end
-
-A_part = sparse(tetrahedra(:,i),tetrahedra(:,j), entry_vec',N,N);
-clear entry_vec;
-
-if i == j
-A = A + A_part;
-else
-A = A + A_part ;
-A = A + A_part';
-end
-
-end
-
-waitbar_ind = waitbar_ind + 1;
-waitbar(waitbar_ind/waitbar_length,h);
-
-end
-
-clear A_part grad_1 grad_2 cross_mat_aux sensor_mat_aux cross_mat tetra_c dot_vec tilavuus ala sigma_tetrahedra;
 
 if not(isempty(prisms))
 
