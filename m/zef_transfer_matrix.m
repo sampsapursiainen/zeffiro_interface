@@ -139,7 +139,6 @@ function [T, Aux_mat, A] = zef_transfer_matrix(A, B, C, N, L, electrode_model, p
             b = full(B(:,block_ind));
             tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 
-
             if isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
                 b = zeros(size(b));
             end
@@ -189,7 +188,6 @@ function [T, Aux_mat, A] = zef_transfer_matrix(A, B, C, N, L, electrode_model, p
                 x_block(:,block_iter_sub) = x_block_cell{block_iter};
                 relres_vec(block_iter_sub) = relres_cell{block_iter};
             end
-
 
             %Substitute matrices
 
