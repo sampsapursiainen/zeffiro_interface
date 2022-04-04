@@ -187,11 +187,11 @@ clear electrodes;
 h = waitbar(0,'System matrices.');
 waitbar_ind = 0;
 
-% Get the total volume 𝑉 of the domain Ω.
+% Get the total volume tilavuus of the domain Ω.
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
-% Calculate stiffness matrix
+% Calculate stiffness matrix A
 
 A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
@@ -211,7 +211,7 @@ A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
 [Grad_1, Grad_2, Grad_3] = zef_tetra_gradient_field(nodes, tetrahedra, tilavuus, sigma_tetrahedra, brain_ind, K, N);
 
-% Calculate transfet matrix R_tes based on A
+% Calculate transfer matrix R_tes based on A
 
 [R_tes, Aux_mat, A] = zef_transfer_matrix( ...
     A                                      ...
