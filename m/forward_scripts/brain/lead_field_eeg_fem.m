@@ -172,92 +172,9 @@ A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
 clear tilavuus ala sigma_tetrahedra;
 
-% Build electrode matrices
+% Build electrode matrices B and C based on A
 
-if isequal(electrode_model,'CEM')
-
-    I_triangles = find(ele_ind(:,4)>0);
-    ala = zeros(1,size(ele_ind,1));
-    ala(I_triangles) = sqrt(sum(cross(nodes(ele_ind(I_triangles,3),:)'-nodes(ele_ind(I_triangles,2),:)', nodes(ele_ind(I_triangles,4),:)'-nodes(ele_ind(I_triangles,2),:)').^2))/2;
-
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-
-    for ele_loop_ind  = 1 : L
-        I = find(ele_ind(:,1) == ele_loop_ind);
-        sum_ala = sum(ala(I));
-        if sum_ala > 0
-        impedance_vec(ele_loop_ind) = impedance_vec(ele_loop_ind)*sum_ala;
-        else
-         for i = 1 : length(I)
-             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) -ele_ind(I(i),3)./impedance_vec(ele_loop_ind);
-            for j = 1 : length(I)
-                    A(ele_ind(I(i),2),ele_ind(I(j),2)) = A(ele_ind(I(i),2),ele_ind(I(j),2)) + ele_ind(I(i),3)*ele_ind(I(j),3)./impedance_vec(ele_loop_ind);
-            end
-         end
-        C(ele_loop_ind, ele_loop_ind) = 1./impedance_vec(ele_loop_ind);
-        end
-    end
-
-    entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))).*ala(I_triangles)';
-    for i = 1 : 3
-        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), -(1/3)*entry_vec, N, L);
-    end
-    if impedance_inf == 0
-        for i = 1 : 3
-            for j = i : 3
-                if i == j
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/6)*entry_vec,N,N);
-                    A = A + A_part;
-                else
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/12)*entry_vec,N,N);
-                    A = A + A_part;
-                    A = A + A_part';
-                end
-            end
-        end
-    else
-
-        ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
-
-I_aux_1 = ele_ind(find(ele_ind(:,1) == 1),2:4);
-I_aux_2 = find(sum(ismember(tetrahedra,I_aux_1),2));
-faces_aux_1 = sort([tetrahedra(I_aux_2,ind_m(1,:)) ; tetrahedra(I_aux_2,ind_m(2,:)); tetrahedra(I_aux_2,ind_m(3,:));tetrahedra(I_aux_2,ind_m(4,:))],2);
-I_aux_2 = find(sum(ismember(prisms,I_aux_1),2));
-faces_aux_2 = [];
-if not(isempty(prisms))
-faces_aux_2 = sort([prisms(I_aux_2,[1 2 3]) ; prisms(I_aux_2,[4 5 6])],2);
-end
-faces_aux = sortrows([faces_aux_1 ; faces_aux_2]);
-faces_aux = faces_aux(find(sum(ismember(faces_aux,I_aux_1),2)),:);
-I_aux_2 = find(sum(faces_aux(1:end-1,:)-faces_aux(2:end,:),2)==0);
-faces_aux_2 = setdiff(faces_aux,faces_aux(I_aux_2,:),'rows');
-I_aux_1 = setdiff(reshape(faces_aux,size(faces_aux,1)*3,1),reshape(ele_ind(:,2:4),size(ele_ind,1)*3,1));
-zero_ind = I_aux_1(1);
-
-clear I_aux_1 I_aux_2 faces_aux_1 faces_aux_2 faces_aux;
-
-A(:,zero_ind) = 0;
-A(zero_ind,:) = 0;
-A(zero_ind,zero_ind) =  1;
-
-    end
-
-    C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
-
-end
-
-
-if isequal(electrode_model,'PEM')
-
-A(ele_ind(1),:) = 0;
-A(:,ele_ind(1)) = 0;
-A(ele_ind(1),ele_ind(1)) = 1;
-
-end
+[A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A, N, L);
 
 % Transfer matrix with preconditioned conjugate gradient (PCG) iteration
 
