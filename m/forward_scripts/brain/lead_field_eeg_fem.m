@@ -259,6 +259,8 @@ A(ele_ind(1),ele_ind(1)) = 1;
 
 end
 
+% Transfer matrix with preconditioned conjugate gradient (PCG) iteration
+
 if isequal(permutation,'symamd')
 perm_vec = symamd(A)';
 elseif isequal(permutation,'symmmd')
