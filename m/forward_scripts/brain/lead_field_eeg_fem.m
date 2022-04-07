@@ -157,169 +157,26 @@ if iscell(elements)
 source_model = 1;
 end
 
-
-A = spalloc(N,N,0);
-
-Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1);
-ind_m = [1 4 7; 2 5 8 ; 3 6 9];
-tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-                - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-                + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
-clear Aux_mat;
-
-ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
+% Initialize wait bar
 
 h=waitbar(0,'System matrices.');
 waitbar_ind = 0;
 
-for i = 1 : 4
+% Volume
 
-grad_1 = cross(nodes(tetrahedra(:,ind_m(i,2)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)', nodes(tetrahedra(:,ind_m(i,3)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)')/2;
-grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(:,i),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)'))),3,1).*grad_1;
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
-for j = i : 4
+% Stiffness matrix calculation
 
-if i == j
-grad_2 = grad_1;
-else
-grad_2 = cross(nodes(tetrahedra(:,ind_m(j,2)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)', nodes(tetrahedra(:,ind_m(j,3)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)')/2;
-grad_2 = repmat(sign(dot(grad_2,(nodes(tetrahedra(:,j),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)'))),3,1).*grad_2;
-end
+A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
-entry_vec = zeros(1,size(tetrahedra,1));
-for k = 1 : 6
-   switch k
-       case 1
-           k_1 = 1;
-           k_2 = 1;
-       case 2
-           k_1 = 2;
-           k_2 = 2;
-       case 3
-           k_1 = 3;
-           k_2 = 3;
-       case 4
-           k_1 = 1;
-           k_2 = 2;
-       case 5
-           k_1 = 1;
-           k_2 = 3;
-       case 6
-           k_1 = 2;
-           k_2 = 3;
-end
+clear tilavuus ala sigma_tetrahedra;
 
-if k <= 3
-entry_vec = entry_vec + sigma_tetrahedra(k,:).*grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
-else
-entry_vec = entry_vec + sigma_tetrahedra(k,:).*(grad_1(k_1,:).*grad_2(k_2,:) + grad_1(k_2,:).*grad_2(k_1,:))./(9*tilavuus);
-end
+% Build electrode matrices B and C based on A
 
-end
+[A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A, N, L);
 
-A_part = sparse(tetrahedra(:,i),tetrahedra(:,j), entry_vec',N,N);
-clear entry_vec;
-
-if i == j
-A = A + A_part;
-else
-A = A + A_part ;
-A = A + A_part';
-end
-
-end
-
-waitbar_ind = waitbar_ind + 1;
-waitbar(waitbar_ind/waitbar_length,h);
-
-end
-
-clear A_part grad_1 grad_2 tilavuus ala sigma_tetrahedra;
-
-if isequal(electrode_model,'CEM')
-
-    I_triangles = find(ele_ind(:,4)>0);
-    ala = zeros(1,size(ele_ind,1));
-    ala(I_triangles) = sqrt(sum(cross(nodes(ele_ind(I_triangles,3),:)'-nodes(ele_ind(I_triangles,2),:)', nodes(ele_ind(I_triangles,4),:)'-nodes(ele_ind(I_triangles,2),:)').^2))/2;
-
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-
-    for ele_loop_ind  = 1 : L
-        I = find(ele_ind(:,1) == ele_loop_ind);
-        sum_ala = sum(ala(I));
-        if sum_ala > 0
-        impedance_vec(ele_loop_ind) = impedance_vec(ele_loop_ind)*sum_ala;
-        else
-         for i = 1 : length(I)
-             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) -ele_ind(I(i),3)./impedance_vec(ele_loop_ind);
-            for j = 1 : length(I)
-                    A(ele_ind(I(i),2),ele_ind(I(j),2)) = A(ele_ind(I(i),2),ele_ind(I(j),2)) + ele_ind(I(i),3)*ele_ind(I(j),3)./impedance_vec(ele_loop_ind);
-            end
-         end
-        C(ele_loop_ind, ele_loop_ind) = 1./impedance_vec(ele_loop_ind);
-        end
-    end
-
-    entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))).*ala(I_triangles)';
-    for i = 1 : 3
-        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), -(1/3)*entry_vec, N, L);
-    end
-    if impedance_inf == 0
-        for i = 1 : 3
-            for j = i : 3
-                if i == j
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/6)*entry_vec,N,N);
-                    A = A + A_part;
-                else
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/12)*entry_vec,N,N);
-                    A = A + A_part;
-                    A = A + A_part';
-                end
-            end
-        end
-    else
-
-        ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
-
-I_aux_1 = ele_ind(find(ele_ind(:,1) == 1),2:4);
-I_aux_2 = find(sum(ismember(tetrahedra,I_aux_1),2));
-faces_aux_1 = sort([tetrahedra(I_aux_2,ind_m(1,:)) ; tetrahedra(I_aux_2,ind_m(2,:)); tetrahedra(I_aux_2,ind_m(3,:));tetrahedra(I_aux_2,ind_m(4,:))],2);
-I_aux_2 = find(sum(ismember(prisms,I_aux_1),2));
-faces_aux_2 = [];
-faces_aux = sortrows([faces_aux_1 ; faces_aux_2]);
-faces_aux = faces_aux(find(sum(ismember(faces_aux,I_aux_1),2)),:);
-I_aux_2 = find(sum(faces_aux(1:end-1,:)-faces_aux(2:end,:),2)==0);
-faces_aux_2 = setdiff(faces_aux,faces_aux(I_aux_2,:),'rows');
-I_aux_1 = setdiff(reshape(faces_aux,size(faces_aux,1)*3,1),reshape(ele_ind(:,2:4),size(ele_ind,1)*3,1));
-zero_ind = I_aux_1(1);
-
-clear I_aux_1 I_aux_2 faces_aux_1 faces_aux_2 faces_aux;
-
-A(:,zero_ind) = 0;
-A(zero_ind,:) = 0;
-A(zero_ind,zero_ind) =  1;
-
-    end
-
-    C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
-
-end
-
-
-if isequal(electrode_model,'PEM')
-
-A(ele_ind(1),:) = 0;
-A(:,ele_ind(1)) = 0;
-A(ele_ind(1),ele_ind(1)) = 1;
-
-end
+% Transfer matrix with preconditioned conjugate gradient (PCG) iteration
 
 if isequal(permutation,'symamd')
 perm_vec = symamd(A)';
@@ -765,5 +622,3 @@ end
 waitbar(1,h);
 
 close(h);
-
-

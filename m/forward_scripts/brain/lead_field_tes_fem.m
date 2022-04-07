@@ -182,469 +182,64 @@ K = length(brain_ind);
 
 clear electrodes;
 
-% A
-A = spalloc(N,N,0);
-Aux_mat = [nodes(tetrahedra(:,1),:)'; nodes(tetrahedra(:,2),:)'; nodes(tetrahedra(:,3),:)'] - repmat(nodes(tetrahedra(:,4),:)',3,1);
+% Initialize progress bar
 
-ind_m = [ 1 4 7;
-          2 5 8;
-          3 6 9];
-
-tilavuus = abs(Aux_mat(ind_m(1,1),:).*(Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,2),:)) ...
-                - Aux_mat(ind_m(1,2),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,3),:)-Aux_mat(ind_m(2,3),:).*Aux_mat(ind_m(3,1),:)) ...
-                + Aux_mat(ind_m(1,3),:).*(Aux_mat(ind_m(2,1),:).*Aux_mat(ind_m(3,2),:)-Aux_mat(ind_m(2,2),:).*Aux_mat(ind_m(3,1),:)))/6;
-
-clear Aux_mat;
-
-ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
 h = waitbar(0,'System matrices.');
 waitbar_ind = 0;
 
-for i = 1 : 4
-    grad_1 = cross(nodes(tetrahedra(:,ind_m(i,2)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)', nodes(tetrahedra(:,ind_m(i,3)),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)')/2;
-    grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(:,i),:)'-nodes(tetrahedra(:,ind_m(i,1)),:)'))),3,1).*grad_1;
-    for j = i : 4
-        if i == j
-            grad_2 = grad_1;
-        else
-            grad_2 = cross(nodes(tetrahedra(:,ind_m(j,2)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)', nodes(tetrahedra(:,ind_m(j,3)),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)')/2;
-            grad_2 = repmat(sign(dot(grad_2,(nodes(tetrahedra(:,j),:)'-nodes(tetrahedra(:,ind_m(j,1)),:)'))),3,1).*grad_2;
-        end
-        entry_vec = zeros(1,size(tetrahedra,1));
-        for k = 1 : 6
-           switch k
-               case 1
-                   k_1 = 1;
-                   k_2 = 1;
-               case 2
-                   k_1 = 2;
-                   k_2 = 2;
-               case 3
-                   k_1 = 3;
-                   k_2 = 3;
-               case 4
-                   k_1 = 1;
-                   k_2 = 2;
-               case 5
-                   k_1 = 1;
-                   k_2 = 3;
-               case 6
-                   k_1 = 2;
-                   k_2 = 3;
-            end
-            if k <= 3
-                entry_vec = entry_vec + sigma_tetrahedra(k,:).*grad_1(k_1,:).*grad_2(k_2,:)./(9*tilavuus);
-            else
-                entry_vec = entry_vec + sigma_tetrahedra(k,:).*(grad_1(k_1,:).*grad_2(k_2,:) + grad_1(k_2,:).*grad_2(k_1,:))./(9*tilavuus);
-            end
-        end
-        A_part = sparse(tetrahedra(:,i),tetrahedra(:,j), entry_vec',N,N);
-        clear entry_vec;
-        if i == j
-            A = A + A_part;
-        else
-            A = A + A_part ;
-            A = A + A_part';
-        end
-    end
-    waitbar_ind = waitbar_ind + 1;
-    waitbar(waitbar_ind/waitbar_length,h);
-end
-clear A_part grad_1 grad_2 ala;
+% Get the total volume tilavuus of the domain Ω.
 
-% coefficients
+tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 
-if isequal(electrode_model,'CEM')
+% Calculate stiffness matrix A
 
-    I_triangles = find(ele_ind(:,4)>0);
-    ala = zeros(1,size(ele_ind,1));
-    ala(I_triangles) = sqrt(sum(cross(nodes(ele_ind(I_triangles,3),:)'-nodes(ele_ind(I_triangles,2),:)', nodes(ele_ind(I_triangles,4),:)'-nodes(ele_ind(I_triangles,2),:)').^2))/2;
+A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
+% Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integral
+% TODO START Tässä kannattaisi rakentaa kolme matriisia. Massamatriisi kertaa
+% diagonaali painotettuna impedanssidiagonaalilla ja reunaintegraalimatriisi
+% painotettuna impedanssidiagonaalilla. Huom massamatriisista on sekä piste-
+% että pinta-alaan perustuvat versiot
 
-      for ele_loop_ind  = 1 : L
-        I = find(ele_ind(:,1) == ele_loop_ind);
-        sum_ala = sum(ala(I));
-        if sum_ala > 0
-        impedance_vec(ele_loop_ind) = impedance_vec(ele_loop_ind)*sum_ala;
-        else
-         for i = 1 : length(I)
-             B(ele_ind(I(i),2), ele_ind(I(i),1)) = B(ele_ind(I(i),2), ele_ind(I(i),1)) +ele_ind(I(i),3)./impedance_vec(ele_loop_ind);  %
-            for j = 1 : length(I)
-                    A(ele_ind(I(i),2),ele_ind(I(j),2)) = A(ele_ind(I(i),2),ele_ind(I(j),2)) + ele_ind(I(i),3)*ele_ind(I(j),3)./impedance_vec(ele_loop_ind);
-            end
-         end
-        C(ele_loop_ind, ele_loop_ind) = 1./impedance_vec(ele_loop_ind);
-        end
-       end
+% Calculate electrode matrices B and C based on A
 
-    entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))).*ala(I_triangles)';
-    for i = 1 : 3
-        B = B + sparse(ele_ind(I_triangles,i+1), ele_ind(I_triangles,1), +(1/3)*entry_vec, N, L);
-    end
-    if impedance_inf == 0
-        for i = 1 : 3
-            for j = i : 3
-                if i == j
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/6)*entry_vec,N,N);
-                    A = A + A_part;
-                else
-                    A_part = sparse(ele_ind(I_triangles,i+1),ele_ind(I_triangles,j+1),(1/12)*entry_vec,N,N);
-                    A = A + A_part;
-                    A = A + A_part';
-                end
-            end
-        end
-    else
+[A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A, N, L);
 
-        'Cannot use infinite impedance for stimulation'
-        return
-    end
+% Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integral END TODO
 
-    C = C + sparse(ele_ind(I_triangles,1), ele_ind(I_triangles,1), entry_vec, L, L);
+% Calculate gradient field
 
+[Grad_1, Grad_2, Grad_3] = zef_tetra_gradient_field(nodes, tetrahedra, tilavuus, sigma_tetrahedra, brain_ind, K, N);
 
-end
+% Calculate transfer matrix R_tes based on A
 
+[R_tes, Aux_mat, A] = zef_transfer_matrix( ...
+    A                                      ...
+,                                          ...
+    B                                      ...
+,                                          ...
+    C                                      ...
+,                                          ...
+    N                                      ...
+,                                          ...
+    L                                      ...
+,                                          ...
+    electrode_model                        ...
+,                                          ...
+    permutation                            ...
+,                                          ...
+    precond                                ...
+,                                          ...
+    impedance_vec                          ...
+,                                          ...
+    impedance_inf                          ...
+,                                          ...
+    tol_val                                ...
+,                                          ...
+    m_max                                  ...
+);
 
-
-% 22.06.2020 Start
-if isequal(electrode_model,'PEM')
-
-    if impedance_inf == 0
-
-    % B and C
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-    entry_vec = (1./impedance_vec(ele_ind(:,1)));
-     for i = 1 : L
-    B(ele_ind(i),i) = entry_vec;
-    A(ele_ind(i),ele_ind(i)) = A(ele_ind(i),ele_ind(i)) + entry_vec;
-     end
-    C = sparse(ele_ind(:,1), ele_ind(:,1), entry_vec, L, L);
-
-
-    else
-
-    B = spalloc(N,L,0);
-    C = spalloc(L,L,0);
-     for i = 1 : L
-    B(ele_ind(i),i) = 1;
-     end
-%Dirichlet boundary condition for a single node.
-    A(ele_ind(1),:) = 0;
-    A(:,ele_ind(1)) = 0;
-    A(ele_ind(1),ele_ind(1)) = 1;
-    C = eye(L);
-
-    end
-end
-
-% 23.06.2020 - Start
-Grad_1 = spalloc(K,N,0);
-Grad_2 = spalloc(K,N,0);
-Grad_3 = spalloc(K,N,0);
-
-ind_m = [ 2 3 4 ;
-          3 4 1 ;
-          4 1 2 ;
-          1 2 3 ];
-
- for i = 1 : 4
-
-    grad_1 = cross(nodes(tetrahedra(brain_ind,ind_m(i,2)),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)', nodes(tetrahedra(brain_ind,ind_m(i,3)),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)')/6;
-    grad_1 = repmat(sign(dot(grad_1,(nodes(tetrahedra(brain_ind,i),:)'-nodes(tetrahedra(brain_ind,ind_m(i,1)),:)'))),3,1).*grad_1;
-    grad_1 = grad_1 ./ tilavuus(brain_ind);
-
-    entry_vec_1 = zeros(1,size(brain_ind,1));
-    entry_vec_2 = zeros(1,size(brain_ind,1));
-    entry_vec_3 = zeros(1,size(brain_ind,1));
-    for k = 1 : 6
-        switch k
-            case 1
-                k_1 = 1;
-                k_2 = 1;
-            case 2
-                k_1 = 2;
-                k_2 = 2;
-            case 3
-                k_1 = 3;
-                k_2 = 3;
-            case 4
-                k_1 = 1;
-                k_2 = 2;
-            case 5
-                k_1 = 1;
-                k_2 = 3;
-            case 6
-                k_1 = 2;
-                k_2 = 3;
-        end
-        if k <= 3
-            switch k_1
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-            end
-        else
-            switch k_1
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_2,:);
-            end
-            switch k_2
-                case 1
-                    entry_vec_1 = entry_vec_1 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-                case 2
-                    entry_vec_2 = entry_vec_2 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-                case 3
-                    entry_vec_3 = entry_vec_3 + sigma_tetrahedra(k,brain_ind).*grad_1(k_1,:);
-            end
-        end
-    end
-    Grad_1 = Grad_1 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_1,K,N);
-    Grad_2 = Grad_2 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_2,K,N);
-    Grad_3 = Grad_3 + sparse([1:K]',tetrahedra(brain_ind,i), entry_vec_3,K,N);
-end
-
-if isequal(permutation,'symamd')
-    perm_vec = symamd(A)';
-elseif isequal(permutation,'symmmd')
-    perm_vec = symmmd(A)';
-elseif isequal(permutation,'symrcm')
-    perm_vec = symrcm(A)';
-else
-    perm_vec = [1:N]';
-end
-
-iperm_vec = sortrows([ perm_vec [1:N]' ]);
-iperm_vec = iperm_vec(:,2);
-A_aux = A(perm_vec,perm_vec);
-A = A_aux;
-
-clear A_aux A_part;
-
-waitbar(0,h,'PCG iteration.');
-
-if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
-    precond_vec = gpuArray(1./full(diag(A)));
-    A = gpuArray(A);
-
-%   if isequal(electrode_model,'CEM')
-        Aux_mat = zeros(L);
-        tol_val_eff = tol_val;
-        relres_vec = gpuArray(zeros(1,L));
-%   else
-%       relres_vec = gpuArray(zeros(1,L-1));
-%   end
-    R_tes = zeros(size(B,1),L);
-%     if source_model == 2
-%         L_eeg_ew = zeros(L,M_ew);
-%     end
-    tic;
-
-
-    for i = 1 : L
-%        if isequal(electrode_model,'PEM')
-%            if i == L
-%                break
-%            end
-%           b = zeros(length(A),1);
-%           b(ele_ind(i+1)) = 1;
-%        end
-
-        %if isequal(electrode_model,'CEM')
-
-              b = full(B(:,i));
-          if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
-              b = zeros(size(b));
-          end
-
-            tol_val = min(impedance_vec(i),1)*tol_val_eff;
-        %end
-
-        x = zeros(N,1);
-        norm_b = norm(b);
-        r = b(perm_vec);
-        p = gpuArray(r);
-        m = 0;
-        x = gpuArray(x);
-        r = gpuArray(r);
-        p = gpuArray(p);
-        norm_b = gpuArray(norm_b);
-
-        while( (norm(r)/norm_b > tol_val) && (m < m_max))
-              a = A * p;
-              a_dot_p = sum(a.*p);
-              aux_val = sum(r.*p);
-              lambda = aux_val ./ a_dot_p;
-              x = x + lambda * p;
-              r = r - lambda * a;
-              inv_M_r = precond_vec.*r;
-              aux_val = sum(inv_M_r.*a);
-              gamma = aux_val ./ a_dot_p;
-              p = inv_M_r - gamma * p;
-              m = m+1;
-        end
-        relres_vec(i) = gather(norm(r)/norm_b);
-        r = gather(x(iperm_vec));
-        x = r;
-        R_tes(:,i) =  x;
-%        if isequal(electrode_model,'PEM')
-%           L_eeg_fi(i+1,:) = - x'*G_fi;
-%           R_tes(:,i) = - x;
-%           if source_model == 2
-%               L_eeg_ew(i+1,:) = - x'*G_ew;
-%           end
-%        end
-
-%        if isequal(electrode_model,'CEM')
-%           L_eeg_fi(i,:) = - x'*G_fi;
-%            R_tes(:,i) = - x;
-%           if source_model == 2
-%               L_eeg_ew(i,:) = - x'*G_ew;
-%           end
-%        end
-
-%        if isequal(electrode_model,'CEM')
-            if impedance_inf == 0
-                Aux_mat(:,i) = C(:,i)-B'*x ;
-            else
-                Aux_mat(:,i) = C(:,i);
-            end
-%        end
-
-        if tol_val < relres_vec(i)
-            close(h);
-            'Error: PCG iteration did not converge.'
-            R_tes = [];
-            return
-        end
-
-        time_val = toc;
-
-%        if isequal(electrode_model,'CEM')
-            waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
-%        end
-    end
-%******************************************
-else
-
-    %******************************************************
-%PCG CPU start
-%******************************************************
-%Define preconditioner
-if isequal(precond,'ssor');
-S1 = tril(A)*spdiags(1./sqrt(diag(A)),0,N,N);
-S2 = S1';
-else
-S2 = ichol(A,struct('type','nofill'));
-S1 = S2';
-end
-
-Aux_mat = zeros(L);
-tol_val_eff = tol_val;
-
-    R_tes = zeros(size(B,1),L);
-
-
-%Define block size
-delete(gcp('nocreate'))
-parallel_processes = evalin('base','zef.parallel_processes');
-parpool(parallel_processes);
-processes_per_core = evalin('base','zef.processes_per_core');
-tic;
-block_size =  parallel_processes*processes_per_core;
-for i = 1 : block_size : L
-block_ind = [i : min(L,i+block_size-1)];
-
-%Define right hand side
-b = full(B(:,block_ind));
-tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
-
-
-if  isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
-              b = zeros(size(b));
- end
-
-
-%Iterate
-x_block_cell = cell(0);
-relres_cell = cell(0);
-x_block = zeros(N,length(block_ind));
-relres_vec = zeros(1,length(block_ind));
-tol_val = tol_val(:)';
-norm_b = sqrt(sum(b.^2));
-block_iter_end = block_ind(end)-block_ind(1)+1;
-[block_iter_ind] = [1 : processes_per_core : block_iter_end];
-parfor block_iter = 1 : length(block_iter_ind)
- block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
- x = zeros(N,length(block_iter_sub));
-r = b(perm_vec,block_iter_sub);
-aux_vec = S1 \ r;
-p = S2 \ aux_vec;
-m = 0;
-while( not(isempty(find(sqrt(sum(r.^2))./norm_b(block_iter_sub) > tol_val(block_iter_sub)))) & (m < m_max) )
-    a = A * p;
-  a_dot_p = sum(a.*p);
-  aux_val = sum(r.*p);
-  lambda = aux_val ./ a_dot_p;
-  x = x + lambda .* p;
-  r = r - lambda .* a;
-  aux_vec = S1\r;
-  inv_M_r = S2\aux_vec;
-  aux_val = sum(inv_M_r.*a);
-  gamma = aux_val ./ a_dot_p;
-  p = inv_M_r - gamma .* p;
-  m=m+1;
-end
-x_block_cell{block_iter} = x(iperm_vec,:);
-relres_cell{block_iter} = sqrt(sum(r.^2))./norm_b(block_iter_sub);
-end
-
-for block_iter = 1 : length(block_iter_ind)
- block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
-x_block(:,block_iter_sub) = x_block_cell{block_iter};
-relres_vec(block_iter_sub) = relres_cell{block_iter};
-end
-
-
-%Substitute matrices
- R_tes(:,block_ind) =  x_block;
-
-if impedance_inf == 0
-Aux_mat(:,block_ind) = C(:,block_ind) - B'*x_block ;
-else
-Aux_mat(:,block_ind) = C(:,block_ind);
-end
-
-if not(isempty(find(tol_val < relres_vec)))
-    close(h);
-    'Error: PCG iteration did not converge.'
-    R_tes = [];
-    return
-end
-time_val = toc;
-
-waitbar((i+length(block_ind)-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+length(block_ind)-1) - 1)*time_val/86400)) '.']);
-
-end
-
-%******************************************************
-%PCG CPU end
-%******************************************************
-
-end
+% Modify transfer matrix R_tes for lead field L_tes calculation
 
 if not(impedance_inf == 0)
 
