@@ -182,11 +182,6 @@ K = length(brain_ind);
 
 clear electrodes;
 
-% Initialize progress bar
-
-h = waitbar(0,'System matrices.');
-waitbar_ind = 0;
-
 % Get the total volume tilavuus of the domain Ω.
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
@@ -238,6 +233,11 @@ A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 ,                                          ...
     m_max                                  ...
 );
+
+% Initialize progress bar
+
+h = waitbar(0,'Form L_tes from transfer matrix R_tes.');
+waitbar_ind = 0;
 
 % Modify transfer matrix R_tes for lead field L_tes calculation
 
