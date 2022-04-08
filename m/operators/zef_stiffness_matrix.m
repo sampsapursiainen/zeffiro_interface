@@ -129,6 +129,6 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, volume, tensor)
     end
 
     waitbar(1,wb);
-    close(wb)
+    close(wb);
 
 end
