@@ -13,6 +13,13 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 % [†]: MathWorks, Avoid unnecessary copies of data,
 % URL: https://se.mathworks.com/help/matlab/matlab_prog/avoid-unnecessary-copies-of-data.html
 
+    % Wait bar and its progress index
+
+    funtitle = 'Electrode matrices';
+
+    wb = waitbar(0,funtitle);
+    wbi = 0;
+
     % Preallocate electrode matrices
 
     B = spalloc(N,L,0);
@@ -20,7 +27,12 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
     % Choose electrode model
 
+    cemtitle = strcat(funtitle, ' (CEM)');
+    pemtitle = strcat(funtitle, ' (PEM)');
+
     if isequal(electrode_model, 'CEM')
+
+        waitbar(0, wb, strcat(cemtitle, ': current triangles'));
 
         I_triangles = find(ele_ind(:,4)>0);
         ala = zeros(1,size(ele_ind,1));
@@ -38,6 +50,9 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
                 ).^2                                 ...
             )                                        ...
         );
+
+        waitbar(1, wb);
+        waitbar(0,wb, strcat(cemtitle, ': initial B and C'));
 
         for ele_loop_ind = 1 : L
 
@@ -83,7 +98,15 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
                 C(ele_loop_ind, ele_loop_ind) = 1 ./ impedance_vec(ele_loop_ind);
 
             end
+
+            wbi = wbi + 1;
+            waitbar(wbi / L, wb);
+
         end
+
+        wbi = 0;
+
+        waitbar(wbi, wb, strcat(cemtitle, ': updating B at active electrodes'));
 
         entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))) .* ala(I_triangles)';
 
@@ -101,9 +124,15 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
                 L                        ...
             );
 
+            waitbar(wbi / 3, wb);
+
         end
 
+        wbi = 0;
+
         if impedance_inf == 0
+
+            waitbar(wbi, wb, strcat(cemtitle, ': modifying stiffness matrix at active electrodes'));
 
             for i = 1 : 3
 
@@ -143,6 +172,10 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
                     end
                 end
+
+                wbi = wbi + 1;
+                waitbar(wbi / 3, wb);
+
             end
 
         else
@@ -151,6 +184,9 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             return
 
         end
+
+        wbi = 0;
+        waitbar(wbi, wb, strcat(cemtitle, ': updating C at active electrodes.'));
 
         C = C + sparse(            ...
             ele_ind(I_triangles,1) ...
@@ -164,7 +200,11 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             L                      ...
         );
 
+        waitbar(1,wb);
+
     elseif isequal(electrode_model, 'PEM')
+
+        waitbar(0, wb, pemtitle);
 
         if impedance_inf == 0
 
@@ -192,6 +232,9 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             C = eye(L);
 
         end
+
+        waitbar(1, wb);
+
     else
 
         'Error: Unrecognised electrode model in zef_build_electrodes'
@@ -201,4 +244,8 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
         return
 
     end
+
+    waitbar(1,wb);
+    close(wb);
+
 end
