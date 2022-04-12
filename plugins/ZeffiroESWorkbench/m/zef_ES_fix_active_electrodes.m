@@ -9,6 +9,7 @@ else
         warning('y_ES not evaluated.')
         return
     end
+    
     if isempty(sr)
         ES_active_electrodes = [];
     else

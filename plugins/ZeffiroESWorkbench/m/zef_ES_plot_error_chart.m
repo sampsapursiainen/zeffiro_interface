@@ -51,7 +51,7 @@ pbaspect([1 1 1])
 
 fnt_sz = 12;
 ax = gca;
-ax.TickLabelInterpreter = 'Latex';
+%ax.TickLabelInterpreter = 'Latex';
 ax.FontSize = fnt_sz;
 
 ax.XLabel.String       = 'Regularization parameter';
@@ -86,7 +86,7 @@ ax.YTickLabel          = {num2str(param_val_aux,'%1.2g')};
 ax.YTickLabelRotation  = 0;
 
 cb                = colorbar;
-cb.TickLabelInterpreter = 'Latex';
+%cb.TickLabelInterpreter = 'Latex';
 colormap(cb, jet(length(sp_var(:,1:end))-1))
 if w ~= 6
     cb.Ruler.Exponent = -3;
@@ -100,7 +100,7 @@ p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',1
 p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
 
 lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
-lgd.Interpreter = 'Latex';
+%lgd.Interpreter = 'Latex';
 lgd.String(1) = {['$\alpha$ : ' num2str(load_aux.reg_param(sc), '%1.2g')]};
 if evalin('base','zef.ES_search_method') == 1
     lgd.String(2) = {['t : ' num2str(param_val_aux(sr), '%1.2g')]};

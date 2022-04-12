@@ -31,6 +31,7 @@ function zeffiro_interface(varargin)
     addpath(genpath([zef_data.program_path '/plugins']));
     addpath(genpath([zef_data.program_path '/profile']));
     addpath(genpath([zef_data.program_path '/cluster']));
+    addpath([zef_data.program_path '/external']);
 
     zef_data.start_mode = 'default';
 

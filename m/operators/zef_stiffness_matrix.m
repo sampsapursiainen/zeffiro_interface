@@ -1,4 +1,4 @@
-function A = zef_stiffness_matrix(nodes, tetrahedra, tensor)
+function A = zef_stiffness_matrix(nodes, tetrahedra, volume, tensor)
 
 % The stiffness matrix 𝐴 of a discretized scalar function 𝑢ₕ = ∑ᵢ𝑧ᵢψᵢ, with
 % each 𝑧ᵢ being a coordinate and ψᵢ a linear basis function, is defined by
@@ -13,23 +13,26 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, tensor)
 % holds with 𝑢 being the non-discretized scalar function 𝑢 on the boundary ∂Ω
 % of the domain and 𝑛⃗ is an outward-pointing surface normal on ∂Ω.
 
-    N = size(nodes,1)
+    % Wait bar and its progress index
+
+    wb = waitbar(0,'Stiffness matrix.');
+    wbi = 0;
+
+    N = size(nodes,1);
 
     A = spalloc(N,N,0);
 
-    % Get the total volume 𝑉 of the domain Ω.
-
-    volume = zef_tetra_volume(nodes, tetrahedra, true)
+    n_of_tetra_faces = 4;
 
     % Start constructing the elements of 𝐴 iteratively. Summing the integrands
     % ∇ψⱼ ⋅ (𝑇∇ψᵢ) multiplied by volume elements d𝑉 like this corresponds to
     % integration.
 
-    for i = 1 : 4
+    for i = 1 : n_of_tetra_faces
 
         grad_1 = zef_volume_gradient(nodes, tetrahedra, i);
 
-        for j = i : 4
+        for j = i : n_of_tetra_faces
 
             if i == j
                 grad_2 = grad_1;
@@ -119,5 +122,13 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, tensor)
 
             end
         end
+
+        wbi = wbi + 1;
+        waitbar(wbi / n_of_tetra_faces, wb);
+
     end
+
+    waitbar(1,wb);
+    close(wb);
+
 end

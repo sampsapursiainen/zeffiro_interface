@@ -1,4 +1,5 @@
-function zef_add_source_space
+function zef_add_dof_space
+%This function plots the degrees of freedom
 
 h_axes = evalin('base','zef.h_axes1'); 
 axes(h_axes);

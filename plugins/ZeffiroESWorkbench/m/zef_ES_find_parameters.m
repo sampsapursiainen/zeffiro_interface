@@ -1,26 +1,26 @@
-function [TolFun, reg_param, k_val] = zef_ES_find_parameters
-TolFun     = evalin('base','zef.ES_optimizer_tolerance');
-reg_param  = evalin('base','zef.ES_regularization_parameter');
-k_val      = evalin('base','zef.ES_L2_reg_ratio_LL');
-step_size  = evalin('base','zef.ES_step_size');
+function [alpha, beta, k_val] = zef_ES_find_parameters
+beta        = evalin('base','zef.ES_beta');
+alpha       = evalin('base','zef.ES_alpha');
+k_val       = evalin('base','zef.ES_L2_LB');
+step_size   = evalin('base','zef.ES_step_size');
 
 if evalin('base','zef.ES_search_type') == 2
-    tol_max       = evalin('base','zef.ES_optimizer_tolerance_max');
-    reg_param_max = evalin('base','zef.ES_regularization_parameter_max');
-    kval_max      = evalin('base','zef.ES_L2_reg_ratio_UL');
-
-    if tol_max < 1E-10
-        tol_max = 1E-10;
-        warning('Maxima optimizer tolerance value exceeding solver limit.');
+    beta_max    = evalin('base','zef.ES_beta_max');
+    alpha_max   = evalin('base','zef.ES_alpha_max');
+    k_val_max   = evalin('base','zef.ES_L2_UB');
+    
+    if beta_max < 1E-10
+        beta_max = 1E-10;
+        warning('Minimum beta value exceeding allowed lower limit.');
     end
-
-    TolFun    = exp(log(TolFun):(log(tol_max)-log(TolFun))/(step_size-1):log(tol_max))';
-    if reg_param == 0
-        reg_param = 1;
+    
+    beta    = exp(log(beta):(log(beta_max)-log(beta))/(step_size-1):log(beta_max))';
+    if alpha == 0
+        alpha = 1;
     end
-    reg_param = exp(log(reg_param):(log(reg_param_max)-log(reg_param))/(step_size-1):log(reg_param_max))';
-    k_val = exp(log(k_val):(log(kval_max)-log(k_val))/(step_size-1):log(kval_max))'; % k-values
-
+    alpha = exp(log(alpha):(log(alpha_max)-log(alpha))/(step_size-1):log(alpha_max))';
+    k_val = exp(log(k_val):(log(k_val_max)-log(k_val))/(step_size-1):log(k_val_max))';
+    
 else
-    reg_param = 0;
+    alpha = 0;
 end

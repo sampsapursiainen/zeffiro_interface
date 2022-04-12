@@ -15,7 +15,7 @@ switch n
                         sc = 1;
                     end
                     load_aux = evalin('base','zef.y_ES_interval.y_ES');
-                    y_ES = cell2mat(load_aux(sr, sc));
+                    y_ES = load_aux{sr, sc};
             end
         else
             y_ES = evalin('base','zef.y_ES_4x1.y_ES');
@@ -29,11 +29,11 @@ switch n
         if numel(varargin{1}) > 1
             y_ES = varargin{1};
         else
-            error('Tis not a y_ES value!')
+            error('This is not a y_ES value')
         end
         [~, sr, sc] = varargin{:};
     otherwise
-        error('Too many input arguments declared. Insert 2, 3 or no argument at all.')
+        error('Too many input arguments declared. Insert 2, 3 or no argument.')
 end
 
 if n ~= 3
@@ -63,7 +63,7 @@ h_barplot_ES.LineWidth = 0.1;
 pbaspect([4 1 1]);
 
 h_axes = gca;
-h_axes.XLabel.String = 'EEG Channel';
+h_axes.XLabel.String = 'Electrode channel';
 h_axes.XLabel.FontSize = 11;
 h_axes.XLabel.FontWeight = 'bold';
 h_axes.XLabel.FontName = 'Arial';
@@ -76,7 +76,7 @@ h_axes.YLabel.FontName = 'Arial';
 h_axes.XGrid = 'off';
 h_axes.YGrid = 'on';
 
-max_current = evalin('base','zef.ES_solvermaximumcurrent');
+max_current = evalin('base','zef.ES_total_max_current');
 
 h_axes.XLim = [0 length(y_ES)+1];
 %h_axes.YLim = [-0.005 0.005];
@@ -99,5 +99,4 @@ plot(xlim,[-max_current -max_current],'LineWidth',1.0,'Color','r','LineStyle','-
 hold off;
 
 h_barplot_ES = [h_axes; h_barplot_ES];
-clear sr sc
 end
