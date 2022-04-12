@@ -286,7 +286,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.use_fem_mesh_inflation = 1;
        zef_data.fem_mesh_inflation_strength = 0.05;
        zef_data.explode_everything = 1;
-       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap'};
+       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_blue_brain_4_colormap','zef_parcellation_colormap'};
        zef_data.parcellation_compartment = {'g'};
        zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
 
