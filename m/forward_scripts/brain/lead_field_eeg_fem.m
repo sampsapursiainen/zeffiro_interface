@@ -157,11 +157,6 @@ if iscell(elements)
 source_model = 1;
 end
 
-% Initialize wait bar
-
-h=waitbar(0,'System matrices.');
-waitbar_ind = 0;
-
 % Volume
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
@@ -175,6 +170,11 @@ clear tilavuus ala sigma_tetrahedra;
 % Build electrode matrices B and C based on A
 
 [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A, N, L);
+
+% Titles for waitbar
+
+fititle = 'Face-intersecting G and L';
+ewtitle = 'Edgewise G and L';
 
 % Transfer matrix with preconditioned conjugate gradient (PCG) iteration
 
@@ -196,6 +196,11 @@ clear A_aux A_part;
 %Form G_fi and T_fi
 %*******************************
 %*******************************
+
+% Initialize wait bar
+
+h=waitbar(0,fititle);
+waitbar_ind = 0;
 
 %An auxiliary matrix for picking up the correct nodes from tetrahedra
 ind_m = [ 2 3 4 ;
@@ -257,7 +262,12 @@ T_fi = sparse(repmat([1:M_fi]',2,1),[Ind_mat(:,1);Ind_mat(:,2)],ones(2*M_fi,1), 
 
 clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 
+waitbar(1, h);
+
 %Form G_ew and T_ew
+
+waitbar(0,h,ewtitle);
+
 if source_model == 2
 %*******************************
 %*******************************
@@ -290,6 +300,8 @@ G_ew = sparse([edge_ind(:,1)  ; edge_ind(:,2)],repmat([1:M_ew]',2,1),[1./(ew_sou
 
 T_ew = sparse(edge_ind_aux_2, Ind_mat(:,1), ones(length(edge_ind_aux_2),1), M_ew, K2);
 clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
+
+waitbar(1,h);
 
 %*******************************
 %*******************************
