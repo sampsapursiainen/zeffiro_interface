@@ -36,7 +36,7 @@ zef_data.colorscale_max_slider = 0;
 zef_data.colormap_size = 2048;
 zef_data.colorscale_min_slider = 0;
 zef_data.colorscale_max_slider = 0;
-zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation','Easter','Black & white'};
+zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation','Easter','Grayscale'};
 zef_data.smoothing_steps_ele = 0.2;
 zef_data.use_pem = 0;
 zef_data.default_impedance_value = 5E3;
@@ -286,7 +286,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.use_fem_mesh_inflation = 1;
        zef_data.fem_mesh_inflation_strength = 0.05;
        zef_data.explode_everything = 1;
-       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap'}; 
+       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap','zef_grayscale_colormap'}; 
        zef_data.parcellation_compartment = {'g'};
        zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
 
