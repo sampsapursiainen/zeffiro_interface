@@ -329,7 +329,7 @@ precond_vec = gpuArray(1./full(diag(A)));
 A = gpuArray(A);
 
 if isequal(electrode_model,'CEM')
-Aux_mat = zeros(L);
+Schur_complement = zeros(L);
 tol_val_eff = tol_val;
 relres_vec = gpuArray(zeros(1,L));
 else
@@ -391,9 +391,9 @@ end
 end
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,i) = B'*x - C(:,i);
+Schur_complement(:,i) = B'*x - C(:,i);
 else
-Aux_mat(:,i) = - C(:,i);
+Schur_complement(:,i) = - C(:,i);
 end
 end
 if tol_val < relres_vec(i)
@@ -427,7 +427,7 @@ S2 = ichol(A,struct('type','nofill'));
 S1 = S2';
 end
 if isequal(electrode_model,'CEM')
-Aux_mat = zeros(L);
+Schur_complement = zeros(L);
 end
 tol_val_eff = tol_val;
 
@@ -516,9 +516,9 @@ end
 
 if isequal(electrode_model,'CEM')
 if impedance_inf == 0
-Aux_mat(:,block_ind) = B'*x_block - C(:,block_ind);
+Schur_complement(:,block_ind) = B'*x_block - C(:,block_ind);
 else
-Aux_mat(:,block_ind) = - C(:,block_ind);
+Schur_complement(:,block_ind) = - C(:,block_ind);
 end
 end
 if not(isempty(find(tol_val < relres_vec)))
@@ -548,17 +548,17 @@ waitbar(0,h,'Interpolation.');
 
 
 if isequal(electrode_model,'CEM')
-Aux_mat = inv(Aux_mat);
-L_eeg_fi = Aux_mat*L_eeg_fi;
+Schur_complement = inv(Schur_complement);
+L_eeg_fi = Schur_complement * L_eeg_fi;
 if source_model == 2
-L_eeg_ew = Aux_mat*L_eeg_ew;
+L_eeg_ew = Schur_complement * L_eeg_ew;
 end
 end
 
-Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
-L_eeg_fi = Aux_mat_2*L_eeg_fi;
+Schur_complement_2 = eye(L,L) - (1/L)*ones(L,L);
+L_eeg_fi = Schur_complement_2*L_eeg_fi;
 if source_model == 2
-L_eeg_ew = Aux_mat_2*L_eeg_ew;
+L_eeg_ew = Schur_complement_2*L_eeg_ew;
 end
 
 
