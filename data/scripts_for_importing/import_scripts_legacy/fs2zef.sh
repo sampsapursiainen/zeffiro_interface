@@ -1,10 +1,39 @@
-#Commands needed for extracting data from Freesurefer to Zeffiro.
-#Atena Rezaei, 2019.
-#System specific variable definitions
+#!/bin/bash
 
-SUBJECT_DIR="/media/datadisk/atena/freesurfer_subjects"
-SUBJECT="EskSa"
-OUT_DIR="/media/datadisk/atena/freesurfer_subjects/fs2zef"
+# Commands needed for extracting data from FreeSurfer to Zeffiro Interface.
+# Called with
+#
+#     fs2zef.sh <subjects directory> <individual subject directory name> <output directory>
+#                       ↑
+#                   Make note!
+#
+# Atena Rezaei, 2019.
+# Expanded by Santtu Söderholm, 2022.
+
+# System specific variable definitions
+
+SUBJECT_DIR=$1 # The directory where the all the individual subjects reside in.
+SUBJECT=$2     # The name of the specific subject directory being observed.
+OUT_DIR=$3     # The output location of FreeSurfer.
+
+SUBJECT_FOLDER="${SUBJECT_DIR}/${SUBJECT}" # Path to specific subject folder
+
+# Check that all given parameters exist.
+
+if [ ! -d "$SUBJECT_DIR" ]; then
+	echo "Error: given FreeSurfer subjects directory ${SUBJECT_DIR} does not exist."
+	return -1
+fi
+
+if [ ! -d "$SUBJECT_FOLDER" ]; then
+	echo "Error: given FreeSurfer subject folder ${SUBJECT_FOLDER} does not exist."
+	return -2
+fi
+
+if [ ! -d "$OUT_DIR" ]; then
+	echo "Error: given FreeSurfer output directory ${OUT_DIR} does not exist."
+	return -3
+fi
 
 #Reconstructing the data out of T1-weighted data including subcortical
 #structures.
@@ -100,7 +129,9 @@ mri_annotation2label --subject $SUBJECT  --sd $SUBJECT_DIR --annotation aparc --
 #The data in the .annot files can be read using the matlab script
 #Command 7:
 
-matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/$SUBJECT/';[vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.a2009s.annot']);save color_table_lh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.a2009s.annot']); save color_table_rh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.annot']); save color_table_lh_36.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.annot']); save color_table_rh_36.mat colortable label vertices;exit;";
+
+matlab -nodisplay -nosplash -nodesktop -r "dir_name = fullfile('$SUBJECT_DIR', '$SUBJECT');[vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.a2009s.annot']);save color_table_lh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.a2009s.annot']); save color_table_rh_76.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/lh.aparc.annot']); save color_table_lh_36.mat colortable label vertices; [vertices,label,colortable]=read_annotation([dir_name '/label/rh.aparc.annot']); save color_table_rh_36.mat colortable label vertices;exit;";
+
 #Create matlab version colortables.
 
 #Merging labels
@@ -110,4 +141,4 @@ mri_mergelabels -d $OUT_DIR/rh.aparc_76/ -o $OUT_DIR/rh_labels_76.asc
 mri_mergelabels -d $OUT_DIR/lh.aparc_36/ -o $OUT_DIR/lh_labels_36.asc
 mri_mergelabels -d $OUT_DIR/rh.aparc_36/ -o $OUT_DIR/rh_labels_36.asc
 
-matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$SUBJECT_DIR/';a = dlmread([dir_name 'lh_labels_76.asc'],' ',2,0);a = a(:,[1,3,5,7]);save -ascii lh_points_76.dat a; a = dlmread([dir_name 'rh_labels_76.asc'],' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_76.dat a; a = dlmread([dir_name 'lh_labels_36.asc'],' ',2,0);a = a(:,[1,3,5,7]);  save -ascii  lh_points_36.dat a; a = dlmread([dir_name 'rh_labels_36.asc'],' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_36.dat a;quit";
+matlab -nodisplay -nosplash -nodesktop -r "dir_name = '$OUT_DIR';a = dlmread(fullfile(dir_name, 'lh_labels_76.asc'),' ',2,0);a = a(:,[1,3,5,7]);save -ascii lh_points_76.dat a; a = dlmread(fullfile(dir_name, 'rh_labels_76.asc'),' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_76.dat a; a = dlmread(fullfile(dir_name, 'lh_labels_36.asc'),' ',2,0);a = a(:,[1,3,5,7]);  save -ascii  lh_points_36.dat a; a = dlmread(fullfile(dir_name, 'rh_labels_36.asc'),' ',2,0);a = a(:,[1,3,5,7]); save -ascii rh_points_36.dat a;quit";
