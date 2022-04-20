@@ -20,7 +20,8 @@ switch n
         else
             y_ES = evalin('base','zef.y_ES_4x1.y_ES');
         end
-
+    case 1
+        y_ES = varargin{1};
     case 2
         [sr, sc] = varargin{:};
         load_aux = evalin('base','zef.y_ES_interval.y_ES');
@@ -29,11 +30,11 @@ switch n
         if numel(varargin{1}) > 1
             y_ES = varargin{1};
         else
-            error('This is not a y_ES value')
+            error('First argument is not a y_ES value')
         end
         [~, sr, sc] = varargin{:};
     otherwise
-        error('Too many input arguments declared. Insert 2, 3 or no argument.')
+        error('Too many input arguments declared. Insert 1, 2, 3 or no argument.')
 end
 
 if n ~= 3
@@ -49,11 +50,13 @@ if n ~= 3
     f.Position(2) = win_temp(2)+(win_temp(4)-f.Position(4));
     f.Position(3) = 880;
     f.Position(4) = 500;
-
-    if evalin('base','zef.ES_search_method') ~= 3
-        sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-    else
-        sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
+    
+    if nargin > 1
+        if evalin('base','zef.ES_search_method') ~= 3
+            sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
+        else
+            sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
+        end
     end
 end
 
@@ -79,12 +82,12 @@ h_axes.YGrid = 'on';
 max_current = evalin('base','zef.ES_total_max_current');
 
 h_axes.XLim = [0 length(y_ES)+1];
-%h_axes.YLim = [-0.005 0.005];
-
 if max(abs(y_ES)) == 0
-    p_max = 1; p_min = 0;
+    p_max = 1;
+    p_min = 0;
 else
-    p_max = max(abs(y_ES)); p_min = -p_max;
+    p_max = max(abs(y_ES));
+    p_min = -p_max;
 end
 
 if p_max > max_current
