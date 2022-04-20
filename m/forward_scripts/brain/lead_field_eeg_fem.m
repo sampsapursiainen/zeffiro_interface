@@ -193,118 +193,27 @@ A_aux = A(perm_vec,perm_vec);
 A = A_aux;
 clear A_aux A_part;
 
-%Form G_fi and T_fi
-%*******************************
-%*******************************
+% Form dipole sign matrix G_fi and arrangement stencil T_fi
 
 % Initialize wait bar
 
 h=waitbar(0,fititle);
 waitbar_ind = 0;
 
-%An auxiliary matrix for picking up the correct nodes from tetrahedra
-ind_m = [ 2 3 4 ;
-    3 4 1 ;
-    4 1 2 ;
-    1 2 3 ];
-
-% Next find nodes that share a face
-Ind_cell = cell(1,3);
-
-for i = 1 : 4
-    % Find the global node indices for each tetrahedra
-    % that correspond to indices ind_m(i,:) and set them to increasing order
-    Ind_mat_fi_1 = sort(tetrahedra(brain_ind,ind_m(i,:)),2);
-    for j = i + 1 : 4
-        % The same for indices ind_m(j,:)
-        Ind_mat_fi_2 = sort(tetrahedra(brain_ind,ind_m(j,:)),2);
-        % Set both matrices in one variable, including element index and which node it corresponds
-        Ind_mat = sortrows([ Ind_mat_fi_1 brain_ind(:) i*ones(K,1) ; Ind_mat_fi_2 brain_ind(:) j*ones(K,1) ]);
-        % Find the rows that have the same node indices, i.e. share a face
-        I = find(sum(abs(Ind_mat(1:end-1,1:3)-Ind_mat(2:end,1:3)),2)==0);
-        Ind_cell{i}{j} = [ Ind_mat(I,4) Ind_mat(I+1,4)  Ind_mat(I,5) Ind_mat(I+1,5) ]; %% Make this better
-
-    end
-end
-
-clear Ind_mat_fi_1 Ind_mat_fi_2;
-% Set the node indices and element indices in one matrix
-Ind_mat = [ Ind_cell{1}{2} ; Ind_cell{1}{3} ; Ind_cell{1}{4} ; Ind_cell{2}{3} ; Ind_cell{2}{4} ; Ind_cell{3}{4} ];
-clear Ind_cell;
-% Drop the double and triple rows
-[Ind_mat_fi_2,I] = unique(Ind_mat(:,1:2),'rows');
-clear Ind_mat_fi_2;
-Ind_mat = Ind_mat(I,:);
-% Here we check that all of the elements were from brain layer
-Ind_mat = Ind_mat(find(sum(ismember(Ind_mat(:,1:2),brain_ind),2)),:);
-
-M_fi = size(Ind_mat,1);
-%D = sparse([Ind_mat(:,1) ; Ind_mat(:,2)], repmat([1:M]',2,1), [ones(M,1) ; -ones(M,1)], K2, M);
-
-% Set nodes that share the face
-tetrahedra_aux_ind_1 = sub2ind([K2 4], Ind_mat(:,1), Ind_mat(:,3));
-nodes_aux_vec_1 = nodes(tetrahedra(tetrahedra_aux_ind_1),:);
-tetrahedra_aux_ind_2 = sub2ind([K2 4], Ind_mat(:,2), Ind_mat(:,4));
-nodes_aux_vec_2 = nodes(tetrahedra(tetrahedra_aux_ind_2),:);
-
-%fi_source locations, moments and directions
-fi_source_directions = (nodes_aux_vec_2 - nodes_aux_vec_1);
-fi_source_moments = sqrt(sum(fi_source_directions.^2,2));
-fi_source_directions = fi_source_directions./repmat(sqrt(sum(fi_source_directions.^2,2)),1,3);
-fi_source_locations = (1/2)*(nodes_aux_vec_1 + nodes_aux_vec_2);
-
-clear nodes_aux_vec_1 nodes_aux_vec_2;
-
-% Formulate matrix G
-G_fi = sparse([tetrahedra(tetrahedra_aux_ind_1) ; tetrahedra(tetrahedra_aux_ind_2)], ...
-    repmat([1:M_fi]',2,1),[1./fi_source_moments(:) ; -1./fi_source_moments(:)],N,M_fi);
-T_fi = sparse(repmat([1:M_fi]',2,1),[Ind_mat(:,1);Ind_mat(:,2)],ones(2*M_fi,1), M_fi, K2);
-
-clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
+[T_fi, G_fi, fi_source_moments, fi_source_directions, fi_source_locations, M_fi] = zef_fi_dipoles(nodes, tetrahedra, brain_ind);
 
 waitbar(1, h);
 
-%Form G_ew and T_ew
+%Form dipole sign matrix G_ew and arrangement stencil T_ew
 
 waitbar(0,h,ewtitle);
 
 if source_model == 2
-%*******************************
-%*******************************
 
-for i = 1 : 4
-for j = i + 1 : 4
-Ind_cell{i}{j} = [ brain_ind(:) tetrahedra(brain_ind(:),i)  tetrahedra(brain_ind(:),j) ];
-end
-end
-
-Ind_mat = [ Ind_cell{1}{2} ; Ind_cell{1}{3} ; Ind_cell{1}{4} ; Ind_cell{2}{3} ; Ind_cell{2}{4} ; Ind_cell{3}{4} ];
-clear Ind_cell;
-%[Ind_mat] = unique(Ind_mat,'rows');
-%Ind_mat = Ind_mat(find(ismember(Ind_mat(:,1),brain_ind)),:);
-
-Ind_mat(:,2:3) = sort(Ind_mat(:,2:3), 2);
-[edge_ind, edge_ind_aux_1, edge_ind_aux_2] = unique(Ind_mat(:,2:3),'rows');
-
-ew_source_directions = nodes(edge_ind(:,2),:) - nodes(edge_ind(:,1),:);
-ew_source_moments = sqrt(sum(ew_source_directions.^2,2));
-ew_source_directions = ew_source_directions./repmat(sqrt(sum(ew_source_directions.^2,2)),1,3);
-
-ew_source_locations = (1/2)*(nodes(edge_ind(:,1),:) + nodes(edge_ind(:,2),:));
-
-clear nodes_aux_vec_1 nodes_aux_vec_2;
-
-ones_aux = ones(size(ew_source_moments));
-M_ew = size(edge_ind,1);
-G_ew = sparse([edge_ind(:,1)  ; edge_ind(:,2)],repmat([1:M_ew]',2,1),[1./(ew_source_moments) ; -1./(ew_source_moments)],N,M_ew);
-
-T_ew = sparse(edge_ind_aux_2, Ind_mat(:,1), ones(length(edge_ind_aux_2),1), M_ew, K2);
-clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
+[T_ew, G_ew, ew_source_moments, ew_source_directions, ew_source_locations, M_ew] = zef_ew_dipoles(nodes, tetrahedra, brain_ind);
 
 waitbar(1,h);
 
-%*******************************
-%*******************************
 end
 
 %%
