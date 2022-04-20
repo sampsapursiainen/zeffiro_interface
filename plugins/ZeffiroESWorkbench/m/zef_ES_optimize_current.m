@@ -27,22 +27,29 @@ end
 
 source_magnitude        = x_ES_projection;
 J_x_ES                  = setdiff((1:size(L_aux,1))',J_x_ES);
+
 %% Active Electrodes and L_ES_projection
+if evalin('base','zef.ES_search_method') >= 1
+    L_ES_projection   = [L_aux(J_x_ES,:)  ; L_ES_projection];
+else
+    k_val = TolFun/size(L_ES_projection,1);
+    L_ES_projection   = [1*L_aux(J_x_ES,:)  ; k_val*L_ES_projection];
+end
+x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
+
+active_electrodes = evalin('base','zef.ES_active_electrodes');
+if not(isempty(active_electrodes))
+    L_ES_projection   = L_ES_projection(:,active_electrodes);
+else
+    active_electrodes = 1:size(L_ES_projection,2);
+    L_ES_projection   = L_ES_projection(:,active_electrodes);
+end
+
+M_mat = eye(size(L_ES_projection,2)) - ones(size(L_ES_projection,2))/size(L_ES_projection,2);
+L_ES_projection = L_ES_projection*M_mat;
+
 switch evalin('base','zef.ES_search_method')
     case 1
-        L_ES_projection   = [L_aux(J_x_ES,:)  ; L_ES_projection];
-        x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
-
-        active_electrodes = evalin('base','zef.ES_active_electrodes');
-        if not(isempty(active_electrodes))
-            L_ES_projection   = L_ES_projection(:,active_electrodes);
-        else
-            active_electrodes = 1:size(L_ES_projection,2);
-            L_ES_projection   = L_ES_projection(:,active_electrodes);
-        end
-
-        M_mat = eye(size(L_ES_projection,2)) - ones(size(L_ES_projection,2))/size(L_ES_projection,2);
-        L_ES_projection = L_ES_projection*M_mat;
         %% LP setup
         opts = optimset('linprog');
         %opts.TolCon     = 1e-3;
@@ -84,32 +91,44 @@ switch evalin('base','zef.ES_search_method')
             x_ES_projection = [x_ES_projection ; zeros(length(negativity_constraint),1)];
         end
         %% Linprog Solver
+%         if alpha <= 0
+%             %[y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, ones(1,size(L_ES_projection,2)), 0, lower_bound, upper_bound, opts);
+%             [y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, [], [], lower_bound, upper_bound, opts);
+%         else
+%             L_ES_projection = [L_ES_projection ; alpha*ones(1,size(L_ES_projection,2))];
+%             x_ES_projection = [x_ES_projection; 0];
+%             [y_ES,~,flag_val] = linprog(sum(L_ES_projection)'+alpha, -L_ES_projection, -x_ES_projection, [], [], lower_bound, upper_bound, opts);
+%         end
+        %% Linprog Solver (20/4/2022)
         if alpha <= 0
-            %[y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, ones(1,size(L_ES_projection,2)), 0, lower_bound, upper_bound, opts);
-            [y_ES,~,flag_val] = linprog(sum(L_ES_projection)', -L_ES_projection, -x_ES_projection, [], [], lower_bound, upper_bound, opts);
+            g = [sum(L_ES_projection)' ; sum(L_ES_projection)' ];
+            [y_ES,~,flag_val] = linprog(g, ...
+                [-L_ES_projection zeros(size(L_ES_projection)); zeros(size(L_ES_projection)) L_ES_projection;-sum(L_ES_projection) -sum(L_ES_projection) ], ...
+                [-x_ES_projection; x_ES_projection; 0], ...
+                [], ...
+                [], ...
+                [lower_bound; lower_bound], ...
+                [upper_bound; upper_bound], ...
+                opts);
+            y_ES = (reshape(y_ES,size(L_ES_projection,2),2));
+            y_ES = sum(y_ES,2);
         else
-            L_ES_projection = [L_ES_projection ; alpha*ones(1,size(L_ES_projection,2))];
+            L_ES_projection = [L_ES_projection; alpha*ones(1,size(L_ES_projection,2))];
             x_ES_projection = [x_ES_projection; 0];
-            [y_ES,~,flag_val] = linprog(sum(L_ES_projection)'+alpha, -L_ES_projection, -x_ES_projection, [], [], lower_bound, upper_bound, opts);
+            g = [sum(L_ES_projection)' ; -sum(L_ES_projection)' ; sum(L_ES_projection)'; -sum(L_ES_projection)'];
+            [y_ES,~,flag_val] = linprog(g, ...
+                [-L_ES_projection L_ES_projection zeros(size(L_ES_projection)) zeros(size(L_ES_projection)); zeros(size(L_ES_projection)) zeros(size(L_ES_projection)) L_ES_projection -L_ES_projection; repmat([-sum(L_ES_projection) sum(L_ES_projection)],1,2)], ...
+                [-x_ES_projection; x_ES_projection; 0], ...
+                [], ...
+                [], ...
+                zeros(4*size(L_ES_projection,2),1), ...
+                repmat(upper_bound,4,1), ...
+                opts);
+            y_ES = (reshape(y_ES,size(L_ES_projection,2),4));
+            y_ES(:,[2 4]) = - y_ES(:,[2 4]);
+            y_ES = sum(y_ES,2);
         end
-
-        y_ES = M_mat*y_ES;
     case 2
-        k_val = TolFun/size(L_ES_projection,1);
-        L_ES_projection   = [1*L_aux(J_x_ES,:)  ; k_val*L_ES_projection];
-        x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
-
-        active_electrodes = evalin('base','zef.ES_active_electrodes');
-        if not(isempty(active_electrodes))
-            L_ES_projection   = L_ES_projection(:,active_electrodes);
-        else
-            active_electrodes = 1:size(L_ES_projection,2);
-            L_ES_projection   = L_ES_projection(:,active_electrodes);
-        end
-
-         M_mat = eye(size(L_ES_projection,2)) - ones(size(L_ES_projection,2))/size(L_ES_projection,2);
-        L_ES_projection = L_ES_projection*M_mat;
-
         delta = evalin('base','zef.ES_delta');
         y_ES = ones(size(L_ES_projection,2),1);
         for inv_iter = 1 : evalin('base','zef.ES_L1_iter')
@@ -118,9 +137,9 @@ switch evalin('base','zef.ES_search_method')
             L_ES_projection_aux = L_ES_projection.*repmat(d_sqrt',size(L_ES_projection,1),1);
             y_ES = d_sqrt.*((L_ES_projection_aux)' * (L_ES_projection_aux) + alpha*eye(size(L_ES_projection_aux,2)))\(L_ES_projection_aux)'*x_ES_projection;
         end
-            %y_ES = ((L_ES_projection)' * (L_ES_projection) + alpha*eye(size(L_ES_projection,2)))\(L_ES_projection)'*x_ES_projection;
+        %y_ES = ((L_ES_projection)' * (L_ES_projection) + alpha*eye(size(L_ES_projection,2)))\(L_ES_projection)'*x_ES_projection;
         flag_val = 1;
-        y_ES = M_mat*y_ES;
+        
     case 3
         active_electrodes       = zef_ES_4x1_sensors;
         alpha_coeff             = x_ES_projection/(L_ES_projection(1) -sum(L_ES_projection(2:5)));
@@ -128,6 +147,7 @@ switch evalin('base','zef.ES_search_method')
         y_ES(active_electrodes) = [alpha_coeff; -alpha_coeff/4*ones(4,1) ];
         flag_val                = 1;
 end
+y_ES = M_mat*y_ES;
 
 if max(abs(y_ES))      >= evalin('base', 'zef.ES_max_current_channel')
     y_ES = evalin('base','zef.ES_max_current_channel') * y_ES ./ max(abs(y_ES));
@@ -154,6 +174,7 @@ try
 catch
     y_ES = 0;
 end
+
 %% Flag value from LP solver
 if ismember(flag_val,[1 3])
     ES_optimized_current_density  = reshape(L_aux*y_ES,3,size(L_aux,1)/3);
