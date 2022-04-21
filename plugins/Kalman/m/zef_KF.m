@@ -117,7 +117,7 @@ for n_rep = 1:n_decompositions
         load('Q.mat', 'best');
         Q = best;
     elseif q_estimation == 2
-        Q = 1e-12*eye(size(L_aux,2));
+        Q = 3e-10*eye(size(L_aux,2));
     elseif q_estimation == 3
         Q = Q_est;
 
