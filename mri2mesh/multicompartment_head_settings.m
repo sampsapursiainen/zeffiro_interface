@@ -1,0 +1,13 @@
+zef.h_refinement_on.Value = 1;
+zef.h_checkbox_mesh_smoothing_on.Value = 1;
+zef.h_edit65.Value = 2;
+zef.exclude_box = 1;
+zef.pml_max_size = 1.2;
+zef.refinement_surface_on = 1;
+zef_update;
+zef_add_compartment;
+zef.compartment_tags = zef.compartment_tags([2:end 1]);
+evalin('base',['zef.' zef.compartment_tags{end} '_name = ''Box''; ']);
+evalin('base',['zef.' zef.compartment_tags{end} '_sources = -1; ']);
+zef.refinement_surface_compartments = [19 1 18];
+zef_build_compartment_table;
