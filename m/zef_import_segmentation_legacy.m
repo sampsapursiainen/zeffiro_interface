@@ -364,6 +364,10 @@ end
 
 end
 
+if isempty(evalin('base',['zef.' name_cell{j} '_points']))
+evalin('base',['zef.' name_cell{j} '_on = 0;']);
+end
+
 end
 
 %*****************************
