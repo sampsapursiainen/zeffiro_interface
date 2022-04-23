@@ -44,7 +44,7 @@ tri = zef_surface_mesh(tetra_c, [], tetra_ind);
 u_tri = unique(tri);
 
 u_tri_rand = randperm(length(u_tri));
-vec_3 = mean(nodes(u_tri(u_tri_rand(1:end-3)),:));
+vec_3 = mean(nodes(u_tri(u_tri_rand(1:end-3)),:),1);
 
 p_in_c = zef_point_in_cluster(nodes,tri,vec_3);
 if isempty(p_in_c)
