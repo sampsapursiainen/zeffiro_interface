@@ -161,7 +161,7 @@ function zeffiro_interface(varargin)
                 assignin('base','zef_data',zef_data);
                 evalin('base','zef_assign_data;');
                 clear zef_data;
-                evalin('base','zef_start_new_project:zef_import_segmentation_legacy');
+                evalin('base','zef_start_new_project;zef_import_segmentation_legacy');
                 option_counter = option_counter + 2;
 
             elseif isequal(varargin{option_counter},lower('import_segmentation_update_legacy'))
