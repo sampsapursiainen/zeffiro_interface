@@ -52,6 +52,8 @@ the first one counts.
 
 The segmentation list starts after the header and can be edited freely by
 the user.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% HEADER END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 electrodes, sensor_points, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 lh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum cortex, 0, ASC,0,0,0
