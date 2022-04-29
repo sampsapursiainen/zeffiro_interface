@@ -18,11 +18,9 @@ else
     axes(f.CurrentAxes);
     clf(f.CurrentAxes);
 end
-
-f.Color      = [1 1 1];
-set(1,'renderer','painters')
+%f.Color      = [1 1 1];
+%set(1,'renderer','painters')
 pbaspect([1 1 1])
-
 %% Tab properties
 h = uitabgroup();
 tab1 = uitab(h, 'title', 'Y_ES');
@@ -46,62 +44,49 @@ end
 function printing_imagesc(w,varargin)
 subplot(2,2,w)
 imagesc(sp_var(:,1:end));
-colormap('jet');
+colormap(gca, jet(64));
 pbaspect([1 1 1])
 
 fnt_sz = 12;
 ax = gca;
-%ax.TickLabelInterpreter = 'Latex';
-ax.FontSize = fnt_sz;
+%ax.FontSize = fnt_sz;
 
-ax.XLabel.String       = 'Regularization parameter';
-ax.XLabel.FontSize     = fnt_sz;
+ax.XLabel.String       = 'Alpha parameter';
+ax.XLabel.FontSize     = fnt_sz-2;
 ax.XLabel.FontWeight   = 'bold';
 
-ax.XTickLabel          = {num2str(load_aux.reg_param,'%1.2g')};
-ax.XTick               = 1:length(load_aux.reg_param);
-%ax.XTickLabel(1)       = {num2str(load_aux.reg_param(1),'%1.0g')};
-%ax.XTickLabel(2:end-1) = {char(' ')};
-%ax.XTickLabel(13)      = {num2str(load_aux.reg_param(13),'%1.0g')};
-%ax.XTickLabel(end)     = {num2str(load_aux.reg_param(end),'%1.0g')};
-ax.XTickLabelRotation  = 0;
+ax.XTickLabel          = {num2str(load_aux.alpha,'%1.2g')};
+ax.XTick               = 1:length(load_aux.alpha);
+ax.XTickLabelRotation  = 90;
 
 if evalin('base','zef.ES_search_method') == 1
-    %ax.YLabel.String = 'Optimizer tolerance';
-    param_val_aux = load_aux.optimizer_tolerance;
+    ax.YLabel.String = 'Beta tolerance';
+    param_val_aux = load_aux.beta;
 elseif evalin('base','zef.ES_search_method') == 2
-    %ax.YLabel.String = 'Weighted k-value';
-    param_val_aux = load_aux.k_val;
+    ax.YLabel.String = 'Weighted k-value';
+    param_val_aux = load_aux.kval;
 end
 
-ax.YLabel.FontSize     = fnt_sz;
+ax.YLabel.FontSize     = fnt_sz-2;
 ax.YLabel.FontWeight   = 'bold';
 
 ax.YTick               = 1:length(param_val_aux);
 ax.YTickLabel          = {num2str(param_val_aux,'%1.2g')};
-%ax.YTickLabel(1)       = {'0.1'};
-%ax.YTickLabel(2:end-1) = {char(' ')};
-%ax.YTickLabel(13)      = {sprintf('%1.0g',param_val_aux(13))};
-%ax.YTickLabel(end)     = {'1e-10'};
 ax.YTickLabelRotation  = 0;
 
-cb                = colorbar;
-%cb.TickLabelInterpreter = 'Latex';
-colormap(cb, jet(length(sp_var(:,1:end))-1))
-if w ~= 6
+cb = colorbar;
+colormap(cb, jet(64))
+
+if ismember(w,[1,3])
     cb.Ruler.Exponent = -3;
 end
-
-% ax.XTick = [];
-% ax.YTick = [];
 
 hold on;
 p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
 p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
 
 lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
-%lgd.Interpreter = 'Latex';
-lgd.String(1) = {['$\alpha$ : ' num2str(load_aux.reg_param(sc), '%1.2g')]};
+lgd.String(1) = {['\alpha : ' num2str(load_aux.alpha(sc), '%1.2g')]};
 if evalin('base','zef.ES_search_method') == 1
     lgd.String(2) = {['t : ' num2str(param_val_aux(sr), '%1.2g')]};
 else
@@ -112,22 +97,9 @@ lgd.AutoUpdate = 'off';
 grid on
 ax.GridAlpha = 0.3;
 ax.GridColor = [0.3 0.3 0.3];
-%ax.Layer = 'top';
 p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
 hold off
 
 title(fieldnames_table(w));
-end
-function printing_heatmap(w)
-    subplot(2,2,w)
-    h_map = heatmap(num2str(load_aux.reg_param, '%1.2e'), num2str(load_aux.optimizer_tolerance, '%1.2e'), sp_var);
-    if load_aux.reg_param(1) == 1
-        h_map.XData(1) = cellstr('1');
-    end
-    colormap('jet');
-    set(h_map.NodeChildren(3), 'XTickLabelRotation', 90)
-    xlabel('Regularization parameter');
-    ylabel('Optimizer tolerance');
-    title(fieldnames_table(w));
 end
 end

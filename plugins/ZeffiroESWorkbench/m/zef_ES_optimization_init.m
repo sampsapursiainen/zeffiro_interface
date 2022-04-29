@@ -1,8 +1,8 @@
-if not(isfield(zef,'ES_L2_UB'))
-    zef.ES_L2_UB = 1E3;
+if not(isfield(zef,'ES_kval_max'))
+    zef.ES_kval_max = 1E5;
 end
-if not(isfield(zef,'ES_L2_LB'))
-    zef.ES_L2_LB = 1E-3;
+if not(isfield(zef,'ES_kval'))
+    zef.ES_kval = 1E-5;
 end
 if not(isfield(zef,'ES_separation_angle'))
     zef.ES_separation_angle = 45;
@@ -11,7 +11,7 @@ if not(isfield(zef,'ES_effective_nnz'))
     zef.ES_effective_nnz = 8;
 end
 if not(isfield(zef,'ES_obj_fun'))
-    zef.ES_obj_fun = 3;
+    zef.ES_obj_fun = 2;
 end
 if not(isfield(zef,'ES_obj_fun_2'))
     zef.ES_obj_fun_2 = 4;
@@ -38,16 +38,16 @@ if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
 if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 1E-06;
+    zef.ES_beta = 1E5;
 end
-if not(isfield(zef,'ES_beta_max'))
-    zef.ES_beta_max = 1E-2;
+if not(isfield(zef,'ES_beta_min'))
+    zef.ES_beta_min = 1E-5;
 end
 if not(isfield(zef,'ES_alpha'))
     zef.ES_alpha = 1E-6;
 end
 if not(isfield(zef,'ES_alpha_max'))
-    zef.ES_alpha_max = 1E15;
+    zef.ES_alpha_max = 1E10;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];
@@ -77,7 +77,7 @@ if not(isfield(zef,'ES_step_size'))
     zef.ES_step_size = 10;
 end
 if not(isfield(zef,'ES_score_dose'))
-    zef.ES_score_dose = 8;
+    zef.ES_score_dose = 24;
 end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
@@ -86,11 +86,14 @@ if not(isfield(zef,'ES_delta'))
     zef.ES_delta = 0.1;
 end
 if not(isfield(zef,'ES_L1_iter'))
-    zef.ES_L1_iter = 3;
+    zef.ES_L1_iter = 1;
 end
 if not(isfield(zef,'ES_acceptable_threshold'))
     zef.ES_acceptable_threshold = 95;
 end
 if not(isfield(zef,'ES_boundary_color_limit'))
-    zef.ES_boundary_color_limit = 0.00025;
+    zef.ES_boundary_color_limit = 0.0025;
+end
+if not(isfield(zef,'ES_roi_range'))
+    zef.ES_roi_range = 10;
 end

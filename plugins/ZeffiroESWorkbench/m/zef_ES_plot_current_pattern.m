@@ -1,8 +1,10 @@
 function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
-n = length(varargin);
-%% clear Axes handle
+%% clear Axes handle && ES_Colorbar
 if isfield(evalin('base','zef'),'h_current_ES')
     evalin('base', 'delete(zef.h_current_ES)')
+end
+try %#ok<*TRYNC>
+    delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
 end
 %% Variables and parameter setup
 switch nargin
@@ -21,32 +23,23 @@ switch nargin
                             sc = 1;
                         end
                         y_ES = evalin('base','zef.y_ES_interval.y_ES');
-                        y_ES = cell2mat(y_ES(sr,sc));
+                        y_ES = y_ES{sr,sc};
                 end
             case 3
                 y_ES = evalin('base','zef.y_ES_4x1.y_ES');
         end
     case 1
         y_ES = varargin{1};
+    case 2
+        y_ES = evalin('base','zef.y_ES_interval.y_ES{varargin{1},varargin{2}}');
     otherwise
         error('Nmber of function input arcument must be 0 or 1')
 end
-nodes   = evalin('base','zef.nodes');
 sensors = evalin('base','zef.sensors');
 %% Sensors attachment
-% if evalin('base','zef.attach_electrodes')
-%     sensors(:,4) = 0;
-%     I_aux = find(sensors(:,5)~=0);
-%     sensors(I_aux,5) = 1; %#ok<*FNDSB>
-%     sensors = zef_attach_sensors_volume(sensors);
-%     unique_sensors_point_like = unique(sensors(:,1));
-%     sensors_point_like = zeros(length(unique_sensors_point_like),3);
-%     for spl_ind = 1:length(unique_sensors_point_like)
-%         spl_aux_ind = find(sensors(:,1)==unique_sensors_point_like(spl_ind));
-%         sensors_point_like(spl_ind,:) = mean(nodes(sensors(spl_aux_ind,2),:),1);
-%     end
-%     sensors = sensors_point_like;
-% end
+if evalin('base','zef.attach_electrodes')
+    sensors = zef_attach_sensors_volume(evalin('base','zef.sensors'));
+end
 %% Sphere generation and allocation of color indexes
 aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
 [X_s, Y_s, Z_s] = sphere(20);
@@ -190,7 +183,16 @@ ES_colormap_vec(index_aux,:);
 h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
-    h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
+ 
+    if not(evalin('base','zef.h_ES_2D_electrode_map.Value'))
+        h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
+    else
+        sensor_explosion_parameter_1 = 3;
+        sensor_explosion_parameter_2 = 0.05;
+        h_current_ES(i) = surf(sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*(max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3))))) + X_s, sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*((max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3)))))) + Y_s, max(sensors(:,3)) + Z_s);
+        view(0,90)
+    end
+    
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');
     if not(y_ES(i)) == 0
@@ -207,13 +209,13 @@ for i = 1:size(sensors,1)
 end
 hold off;
 %% Wrapping up and return of variables
-h_axes = axes('Units','normalized','Position',[0 0 0 0],'visible','off');
+h_axes = axes('Units','normalized','Position',[0 0 0 0],'visible','off','tag','ES_axes');
 set(h_axes,'TitleHorizontalAlignment','left');
 imagesc(linspace(min_colorbar_value,max_colorbar_value,colormap_size));
 
 colormap(h_axes, ES_colormap_vec);
 
-h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25],'tag','colorbar');
+h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25],'tag','ES_colorbar');
 
 %h_colorbar.Limits = [min(y_ES(:)) max(y_ES(:))];
 h_colorbar.Limits = [min_colorbar_value max_colorbar_value];

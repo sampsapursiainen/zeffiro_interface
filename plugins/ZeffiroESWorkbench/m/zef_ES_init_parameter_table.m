@@ -8,15 +8,15 @@ switch n_ES
         zef.h_ES_parameter_table.Data{2,2} = num2str(zef.ES_alpha_max);
         
         if     n_ES == 1
-            zef.h_ES_parameter_table.Data{3,1}  = 'Beta minimum';
+            zef.h_ES_parameter_table.Data{3,1}  = 'Beta maximum';
             zef.h_ES_parameter_table.Data{3,2}  = num2str(zef.ES_beta);
-            zef.h_ES_parameter_table.Data{4,1}  = 'Beta maximum';
-            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_beta_max);
+            zef.h_ES_parameter_table.Data{4,1}  = 'Beta minimum';
+            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_beta_min);
         elseif n_ES == 2
-            zef.h_ES_parameter_table.Data{3,1}  = 'Relative weighting minimum';
-            zef.h_ES_parameter_table.Data{3,2}  = num2str(zef.ES_L2_LB);
-            zef.h_ES_parameter_table.Data{4,1}  = 'Relative weighting maximum';
-            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_L2_UB);
+            zef.h_ES_parameter_table.Data{3,1}  = 'Weighting k-value';
+            zef.h_ES_parameter_table.Data{3,2}  = num2str(zef.ES_kval);
+            zef.h_ES_parameter_table.Data{4,1}  = 'Weighting k-value (maximum)';
+            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_kval_max);
             zef.h_ES_parameter_table.Data{15,1} = 'Delta';
             zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_delta);
             zef.h_ES_parameter_table.Data{16,1} = 'L1 iteration steps';
@@ -25,7 +25,7 @@ switch n_ES
         
         zef.h_ES_parameter_table.Data{5,1} = 'Total current in montage';
         zef.h_ES_parameter_table.Data{5,2} = num2str(zef.ES_total_max_current);
-        zef.h_ES_parameter_table.Data{6,1} = 'Maximum current allowed per electrode';
+        zef.h_ES_parameter_table.Data{6,1} = 'Max current allowed per electrode';
         zef.h_ES_parameter_table.Data{6,2} = num2str(zef.ES_max_current_channel);
         zef.h_ES_parameter_table.Data{7,1} = 'Relative weight of non-zero currents';
         zef.h_ES_parameter_table.Data{7,2} = num2str(zef.ES_relative_weight_nnz);
@@ -51,7 +51,7 @@ switch n_ES
         zef.h_ES_parameter_table.Data{1,2} = num2str(zef.ES_separation_angle);
         zef.h_ES_parameter_table.Data{2,1} = 'Total current in montage';
         zef.h_ES_parameter_table.Data{2,2} = num2str(zef.ES_total_max_current);
-        zef.h_ES_parameter_table.Data{3,1} = 'Maximum current allowed per electrode';
+        zef.h_ES_parameter_table.Data{3,1} = 'Max current allowed per electrode';
         zef.h_ES_parameter_table.Data{3,2} = num2str(zef.ES_max_current_channel);
         zef.h_ES_parameter_table.Data{4,1} = 'Relative weight of non-zero currents';
         zef.h_ES_parameter_table.Data{4,2} = num2str(zef.ES_relative_weight_nnz);

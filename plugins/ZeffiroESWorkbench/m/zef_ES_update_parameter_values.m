@@ -5,10 +5,10 @@ switch n_ES
         zef.ES_alpha_max    = str2double(zef.h_ES_parameter_table.Data{2,2});
         if n_ES == 1
             zef.ES_beta       = str2double(zef.h_ES_parameter_table.Data{3,2});
-            zef.ES_beta_max   = str2double(zef.h_ES_parameter_table.Data{4,2});
+            zef.ES_beta_min  = str2double(zef.h_ES_parameter_table.Data{4,2});
         elseif n_ES == 2
-            zef.ES_L2_LB        = str2double(zef.h_ES_parameter_table.Data{3,2});
-            zef.ES_L2_UB        = str2double(zef.h_ES_parameter_table.Data{4,2});
+            zef.ES_kval        = str2double(zef.h_ES_parameter_table.Data{3,2});
+            zef.ES_kval_max        = str2double(zef.h_ES_parameter_table.Data{4,2});
             zef.ES_delta        = str2double(zef.h_ES_parameter_table.Data{15,2});
             zef.ES_L1_iter      = str2double(zef.h_ES_parameter_table.Data{16,2});
         end

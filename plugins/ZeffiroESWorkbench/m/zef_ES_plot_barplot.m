@@ -27,7 +27,7 @@ switch n
             error('Inserted argument is not a vector!')
         end
     case 2
-        [sr, sc] = varargin{2};
+        [sr, sc] = deal(varargin{1:2});
         load_aux = evalin('base','zef.y_ES_interval.y_ES');
         y_ES = cell2mat(load_aux(sr, sc));
     case 3
@@ -48,15 +48,18 @@ if n ~= 3
         win_temp = findobj('type','figure','name','ZEFFIRO Interface: Error chart tool');
         win_temp = get(win_temp(1),'Position');
     catch
-        win_temp = [10 800 570 413];
+        win_temp = [10 800 550 150];
     end
     fig_aux.Position(1) = win_temp(1)+win_temp(3);
     fig_aux.Position(2) = win_temp(2)+(win_temp(4)-fig_aux.Position(4));
-    fig_aux.Position(3) = 880;
-    fig_aux.Position(4) = 500;
+    fig_aux.Position(3) = 750;
+    fig_aux.Position(4) = 250;
 
-    if evalin('base','zef.ES_search_method') ~= 3 
-        sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
+    if evalin('base','zef.ES_search_method') ~= 3
+        if evalin('base','zef.ES_search_type') == 2
+            sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
+        end
+    
     else
         sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
     end
