@@ -14,7 +14,8 @@ function zeffiro_downloader(varargin)
 % follows:
 %
 % zeffiro_downloader('install_directory',<directory string>,...
-% 'branch_name',<branch name string>,'profile_name',<profile name string>);
+% 'branch_name',<branch name string>,...
+% 'profile_name',<profile name string>,'folder_name',<folder name string'>);
 %
 % The folder name of the repository will be of the form
 % zeffiro_interface-branch_name. The number of arguments is variable. By
@@ -30,6 +31,7 @@ function zeffiro_downloader(varargin)
 install_directory = pwd;
 branch_name = 'main_development_branch';
 profile_name = 'multicompartment_head';
+folder_name = [];
 
 if not(isempty(varargin))
 zef_i = 1;
@@ -39,8 +41,12 @@ zef_i = zef_i + 2;
 end
 end
 
-directory_name = ['zeffiro_interface-' branch_name];
-program_path = [install_directory filesep directory_name];
+if isempty(folder_name)
+folder_name = ['zeffiro_interface-' branch_name];
+end
+program_path = [install_directory filesep folder_name];
+if not(isempty(folder_name))
+end
 
 if not(isequal(branch_name,'master'))
 eval(['!git clone -b ' branch_name ' https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
