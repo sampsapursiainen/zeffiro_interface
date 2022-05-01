@@ -1,15 +1,25 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_import_figure
+function zef_import_figure(varargin)
+
+file_name = [];
+folder_name = []; 
+
+if not(isempty(varargin))
+    file_name = varargin{1};
+    folder_name = varargin{2};
+end
 
 evalin('base','zef.zeffiro_current_size_aux = zef.zeffiro_current_size;');
 evalin('base','zef.zeffiro_current_size = cell(0);');
 
+if isempty(file_name)
 if evalin('base','zef.use_display')
 [file_name folder_name] = uigetfile({'*.fig'},'Open figure file',evalin('base','zef.save_file_path'));
 else
     file_name = evalin('base','zef.file');
     folder_name = evalin('base','zef.file_path');
+end
 end
 
 if not(isequal(file_name,0));
