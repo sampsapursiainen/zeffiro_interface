@@ -68,42 +68,33 @@ switch evalin('base','zef.ES_search_method')
                         zef.y_ES_interval.residual{i,j}                     = residual;
                         zef.y_ES_interval.flag{i,j}                         = flag;
                         zef.y_ES_interval.source_magnitude{i,j}             = source_magnitude;
-                        if ismember(flag,[1,3])
+                        if ismember(flag,[1,3]) && norm(y_ES,2) > 0
                             for running_index = 1:length(source_position_index)
                                 vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
-                                if not(isfield(zef,'ES_roi_range'))
-                                    position_index = source_position_index(running_index);
-                                else
-                                    if isempty(zef.ES_roi_range) || zef.ES_roi_range == 0
-                                        position_index = source_position_index(running_index);
-                                        vec_2_aux = volumetric_current_density(:,position_index);
-                                        [~, source_running_ind] = max(sum(vec_2_aux.^2));
-                                        source_running_ind = position_index(source_running_ind);
-                                    else
-                                        source_positions = evalin('base','zef.inv_synth_source(:,1:3)');
-                                        position_index = rangesearch(zef.source_positions,source_positions(running_index,:),zef.ES_roi_range);
-                                        vec_2_aux = volumetric_current_density(:,position_index{1});
-                                        [~, source_running_ind] = max(sum(vec_2_aux.^2));
-                                        source_running_ind = position_index{1}(source_running_ind);
-                                    end
-                                end
+                                norm_vec_1 = norm(vec_1,2);
+                   
+                                 source_running_ind = source_position_index(running_index);
+     
                                 vec_2 = volumetric_current_density(:,source_running_ind);
+                                norm_vec_2 = norm(vec_2,2);
+                                if isequal(norm_vec_2,0)
+                                    norm_vec_2 = 1;
+                                 end
                                 vec_index = setdiff(1:length(volumetric_current_density), source_running_ind);
-                                
-                                zef.y_ES_interval.field_source(running_index).field_source{i,j}         =         (volumetric_current_density(:,source_running_ind));
-                                zef.y_ES_interval.field_source(running_index).magnitude{i,j}            = sqrt(sum(volumetric_current_density(:,source_running_ind).^2));
-                                zef.y_ES_interval.field_source(running_index).angle{i,j}                = 180/pi*acos(dot(vec_1',vec_2)/(norm(vec_1')*norm(vec_2)));
-                                zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = abs(1 - norm(vec_2)/norm(vec_1'));
-                                zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = norm(vec_1'-vec_2)./norm(vec_1');
+                                zef.y_ES_interval.field_source(running_index).field_source{i,j}         = (volumetric_current_density(:,source_running_ind));
+                                zef.y_ES_interval.field_source(running_index).magnitude{i,j}            = sum(volumetric_current_density(:,source_running_ind).*vec_1'/norm_vec_1);
+                                zef.y_ES_interval.field_source(running_index).angle{i,j}                = 180/pi*acos(dot(vec_1',vec_2)/(norm_vec_1'*norm_vec_2));
+                                zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = abs(1 - norm(vec_2)/norm_vec_1);
+                                zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = norm(vec_1'-vec_2)./norm_vec_1;
                                 zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}        = mean(sqrt(sum(volumetric_current_density(:, vec_index).^2)));
                             end
                         else
                             zef.y_ES_interval.field_source(running_index).field_source{i,j}         = 0;
                             zef.y_ES_interval.field_source(running_index).magnitude{i,j}            = 0;
-                            zef.y_ES_interval.field_source(running_index).angle{i,j}                = 0;
-                            zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = 0;
-                            zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = 0;
-                            zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}        = 0;
+                            zef.y_ES_interval.field_source(running_index).angle{i,j}                = 360;
+                            zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = 1;
+                            zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = 1;
+                            zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}        = Inf;
                         end
                         waitbar_ind = waitbar_ind + 1/(length(alpha)*length(val_aux));
                     end

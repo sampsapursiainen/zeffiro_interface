@@ -1,7 +1,13 @@
 function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
 %% clear Axes handle && ES_Colorbar
 if isfield(evalin('base','zef'),'h_current_ES')
+    if not(isempty(evalin('base','zef.h_current_ES')))
+        if evalin('base','isvalid(zef.h_current_ES(1))')
+     if isequal(evalin('base','zef.h_zeffiro'),evalin('base','zef.h_current_ES(1).Parent'))
     evalin('base', 'delete(zef.h_current_ES)')
+     end
+        end
+    end
 end
 try %#ok<*TRYNC>
     delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))

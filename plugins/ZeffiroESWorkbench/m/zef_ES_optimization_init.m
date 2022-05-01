@@ -1,5 +1,5 @@
 if not(isfield(zef,'ES_kval_max'))
-    zef.ES_kval_max = 1E5;
+    zef.ES_kval_max = 10;
 end
 if not(isfield(zef,'ES_kval'))
     zef.ES_kval = 1E-5;
@@ -38,16 +38,16 @@ if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
 if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 1E5;
+    zef.ES_beta = 10;
 end
 if not(isfield(zef,'ES_beta_min'))
     zef.ES_beta_min = 1E-5;
 end
 if not(isfield(zef,'ES_alpha'))
-    zef.ES_alpha = 1E-6;
+    zef.ES_alpha = 1E-5;
 end
 if not(isfield(zef,'ES_alpha_max'))
-    zef.ES_alpha_max = 1E10;
+    zef.ES_alpha_max = 10;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];

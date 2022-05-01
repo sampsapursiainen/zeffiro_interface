@@ -2,24 +2,24 @@ zef.h_ES_parameter_table.Data = cell(0);
 n_ES = zef.ES_search_method;
 switch n_ES
     case {1,2}
-        zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum';
-        zef.h_ES_parameter_table.Data{1,2} = num2str(zef.ES_alpha);
-        zef.h_ES_parameter_table.Data{2,1} = 'Alpha maximum';
-        zef.h_ES_parameter_table.Data{2,2} = num2str(zef.ES_alpha_max);
+        zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum (dB)';
+        zef.h_ES_parameter_table.Data{1,2} = num2str(db(zef.ES_alpha));
+        zef.h_ES_parameter_table.Data{2,1} = 'Alpha maximum (dB)';
+        zef.h_ES_parameter_table.Data{2,2} = num2str(db(zef.ES_alpha_max));
         
         if     n_ES == 1
-            zef.h_ES_parameter_table.Data{3,1}  = 'Beta maximum';
-            zef.h_ES_parameter_table.Data{3,2}  = num2str(zef.ES_beta);
-            zef.h_ES_parameter_table.Data{4,1}  = 'Beta minimum';
-            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_beta_min);
+              zef.h_ES_parameter_table.Data{3,1}  = 'Off-field weight minimum (dB)';
+            zef.h_ES_parameter_table.Data{3,2}  = num2str(db(zef.ES_beta_min));
+            zef.h_ES_parameter_table.Data{4,1}  = 'Off-field weight maximum (dB)';
+            zef.h_ES_parameter_table.Data{4,2}  = num2str(db(zef.ES_beta));
         elseif n_ES == 2
-            zef.h_ES_parameter_table.Data{3,1}  = 'Weighting k-value';
-            zef.h_ES_parameter_table.Data{3,2}  = num2str(zef.ES_kval);
-            zef.h_ES_parameter_table.Data{4,1}  = 'Weighting k-value (maximum)';
-            zef.h_ES_parameter_table.Data{4,2}  = num2str(zef.ES_kval_max);
+            zef.h_ES_parameter_table.Data{3,1}  = 'Off-field weight minimum (dB)';
+            zef.h_ES_parameter_table.Data{3,2}  = num2str(db(zef.ES_kval));
+            zef.h_ES_parameter_table.Data{4,1}  = 'Off-field weight maximum (dB)';
+            zef.h_ES_parameter_table.Data{4,2}  = num2str(db(zef.ES_kval_max));
             zef.h_ES_parameter_table.Data{15,1} = 'Delta';
             zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_delta);
-            zef.h_ES_parameter_table.Data{16,1} = 'L1 iteration steps';
+            zef.h_ES_parameter_table.Data{16,1} = 'Re-weighting iteration steps';
             zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_L1_iter);
         end
         

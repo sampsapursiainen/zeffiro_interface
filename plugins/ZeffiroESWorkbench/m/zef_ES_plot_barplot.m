@@ -42,10 +42,10 @@ switch n
 end
 
 if n ~= 3
-    fig_aux = figure('Name','ZEFFIRO Interface: Electrode potentials tool','NumberTitle','off', ...
+    fig_aux = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
     try
-        win_temp = findobj('type','figure','name','ZEFFIRO Interface: Error chart tool');
+        win_temp = findobj('type','figure','name','ZEFFIRO Interface: ES error chart');
         win_temp = get(win_temp(1),'Position');
     catch
         win_temp = [10 800 550 150];

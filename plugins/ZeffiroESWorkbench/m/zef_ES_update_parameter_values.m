@@ -1,14 +1,14 @@
 n_ES = zef.ES_search_method;
 switch n_ES
     case {1,2}
-        zef.ES_alpha        = str2double(zef.h_ES_parameter_table.Data{1,2});
-        zef.ES_alpha_max    = str2double(zef.h_ES_parameter_table.Data{2,2});
+        zef.ES_alpha        = 10^(str2double(zef.h_ES_parameter_table.Data{1,2})/20);
+        zef.ES_alpha_max    = 10^(str2double(zef.h_ES_parameter_table.Data{2,2})/20);
         if n_ES == 1
-            zef.ES_beta       = str2double(zef.h_ES_parameter_table.Data{3,2});
-            zef.ES_beta_min  = str2double(zef.h_ES_parameter_table.Data{4,2});
+                        zef.ES_beta_min  = 10^(str2double(zef.h_ES_parameter_table.Data{3,2})/20);
+            zef.ES_beta       = 10^(str2double(zef.h_ES_parameter_table.Data{4,2})/20);
         elseif n_ES == 2
-            zef.ES_kval        = str2double(zef.h_ES_parameter_table.Data{3,2});
-            zef.ES_kval_max        = str2double(zef.h_ES_parameter_table.Data{4,2});
+            zef.ES_kval        = 10^(str2double(zef.h_ES_parameter_table.Data{3,2})/20);
+            zef.ES_kval_max        = 10^(str2double(zef.h_ES_parameter_table.Data{4,2})/20);
             zef.ES_delta        = str2double(zef.h_ES_parameter_table.Data{15,2});
             zef.ES_L1_iter      = str2double(zef.h_ES_parameter_table.Data{16,2});
         end

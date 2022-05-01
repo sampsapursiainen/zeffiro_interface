@@ -21,11 +21,15 @@ zef.h_ES_plot_data_menu_item_1    = zef_data.h_ES_plot_data_menu_item_1;
 zef.h_ES_plot_data_menu_item_2    = zef_data.h_ES_plot_data_menu_item_2;
 zef.h_ES_plot_data_menu_item_3    = zef_data.h_ES_plot_data_menu_item_3;
 zef.h_ES_plot_data_menu_item_4    = zef_data.h_ES_plot_data_menu_item_4;
+zef.h_ES_plot_data_menu_item_5    = zef_data.h_ES_plot_data_menu_item_5;
 
 clear zef_data;
 zef_ES_init_parameter_table;
-zef.h_ES_plot_type.Items     = {'Current pattern',  'Electrode potentials',  'Error Chart', 'Show optimizer properties'};
-zef.h_ES_search_method.Items = {'L1 optimization',  'L2 optimization',  '4x1'};
+zef.h_ES_plot_type.Items     = {'Current pattern',  'Electrode potentials',  'Error Chart', 'Show optimizer properties','Distance curves'};
+zef.h_ES_obj_fun.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. off-field ratio'};
+zef.h_ES_obj_fun_2.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. off-field ratio'};
+
+zef.h_ES_search_method.Items = {'L1 optimization', 'L2 optimization', '4x1'};
 
 zef.h_ES_parameter_table.CellEditCallback                = 'zef_ES_optimization_update;';
 %% Button
@@ -37,6 +41,7 @@ zef.h_ES_plot_data_menu_item_1.MenuSelectedFcn           = 'zef.reconstruction =
 zef.h_ES_plot_data_menu_item_2.MenuSelectedFcn           = 'zef_ES_plot_barplot;';
 zef.h_ES_plot_data_menu_item_3.MenuSelectedFcn           = 'zef_ES_plot_error_chart;';
 zef.h_ES_plot_data_menu_item_4.MenuSelectedFcn           = 'zef_ES_optimizer_properties_show;';
+zef.h_ES_plot_data_menu_item_5.MenuSelectedFcn           = 'zef_ES_plot_distance_curves;';
 %% Checkboxes
 %zef.h_ES_fixed_active_electrodes.Value                   = zef.ES_fixed_active_electrodes;
 

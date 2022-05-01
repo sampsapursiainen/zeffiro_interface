@@ -35,15 +35,15 @@ for running_index = 1:length(source_position_index)
 end
 
 source_magnitude        = x_ES_projection;
-singular_value_mean = mean(svd(L_aux));
-alpha = singular_value_mean*alpha;
+singular_value_max = svds(L_aux,1);
+alpha = singular_value_max*alpha;
 
 J_x_ES                  = setdiff((1:size(L_aux,1))',J_x_ES);
 %% Active Electrodes and L_ES_projection
 if evalin('base','zef.ES_search_method') == 1
     L_ES_projection   = [L_aux(J_x_ES,:)  ; L_ES_projection];
 else
-    k_val = TolFun*max(source_magnitude)/singular_value_mean;
+    k_val = TolFun*max(source_magnitude)/singular_value_max;
     L_ES_projection   = [k_val*L_aux(J_x_ES,:)  ; L_ES_projection];
 end
 x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
@@ -69,6 +69,8 @@ switch evalin('base','zef.ES_search_method')
             TolFun = round(TolFun,10);
         end
         opts.TolFun     = 1E-10;            %TolFun;
+        opts.TolX = 1E-10;
+        opts.TolCon = 1E-9;
         opts.Algorithm  = 'dual-simplex';
         opts.Display    = 'off';
         lower_bound     = -Inf;
@@ -171,13 +173,9 @@ switch evalin('base','zef.ES_search_method')
             
             y_ES = y_ES(1:size(L_ES_projection,2));
             
-%             if flag_val == 1
-%                 y_ES = (reshape(y_ES,size(L_ES_projection,2),4));
-%                 y_ES(:,[2 4]) = - y_ES(:,[2 4]);
-%                 y_ES = sum(y_ES,2);
-%             else
-%                 y_ES = zeros(size(L_ES_projection,2),1);
-%             end
+             if flag_val ~= 1
+                 y_ES = zeros(size(L_ES_projection,2),1);
+             end
             
         end
     case 2

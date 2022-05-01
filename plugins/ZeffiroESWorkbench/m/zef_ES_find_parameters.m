@@ -21,5 +21,5 @@ if evalin('base','zef.ES_search_type') == 2
     end
     beta  = exp(log(beta):(log(beta_min)-log(beta))/(step_size-1):log(beta_min))';
     
-    kval  = exp(log(kval):(log(kval_max)-log(kval))/(step_size-1):log(kval_max))';
+    kval  = exp(log(kval_max):(log(kval)-log(kval_max))/(step_size-1):log(kval))';
 end
