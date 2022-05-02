@@ -227,7 +227,7 @@ h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25],'tag','ES_c
 h_colorbar.Limits = [min_colorbar_value max_colorbar_value];
 %h_colorbar.Ruler.Exponent = -3;
 
-h_colorbar.Label.String     = 'Amplitude (mA)';
+h_colorbar.Label.String     = 'Amplitude (A)';
 h_colorbar.Label.Position   = [-2 0];
 h_colorbar.Label.Rotation   = 90;
 
