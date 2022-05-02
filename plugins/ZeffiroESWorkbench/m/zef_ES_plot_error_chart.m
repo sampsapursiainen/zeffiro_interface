@@ -47,7 +47,7 @@ end
 function printing_imagesc(w,varargin)
 subplot(2,2,w)
 imagesc(sp_var(:,1:end));
-colormap(gca, turbo(64));
+colormap(gca, turbo(2048));
 pbaspect([1 1 1])
 
 fnt_sz = 12;
@@ -78,7 +78,7 @@ ax.YTickLabel          = {num2str(db(param_val_aux),'%1.0f')};
 ax.YTickLabelRotation  = 0;
 
 cb = colorbar;
-colormap(cb, turbo(64))
+colormap(cb, turbo(2048))
 
 if ismember(w,[1,3])
     cb.Ruler.Exponent = -3;
