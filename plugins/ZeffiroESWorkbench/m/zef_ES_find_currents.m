@@ -43,12 +43,12 @@ switch evalin('base','zef.ES_search_method')
                 if exist('wait_bar_temp','var') == 1
                     delete(wait_bar_temp)
                 end
-                wait_bar_temp = waitbar(0,sprintf('Optimizing: i = %d, j = d%',0,0), ...
+                wait_bar_temp = waitbar([0 ],sprintf('Optimizing: i = %d, j = d%',0,0), ...
                     'Name','ZEFFIRO Interface: ES Optimization...', ...
                     'CreateCancelbtn','setappdata(gcbf,''canceling'',1)', ...
                     'Visible','on');
                 
-                waitbar_ind = 1/(length(alpha)*length(val_aux));
+                waitbar_ind = [1/length(alpha) 1/length(val_aux)];
                 %% The real task...
                 zef.y_ES_interval = [];
                 
@@ -57,7 +57,7 @@ switch evalin('base','zef.ES_search_method')
                         if getappdata(wait_bar_temp,'canceling')
                             error('The calculations were interrupted by the user.')
                         end
-                        waitbar(waitbar_ind, wait_bar_temp, sprintf('Optimizing: \n %1.2e -- %1.2e', val_aux(i), alpha(j)));
+                        waitbar(waitbar_ind , wait_bar_temp, sprintf('Optimizing: %1.2e -- %1.2e', val_aux(i), alpha(j)));
                         
                         tic;
                         [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha(j), val_aux(i));
@@ -96,8 +96,9 @@ switch evalin('base','zef.ES_search_method')
                             zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = 1;
                             zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}        = Inf;
                         end
-                        waitbar_ind = waitbar_ind + 1/(length(alpha)*length(val_aux));
+                        waitbar_ind = mod(waitbar_ind + [1/length(alpha) 0],1);
                     end
+                     waitbar_ind = mod(waitbar_ind + [0 1/length(val_aux)],1);
                 end
                 
                     zef.y_ES_interval.alpha  = alpha;

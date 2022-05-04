@@ -8,7 +8,7 @@ n_distances = 2000;
 max_distance = 100;
 quantile_val = 0.90;
 smooth_range = 50;
-font_size = 12;
+font_size = 14;
 
 rec_vec_aux = zeros(3,size(evalin('base','zef.source_positions'),1));
 rec_vec_aux(1:evalin('base','length(zef.reconstruction(:))')) = evalin('base','zef.reconstruction');

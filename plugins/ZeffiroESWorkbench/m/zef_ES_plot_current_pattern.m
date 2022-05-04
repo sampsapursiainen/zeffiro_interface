@@ -199,7 +199,7 @@ for i = 1:size(sensors,1)
         view(0,90)
     end
     
-    set(h_current_ES(i),'Tag','sensor');
+set(h_current_ES(i),'Tag','sensor');
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');
     if not(y_ES(i)) == 0
