@@ -14,7 +14,8 @@ zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gr
 
 zef_data.update_colorscale = 1;
 
-global waitbar = @zef_waitbar;
+global waitbar 
+waitbar = @zef_waitbar;
 zef_data.dof_decomposition_type = 2;
 zef_data.update_lights = 1;
 zef_data.update_colormap = 1;
