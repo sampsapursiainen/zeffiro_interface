@@ -1,5 +1,5 @@
 
-function h_waitbar = zef_waitbar(varargin)
+function h_waitbar = waitbar(varargin)
 
 progress_value = varargin{1};
 progress_value = min(1,progress_value(:));
