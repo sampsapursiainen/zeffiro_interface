@@ -1,6 +1,6 @@
 function [m, P, K, D] = kf_sL_update(m,P,y,H,R)
     % Resolution matrix
-    method = '2';
+    method = '1';
     if(method == '1')
     P_sqrtm = sqrtm(P);
     B = H * P_sqrtm;

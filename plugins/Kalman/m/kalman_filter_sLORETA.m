@@ -11,6 +11,10 @@ for f_ind = 1: number_of_frames
     % Update
     [m, P, ~, D] = kf_sL_update(m, P, f, L, R);
     z_inverse{f_ind} = gather(D*m);
+    smoothing = evalin('base','zef.kf_smoothing');
+    if (smoothing == 2)
+        P_store{f_ind} = gather(P);
+    end
 end
 close(h);
 end
