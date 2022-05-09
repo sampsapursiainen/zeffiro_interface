@@ -28,20 +28,25 @@ tab1 = uitab(h, 'title', 'Current pattern');
 set(tab1,'BackgroundColor',[1 1 1])
 axes('parent', tab1);
 fieldnames_table = fieldnames(loader);
-w_ind = [1 2 3 4];
+w_ind = [2 1 3 4];
+ColorScaleCell = {'log','linear','linear','linear'};
+fieldnames_table = fieldnames(loader(:,w_ind));
 for w = 1:4
     sp_var = cell2mat(loader{1,w_ind(w)});
-    printing_imagesc(w);
+    plot_opts.ColorScale = ColorScaleCell{w};
+    printing_imagesc(w,plot_opts);
 end
 
 tab2 = uitab(h, 'title', 'Volume current');
 set(tab2,'BackgroundColor',[1 1 1])
 axes('parent', tab2);
 w_ind = [5 6 19 8];
+ColorScaleCell = {'linear','linear','linear','linear'};
 fieldnames_table = fieldnames(loader(:,w_ind));
 for w = 1:4
     sp_var = cell2mat(loader{1,w_ind(w)});
-    printing_imagesc(w);
+    plot_opts.ColorScale = ColorScaleCell{w};
+    printing_imagesc(w,plot_opts);
 end
 %% Wrapping up, functions and return of variables
 function printing_imagesc(w,varargin)
@@ -49,6 +54,11 @@ subplot(2,2,w)
 imagesc(sp_var(:,1:end));
 colormap(gca, turbo(2048));
 pbaspect([1 1 1])
+if not(isempty(varargin))
+plot_opts = varargin{1};
+end
+
+
 
 fnt_sz = 12;
 ax = gca;
@@ -81,6 +91,7 @@ cb = colorbar;
 colormap(cb, turbo(2048))
 
 if ismember(w,[1,3])
+    plot_opts.ColorScale = ColorScaleCell{w};
     cb.Ruler.Exponent = -3;
 end
 
@@ -100,6 +111,9 @@ lgd.AutoUpdate = 'off';
 grid on
 ax.GridAlpha = 0.3;
 ax.GridColor = [0.3 0.3 0.3];
+if isfield(plot_opts,'ColorScale')
+ax.ColorScale = plot_opts.ColorScale;
+end
 p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
 hold off
 
