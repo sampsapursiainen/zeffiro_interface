@@ -20,14 +20,36 @@ for f_ind = 1:number_of_frames
     T(abs(T) < 0.05) = 0;
     C = C .* T;
     end
-
+    v = mvnrnd(zeros(size(R,1),1), R, n_ensembles);
+    
+    % method to calculate resolution D
+    method = '1';
+    if(method == '1')
+        P_sqrtm = sqrtm(C);
+        B = L * P_sqrtm;
+        G = B' / (B * B' + R);
+        w_t = 1 ./ sum(G.' .* B, 1)';
+        D = w_t .* inv(P_sqrtm);
+    elseif(method == '2')
+        % complexity O(n^3)
+        [Ur,Sr,Vr] = svd(C);
+        Sr = diag(Sr);
+        RNK = sum(Sr > (length(Sr) * eps(single(Sr(1)))));
+        SIR = Vr(:,1:RNK) * diag(1./sqrt(Sr(1:RNK))) * Ur(:,1:RNK)'; % square root
+        P_sqrtm = Vr(:,1:RNK) * diag(sqrt(Sr(1:RNK))) * Ur(:,1:RNK)';
+        B = L * P_sqrtm;
+        G = B' / (B * B' + R);
+        w_t = 1 ./ sum(G.' .* B, 1)';
+        D = w_t .* SIR;
+    else
+        D = speye(size(C));
+    end
     % Update
     K = C * L' / (L * C * L' + R);
-
-    v = mvnrnd(zeros(size(R,1),1), R, n_ensembles);
     x_ensemble = x_f + K *(f + v' - L*x_f);
     % x_ensemble = x_ensemble';
-    z_inverse{f_ind} = mean(x_ensemble,2);
+    mean_x = mean(x_ensemble,2);
+    z_inverse{f_ind} = D*mean_x;
 end
 close(h);
 end

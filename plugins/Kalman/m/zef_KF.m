@@ -14,6 +14,7 @@ number_of_frames = evalin('base','zef.number_of_frames');
 source_direction_mode = evalin('base','zef.source_direction_mode'); 
 source_directions = evalin('base','zef.source_directions');
 source_positions = evalin('base', 'zef.source_positions');
+time_step = evalin('base','zef.inv_time_3');
 
 %% Reconstruction identifiers
 reconstruction_information.tag = 'Kalman';
@@ -117,7 +118,8 @@ for n_rep = 1:n_decompositions
         load('Q.mat', 'best');
         Q = best;
     elseif q_estimation == 2
-        Q = 1e-12*eye(size(L_aux,2));
+        q = sqrt(5684*0.0005/(size(L_aux,2)*time_step)) * 1e-10;
+        Q = q*eye(size(L_aux,2));
     elseif q_estimation == 3
         Q = Q_est;
 
@@ -150,7 +152,7 @@ elseif filter_type == '2'
     n_ensembles = str2double(evalin('base', 'zef.KF.number_of_ensembles.Value'));
     z_inverse = EnKF(m,A,P,Q,L_aux,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == '3'
-    [~, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
+    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L_aux,R,timeSteps, number_of_frames);
 end
 
 
