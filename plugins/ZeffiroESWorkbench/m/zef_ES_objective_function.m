@@ -32,7 +32,7 @@ switch evalin('base','zef.ES_obj_fun_2')
     case {1,3,4}
         ES_optimize_condition = 'minimum';
     case {2,5}
-         ES_optimize_condition = 'maximum';
+        ES_optimize_condition = 'maximum';
 end
 
 if evalin('base','zef.ES_search_method') == 3
@@ -52,37 +52,37 @@ for i = 1:size(load_aux.y_ES,1)
     end
 end
 
-vec = array2table({ ES_y,                   ES_residual,            ES_max,                 ES_flag, ...
-                    ES_magnitude,           ES_angle_error,         ES_rela_norm,           ES_rela_error, ...
-                    ES_off_field,           ES_active_electrodes,   ES_separation_angle,    ES_search_method, ...
-                    ES_max_current_channel, ES_relative_weight_nnz, ES_cortex_thickness,    ES_total_max_current, ...
+vec = array2table({ ES_y,                   ES_residual,              ES_max,                 ES_flag, ...
+                    ES_magnitude,           ES_angle_error,           ES_rela_norm,           ES_rela_error, ...
+                    ES_off_field,           ES_active_electrodes,     ES_separation_angle,    ES_search_method, ...
+                    ES_max_current_channel, ES_relative_weight_nnz,   ES_cortex_thickness,    ES_total_max_current, ...
                     ES_source_density,      ES_rela_source_amplitude, max(0,ES_magnitude./ES_off_field)}, ...
     'VariableNames', ...
-                    {'Total dose',              'Residual',            'Maximum current (A)',            'Flag value', ...
-                     'Current density (A/m^2)',         'Angle error (deg)',         'Relative magnitude error',  'Relative error', ...
-                     'Avg. off-field',          'Active electrodes',   'Separation angle', 'Search method', ...
-                     'Maximum current limit (A)',     'Relative weight NNZ', 'Cortex thickness', 'Solver maximum current (mA)', ...
-                     'Source density (A/m2)',   'Relative source amplitude', 'Current density vs. off-field ratio'});
+    {'Total dose',               'Residual',                  'Maximum current (A)',        'Optimizer Flag value', ...
+    'Current density (A/m^2)',   'Angle error (deg)',         'Relative magnitude error',   'Relative error', ...
+    'Avg. off-field',            'Active electrodes',         'Separation angle',           'Search method', ...
+    'Maximum current limit (A)', 'Relative weight NNZ',       'Cortex thickness',           'Solver maximum current (A)', ...
+    'Source density (A/m2)',     'Relative source amplitude', 'Current density vs. off-field ratio'});
 
 %% Obj Fun
 vec_aux = vec(1,[2,5,6,8,19]);
 obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
 obj_funct_threshold = obj_funct;
 if isequal(ES_optimize_condition,'minimum')
- [Idx] = find(abs(obj_funct_threshold(:)) <= evalin('base','zef.ES_acceptable_threshold'));
-        % [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
- 
+    [Idx] = find(abs(obj_funct_threshold(:)) <= evalin('base','zef.ES_acceptable_threshold'));
+    % [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+    
 elseif isequal(ES_optimize_condition,'maximum')
-                         [Idx] = find(obj_funct_threshold(:)      >= evalin('base','zef.ES_acceptable_threshold'));
-     %[Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+    [Idx] = find(obj_funct_threshold(:)      >= evalin('base','zef.ES_acceptable_threshold'));
+    %[Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
 end
 
 if isequal(ES_optimize_condition,'minimum')
-        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-        [~,Idx_2] = min(obj_funct_2(Idx));
+    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
+    [~,Idx_2] = min(obj_funct_2(Idx));
 elseif isequal(ES_optimize_condition,'maximum')
-        obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-        [~,Idx_2] = max(obj_funct_2(Idx));
+    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
+    [~,Idx_2] = max(obj_funct_2(Idx));
 end
 [sr, sc] = ind2sub(size(obj_funct_2),Idx(Idx_2));
 end
