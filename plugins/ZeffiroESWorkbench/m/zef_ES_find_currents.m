@@ -73,9 +73,9 @@ switch evalin('base','zef.ES_search_method')
                                 vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
                                 norm_vec_1 = norm(vec_1,2);
                    
-                                source_running_ind = source_position_index(running_index);
-                                %source_running_ind = rangesearch(zef.source_positions,zef.source_positions(source_position_index(running_index),:), 15);
-                                %source_running_ind = source_running_ind{1};
+                                %source_running_ind = source_position_index(running_index);
+                                source_running_ind = rangesearch(zef.source_positions,zef.source_positions(source_position_index(running_index),:), 15);
+                                source_running_ind = source_running_ind{1};
                                 
                                 vec_2 = mean(volumetric_current_density(:,source_running_ind),2);
                                 norm_vec_2 = norm(vec_2,2);
