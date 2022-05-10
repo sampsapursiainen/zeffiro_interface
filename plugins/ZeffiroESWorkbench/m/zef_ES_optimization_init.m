@@ -95,5 +95,5 @@ if not(isfield(zef,'ES_boundary_color_limit'))
     zef.ES_boundary_color_limit = 0.0025;
 end
 if not(isfield(zef,'ES_roi_range'))
-    zef.ES_roi_range = 10;
+    zef.ES_roi_range = 15;
 end
