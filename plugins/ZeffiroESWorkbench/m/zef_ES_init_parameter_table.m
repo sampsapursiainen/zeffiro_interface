@@ -8,7 +8,7 @@ switch n_ES
         zef.h_ES_parameter_table.Data{2,2} = num2str(db(zef.ES_alpha_max));
         
         if     n_ES == 1
-              zef.h_ES_parameter_table.Data{3,1}  = 'Off-field weight minimum (dB)';
+            zef.h_ES_parameter_table.Data{3,1}  = 'Off-field weight minimum (dB)';
             zef.h_ES_parameter_table.Data{3,2}  = num2str(db(zef.ES_beta_min));
             zef.h_ES_parameter_table.Data{4,1}  = 'Off-field weight maximum (dB)';
             zef.h_ES_parameter_table.Data{4,2}  = num2str(db(zef.ES_beta));
@@ -17,10 +17,10 @@ switch n_ES
             zef.h_ES_parameter_table.Data{3,2}  = num2str(db(zef.ES_kval));
             zef.h_ES_parameter_table.Data{4,1}  = 'Off-field weight maximum (dB)';
             zef.h_ES_parameter_table.Data{4,2}  = num2str(db(zef.ES_kval_max));
-            zef.h_ES_parameter_table.Data{15,1} = 'Delta';
-            zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_delta);
-            zef.h_ES_parameter_table.Data{16,1} = 'Re-weighting iteration steps';
-            zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_L1_iter);
+%             zef.h_ES_parameter_table.Data{15,1} = 'Delta';
+%             zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_delta);
+%             zef.h_ES_parameter_table.Data{16,1} = 'Re-weighting iteration steps';
+%             zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_L1_iter);
         end
         
         zef.h_ES_parameter_table.Data{5,1} = 'Total current in montage';
@@ -45,6 +45,8 @@ switch n_ES
         zef.h_ES_parameter_table.Data{13,2} = num2str(zef.ES_acceptable_threshold);
         zef.h_ES_parameter_table.Data{14,1} = 'Boundary color limit';
         zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_boundary_color_limit);
+        zef.h_ES_parameter_table.Data{15,1} = 'RoI radius (mm)';
+        zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_roi_range);
         
     case 3
         zef.h_ES_parameter_table.Data{1,1} = 'Separation angle';
