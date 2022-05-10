@@ -147,7 +147,7 @@ switch evalin('base','zef.ES_search_method')
             L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
             x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
             
-            g = [zeros(size(L_ES_projection,2),1); alpha*ones(size(L_ES_projection,1),1) ];
+            g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
             
             if evalin('base','zef.h_ES_CVXCheckBox.Value')
                % [y_ES,~,flag_val] = zef_cvx_linprog(g, ...

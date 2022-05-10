@@ -73,16 +73,18 @@ switch evalin('base','zef.ES_search_method')
                                 vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
                                 norm_vec_1 = norm(vec_1,2);
                    
-                                 source_running_ind = source_position_index(running_index);
-     
-                                vec_2 = volumetric_current_density(:,source_running_ind);
+                                source_running_ind = source_position_index(running_index);
+                                %source_running_ind = rangesearch(zef.source_positions,zef.source_positions(source_position_index(running_index),:), 15);
+                                %source_running_ind = source_running_ind{1};
+                                
+                                vec_2 = mean(volumetric_current_density(:,source_running_ind),2);
                                 norm_vec_2 = norm(vec_2,2);
                                 if isequal(norm_vec_2,0)
                                     norm_vec_2 = 1;
                                  end
                                 vec_index = setdiff(1:length(volumetric_current_density), source_running_ind);
                                 zef.y_ES_interval.field_source(running_index).field_source{i,j}         = (volumetric_current_density(:,source_running_ind));
-                                zef.y_ES_interval.field_source(running_index).magnitude{i,j}            = sum(volumetric_current_density(:,source_running_ind).*vec_1'/norm_vec_1);
+                                zef.y_ES_interval.field_source(running_index).magnitude{i,j}            = mean(sum(volumetric_current_density(:,source_running_ind).*repmat(vec_1',1,length(source_running_ind))./norm_vec_1));
                                 zef.y_ES_interval.field_source(running_index).angle{i,j}                = 180/pi*acos(dot(vec_1',vec_2)/(norm_vec_1'*norm_vec_2));
                                 zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = abs(1 - norm(vec_2)/norm_vec_1);
                                 zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = norm(vec_1'-vec_2)./norm_vec_1;

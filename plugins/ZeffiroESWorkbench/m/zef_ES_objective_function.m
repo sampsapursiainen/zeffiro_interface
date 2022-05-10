@@ -27,6 +27,14 @@ ES_total_max_current     = evalin('base','zef.ES_total_max_current');
 ES_source_density        = evalin('base','zef.ES_source_density');
 ES_rela_source_amplitude = evalin('base','zef.ES_relative_source_amplitude');
 
+ES_optimize_condition = 'maximum';
+switch evalin('base','zef.ES_obj_fun_2')
+    case {1,3,4}
+        ES_optimize_condition = 'minimum';
+    case {2,5}
+         ES_optimize_condition = 'maximum';
+end
+
 if evalin('base','zef.ES_search_method') == 3
     ES_relative_weight_nnz = 100;
     ES_active_electrodes = zef_ES_4x1_sensors;
@@ -58,26 +66,21 @@ vec = array2table({ ES_y,                   ES_residual,            ES_max,     
 
 %% Obj Fun
 vec_aux = vec(1,[2,5,6,8,19]);
-switch evalin('base','zef.ES_obj_fun')
-    case {1,3,4}
-        obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
-        if evalin('base','zef.ES_acceptable_threshold') <= 100
-            obj_funct_threshold = obj_funct;
-            [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
-        end
-    case {2,5}
-        obj_funct   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun')});
-        if evalin('base','zef.ES_acceptable_threshold') <= 100
-            obj_funct_threshold = obj_funct;
-            [Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
-        end
+obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
+obj_funct_threshold = obj_funct;
+if isequal(ES_optimize_condition,'minimum')
+ [Idx] = find(abs(obj_funct_threshold(:)) <= evalin('base','zef.ES_acceptable_threshold'));
+        % [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+ 
+elseif isequal(ES_optimize_condition,'maximum')
+                         [Idx] = find(obj_funct_threshold(:)      >= evalin('base','zef.ES_acceptable_threshold'));
+     %[Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
 end
 
-switch evalin('base','zef.ES_obj_fun_2')
-    case {1,3,4}
+if isequal(ES_optimize_condition,'minimum')
         obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
         [~,Idx_2] = min(obj_funct_2(Idx));
-    case {2,5}
+elseif isequal(ES_optimize_condition,'maximum')
         obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
         [~,Idx_2] = max(obj_funct_2(Idx));
 end
