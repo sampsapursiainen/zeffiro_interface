@@ -1,7 +1,7 @@
 if exist('zeffiro_interface_start_config.m')
-zef.fid_temp = fopen('zeffiro_interface_start_config.m','a');
+zef.fid_temp = fopen([mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'],'a');
 else
-zef.fid_temp = fopen('zeffiro_interface_start_config.m','w');
+zef.fid_temp = fopen([mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'],'w');
 end
 
 %%% Install SDPT3 BEGIN %%%
