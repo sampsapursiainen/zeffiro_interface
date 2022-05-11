@@ -34,15 +34,17 @@ for running_index = 1:length(source_position_index)
     x_ES_projection(running_index) = relative_source_amplitude.*evalin('base',['zef.inv_synth_source(' num2str(running_index) ',7)']).*evalin('base','zef.ES_source_density')./evalin('base','zef.ES_cortex_thickness');
 end
 
-source_magnitude        = x_ES_projection;
-singular_value_max = svds(L_aux,1);
-alpha = singular_value_max*alpha;
+source_magnitude  = x_ES_projection;
+
 
 J_x_ES                  = setdiff((1:size(L_aux,1))',J_x_ES);
 %% Active Electrodes and L_ES_projection
 if evalin('base','zef.ES_search_method') == 1
+    alpha = norm(L_aux,1)*alpha;
     L_ES_projection   = [L_aux(J_x_ES,:)  ; L_ES_projection];
 else
+    singular_value_max = svds(L_aux,1);
+    alpha = singular_value_max*alpha;
     k_val = singular_value_max/(sqrt(size(L_aux,1))*TolFun);
     L_ES_projection   = [L_aux(J_x_ES,:)  ; k_val*L_ES_projection];
 end
