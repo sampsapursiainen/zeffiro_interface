@@ -333,4 +333,9 @@ function zeffiro_interface(varargin)
     else
         evalin('base','zeffiro_interface_start');
     end
+    
+    if exist('zeffiro_interface_start_config.m')
+        evalin('base','zeffiro_interface_start_config');
+    end
+    
 end
