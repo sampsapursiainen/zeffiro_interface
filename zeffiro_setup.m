@@ -7,7 +7,7 @@ end
 %%% Install SDPT3 BEGIN %%%
 eval(['!git clone https://github.com/sqlp/sdpt3 ' fileparts(mfilename('fullpath')) filesep 'external/SDPT3'])
 run([fileparts(mfilename('fullpath')) filesep '/external/SDPT3/install_sdpt3.m']);
-zef_data.str_temp = 'addpath([zef.program_path filesep ''/external/SDPT3/'']);';
+zef_data.str_temp = 'addpath(genpath([zef.program_path filesep ''/external/SDPT3/'']));';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install SDPT3 END %%%
 
@@ -15,7 +15,7 @@ fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 mkdir(fileparts(mfilename('fullpath')),'external')
 eval(['!git clone https://github.com/cvxr/CVX ' fileparts(mfilename('fullpath')) filesep 'external/CVX'])
 run([fileparts(mfilename('fullpath')) filesep '/external/CVX/cvx_setup.m']);
-zef_data.str_temp = 'addpath([zef.program_path filesep ''/external/CVX/'']);';
+zef_data.str_temp = 'addpath(genpath([zef.program_path filesep ''/external/CVX/'']));';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install CVX BEGIN %%%
 
