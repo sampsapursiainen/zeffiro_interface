@@ -24,5 +24,5 @@ eval(['!git clone https://github.com/i-am-sorri/SESAME_core ' fileparts(mfilenam
 addpath(genpath([fileparts(mfilename('fullpath')) '/external/SESAME']));
 %%% Install SESAME END %%%
 
-fclose(zef.fid_temp)
+fclose(zef.fid_temp);
 
