@@ -8,3 +8,4 @@ zef.n_sources_mod = 1;
 zef.source_ind = [];
 zef_update_fig_details;
 zef_eit_lead_field;
+source_interpolation;
