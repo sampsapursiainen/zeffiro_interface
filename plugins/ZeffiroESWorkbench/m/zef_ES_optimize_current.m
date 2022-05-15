@@ -45,8 +45,7 @@ if evalin('base','zef.ES_search_method') == 1
 else
     singular_value_max = svds(L_aux,1);
     alpha = singular_value_max*alpha;
-    k_val = singular_value_max/(sqrt(size(L_aux,1))*TolFun);
-    L_ES_projection   = [L_aux(J_x_ES,:)  ; k_val*L_ES_projection];
+    L_ES_projection   = [singular_value_max*TolFun*L_aux(J_x_ES,:)  ; L_ES_projection];
 end
 x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
 
