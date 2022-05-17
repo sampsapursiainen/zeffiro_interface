@@ -19,6 +19,7 @@
 % open GUI tools
 zef_start_dataBank;
 zef_kf_start;
+zef_minimum_norm_estimation;
 
 find_synthetic_source;
 
@@ -99,19 +100,18 @@ switch inv_type
         [zef.reconstruction, zef.reconstruction_information] = zef_KF;
         % END KALMAN
     case 'MNE'
-        % balanced, constant 1, 2
-        zef.mne_prior = 2;
-        % 1,2,3 MNE, dspm, sloreta
-        zef.mne_type = 3;
-        zef.mne_sampling_frequency = 5000;
-        zef.mne_low_cut_frequency = 0;
-        zef.mne_high_cut_frequency = 0;
-        %1,2,3,4
-        zef.mne_normalize_data = 4;
-        zef.mne_time_1 = 0.121;
-        zef.mne_time_2 = 0;
-        zef.mne_time_3 = 0.0002;
-        zef.mne_number_of_frames = 48;
+        zef.h_mne_prior.Value = 2;
+        zef.h_mne_type.Value = 3;
+        zef.h_mne_sampling_frequency.String = '5000';
+        zef.h_mne_low_cut_frequency.String = '0';
+        zef.h_mne_high_cut_frequency.String = '0';
+        zef.h_mne_normalize_data.Value = 4;
+        zef.h_mne_time_1.String = '0.121';
+        zef.h_mne_time_2.String = '0';
+        zef.h_mne_time_3.String = '0.0002';
+        zef.h_mne_number_of_frames.String = '48';
+        
+        zef_update_mne;
         [zef.reconstruction, zef.reconstruction_information] = zef_find_mne_reconstruction([]);
 end
 
