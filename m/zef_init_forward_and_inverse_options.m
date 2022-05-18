@@ -86,7 +86,7 @@ if not(isfield(zef,'use_depth_electrodes'));
 end;
 
 if not(isfield(zef,'source_model'));
-    zef.source_model = 1;
+    zef.source_model = ZefSourceModel.Whitney;
 end;
 if not(isfield(zef,'preconditioner'));
     zef.preconditioner = 1;
