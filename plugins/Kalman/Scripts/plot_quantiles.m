@@ -41,5 +41,6 @@ b = plot(x_data,lm_q(2,:),'Color',[0.86,0.08,0.08], 'LineWidth', linewidth);
 xlim([x_data(1) x_data(end)]);
 set(gca,'ygrid','on')
 legend([a,b], 'SG 006', 'LH 023')
+title("SNR = Inf")
 box off
 hold off
