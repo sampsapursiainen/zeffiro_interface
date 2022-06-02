@@ -1,8 +1,4 @@
-if exist([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'])
-zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'],'a');
-else
 zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'],'w');
-end
 
 %%% Install SDPT3 BEGIN %%%
 eval(['!git clone https://github.com/sqlp/sdpt3 ' fileparts(mfilename('fullpath')) filesep 'external/SDPT3'])
