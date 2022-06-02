@@ -16,23 +16,26 @@ function zeffiro_interface(varargin)
 %(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
     if evalin('base','exist(''zef'');')
-        error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear zef by command ''clear zef'' in the base workspace.')
+        error('It looks like that another instance of Zeffiro interface already open. To enable this script, close Zeffiro Interface by command ''zef_close_all'' or clear zef by command ''clear zef''.')
     end
 
     program_path = pwd;
     zef_data.program_path = program_path;
     zef_data.code_path = [zef_data.program_path filesep 'm'];
+    evalin('base',['run(''' zef_data.code_path filesep 'zef_close_all.m'')'])
+    
     zef_data.cluster_path =  [zef_data.program_path filesep 'cluster'];
-
-    addpath(genpath([zef_data.program_path '/m']));
-    addpath(genpath([zef_data.program_path '/mlapp']));
-    addpath(genpath([zef_data.program_path '/fig']));
-    addpath(genpath([zef_data.program_path zef_data.code_path]));
-    addpath(genpath([zef_data.program_path '/plugins']));
-    addpath(genpath([zef_data.program_path '/profile']));
-    addpath(genpath([zef_data.program_path '/cluster']));
-    addpath([zef_data.program_path '/external']);
-
+    addpath(zef_data.program_path); 
+    addpath(zef_data.code_path); 
+    addpath(zef_data.program_path); 
+    zef_data.path_cell = [{zef_data.program_path} ; {zef_data.code_path}; {zef_data.cluster_path}];
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep zef_data.code_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep zef_data.cluster_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'mlapp'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'fig'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'plugins'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'profile'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'external'],[], zef_data.path_cell);
     zef_data.start_mode = 'default';
 
     assignin('base','zef_data',zef_data);
