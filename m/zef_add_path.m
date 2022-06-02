@@ -1,6 +1,5 @@
 function [folder_list] = zef_add_path(import_path,varargin)
 
-warning off;
 folder_list_aux = [];
 subfolder_status = 0;
 d = dir(import_path);
@@ -20,7 +19,7 @@ for i = 1 : length(d)
    
 [a, b, c] = fileparts(d(i).name);
 if not(isempty(b)) 
-if not(isequal(b(1),'+'))
+if not(isequal(b(1),'+')) && not(isequal(b(1),'@'))
 if isequal(b,'.')
 b = '';
 end
@@ -43,7 +42,5 @@ folder_list_aux = setdiff(folder_list,folder_list_aux);
 for i = 1 : length(folder_list_aux)
 addpath(folder_list_aux{i});
 end
-
-warning on;
 
 end
