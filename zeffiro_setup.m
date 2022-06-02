@@ -21,7 +21,7 @@ eval(['!git clone https://github.com/i-am-sorri/SESAME_core ' fileparts(mfilenam
 zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/SESAME/''],''recursive'',zef.path_cell);';
 %%% Install SESAME END %%%
 
-fprintf(zef_data.fid_temp, ['\n warning on;' );
+fprintf(zef_data.fid_temp, '\n warning on;' );
 
 fclose(zef_data.fid_temp);
 clear zef_data;
