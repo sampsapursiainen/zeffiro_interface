@@ -1,5 +1,5 @@
-function [z, reconstruction_information] = zef_KF(void)
-
+function [z, reconstruction_information] = zef_KF(q_value)
+% Optimal q_value as parameter
 %% Initial parameters
 mne_prior = evalin('base','zef.mne_prior');
 snr_val = evalin('base','zef.inv_snr');
@@ -51,27 +51,6 @@ norms = [];
 [f_data] = zef_getFilteredData; 
 timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true), 1:number_of_frames, 'UniformOutput', false);
 
-% m_0 = prior mean
-%m = zeros(size(L,2), 1);
-% Initial covariance matrix 
-% find gaussian prior
-%[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
-%P = eye(size(L,2)) * theta0;
-
-% try different values 1, 10e-10,  10e-9kk
-% add a smoothing matrix
-%Q_A = connectivity_matrix(source_positions,6);
-%beta = 10e-10;
-%alpha = 0.1;
-
-%Q = beta* (alpha * eye(size(L,2)) +  Q_A);
-%Q = 3e-10 * eye(size(L,2));
-% std_lhood
-%R = std_lhood^2 * eye(size(L,1));
-
-% Transition matrix is Identity matrix
-%A = eye(size(L,2));
-
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE
 % Waitbar for iterations 
@@ -81,8 +60,6 @@ h = waitbar(0,('Kalman iterations.'));
 iter_ind = 0;
 source_count_aux = 0;
 
-q_estimation = 2;
-Q_est = 0;
 for n_rep = 1:n_decompositions
     waitbar([n_rep/n_decompositions, 0],h,['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.']);
     iter_ind = iter_ind + 1;
@@ -113,17 +90,16 @@ for n_rep = 1:n_decompositions
     P = eye(size(L_aux,2)) * theta0;
 
     A = eye(size(L_aux,2));
-    
-    if q_estimation == 1 
-        load('Q.mat', 'best');
-        Q = best;
-    elseif q_estimation == 2
-        q = sqrt(5684*0.0005/(size(L_aux,2)*time_step)) * 1e-10;
-        Q = q*eye(size(L_aux,2));
-    elseif q_estimation == 3
-        Q = Q_est;
-
+    % If q_value given in the function call
+    if nargin > 0
+        Q = q_value*eye(size(L_aux,2));
+    else
+        evalin('base','zef_init_gaussian_prior_options');
+        evolution_prior_db = evalin('base', 'zef.inv_evolution_prior');
+        q_value = find_evolution_prior(L_aux, theta0, time_step, evolution_prior_db);
+        Q = q_value*eye(size(L_aux,2));
     end
+    
     % std_lhood
     R = std_lhood^2 * eye(size(L_aux,1));
     
@@ -138,8 +114,7 @@ for n_rep = 1:n_decompositions
     end
 
 Q_Store = cell(0);
-for q_iter = 1:1
-%% sLORETA
+%% sLORETA OLD VERSION
 s_loreta = str2double(evalin('base', 'zef.KF.sLORETA.Value'));
 if s_loreta
     [P, L_aux, Q] = zef_kf_sLORETA_OLD(L_aux, Q, std_lhood, theta0);
@@ -168,8 +143,7 @@ A = gather(A);
 z_inverse = m_s_store;
 end
 %% Q ESTIMATION
-%q_estimation = true;
-if q_estimation == 1
+if false
 [sigma, phi, B, C, D] =Q_quantities(P_s_store,m_s_store,G_store,timeSteps);
 Q_est = sigma - C * A' - A * C' + A * phi * A';
 Q_est = diag(Q_est);
@@ -178,7 +152,7 @@ norms = [norms, norm(Q-Q_est, 'fro')];
 Q_Store{q_iter} = Q;
 Q = Q_est;
 end
-end
+
 for i= 1:number_of_frames
     z_inverse_results{i}{n_rep} = z_inverse{i}(mr_ind);
 end

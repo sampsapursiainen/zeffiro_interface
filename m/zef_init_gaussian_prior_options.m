@@ -20,3 +20,7 @@ end;
 if not(isfield(zef,'inv_hyperprior_weight'));
     zef.inv_hyperprior_weight = 1;
 end;
+
+if not(isfield(zef,'inv_evolution_prior'));
+    zef.inv_evolution_prior = -34;
+end;
