@@ -72,13 +72,8 @@ ax.XTickLabel          = {num2str(db(load_aux.alpha),'%1.0f')};
 ax.XTick               = 1:length(load_aux.alpha);
 ax.XTickLabelRotation  = 90;
 
-if evalin('base','zef.ES_search_method') == 1
-    ax.YLabel.String = 'Off-field weight (dB)';
+    ax.YLabel.String = 'Nuisance field weight (dB)';
     param_val_aux = load_aux.beta;
-elseif evalin('base','zef.ES_search_method') == 2
-    ax.YLabel.String = 'Off-field weight (dB)';
-    param_val_aux = load_aux.kval;
-end
 
 ax.YLabel.FontSize     = fnt_sz-2;
 ax.YLabel.FontWeight   = 'bold';
@@ -101,11 +96,7 @@ p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',1
 
 lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
 lgd.String(1) = {['\alpha : ' num2str(load_aux.alpha(sc), '%1.0f')]};
-if evalin('base','zef.ES_search_method') == 1
     lgd.String(2) = {['t : ' num2str(param_val_aux(sr), '%1.0g')]};
-else
-    lgd.String(2) = {['k : ' num2str(param_val_aux(sr), '%1.0f')]};
-end
 lgd.AutoUpdate = 'off';
 
 grid on

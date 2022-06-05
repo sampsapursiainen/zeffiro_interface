@@ -3,9 +3,7 @@ load_aux = evalin('base','zef.y_ES_interval');
 
 ES_y                     = zeros(size(load_aux.y_ES));
 ES_residual              = cell2mat(load_aux.residual);
-if evalin('base','zef.ES_search_method') ~= 3
-    ES_residual = round(ES_residual/max(abs(ES_residual(:))),6);
-end
+ES_residual = round(ES_residual/max(abs(ES_residual(:))),6);
 ES_max                   = zeros(size(load_aux.y_ES));
 ES_flag                  = cell2mat(load_aux.flag')';
 
@@ -35,15 +33,12 @@ switch evalin('base','zef.ES_obj_fun_2')
         ES_optimize_condition = 'maximum';
 end
 
-if evalin('base','zef.ES_search_method') == 3
-    ES_relative_weight_nnz = 100;
-    ES_active_electrodes = zef_ES_4x1_sensors;
-else
+
     if isempty(ES_active_electrodes)
         ES_active_electrodes = size(load_aux.y_ES{1,1},1);
     end
     ES_separation_angle = NaN;
-end
+
 for i = 1:size(load_aux.y_ES,1)
     for j = 1:size(load_aux.y_ES,2)
         ES_y(i,j) =         norm(cell2mat(load_aux.y_ES(i,j)),1);  % L1
@@ -60,9 +55,9 @@ vec = array2table({ ES_y,                   ES_residual,              ES_max,   
     'VariableNames', ...
     {'Total dose',               'Residual',                  'Maximum current (A)',        'Optimizer Flag value', ...
     'Current density (A/m^2)',   'Angle error (deg)',         'Relative magnitude error',   'Relative error', ...
-    'Avg. off-field',            'Active electrodes',         'Separation angle',           'Search method', ...
+    'Avg. nuisance field',            'Active electrodes',         'Separation angle',           'Search method', ...
     'Maximum current limit (A)', 'Relative weight NNZ',       'Cortex thickness',           'Solver maximum current (A)', ...
-    'Source density (A/m2)',     'Relative source amplitude', 'Current density vs. off-field ratio'});
+    'Source density (A/m2)',     'Relative source amplitude', 'Current density vs. nuisance field ratio'});
 
 %% Obj Fun
 vec_aux = vec(1,[2,5,6,8,19]);
@@ -85,4 +80,5 @@ elseif isequal(ES_optimize_condition,'maximum')
     [~,Idx_2] = max(obj_funct_2(Idx));
 end
 [sr, sc] = ind2sub(size(obj_funct_2),Idx(Idx_2));
+
 end

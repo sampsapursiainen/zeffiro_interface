@@ -2,7 +2,6 @@ function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
 n = length(varargin);
 switch n
     case 0
-        if evalin('base','zef.ES_search_method') ~= 3 
             switch evalin('base','zef.ES_search_type')
                 case 1
                     y_ES = evalin('base','zef.y_ES_single.y_ES');
@@ -17,9 +16,6 @@ switch n
                     load_aux = evalin('base','zef.y_ES_interval.y_ES');
                     y_ES = load_aux{sr, sc};
             end
-        else
-            y_ES = evalin('base','zef.y_ES_4x1.y_ES');
-        end
     case 1
         if isvector(A)
             y_ES = varargin{1};
@@ -55,14 +51,10 @@ if n ~= 3
     fig_aux.Position(3) = 750;
     fig_aux.Position(4) = 250;
 
-    if evalin('base','zef.ES_search_method') ~= 3
         if evalin('base','zef.ES_search_type') == 2
             sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
         end
     
-    else
-        sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
-    end
 end
 
 h_barplot_ES = bar(y_ES,0.3);

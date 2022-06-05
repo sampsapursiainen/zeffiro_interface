@@ -14,7 +14,6 @@ zef.h_ES_obj_fun                  = zef_data.h_ES_obj_fun;
 zef.h_ES_obj_fun_2                = zef_data.h_ES_obj_fun_2;
 
 zef.h_ES_fixed_active_electrodes  = zef_data.h_ES_fixed_active_electrodes;
-zef.h_ES_CVXCheckBox              = zef_data.h_ES_CVXCheckBox;
 zef.h_ES_2D_electrode_map         = zef_data.h_ES_2D_electrode_map;
 
 zef.h_ES_plot_data_menu_item_1    = zef_data.h_ES_plot_data_menu_item_1;
@@ -26,10 +25,10 @@ zef.h_ES_plot_data_menu_item_5    = zef_data.h_ES_plot_data_menu_item_5;
 clear zef_data;
 zef_ES_init_parameter_table;
 zef.h_ES_plot_type.Items     = {'Current pattern',  'Electrode potentials',  'Error Chart', 'Show optimizer properties','Distance curves'};
-zef.h_ES_obj_fun.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. off-field ratio'};
-zef.h_ES_obj_fun_2.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. off-field ratio'};
+zef.h_ES_obj_fun.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. nuisance field ratio'};
+zef.h_ES_obj_fun_2.Items = {'Residual'  'Local current density'  'Local orientation error'  'Local relative error', 'Local current density vs. nuisance field ratio'};
 
-zef.h_ES_search_method.Items = {'L1 optimization', 'L2 optimization', '4x1'};
+zef.h_ES_search_method.Items = {'L1L1 optimization', 'L1L2 optimization', 'Least Squares optimization'};
 
 zef.h_ES_parameter_table.CellEditCallback                = 'zef_ES_optimization_update;';
 %% Button

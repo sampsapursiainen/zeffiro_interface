@@ -15,8 +15,6 @@ end
 %% Variables and parameter setup
 switch nargin
     case 0
-        switch evalin('base','zef.ES_search_method')
-            case {1,2}
                 switch evalin('base','zef.ES_search_type')
                     case 1
                         y_ES = evalin('base','zef.y_ES_single.y_ES');
@@ -31,9 +29,6 @@ switch nargin
                         y_ES = evalin('base','zef.y_ES_interval.y_ES');
                         y_ES = y_ES{sr,sc};
                 end
-            case 3
-                y_ES = evalin('base','zef.y_ES_4x1.y_ES');
-        end
     case 1
         y_ES = varargin{1};
     case 2

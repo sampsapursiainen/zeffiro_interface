@@ -1,6 +1,4 @@
 function [reconstruction] = zef_ES_update_reconstruction(varargin)
-switch evalin('base','zef.ES_search_method')
-    case {1,2}
         switch evalin('base','zef.ES_search_type')
             case 1
                 reconstruction  = evalin('base','zef.y_ES_single.volumetric_current_density');
@@ -24,7 +22,6 @@ switch evalin('base','zef.ES_search_method')
                     otherwise
                         error('Invalid length of input arguments.')
                 end
-        end
     case 3
         reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
 end

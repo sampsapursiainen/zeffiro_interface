@@ -1,9 +1,4 @@
-if not(isfield(zef,'ES_kval_max'))
-    zef.ES_kval_max = 10;
-end
-if not(isfield(zef,'ES_kval'))
-    zef.ES_kval = 1E-5;
-end
+
 if not(isfield(zef,'ES_separation_angle'))
     zef.ES_separation_angle = 45;
 end
@@ -81,12 +76,6 @@ if not(isfield(zef,'ES_score_dose'))
 end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
-end
-if not(isfield(zef,'ES_delta'))
-    zef.ES_delta = 0.1;
-end
-if not(isfield(zef,'ES_L1_iter'))
-    zef.ES_L1_iter = 1;
 end
 if not(isfield(zef,'ES_acceptable_threshold'))
     zef.ES_acceptable_threshold = 95;

@@ -1,4 +1,3 @@
-if ismember(zef.ES_search_method,[1 2])
 
         zef_ES_optimizer_properties;
 
@@ -17,17 +16,12 @@ if ismember(zef.ES_search_method,[1 2])
         zef.h_ES_optimizer_properties_table.Data{5,2} = max(abs(zef.y_ES_single.y_ES));
         zef.h_ES_optimizer_properties_table.Data{6,1} = 'Total dose';
         zef.h_ES_optimizer_properties_table.Data{6,2} = sum(abs(zef.y_ES_single.y_ES));
-        zef.h_ES_optimizer_properties_table.Data{7,1} = 'Off-field ';
+        zef.h_ES_optimizer_properties_table.Data{7,1} = 'Nuisance field ';
         zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_single.field_source.avg_off_field;
         zef.h_ES_optimizer_properties_table.Data{8,1} = 'Alpha';
         zef.h_ES_optimizer_properties_table.Data{8,2} = zef.y_ES_single.alpha;
-        if zef.ES_search_method == 1
-            zef.h_ES_optimizer_properties_table.Data{9,1} = 'Off-field weight';
-            zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_single.beta;
-        else
-            zef.h_ES_optimizer_properties_table.Data{9,1} = 'Off-field weight';
-            zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_single.kval;
-        end
+        zef.h_ES_optimizer_properties_table.Data{9,1} = 'Nuisance field weight';
+        zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_single.beta;
     end
     
     if zef.ES_search_type == 2
@@ -44,18 +38,12 @@ if ismember(zef.ES_search_method,[1 2])
         zef.h_ES_optimizer_properties_table.Data{5,2} = max(abs(zef.y_ES_interval.y_ES{sr,sc}));
         zef.h_ES_optimizer_properties_table.Data{6,1} = 'Total dose';
         zef.h_ES_optimizer_properties_table.Data{6,2} = sum(abs(zef.y_ES_interval.y_ES{sr,sc}));
-        zef.h_ES_optimizer_properties_table.Data{7,1} = 'Off-field';
-        zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_interval.field_source.avg_off_field{sr,sc};
-        
+        zef.h_ES_optimizer_properties_table.Data{7,1} = 'Nuisance field';
+        zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_interval.field_source.avg_off_field{sr,sc};     
         zef.h_ES_optimizer_properties_table.Data{8,1} = 'Alpha';
         zef.h_ES_optimizer_properties_table.Data{8,2} = zef.y_ES_interval.alpha(sc);
-        if zef.ES_search_method == 1
-            zef.h_ES_optimizer_properties_table.Data{9,1} = 'Off-field weight';
-            zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_interval.beta(sr);
-        else
-            zef.h_ES_optimizer_properties_table.Data{9,1} = 'Off-field weight';
-            zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_interval.kval(sr);
-        end
+        zef.h_ES_optimizer_properties_table.Data{9,1} = 'Nuiscane field weight';
+        zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_interval.beta(sr);
     end
-end
+
 clear sr sc
