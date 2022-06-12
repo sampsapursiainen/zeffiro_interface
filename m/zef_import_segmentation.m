@@ -64,14 +64,12 @@ for i = 1 : size(ini_cell,1)
             evalin('base','zef_add_compartment;');
             compartment_tags = evalin('base','zef.compartment_tags');
             compartment_tag = compartment_tags{1};
-            compartment_ind = length(compartment_tags);
             end
         else
              domain_label_counter = domain_label_counter + 1;
             evalin('base','zef_add_compartment;');
             compartment_tags = evalin('base','zef.compartment_tags');
             compartment_tag = compartment_tags{1};
-            compartment_ind = length(compartment_tags);
         end
 
         if ismember('filename',ini_cell(i,:))
@@ -167,7 +165,7 @@ for i = 1 : size(ini_cell,1)
          aux_tetra = evalin('base','zef.tetra');
          aux_nodes = evalin('base','zef.nodes');
          aux_domain_labels = evalin('base','zef.domain_labels');
-            [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels>=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
+            [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
             aux_submesh_ind = size(aux_triangles,1);
             eval(['zef_data.' compartment_tag '_points = aux_points;']);
             eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
@@ -196,7 +194,6 @@ for i = 1 : size(ini_cell,1)
             evalin('base','zef_add_sensors;');
             sensor_tags = evalin('base','zef.sensor_tags');
             sensor_tag = sensor_tags{1};
-            sensors_ind = length(sensor_tags);
         end
 
         filename = [];
@@ -259,7 +256,7 @@ for i = 1 : size(ini_cell,1)
         evalin('base','zef_get_sensor_directions;');
              end
             if isequal(filetype,'mat')
-           zef_import_mat_struct(fullfile(folder_name,filename),[compartment_tag '_']);
+           zef_import_mat_struct(fullfile(folder_name,filename),[sensor_tag '_']);
             end
         end
      

@@ -39,9 +39,9 @@ end
 
 if not(isempty(extension))
 mat_struct_aux = cell(0);
-fieldnames = fieldnames(mat_struct);
-for i = 1 : length(fieldnames)
-eval(['mat_struct_aux.' extension fieldnames{i} '=' 'mat_struct.' fieldnames{i} ';'])
+fieldnames_cell = fieldnames(mat_struct);
+for i = 1 : length(fieldnames_cell)
+eval(['mat_struct_aux.' extension fieldnames_cell{i} '=' 'mat_struct.' fieldnames_cell{i} ';'])
 end 
 mat_struct = mat_struct_aux;
 end

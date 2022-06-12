@@ -1,5 +1,7 @@
 function zef_create_compartment(compartment_tag, varargin)
 
+n_compartments = evalin('base','length(zef.compartment_tags)')
+rng(n_compartments);
 zef_struct_name = 'zef';
 field_cell_update = cell(0);
 if not(isempty(varargin))
