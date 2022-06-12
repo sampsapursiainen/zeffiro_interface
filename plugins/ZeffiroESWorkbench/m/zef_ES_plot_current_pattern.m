@@ -36,7 +36,7 @@ switch nargin
     otherwise
         error('Nmber of function input arcument must be 0 or 1')
 end
-sensors = evalin('base','zef.sensors');
+[sensors] = zef_process_meshes(evalin('base','zef.explode_everything'));
 %% Sensors attachment
 if evalin('base','zef.attach_electrodes')
     sensors = zef_attach_sensors_volume(evalin('base','zef.sensors'));

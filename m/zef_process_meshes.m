@@ -36,6 +36,8 @@ for k = 1 : length(compartment_tags)
         var_10 = ['zef.' compartment_tags{k} '_triangles'];
         var_11 = ['zef.' compartment_tags{k} '_submesh_ind'];
         var_12 = ['zef.' compartment_tags{k} '_sources'];
+        var_13 = ['zef.' compartment_tags{k} '_affine_transform'];
+        var_14 = [compartment_tags{k} '_affine_transform'];
 
 on_val = evalin('base',var_0);
 
@@ -60,6 +62,16 @@ translation_vec(3) = evalin('base',[var_4 '(' num2str(t_ind) ')']);
 theta_angle_vec(1) =  evalin('base',[var_5 '(' num2str(t_ind) ')']);
 theta_angle_vec(2) =  evalin('base',[var_6 '(' num2str(t_ind) ')']);
 theta_angle_vec(3) =  evalin('base',[var_7 '(' num2str(t_ind) ')']);
+if evalin('base',['isfield(zef,''' var_14 ''')'])
+    if evalin('base',['length(' var_13 ')']) >= t_ind
+affine_transform =  cell2mat(evalin('base',[var_13 '(' num2str(t_ind) ')']));
+    else
+        affine_transform = eye(4);
+    end
+    
+reuna_aux = [reuna_p{i} ones(size(reuna_p{i},1),1)];
+reuna_aux = reuna_aux*affine_transform';
+reuna_p{i} = reuna_aux(:,1:3);
 
 if scaling_val ~= 1
 reuna_p{i} = scaling_val*reuna_p{i};
@@ -145,6 +157,13 @@ s_z_correction = evalin('base',['zef.' sensor_tag '_z_correction']);
 s_xy_rotation = evalin('base',['zef.' sensor_tag '_xy_rotation']);
 s_yz_rotation = evalin('base',['zef.' sensor_tag '_yz_rotation']);
 s_zx_rotation = evalin('base',['zef.' sensor_tag '_zx_rotation']);
+
+if evalin('base',['isfield(zef,''' sensor_tag '_affine_transform'')']);
+s_affine_transform = evalin('base',['zef.' sensor_tag '_affine_transform']);
+else
+s_affine_transform = cell(0);
+end
+
 if isempty(s_directions)
 sensors = [s_points];
 else
@@ -166,6 +185,14 @@ translation_vec = [s_x_correction(t_ind) s_y_correction(t_ind) s_z_correction(t_
 theta_angle_vec = [s_xy_rotation(t_ind) s_yz_rotation(t_ind) s_zx_rotation(t_ind)];
 if not(isempty(sensors))
 mean_vec = repmat(mean(sensors(:,1:3),1),size(sensors(:,1:3),1),1);
+
+if length(s_affine_transform) >= t_ind
+sensors_aux = [sensors(:,1:3) ones(size(sensors,1),1)];
+sensors_aux = sensors_aux*s_affine_transform{t_ind}';
+sensors(:,1: 3) = sensors_aux(:,1:3);
+end
+
+
 if scaling_val ~= 1
 sensors(:,1:3) = scaling_val*sensors(:,1:3);
 end

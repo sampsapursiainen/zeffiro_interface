@@ -43,6 +43,7 @@ for zef_ii = sort(zef.lf_item_selected)
         zef.s_xy_rotation = 0;
         zef.s_yz_rotation = 0;
         zef.s_zx_rotation = 0;
+        zef.s_affine_transform = {eye(4)};
         zef_update;
 
     end

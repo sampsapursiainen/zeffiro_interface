@@ -25,6 +25,7 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef.s_xy_rotation = 0;
         zef.s_yz_rotation = 0;
         zef.s_zx_rotation = 0;
+        zef.s_affine_transform = {eye(4)};
 
         if zef.source_interpolation_on == 1 && zef_i > 1
         zef.source_interpolation_on = 0;

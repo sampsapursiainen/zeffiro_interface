@@ -27,6 +27,7 @@ field_cell_default =  {{'on', '1'}
     {'z_correction', '0'}
     {'y_correction', '0'}
     {'x_correction', '0'}
+    {'affine_transform','{[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]}'}
     {'transform_name','{''Transform 1''}'}
     {'imaging_method_name',['''' evalin('base',[zef_struct_name '.imaging_method_cell{' zef_struct_name '.imaging_method}' ]) '''']}
     {'name_list','[]'}
@@ -46,4 +47,4 @@ evalin('base',[zef_struct_name '.' sensor_tag '_' field_cell_update{i}{1} '=[' f
 
 end
 
-evalin('base',[zef_struct_name '.sensor_tags = ['''  sensor_tag ''',' zef_struct_name '.sensor_tags];']);
+evalin('base',[zef_struct_name '.sensor_tags = ['''  sensor_tag ''', ' zef_struct_name '.sensor_tags];']);
