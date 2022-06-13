@@ -29,8 +29,8 @@ function zeffiro_interface(varargin)
     addpath(zef_data.code_path); 
     addpath(zef_data.program_path); 
     zef_data.path_cell = [{zef_data.program_path} ; {zef_data.code_path}; {zef_data.cluster_path}];
-    zef_data.path_cell = zef_add_path([zef_data.program_path filesep zef_data.code_path],'recursive', zef_data.path_cell);
-    zef_data.path_cell = zef_add_path([zef_data.program_path filesep zef_data.cluster_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.code_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.cluster_path],'recursive', zef_data.path_cell);
     zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'mlapp'],'recursive', zef_data.path_cell);
     zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'fig'],'recursive', zef_data.path_cell);
     zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'plugins'],'recursive', zef_data.path_cell);
