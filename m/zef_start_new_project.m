@@ -2,6 +2,9 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef_data = struct;
 zef_close_tools;
+zef_close_figs;
+zef.compartments_selected = [1 : length(zef.compartment_tags)];
+zef_delete_compartment;
 zef_init;
 zef_reopen_segmentation_tool;
 zef_close_figs;

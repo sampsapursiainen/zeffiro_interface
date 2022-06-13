@@ -196,7 +196,7 @@ for i = 1 : size(ini_cell,1)
             sensor_tag = sensor_tags{1};
         end
 
-        filename = [];
+        filename = '';
         if ismember('filename',ini_cell(i,:))
             ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filename'),1)];
                 ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -268,7 +268,7 @@ evalin('base','zef_build_sensors_table;');
  
     
     elseif isequal(type,'struct')
-       filename = [];
+       filename = '';
         if ismember('filename',ini_cell(i,:))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filename'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -276,8 +276,19 @@ evalin('base','zef_build_sensors_table;');
         zef_import_mat_struct(fullfile(folder_name,filename));
         end
           
-
+    elseif isequal(type,'script')
+       filename = '';
+        if ismember('filename',ini_cell(i,:))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filename'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        filename = (ini_cell{i,find(ismember(ini_cell(i,:),'filename'),1)+1});
+        evalin('base',['run(''' fullfile(folder_name,filename)  ''');']);
+        end
+        
+        
     end
+    
+    
     
 end
 
