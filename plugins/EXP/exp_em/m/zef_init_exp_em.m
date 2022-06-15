@@ -5,7 +5,7 @@ if not(isfield(zef,'exp_em_q'))
     zef.exp_em_q = 1;
 end
 if not(isfield(zef,'exp_em_hyper_type'))
-    zef.exp_em_hyper_type = 1;
+    zef.exp_em_hyper_type = 2;
 end
 if not(isfield(zef,'exp_em_beta'));
     zef.exp_em_beta = 1.5;

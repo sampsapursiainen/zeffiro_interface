@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'mne_prior'));
-    zef.mne_prior = 1;
+    zef.mne_prior = 2;
 end;
 if not(isfield(zef,'mne_type'));
     zef.mne_type = 1;

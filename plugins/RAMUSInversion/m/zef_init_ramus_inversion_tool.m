@@ -25,7 +25,7 @@ if not(isfield(zef,'ramus_multires_n_iter'));
     zef.ramus_multires_n_iter = [10];
 end;
 if not(isfield(zef,'ramus_hyperprior'));
-    zef.ramus_hyperprior = 1;
+    zef.ramus_hyperprior = 2;
 end;
 if not(isfield(zef,'ramus_n_map_iterations'));
     zef.ramus_n_map_iterations = 25;

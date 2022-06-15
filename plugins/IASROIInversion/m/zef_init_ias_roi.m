@@ -13,7 +13,7 @@ if not(isfield(zef,'iasroi_roi_threshold'));
     zef.iasroi_roi_threshold = 0.5;
 end;
 if not(isfield(zef,'iasroi_hyperprior'));
-    zef.iasroi_hyperprior = 1;
+    zef.iasroi_hyperprior = 2;
 end;
 if not(isfield(zef,'iasroi_n_map_iterations'));
     zef.iasroi_n_map_iterations = 25;

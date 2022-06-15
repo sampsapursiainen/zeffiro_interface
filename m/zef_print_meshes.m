@@ -102,7 +102,7 @@ end
 if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(num2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 open(h_aviobj);
@@ -1187,7 +1187,7 @@ end
 if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(num2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 h_aviobj.FrameRate = movie_fps;
@@ -1197,7 +1197,7 @@ end
 if iscell(evalin('base','zef.top_reconstruction')) &  evalin('base','zef.visualization_type') == 5 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(nu2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 h_aviobj.FrameRate = movie_fps;
@@ -2164,7 +2164,7 @@ if f_ind_aux > 2
 time_val = toc;
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames-1)/(f_ind_aux-2) - 1)*time_val/86400)) '.']);
 else
-waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
+waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
 end
 set(h_waitbar,'handlevisibility','off');
 %******************************************************
@@ -2379,7 +2379,7 @@ end
 
 end
 zef_plot_dpq('dynamical');
-zef_set_sliders_print(1);
+zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
 

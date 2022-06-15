@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'ias_hyperprior'));
-    zef.ias_hyperprior = 1;
+    zef.ias_hyperprior = 2;
 end;
 if not(isfield(zef,'ias_n_map_iterations'));
     zef.ias_n_map_iterations = 25;
