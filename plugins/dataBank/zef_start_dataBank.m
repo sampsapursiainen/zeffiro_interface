@@ -79,7 +79,7 @@ set(zef.dataBank.app.DataBank,'SizeChangedFcn','zef.zeffiro_dataBank_current_siz
 % load all data and stuff
 
 if ~isfield(zef.dataBank, 'tree')
-    zef.dataBank.tree=[];
+    zef.dataBank.tree=struct;
 else
     zef_dataBank_hash2tree;
 end

@@ -29,15 +29,15 @@ end
 
 %_ Initial values _
 zef.MUSIC.MUSIC_leadfield_lambda.Value = '1e-3';
-zef.MUSIC.inv_snr.Value = '30';
-zef.MUSIC.inv_sampling_frequency.Value = '1025';
-zef.MUSIC.inv_low_cut_frequency.Value = '7';
-zef.MUSIC.inv_high_cut_frequency.Value = '9';
-zef.MUSIC.inv_time_1.Value = '0';
-zef.MUSIC.inv_time_2.Value = '0';
-zef.MUSIC.number_of_frames.Value = '0';
-zef.MUSIC.inv_time_3.Value = '0';
-zef.MUSIC.inv_data_segment.Value = '1';
+zef.MUSIC.inv_snr.Value = num2str(zef.inv_snr);
+zef.MUSIC.inv_sampling_frequency.Value = num2str(zef.inv_sampling_frequency);
+zef.MUSIC.inv_low_cut_frequency.Value = num2str(zef.inv_low_cut_frequency);
+zef.MUSIC.inv_high_cut_frequency.Value = num2str(zef.inv_high_cut_frequency);
+zef.MUSIC.inv_time_1.Value = num2str(zef.inv_time_1);
+zef.MUSIC.inv_time_2.Value = num2str(zef.inv_time_2);
+zef.MUSIC.number_of_frames.Value = num2str(zef.number_of_frames);
+zef.MUSIC.inv_time_3.Value = num2str(zef.inv_time_3);
+zef.MUSIC.inv_data_segment.Value = num2str(zef.inv_data_segment);
 
 if ~isfield(zef,'MUSIC_leadfield_lambda')
     zef.MUSIC_leadfield_lambda = 1e-3;

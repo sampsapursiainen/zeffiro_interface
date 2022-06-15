@@ -860,12 +860,12 @@ if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') ==
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+  [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  % = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-  delete(bmp_file_temp);
+  %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -1090,11 +1090,11 @@ end
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index == 4;
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-  delete(bmp_file_temp);
+  %delete(bmp_file_temp);
   end;
 
 end
@@ -2095,12 +2095,12 @@ if iscell(volumetric_distribution) &&  ismember(evalin('base','zef.visualization
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -2122,12 +2122,12 @@ elseif iscell(evalin('base','zef.top_reconstruction')) &&  ismember(evalin('base
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -2416,11 +2416,11 @@ end
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index == 4;
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
 
 end

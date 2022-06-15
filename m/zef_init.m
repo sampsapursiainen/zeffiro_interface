@@ -203,6 +203,9 @@ zef_data.sensors_attached_volume = [];
        zef_data.import_mode      = 0;
 
        zef_data.mesh_smoothing_on = 0;
+       
+       zef.file = '';
+       zef.file_path = '';
 
        zef_data.forward_simulation_selected = [];
        zef_data.forward_simulation_table = cell(0);

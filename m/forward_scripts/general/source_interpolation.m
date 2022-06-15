@@ -72,7 +72,7 @@ sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
+if evalin('base',['zef.' compartment_tags{k} '_sources'])>0
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -83,7 +83,7 @@ source_positions_aux = source_positions;
 
 for ab_ind = 1 : length(aux_brain_ind)
 
-    waitbar((ab_ind+1)/(length(aux_brain_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
+waitbar((ab_ind+1)/(length(aux_brain_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
 
 aux_point_ind = unique(gather(source_interpolation_ind{1}));
 source_positions = source_positions_aux(aux_point_ind,:);

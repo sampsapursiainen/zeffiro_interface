@@ -12,8 +12,10 @@ gpuDeviceCount = 0;
 end
 zef = rmfield(zef, 'ver');
 
-if ismember(zef.start_mode,{'nodisplay','display'})
-zef.use_display = 0;
+if isequal(zef.start_mode,{'nodisplay'})
+   zef.use_display = 0;
+else 
+   zef.use_display = 1;
 end
 
 if not(zef.use_display)

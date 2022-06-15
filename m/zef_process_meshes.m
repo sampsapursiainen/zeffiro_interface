@@ -190,7 +190,15 @@ if length(s_affine_transform) >= t_ind
 sensors_aux = [sensors(:,1:3) ones(size(sensors,1),1)];
 sensors_aux = sensors_aux*s_affine_transform{t_ind}';
 sensors(:,1: 3) = sensors_aux(:,1:3);
+if size(sensors_aux,2) >= 6 && ismember(evalin('base','zef.imaging_method'),[2 3])
+sensors(:,4:6) = sensors(:,4:6)*s_affine_transform{t_ind}(1:3,1:3)';
 end
+if size(sensors_aux,2) >= 9 && ismember(evalin('base','zef.imaging_method'),[3])
+sensors(:,7:9) = sensors(:,7:9)*s_affine_transform{t_ind}(1:3,1:3)';
+end
+
+end 
+
 
 
 if scaling_val ~= 1

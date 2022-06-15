@@ -15,11 +15,23 @@ function zeffiro_interface(varargin)
 %export_fem_mesh (file name), open_figure (file name), open_figure_folder
 %(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
+option_counter = 1;
+zeffiro_restart = 0;
+if not(isempty(varargin))
+    if isequal(varargin{1},'restart')
+zeffiro_restart = 1;
+option_counter = option_counter + 1;
+    end
+end
+
+if isequal(zeffiro_restart,0)
     if evalin('base','exist(''zef'');')
         error('It looks like that another instance of Zeffiro interface already open. To enable this script, close Zeffiro Interface by command ''zef_close_all'' or clear zef by command ''clear zef''.')
     end
+end
 
-    program_path = pwd;
+    program_path_aux = mfilename('fullpath');
+    [program_path, ~] = fileparts(program_path_aux);
     zef_data.program_path = program_path;
     zef_data.code_path = [zef_data.program_path filesep 'm'];
     evalin('base',['run(''' zef_data.code_path filesep 'zef_close_all.m'')'])
@@ -43,8 +55,6 @@ function zeffiro_interface(varargin)
     clear zef_data;
 
     if not(isempty(varargin))
-
-        option_counter = 1;
 
         start_mode = 'display';
 

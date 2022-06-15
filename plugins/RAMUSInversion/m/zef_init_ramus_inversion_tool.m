@@ -36,14 +36,10 @@ end;
 if not(isfield(zef,'ramus_data_segment'));
     zef.ramus_data_segment = 1;
 end;
-if not(isfield(zef,'ramus_sampling_frequency'));
-    zef.ramus_sampling_frequency = 1025;
-end;
-if not(isfield(zef,'ramus_low_cut_frequency'));
-    zef.ramus_low_cut_frequency = 7;
-end;
-if not(isfield(zef,'ramus_high_cut_frequency'));
-    zef.ramus_high_cut_frequency = 9;
+
+    zef.ramus_sampling_frequency = zef.inv_sampling_frequency;
+    zef.ramus_low_cut_frequency = zef.inv_low_cut_frequency;
+    zef.ramus_high_cut_frequency = zef.inv_high_cut_frequency;
 end;
 if not(isfield(zef,'ramus_normalize_data'));
     zef.ramus_normalize_data = 1;
@@ -54,18 +50,11 @@ end;
 if not(isfield(zef,'ramus_hyperprior'));
     zef.ramus_hyperprior = 1;
 end;
-if not(isfield(zef,'ramus_time_1'));
-    zef.ramus_time_1 = 0;
-end;
-if not(isfield(zef,'ramus_time_2'));
-    zef.ramus_time_2 = 0;
-end;
-if not(isfield(zef,'ramus_time_3'));
-    zef.ramus_time_3 = 0;
-end;
-if not(isfield(zef,'ramus_number_of_frames'));
-    zef.ramus_number_of_frames = 1;
-end;
+
+    zef.ramus_time_1 = zef.inv_time_1;
+    zef.ramus_time_2 = zef.inv_time_2;
+    zef.ramus_time_3 = zef.inv_time_3;
+    zef.ramus_number_of_frames = zef.number_of_frames;
 
 zef.ramus_snr = zef.inv_snr;
 

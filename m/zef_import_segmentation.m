@@ -39,8 +39,8 @@ sensor_tags = evalin('base','zef.sensor_tags');
 for i = 1 : size(ini_cell,1)
     
     compartment_data = evalin('base','zef.h_compartment_table.Data');
-        sensors_data = evalin('base','zef.h_sensors_table.Data');
-        
+    sensors_data = evalin('base','zef.h_sensors_table.Data');
+    
     waitbar(i/size(ini_cell,1),h,['Importing ' num2str(i) '/' num2str(size(ini_cell,1)) '.']);
     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'type'),1)];
     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -60,7 +60,7 @@ for i = 1 : size(ini_cell,1)
             compartment_ind = find(ismember(compartment_data(:,3),name));
             compartment_tag = compartment_tags{end-compartment_ind+1};
             else
-                domain_label_counter = domain_label_counter + 1;
+            domain_label_counter = domain_label_counter + 1;
             evalin('base','zef_add_compartment;');
             compartment_tags = evalin('base','zef.compartment_tags');
             compartment_tag = compartment_tags{1};
@@ -155,7 +155,6 @@ for i = 1 : size(ini_cell,1)
         zef_data.file = filename;
         zef_data.file_path = folder_name;
 
-        
         if not(isempty(filename))
             if not(ismember(filetype,{'mat',''}))
         evalin('base','zef_get_surface_mesh;');
@@ -173,20 +172,18 @@ for i = 1 : size(ini_cell,1)
             end
         end
         
-                assignin('base','zef_data',zef_data);
+        assignin('base','zef_data',zef_data);
         evalin('base','zef_assign_data;');
         clear zef_data;
  
-
     %    evalin('base','zef_init_parameter_profile;');
         evalin('base','zef_apply_parameter_profile;');
         evalin('base','zef_build_compartment_table;');
 
-
-
     elseif isequal(type,'sensors')
 
         name = (ini_cell{i,find(ismember(ini_cell(i,:),'name'),1)+1});
+       if not(isempty(sensors_data))
         if ismember(name,sensors_data(:,2))
             sensors_ind = find(ismember(sensors_data(:,2),name));
             sensor_tag = sensor_tags{end-sensors_ind+1};
@@ -195,6 +192,11 @@ for i = 1 : size(ini_cell,1)
             sensor_tags = evalin('base','zef.sensor_tags');
             sensor_tag = sensor_tags{1};
         end
+       else
+           evalin('base','zef_add_sensors;');
+            sensor_tags = evalin('base','zef.sensor_tags');
+            sensor_tag = sensor_tags{1};
+       end
 
         filename = '';
         if ismember('filename',ini_cell(i,:))
@@ -228,7 +230,7 @@ for i = 1 : size(ini_cell,1)
         else
             visible = '1';
          end
-  if find(ismember(ini_cell(i,:),'affine_transform'))
+        if find(ismember(ini_cell(i,:),'affine_transform'))
             ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'affine_transform'),1)];
                 ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         affine_transform = ini_cell{i,find(ismember(ini_cell(i,:),'affine_transform'),1)+1};
@@ -258,15 +260,12 @@ for i = 1 : size(ini_cell,1)
             if isequal(filetype,'mat')
            zef_import_mat_struct(fullfile(folder_name,filename),[sensor_tag '_']);
             end
-        end
-     
+        end   
 
        % evalin('base','zef_init_sensors_parameter_profile;');
         evalin('base','zef_apply_parameter_profile;');
 evalin('base','zef_build_sensors_table;');
 
- 
-    
     elseif isequal(type,'struct')
        filename = '';
         if ismember('filename',ini_cell(i,:))

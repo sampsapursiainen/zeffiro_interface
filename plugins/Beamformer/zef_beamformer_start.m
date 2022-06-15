@@ -60,14 +60,14 @@ end
 %_ Initial values _
 zef.beamformer.inv_cov_lambda.Value = '5e-2';
 zef.beamformer.inv_leadfield_lambda.Value = '1e-3';
-zef.beamformer.inv_snr.Value = '30';
-zef.beamformer.inv_sampling_frequency.Value = '1025';
-zef.beamformer.inv_low_cut_frequency.Value = '7';
-zef.beamformer.inv_high_cut_frequency.Value = '9';
-zef.beamformer.inv_time_1.Value = '0';
-zef.beamformer.inv_time_2.Value = '0';
-zef.beamformer.number_of_frames.Value = '0';
-zef.beamformer.inv_time_3.Value = '0';
+zef.beamformer.inv_snr.Value =  num2str(zef.inv_snr);
+zef.beamformer.inv_sampling_frequency.Value = num2str(zef.inv_sampling_frequency);
+zef.beamformer.inv_low_cut_frequency.Value = num2str(zef.inv_low_cut_frequency);
+zef.beamformer.inv_high_cut_frequency.Value = num2str(zef.inv_high_cut_frequency);
+zef.beamformer.inv_time_1.Value = num2str(zef.inv_time_1);
+zef.beamformer.inv_time_2.Value = num2str(zef.inv_time_2);
+zef.beamformer.number_of_frames.Value = num2str(zef.number_of_frames);
+zef.beamformer.inv_time_3.Value = num2str(zef.inv_time_3);
 zef.beamformer.inv_data_segment.Value = '1';
 
 if ~isfield(zef,'inv_cov_lambda')
