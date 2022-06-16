@@ -8,7 +8,7 @@ for k=1:numel(fn)
     node = data_tree.(fn{k});
     if (strcmp(node.type, 'reconstruction'))
         rec = node.data.reconstruction;
-        number_of_frames = size(rec,2);
+        number_of_frames = size(rec,1);
         for i= 1:number_of_frames
             z_inverse_results{i}{rec_ind} = rec{i};
         end
@@ -17,8 +17,8 @@ for k=1:numel(fn)
 end
 
 
-
+z_mean = cell(0);
 % average
 for i = 1:size(z_inverse_results,2)
-    z_inverse_results{i} = mean([z_inverse_results{i}{:}],2);
+    z_mean = mean([z_inverse_results{i}{:}],2);
 end
