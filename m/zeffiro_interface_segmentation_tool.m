@@ -24,6 +24,7 @@ set(zef.h_transform_table,'CellSelectionCallback',@zef_transform_table_selection
 set(zef.h_sensors_table,'CellSelectionCallback',@zef_sensors_table_selection);
 set(zef.h_sensors_name_table,'CellSelectionCallback',@zef_sensors_name_table_selection);
 
+
 set(zef.h_menu_settings,'Tag','settings');
 set(zef.h_menu_add_sensors,'MenuSelectedFcn','zef_add_sensor_name;');
 set(zef.h_menu_delete_sensors,'MenuSelectedFcn','zef_delete_sensors;');
@@ -157,3 +158,4 @@ set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','zef_close_all;');
+
