@@ -15,7 +15,12 @@ end
 
 h_axes = gca;
 hold_status = ishold(h_axes);
-c_map = lines(length(rel_val));
+
+colormap_size = length(rel_val);
+colortune_param = evalin('base','zef.colortune_param');
+colormap_cell = evalin('base','zef.colormap_cell');
+c_map = evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
+
 h_contour_old = findobj(h_axes.Children,'-regexp','Tag','contour*');
 delete(h_contour_old);
 
