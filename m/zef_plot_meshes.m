@@ -796,11 +796,11 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
-                            h_contour{i} = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                            [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                             else
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
-                            h_contour{i} = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+                            [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
                             end
 
                            if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
@@ -1053,9 +1053,9 @@ zef_plot_dpq('dynamical');
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
                     if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                    h_contour{i} = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                    [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                     else
-                     h_contour{i} = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});      
+                     [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});      
                     end
                     if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                     zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);

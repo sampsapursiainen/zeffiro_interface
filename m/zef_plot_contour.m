@@ -1,5 +1,6 @@
 function [h_contour,h_text] = zef_plot_contour(rel_val,surf_func,triangles,nodes,varargin)
 
+
 if evalin('base','zef.show_contour')
 
 tau = 1;
@@ -127,6 +128,9 @@ if not(hold_status)
     hold off; 
 end
 
+else
+h_contour = []; 
+h_text = [];
 end
 
 end
