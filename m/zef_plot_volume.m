@@ -783,8 +783,21 @@ end
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_plot(1);
 
           zef_store_cdata(cdata_counter,cdata_info);
@@ -951,7 +964,17 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none');
 end
+
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_plot(2);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 

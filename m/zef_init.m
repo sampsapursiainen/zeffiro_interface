@@ -192,7 +192,8 @@ zef_data.sensors_attached_volume = [];
        zef_data.source_directions = [];
               zef_data.brain_ind = [];
              zef_data.source_ind = [];
-             zef_data.show_contour = 1;
+             zef_data.show_contour = 0;
+             zef_data.show_contour_text = 0;
              zef_data.contour_set = [0.1:0.2:0.9];
 
             zef_data.cp_on       = 0;

@@ -844,8 +844,21 @@ camup(c_u);
 
 sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
 uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;
@@ -1062,7 +1075,16 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none');
 end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
@@ -2078,8 +2100,21 @@ camup(c_u);
 
         sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_print(1,h_axes_image);
 if not(evalin('base','zef.axes_visible'))
 set(h_axes_image,'visible','off');
@@ -2383,7 +2418,16 @@ end
 %End of topography reconstruction.
 
 end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
@@ -2481,8 +2525,21 @@ camup(c_u);
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;

@@ -1,11 +1,12 @@
 function [h_contour,h_text] = zef_plot_contour(rel_val,surf_func,triangles,nodes,varargin)
 
-
-if evalin('base','zef.show_contour')
-
+if not(evalin('base','zef.show_contour_text'))
+h_text = [];
+end
+    
 tau = 1;
 n_iter = 10;
-line_width = 2;
+line_width = 1;
 if not(isempty(varargin))
 n_iter = varargin{1};
 if length(varargin) > 1
@@ -13,7 +14,8 @@ tau = varargin{2};
 end
 end
 
-h_axes = gca;
+h_fig = gcf;
+h_axes = findobj(h_fig.Children,'Tag','axes1');
 hold_status = ishold(h_axes);
 
 colormap_size = length(rel_val);
@@ -21,10 +23,17 @@ colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 c_map = evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
 
-h_contour_old = findobj(h_axes.Children,'-regexp','Tag','contour*');
+h_contour_old = findobj(h_axes.Children,'Tag','contour');
 delete(h_contour_old);
 
+h_contour_text_old = findobj(h_axes.Children,'Tag','contour_text');
+delete(h_contour_text_old);
+
+if isequal(size(surf_func(:),1),size(nodes,1))
 surf_func = (1/3)*(surf_func(triangles(:,1),:) + surf_func(triangles(:,2),:) + surf_func(triangles(:,3),:));
+elseif isequal(size(surf_func(:),1),3*size(triangles,1))
+  surf_func = mean(reshape(surf_func,3,size(triangles,1)),1);  
+end
 
 min_val = min(surf_func,[],'all');
 max_val = max(surf_func,[],'all');
@@ -106,16 +115,16 @@ if size(edges_contour{loop_start},1) > 0
 edges_contour{loop_start} = edges_contour{loop_start}';
 edges_contour{loop_start} = edges_contour{loop_start}(:);
 
-h_contour(loop_start,j) = plot3(nodes(edges_contour{loop_start},1),nodes(edges_contour{loop_start},2),nodes(edges_contour{loop_start},3));
+h_contour(loop_start,j) = plot3(h_axes,nodes(edges_contour{loop_start},1),nodes(edges_contour{loop_start},2),nodes(edges_contour{loop_start},3));
 set(h_contour(loop_start,j),'linewidth',line_width)
 set(h_contour(loop_start,j),'color',c_map(j,:))
 set(h_contour(loop_start,j),'tag','contour')
 
 uistack(h_contour(loop_start,j),'top');
 
-if loop_start == 1
- h_text(j) = text(nodes(edges_contour{loop_start}(1,1),1),nodes(edges_contour{loop_start}(1,1),2),nodes(edges_contour{loop_start}(1,1),3),[sprintf('%0.3g',100*rel_val(j)) ' %']);
-                    set(h_text(loop_start,j),'FontSize',evalin('base','zef.h_axes1.FontSize'));
+if loop_start == 1 && evalin('base','zef.show_contour_text')
+h_text(j) = text(h_axes,nodes(edges_contour{loop_start}(1,1),1),nodes(edges_contour{loop_start}(1,1),2),nodes(edges_contour{loop_start}(1,1),3),[sprintf('%0.3g',100*rel_val(j)) ' %']);
+set(h_text(j),'FontSize',h_axes.FontSize);
 h_text(j).Tag = 'contour_text';
 uistack(h_text(j),'top');
 end
@@ -127,15 +136,11 @@ end
 end
 
 
-
  
 if not(hold_status)
     hold off; 
 end
 
-else
-h_contour = []; 
-h_text = [];
-end
+
 
 end

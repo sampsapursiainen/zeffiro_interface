@@ -796,11 +796,11 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                             if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
-                            [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                            %[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                             else
                             h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                             set(h_surf_2{i},'Tag','reconstruction');
-                            [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+                            %[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
                             end
 
                            if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
@@ -892,8 +892,21 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_plot(1);
         zef_store_cdata(cdata_counter,cdata_info);
         cdata_counter = cdata_counter + 1;
@@ -1053,9 +1066,9 @@ zef_plot_dpq('dynamical');
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
                     if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                    [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                    %[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                     else
-                     [h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});      
+                     %[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});      
                     end
                     if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
                     zef_plot_cone_field(evalin('base','zef.h_axes1'),f_ind);
@@ -1094,7 +1107,16 @@ zef_plot_dpq('dynamical');
                     %End of topography reconstruction.
                 end
 
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
                 zef_set_sliders_plot(2);
                 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
@@ -1164,8 +1186,21 @@ zef_plot_dpq('dynamical');
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
-        zef_plot_dpq('static');
-        zef_plot_dpq('dynamical');
+        try
+zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_plot(1);
         zef_store_cdata(cdata_counter,cdata_info);
         cdata_counter = cdata_counter + 1;

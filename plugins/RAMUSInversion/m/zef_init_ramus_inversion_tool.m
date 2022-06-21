@@ -40,7 +40,7 @@ end;
     zef.ramus_sampling_frequency = zef.inv_sampling_frequency;
     zef.ramus_low_cut_frequency = zef.inv_low_cut_frequency;
     zef.ramus_high_cut_frequency = zef.inv_high_cut_frequency;
-end;
+
 if not(isfield(zef,'ramus_normalize_data'));
     zef.ramus_normalize_data = 1;
 end;
