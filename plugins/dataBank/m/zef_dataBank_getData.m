@@ -28,7 +28,11 @@ switch type
         data.sensors = zef.sensors;
         data.imaging_method = zef.imaging_method;
         data.noise_data = zef.noise_data;
+        if isfield(zef,'lf_tag')
         data.lf_tag = zef.lf_tag;
+        else
+            data.lf_tag = '';
+        end
         data.source_structure = cell(0,0);
         for zef_ind=1:length(zef.compartment_tags)
             zef_name=strcat(zef.compartment_tags{zef_ind}, '_sources');

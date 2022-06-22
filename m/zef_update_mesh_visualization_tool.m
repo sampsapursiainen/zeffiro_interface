@@ -1,3 +1,7 @@
+zef.show_contour = zef.h_show_contour.Value;
+zef.show_contour_text = zef.h_show_contour_text.Value;
+zef.contour_set_text = zef.h_contour_set_text.Value;
+zef.contour_set = str2num(zef.h_contour_set_text);
 zef.attach_electrodes = zef.h_checkbox14.Value;
 zef.axes_visible = zef.h_checkbox15.Value;
 zef.azimuth = zef.h_edit80.Value;

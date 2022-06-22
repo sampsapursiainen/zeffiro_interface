@@ -173,7 +173,7 @@ if not(isequal(zef.file,0));
 print(gcf,'-dpng','-r200',[zef.file_path zef.file]);
     end
         if zef.file_index == 2
-print(gcf,['-djpeg' zef.video_codec],'-r200',[zef.save_file_path zef.file]);
+print(gcf,['-djpeg' num2str(zef.video_codec)],'-r200',[zef.save_file_path zef.file]);
     end
 if zef.file_index == 3
 print(gcf,'-dtiff','-r200',[zef.file_path zef.file]);

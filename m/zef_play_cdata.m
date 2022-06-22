@@ -41,7 +41,11 @@ for i = 1 : length(h_c)
         frame_step = h_c(i).UserData(f_ind).frame_step;
         frame_stop = h_c(i).UserData(f_ind).frame_stop;
         frame_start = h_c(i).UserData(f_ind).frame_start;
-        h_c(i).CData = h_c(i).UserData(f_ind).CData;
+        CData_aux = h_c(i).UserData(f_ind).CData;
+        if isequal(length(CData_aux(:)),3*size(h_c(i).Faces,1))
+            CData_aux = mean(reshape(CData_aux,3,size(h_c(i).Faces,1)),1);
+        end
+        h_c(i).CData = CData_aux;
         if not(details_set)
         set(h_time_text,'String',h_c(i).UserData(f_ind).time_string);
         if isequal(show_frame_number,0)
@@ -71,6 +75,24 @@ end
 if isequal(last_frame,0)
            camorbit(h_axes,frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 end
+
+if isequal(f_ind,1)
+        try
+zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+end
+        try
+zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 
 end
 

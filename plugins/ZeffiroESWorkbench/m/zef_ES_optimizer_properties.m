@@ -1,10 +1,13 @@
 zef_data = zef_ES_optimizer_properties_app;
 
+zef.h_ES_optimizer_properties_copy_all = zef_data.h_ES_optimizer_properties_copy_all;
 zef.h_ES_optimizer_properties       = zef_data.h_ES_optimizer_properties;
 zef.h_ES_optimizer_properties_table = zef_data.h_ES_optimizer_properties_table;
 
-set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+zef.h_ES_optimizer_properties_copy_all.MenuSelectedFcn = 'zef.ES_temp = zef.h_ES_optimizer_properties_table.Data''; clipboard(''copy'',sprintf(''%s\t%5.10g\n'', zef.ES_temp{:})); zef = rmfield(zef,''ES_temp'');';
 
 %% Autoresize
 set(zef.h_ES_optimizer_properties,'Name','ZEFFIRO Interface: ES optimizer properties');

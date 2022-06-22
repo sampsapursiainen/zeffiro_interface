@@ -9,15 +9,11 @@ end;
 if not(isfield(zef,'SESAME_pcg_tol'));
     zef.SESAME_pcg_tol = 1e-8;
 end;
-if not(isfield(zef,'SESAME_sampling_frequency'));
-    zef.SESAME_sampling_frequency = 1025;
-end;
-if not(isfield(zef,'SESAME_low_cut_frequency'));
-    zef.SESAME_low_cut_frequency = 7;
-end;
-if not(isfield(zef,'SESAME_high_cut_frequency'));
-    zef.SESAME_high_cut_frequency = 9;
-end;
+
+    zef.SESAME_sampling_frequency = zef.inv_sampling_frequency;
+    zef.SESAME_low_cut_frequency = zef.inv_low_cut_frequency;
+    zef.SESAME_high_cut_frequency = zef.inv_high_cut_frequency;
+
 if not(isfield(zef,'SESAME_data_segment'));
     zef.SESAME_data_segment = 1;
 end;
@@ -25,18 +21,11 @@ if not(isfield(zef,'SESAME_normalize_data'));
     zef.SESAME_normalize_data = 1;
 end;
 
-if not(isfield(zef,'SESAME_time_1'));
-    zef.SESAME_time_1 = 0;
-end;
-if not(isfield(zef,'SESAME_time_2'));
-    zef.SESAME_time_2 = 0;
-end;
-if not(isfield(zef,'SESAME_time_3'));
-    zef.SESAME_time_3 = 0;
-end;
-if not(isfield(zef,'SESAME_number_of_frames'));
-    zef.SESAME_number_of_frames = 1;
-end;
+    zef.SESAME_time_1 = zef.inv_time_1;
+    zef.SESAME_time_2 = zef.inv_time_2;
+    zef.SESAME_time_3 = zef.inv_time_3;
+    zef.SESAME_number_of_frames = zef.number_of_frames;
+
 if not(isfield(zef,'inv_rec_source'))
     zef.inv_rec_source = zeros(1,9);
     zef.inv_rec_source(1,8) = 3;

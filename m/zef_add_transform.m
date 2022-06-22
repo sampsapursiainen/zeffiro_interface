@@ -10,7 +10,7 @@ evalin('base',['zef.' zef.current_tag '_z_correction = [zef.' zef.current_tag '_
 evalin('base',['zef.' zef.current_tag '_xy_rotation = [zef.' zef.current_tag '_xy_rotation, 0];']);
 evalin('base',['zef.' zef.current_tag '_yz_rotation = [zef.' zef.current_tag '_yz_rotation, 0];']);
 evalin('base',['zef.' zef.current_tag '_zx_rotation = [zef.' zef.current_tag '_zx_rotation, 0];']);
-
+evalin('base',['zef.' zef.current_tag '_affine_transform(zef_i) = {eye(4)};']);
 clear zef_i;
 
 zef_init_transform;

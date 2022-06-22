@@ -2,6 +2,15 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function h_source = zef_plot_source(source_type)
 
+
+arrow_scale = 1;
+arrow_type = 1;
+arrow_color = 0.5*[1 1 1]; 
+arrow_shape = 10; 
+arrow_length = 1; 
+arrow_head_size = 2; 
+arrow_n_polygons = 100;
+
 if source_type == 1
 h_axes1 = evalin('base','zef.h_axes1');
 if isfield(evalin('base','zef'),'h_synth_source')
@@ -24,8 +33,12 @@ s_o = repmat(s_length,1,3).*s_o;
 h_axes1 = evalin('base','zef.h_axes1');
 hold(h_axes1,'on');
 h_synth_source = zeros(size(s_p,1),1);
+axes(h_axes1)
+arrow_scale = 3*sqrt(s_length);
 for i = 1 : size(s_p,1)
-h_synth_source(i) = quiver3(h_axes1,s_p(i,1),s_p(i,2),s_p(i,3),s_length*s_o(i,1),s_length*s_o(i,2),s_length*s_o(i,3), 0, 'linewidth',s_width,'color',source_color,'marker','o');
+%h_synth_source(i) = quiver3(h_axes1,s_p(i,1),s_p(i,2),s_p(i,3),s_length*s_o(i,1),s_length*s_o(i,2),s_length*s_o(i,3), 0, 'linewidth',s_width,'color',source_color,'marker','o');
+h_synth_source(i) = zef_plot_3D_arrow(s_p(i,1),s_p(i,2),s_p(i,3),s_o(i,1),s_o(i,2),s_o(i,3),arrow_scale,arrow_type,source_color,arrow_shape,arrow_length,arrow_head_size,arrow_n_polygons);
+
 end
 hold(h_axes1,'off');
 h_source = h_synth_source;

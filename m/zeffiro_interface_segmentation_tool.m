@@ -24,6 +24,7 @@ set(zef.h_transform_table,'CellSelectionCallback',@zef_transform_table_selection
 set(zef.h_sensors_table,'CellSelectionCallback',@zef_sensors_table_selection);
 set(zef.h_sensors_name_table,'CellSelectionCallback',@zef_sensors_name_table_selection);
 
+
 set(zef.h_menu_settings,'Tag','settings');
 set(zef.h_menu_add_sensors,'MenuSelectedFcn','zef_add_sensor_name;');
 set(zef.h_menu_delete_sensors,'MenuSelectedFcn','zef_delete_sensors;');
@@ -62,10 +63,13 @@ set(zef.h_menu_export_sensors                     ,'MenuSelectedFcn','zef.save_s
 set(zef.h_menu_export_reconstruction                        ,'MenuSelectedFcn','zef.save_switch=8;zef_save;zef_update;');
 
 set(zef.h_menu_new_segmentation_from_folder_legacy          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.new_empty_project = 0;zef_start_new_project; zef_import_segmentation_legacy;zef_build_compartment_table;end;');
-set(zef.h_menu_import_segmentation_update_from_folder_legacy,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation_legacy;zef_update;');
+set(zef.h_menu_import_segmentation_update_from_folder_legacy,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation_legacy;zef_build_compartment_table;');
 
 set(zef.h_menu_new_segmentation_from_folder          ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a segmentation from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef.new_empty_project = 1;zef_start_new_project; zef_import_segmentation;zef_build_compartment_table;end;');
-set(zef.h_menu_import_segmentation_update_from_folder,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation;zef_update;');
+set(zef.h_menu_import_segmentation_update_from_folder,'MenuSelectedFcn','zef.new_empty_project = 0;zef_import_segmentation;');
+
+zef.h_menu_new_segmentation_from_folder.Text = 'Import data to a new project';
+zef.h_menu_import_segmentation_update_from_folder.Text = 'Import data to project';
 
 set(zef.h_menu_import_new_project_from_folder        ,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset and import a project from folder?'',''Yes'',''No''); if isequal(zef.yesno,''Yes'');zef_start_new_project; zef_import_project;zef_build_compartment_table;end;');
 set(zef.h_menu_import_project_update_from_folder    ,'MenuSelectedFcn','zef_import_project;zef_update;');
@@ -154,3 +158,4 @@ set(zef.h_zeffiro_window_main,'SizeChangedFcn','zef.zeffiro_window_main_current_
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','zef_close_all;');
+

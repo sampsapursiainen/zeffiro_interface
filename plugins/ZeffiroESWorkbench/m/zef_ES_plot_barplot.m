@@ -2,7 +2,6 @@ function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
 n = length(varargin);
 switch n
     case 0
-        if evalin('base','zef.ES_search_method') ~= 3
             switch evalin('base','zef.ES_search_type')
                 case 1
                     y_ES = evalin('base','zef.y_ES_single.y_ES');
@@ -17,12 +16,14 @@ switch n
                     load_aux = evalin('base','zef.y_ES_interval.y_ES');
                     y_ES = load_aux{sr, sc};
             end
+    case 1
+        if isvector(A)
+            y_ES = varargin{1};
         else
-            y_ES = evalin('base','zef.y_ES_4x1.y_ES');
+            error('Inserted argument is not a vector!')
         end
-
     case 2
-        [sr, sc] = varargin{:};
+        [sr, sc] = deal(varargin{1:2});
         load_aux = evalin('base','zef.y_ES_interval.y_ES');
         y_ES = cell2mat(load_aux(sr, sc));
     case 3
@@ -37,24 +38,23 @@ switch n
 end
 
 if n ~= 3
-    f = figure('Name','ZEFFIRO Interface: Electrode potentials tool','NumberTitle','off', ...
+    fig_aux = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
     try
-        win_temp = findobj('type','figure','name','ZEFFIRO Interface: Error chart tool');
+        win_temp = findobj('type','figure','name','ZEFFIRO Interface: ES error chart');
         win_temp = get(win_temp(1),'Position');
     catch
-        win_temp = [10 800 570 413];
+        win_temp = [10 800 550 150];
     end
-    f.Position(1) = win_temp(1)+win_temp(3);
-    f.Position(2) = win_temp(2)+(win_temp(4)-f.Position(4));
-    f.Position(3) = 880;
-    f.Position(4) = 500;
+    fig_aux.Position(1) = win_temp(1)+win_temp(3);
+    fig_aux.Position(2) = win_temp(2)+(win_temp(4)-fig_aux.Position(4));
+    fig_aux.Position(3) = 750;
+    fig_aux.Position(4) = 250;
 
-    if evalin('base','zef.ES_search_method') ~= 3
-        sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-    else
-        sgtitle(['4x1 using separation angle of ' num2str(evalin('base','zef.ES_separation_angle')) ' degrees'])
-    end
+        if evalin('base','zef.ES_search_type') == 2
+            sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
+        end
+    
 end
 
 h_barplot_ES = bar(y_ES,0.3);

@@ -102,7 +102,7 @@ end
 if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 2 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(num2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 open(h_aviobj);
@@ -844,8 +844,21 @@ camup(c_u);
 
 sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
 uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;
@@ -860,12 +873,12 @@ if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') ==
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+  [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  % = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-  delete(bmp_file_temp);
+  %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -1062,7 +1075,16 @@ end
 set(h_surf_2,'FaceAlpha','interp');
 set(h_surf_2,'AlphaDataMapping','none');
 end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
 zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 
@@ -1090,11 +1112,11 @@ end
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index == 4;
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-  delete(bmp_file_temp);
+  %delete(bmp_file_temp);
   end;
 
 end
@@ -1187,7 +1209,7 @@ end
 if iscell(volumetric_distribution) &  evalin('base','zef.visualization_type') == 3 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(num2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 h_aviobj.FrameRate = movie_fps;
@@ -1197,7 +1219,7 @@ end
 if iscell(evalin('base','zef.top_reconstruction')) &  evalin('base','zef.visualization_type') == 5 & is_video & file_index == 4
 avi_file_temp = [file_path file_name(1:end-4) '_temp.avi'];
 avi_file = [file_path file_name];
-video_quality = str2num(evalin('base','zef.video_codec'));
+video_quality = str2num(nu2str(evalin('base','zef.video_codec')));
 h_aviobj = VideoWriter(avi_file_temp);
 h_aviobj.Quality = video_quality;
 h_aviobj.FrameRate = movie_fps;
@@ -1972,9 +1994,11 @@ reconstruction = reconstruction(:);
 if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
 end
 if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
@@ -2076,8 +2100,21 @@ camup(c_u);
 
         sensor_patches = findobj(h_axes_image,'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_print(1,h_axes_image);
 if not(evalin('base','zef.axes_visible'))
 set(h_axes_image,'visible','off');
@@ -2095,12 +2132,12 @@ if iscell(volumetric_distribution) &&  ismember(evalin('base','zef.visualization
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -2122,12 +2159,12 @@ elseif iscell(evalin('base','zef.top_reconstruction')) &&  ismember(evalin('base
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(frame_start) file_name(end-3:end)]);
   elseif file_index ==4;
-  bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+  %bmp_file_temp = [file_path  file_name(1:end-4) '_temp.bmp'];
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
   else
   if file_index == 1;
@@ -2164,7 +2201,7 @@ if f_ind_aux > 2
 time_val = toc;
 waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames-1)/(f_ind_aux-2) - 1)*time_val/86400)) '.']);
 else
-waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
+waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
 end
 set(h_waitbar,'handlevisibility','off');
 %******************************************************
@@ -2337,9 +2374,12 @@ delete(h_surf_2{i});
 if ismember(i,aux_active_compartment_ind) && evalin('base','zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});                         
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(evalin('base','zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+                            
 end
 if ismember(evalin('base','zef.volumetric_distribution_mode'),[1, 3])
 zef_plot_cone_field(h_axes_image, f_ind, 2);
@@ -2378,8 +2418,17 @@ end
 %End of topography reconstruction.
 
 end
+        try
 zef_plot_dpq('dynamical');
-zef_set_sliders_print(1);
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
+zef_set_sliders_print(1,h_axes_image);
 camorbit(frame_step*evalin('base','zef.orbit_1')/movie_fps,frame_step*evalin('base','zef.orbit_2')/movie_fps);
 lighting phong;
 
@@ -2416,11 +2465,11 @@ end
   elseif file_index ==3;
   print(h_fig_aux,'-dpng','-r1',[file_path  file_name(1:end-4) '_' int2str(f_ind) file_name(end-3:end)]);
   elseif file_index == 4;
-  print(h_fig_aux,'-dbmp','-r1',bmp_file_temp);
-  [movie_frame] = imread(bmp_file_temp,'bmp');
+   [movie_frame] = print(h_fig_aux,'-r1','-RGBImage');
+  %[movie_frame] = imread(bmp_file_temp,'bmp');
   h_frame = im2frame(movie_frame);
   writeVideo(h_aviobj,h_frame);
-   delete(bmp_file_temp);
+   %delete(bmp_file_temp);
   end;
 
 end
@@ -2476,8 +2525,21 @@ camup(c_u);
 
         sensor_patches = findobj(evalin('base','zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
+        try
 zef_plot_dpq('static');
+        catch
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
 zef_plot_dpq('dynamical');
+        catch 
+            warning('Dynamical Plot Queue not successful.')
+        end
+        try
+zef_update_contour;
+        catch
+            warning('Contour plot not successful.')
+        end
         zef_set_sliders_print(1,h_axes_image);
 
 %drawnow;

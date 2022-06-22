@@ -1,5 +1,17 @@
 function zef_create_compartment(compartment_tag, varargin)
 
+n_compartments = evalin('base','length(zef.compartment_tags)');
+color_default = [0.5810    0.4690    0.3430 ; 
+                   0.7000    0.7000    0.6000 ; 
+                   0.3984    0.7615    0.4435 ;
+                   0.4200    0.4800    0.4200 ;
+                    0.3500    0.3500    0.3500 ;
+                     0.8000    0.8000    0.8000];
+                          
+
+rng(n_compartments);
+rand_aux = randperm(500);
+rng(rand_aux(1));
 zef_struct_name = 'zef';
 field_cell_update = cell(0);
 if not(isempty(varargin))
@@ -10,7 +22,7 @@ field_cell_update = varargin{2};
 end
 
 field_cell_default =  {{'on', '1'       }
-    {'color',   '0.3 + 0.7*rand(1,3)'   }
+    {'color',   '0.2 + 0.8*rand(1,3)'   }
     {'priority', ['length(' zef_struct_name '.compartment_tags) + 1']   }
     {'sources',  '0'  }
     {'sources_old', '-1'}
@@ -30,7 +42,12 @@ field_cell_default =  {{'on', '1'       }
     {'z_correction', '0'}
     {'y_correction', '0'}
     {'x_correction', '0'}
+    {'affine_transform','{[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]}'}
     {'transform_name','{''Transform 1''}'}};
+
+if n_compartments < size(color_default,1)
+field_cell_default{2}{2} = mat2str(color_default(n_compartments+1,:));
+end
 
 for i = 1 : length(field_cell_default)
 
@@ -44,4 +61,4 @@ evalin('base',[zef_struct_name '.' compartment_tag '_' field_cell_update{i}{1} '
 
 end
 
-evalin('base',[zef_struct_name '.compartment_tags = ['''  compartment_tag ''',' zef_struct_name '.compartment_tags];']);
+evalin('base',[zef_struct_name '.compartment_tags = ['''  compartment_tag ''', ' zef_struct_name '.compartment_tags];']);

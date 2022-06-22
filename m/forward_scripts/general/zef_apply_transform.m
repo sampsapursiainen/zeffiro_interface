@@ -27,6 +27,7 @@ evalin('base',['zef.' evalin('base','zef.current_sensors') '_z_correction = 0;']
 evalin('base',['zef.' evalin('base','zef.current_sensors') '_xy_rotation = 0;']);
 evalin('base',['zef.' evalin('base','zef.current_sensors') '_yz_rotation = 0;']);
 evalin('base',['zef.' evalin('base','zef.current_sensors') '_zx_rotation = 0;']);
+evalin('base',['zef.' evalin('base','zef.current_sensors') '_affine_transform = {eye(4)};']);
 
 zef.apply_transform_compartment_tags = evalin('base','zef.compartment_tags');
 zef_k = 0;
@@ -44,6 +45,7 @@ for zef_i = 1 : length(zef.apply_transform_compartment_tags)
         evalin('base',['zef.'  zef.apply_transform_compartment_tags{zef_k} '_xy_rotation = 0;']);
         evalin('base',['zef.'  zef.apply_transform_compartment_tags{zef_k} '_yz_rotation = 0;']);
         evalin('base',['zef.'  zef.apply_transform_compartment_tags{zef_k} '_zx_rotation = 0;']);
+             evalin('base',['zef.'  zef.apply_transform_compartment_tags{zef_k} '_affine_transform = {eye(4)};']);
 
     end
 

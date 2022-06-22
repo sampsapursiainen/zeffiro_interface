@@ -1,4 +1,4 @@
-function [x, flag_val] = zef_cvx_linprog(z,A,b,varargin)
+function [x, function_val, flag_val] = zef_cvx_linprog(z,A,b,Aeq,beq,lb,ub,varargin)
 %Finds the minimum of z'*x with respect to x and with the constraint A x  - b <= 0
 %Outputs: x (size: [n x 1]), flag_val (1 if the solution was found -2
 %otherwise)
@@ -11,17 +11,12 @@ function [x, flag_val] = zef_cvx_linprog(z,A,b,varargin)
 
 opts = [];
 
-max_1_norm = [];
+max_1_norm = []; %#ok<*NASGU>
 max_infty_norm = [];
+function_val = [];
 
 if not(isempty(varargin))
-    max_1_norm = varargin{1};
-    if length(varargin) > 1
-        max_infty_norm = varargin{2};
-    end
-    if length(varargin) > 2
-        opts = varargin{3};
-    end
+        opts = varargin{1};
 end
 
 flag_val = -2;
@@ -38,17 +33,22 @@ cvx_begin quiet
 variable x(n)
 minimize(sum(z.*x))
 subject to: 
-A*x - b <= 0;
-if not(isempty(max_1_norm))
-sum(abs(x)) <= max_1_norm;
+A*x - b <= 0; %#ok<*VUNUS>
+if not(isempty(lb))
+x >= lb;
 end
-if not(isempty(max_infty_norm))
-max(abs(x)) <= max_infty_norm;
+if not(isempty(ub))
+x <= ub;
 end
-cvx_end
+if not(isempty(Aeq))
+Aeq*x == beq;
+end
 
+cvx_end
 
 if isequal(cvx_status,'Solved')
     flag_val = 1; 
+    function_val = norm(A*x-b,1);
+    
 end
 end

@@ -8,13 +8,13 @@ zef.RAPMUSIC = RAPMUSIC_app;
 zef.RAPMUSIC.RAPMUSIC_leadfield_lambda.Value = '1e-3';
 zef.RAPMUSIC.inv_snr.Value = '30';
 zef.RAPMUSIC.RAPMUSIC_n_dipoles.Value = '8';
-zef.RAPMUSIC.inv_sampling_frequency.Value = '1025';
-zef.RAPMUSIC.inv_low_cut_frequency.Value = '7';
-zef.RAPMUSIC.inv_high_cut_frequency.Value = '9';
-zef.RAPMUSIC.inv_time_1.Value = '0';
-zef.RAPMUSIC.inv_time_2.Value = '0';
-zef.RAPMUSIC.number_of_frames.Value = '0';
-zef.RAPMUSIC.inv_time_3.Value = '0';
+zef.RAPMUSIC.inv_sampling_frequency.Value = num2str(zef.inv_sampling_frequency);
+zef.RAPMUSIC.inv_low_cut_frequency.Value =  num2str(zef.inv_low_cut_frequency);
+zef.RAPMUSIC.inv_high_cut_frequency.Value =  num2str(zef.inv_high_cut_frequency);
+zef.RAPMUSIC.inv_time_1.Value =  num2str(zef.inv_time_1);
+zef.RAPMUSIC.inv_time_2.Value = num2str(zef.inv_time_2);
+zef.RAPMUSIC.number_of_frames.Value = num2str(zef.number_of_frames);
+zef.RAPMUSIC.inv_time_3.Value = num2str(zef.inv_time_3);
 
 if ~isfield(zef,'RAPMUSIC_leadfield_lambda')
     zef.RAPMUSIC_leadfield_lambda = 1e-3;

@@ -192,6 +192,9 @@ zef_data.sensors_attached_volume = [];
        zef_data.source_directions = [];
               zef_data.brain_ind = [];
              zef_data.source_ind = [];
+             zef_data.show_contour = 0;
+             zef_data.show_contour_text = 0;
+             zef_data.contour_set_text = '0.1:0.2:0.9';
 
             zef_data.cp_on       = 0;
             zef_data.cp_a        = 1;
@@ -203,6 +206,9 @@ zef_data.sensors_attached_volume = [];
        zef_data.import_mode      = 0;
 
        zef_data.mesh_smoothing_on = 0;
+       
+       zef.file = '';
+       zef.file_path = '';
 
        zef_data.forward_simulation_selected = [];
        zef_data.forward_simulation_table = cell(0);
@@ -286,7 +292,7 @@ zef_data.sensors_attached_volume = [];
        zef_data.use_fem_mesh_inflation = 1;
        zef_data.fem_mesh_inflation_strength = 0.05;
        zef_data.explode_everything = 1;
-       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap','zef_greyscale_colormap'};
+       zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap','zef_greyscale_colormap'}; 
        zef_data.parcellation_compartment = {'g'};
        zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
 

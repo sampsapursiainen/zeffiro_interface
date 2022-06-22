@@ -15,24 +15,39 @@ function zeffiro_interface(varargin)
 %export_fem_mesh (file name), open_figure (file name), open_figure_folder
 %(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
-    if evalin('base','exist(''zef'');')
-        error('It looks like that another instance of Zeffiro interface already open. To enable this script, clear zef by command ''clear zef'' in the base workspace.')
+option_counter = 1;
+zeffiro_restart = 0;
+if not(isempty(varargin))
+    if isequal(varargin{1},'restart')
+zeffiro_restart = 1;
+option_counter = option_counter + 1;
     end
+end
 
-    program_path = pwd;
+if isequal(zeffiro_restart,0)
+    if evalin('base','exist(''zef'');')
+        error('It looks like that another instance of Zeffiro interface already open. To enable this script, close Zeffiro Interface by command ''zef_close_all'' or clear zef by command ''clear zef''.')
+    end
+end
+
+    program_path_aux = mfilename('fullpath');
+    [program_path, ~] = fileparts(program_path_aux);
     zef_data.program_path = program_path;
     zef_data.code_path = [zef_data.program_path filesep 'm'];
+    evalin('base',['run(''' zef_data.code_path filesep 'zef_close_all.m'')'])
+    
     zef_data.cluster_path =  [zef_data.program_path filesep 'cluster'];
-
-    addpath(genpath([zef_data.program_path '/m']));
-    addpath(genpath([zef_data.program_path '/mlapp']));
-    addpath(genpath([zef_data.program_path '/fig']));
-    addpath(genpath([zef_data.program_path zef_data.code_path]));
-    addpath(genpath([zef_data.program_path '/plugins']));
-    addpath(genpath([zef_data.program_path '/profile']));
-    addpath(genpath([zef_data.program_path '/cluster']));
-    addpath([zef_data.program_path '/external']);
-
+    addpath(zef_data.program_path); 
+    addpath(zef_data.code_path); 
+    addpath(zef_data.program_path); 
+    zef_data.path_cell = [{zef_data.program_path} ; {zef_data.code_path}; {zef_data.cluster_path}];
+    zef_data.path_cell = zef_add_path([zef_data.code_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.cluster_path],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'mlapp'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'fig'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'plugins'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'profile'],'recursive', zef_data.path_cell);
+    zef_data.path_cell = zef_add_path([zef_data.program_path filesep 'external'],[], zef_data.path_cell);
     zef_data.start_mode = 'default';
 
     assignin('base','zef_data',zef_data);
@@ -40,8 +55,6 @@ function zeffiro_interface(varargin)
     clear zef_data;
 
     if not(isempty(varargin))
-
-        option_counter = 1;
 
         start_mode = 'display';
 
@@ -115,7 +128,7 @@ function zeffiro_interface(varargin)
                 assignin('base','zef_data',zef_data);
                 evalin('base','zef_assign_data;');
                 clear zef_data;
-                evalin('base','zef_start_new_project;zef_import_segmentation');
+                evalin('base','zef_start_new_project;zef_import_segmentation;zef_build_compartment_table;');
                 option_counter = option_counter + 2;
 
             elseif isequal(varargin{option_counter},lower('import_update'))
@@ -184,7 +197,7 @@ function zeffiro_interface(varargin)
                 assignin('base','zef_data',zef_data);
                 evalin('base','zef_assign_data;');
                 clear zef_data;
-                evalin('base','zef_import_segmentation_legacy');
+                evalin('base','zef_import_segmentation_legacy;zef_build_compartment_table;');
                 option_counter = option_counter + 2;
 
             elseif isequal(varargin{option_counter},lower('save_project'))
@@ -333,4 +346,9 @@ function zeffiro_interface(varargin)
     else
         evalin('base','zeffiro_interface_start');
     end
+    
+    if exist('zeffiro_interface_start_config.m')
+        evalin('base','zeffiro_interface_start_config');
+    end
+    
 end
