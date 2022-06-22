@@ -21,7 +21,7 @@ zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_f
 zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef = rmfield(zef,'aux_field');
-zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers; 
+zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers;
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
@@ -108,7 +108,12 @@ zef.h_adaptive_refinement_k_param.Value = num2str(zef.adaptive_refinement_k_para
 
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
-zef.h_source_model.ItemsData = [1:length(zef.h_source_model.Items)];
+zef.h_source_model.ItemsData = arrayfun(@ZefSourceModel.from, 1:length(zef.h_source_model.Items));
+zef.source_model = ZefSourceModel.from(zef.source_model);
+if eq(zef.source_model, ZefSourceModel.Error)
+    warning("Invalid source model. Setting it as H(div)");
+    zef.source_model = ZefSourceModel.Hdiv;
+end
 zef.h_source_model.Value = zef.source_model;
 zef.h_use_gpu.Value = zef.use_gpu;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);

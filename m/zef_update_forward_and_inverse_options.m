@@ -29,8 +29,8 @@
     zef.exclude_box = zef.h_exclude_box.Value;
         zef.reduce_labeling_outliers = zef.h_reduce_labeling_outliers.Value;
 zef.lead_field_filter_quantile = str2num(get(zef.h_lead_field_filter_quantile,'Value'));
-    
-        
+
+
     zef.adaptive_refinement_on = get(zef.h_adaptive_refinement_on,'Value');
      zef.adaptive_refinement_k_param = str2num(get(zef.h_adaptive_refinement_k_param,'Value'));
     zef.adaptive_refinement_thresh_val = str2num(get(zef.h_adaptive_refinement_thresh_val,'Value'));
@@ -40,7 +40,7 @@ zef.lead_field_filter_quantile = str2num(get(zef.h_lead_field_filter_quantile,'V
 
     zef.surface_sources = get(zef.h_as_opt_6,'Value');
     zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'Value');
-    zef.source_model = get(zef.h_source_model,'Value');
+    zef.source_model = ZefSourceModel.from(get(zef.h_source_model,'Value'));
     zef.use_gpu = get(zef.h_use_gpu,'Value');
     zef.gpu_num = str2num(get(zef.h_gpu_num,'Value'));
     zef.smoothing_steps_ele = str2num(get(zef.h_smoothing_steps_ele,'Value'));

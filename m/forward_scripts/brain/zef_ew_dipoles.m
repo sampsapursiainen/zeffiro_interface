@@ -12,11 +12,16 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
 
     wb = waitbar(0, 'Edgewise dipoles');
 
+    % Define cleanup operations
+
+    cleanup_fn = @(h) close(h);
+    cleanup_obj = onCleanup(@() cleanup_fn(wb));
+
     % Matrix sizes
 
-    N = size(nodes, 1);
+    n_of_nodes = size(nodes, 1);
     K = length(brain_ind);
-    K2 = size(tetrahedra, 1);
+    n_of_tetra = size(tetrahedra, 1);
 
     % Find nodes that share an edge
 
@@ -25,6 +30,7 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
         for j = i + 1 : 4
 
             Ind_cell{i}{j} = [ brain_ind(:) tetrahedra(brain_ind(:),i)  tetrahedra(brain_ind(:),j) ];
+
         end
     end
 
@@ -60,7 +66,7 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
     ,                                                ...
         [1./(source_moments) ; -1./(source_moments)] ...
     ,                                                ...
-        N                                            ...
+        n_of_nodes                                   ...
     ,                                                ...
         n_of_adj_nodes                               ...
     );
@@ -76,7 +82,7 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
     ,                                   ...
         n_of_adj_nodes                  ...
     ,                                   ...
-        K2                              ...
+        n_of_tetra                              ...
     );
 
     waitbar(1,wb); close(wb);

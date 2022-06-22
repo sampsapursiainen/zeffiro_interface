@@ -255,7 +255,7 @@ T_fi = sparse(repmat([1:M_fi]',2,1),[Ind_mat(:,1);Ind_mat(:,2)],ones(2*M_fi,1), 
 clear I tetrahedra_aux_ind_1 tetrahedra_aux_ind_2;
 
 %Form G_ew and T_ew
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 %*******************************
 %*******************************
 
@@ -310,7 +310,7 @@ power_vec = (power_vec.^2).*power_vec;
 L_meg_fi(j,:) = dot(cross_mat,repmat(sensors(4:6,j),1,M_fi))./power_vec;
 end
 
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 L_meg_ew = zeros(L,M_ew);
 for j = 1 : L
 cross_mat = cross(ew_source_directions', repmat(sensors(1:3,j),1,M_ew) - ew_source_locations');
@@ -361,7 +361,7 @@ relres_vec(i) = gather(norm(r)/norm_b);
 r = gather(x(iperm_vec));
 x = r;
 L_meg_fi(i,:) = L_meg_fi(i,:) + x'*G_fi;
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 L_meg_ew(i,:) = L_meg_ew(i,:) + x'*G_ew;
 end
 if tol_val < relres_vec(i)
@@ -450,7 +450,7 @@ end
 
 %Substitute matrices
 L_meg_fi(block_ind,:) = L_meg_fi(block_ind,:) + x_block'*G_fi;
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 L_meg_ew(block_ind,:) = L_meg_ew(block_ind,:) + x_block'*G_ew;
 end
 
@@ -480,7 +480,7 @@ waitbar_ind = 0;
 waitbar(waitbar_ind/waitbar_length,h,'Interpolation.');
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
 L_meg_fi = Aux_mat_2*L_meg_fi/(4*pi);
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 L_meg_ew = Aux_mat_2*L_meg_ew/(4*pi);
 end
 
@@ -505,7 +505,7 @@ dipole_locations = c_tet(source_nonzero_ind,:);
 dipole_directions = [];
 L_meg = zeros(L,3*M2);
 
-if source_model == 2
+if source_model == ZefSourceModel.Hdiv
 
 tic;
     for i = 1 : M2
@@ -529,7 +529,7 @@ end
 end
 end
 
-if source_model == 1
+if source_model == ZefSourceModel.Whitney
 tic;
     for i = 1 : M2
 
