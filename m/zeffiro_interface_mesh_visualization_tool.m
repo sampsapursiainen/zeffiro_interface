@@ -24,6 +24,10 @@ set(zef.h_edit81,'value',zef.elevation);
 set(zef.h_edit82,'value',zef.cam_va);
 set(zef.h_cone_draw,'value',zef.cone_draw);
 set(zef.h_streamline_draw,'value',zef.streamline_draw);
+set(zef.h_show_contour,'value',zef.show_contour);
+set(zef.h_show_contour_text,'value',zef.show_contour_text);
+set(zef.h_contour_set_text,'value',zef.contour_set_text);
+zef.contour_set = str2num(zef.contour_set_text);
 
 set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters);
 zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visualization_parameter_list.Items)];
