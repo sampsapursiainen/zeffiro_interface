@@ -22,12 +22,97 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
     tol_val                                              ...
 ,                                                        ...
     m_max                                                ...
+,                                                        ...
+    schur_expression                                     ...
 )
 
-% zef_transfer_matrix: builds a transfer matrix T and an auxiliary matrix
-% Schur_complement from a given stiffness matrix A, matrices B and C, sizes
-% n_of_fem_nodes and n_of_electrodes, a permutation matrix and a precoditioner,
-% through preconditioned conjugate gradient (PCG) iteration.
+    % Documentation
+    %
+    % Builds a transfer matrix T and an auxiliary matrix Schur_complement from
+    % a given stiffness matrix A, matrices B and C, sizes n_of_fem_nodes and
+    % n_of_electrodes, a permutation matrix and a precoditioner, through
+    % preconditioned conjugate gradient (PCG) iteration.
+    %
+    % Input:
+    %
+    % - A
+    %
+    %   A stiffness matrix related to the FE system under observation.
+    %
+    % - B
+    %
+    %   A matrix whose columns are used in determining the direction vector at
+    %   each optimization iteration. In the case of EEG, this is the electrode
+    %   matrix B produced by zef_build_electrodes.
+    %
+    % - C
+    %
+    %   A matrix used in the construction of the Schur complement of T. In the
+    %   case of EEG, this is the electrode matrix C produced by
+    %   zef_build_electrodes.
+    %
+    % - n_of_fem_nodes
+    %
+    %   As the name implies, this is the number of FEM nodes in the system
+    %   under observation.
+    %
+    % - n_of_electrodes
+    %
+    %   The number of sensors used to measure potentials, gradients or
+    %   whatever.
+    %
+    % - electrode_model
+    %
+    %   The electode model (either 'PEM' or 'CEM') used in the modelling of
+    %   the system under observation.
+    %
+    % - permutation
+    %
+    %   A permutation type used by the preconditioner of the PCG solver. In
+    %   {symamd, symmd, symrcm}.
+    %
+    % - preconditioner
+    %
+    %   A type of preconditioner. Either 'ssor' or another arbitrary value, i
+    %   which case a different default preconditioner will be used.
+    %
+    % - impedance_vec
+    %
+    %   A vector of impedances at the sensors used to measure potentials or
+    %   magnetic fields.
+    %
+    % - impedance_inf
+    %
+    %   A boolean which tells whether the impedances used are infinite. mainly
+    %   relevant in the PEM case (but still needed in any case).
+    %
+    % - tol val
+    %
+    %   A heuristic tolerance value for the PCG solver.
+    %
+    % - m_max
+    %
+    %   A heuristic number of iterations that the PCG solver performs at each
+    %   step.
+    %
+    % - schur_expression
+    %
+    %   A 2-place function handle that specifies how the columns at index ind
+    %   of the Schur complement of T should be calculated with B and C. For
+    %   example. In the case of EEG and non-infinite impedance we would have
+    %
+    %       schur_expression = @(Tcol, ind) C(:,ind) - B'* Tcol;
+    %
+    %   where B and C were captured from the environment where the function
+    %   handle was created (the call site of zef_transfer_matrix).
+    %
+    % Output:
+    %
+    % - T: a transfer matrix of the FE system under observation.
+    %
+    % - Schur_complement: the Schur complement of T.
+    %
+    % - A: a modified stiffness matrix A.
 
     if isequal(permutation,'symamd')
         perm_vec = symamd(A)';
@@ -109,9 +194,9 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
             T(:,i) = x;
 
             if impedance_inf == 0
-                Schur_complement(:,i) = C(:,i) - B'*x ;
+                Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
             else
-                Schur_complement(:,i) = C(:,i);
+                Schur_complement(:,i) = schur_expression(x, i); % C(:,i);
             end
 
             if tol_val < relres_vec(i)
@@ -217,9 +302,9 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
             % Construct stencil T column by column.
 
             if impedance_inf == 0
-                Schur_complement(:,block_ind) = C(:,block_ind) - B' * T(:,block_ind);
+                Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
             else
-                Schur_complement(:,block_ind) = C(:,block_ind);
+                Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind);
             end
 
             if not(isempty(find(tol_val < relres_vec)))

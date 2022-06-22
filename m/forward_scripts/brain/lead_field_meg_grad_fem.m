@@ -111,6 +111,9 @@ if iscell(elements)
 source_model = 1;
 end
 
+% Convert source model to new format.
+
+source_model = ZefSourceModel.from(source_model);
 
 A = spalloc(N,N,0);
 
