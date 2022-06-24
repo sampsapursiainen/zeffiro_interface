@@ -195,6 +195,8 @@ zef_data.sensors_attached_volume = [];
              zef_data.show_contour = 0;
              zef_data.show_contour_text = 0;
              zef_data.contour_set_text = '0.1:0.2:0.9';
+zef_data.contour_n_smoothing = 2; 
+zef_data.contour_line_width = 1;
 
             zef_data.cp_on       = 0;
             zef_data.cp_a        = 1;

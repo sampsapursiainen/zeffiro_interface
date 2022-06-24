@@ -28,6 +28,8 @@ zef.h_streamline_linewidth.Value = num2str(zef.streamline_linewidth);
 zef.h_streamline_color.Value = zef.streamline_color;
 zef.h_n_streamline.Value = num2str(zef.n_streamline);
 zef.h_colortune_param.Value = num2str(zef.colortune_param);
+zef.h_contour_n_smoothing.Value = num2str(zef.contour_n_smoothing);
+zef.h_contour_line_width.Value = num2str(zef.contour_line_width);
 
 zef.h_zef_graphics_processing_options.Name = 'ZEFFIRO Interface: Graphics processing options';
 set(findobj(zef.h_zef_graphics_processing_options.Children,'-property','FontUnits'),'FontUnits','pixels');

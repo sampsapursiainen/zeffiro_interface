@@ -11,3 +11,5 @@ zef.cone_lattice_resolution = str2num(get(zef.h_cone_lattice_resolution,'Value')
     zef.n_streamline = str2num(get(zef.h_n_streamline,'value'));
     zef.colortune_param = str2num(get(zef.h_colortune_param,'Value'));
      zef.sensors_visual_size = str2num(get(zef.h_sensors_visual_size,'value'));
+      zef.contour_n_smoothing = str2num(get(zef.h_contour_n_smoothing,'value'));
+ zef.contour_line_width = str2num(get(zef.h_contour_line_width,'value'));

@@ -4,13 +4,11 @@ if not(evalin('base','zef.show_contour_text'))
 h_text = [];
 end
     
-tau = 1;
-n_iter = 2;
-line_width = 1;
+n_iter = evalin('base','zef.contour_n_smoothing');
+line_width = evalin('base','zef.contour_line_width');
 if not(isempty(varargin))
 n_iter = varargin{1};
 if length(varargin) > 1
-tau = varargin{2};
 end
 end
 
@@ -109,8 +107,8 @@ edges_contour{loop_start} = reshape(nodes_edge_1(edges_contour{loop_start}),size
 
 for i = 1 : n_iter
 nodes_mean = 0.5*(nodes(edges_contour{loop_start}(:,1),:)+nodes(edges_contour{loop_start}(:,2),:));
-nodes(edges_contour{loop_start}(:,1),:) = (nodes(edges_contour{loop_start}(:,1),:) + tau*nodes_mean)/(1+tau);
-nodes(edges_contour{loop_start}(:,2),:) = (nodes(edges_contour{loop_start}(:,2),:) + tau*nodes_mean)/(1+tau);
+nodes(edges_contour{loop_start}(:,1),:) = (nodes(edges_contour{loop_start}(:,1),:) + nodes_mean)/2;
+nodes(edges_contour{loop_start}(:,2),:) = (nodes(edges_contour{loop_start}(:,2),:) + nodes_mean)/2;
 end
 
 if size(edges_contour{loop_start},1) > 0 
