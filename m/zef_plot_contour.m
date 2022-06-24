@@ -5,7 +5,7 @@ h_text = [];
 end
     
 tau = 1;
-n_iter = 10;
+n_iter = 2;
 line_width = 1;
 if not(isempty(varargin))
 n_iter = varargin{1};
@@ -86,6 +86,9 @@ while ismember(0,nodes_edge_3)
    edges_contour{loop_start}(edges_found,1) = node_ind;
    node_neighbor = find(E(:,node_ind));
    node_ind = node_neighbor(find(not(ismember(node_neighbor,nodes_edge_3)),1));
+   if isempty(node_ind)
+      node_ind = node_neighbor(find(ismember(node_neighbor, edges_contour{loop_start}(1)),1));
+   end
    if not(isempty(node_ind))   
        %loop_nodes = loop_nodes + 1;
          nodes_found = nodes_found + 1;
@@ -122,11 +125,11 @@ set(h_contour(loop_start,j),'tag','contour')
 
 uistack(h_contour(loop_start,j),'top');
 
-if loop_start == 1 && evalin('base','zef.show_contour_text')
-h_text(j) = text(h_axes,nodes(edges_contour{loop_start}(1,1),1),nodes(edges_contour{loop_start}(1,1),2),nodes(edges_contour{loop_start}(1,1),3),[sprintf('%0.3g',100*rel_val(j)) ' %']);
-set(h_text(j),'FontSize',h_axes.FontSize);
-h_text(j).Tag = 'contour_text';
-uistack(h_text(j),'top');
+if evalin('base','zef.show_contour_text')
+h_text(loop_start,j) = text(h_axes,nodes(edges_contour{loop_start}(1,1),1),nodes(edges_contour{loop_start}(1,1),2),nodes(edges_contour{loop_start}(1,1),3),[sprintf('%0.3g',100*rel_val(j)) ' %']);
+set(h_text(loop_start,j),'FontSize',h_axes.FontSize);
+h_text(loop_start,j).Tag = 'contour_text';
+uistack(h_text(loop_start,j),'top');
 end
 end
 
