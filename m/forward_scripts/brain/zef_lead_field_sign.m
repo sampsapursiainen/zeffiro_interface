@@ -1,11 +1,32 @@
-function Lsign = zef_lead_field_sign( ...
+function [Lsignx, Lsigny, Lsignz] = zef_lead_field_sign( ...
     p_source_positions, ...
     p_electrode_positions, ...
     p_L ...
 )
 
-    % Calculates the sign of the given lead field p_L based on source positions,
-    % their directions, the electrode positions and the lead field itself.
+    % Documentation
+    %
+    % Calculates the x-, y- and z-signs of the given lead field p_L based on
+    % cartesian source positions, their directions, the electrode positions
+    % and the lead field itself.
+    %
+    % Input:
+    %
+    % - p_source_positions: the cartesian positions of the dipole sources in
+    %   the brain.
+    %
+    % - p_electrode_positions: the cartesian positions of the electrodes on
+    %   the surface of the head.
+    %
+    % - p_L: the cartesian lead field matrix whose sign we are checkin for.
+    %
+    % Output:
+    %
+    % - Lsignx: the sign of the x-component of p_L or p_L(1:3:end).
+    %
+    % - Lsigny: the sign of the y-component of p_L or p_L(1:3:end).
+    %
+    % - Lsignz: the sign of the z-component of p_L or p_L(1:3:end).
 
     arguments
         p_source_positions (:, 3) double
@@ -21,17 +42,37 @@ function Lsign = zef_lead_field_sign( ...
 
     scopos = p_source_positions(scoind,:);
 
-    % Electrode whose projection onto the xy-plane is closest to that of SCO,
-    % as in is "most below/above it". Call it projectively closest electrode
-    % (PCE).
+    % Restrict ourselves to electrodes where the desired coordinate is
+    % positive or in the direction of the basis vector that will be used.
 
-    sco_ele_diffs = scopos - p_electrode_positions;
+    electrode_pos_xy_ind = find(p_electrode_positions(:,3) > 0);
+    electrode_pos_xy = p_electrode_positions(electrode_pos_xy_ind, :);
 
-    sco_ele_diffs_xy = sco_ele_diffs(:, 1:2);
+    electrode_pos_xz_ind = find(p_electrode_positions(:,2) > 0);
+    electrode_pos_xz = p_electrode_positions(electrode_pos_xz_ind, :);
 
-    pce_dists = zef_L2_norm(sco_ele_diffs_xy, 2);
+    electrode_pos_yz_ind = find(p_electrode_positions(:,1) > 0);
+    electrode_pos_yz = p_electrode_positions(electrode_pos_yz_ind, :);
 
-    [~, pceind] = min(pce_dists);
+    % Electrodes whose projections onto the planes xy, xz and yz are closest
+    % to that of SCO, as in are "most below/above or left/right of it". Call
+    % it projectively closest electrode (PCE).
+
+    sco_ele_diffs_xy_to_be = scopos - electrode_pos_xy;
+    sco_ele_diffs_xz_to_be = scopos - electrode_pos_xz;
+    sco_ele_diffs_yz_to_be = scopos - electrode_pos_yz;
+
+    sco_ele_diffs_xy = sco_ele_diffs_xy_to_be(:, 1:2);
+    sco_ele_diffs_xz = sco_ele_diffs_xz_to_be(:, [1, 3]);
+    sco_ele_diffs_yz = sco_ele_diffs_yz_to_be(:, 2:3);
+
+    pce_dists_xy = zef_L2_norm(sco_ele_diffs_xy, 2);
+    pce_dists_xz = zef_L2_norm(sco_ele_diffs_xz, 2);
+    pce_dists_yz = zef_L2_norm(sco_ele_diffs_yz, 2);
+
+    [~, pceind_xy] = min(pce_dists_xy);
+    [~, pceind_xz] = min(pce_dists_xz);
+    [~, pceind_yz] = min(pce_dists_yz);
 
     % Indices of p_L that match the SCO.
 
@@ -39,16 +80,22 @@ function Lsign = zef_lead_field_sign( ...
 
     % Part of p_L that matches both SCO and PCE.
 
-    scopceL = p_L(pceind, sco_xyz_inds);
+    scopceLxy = p_L(pceind_xy, sco_xyz_inds);
+    scopceLxz = p_L(pceind_xz, sco_xyz_inds);
+    scopceLyz = p_L(pceind_yz, sco_xyz_inds);
 
     % Scalar potential of SCO at PCE, u = Lx.
 
-    scodir = [ 0 ; 0 ; 1 ];
+    basis = eye(3);
 
-    scopceu = scopceL * scodir;
+    scopceux = scopceLyz * basis(:,1);
+    scopceuy = scopceLxz * basis(:,2);
+    scopceuz = scopceLxy * basis(:,3);
 
     % Calculate the sign
 
-    Lsign = sign(scopceu);
+    Lsignx = sign(scopceux);
+    Lsigny = sign(scopceuy);
+    Lsignz = sign(scopceuz);
 
 end

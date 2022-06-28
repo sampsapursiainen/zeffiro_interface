@@ -125,19 +125,36 @@ zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec','aux_vec_sources'});
 zef.lead_field_time = toc;
 
 if zef.location_unit == 1
-zef.source_positions = 1000*zef.source_positions;
-zef.location_unit_current = 1;
+    zef.source_positions = 1000*zef.source_positions;
+    zef.location_unit_current = 1;
 end
 
 if zef.location_unit == 2
-zef.source_positions = 100*zef.source_positions;
-zef.location_unit_current = 2;
+    zef.source_positions = 100*zef.source_positions;
+    zef.location_unit_current = 2;
 end
 
 if zef.location_unit == 3
-zef.location_unit_current = 3;
+    zef.location_unit_current = 3;
 end
 
 if zef.source_interpolation_on
-[zef.source_interpolation_ind] = source_interpolation([]);
+    [zef.source_interpolation_ind] = source_interpolation([]);
+end
+
+% Flip EEG lead field signs per cartesian basis direction, if they are not
+% correct.
+%
+% NOTE: previously this was located in lead_field_eeg_fem, before the source
+% interpolation and unit scaling above, but either the above scaling or
+% interpolation caused the sign of the x-columns of L(1:3:end) to get flipped.
+
+if zef.lead_field_type == 1
+
+    [Lsignx, Lsigny, Lsignz] = zef_lead_field_sign(zef.source_positions, zef.sensors(:,1:3), zef.L);
+
+    zef.L(:, 1:3:end) = Lsignx * zef.L(:, 1:3:end);
+    zef.L(:, 2:3:end) = Lsigny * zef.L(:, 2:3:end);
+    zef.L(:, 3:3:end) = Lsignz * zef.L(:, 3:3:end);
+
 end

@@ -236,9 +236,5 @@ L_eeg = T' * G;
 
 L_eeg = L_eeg - mean(L_eeg, 1);
 
-% Make sure lead field has correct orientation
-
-L_eeg = zef_lead_field_sign(dipole_locations, electrodes, L_eeg) * L_eeg;
-
 end % if
 end % function
