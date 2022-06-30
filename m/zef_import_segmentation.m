@@ -25,7 +25,7 @@ ini_cell = readcell(fullfile(folder_name,file_name),'FileType','Text','NumHeader
 ini_cell_original = ini_cell;
 for i = 1 : size(ini_cell,1)
 for j = 1 : size(ini_cell,2)
-if    ismissing(ini_cell{i,j})
+if ismissing(ini_cell{i,j})
     ini_cell{i,j} = 'missing_cell_entry';
 end
     if not(ischar(ini_cell{i,j}))
@@ -124,6 +124,20 @@ for i = 1 : size(ini_cell,1)
         else
             visible = '1';
          end
+          if find(ismember(ini_cell(i,:),'subject'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'subject'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        subject = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'subject'),1)+1});
+        else
+            subject = 1;
+          end
+        if find(ismember(ini_cell(i,:),'database'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'database'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        database = (ini_cell{i,find(ismember(ini_cell(i,:),'database'),1)+1});
+        else
+            database = 'none';
+         end
 
          aux_ind = 0;
          while not(isempty(aux_ind))
@@ -171,6 +185,25 @@ for i = 1 : size(ini_cell,1)
             eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
             end
         end
+        
+     if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
+    n_surfaces = length(bst_get('ProtocolSubjects').Subject(subject).Surface);
+    surface_found = 0 ;
+    surface_ind_aux = 0; 
+    while surface_ind_aux < n_surfaces && not(surface_found)
+    surface_ind_aux = surface_ind_aux + 1;
+        surface_name_aux = load([ bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName],'Comment');
+    surface_name_aux = surface_name_aux.Comment;
+    if isequal(lower(surface_name_aux),lower(name))
+    surface_found = 1;
+    surface_data = load([bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName]);
+    eval(['zef_data.' compartment_tag '_points = surface_data.Vertices;']);
+    eval(['zef_data.' compartment_tag '_triangles = surface_data.Faces;']);
+    eval(['zef_data.' compartment_tag '_submesh_ind = size(surface_data.Faces,1);']);
+   eval(['zef_data.' compartment_tag '_scaling = 1000;']);
+    end
+    end
+    end
         
         assignin('base','zef_data',zef_data);
         evalin('base','zef_assign_data;');
@@ -237,6 +270,21 @@ for i = 1 : size(ini_cell,1)
         else
             affine_transform = mat2str(eye(4));
         end
+        
+             if find(ismember(ini_cell(i,:),'tag'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        tag = (ini_cell{i,find(ismember(ini_cell(i,:),'tag'),1)+1});
+        else
+            tag = [];
+          end
+        if find(ismember(ini_cell(i,:),'database'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'database'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        database = (ini_cell{i,find(ismember(ini_cell(i,:),'database'),1)+1});
+        else
+            database = 'none';
+        end
          
         %eval(['zef_data.sensora_selected = ' num2str(sensors_ind) ';']);
          eval(['zef_data.current_sensors = ''' sensor_tag  ''';']);
@@ -250,6 +298,7 @@ for i = 1 : size(ini_cell,1)
         assignin('base','zef_data',zef_data);
         evalin('base','zef_assign_data;');
         clear zef_data;
+        
         if not(isempty(filename))
             if isequal(filetype,'points')
         evalin('base','zef_get_sensor_points;');
@@ -261,10 +310,21 @@ for i = 1 : size(ini_cell,1)
            zef_import_mat_struct(fullfile(folder_name,filename),[sensor_tag '_']);
             end
         end   
+        
+      if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
+      
+      [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors([bst_get('ProtocolInfo').STUDIES filesep bst_get('Study').Channel.FileName],tag);
+      if isequal(modality,'EEG')
+      eval(['zef_data.' sensor_tag '_points = sensor_positions;']);
+      eval(['zef_data.' sensor_tag '_scaling = 1000;']);
+      end
+      
+      
+      end
 
        % evalin('base','zef_init_sensors_parameter_profile;');
-        evalin('base','zef_apply_parameter_profile;');
-evalin('base','zef_build_sensors_table;');
+       evalin('base','zef_apply_parameter_profile;');
+       evalin('base','zef_build_sensors_table;');
 
     elseif isequal(type,'struct')
        filename = '';

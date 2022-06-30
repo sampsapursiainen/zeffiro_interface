@@ -70,8 +70,13 @@ affine_transform =  cell2mat(evalin('base',[var_13 '(' num2str(t_ind) ')']));
     end
     
 reuna_aux = [reuna_p{i} ones(size(reuna_p{i},1),1)];
+if not(isempty(reuna_aux)) && not(isempty(affine_transform))
 reuna_aux = reuna_aux*affine_transform';
 reuna_p{i} = reuna_aux(:,1:3);
+else
+    reuna_p{i} = [];
+end
+
 
 if scaling_val ~= 1
 reuna_p{i} = scaling_val*reuna_p{i};
@@ -260,11 +265,11 @@ end
 
 max_val = 0;
 box_ind = 0;
-for i = 1 : length(reuna_p)
-    if not(isequal(reuna_type{i,1}, -1))
-max_val = max([abs(reuna_p{i}(:)) ; max_val]);
-    elseif isequal(reuna_type{i,1}, -1)
-   box_ind = i;
+for i_aux = 1 : length(reuna_p)
+    if not(isequal(reuna_type{i_aux,1}, -1))
+max_val = max([abs(reuna_p{i_aux}(:)) ; max_val]);
+    elseif isequal(reuna_type{i_aux,1}, -1)
+   box_ind = i_aux;
 end
 end
 

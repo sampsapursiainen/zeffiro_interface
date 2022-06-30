@@ -72,12 +72,12 @@ classdef zeffiro_interface_mesh_tool_app_exported < matlab.apps.AppBase
             % Create h_field_downsampling
             app.h_field_downsampling = uibutton(app.h_mesh_tool, 'push');
             app.h_field_downsampling.Position = [16 273 165 39];
-            app.h_field_downsampling.Text = 'Downsample field';
+            app.h_field_downsampling.Text = 'Resample field';
 
             % Create h_surface_downsampling
             app.h_surface_downsampling = uibutton(app.h_mesh_tool, 'push');
             app.h_surface_downsampling.Position = [190 273 165 39];
-            app.h_surface_downsampling.Text = 'Downsample surfaces';
+            app.h_surface_downsampling.Text = 'Resample surfaces';
 
             % Create h_checkbox_mesh_smoothing_on
             app.h_checkbox_mesh_smoothing_on = uicheckbox(app.h_mesh_tool);
@@ -225,7 +225,7 @@ classdef zeffiro_interface_mesh_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_forward_simulation_table_context
             app.h_menu_forward_simulation_table_context = uicontextmenu(app.h_mesh_tool);
-
+            
             % Assign app.h_menu_forward_simulation_table_context
             app.h_forward_simulation_table.ContextMenu = app.h_menu_forward_simulation_table_context;
 
