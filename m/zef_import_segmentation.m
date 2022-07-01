@@ -124,7 +124,7 @@ for i = 1 : size(ini_cell,1)
         else
             visible = '1';
          end
-          if find(ismember(ini_cell(i,:),'subject'))
+         if find(ismember(ini_cell(i,:),'subject'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'subject'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         subject = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'subject'),1)+1});
@@ -137,7 +137,35 @@ for i = 1 : size(ini_cell,1)
         database = (ini_cell{i,find(ismember(ini_cell(i,:),'database'),1)+1});
         else
             database = 'none';
-         end
+        end
+        if find(ismember(ini_cell(i,:),'tag'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        tag = (ini_cell{i,find(ismember(ini_cell(i,:),'tag'),1)+1});
+        else
+        tag = [];
+        end
+        if find(ismember(ini_cell(i,:),'atlas'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas = (ini_cell{i,find(ismember(ini_cell(i,:),'atlas'),1)+1});
+        else
+        atlas = '';
+        end
+        if find(ismember(ini_cell(i,:),'atlas_compartment'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_compartment'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_compartment = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'atlas_compartment'),1)+1});
+        else
+        atlas_compartment = 0;
+        end
+        if find(ismember(ini_cell(i,:),'atlas_tag'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_tag'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_tag = (ini_cell{i,find(ismember(ini_cell(i,:),'atlas_tag'),1)+1});
+        else
+            atlas_tag = [];
+          end
 
          aux_ind = 0;
          while not(isempty(aux_ind))
@@ -194,16 +222,30 @@ for i = 1 : size(ini_cell,1)
     surface_ind_aux = surface_ind_aux + 1;
         surface_name_aux = load([ bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName],'Comment');
     surface_name_aux = surface_name_aux.Comment;
-    if isequal(lower(surface_name_aux),lower(name))
+    if isequal(lower(surface_name_aux),lower(tag))
     surface_found = 1;
     surface_data = load([bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName]);
     eval(['zef_data.' compartment_tag '_points = surface_data.Vertices;']);
     eval(['zef_data.' compartment_tag '_triangles = surface_data.Faces;']);
     eval(['zef_data.' compartment_tag '_submesh_ind = size(surface_data.Faces,1);']);
    eval(['zef_data.' compartment_tag '_scaling = 1000;']);
+   if not(isempty(atlas))
+       if isempty(atlas_tag)
+           atlas_tag = atlas;
+       end
+       [p_c_table_new, p_points_new] = zef_bst_2_zef_atlas(surface_data, atlas_compartment, atlas, atlas_tag, 1000);
+       if not(isempty(p_c_table_new))
+       p_c_table = evalin('base','zef.parcellation_colortable');
+       p_c_table{length(p_c_table)+1} = p_c_table_new;
+       p_points = evalin('base','zef.parcellation_points');
+       p_points{length(p_points)+1} = p_points_new; 
+       eval(['zef_data.parcellation_colortable = p_c_table;']);
+       eval(['zef_data.parcellation_points = p_points;']);
+       end
+   end
     end
     end
-    end
+     end
         
         assignin('base','zef_data',zef_data);
         evalin('base','zef_assign_data;');

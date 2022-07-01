@@ -59,9 +59,13 @@ compartment_tags = compartment_tags(1:end-1);
 end
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])
+    if not(isempty(evalin('base','zef.source_interpolation_ind')))
     s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
+    end
         if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
+            if not(isempty(evalin('base','zef.source_interpolation_ind')))
 s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
+            end
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2])
     s_i_ind_2 = evalin('base','zef.active_compartment_ind');
         end

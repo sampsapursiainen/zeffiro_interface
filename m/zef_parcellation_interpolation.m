@@ -42,11 +42,11 @@ if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
 end
 
-if sum(ismember(parcellation_compartment(1), compartment_tags{k}))
+if ismember(compartment_tags{k},parcellation_compartment(1))
     cortex_ind_aux = [cortex_ind_aux i];
 end
 
-if sum(ismember(parcellation_compartment, compartment_tags{k}))
+if ismember(compartment_tags{k},parcellation_compartment)
     cortex_surface_ind_aux = [cortex_surface_ind_aux i];
 end
 
@@ -77,7 +77,11 @@ for i = 1 : length(p_points)
     parcellation_p = [parcellation_p ; p_points{i}(:,2:4)];
     if length(p_colortable{i}) > 4
         p_compartment= [p_compartment ; p_colortable{i}{5}];
+    if length(p_colortable{i}) > 5
+        p_cortex = [p_cortex ; p_colortable{i}{6}];
+    else
         p_cortex = [p_cortex ; zeros(length(p_colortable{i}{3}(:,5)),1)];
+    end
     else
     p_compartment = [p_compartment ; [cortex_ind_aux(1)*ones(length(p_colortable{i}{3}(:,5)),1) ones(length(p_colortable{i}{3}(:,5)),1)]];
     p_cortex = [p_cortex ; ones(length(p_colortable{i}{3}(:,5)),1)];
@@ -96,18 +100,24 @@ if evalin('base','zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
-I_compartment = find(ismember(evalin('base','zef.sigma(:,2)'),cortex_ind_aux(1)));
-brain_cortex_ind = find(ismember(brain_ind,I_compartment));
+h = waitbar(0,['Interp. 1.']);
+
+p_counter = 0;
+for p_ind = p_selected + 1
+p_counter = p_counter + 1;
+
+
+    
+I_compartment = find(ismember(evalin('base','zef.domain_labels'),p_compartment(p_ind-1,1)));
+brain_cortex_ind = find(ismember(brain_ind,I_compartment) & ismember(submesh_ind_vec,p_compartment(p_ind-1,2)));
 cortex_ind = brain_ind(brain_cortex_ind);
 
 [center_points I center_points_ind] = unique(tetra(cortex_ind,:));
 center_points = nodes(center_points,:);
 size_center_points = size(center_points,1);
 
-h = waitbar(i/size_center_points,['Interp. 1.']);
-p_counter = 0;
-for p_ind = p_selected + 1
-p_counter = p_counter + 1;
+waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
 parcellation_interpolation_ind{p_ind-1}{1} = [];
 
@@ -123,7 +133,7 @@ if not(isempty(source_positions))
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+%waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
 source_interpolation_ind = source_interpolation_ind(:);
 
@@ -143,9 +153,14 @@ end
 
 for ab_ind = 1 : length(aux_brain_ind)
 
+    
+    
 p_counter = 0;
 for p_ind = p_selected + 1
 p_counter = p_counter + 1;
+
+waitbar([ab_ind/length(aux_brain_ind) p_counter/length(p_selected)],h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
+
 
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [];
 triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
@@ -166,7 +181,7 @@ if not(p_cortex(p_ind-1) == 1)
 
 else
 
-if ismember(aux_brain_ind(ab_ind),cortex_surface_ind_aux)
+%if ismember(aux_brain_ind(ab_ind),cortex_surface_ind_aux)
 
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
 
@@ -186,7 +201,7 @@ tic;
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
+%waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
 source_interpolation_ind = source_interpolation_ind(:);
 
@@ -197,10 +212,9 @@ distance_vec = sum((source_positions(source_interpolation_ind,:)-center_points).
 %end
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = find(mean(sqrt(distance_vec(triangles)),2)<p_tolerance);
 
-waitbar(1,h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
 
 end
-end
+%end
 end
 end
 end

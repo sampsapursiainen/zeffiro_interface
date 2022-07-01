@@ -415,7 +415,9 @@ frame_step = 1;
 
 if ismember(evalin('base','zef.visualization_type'), [2,4])
     if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
+        if not(isempty(evalin('base','zef.source_interpolation_ind')))
 s_i_ind = evalin('base','zef.source_interpolation_ind{1}');
+        end
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
      s_i_ind = [1:evalin('base','size(zef.tetra,1)')]';
     end
@@ -1229,9 +1231,13 @@ end
 submesh_num = evalin('base','zef.submesh_num');
 
 if ismember(evalin('base','zef.visualization_type'), [3,4])
+    if not(isempty(evalin('base','zef.source_interpolation_ind')))
     s_i_ind = evalin('base','zef.source_interpolation_ind{2}');
+    end
         if ismember(evalin('base','zef.volumetric_distribution_mode'), [1,3])
+            if not(isempty(evalin('base','zef.source_interpolation_ind')))
 s_i_ind_2 = evalin('base','zef.source_interpolation_ind{1}');
+            end
     elseif ismember(evalin('base','zef.volumetric_distribution_mode'), [2,4])
     s_i_ind_2 = evalin('base','zef.active_compartment_ind');
         end
