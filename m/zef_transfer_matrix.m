@@ -45,7 +45,7 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
     A_aux = A(perm_vec,perm_vec);
     A = A_aux;
 
-    wbtitle = 'Stensil PCG iteration';
+    wbtitle = 'Stencil PCG iteration';
     wb = waitbar(0, wbtitle);
 
     % Initialize transfer matrix T and Schur_complement
@@ -214,10 +214,10 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
                 relres_vec(block_iter_sub) = relres_cell{block_iter};
             end
 
-            % Construct stensil T column by column.
+            % Construct stencil T column by column.
 
             if impedance_inf == 0
-                Schur_complement(:,block_ind) = C(:,block_ind) - B' * x_block;
+                Schur_complement(:,block_ind) = C(:,block_ind) - B' * T(:,block_ind);
             else
                 Schur_complement(:,block_ind) = C(:,block_ind);
             end

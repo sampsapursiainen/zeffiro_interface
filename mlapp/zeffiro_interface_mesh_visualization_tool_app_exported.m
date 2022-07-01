@@ -129,7 +129,7 @@ classdef zeffiro_interface_mesh_visualization_tool_app_exported < matlab.apps.Ap
 
             % Create h_visualization_type
             app.h_visualization_type = uidropdown(app.h_mesh_visualization_tool);
-            app.h_visualization_type.Position = [42 278 73 22];
+            app.h_visualization_type.Position = [42 278 75 22];
 
             % Create h_frame_start
             app.h_frame_start = uieditfield(app.h_mesh_visualization_tool, 'text');
