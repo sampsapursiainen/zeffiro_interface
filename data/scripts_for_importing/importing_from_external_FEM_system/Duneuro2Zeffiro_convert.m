@@ -11,6 +11,10 @@ source_positions = source_grid;
 save data/converted/source_space.mat source_positions;
 clear source_grid source_positions;
 
+resection_points = load('data/exported/resection_points.dat');
+save  data/converted/resection_points.mat resection_points;
+clear resection_points;
+
 load data/exported/LF_EEG.mat LF_EEG;
 load data/exported/spikeAvgEEG;
 measurements = spikeAvg_EEG.avg; 
