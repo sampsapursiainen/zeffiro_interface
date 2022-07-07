@@ -50,7 +50,7 @@ i = i + 1;
 c_str = compartment_tags{k};
 
 if ismember(evalin('base',['zef.' c_str '_sources']),[1 2])
-I = find(evalin('base','zef.sigma(zef.brain_ind,2)')==i);
+I = find(evalin('base','zef.domain_labels(zef.brain_ind)')==i);
 submesh_ind_aux = unique(submesh_ind(I));
 if isempty(submesh_ind_aux)
     submesh_ind_aux = 1;

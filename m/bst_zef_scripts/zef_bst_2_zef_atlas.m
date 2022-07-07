@@ -48,7 +48,11 @@ for i = 1 : length(surface_struct.Atlas)
             
         end
         
-        p_c_table{5} = [atlas_compartment*ones(size(p_c_table{3},1),1) ones(size(p_c_table{3},1),1)];
+        p_c_table{5} = cell(0);
+        for p_ind = 1 : size(p_c_table{3},1)
+        p_c_table{5}{p_ind,1} = zef_find_compartment('name',atlas_compartment);    
+        p_c_table{5}{p_ind,2} = 1;
+        end
         p_c_table{6} = ones(size(p_c_table{3},1),1);
             
     end

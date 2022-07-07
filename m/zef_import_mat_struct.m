@@ -21,7 +21,7 @@ end
 
 if not(isequal(file_name,0))
 
-mat_struct = load([folder_name '/' file_name]);
+mat_struct = load(fullfile(folder_name, file_name));
 
 end
 

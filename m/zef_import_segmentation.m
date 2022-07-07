@@ -1,6 +1,7 @@
 function zef_import_segmentation(file_name, folder_name)
 
 domain_label_counter = 0;
+atlas_on = 0;
 if evalin('base','zef.use_display')
 if nargin < 2
 [file_name, folder_name] = uigetfile({'*.zef;*.mat'},'Segmentation data file and folder',evalin('base','zef.save_file_path'));
@@ -10,7 +11,7 @@ else
     folder_name = evalin('base','zef.file_path');
 end
 
-if not(isequal(file_name,0));
+if not(isequal(file_name,0))
     
     [~,~,extension] = fileparts(file_name);
     if isequal(extension,'.mat')
@@ -50,6 +51,7 @@ for i = 1 : size(ini_cell,1)
     name = '';
     filetype = '';
     filename = '';
+    foldername = '';
     if ismember('name',ini_cell(i,:))
     name = (ini_cell{i,find(ismember(ini_cell(i,:),'name'),1)+1});
     end
@@ -77,10 +79,23 @@ for i = 1 : size(ini_cell,1)
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filename = (ini_cell{i,find(ismember(ini_cell(i,:),'filename'),1)+1});
         end
+        if ismember('foldername',ini_cell(i,:))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'foldername'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
+        end
+        if not(isempty(filename))
+        filename = [folder_name filesep foldername filesep filename];
+        end
         if ismember('filetype',ini_cell(i,:))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filetype'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filetype = (ini_cell{i,find(ismember(ini_cell(i,:),'filetype'),1)+1});
+        elseif not(isempty(filename))
+            [~,~,filetype]=fileparts(filename);
+            if not(isempty(filetype))
+            filetype = filetype(2:end);
+            end
         end
         if find(ismember(ini_cell(i,:),'merge'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'merge'),1)];
@@ -143,7 +158,21 @@ for i = 1 : size(ini_cell,1)
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         tag = (ini_cell{i,find(ismember(ini_cell(i,:),'tag'),1)+1});
         else
-        tag = [];
+        tag = name;
+        end
+        if find(ismember(ini_cell(i,:),'parameter_name'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'parameter_name'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        parameter_name = (ini_cell{i,find(ismember(ini_cell(i,:),'parameter_name'),1)+1});
+        else
+        parameter_name = '';
+        end
+        if find(ismember(ini_cell(i,:),'parameter_value'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'parameter_value'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        parameter_value = (ini_cell{i,find(ismember(ini_cell(i,:),'parameter_value'),1)+1});
+        else
+        parameter_value = '';
         end
         if find(ismember(ini_cell(i,:),'atlas'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas'),1)];
@@ -155,17 +184,54 @@ for i = 1 : size(ini_cell,1)
         if find(ismember(ini_cell(i,:),'atlas_compartment'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_compartment'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
-        atlas_compartment = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'atlas_compartment'),1)+1});
+        atlas_compartment = ini_cell{i,find(ismember(ini_cell(i,:),'atlas_compartment'),1)+1};
         else
-        atlas_compartment = 0;
+        atlas_compartment = '';
         end
         if find(ismember(ini_cell(i,:),'atlas_tag'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_tag'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         atlas_tag = (ini_cell{i,find(ismember(ini_cell(i,:),'atlas_tag'),1)+1});
         else
-            atlas_tag = [];
-          end
+        atlas_tag = [];
+        end
+        if find(ismember(ini_cell(i,:),'atlas_on'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_on'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_on = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'atlas_on'),1)+1});
+        else
+        atlas_on = 0;
+        end
+        
+        if find(ismember(ini_cell(i,:),'atlas_colortable_filename'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_colortable_filename'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_colortable_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'atlas_colortable_filename'),1)+1});
+        else
+        atlas_colortable_filename = '';
+        end
+        if not(isempty(atlas_colortable_filename))
+        atlas_colortable_filename = [folder_name filesep foldername filesep atlas_colortable_filename];
+        end
+        
+        if find(ismember(ini_cell(i,:),'atlas_points_filename'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_points_filename'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_points_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'atlas_points_filename'),1)+1});
+        else
+        atlas_points_filename = '';
+        end
+        if not(isempty(atlas_points_filename))
+        atlas_points_filename = [folder_name filesep foldername filesep atlas_points_filename];
+        end
+        
+         if find(ismember(ini_cell(i,:),'atlas_merge'))
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'atlas_merge'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        atlas_merge = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'atlas_merge'),1)+1});
+        else
+        atlas_merge = 1;
+        end
 
          aux_ind = 0;
          while not(isempty(aux_ind))
@@ -188,6 +254,15 @@ for i = 1 : size(ini_cell,1)
         eval(['zef_data.current_compartment = ''' compartment_tag ''';']);
         eval(['zef_data.' compartment_tag '_merge = ' merge ';']);
         eval(['zef_data.' compartment_tag '_invert = ' invert ';']);
+        if not(isempty(parameter_name))
+        eval(['zef_data.' compartment_tag '_' parameter_name ' = ' parameter_value ';']);
+        end
+        if not(isempty(atlas_colortable_filename))
+        zef_import_parcellation_colortable(atlas_colortable_filename,compartment_tag,atlas_merge);
+        end
+        if not(isempty(atlas_points_filename))
+        zef_import_parcellation_points(atlas_points_filename,atlas_merge);
+        end
         eval(['zef_data.' compartment_tag '_name = ''' name ''';']);
         eval(['zef_data.' compartment_tag '_affine_transform = {' affine_transform '};']);
         eval(['zef_data.' compartment_tag '_sources = ' activity ';']);
@@ -196,25 +271,39 @@ for i = 1 : size(ini_cell,1)
         zef_data.surface_mesh_type = filetype;
         zef_data.file = filename;
         zef_data.file_path = folder_name;
+        
+        if atlas_on
+            parcellation_compartment = evalin('base','zef.parcellation_compartment');
+            if isequal(parcellation_compartment,{'g'})
+                parcellation_compartment = cell(0);
+            end
+            parcellation_compartment = [parcellation_compartment {compartment_tag}];       
+       atlas_on = 0;
+        end
 
         if not(isempty(filename))
-            if not(ismember(filetype,{'mat',''}))
-        evalin('base','zef_get_surface_mesh;');
+        if not(ismember(filetype,{'mat',''}))
+         [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(filename, compartment_tag, filetype,'full');
+eval(['zef_data.' compartment_tag '_points = aux_points;']);
+eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
+eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);   
         elseif isequal(filetype,'mat')
-           zef_import_mat_struct(fullfile(folder_name,filename),[compartment_tag '_']);
-        elseif isempty(filetype)
+         zef_import_mat_struct(filename,[compartment_tag '_']);
+        end
+        end
+        
+          if isempty(filename) 
          aux_tetra = evalin('base','zef.tetra');
          aux_nodes = evalin('base','zef.nodes');
          aux_domain_labels = evalin('base','zef.domain_labels');
-            [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
-            aux_submesh_ind = size(aux_triangles,1);
-            eval(['zef_data.' compartment_tag '_points = aux_points;']);
-            eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
-            eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
-            end
+         [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
+         aux_submesh_ind = size(aux_triangles,1);
+         eval(['zef_data.' compartment_tag '_points = aux_points;']);
+         eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
+         eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
         end
         
-     if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
+    if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
     n_surfaces = length(bst_get('ProtocolSubjects').Subject(subject).Surface);
     surface_found = 0 ;
     surface_ind_aux = 0; 
@@ -233,6 +322,7 @@ for i = 1 : size(ini_cell,1)
        if isempty(atlas_tag)
            atlas_tag = atlas;
        end
+       
        [p_c_table_new, p_points_new] = zef_bst_2_zef_atlas(surface_data, atlas_compartment, atlas, atlas_tag, 1000);
        if not(isempty(p_c_table_new))
        p_c_table = evalin('base','zef.parcellation_colortable');
@@ -279,11 +369,25 @@ for i = 1 : size(ini_cell,1)
                 ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filename = (ini_cell{i,find(ismember(ini_cell(i,:),'filename'),1)+1});
         end
+         foldername = '';
+        if ismember('foldername',ini_cell(i,:))
+            ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'foldername'),1)];
+                ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
+        end
+          if not(isempty(filename))
+        filename = [folder_name filesep foldername filesep filename];
+          end
         if ismember('filetype',ini_cell(i,:))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filetype'),1)];
           ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filetype = (ini_cell{i,find(ismember(ini_cell(i,:),'filetype'),1)+1});
-          end
+         elseif not(isempty(filename))
+            [~,~,filetype]=fileparts(filename);
+            if not(isempty(filetype))
+            filetype = filetype(2:end);
+            end 
+        end
          if find(ismember(ini_cell(i,:),'modality'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'modality'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -343,13 +447,15 @@ for i = 1 : size(ini_cell,1)
         
         if not(isempty(filename))
             if isequal(filetype,'points')
-        evalin('base','zef_get_sensor_points;');
+       aux_field = zef_get_mesh(filename,sensor_tag,'points');
+eval(['zef_data.' sensor_tag '_points = aux_field;']);
             end
              if isequal(filetype,'directions')
-        evalin('base','zef_get_sensor_directions;');
+        aux_field = zef_get_mesh(filename,sensor_tag,'triangles');
+eval(['zef_data.' sensor_tag '_directions = aux_field;']);
              end
             if isequal(filetype,'mat')
-           zef_import_mat_struct(fullfile(folder_name,filename),[sensor_tag '_']);
+           zef_import_mat_struct(filename,[sensor_tag '_']);
             end
         end   
         
@@ -374,7 +480,15 @@ for i = 1 : size(ini_cell,1)
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filename'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filename = (ini_cell{i,find(ismember(ini_cell(i,:),'filename'),1)+1});
-        zef_import_mat_struct(fullfile(folder_name,filename));
+                if ismember('foldername',ini_cell(i,:))
+            ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'foldername'),1)];
+                ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
+        end
+          if not(isempty(filename))
+        filename = [folder_name filesep foldername filesep filename];
+          end
+        zef_import_mat_struct(filename);
         end
           
     elseif isequal(type,'script')
@@ -383,10 +497,17 @@ for i = 1 : size(ini_cell,1)
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filename'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         filename = (ini_cell{i,find(ismember(ini_cell(i,:),'filename'),1)+1});
-        evalin('base',['run(''' fullfile(folder_name,filename)  ''');']);
+                if ismember('foldername',ini_cell(i,:))
+            ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'foldername'),1)];
+                ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
         end
-        
-        
+          if not(isempty(filename))
+        filename = [folder_name filesep foldername filesep filename];
+          end
+        evalin('base',['run(''' filename  ''');']);
+        end
+
     end
     
     
