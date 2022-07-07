@@ -8,35 +8,73 @@
 %
 % Input:
 %
-% - nodes: the nodes that make up a finite element mesh.
+% - nodes
 %
-% - tetrahedra: quadruples of node indices that indicate which nodes
-%   participate in which tetrahedra.
+%   The nodes that make up a finite element mesh.
 %
-% - brain_ind: linear indices of tetrahedra that are in the brain.
+% - tetrahedra
 %
-% - varargin{1}: source indices. If not set, these are assumed to be the
-%   same as brain_ind.
+%   Quadruples of node indices that indicate which nodes participate in which
+%   tetrahedra.
 %
-% - varargin{2}: number of sources. If not set, these are fetched from the
+% - brain_ind
+%
+%   Linear indices of tetrahedra that are in the brain and can contain brain
+%   activity.
+%
+% - varargin{1}
+%
+%   Source indices. If not set, these are assumed to be the same as brain_ind.
+%
+% - varargin{2}
+%
+%   Wanted number of sources. If not set, these are fetched from the global
+%   zef instance with evalin.
+%
+% - varargin{3}
+%
+%   DOF decomposition type. TODO. If not set, this is again fetched from the
 %   global zef instance with evalin.
-%
-% - varargin{3}: DOF decomposition type. TODO. If not set, this is again
-%   fetched from the global zef instance with evalin.
 %
 % Output:
 %
-% - decomposition_ind: TODO
-% - decomposition_count: TODO
-% - dof_positions: TODO
-% - decomposition_ind_first: TODO. Has something to do with generating source
-%   indices before lead field construction.
+% - nearest_neighbour_inds
+%
+%   Can be used to index into below decomposition_source_inds to find out
+%   which tetra in the global mesh is closest to the tetrahedron corresponding
+%   to it. For example
+%
+%       decomposition_source_inds(nearest_neighbour_inds(1))
+%
+%   would produce the nearest neighbour of the tetrahedron indicated by
+%   brain_ind(1).
+%
+% - decomposition_count
+%
+%   The number of incidences of each (sorted) index in nearest_neighbour_inds,
+%   meaning how many times each nearest neghbour is the nearest neighbour of
+%   some tetrahedron. The main use of this is for normalizing results when the
+%   index sets are used.
+%
+% - dof_positions
+%
+%   An array of decomposition node positions in a Cartesian coordinate system.
+%   Depending on the current zef.dof_decomposition_type integer value, this
+%   might be just (1 or 3) the set of barycentra of the tetrahedra in the FE
+%   mesh, (2) a rectangular grid whose resolution is determined by the minimum
+%   and maximum values of the mesh coordinates + a lattice constant computed
+%   from these.
+%
+% - decomposition_source_inds
+%
+%   These can be used to index into the input brain_ind to determine which of
+%   them can be used as dipolar sources in a head model.
 
 function [ ...
-    decomposition_ind, ...
+    nearest_neighbour_inds, ...
     decomposition_count, ...
     dof_positions, ...
-    decomposition_ind_first ...
+    decomposition_source_inds ...
 ] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,varargin)
 
 
@@ -75,15 +113,14 @@ function [ ...
 
         dof_positions = zef_tetra_barycentra(nodes, tetrahedra(source_ind, :));
 
-        size_center_points = size(center_points,2);
-        size_source_points = size(center_points,2);
-
         MdlKDT = KDTreeSearcher(dof_positions);
-        decomposition_ind  = knnsearch(MdlKDT,center_points);
+        nearest_neighbour_inds  = knnsearch(MdlKDT,center_points);
 
-        [unique_decomposition_ind, i_a, i_c] = unique(decomposition_ind);
+        [~, i_a, i_c] = unique(nearest_neighbour_inds);
+
         decomposition_count = accumarray(i_c,1);
-        decomposition_pointe = i_a;
+
+        decomposition_source_inds = i_a;
 
     elseif dof_decomposition_type == 2
 
@@ -118,33 +155,36 @@ function [ ...
 
         dof_positions = [X_lattice(:) Y_lattice(:) Z_lattice(:)];
 
-        decomposition_ind = lattice_index_fn( ...
+        nearest_neighbour_inds = lattice_index_fn( ...
             center_points, ...
             lattice_res_x, ...
             lattice_res_y, ...
             lattice_res_z ...
         );
 
-        [unique_decomposition_ind, i_a, i_c] = unique(decomposition_ind);
+        [unique_nearest_neighbour_ind, i_a, i_c] = unique(nearest_neighbour_inds);
 
-        decomposition_ind_to_be = zeros(size(dof_positions,1),1);
+        nearest_neighbour_ind_to_be = zeros(size(dof_positions,1),1);
 
-        decomposition_ind_to_be(unique_decomposition_ind) = [1 : length(unique_decomposition_ind)];
+        nearest_neighbour_ind_to_be(unique_nearest_neighbour_ind) = 1 : length(unique_nearest_neighbour_ind);
 
-        decomposition_ind = decomposition_ind_to_be(decomposition_ind);
+        nearest_neighbour_inds = nearest_neighbour_ind_to_be(nearest_neighbour_inds);
 
-        dof_positions = dof_positions(unique_decomposition_ind,:);
+        dof_positions = dof_positions(unique_nearest_neighbour_ind,:);
 
         decomposition_count = accumarray(i_c,1);
 
-        decomposition_ind_first = i_a;
+        decomposition_source_inds = i_a;
 
     elseif dof_decomposition_type == 3
 
-         decomposition_ind = [1:length(brain_ind)]';
-         decomposition_count = ones(size(decomposition_ind));
+         nearest_neighbour_inds = (1 : length(brain_ind))';
+
+         decomposition_count = ones(size(nearest_neighbour_inds));
+
          dof_positions = center_points;
-         decomposition_ind_first = [1:length(brain_ind)]';
+
+         decomposition_source_inds = (1 : length(brain_ind))';
 
     else
 
@@ -182,7 +222,10 @@ function out_indices = lattice_index_fn( ...
     %
     % Output:
     %
-    % - out_indices: the indices of the lattice we are interested in.
+    % - out_indices
+    %
+    %   Linear index locations of the tetrehedral barycenters in the lattice
+    %   we are interested in.
 
     arguments
         in_center_points (:,3) double
@@ -201,16 +244,15 @@ function out_indices = lattice_index_fn( ...
     lry = in_lattice_res_y;
     lrz = in_lattice_res_z;
 
-    % Lattice index builder.
+    % Absolute coordinates (relative coordinates times resolution) in the
+    % rectangular lattice.
 
-    lib = [
-        max(1, round( lrx * (cp1 - min(cp1)) ./ (max(cp1) - min(cp1)))) ...
-        max(1, round( lry * (cp2 - min(cp2)) ./ (max(cp2) - min(cp2)))) ...
-        max(1, round( lrz * (cp3 - min(cp3)) ./ (max(cp3) - min(cp3))))
-    ];
+    acx = max(1, round( lrx * (cp1 - min(cp1)) ./ (max(cp1) - min(cp1))));
+    acy = max(1, round( lry * (cp2 - min(cp2)) ./ (max(cp2) - min(cp2))));
+    acz = max(1, round( lrz * (cp3 - min(cp3)) ./ (max(cp3) - min(cp3))));
 
-    % Indices from builder.
+    % Linear indices from absolute coordinates.
 
-    out_indices = (lib(:,3)-1) * lrx * lry + (lib(:,1)-1) * lry + lib(:,2);
+    out_indices = (acz-1) * lrx * lry + (acx-1) * lry + acy;
 
 end

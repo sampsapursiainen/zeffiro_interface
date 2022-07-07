@@ -2,18 +2,67 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
     p_nodes, ...
     p_tetrahedra, ...
     p_brain_inds, ...
-    p_intended_source_inds ...
+    p_intended_source_inds, ...
+    p_nearest_neighbour_inds, ...
+    p_optimization_system_type ...
 )
 
+    % Documentation
+    %
     % Produces a lead field interpolation matrix G with position-based
     % optimization (PBO), based on the Whitney (face-intersecting) source
     % model. Also returns the related interpolation positions.
+    %
+    % Input:
+    %
+    % - p_nodes
+    %
+    %   The nodes that form the tetrahedral mesh.
+    %
+    % - p_tetrahedra
+    %
+    %   The tetrahedra (4-tuples of node indices) that are formed from
+    %   p_nodes.
+    %
+    % - p_brain_inds
+    %
+    %   The indices of the tetrahedra where sources can be placed in the first
+    %   place. In other words, these tetra form the gray matter.
+    %
+    % - p_intended_source_inds
+    %
+    %   These are the subset of the tetrahedral indices which indicate where
+    %   dipolar sources are to be placed in, not just where they can be
+    %   placed.
+    %
+    % - p_nearest_neighbour_inds
+    %
+    %   Used by the continuous source models to determine which neighbours of
+    %   neighbours of each central source tetrahedron are to be included in
+    %   the interpolation. If this is empty, the source model is interpreted
+    %   as being discrete.
+    %
+    % Output:
+    %
+    % - G
+    %
+    %   Interpolation matrix that is to be multiplied by the transpose of the
+    %   transfer matrix in the lead field routines.
+    %
+    % - interpolation_positions
+    %
+    %   The positions at which sources are the be placed after interpolation.
 
     arguments
         p_nodes (:,3) double {mustBeNonNan}
-        p_tetrahedra (:,4) double {mustBeInteger, mustBeNonnegative}
-        p_brain_inds (:,1) double {mustBeInteger, mustBeNonnegative}
-        p_intended_source_inds (:,1) double {mustBeInteger, mustBeNonnegative}
+        p_tetrahedra (:,4) double {mustBeInteger, mustBePositive}
+        p_brain_inds (:,1) double {mustBeInteger, mustBePositive}
+        p_intended_source_inds (:,1) double {mustBeInteger, mustBePositive}
+        p_nearest_neighbour_inds (:,1) double {mustBeInteger, mustBePositive}
+        p_optimization_system_type { ...
+            mustBeText, ...
+            mustBeMember(p_optimization_system_type,{'pbo','mpo'}) ...
+        }
     end
 
     G = [];
@@ -36,15 +85,9 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
         p_brain_inds ...
     );
 
-    % Form local environment indices based on adjacency matrix T_fi. TODO:
-    % change this to use some other condition than .
+    % Form local environment indices based on adjacency matrix T_fi.
 
-    valid_source_inds = full(find(sum(T_fi) >= 4))';
-    valid_source_inds = intersect(valid_source_inds, p_intended_source_inds);
-
-    % Restrict stensils to intended source positions.
-
-    T_fi = T_fi(:, valid_source_inds);
+    valid_source_inds = p_intended_source_inds;
 
     % Form interpolation positions (barycenters of tetrahedra).
 
@@ -77,9 +120,41 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
     for i = 1 : n_of_iterations
 
+        % Get global source index.
+
+        source_ind = valid_source_inds(i);
+
         % Find local neighbour indices.
 
-        fi_neighbour_inds = full(find(T_fi(:,i)));
+        if isempty(p_nearest_neighbour_inds)
+
+            fi_neighbour_inds = full(find(T_fi(:,source_ind)));
+
+        else
+
+            % Gather continuous environment around current source ind.
+
+            i_locations_in_nearest_neighbour_inds = find(p_nearest_neighbour_inds == i);
+
+            env_inds = [source_ind ; p_brain_inds(i_locations_in_nearest_neighbour_inds)];
+
+            % Use cell arrays to store neighbour source inds per column.
+
+            env_size = numel(env_inds);
+
+            fi_ind_cell = cell(1, env_size);
+
+            for ii = 1 : env_size
+
+                fi_ind_cell{ii} = full(find(T_fi(:,env_inds(ii))))';
+
+            end
+
+            % Set the neighbour indices to be used in optimization.
+
+            fi_neighbour_inds = unique([fi_ind_cell{:}]');
+
+        end
 
         % N of non-zero object function coefficients.
 
@@ -96,26 +171,31 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
             fi_source_positions(fi_neighbour_inds,:) ...
         ];
 
-        % PBO weigth coefficients from differences between barycentra
-        % (interpolation positions) and dipole positions.
+        % Interpolation coefficients.
 
-        interp_pos = interpolation_positions(i, :);
-        interp_pos = repmat(interp_pos, n_coeff, 1);
+        if strcmp(p_optimization_system_type, 'pbo')
 
-        pos_diffs = loc_mat - interp_pos;
+            Coeff_mat = zef_pbo_system( ...
+                loc_mat, ...
+                dir_mat, ...
+                interpolation_positions, ...
+                i, ...
+                n_coeff ...
+            );
 
-        weight_coefs = zef_L2_norm(pos_diffs, 2);
+        elseif strcmp(p_optimization_system_type, 'mpo')
 
-        % Position-based optimization matrix.
+            Coeff_mat = zef_mpo_system( ...
+                loc_mat, ...
+                dir_mat, ...
+                interpolation_positions, ...
+                i, ...
+                n_coeff ...
+            );
 
-        PBO_mat = [                     ...
-            diag(weight_coefs) dir_mat; ...
-            dir_mat' zeros(3,3)         ...
-        ];
-
-        % Solve for Lagrangian multipliers.
-
-        Coeff_mat = PBO_mat \ [zeros(n_coeff,3); eye(3)];
+        else
+            error('To interpolate, one must optimize with either a PBO or an MPO system.')
+        end
 
         % Row indices (repeated because there are multiple values per row)
 

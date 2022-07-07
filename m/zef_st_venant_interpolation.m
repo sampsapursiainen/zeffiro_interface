@@ -3,17 +3,67 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
     p_tetrahedra, ...
     p_brain_inds, ...
     p_intended_source_inds, ...
+    p_nearest_neighbour_inds, ...
     p_regparam ...
 )
 
+    % Documentation
+    %
     % Produces an interpolation matrix G in a tetrahedral finite element mesh
-    % with the St. Venant method.
+    % with the St. Venant method. Also produces the related interpolation
+    % positions.
+    %
+    % Input:
+    %
+    % - p_nodes
+    %
+    %   The nodes that form the tetrahedral mesh.
+    %
+    % - p_tetrahedra
+    %
+    %   The tetrahedra (4-tuples of node indices) that are formed from
+    %   p_nodes.
+    %
+    % - p_brain_inds
+    %
+    %   The indices of the tetrahedra where sources can be placed in the first
+    %   place. In other words, these tetra form the gray matter.
+    %
+    % - p_intended_source_inds
+    %
+    %   These are the subset of the tetrahedral indices which indicate where
+    %   dipolar sources are to be placed in, not just where they can be
+    %   placed.
+    %
+    % - p_nearest_neighbour_inds
+    %
+    %   Used by the continuous source models to determine which neighbours of
+    %   neighbours of each central source tetrahedron are to be included in
+    %   the interpolation. If this is empty, the source model is interpreted
+    %   as being discrete.
+    %
+    % - p_regparam
+    %
+    %   A regularization parameter used to scale a certain weight matrix in
+    %   the formulation of the interpolation coeficient matrix.
+    %
+    % Output:
+    %
+    % - G
+    %
+    %   Interpolation matrix that is to be multiplied by the transpose of the
+    %   transfer matrix in the lead field routines.
+    %
+    % - interpolation_positions
+    %
+    %   The positions at which sources are the be placed after interpolation.
 
     arguments
         p_nodes (:,3) double {mustBeNonNan}
-        p_tetrahedra (:,4) double {mustBeInteger, mustBeNonnegative}
-        p_brain_inds (:,1) double {mustBeInteger, mustBeNonnegative}
-        p_intended_source_inds (:,1) double {mustBeInteger, mustBeNonnegative}
+        p_tetrahedra (:,4) double {mustBeInteger, mustBePositive}
+        p_brain_inds (:,1) double {mustBeInteger, mustBePositive}
+        p_intended_source_inds (:,1) double {mustBeInteger, mustBePositive}
+        p_nearest_neighbour_inds (:,1) double {mustBeInteger, mustBePositive}
         p_regparam (1,1) double
     end
 
@@ -91,6 +141,14 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
         % mechanism and save them to the preallocated distance matrix.
 
         neighbour_inds = find(adjacency_mat(:, refnode_ind));
+
+        % Also gather additional tetra into the neighbour inds, if a
+        % continuous model (indicated by non-empty nearest neighbours) is
+        % used.
+
+        if ~ isempty(p_nearest_neighbour_inds)
+            % TODO
+        end
 
         % Some nodes apparently have no neighbours. Go figure...
 

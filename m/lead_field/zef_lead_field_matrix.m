@@ -8,7 +8,7 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-   
+
 [zef.lead_field_id, zef.lead_field_id_max]  = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'create');
 
 tic;
@@ -45,7 +45,7 @@ else
     zef.lf_param.pcg_tol = 1e-8;
 end
 
-zef.aux_vec = [];
+zef.brain_activity_inds = [];
 zef.aux_vec_sources = zeros(length(zef.compartment_tags),1);
 
 for zef_i = 1 : length(zef.compartment_tags)
@@ -55,23 +55,45 @@ end
 % if not(zef.source_space_lock_on) && ( isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources) )
 
 if isempty(zef.non_source_ind)
-    zef.aux_vec = zef.brain_ind;
+    zef.brain_activity_inds = zef.brain_ind;
 else
-    zef.aux_vec = setdiff(zef.brain_ind,zef.non_source_ind);
+    zef.brain_activity_inds = setdiff(zef.brain_ind,zef.non_source_ind);
 end
 
-% Limit ourselves to tetra deep enough (default 1 mm) in the gray matter.
+%% Determine which tetra are to be used as sources
+%
+% Start by limiting ourselves to tetra deep enough in the gray matter. The
+% depth of 0 mm is used by default, but the below requirement for having at
+% least 4 neighbours makes sure that we are not directly on the surface.
 
 if ~ isfield(zef, 'acceptable_source_depth')
-    zef.acceptable_source_depth = 1; % mm
+    warning(['Using default acceptable depth of ' num2str(0) ' mm for source tetra.'])
+    zef.acceptable_source_depth = 0; % mm
 end
 
-[~, ~, ~, zef.aux_vec] = zef_deep_nodes_and_tetra( ...
+[T_fi, G_fi, ~, ~, ~, ~] = zef_fi_dipoles( ...
     zef.nodes, ...
     zef.tetra, ...
-    zef.aux_vec, ...
+    zef.brain_ind ...
+);
+
+% Also restrict to tetra which have 4 neighbours to make sure we are not on
+% the surface, but in the brain.
+
+valid_source_inds_builder = full(find(sum(T_fi,1) == 4))';
+
+clear T_fi;
+
+[~, ~, ~, zef.brain_activity_inds] = zef_deep_nodes_and_tetra( ...
+    zef.nodes, ...
+    zef.tetra, ...
+    zef.brain_activity_inds, ...
     zef.acceptable_source_depth ...
 );
+
+zef.brain_activity_inds = intersect(zef.brain_activity_inds, valid_source_inds_builder);
+
+clear valid_source_inds_builder;
 
 zef.n_sources_old = zef.n_sources;
 
@@ -83,17 +105,23 @@ clear zef_i;
 
 zef.lf_tag = zef.forward_simulation_table{zef.forward_simulation_selected(1), 1};
 
-[~,~,~,zef.source_ind] = zef_decompose_dof_space(zef.nodes,zef.tetra,zef.aux_vec,[],zef.n_sources,2);
+% Decompose source space into a rectangular lattice and extract the indices of
+% the source tetra in this frame of reference. Nearest source neighbour inds
+% will be empty when discrete source models are used.
 
-zef.n_sources_aux = zef.n_sources;
+[zef.nearest_source_neighbour_inds, zef.source_ind] = decomposition_and_source_index_fn( ...
+    zef.nodes, ...
+    zef.tetra, ...
+    zef.brain_activity_inds, ...
+    zef.source_model, ...
+    zef.n_sources, ...
+    zef.source_space_creation_iterations ...
+);
 
-for zef_i = 1 : zef.source_space_creation_iterations
-    zef.n_sources_aux = round(zef.n_sources*zef.n_sources_aux/length(zef.source_ind));
-    [~,~,~,zef.source_ind] = zef_decompose_dof_space(zef.nodes,zef.tetra,zef.aux_vec,[],zef.n_sources_aux,2);
-end
+% Determine which tetra are to be used as sources in their own frame of
+% reference.
 
-zef = rmfield(zef,'n_sources_aux');
-zef.source_ind = zef.aux_vec(zef.source_ind);
+zef.source_ind = zef.brain_activity_inds(zef.source_ind);
 zef.n_sources_mod = 0;
 
 %end % if
@@ -111,6 +139,15 @@ end
 
 zef.lf_param.dipole_mode = 1;
 
+% Set wanted optimization system type. Default value is 'pbo'.
+
+if isfield(zef, 'optimization_system_type')
+    % Do nothing
+else
+    zef.optimization_system_type = 'pbo';
+end
+
+%% Call one of the lead field routines.
 
 if zef.lead_field_type == 1
 
@@ -118,19 +155,49 @@ if zef.lead_field_type == 1
         zef.lf_param.impedances = zef.sensors(:,6);
     end
 
-        [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_eeg_fem(zef,zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+    [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_eeg_fem( ...
+        zef, ...
+        zef.nodes_aux, ...
+        {zef.tetra,zef.prisms}, ...
+        {zef.sigma(:,1), zef.sigma_prisms}, ...
+        zef.sensors_aux, ...
+        zef.nearest_source_neighbour_inds, ...
+        zef.optimization_system_type, ...
+        zef.brain_ind, ...
+        zef.source_ind, ...
+        zef.lf_param ...
+    );
+end
+
+if zef.lead_field_type == 2
+
+    [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_meg_fem( ...
+        zef, ...
+        zef.nodes_aux, ...
+        {zef.tetra,zef.prisms}, ...
+        {zef.sigma(:,1),zef.sigma_prisms}, ...
+        zef.sensors_aux, ...
+        zef.nearest_source_neighbour_inds, ...
+        zef.brain_ind, ...
+        zef.source_ind, ...
+        zef.lf_param ...
+    );
 
 end
 
-if zef.lead_field_type == 2;
+if zef.lead_field_type == 3
 
-        [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_meg_fem(zef,zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
-
-end
-
-if zef.lead_field_type == 3;
-
-        [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_meg_grad_fem(zef,zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+    [zef.L, zef.source_positions, zef.source_directions] = zef_lead_field_meg_grad_fem( ...
+        zef, ...
+        zef.nodes_aux, ...
+        {zef.tetra,zef.prisms}, ...
+        {zef.sigma(:,1),zef.sigma_prisms}, ...
+        zef.sensors_aux, ...
+        zef.nearest_source_neighbour_inds, ...
+        zef.brain_ind, ...
+        zef.source_ind, ...
+        zef.lf_param ...
+    );
 
 end
 
@@ -140,23 +207,48 @@ if zef.lead_field_type == 4
         zef.lf_param.impedances = zef.sensors(:,6);
     end
 
-        [zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_eit_fem(zef,zef.nodes_aux,zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+    [zef.L, zef.inv_bg_data, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_eit_fem( ...
+        zef, ...
+        zef.nodes_aux, ...
+        {zef.tetra,zef.prisms}, ...
+        {zef.sigma(:,1),zef.sigma_prisms}, ...
+        zef.sensors_aux, ...
+        zef.nearest_source_neighbour_inds, ...
+        zef.brain_ind, ...
+        zef.source_ind, ...
+        zef.lf_param ...
+    );
 
 end
 
-if zef.lead_field_type == 5;
+if zef.lead_field_type == 5
 
     if size(zef.sensors,2) == 6
         zef.lf_param.impedances = zef.sensors(:,6);
     end
 
-        [zef.L, zef.S, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_tes_fem(zef,zef.nodes_aux, zef.tetra,zef.sigma(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+
+        [zef.L, zef.S, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_tes_fem( ...
+            zef, ...
+            zef.nodes_aux, ...
+            {zef.tetra,zef.prisms}, ...
+            {zef.sigma(:,1),zef.sigma_prisms}, ...
+            zef.sensors_aux, ...
+            zef.nearest_source_neighbour_inds, ...
+            zef.brain_ind, ...
+            zef.source_ind, ...
+            zef.lf_param ...
+        );
 
 end
 
-zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec','aux_vec_sources'});
+zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec_sources'});
+
+clear optimization_system_type;
 
 zef.lead_field_time = toc;
+
+%% Perform final unit conversions and source interpolation.
 
 if zef.location_unit == 1
     zef.source_positions = 1000*zef.source_positions;
@@ -181,3 +273,118 @@ assignin('base','zef',zef);
 end
 
 end
+
+%% Local helper functions
+
+function [nearest_source_neighbour_inds, source_inds] = decomposition_and_source_index_fn( ...
+    nodes, ...
+    tetra, ...
+    restricted_brain_inds, ...
+    source_model, ...
+    wanted_n_of_sources, ...
+    source_space_creation_iterations ...
+)
+
+    % Documentation
+    %
+    % Generates (extrapolated) node (degree of freedom) and source indices for
+    % a node space.
+    %
+    % Input:
+    %
+    % - nodes
+    %
+    %   The finite element node cloud of the model under observation.
+    %
+    % - tetra
+    %
+    %   The tetrahedra (4-tuples of node indices) that are formed from the
+    %   above nodes.
+    %
+    % - restricted_brain_inds
+    %
+    %   The subset of tetra that dipolar sources can be placed into.
+    %
+    % - wanted_n_of_sources
+    %
+    %   The number of sources one wishes to generate.
+    %
+    % - source_space_creation_iterations
+    %
+    %   The number of extrapolation iterations performed to make sure that we
+    %   get as close to the wanted number of sources as was wanted.
+    %
+    % Output:
+    %
+    % - nearest_source_neighbour_inds
+    %
+    %   The indices that denote the node decomposition positions in the FEM
+    %   mesh.
+    %
+    % - source_inds
+    %
+    %   The tetrahedra that will be used as sources, based on the generated
+    %   decomposition.
+
+    arguments
+        nodes (:,3) double
+        tetra (:,4) double { mustBeInteger, mustBePositive }
+        restricted_brain_inds (:,1) double { mustBeInteger, mustBePositive }
+        source_model
+        wanted_n_of_sources (1,1) double { mustBeInteger, mustBePositive }
+        source_space_creation_iterations (1,1) double { mustBeInteger, mustBePositive }
+    end
+
+    % Create initial decomposition of node (degree of freedom, DOF) space.
+
+    [nearest_source_neighbour_inds, ~, ~, source_inds] = zef_decompose_dof_space( ...
+        nodes, ...
+        tetra, ...
+        restricted_brain_inds, ...
+        [], ...
+        wanted_n_of_sources, ...
+        2 ...
+    );
+
+    % Extrapolate, if we have less sources than we wanted.
+
+    n_of_sources = wanted_n_of_sources;
+
+    for ind = 1 : source_space_creation_iterations
+
+        n_of_sources = round(wanted_n_of_sources * n_of_sources / length(source_inds));
+
+        [nearest_source_neighbour_inds, ~, ~, source_inds] = zef_decompose_dof_space( ...
+            nodes, ...
+            tetra, ...
+            restricted_brain_inds, ...
+            [], ...
+            n_of_sources, ...
+            2 ...
+        );
+
+    end
+
+    % Set empty decomposition indices, if source model is not continuous.
+
+    switch ZefSourceModel.from(source_model)
+
+        case ZefSourceModel.Error
+
+            error('Received and erraneous source model.')
+
+        case { ...
+            ZefSourceModel.ContinuousWhitney, ...
+            ZefSourceModel.ContinuousHdiv, ...
+            ZefSourceModel.ContinuousStVenant ...
+        }
+
+            % Do nothing
+
+        otherwise
+
+            nearest_source_neighbour_inds = [];
+
+    end % switch
+
+end % function
