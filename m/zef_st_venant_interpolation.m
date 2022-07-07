@@ -18,6 +18,7 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
     end
 
     G = [];
+
     interpolation_positions = [];
 
     % Open up a waitbar
@@ -28,6 +29,7 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
     % Define cleanup operations, in case of an interruption.
 
     cleanupfn = @(handle) close(handle);
+
     cleanupobj = onCleanup(@() cleanupfn(wb));
 
     % Define adjacency matrix for tetrahedra
@@ -48,25 +50,41 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
 
     n_of_iters = numel(center_node_inds);
 
-    %% Interpolation for each position
-
-    wbtitleloop = [wbtitle, ': interpolation '];
+    print_interval = ceil(n_of_iters / 100);
 
     % Initialize interpolation weight matrix G
 
-    G = sparse(size(p_nodes,1), 3 * size(interpolation_positions, 1), 0);
+    Grows = size(p_nodes, 1);
+
+    Gcols = 3 * size(interpolation_positions, 1);
+
+    G = sparse(Grows, Gcols, 0);
+
+    %% Interpolation for each position
+
+    wbtitleloop = [wbtitle, ': interpolation '];
 
     % Cartesian directions for interpolation
 
     basis = eye(3);
 
+    % Iterate over neighbours of each center node and form the monopolar
+    % loads.
+
     for ind = 1 : n_of_iters
 
-        waitbar(ind / n_of_iters, wb, [wbtitleloop, num2str(ind), ' / ', num2str(n_of_iters)]);
+        % Update waitbar.
+
+        if mod(ind, print_interval) == 0
+
+            waitbar(ind / n_of_iters, wb, [wbtitleloop, num2str(ind), ' / ', num2str(n_of_iters)]);
+
+        end
 
         % Fetch reference node coordinates
 
         refnode_ind = center_node_inds(ind);
+
         refnode = p_nodes(refnode_ind, :);
 
         % Calculate the distances from refnode with Matlab's broadcasting
@@ -81,13 +99,17 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
         end
 
         neighbour_inds = setdiff(neighbour_inds, refnode_ind);
+
         n_of_neighbours = numel(neighbour_inds); % + 1;
+
         neighbours = p_nodes(neighbour_inds, :);
+
         neighbour_diffs = neighbours - refnode;
 
         % Calculate the distances and longest edge.
 
         dists = zef_L2_norm(neighbour_diffs, 2);
+
         longest_edge_len = max(dists, [], 'all');
 
         %% Construct restriction matrices P, b and regularization matrix D.
@@ -123,6 +145,7 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
         % Vector b
 
         b = zeros(9,3);
+
         b(2:3:end, :) = basis / longest_edge_len;
 
         % Regularization matrix D
@@ -134,12 +157,20 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
 
         m = inv(P' * P + p_regparam * D) * P' * b;
 
-        for iind = 1 : 3
+        col_inds = (3 * (ind-1) + 1 : 3 * ind);
 
-            G(neighbour_inds, 3 * (ind -1 ) + iind) = m(:, iind);
-
-        end
+        G(neighbour_inds, col_inds) = m(:,1:3);
 
     end
+
+    % TODO
+    %
+    % Find out why this sign flip is needed! We already know that
+    % zef_transfer_matrix produces a wrongly oriented (negative) Schur
+    % complement because the B and C matrices are not the same for EEG and
+    % tES, but is this related to that, or was a minus sign forgotten from the
+    % above equations?
+
+    G = -G;
 
 end

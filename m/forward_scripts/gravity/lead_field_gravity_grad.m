@@ -35,6 +35,10 @@ function [L_eit,  bg_data, source_locations, source_directions] = lead_field_gra
 N = size(nodes,1);
 source_model = evalin('base','zef.source_model');
 
+% Convert source model to new format.
+
+source_model = ZefSourceModel.from(source_model);
+
 if iscell(elements)
         tetrahedra = elements{1};
         prisms = [];

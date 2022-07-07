@@ -55,6 +55,8 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
     n_of_iterations = size(valid_source_inds, 1);
 
+    print_interval = ceil(n_of_iterations / 100);
+
     % Initialize weight matrix.
 
     G_rows = size(p_nodes, 1);
@@ -66,6 +68,13 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
     tic;
 
+    %% Generate coefficient matrix indices and values before allocating space
+    %  for G. Start by storing the actual coefficient values and their
+    %  corresponding rows and columns in the adjacency matrices T into cell
+    %  arrays or tuples.
+
+    fi_coeff_row_col_val = cell(0);
+
     for i = 1 : n_of_iterations
 
         % Find local neighbour indices.
@@ -74,7 +83,8 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
         % N of non-zero object function coefficients.
 
-        n_coeff = numel(fi_neighbour_inds);
+        n_coeff_fi = numel(fi_neighbour_inds);
+        n_coeff = n_coeff_fi;
 
         % Dipole locations and directions.
 
@@ -107,30 +117,125 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
         Coeff_mat = PBO_mat \ [zeros(n_coeff,3); eye(3)];
 
-        % Accumulate interpolation matrix.
+        % Row indices (repeated because there are multiple values per row)
 
-        G(:, 3 * (i-1)+1:3*i) = ...
-            G_fi(:,fi_neighbour_inds) ...
-            * ...
-            Coeff_mat(1:n_coeff,:) ...
-        ;
+        fi_coeff_row_col_val{i,1} = repmat(fi_neighbour_inds, 1, size(Coeff_mat,2));
+
+        % Column indices (again repeated for the same reasons as above)
+
+        col_inds = (3 * (i-1) + 1 : 3 * i)';
+
+        fi_coeff_row_col_val{i,2} = repmat(col_inds, 1, length(fi_neighbour_inds))';
+
+        % Values
+
+        fi_coeff_row_col_val{i,3} = Coeff_mat(1 : n_coeff_fi, :);
 
         % Update waitbar.
 
-        time_val = toc;
+        if mod(i, print_interval) == 0
 
-        waitbar( ...
-            i/n_of_iterations, ...
-            wb, ...
-            [ ...
-                wbtitle, ...
-                ' (', ...
-                num2str(i), ...
-                ' / ', ...
-                num2str(n_of_iterations), ...
-                '). Ready: ' datestr(datevec(now+(n_of_iterations/i - 1)*time_val/86400)) '.' ...
-            ] ...
-        );
+            time_val = toc;
+
+            waitbar( ...
+                i/n_of_iterations, ...
+                wb, ...
+                [ ...
+                    wbtitle, ...
+                    ' (', ...
+                    num2str(i), ...
+                    ' / ', ...
+                    num2str(n_of_iterations), ...
+                    '). Ready: ' datestr(datevec(now+(n_of_iterations/i - 1)*time_val/86400)) '.' ...
+                ] ...
+            );
+
+        end
+    end
+
+    % Number of needed indices in the sparse matrix G from how many
+    % coefficients were found during above iteration.
+
+    entry_counter_fi = 0;
+
+    for i = 1 : n_of_iterations
+
+        n_of_fi_vals = numel(fi_coeff_row_col_val{i, 3});
+
+        entry_counter_fi = entry_counter_fi + n_of_fi_vals;
 
     end
+
+    n_of_entries_fi = entry_counter_fi;
+
+    % Construct the row I, column J and coeff value K vectors needed to
+    % instantiate interpolation matrix G with sparse.
+
+    entry_counter_fi = 0;
+
+    I_fi = zeros(n_of_entries_fi,1);
+    J_fi = zeros(n_of_entries_fi,1);
+    K_fi = zeros(n_of_entries_fi,1);
+
+    % Fill in the index and value vectors.
+
+    for i = 1 : n_of_iterations
+
+        fi_row_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 1);
+        fi_col_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 2);
+        fi_val_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 3);
+
+        I_fi(fi_row_inds) = fi_coeff_row_col_val{i,1}(:);
+        J_fi(fi_col_inds) = fi_coeff_row_col_val{i,2}(:);
+        K_fi(fi_val_inds) = fi_coeff_row_col_val{i,3}(:);
+
+        entry_counter_fi = entry_counter_fi + numel(fi_coeff_row_col_val{i,1});
+
+    end
+
+    % Finally, allocate and instantiate building blocks of G only once.
+
+    S_fi = sparse(I_fi, J_fi, K_fi, size(G_fi,2), G_cols);
+
+    G = G_fi * S_fi;
+
+    waitbar(1, wb);
+
+end
+
+%% Helper functions
+
+function inds = row_col_val_inds_fn(entry_counter, rows_cols_vals, iter_ind, selector_ind)
+
+    % A helper function for cleaning up above index selection code.
+    %
+    % Input
+    %
+    % - entry_counter: keeps track of how manu coefficient values there were
+    %   per transfer matrix column.
+    %
+    % - rows_cols_vals: a tuple (cell array) of PBO coefficient
+    %   (rows,cols,vals) arrays.
+    %
+    % - iter_ind: a valid source tetra index.
+    %
+    % - selector_ind: in {1,2,3}. Used to choose either rows (1), columns (2)
+    %   or values (3) from rows_cols_and_vals.
+    %
+    % Output:
+    %
+    % - the row-, column- or value indices in coeff_rows_cols_vals
+
+    arguments
+        entry_counter
+        rows_cols_vals
+        iter_ind
+        selector_ind
+    end
+
+    begini = entry_counter + 1;
+    endi = entry_counter + numel(rows_cols_vals{iter_ind, selector_ind});
+
+    inds = begini : endi;
+
 end

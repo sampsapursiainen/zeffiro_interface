@@ -110,6 +110,10 @@ if iscell(elements)
 source_model = 1;
 end
 
+% Convert source model to new format.
+
+source_model = ZefSourceModel.from(source_model);
+
 % Calculate volume tilavuus
 
 tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
