@@ -1,14 +1,29 @@
-function [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors(file_name,sensor_type)
-
-channel_data = load(file_name);
+function [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors(varargin)
 
 sensor_counter = 0; 
 sensor_num = 0; 
+istudy = [];
+sensor_type = [];
+
+if not(isempty(varargin))
+sensor_type = varargin{1};
+if length(varargin) > 1
+istudy = varargin{2};
+end
+end
+
+if not(isempty(istudy))
+file_name = [bst_get('ProtocolInfo').STUDIES filesep bst_get('Study',istudy).Channel.FileName];
+else
+file_name = [bst_get('ProtocolInfo').STUDIES filesep bst_get('Study').Channel.FileName];
+end
+
+channel_data = load(file_name);
 
 sensor_orientations = [];
 for i = 1 : length(channel_data.Channel)
 
-    if isequal(channel_data.Channel(i).Type,sensor_type) 
+    if ismember(channel_data.Channel(i).Type,sensor_type) | isempty(sensor_type)  
         
         sensor_num = sensor_num + 1;
      

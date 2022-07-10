@@ -25,7 +25,7 @@ for running_index = 1:length(source_position_index)
     for ell_ind = 1:3
         L_ES_projection(running_index,:) = L_ES_projection(running_index,:) + zef_data.L_aux(3*(source_position_index(running_index)-1)+ell_ind,:).*zef_data.source_directions(running_index,ell_ind);
     end
-    x_ES_projection(running_index) = zef_data.relative_source_amplitude.*zef_data.inv_synth_source(running_index,7).*zef_data.source_density./zef_data.cortex_thickness;
+    x_ES_projection(running_index) = zef_data.relative_source_amplitude.*zef_data.source_density./zef_data.cortex_thickness;
 end
 
 source_magnitude  = max(abs(x_ES_projection));

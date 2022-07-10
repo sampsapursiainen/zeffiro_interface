@@ -1,4 +1,7 @@
-function [p_c_table, p_points] = zef_bst_2_zef_atlas(surface_struct,atlas_compartment,atlas_type,varargin)
+function [p_c_table, p_points] = zef_bst_2_zef_atlas(subject,surface_ind_aux,surface_struct,atlas_compartment,atlas_type,varargin)
+
+atlas_tag = '';
+unit_scale = 1;
 
 unit_scale = 1; 
 atlas_tag = atlas_type;
@@ -8,6 +11,10 @@ if length(varargin) > 1
 unit_scale = varargin{2};
 end
 end
+
+surface_file = [ bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName];
+load_fields = {'Atlas','Vertices'};
+surface_struct = load(surface_file,load_fields{:});
 
 p_c_table = cell(0);
 p_points = cell(0);
@@ -42,7 +49,11 @@ for i = 1 : length(surface_struct.Atlas)
         for j = 1 : length(surface_struct.Atlas(i).Scouts)
         
             n_nodes_aux = size(surface_struct.Atlas(i).Scouts(j).Vertices,1);
+            try
             p_points(node_counter + 1:node_counter + n_nodes_aux,2:4) = unit_scale*surface_struct.Vertices(surface_struct.Atlas(i).Scouts(j).Vertices,:);
+            catch
+                keyboard
+            end
             p_c_table{4}(node_counter + 1:node_counter + n_nodes_aux) = j;
             node_counter = node_counter + n_nodes_aux;
             

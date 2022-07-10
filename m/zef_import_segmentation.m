@@ -151,7 +151,7 @@ for i = 1 : size(ini_cell,1)
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         database = (ini_cell{i,find(ismember(ini_cell(i,:),'database'),1)+1});
         else
-            database = 'none';
+            database = '';
         end
         if find(ismember(ini_cell(i,:),'tag'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
@@ -292,7 +292,7 @@ eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
         end
         end
         
-          if isempty(filename) 
+          if isempty(filename) && isempty(database) 
          aux_tetra = evalin('base','zef.tetra');
          aux_nodes = evalin('base','zef.nodes');
          aux_domain_labels = evalin('base','zef.domain_labels');
@@ -304,26 +304,26 @@ eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
         end
         
     if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
-    n_surfaces = length(bst_get('ProtocolSubjects').Subject(subject).Surface);
+    [~,~,~,surface_struct_aux] = zef_bst_2_zef_surface(subject);
+    n_surfaces = length(surface_struct_aux);
     surface_found = 0 ;
     surface_ind_aux = 0; 
     while surface_ind_aux < n_surfaces && not(surface_found)
     surface_ind_aux = surface_ind_aux + 1;
-        surface_name_aux = load([ bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName],'Comment');
-    surface_name_aux = surface_name_aux.Comment;
+    [~, ~, surface_name_aux] = zef_bst_2_zef_surface(subject,surface_ind_aux,'Comment');
     if isequal(lower(surface_name_aux),lower(tag))
     surface_found = 1;
-    surface_data = load([bst_get('ProtocolInfo').SUBJECTS filesep bst_get('ProtocolSubjects').Subject(subject).Surface(surface_ind_aux).FileName]);
-    eval(['zef_data.' compartment_tag '_points = surface_data.Vertices;']);
-    eval(['zef_data.' compartment_tag '_triangles = surface_data.Faces;']);
-    eval(['zef_data.' compartment_tag '_submesh_ind = size(surface_data.Faces,1);']);
+    [vertices_aux, faces_aux] = zef_bst_2_zef_surface(subject,surface_ind_aux);
+    eval(['zef_data.' compartment_tag '_points = vertices_aux;']);
+    eval(['zef_data.' compartment_tag '_triangles = faces_aux;']);
+    eval(['zef_data.' compartment_tag '_submesh_ind = size(faces_aux,1);']);
    eval(['zef_data.' compartment_tag '_scaling = 1000;']);
    if not(isempty(atlas))
        if isempty(atlas_tag)
            atlas_tag = atlas;
        end
        
-       [p_c_table_new, p_points_new] = zef_bst_2_zef_atlas(surface_data, atlas_compartment, atlas, atlas_tag, 1000);
+       [p_c_table_new, p_points_new] = zef_bst_2_zef_atlas(subject, surface_ind_aux, atlas_compartment, atlas, atlas_tag, 1000);
        if not(isempty(p_c_table_new))
        p_c_table = evalin('base','zef.parcellation_colortable');
        p_c_table{length(p_c_table)+1} = p_c_table_new;
@@ -423,7 +423,8 @@ eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
         tag = (ini_cell{i,find(ismember(ini_cell(i,:),'tag'),1)+1});
         else
             tag = [];
-          end
+             end
+             
         if find(ismember(ini_cell(i,:),'database'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'database'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -461,7 +462,7 @@ eval(['zef_data.' sensor_tag '_directions = aux_field;']);
         
       if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
       
-      [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors([bst_get('ProtocolInfo').STUDIES filesep bst_get('Study').Channel.FileName],tag);
+      [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors(tag);
       if isequal(modality,'EEG')
       eval(['zef_data.' sensor_tag '_points = sensor_positions;']);
       eval(['zef_data.' sensor_tag '_scaling = 1000;']);
