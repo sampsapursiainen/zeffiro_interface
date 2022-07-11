@@ -283,10 +283,8 @@ for i = 1 : size(ini_cell,1)
 
         if not(isempty(filename))
         if not(ismember(filetype,{'mat',''}))
-         [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(filename, compartment_tag, filetype,'full');
-eval(['zef_data.' compartment_tag '_points = aux_points;']);
-eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
-eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);   
+         [aux_points,aux_triangles] = zef_get_mesh(filename, compartment_tag, filetype,'full');
+ zef_merge_surface_mesh(compartment_tag,aux_triangles,aux_points,merge); 
         elseif isequal(filetype,'mat')
          zef_import_mat_struct(filename,[compartment_tag '_']);
         end
@@ -297,10 +295,7 @@ eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
          aux_nodes = evalin('base','zef.nodes');
          aux_domain_labels = evalin('base','zef.domain_labels');
          [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
-         aux_submesh_ind = size(aux_triangles,1);
-         eval(['zef_data.' compartment_tag '_points = aux_points;']);
-         eval(['zef_data.' compartment_tag '_triangles = aux_triangles;']);
-         eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
+         zef_merge_surface_mesh(compartment_tag,aux_triangles,aux_points,merge);
         end
         
     if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm') 
@@ -314,9 +309,7 @@ eval(['zef_data.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
     if isequal(lower(surface_name_aux),lower(tag))
     surface_found = 1;
     [vertices_aux, faces_aux] = zef_bst_2_zef_surface(subject,surface_ind_aux);
-    eval(['zef_data.' compartment_tag '_points = vertices_aux;']);
-    eval(['zef_data.' compartment_tag '_triangles = faces_aux;']);
-    eval(['zef_data.' compartment_tag '_submesh_ind = size(faces_aux,1);']);
+    zef_merge_surface_mesh(compartment_tag,faces_aux,vertices_aux,merge);
    eval(['zef_data.' compartment_tag '_scaling = 1000;']);
    if not(isempty(atlas))
        if isempty(atlas_tag)
