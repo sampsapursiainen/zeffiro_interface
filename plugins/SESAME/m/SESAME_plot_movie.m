@@ -21,7 +21,7 @@ else
     h_axes_text = findobj(evalin('base','zef.h_zeffiro'),'tag','image_details');
     zef_boolean = 1;
     for zef_j = 1:size(zef.SESAME_time_serie,2)
-        zef_time_val = evalin('base','zef.SESAME_time_1') + evalin('base','zef.SESAME_time_2')/2 + evalin('base','zef.SESAME_time_3')*(zef_j-1);
+        zef_time_val = evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + evalin('base','zef.inv_time_3')*(zef_j-1);
         d_est = zef.SESAME_time_serie{zef_j}.estimated_dipoles;
         zef.inv_rec_source = zeros(length(d_est),9);
         zef.inv_rec_source(1,9) = str2num(zef.SESAME_App.h_inv_rec_source_9.Value);
