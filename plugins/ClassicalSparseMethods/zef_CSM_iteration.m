@@ -100,7 +100,7 @@ end
         %__ sLORETA __
         %d = 1./sqrt(diag(P*L));
         d = 1./sum(P.'.*L,1)';
-        z_vec = d.*P*f;
+        z_vec = d.*P*f/sqrt(theta0);
     else
         z_vec = P*f;
         if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
@@ -121,11 +121,12 @@ end
                 end
                 ind = r_ind(i)+[0,n_interp,2*n_interp];
                 M = sqrtm(P(ind,:)*L(:,ind));
-                z_vec(ind) = M\z_vec(ind);
+                z_vec(ind) = (M\z_vec(ind));
                 if number_of_frames <= 1 && i > 1
                     waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
                 end
             end
+            z_vec = z_vec/sqrt(theta0);
         else
             for i = 1:n_interp
                 if number_of_frames <= 1 && i > 1
@@ -138,6 +139,7 @@ end
                     waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
                 end
             end
+            z_vec = z_vec/sqrt(theta0);
         end
     end
     if f_ind > 1;    
