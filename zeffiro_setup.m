@@ -8,6 +8,13 @@ zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/SDPT3/''
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install SDPT3 END %%%
 
+%%% Install SDPT3 BEGIN %%%
+eval(['!git clone https://github.com/sqlp/sedumi ' fileparts(mfilename('fullpath')) filesep 'external/SeDuMi'])
+run([fileparts(mfilename('fullpath')) filesep '/external/SeDuMi/install_sedumi.m']);
+zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/SeDuMi/''],''recursive'',zef.path_cell);';
+fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
+%%% Install SDPT3 END %%%
+
 %%% Install CVX BEGIN %%%
 mkdir(fileparts(mfilename('fullpath')),'external')
 eval(['!git clone https://github.com/cvxr/CVX ' fileparts(mfilename('fullpath')) filesep 'external/CVX'])
