@@ -1,9 +1,19 @@
 function [y_ES, ES_optimized_current_density, residual, flag_val, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(zef_data,varargin)
 %% varargin
 
-if nargin >= 3
-    [alpha, TolFun] = deal(varargin{1:2});
+if nargin >= 2
+    alpha = varargin{1};
 end
+if nargin >= 3
+    TolFun = varargin{2};
+end
+if nargin >= 4
+    solver_tolerance = varargin{3};
+end
+if nargin >= 5
+    solver_package = varargin{4};
+end
+
 %% Source properties
 
 source_position_index       = zeros(size(zef_data.source_positions,1),1);
@@ -25,7 +35,7 @@ for running_index = 1:length(source_position_index)
     for ell_ind = 1:3
         L_ES_projection(running_index,:) = L_ES_projection(running_index,:) + zef_data.L_aux(3*(source_position_index(running_index)-1)+ell_ind,:).*zef_data.source_directions(running_index,ell_ind);
     end
-    x_ES_projection(running_index) = zef_data.relative_source_amplitude.*zef_data.source_density./zef_data.cortex_thickness;
+    x_ES_projection(running_index) = zef_data.relative_source_amplitude.*zef_data.source_density;
 end
 
 source_magnitude  = max(abs(x_ES_projection));
@@ -61,9 +71,10 @@ switch zef_data.search_method
         if isfloat(TolFun)
             TolFun = round(TolFun,10);
         end
-        opts.TolFun     = 1E-10;            %TolFun;
-        opts.TolX = 1E-10;
-        opts.TolCon = 1E-9;
+        opts.Solver = solver_package;
+        opts.TolFun     = solver_tolerance;             %TolFun;
+        opts.TolX = solver_tolerance;
+        opts.TolCon = solver_tolerance;
         opts.Algorithm  = 'dual-simplex';
         opts.Display    = 'off';
 
@@ -96,9 +107,9 @@ switch zef_data.search_method
         if isfloat(TolFun)
             TolFun = round(TolFun,10);
         end
-        opts.TolFun     = 1E-10;            %TolFun;
-        opts.TolX = 1E-10;
-        opts.TolCon = 1E-9;
+        opts.TolFun     = 1E-12;            %TolFun;
+        opts.TolX = 1E-12;
+        opts.TolCon = 1E-12;
         opts.Algorithm  = 'dual-simplex';
         opts.Display    = 'off';
 

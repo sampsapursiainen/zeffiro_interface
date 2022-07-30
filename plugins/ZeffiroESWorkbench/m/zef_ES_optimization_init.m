@@ -11,6 +11,12 @@ end
 if not(isfield(zef,'ES_obj_fun_2'))
     zef.ES_obj_fun_2 = 4;
 end
+if not(isfield(zef,'ES_solver_package'))
+    zef.ES_solver_package = 'sdpt3';
+end
+if not(isfield(zef,'ES_solver_tolerance'))
+    zef.ES_solver_tolerance = '1E-12';
+end
 if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
 end

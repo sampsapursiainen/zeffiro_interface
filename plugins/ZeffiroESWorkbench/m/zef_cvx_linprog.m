@@ -10,6 +10,7 @@ function [x, function_val, flag_val] = zef_cvx_linprog(z,A,b,Aeq,beq,lb,ub,varar
 
 
 opts = [];
+solver_package = 'sdpt3';
 
 max_1_norm = []; %#ok<*NASGU>
 max_infty_norm = [];
@@ -22,12 +23,19 @@ end
 flag_val = -2;
 n = size(A,2);
 
-try
-cvx_solver('sdpt3')
+if isfield(opts,'Solver')
+    solver_package = opts.Solver;
 end
+
+try
+cvx_solver(solver_package)
+end
+
 if isfield(opts,'TolVal')
     cvx_precision(opts.TolVal)
 end
+
+
 
 cvx_begin quiet
 variable x(n)

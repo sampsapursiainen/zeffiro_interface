@@ -12,9 +12,12 @@ zef_data.active_electrodes = evalin('base','zef.ES_active_electrodes');
 zef_data.source_positions_aux = evalin('base','zef.source_positions');
 zef_data.source_density = evalin('base','zef.ES_source_density');
 zef_data.inv_synth_source = evalin('base','zef.inv_synth_source');
-zef_data.cortex_thickness = evalin('base','zef.ES_cortex_thickness');
 zef_data.relative_weight_nnz = evalin('base','zef.ES_relative_weight_nnz');
 zef_data.score_dose = evalin('base','zef.ES_score_dose');
+zef_data.solver_tolerance = evalin('base','zef.ES_solver_tolerance');
+zef_data.solver_package = evalin('base','zef.ES_solver_package');
+
+
 
         if isempty(evalin('base','zef.source_positions'))
             error('--ZI: No discretized sources found. Perhaps you forgot to calculate or load them...?')
@@ -27,7 +30,7 @@ zef_data.score_dose = evalin('base','zef.ES_score_dose');
         switch evalin('base','zef.ES_search_type')
             case 1
                 tic;
-                [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, val_aux);
+                [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, val_aux, zef_data.solver_tolerance, zef_data.solver_package);
                zef_data_2.y_ES_single.y_ES                                = y_ES;
                zef_data_2.y_ES_single.volumetric_current_density          = volumetric_current_density;
                zef_data_2.y_ES_single.residual                            = residual;
@@ -82,7 +85,7 @@ parfor parallel_ind = 1 : p_ind_max
                         end
                    
                         tic;
-                        [y_ES{parallel_ind}, volumetric_current_density{parallel_ind}, residual{parallel_ind}, flag{parallel_ind}, source_magnitude{parallel_ind}, source_position_index{parallel_ind}, source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data,alpha(parallel_ind+j),val_aux(i));
+                        [y_ES{parallel_ind}, volumetric_current_density{parallel_ind}, residual{parallel_ind}, flag{parallel_ind}, source_magnitude{parallel_ind}, source_position_index{parallel_ind}, source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data,alpha(parallel_ind+j),val_aux(i),zef_data.solver_tolerance,zef_data.solver_package);
                     
 end
 
@@ -100,7 +103,7 @@ j = j + 1;
                                 norm_vec_1 = norm(vec_1,2);
                                 
                                 if isequal(evalin('base','zef.ES_roi_range'),0)
-                                source_running_ind = source_position_index(running_index);
+                                source_running_ind = source_position_index{parallel_ind}(running_index);
                                 else
                                 source_running_ind = rangesearch(zef_data.source_positions_aux,zef_data.source_positions_aux(source_position_index{parallel_ind}(running_index),:), evalin('base','zef.ES_roi_range'));
                                 source_running_ind = source_running_ind{1};

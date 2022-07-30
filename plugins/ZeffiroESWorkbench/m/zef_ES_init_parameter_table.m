@@ -20,18 +20,20 @@ switch zef_i
         zef.h_ES_parameter_table.Data{8,2} = num2str(zef.ES_score_dose);
         zef.h_ES_parameter_table.Data{9,1} = 'Lattice size';
         zef.h_ES_parameter_table.Data{9,2} = num2str(zef.ES_step_size);
-        zef.h_ES_parameter_table.Data{10,1} = 'Source density';
+        zef.h_ES_parameter_table.Data{10,1} = 'Targeted current density (A/m2)';
         zef.h_ES_parameter_table.Data{10,2} = num2str(zef.ES_source_density);
-        zef.h_ES_parameter_table.Data{11,1} = 'Cortex thickness';
-        zef.h_ES_parameter_table.Data{11,2} = num2str(zef.ES_cortex_thickness);
-        zef.h_ES_parameter_table.Data{12,1} = 'Relative source amplitude';
-        zef.h_ES_parameter_table.Data{12,2} = num2str(zef.ES_relative_source_amplitude);
-        zef.h_ES_parameter_table.Data{13,1} = 'Acceptable threshold value';
-        zef.h_ES_parameter_table.Data{13,2} = num2str(zef.ES_acceptable_threshold);
-        zef.h_ES_parameter_table.Data{14,1} = 'Boundary color limit';
-        zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_boundary_color_limit);
-        zef.h_ES_parameter_table.Data{15,1} = 'RoI radius (mm)';
-        zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_roi_range);
+        zef.h_ES_parameter_table.Data{11,1} = 'Relative source amplitude';
+        zef.h_ES_parameter_table.Data{11,2} = num2str(zef.ES_relative_source_amplitude);
+        zef.h_ES_parameter_table.Data{12,1} = 'Acceptable threshold value';
+        zef.h_ES_parameter_table.Data{12,2} = num2str(zef.ES_acceptable_threshold);
+        zef.h_ES_parameter_table.Data{13,1} = 'Boundary color limit';
+        zef.h_ES_parameter_table.Data{13,2} = num2str(zef.ES_boundary_color_limit);
+        zef.h_ES_parameter_table.Data{14,1} = 'ROI radius (mm)';
+        zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_roi_range);
+         zef.h_ES_parameter_table.Data{15,1} = 'Solver package';
+        zef.h_ES_parameter_table.Data{15,2} = zef.ES_solver_package;
+         zef.h_ES_parameter_table.Data{16,1} = 'Solver tolerance';
+        zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_solver_tolerance);
         
 end
 clear zef_i

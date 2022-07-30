@@ -46,20 +46,25 @@ fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec
 
 I2 = find(distance_vec <= vert_pos_2);
 I2 = setdiff(I2,I1);
+if not(isempty(I2))
 fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[amplitude_vec(I2); 0; 0 ;amplitude_vec(I2(1))],'c') 
+end
 
 
 I3 = find(distance_vec <= vert_pos_1);
 I3 = setdiff(I3, I1);
 I3 = setdiff(I3, I2);
+if not(isempty(I3))
 fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[amplitude_vec(I3); 0; 0 ;amplitude_vec(I3(1))],'g') 
+end
 
 I4 = [1:length(distance_vec)];
 I4 = setdiff(I4, I1);
 I4 = setdiff(I4, I2);
 I4 = setdiff(I4, I3);
+if not(isempty(I4))
 fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[amplitude_vec(I4); 0; 0 ;amplitude_vec(I4(1))],'y') 
-
+end
 
 set(gca,'ylim',[0 1.25*max(amplitude_vec)])
 set(gca,'xlim',[0 max_distance])
@@ -93,19 +98,24 @@ fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec
 
 I2 = find(distance_vec <= vert_pos_2);
 I2 = setdiff(I2,I1);
+if not(isempty(I2))
 fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[angle_vec(I2); 0; 0 ;angle_vec(I2(1))],'c') 
+end
 
 I3 = find(distance_vec <= vert_pos_1);
 I3 = setdiff(I3, I1);
 I3 = setdiff(I3, I2);
+if not(isempty(I3))
 fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[angle_vec(I3); 0; 0 ;angle_vec(I3(1))],'g') 
+end
 
 I4 = [1:length(distance_vec)];
 I4 = setdiff(I4, I1);
 I4 = setdiff(I4, I2);
 I4 = setdiff(I4, I3);
+if not(isempty(I4))
 fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[angle_vec(I4); 0; 0 ;angle_vec(I4(1))],'y') 
-
+end
 
 set(gca,'ylim',[0 1.25*max(angle_vec)])
 set(gca,'xlim',[0 max_distance])

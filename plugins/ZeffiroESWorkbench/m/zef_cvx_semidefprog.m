@@ -14,6 +14,7 @@ opts = [];
 max_1_norm = []; %#ok<*NASGU>
 max_infty_norm = [];
 function_val = [];
+solver_package = 'sdpt3';
 
 if not(isempty(varargin))
         opts = varargin{1};
@@ -22,9 +23,14 @@ end
 flag_val = -2;
 n = size(A,2);
 
-try
-cvx_solver('sdpt3')
+if isfield(opts,'Solver')
+    solver_package = opts.Solver;
 end
+
+try
+cvx_solver(solver_package)
+end
+
 if isfield(opts,'TolVal')
     cvx_precision(opts.TolVal)
 end
