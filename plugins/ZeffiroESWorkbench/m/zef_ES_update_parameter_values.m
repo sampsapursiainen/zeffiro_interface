@@ -15,13 +15,16 @@ if ismember(zef_i,[1,2,3])
         zef.ES_boundary_color_limit         = str2double(zef.h_ES_parameter_table.Data{13,2});
         zef.ES_roi_range                    = str2double(zef.h_ES_parameter_table.Data{14,2});
         zef.ES_solver_package                    = zef.h_ES_parameter_table.Data{15,2};
-        zef.ES_solver_tolerance                   = str2double(zef.h_ES_parameter_table.Data{16,2});       
+        zef.ES_solver_tolerance                   = str2double(zef.h_ES_parameter_table.Data{16,2});
+           
 end
 
 if ismember(zef_i,[1])
-    zef.ES_step_tolerance = str2double(zef.h_ES_parameter_table.Data{17,2});
-    zef.ES_constraint_tolerance = str2double(zef.h_ES_parameter_table.Data{18,2});
-    zef.ES_algorithm = zef.h_ES_parameter_table.Data{19,2};
+    zef.ES_max_n_iterations                  = str2double(zef.h_ES_parameter_table.Data{17,2});
+        zef.ES_algorithm = zef.h_ES_parameter_table.Data{18,2};
+    zef.ES_step_tolerance = str2double(zef.h_ES_parameter_table.Data{19,2});
+    zef.ES_constraint_tolerance = str2double(zef.h_ES_parameter_table.Data{20,2});
+ zef.ES_max_time = str2double(zef.h_ES_parameter_table.Data{21,2});
 end
 
 clear zef_i

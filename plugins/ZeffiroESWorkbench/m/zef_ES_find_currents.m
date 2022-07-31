@@ -19,7 +19,16 @@ zef_data.step_tolerance = evalin('base','zef.ES_step_tolerance');
 zef_data.constraint_tolerance = evalin('base','zef.ES_constraint_tolerance');
 zef_data.solver_package = evalin('base','zef.ES_solver_package');
 zef_data.algorithm = evalin('base','zef.ES_algorithm');
-zef_data.algorithm = evalin('base','zef.ES_solver_type');
+zef_data.search_type = evalin('base','zef.ES_search_type');
+zef_data.max_n_iterations = evalin('base','zef.ES_max_n_iterations');
+zef_data.max_time = evalin('base','zef.ES_max_time');
+
+aux_string = [ zef_data.solver_package '_path'];
+if evalin('base',['isfield(zef,''' aux_string ''')'])
+zef_data.solver_path = evalin('base',['zef.' aux_string ]);
+else 
+    zef_data.solver_path = '';
+end
 
 
 

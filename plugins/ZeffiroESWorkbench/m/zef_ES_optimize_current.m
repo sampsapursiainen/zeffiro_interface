@@ -8,11 +8,9 @@ if nargin >= 3
     eps_val = varargin{2};
 end
 
-
 %% Source properties
 
 source_position_index       = zeros(size(zef_data.source_positions,1),1);
-
 
 for i = 1:size(zef_data.source_positions,1)
     [~,aux_index] = min(sqrt(sum((zef_data.source_positions_aux - zef_data.source_positions(i,:)).^2,2)));
@@ -62,27 +60,56 @@ L_ES_projection = L_ES_projection*M_mat;
 switch zef_data.search_method
     case 1
         %% LP setup
-        if isequal(zef_data.solver_type,2)
+        if isequal(zef_data.search_type,2)
         %opts = optimset('linprog');
         opts = struct; 
         opts.Solver = zef_data.solver_package;       
         opts.Display    = 'off';
-        elseif isequal(zef_data.solver_type,1)
-        opts = optimset('linprog');   
+        elseif isequal(zef_data.search_type,1)
+        if isequal(lower(zef_data.solver_package),'mosek')
+            opts = mskoptimset('linprog');
+            opts.Simplex = zef_data.algorithm;
+            if isinf(zef_data.max_n_iterations)
+            opts.MaxIter = intmax;
+            else
+            opts.MaxIter = zef_data.max_n_iterations;
+            end
+        else
+        opts = optimset('linprog');
         opts.TolX = zef_data.step_tolerance;
         opts.TolCon = zef_data.constraint_tolerance;
+        opts.MaxIter = zef_data.max_n_iterations;
+        opts.MaxTime = zef_data.max_time;
         opts.Algorithm  = zef_data.algorithm;
         opts.Display    = 'off';
         end
         opts.TolFun     = zef_data.solver_tolerance;  
-  
+        end
+        
             L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
             x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
             
             g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
-            
-            if isequal(zef_data.solver_type,1)
-                   [y_ES,~,flag_val] = linprog(g, ...
+           
+            if isequal(zef_data.search_type,1)
+   
+               if isequal(lower(zef_data.solver_package),'matlab')
+                   pwd_aux = pwd;
+                   dir_aux = [toolboxdir('optim') filesep 'optim'];
+                   cd(dir_aux);
+               h_linprog = str2func('linprog');
+               cd(pwd_aux)
+               elseif not(isempty(zef_data.solver_path))
+                   pwd_aux = pwd;
+                   path_aux = zef_data.solver_path;
+                   cd(path_aux);
+                h_linprog = str2func('linprog');
+               cd(pwd_aux)
+               else
+                  h_linprog = str2func('linprog');  
+               end
+                
+                   [y_ES,~,flag_val] = h_linprog(g, ...
                     [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
                     [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
                     [], ...
@@ -90,7 +117,8 @@ switch zef_data.search_method
                     [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
                     [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
                     opts);
-            elseif isequal(zef_data.solver_type,2)
+                
+            elseif isequal(zef_data.search_type,2)
                 [y_ES,~,flag_val] = zef_cvx_linprog(g, ...
                     [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
                     [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...

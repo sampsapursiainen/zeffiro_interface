@@ -17,8 +17,14 @@ end
 if not(isfield(zef,'ES_solver_tolerance'))
     zef.ES_solver_tolerance = 1E-10;
 end
+if not(isfield(zef,'ES_max_n_iterations'))
+    zef.ES_max_n_iterations = 1000000;
+end
 if not(isfield(zef,'ES_step_tolerance'))
-    zef.ES_solver_tolerance = 1E-10;
+    zef.ES_step_tolerance = 1E-10;
+end
+if not(isfield(zef,'ES_max_time'))
+    zef.ES_max_time = 3600;
 end
 if not(isfield(zef,'ES_constraint_tolerance'))
     zef.ES_constraint_tolerance = 1E-10;
@@ -48,10 +54,10 @@ if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
 if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 0;
+    zef.ES_beta = 1;
 end
 if not(isfield(zef,'ES_beta_min'))
-    zef.ES_beta_min = 1E-5;
+    zef.ES_beta_min = 1E-8;
 end
 if not(isfield(zef,'ES_alpha'))
     zef.ES_alpha = 1E-5;
@@ -84,19 +90,19 @@ if not(isfield(zef,'ES_inv_colormap'))
     zef.ES_inv_colormap = 2;
 end
 if not(isfield(zef,'ES_step_size'))
-    zef.ES_step_size = 10;
+    zef.ES_step_size = 15;
 end
 if not(isfield(zef,'ES_score_dose'))
-    zef.ES_score_dose = 24;
+    zef.ES_score_dose = 20;
 end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
-if not(isfield(zef,'ES_acceptable_threshold'))
-    zef.ES_acceptable_threshold = 95;
+if not(isfield(zef,'ES_acceptable_threshold (A/m2)'))
+    zef.ES_acceptable_threshold = 0.11;
 end
 if not(isfield(zef,'ES_boundary_color_limit'))
-    zef.ES_boundary_color_limit = 0.0025;
+    zef.ES_boundary_color_limit = 0.00025;
 end
 if not(isfield(zef,'ES_roi_range'))
     zef.ES_roi_range = 15;

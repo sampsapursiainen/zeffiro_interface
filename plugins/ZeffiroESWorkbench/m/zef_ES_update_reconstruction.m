@@ -1,5 +1,5 @@
 function [reconstruction] = zef_ES_update_reconstruction(varargin)
-        switch evalin('base','zef.ES_search_type')
+       % switch evalin('base','zef.ES_search_type')
            % case 1
             %    reconstruction  = evalin('base','zef.y_ES_single.volumetric_current_density');
            %     if nargin > 1

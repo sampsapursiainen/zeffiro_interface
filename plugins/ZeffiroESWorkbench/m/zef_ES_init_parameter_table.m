@@ -36,17 +36,22 @@ zef.h_ES_search_method.ItemsData = [1 2 3];
         zef.h_ES_parameter_table.Data{15,2} = zef.ES_solver_package;
          zef.h_ES_parameter_table.Data{16,1} = 'Solver tolerance';
         zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_solver_tolerance);
+        
 end
 
 if ismember(zef_i,[1])
             
     zef.h_ES_search_method.Items = {'L1L1 optimization', 'Least squares optimization'};
 zef.h_ES_search_method.ItemsData = [1 3];
-   zef.h_ES_parameter_table.Data{17,1} = 'Step tolerance';
-        zef.h_ES_parameter_table.Data{17,2} = num2str(zef.ES_solver_tolerance);
-         zef.h_ES_parameter_table.Data{18,1} = 'Constraint tolerance';
-        zef.h_ES_parameter_table.Data{18,2} = num2str(zef.ES_solver_tolerance);
-zef.h_ES_parameter_table.Data{19,1} = 'Algorithm';
-        zef.h_ES_parameter_table.Data{19,2} = num2str(zef.ES_algorithm);   
+        zef.h_ES_parameter_table.Data{17,1} = 'Maximum number of iterations';
+        zef.h_ES_parameter_table.Data{17,2} = num2str(zef.ES_max_n_iterations);
+        zef.h_ES_parameter_table.Data{18,1} = 'Algorithm';
+        zef.h_ES_parameter_table.Data{18,2} = num2str(zef.ES_algorithm);  
+   zef.h_ES_parameter_table.Data{19,1} = 'Step tolerance';
+        zef.h_ES_parameter_table.Data{19,2} = num2str(zef.ES_step_tolerance);
+         zef.h_ES_parameter_table.Data{20,1} = 'Constraint tolerance';
+        zef.h_ES_parameter_table.Data{20,2} = num2str(zef.ES_constraint_tolerance);   
+         zef.h_ES_parameter_table.Data{21,1} = 'Maximum time (s)';
+        zef.h_ES_parameter_table.Data{21,2} = num2str(zef.ES_max_time); 
 end
 clear zef_i
