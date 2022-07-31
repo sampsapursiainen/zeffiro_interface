@@ -3,7 +3,7 @@ if not(isfield(zef,'ES_separation_angle'))
     zef.ES_separation_angle = 45;
 end
 if not(isfield(zef,'ES_effective_nnz'))
-    zef.ES_effective_nnz = 8;
+    zef.ES_effective_nnz = 20;
 end
 if not(isfield(zef,'ES_obj_fun'))
     zef.ES_obj_fun = 2;
@@ -15,7 +15,16 @@ if not(isfield(zef,'ES_solver_package'))
     zef.ES_solver_package = 'sdpt3';
 end
 if not(isfield(zef,'ES_solver_tolerance'))
-    zef.ES_solver_tolerance = '1E-12';
+    zef.ES_solver_tolerance = 1E-10;
+end
+if not(isfield(zef,'ES_step_tolerance'))
+    zef.ES_solver_tolerance = 1E-10;
+end
+if not(isfield(zef,'ES_constraint_tolerance'))
+    zef.ES_constraint_tolerance = 1E-10;
+end
+if not(isfield(zef,'ES_algorithm'))
+    zef.ES_algorithm = 'dual-simplex';
 end
 if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
@@ -39,7 +48,7 @@ if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
 if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 10;
+    zef.ES_beta = 0;
 end
 if not(isfield(zef,'ES_beta_min'))
     zef.ES_beta_min = 1E-5;
@@ -48,7 +57,7 @@ if not(isfield(zef,'ES_alpha'))
     zef.ES_alpha = 1E-5;
 end
 if not(isfield(zef,'ES_alpha_max'))
-    zef.ES_alpha_max = 10;
+    zef.ES_alpha_max = 0.1;
 end
 if not(isfield(zef,'ES_active_electrodes'))
     zef.ES_active_electrodes = [];
@@ -69,7 +78,7 @@ if not(isfield(zef,'ES_relative_source_amplitude'))
     zef.ES_relative_source_amplitude = 100; % 100%
 end
 if not(isfield(zef,'ES_source_density'))
-    zef.ES_source_density = 0.77;
+    zef.ES_source_density = 3.85;
 end
 if not(isfield(zef,'ES_inv_colormap'))
     zef.ES_inv_colormap = 2;

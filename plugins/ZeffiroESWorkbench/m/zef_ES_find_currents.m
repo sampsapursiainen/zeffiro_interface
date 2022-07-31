@@ -15,7 +15,11 @@ zef_data.inv_synth_source = evalin('base','zef.inv_synth_source');
 zef_data.relative_weight_nnz = evalin('base','zef.ES_relative_weight_nnz');
 zef_data.score_dose = evalin('base','zef.ES_score_dose');
 zef_data.solver_tolerance = evalin('base','zef.ES_solver_tolerance');
+zef_data.step_tolerance = evalin('base','zef.ES_step_tolerance');
+zef_data.constraint_tolerance = evalin('base','zef.ES_constraint_tolerance');
 zef_data.solver_package = evalin('base','zef.ES_solver_package');
+zef_data.algorithm = evalin('base','zef.ES_algorithm');
+zef_data.algorithm = evalin('base','zef.ES_solver_type');
 
 
 
@@ -24,33 +28,33 @@ zef_data.solver_package = evalin('base','zef.ES_solver_package');
         end
         
         [alpha, beta] = zef_ES_find_parameters;
-        val_aux = beta;
+        eps_val = beta;
 
         
-        switch evalin('base','zef.ES_search_type')
-            case 1
-                tic;
-                [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, val_aux, zef_data.solver_tolerance, zef_data.solver_package);
-               zef_data_2.y_ES_single.y_ES                                = y_ES;
-               zef_data_2.y_ES_single.volumetric_current_density          = volumetric_current_density;
-               zef_data_2.y_ES_single.residual                            = residual;
-               zef_data_2.y_ES_single.flag                                = flag;
-               zef_data_2.y_ES_single.source_magnitude                    = source_magnitude;
-
-                for running_index = 1:length(source_position_index)
-                    vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
-                    vec_2 = (volumetric_current_density(:,source_position_index(running_index)).^2);
-                   zef_data_2.y_ES_single.field_source(running_index).field_source   =         (volumetric_current_density(:,source_position_index(running_index)).^2);
-                   zef_data_2.y_ES_single.field_source(running_index).magnitude      = sqrt(sum(volumetric_current_density(:,source_position_index(running_index)).^2));
-                   zef_data_2.y_ES_single.field_source(running_index).angle          = 180/pi*acos(dot(vec_1',vec_2)/(norm(vec_1')*norm(vec_2)));
-                   zef_data_2.y_ES_single.field_source(running_index).relative_norm  = abs(1 - norm(vec_2)/norm(vec_1'));
-                   zef_data_2.y_ES_single.field_source(running_index).relative_error = norm(vec_1'-vec_2)./norm(vec_1');
-                end
-                
-                   zef_data_2.y_ES_single.alpha    = alpha;
-                   zef_data_2.y_ES_single.beta     = val_aux;
-
-            case 2
+%         switch evalin('base','zef.ES_search_type')
+%             case 1
+%                 tic;
+%                 [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, eps_val, zef_data.solver_tolerance, zef_data.solver_package);
+%                zef_data_2.y_ES_single.y_ES                                = y_ES;
+%                zef_data_2.y_ES_single.volumetric_current_density          = volumetric_current_density;
+%                zef_data_2.y_ES_single.residual                            = residual;
+%                zef_data_2.y_ES_single.flag                                = flag;
+%                zef_data_2.y_ES_single.source_magnitude                    = source_magnitude;
+% 
+%                 for running_index = 1:length(source_position_index)
+%                     vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
+%                     vec_2 = (volumetric_current_density(:,source_position_index(running_index)).^2);
+%                    zef_data_2.y_ES_single.field_source(running_index).field_source   =         (volumetric_current_density(:,source_position_index(running_index)).^2);
+%                    zef_data_2.y_ES_single.field_source(running_index).magnitude      = sqrt(sum(volumetric_current_density(:,source_position_index(running_index)).^2));
+%                    zef_data_2.y_ES_single.field_source(running_index).angle          = 180/pi*acos(dot(vec_1',vec_2)/(norm(vec_1')*norm(vec_2)));
+%                    zef_data_2.y_ES_single.field_source(running_index).relative_norm  = abs(1 - norm(vec_2)/norm(vec_1'));
+%                    zef_data_2.y_ES_single.field_source(running_index).relative_error = norm(vec_1'-vec_2)./norm(vec_1');
+%                 end
+%                 
+%                    zef_data_2.y_ES_single.alpha    = alpha;
+%                    zef_data_2.y_ES_single.beta     = eps_val;
+% 
+%             case 2
                 %% Waitbar
                 if exist('wait_bar_temp','var') == 1
                     delete(wait_bar_temp)
@@ -85,7 +89,7 @@ parfor parallel_ind = 1 : p_ind_max
                         end
                    
                         tic;
-                        [y_ES{parallel_ind}, volumetric_current_density{parallel_ind}, residual{parallel_ind}, flag{parallel_ind}, source_magnitude{parallel_ind}, source_position_index{parallel_ind}, source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data,alpha(parallel_ind+j),val_aux(i),zef_data.solver_tolerance,zef_data.solver_package);
+                        [y_ES{parallel_ind}, volumetric_current_density{parallel_ind}, residual{parallel_ind}, flag{parallel_ind}, source_magnitude{parallel_ind}, source_position_index{parallel_ind}, source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data,alpha(parallel_ind+j),eps_val(i));
                     
 end
 
@@ -134,35 +138,36 @@ for running_index = 1:length(source_position_index{parallel_ind})
   end
 
 end
-waitbar([j/length(alpha) i/length(val_aux)] , wait_bar_temp, sprintf('Optimizing: %1.2e -- %1.2e', val_aux(i), alpha(j)));              
+waitbar([j/length(alpha) i/length(eps_val)] , wait_bar_temp, sprintf('Optimizing: %1.2e -- %1.2e', eps_val(i), alpha(j)));              
                     end
-waitbar([j/length(alpha) i/length(val_aux)] , wait_bar_temp, sprintf('Optimizing: %1.2e -- %1.2e', val_aux(i), alpha(j)));              
+waitbar([j/length(alpha) i/length(eps_val)] , wait_bar_temp, sprintf('Optimizing: %1.2e -- %1.2e', eps_val(i), alpha(j)));              
  
 
 end
                 
                    zef_data_2.y_ES_interval.alpha  = alpha;
                    zef_data_2.y_ES_interval.beta   = beta;
+                   
 
-    case 3
-        [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(zef_data);
-        
-      zef_data_2.y_ES_4x1.y_ES                                = y_ES;
-      zef_data_2.y_ES_4x1.volumetric_current_density          = volumetric_current_density;
-      zef_data_2.y_ES_4x1.residual                            = residual;
-      zef_data_2.y_ES_4x1.flag                                = flag;
-      zef_data_2.y_ES_4x1.source_magnitude                    = source_magnitude;
-        for running_index = 1:length(source_position_index)
-            vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
-            vec_2 = (volumetric_current_density(:,source_position_index(running_index)).^2);
-          zef_data_2.y_ES_4x1.field_source(running_index).field_source   =         (volumetric_current_density(:,source_position_index(running_index)).^2);
-          zef_data_2.y_ES_4x1.field_source(running_index).magnitude      = sqrt(sum(volumetric_current_density(:,source_position_index(running_index)).^2));
-          zef_data_2.y_ES_4x1.field_source(running_index).angle          = 180/pi*acos(dot(vec_1',vec_2)/(norm(vec_1')*norm(vec_2)));
-          zef_data_2.y_ES_4x1.field_source(running_index).relative_norm  = abs(1 - norm(vec_2)/norm(vec_1'));
-          zef_data_2.y_ES_4x1.field_source(running_index).relative_error = norm(vec_1'-vec_2)./norm(vec_1');
-        end
-      zef_data_2.y_ES_4x1.separation_angle                    = evalin('base','zef.ES_separation_angle');
-end
+%     case 3
+%         [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(zef_data);
+%         
+%       zef_data_2.y_ES_4x1.y_ES                                = y_ES;
+%       zef_data_2.y_ES_4x1.volumetric_current_density          = volumetric_current_density;
+%       zef_data_2.y_ES_4x1.residual                            = residual;
+%       zef_data_2.y_ES_4x1.flag                                = flag;
+%       zef_data_2.y_ES_4x1.source_magnitude                    = source_magnitude;
+%         for running_index = 1:length(source_position_index)
+%             vec_1 = source_magnitude(running_index)*source_directions(running_index,:);
+%             vec_2 = (volumetric_current_density(:,source_position_index(running_index)).^2);
+%           zef_data_2.y_ES_4x1.field_source(running_index).field_source   =         (volumetric_current_density(:,source_position_index(running_index)).^2);
+%           zef_data_2.y_ES_4x1.field_source(running_index).magnitude      = sqrt(sum(volumetric_current_density(:,source_position_index(running_index)).^2));
+%           zef_data_2.y_ES_4x1.field_source(running_index).angle          = 180/pi*acos(dot(vec_1',vec_2)/(norm(vec_1')*norm(vec_2)));
+%           zef_data_2.y_ES_4x1.field_source(running_index).relative_norm  = abs(1 - norm(vec_2)/norm(vec_1'));
+%           zef_data_2.y_ES_4x1.field_source(running_index).relative_error = norm(vec_1'-vec_2)./norm(vec_1');
+%         end
+%       zef_data_2.y_ES_4x1.separation_angle                    = evalin('base','zef.ES_separation_angle');
+% end
 
 if exist('wait_bar_temp') %#ok<EXIST>
     delete(wait_bar_temp)

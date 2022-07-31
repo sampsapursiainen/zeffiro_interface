@@ -5,7 +5,7 @@ beta        = evalin('base','zef.ES_beta');
 
 step_size   = evalin('base','zef.ES_step_size');
 
-if evalin('base','zef.ES_search_type') == 2
+%if evalin('base','zef.ES_search_type') == 2
     alpha_max   = evalin('base','zef.ES_alpha_max');
     beta_min    = evalin('base','zef.ES_beta_min');
        

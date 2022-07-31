@@ -2,10 +2,10 @@ function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
 n = length(varargin);
 switch n
     case 0
-            switch evalin('base','zef.ES_search_type')
-                case 1
-                    y_ES = evalin('base','zef.y_ES_single.y_ES');
-                case 2
+            %switch evalin('base','zef.ES_search_type')
+             %   case 1
+              %      y_ES = evalin('base','zef.y_ES_single.y_ES');
+               % case 2
                     [~, sr, sc] = zef_ES_objective_function;
                     if isempty(sr)
                         sr = 1;
@@ -15,7 +15,7 @@ switch n
                     end
                     load_aux = evalin('base','zef.y_ES_interval.y_ES');
                     y_ES = load_aux{sr, sc};
-            end
+          %  end
     case 1
         if isvector(A)
             y_ES = varargin{1};
@@ -51,9 +51,9 @@ if n ~= 3
     fig_aux.Position(3) = 750;
     fig_aux.Position(4) = 250;
 
-        if evalin('base','zef.ES_search_type') == 2
+      %  if evalin('base','zef.ES_search_type') == 2
             sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-        end
+       % end
     
 end
 

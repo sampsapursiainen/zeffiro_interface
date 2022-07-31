@@ -1,11 +1,11 @@
 function [reconstruction] = zef_ES_update_reconstruction(varargin)
         switch evalin('base','zef.ES_search_type')
-            case 1
-                reconstruction  = evalin('base','zef.y_ES_single.volumetric_current_density');
-                if nargin > 1
-                    warning('Invalid length of input arguments using Single-Instance. Displaying the latest (single) calculated option...')
-                end
-            case 2
+           % case 1
+            %    reconstruction  = evalin('base','zef.y_ES_single.volumetric_current_density');
+           %     if nargin > 1
+          %          warning('Invalid length of input arguments using Single-Instance. Displaying the latest (single) calculated option...')
+         %       end
+        %    case 2
                 reconstruction  = evalin('base','zef.y_ES_interval.volumetric_current_density');
                 switch nargin
                     case 0
@@ -22,9 +22,9 @@ function [reconstruction] = zef_ES_update_reconstruction(varargin)
                     otherwise
                         error('Invalid length of input arguments.')
                 end
-    case 3
-        reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
-end
+  %  case 3
+ %       reconstruction = evalin('base','zef.y_ES_4x1.volumetric_current_density');
+%end
 try %#ok<*TRYNC>
     delete(findobj(evalin('base','zef.h_zeffiro.Children'),'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
 end
