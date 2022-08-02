@@ -1,13 +1,11 @@
 function [y_ES, ES_optimized_current_density, residual, flag_val, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(zef_data,varargin)
 %% varargin
-
 if nargin >= 2
     alpha = varargin{1};
 end
 if nargin >= 3
     eps_val = varargin{2};
 end
-
 %% Source properties
 
 source_position_index       = zeros(size(zef_data.source_positions,1),1);
@@ -42,7 +40,7 @@ if ismember(zef_data.search_method,[1 2])
 elseif ismember(zef_data.search_method,3)
     singular_value_max = svds(zef_data.L_aux,1);
     L_ES_projection   = [alpha*eps_val*zef_data.L_aux(J_x_ES,:)  ; L_ES_projection];
-alpha = singular_value_max*alpha;
+    alpha = singular_value_max*alpha;
 end
 x_ES_projection   = [zeros(length(J_x_ES),1) ; x_ES_projection];
 
@@ -60,116 +58,110 @@ L_ES_projection = L_ES_projection*M_mat;
 switch zef_data.search_method
     case 1
         %% LP setup
-        if isequal(zef_data.search_type,2)
-        %opts = optimset('linprog');
-        opts = struct; 
-        opts.Solver = zef_data.solver_package;       
-        opts.Display    = 'off';
-        elseif isequal(zef_data.search_type,1)
-        if isequal(lower(zef_data.solver_package),'mosek')
-            opts = mskoptimset('linprog');
-            opts.Simplex = zef_data.algorithm;
-            if isinf(zef_data.max_n_iterations)
-            opts.MaxIter = intmax;
-            else
-            opts.MaxIter = zef_data.max_n_iterations;
-            end
-        else
-        opts = optimset('linprog');
-        opts.TolX = zef_data.step_tolerance;
-        opts.TolCon = zef_data.constraint_tolerance;
-        opts.MaxIter = zef_data.max_n_iterations;
-        opts.MaxTime = zef_data.max_time;
-        opts.Algorithm  = zef_data.algorithm;
-        opts.Display    = 'off';
-        end
-        opts.TolFun     = zef_data.solver_tolerance;  
+%         if isequal(zef_data.search_type,2)
+%             
+%             %opts = struct;
+%             opts.Solver = zef_data.solver_package;
+%             opts.Display    = 'off';
+%         elseif isequal(zef_data.search_type,1)
+%             if isequal(lower(zef_data.solver_package),'mosek')
+%                 opts = mskoptimset('linprog');
+%                 opts.Simplex = zef_data.algorithm;
+%                 if isinf(zef_data.max_n_iterations)
+%                     opts.MaxIter = intmax;
+%                 else
+%                     opts.MaxIter = zef_data.max_n_iterations;
+%                 end
+%             else
+%                 %opts = optimset('linprog');
+%                 opts.TolX    = zef_data.step_tolerance;
+%                 opts.TolCon  = zef_data.constraint_tolerance;
+%                 opts.MaxIter = zef_data.max_n_iterations;
+%                 opts.MaxTime = zef_data.max_time;
+%                 opts.Algorithm  = zef_data.algorithm;
+%                 opts.Display    = 'off';
+%             end
+%             opts.TolFun     = zef_data.solver_tolerance;
+%         end
+        
+        L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
+        x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
+        
+        g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
+        
+        if isequal(zef_data.search_type, 1)
+            
+            
+            
+            [y_ES,~,flag_val] = zef_data.h_linprog(g, ...
+                [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
+                [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
+                [], ...
+                [], ...
+                [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
+                [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
+                zef_data.opts);
+            
+        elseif isequal(zef_data.search_type, 2)
+            [y_ES,~,flag_val] = zef_cvx_linprog(g, ...
+                [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
+                [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
+                [], ...
+                [], ...
+                [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
+                [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
+                zef_data.opts);
         end
         
-            L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
-            x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
-            
-            g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
-           
-            if isequal(zef_data.search_type,1)
-   
-               if isequal(lower(zef_data.solver_package),'matlab')
-                   pwd_aux = pwd;
-                   dir_aux = [toolboxdir('optim') filesep 'optim'];
-                   cd(dir_aux);
-               h_linprog = str2func('linprog');
-               cd(pwd_aux)
-               elseif not(isempty(zef_data.solver_path))
-                   pwd_aux = pwd;
-                   path_aux = zef_data.solver_path;
-                   cd(path_aux);
-                h_linprog = str2func('linprog');
-               cd(pwd_aux)
-               else
-                  h_linprog = str2func('linprog');  
-               end
-                
-                   [y_ES,~,flag_val] = h_linprog(g, ...
-                    [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
-                    [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
-                    [], ...
-                    [], ...
-                    [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
-                    [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
-                    opts);
-                
-            elseif isequal(zef_data.search_type,2)
-                [y_ES,~,flag_val] = zef_cvx_linprog(g, ...
-                    [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
-                    [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
-                    [], ...
-                    [], ...
-                    [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
-                    [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
-                    opts);
-            end
-     
+        if not(isempty(y_ES))
             y_ES = y_ES(1:size(L_ES_projection,2));
-            
-             if flag_val ~= 1
-                 y_ES = zeros(size(L_ES_projection,2),1);
-             end
-             
-    case 2  
-  
+        else
+            y_ES = zeros(size(L_ES_projection,1));
+        end
+        
+        if flag_val ~= 1
+            y_ES = zeros(size(L_ES_projection,2),1);
+        end
+        
+    case 2
         %% SDP setup
-        opts = struct;
-        opts.TolFun     = 1E-12;            %TolFun;
-        opts.Solver = zef_data.solver_package;  
-        opts.Display    = 'off';
-
-   
-            L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
-            x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
-            
-            g_1 = [zeros(size(L_ES_projection,2),1); zeros(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
-            g_2 = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; zeros(size(L_ES_projection,2),1) ];
-            
-                 [y_ES,~,flag_val] = zef_cvx_semidefprog(g_1,g_2, ...
-                    [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
-                    [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
-                    [], ...
-                    [], ...
-                    [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
-                    [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
-                    opts);
-     
+%         %opts = struct;
+%         opts.TolFun     = zef_data.solver_tolerance;
+%         %opts.TolFun     = 1E-12;            %TolFun;
+%         opts.Solver = zef_data.solver_package;
+%         opts.Display    = 'off';
+%         
+        
+        L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
+        x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
+        
+        g_1 = [zeros(size(L_ES_projection,2),1); zeros(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
+        g_2 = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; zeros(size(L_ES_projection,2),1) ];
+        
+        [y_ES,~,flag_val] = zef_cvx_semidefprog(g_1,g_2, ...
+            [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
+            [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
+            [], ...
+            [], ...
+            [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
+            [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
+            zef_data.opts);
+        
+        if not(isempty(y_ES))
             y_ES = y_ES(1:size(L_ES_projection,2));
-            
-             if flag_val ~= 1
-                 y_ES = zeros(size(L_ES_projection,2),1);
-             end
-            
+        else
+            y_ES = zeros(size(L_ES_projection,1));
+        end
+        
+        if flag_val ~= 1
+            y_ES = zeros(size(L_ES_projection,2),1);
+        end
+        
     case 3
-
-     y_ES = ((L_ES_projection)' * (L_ES_projection) + alpha^2*eye(size(L_ES_projection,2))) \ L_ES_projection'*x_ES_projection;
-
-     flag_val = 1;
+        
+        y_ES = ((L_ES_projection)' * (L_ES_projection) + alpha^2*eye(size(L_ES_projection,2))) \ L_ES_projection'*x_ES_projection;
+        
+        flag_val = 1;
         
 end
 %% Postprocess
@@ -180,27 +172,27 @@ y_ES = M_mat*y_ES;
 y_idx = y_ES ~= 0;
 y_ES(y_idx) = y_ES(y_idx)-mean(y_ES(y_idx));
 
- y_ES = zef_data.total_max_current * y_ES ./ sum(abs(y_ES));
+y_ES = zef_data.total_max_current * y_ES ./ sum(abs(y_ES));
 
 if max(abs(y_ES))      >= zef_data.max_current_channel
-   y_ES = zef_data.max_current_channel * y_ES ./ max(abs(y_ES));
+    y_ES = zef_data.max_current_channel * y_ES ./ max(abs(y_ES));
 end
 
 
 if not(isempty(zef_data.active_electrodes))
     y_ES_aux = zeros(size(zef_data.L_aux,2),1);
-        y_ES_aux(zef_data.active_electrodes) = y_ES;
+    y_ES_aux(zef_data.active_electrodes) = y_ES;
     y_ES = y_ES_aux;
 end
 
 %% Flag value from LP solver
 if ismember(flag_val,[1 3])
-        ES_optimized_current_density  = reshape(zef_data.L_aux*y_ES,3,size(zef_data.L_aux,1)/3);
-        if not(isempty(zef_data.active_electrodes))
-            residual = norm(L_ES_projection*y_ES(zef_data.active_electrodes)-x_ES_projection,1);
-        else
-            residual = norm(L_ES_projection*y_ES-x_ES_projection,1);
-        end
+    ES_optimized_current_density  = reshape(zef_data.L_aux*y_ES,3,size(zef_data.L_aux,1)/3);
+    if not(isempty(zef_data.active_electrodes))
+        residual = norm(L_ES_projection*y_ES(zef_data.active_electrodes)-x_ES_projection,1);
+    else
+        residual = norm(L_ES_projection*y_ES-x_ES_projection,1);
+    end
 else
     y_ES = zeros(size(zef_data.L_aux,2),1);
     ES_optimized_current_density = zeros(size(zef_data.L_aux,2),1);
@@ -210,7 +202,3 @@ end
 source_directions = zef_data.source_directions;
 
 end
-
-
-
-
