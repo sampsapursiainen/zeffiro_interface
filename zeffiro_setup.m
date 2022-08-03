@@ -31,7 +31,7 @@ zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/SESAME/'
 %%% Install CVX BEGIN %%%
 mkdir(fileparts(mfilename('fullpath')),'external/OSQP')
 websave('external/OSQP/install_osqp.m','https://raw.githubusercontent.com/osqp/osqp-matlab/master/package/install_osqp.m');
-run([fileparts(mfilename('fullpath')) filesep '/external/OSQP.m']);
+run([fileparts(mfilename('fullpath')) filesep '/external/OSQP/install_osqp.m']);
 zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/OSQP/''],''recursive'',zef.path_cell);';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install CVX BEGIN %%%
