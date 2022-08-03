@@ -15,10 +15,10 @@ zef_data.inv_synth_source = evalin('base','zef.inv_synth_source');
 zef_data.relative_weight_nnz = evalin('base','zef.ES_relative_weight_nnz');
 zef_data.score_dose = evalin('base','zef.ES_score_dose');
 
+solver_tolerance = evalin('base','zef.ES_solver_package');
 solver_tolerance = evalin('base','zef.ES_solver_tolerance');
 step_tolerance = evalin('base','zef.ES_step_tolerance');
 constraint_tolerance = evalin('base','zef.ES_constraint_tolerance');
-solver_package = evalin('base','zef.ES_solver_package');
 algorithm = evalin('base','zef.ES_algorithm');
 
 zef_data.search_type = evalin('base','zef.ES_search_type');
@@ -27,13 +27,13 @@ max_n_iterations = evalin('base','zef.ES_max_n_iterations');
 max_time         = evalin('base','zef.ES_max_time');
 
 
-if isequal(lower(solver_package),'mosek')
+if isequal(lower(zef_data.solver_package),'mosek')
     zef_data.opts = mskoptimset('linprog');
 else
     zef_data.opts = optimset('linprog');
 end
 
-zef_data.opts.Solver = solver_package;
+zef_data.opts.Solver = zef_data.search_type;
 zef_data.opts.Display    = 'off';
 zef_data.opts.Simplex = algorithm;
 
@@ -51,7 +51,7 @@ zef_data.opts.Algorithm  = algorithm;
 zef_data.opts.Display    = 'off';
 zef_data.opts.TolFun     = solver_tolerance;
 
-aux_string = [ solver_package '_path'];
+aux_string = [ zef_data.search_type '_path'];
 if evalin('base',['isfield(zef,''' aux_string ''')'])
     solver_path = evalin('base',['zef.' aux_string ]);
 else
@@ -88,7 +88,7 @@ eps_val = beta;
 %         switch evalin('base','zef.ES_search_type')
 %             case 1
 %                 tic;
-%                 [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, eps_val, zef_data.solver_tolerance, zef_data.solver_package);
+%                 [y_ES, volumetric_current_density, residual, flag, source_magnitude, source_position_index, source_directions] = zef_ES_optimize_current(alpha, eps_val, zef_data.solver_tolerance, zef_data.zef_data.search_type);
 %                zef_data_2.y_ES_single.y_ES                                = y_ES;
 %                zef_data_2.y_ES_single.volumetric_current_density          = volumetric_current_density;
 %                zef_data_2.y_ES_single.residual                            = residual;

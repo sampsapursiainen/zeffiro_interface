@@ -1,4 +1,9 @@
-
+if not(isfield(zef,'mosek_path'))
+    zef.mosek_path = '';
+end
+if not(isfield(zef,'gurobi_path'))
+    zef.gurobi_path = '';
+end
 if not(isfield(zef,'ES_separation_angle'))
     zef.ES_separation_angle = 45;
 end
