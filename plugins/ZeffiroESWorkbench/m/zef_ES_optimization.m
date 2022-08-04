@@ -50,10 +50,10 @@ zef.h_ES_search_method.Items = zef.ES_search_method_list;
 zef.h_ES_parameter_table.CellEditCallback                = 'zef_ES_optimization_update;';
 %% Button
 zef.h_ES_plot_data.ButtonPushedFcn                       = 'zef_ES_plot_data;';
-zef.h_ES_update_reconstruction.ButtonPushedFcn           = 'zef.reconstruction = zef_ES_update_reconstruction; zef_plot_meshes;';
+zef.h_ES_update_reconstruction.ButtonPushedFcn           = 'zef_ES_update_reconstruction; zef_plot_meshes;';
 zef.h_ES_find_currents_button.ButtonPushedFcn            = 'question_aux = questdlg(''Confirm calculations?'',''ZI Help'',''Yes'',''No'', ''No''); switch question_aux; case ''Yes''; zef_ES_find_current; end;;';
 %% Right-click
-zef.h_ES_plot_data_menu_item_1.MenuSelectedFcn           = 'zef.reconstruction = zef_ES_update_reconstruction; zef_plot_meshes; zef_ES_plot_current_pattern;';
+zef.h_ES_plot_data_menu_item_1.MenuSelectedFcn           = 'zef_ES_update_reconstruction; zef_plot_meshes; zef_ES_plot_current_pattern;';
 zef.h_ES_plot_data_menu_item_2.MenuSelectedFcn           = 'zef_ES_plot_barplot;';
 zef.h_ES_plot_data_menu_item_3.MenuSelectedFcn           = 'zef_ES_plot_error_chart;';
 zef.h_ES_plot_data_menu_item_4.MenuSelectedFcn           = 'zef_ES_optimizer_properties_show;';
