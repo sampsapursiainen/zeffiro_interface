@@ -1,113 +1,102 @@
-function zef_ES_plot_error_chart
+function zef_ES_plot_error_chart(varargin)
 %% Variables and parameters setup
-try
-    load_aux = evalin('base','zef.y_ES_interval');
-catch
-    if not(isfield(evalin('base','zef'),'y_ES_interval'))
-        error('There are no values calculated yet...')
-    end
+h_dial = helpdlg('Plotting data...','ZI: Help');
+switch nargin
+    case 0
+        vec = zef_ES_table;
+    case 1
+        vec = varargin{1};
+    otherwise
+        error('Invalid number of arguments inserted.')
 end
-[loader, sr, sc] = zef_ES_objective_function;
 %% Figure and Axes
-if isempty(findobj('type','figure','Name','ZEFFIRO Interface: ES error chart'))
-    f = figure('Name','ZEFFIRO Interface: Error chart','NumberTitle','off', ...
-        'ToolBar','figure','MenuBar','none');
-   set(f,'Position',[800 400 800 600]);
-else
-    f = findobj('type','figure','Name','ZEFFIRO Interface: ES error chart');
-    figure(f);
-    clf(f);
-    axes(f.CurrentAxes);
-end
-%f.Color      = [1 1 1];
-%set(1,'renderer','painters')
+f = figure('Name','ZEFFIRO Interface: Error chart', ...
+    'NumberTitle','off', ...
+    'ToolBar','none', ...
+    'MenuBar','none');
+pos_aux = findall(groot,'Name','ZEFFIRO Interface: ES Workbench').Position;
+set(f,'Position',[pos_aux(1) pos_aux(2) 800 600]);
 pbaspect([1 1 1])
 %% Tab properties
 h = uitabgroup();
-tab1 = uitab(h, 'title', 'Current pattern');
-set(tab1,'BackgroundColor',[1 1 1])
-axes('parent', tab1);
-fieldnames_table = fieldnames(loader);
-w_ind = [2 1 3 4];
-ColorScaleCell = {'log','linear','linear','linear'};
-fieldnames_table = fieldnames(loader(:,w_ind));
-for w = 1:4
-    sp_var = cell2mat(loader{1,w_ind(w)});
-    plot_opts.ColorScale = ColorScaleCell{w};
-    printing_imagesc(w,plot_opts);
-end
+tab_titles = [{'Current pattern'}; {'Volume current'}];
+fieldnames_table = {};
+fieldnames_table{1} = fieldnames(vec(:,1:4));
+fieldnames_table{2} = fieldnames(vec(:,[5:7,9]));
 
-tab2 = uitab(h, 'title', 'Volume current');
-set(tab2,'BackgroundColor',[1 1 1])
-axes('parent', tab2);
-w_ind = [5 6 19 8];
-ColorScaleCell = {'linear','linear','linear','linear'};
-fieldnames_table = fieldnames(loader(:,w_ind));
-for w = 1:4
-    sp_var = cell2mat(loader{1,w_ind(w)});
-    plot_opts.ColorScale = ColorScaleCell{w};
-    printing_imagesc(w,plot_opts);
+for i_idx = 1:2
+    tabs_aux = uitab(h, 'title', tab_titles{i_idx});
+    axes('parent', tabs_aux);
+    for w = 1:4
+        printing_imagesc(vec, w, fieldnames_table{i_idx});
+    end
 end
 %% Wrapping up, functions and return of variables
-function printing_imagesc(w,varargin)
-subplot(2,2,w)
-imagesc(sp_var(:,1:end));
-colormap(gca, turbo(2048));
-pbaspect([1 1 1])
-if not(isempty(varargin))
-plot_opts = varargin{1};
-end
-
-
-
-fnt_sz = 12;
-ax = gca;
-%ax.FontSize = fnt_sz;
-
-ax.XLabel.String       = 'Alpha parameter';
-ax.XLabel.FontSize     = fnt_sz-2;
-ax.XLabel.FontWeight   = 'bold';
-
-ax.XTickLabel          = {num2str(db(load_aux.alpha),'%1.0f')};
-ax.XTick               = 1:length(load_aux.alpha);
-ax.XTickLabelRotation  = 90;
-
-    ax.YLabel.String = 'Nuisance field weight (dB)';
-    param_val_aux = load_aux.beta;
-
-ax.YLabel.FontSize     = fnt_sz-2;
-ax.YLabel.FontWeight   = 'bold';
-
-ax.YTick               = 1:length(param_val_aux);
-ax.YTickLabel          = {num2str(db(param_val_aux),'%1.0f')};
-ax.YTickLabelRotation  = 0;
-
-cb = colorbar;
-colormap(cb, turbo(2048))
-
-if ismember(w,[1,3])
-    plot_opts.ColorScale = ColorScaleCell{w};
-    cb.Ruler.Exponent = -3;
-end
-
-hold on;
-p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
-p = plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
-
-lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
-lgd.String(1) = {['\alpha : ' num2str(load_aux.alpha(sc), '%1.0f')]};
-    lgd.String(2) = {['t : ' num2str(param_val_aux(sr), '%1.0g')]};
-lgd.AutoUpdate = 'off';
-
-grid on
-ax.GridAlpha = 0.3;
-ax.GridColor = [0.3 0.3 0.3];
-if isfield(plot_opts,'ColorScale')
-ax.ColorScale = plot_opts.ColorScale;
-end
-p = plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
-hold off
-
-title(fieldnames_table(w));
-end
+    function printing_imagesc(vec, w, fieldnames_table, varargin)
+        [sr, sc] = zef_ES_objective_function(vec);
+        subplot(2,2,w)
+        imagesc(vec.(fieldnames_table{w}){1,1});
+        colormap(gca, turbo(2048));
+        pbaspect([1 1 1])
+        
+        ax = gca;
+        ax.XLabel.String       = 'Alpha parameter (dB)';
+        ax.XLabel.FontSize     = 10;
+        ax.XLabel.FontWeight   = 'bold';
+        ax.XTickLabel          = {num2str(db(vec.('Alpha'){:}),'%1.0f')};
+        ax.XTick               = 1:length(vec.('Alpha'){:});
+        ax.XTickLabelRotation  = 90;
+        
+        ax.YLabel.String       = 'Nuisance field weight (dB)';
+        ax.YLabel.FontSize     = 10;
+        ax.YLabel.FontWeight   = 'bold';
+        ax.YTickLabel          = {num2str(db(vec.('Beta'){:}),'%1.0f')};
+        ax.YTick               = 1:length(vec.('Beta'){:});
+        ax.YTickLabelRotation  = 0;
+        
+        %%% Colorbar
+        cb = colorbar;
+        colormap(cb, turbo(2048))
+        %         if strcmp(fieldnames_table{w}, 'Total dose')
+        %             ax.ColorScale = 'log';
+        %             cb.Ruler.TickLabelFormat = '%1.3f';
+        %         else
+        %             ax.ColorScale = 'linear';
+        %         end
+        
+        t = cb.Limits;
+        T = linspace(t(1), t(2), 5); %% 5= five numbers in the colorbar
+        cb.Ticks = T;
+        
+        if         strcmp(fieldnames_table{w}, 'Total dose')
+            TL = arrayfun(@(x) sprintf('%1.1e', x), T, 'un', 0);
+        elseif strcmp(fieldnames_table{w}, 'Maximum current (A)')
+            TL = arrayfun(@(x) sprintf('%1.1e', x), T, 'un', 0);
+        elseif     strcmp(fieldnames_table{w}, 'Angle error (deg)')
+            TL = arrayfun(@(x) sprintf('%3.2f', x), T, 'un', 0);
+        elseif     strcmp(fieldnames_table{w}, 'Relative magnitude error')
+            TL = arrayfun(@(x) sprintf('%1.4f', x), T, 'un', 0);
+        else
+            TL = arrayfun(@(x) sprintf('%1.2f', x), T, 'un', 0);
+        end
+        set(cb, 'TickLabels', TL);
+        
+        %%% Legend
+        hold on;
+        plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
+        plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
+        lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
+        lgd.String(1) = {['\alpha : ' num2str(db(vec.('Alpha'){:,:}(sc)), '%1.0f')]};
+        lgd.String(2) = {['\epsilon : ' num2str(db(vec.('Alpha'){:,:}(sr)), '%1.0f')]};
+        lgd.AutoUpdate = 'off';
+        plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
+        
+        grid on
+        ax.GridAlpha = 0.3;
+        ax.GridColor = [0.3 0.3 0.3];
+        
+        hold off
+        title(fieldnames_table(w));
+    end
+close(h_dial)
 end

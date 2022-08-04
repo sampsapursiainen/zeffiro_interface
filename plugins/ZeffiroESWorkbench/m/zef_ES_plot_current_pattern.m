@@ -3,9 +3,9 @@ function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin
 if isfield(evalin('base','zef'),'h_current_ES')
     if not(isempty(evalin('base','zef.h_current_ES')))
         if evalin('base','isvalid(zef.h_current_ES(1))')
-     if isequal(evalin('base','zef.h_zeffiro'),evalin('base','zef.h_current_ES(1).Parent'))
-    evalin('base', 'delete(zef.h_current_ES)')
-     end
+            if isequal(evalin('base','zef.h_zeffiro'),evalin('base','zef.h_current_ES(1).Parent'))
+                evalin('base', 'delete(zef.h_current_ES)')
+            end
         end
     end
 end
@@ -15,26 +15,23 @@ end
 %% Variables and parameter setup
 switch nargin
     case 0
-               % switch evalin('base','zef.ES_search_type')
-                %    case 1
-                 %       y_ES = evalin('base','zef.y_ES_single.y_ES');
-                  %  case 2
-                        [~,sr, sc] = zef_ES_objective_function;
-                        if isempty(sr)
-                            sr = 1;
-                        end
-                        if isempty(sc)
-                            sc = 1;
-                        end
-                        y_ES = evalin('base','zef.y_ES_interval.y_ES');
-                        y_ES = y_ES{sr,sc};
-                %end
+        [sr, sc] = zef_ES_objective_function(zef_ES_table);
+        y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
     case 1
-        y_ES = varargin{1};
+        if isvector(varargin{1})
+            y_ES = varargin{1};
+        else
+            error('Inserted argument is not a vector.')
+        end
     case 2
-        y_ES = evalin('base','zef.y_ES_interval.y_ES{varargin{1},varargin{2}}');
+        [sr, sc] = deal(varargin{1:2});
+        try
+            y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+        catch
+            error('No y_ES data found.')
+        end
     otherwise
-        error('Nmber of function input arcument must be 0 or 1')
+        error('Number of function input argument must be 0 or 1')
 end
 [sensors] = zef_process_meshes(evalin('base','zef.explode_everything'));
 %% Sensors attachment
@@ -184,7 +181,7 @@ ES_colormap_vec(index_aux,:);
 h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
- 
+    
     if not(evalin('base','zef.h_ES_2D_electrode_map.Value'))
         h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
     else
@@ -194,7 +191,7 @@ for i = 1:size(sensors,1)
         view(0,90)
     end
     
-set(h_current_ES(i),'Tag','sensor');
+    set(h_current_ES(i),'Tag','sensor');
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');
     if not(y_ES(i)) == 0
@@ -219,9 +216,7 @@ colormap(h_axes, ES_colormap_vec);
 
 h_colorbar = colorbar('WestOutside','Position',[0.03 0.65 0.01 0.25],'tag','ES_colorbar');
 
-%h_colorbar.Limits = [min(y_ES(:)) max(y_ES(:))];
 h_colorbar.Limits = [min_colorbar_value max_colorbar_value];
-%h_colorbar.Ruler.Exponent = -3;
 
 h_colorbar.Label.String     = 'Amplitude (A)';
 h_colorbar.Label.Position   = [-2 0];

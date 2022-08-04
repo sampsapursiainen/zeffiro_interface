@@ -1,84 +1,51 @@
-function [vec, sr, sc] = zef_ES_objective_function
-load_aux = evalin('base','zef.y_ES_interval');
-
-ES_y                     = zeros(size(load_aux.y_ES));
-ES_residual              = cell2mat(load_aux.residual);
-ES_residual = round(ES_residual/max(abs(ES_residual(:))),6);
-ES_max                   = zeros(size(load_aux.y_ES));
-ES_flag                  = cell2mat(load_aux.flag')';
-
-ES_magnitude             = cell2mat(load_aux.field_source.magnitude')';
-ES_angle_error           = cell2mat(load_aux.field_source.angle')';
-ES_rela_norm             = cell2mat(load_aux.field_source.relative_norm_error')';
-ES_rela_error            = cell2mat(load_aux.field_source.relative_error')';
-
-ES_off_field             = cell2mat(load_aux.field_source.avg_off_field')';
-ES_active_electrodes     = evalin('base','zef.ES_active_electrodes');
-
-ES_separation_angle      = evalin('base','zef.ES_separation_angle');
-ES_search_method         = evalin('base','zef.ES_search_method_list{zef.ES_search_method}');
-ES_max_current_channel   = evalin('base','zef.ES_max_current_channel');
-
-ES_relative_weight_nnz   = evalin('base','zef.ES_relative_weight_nnz');
-ES_cortex_thickness      = evalin('base','zef.ES_cortex_thickness');
-ES_total_max_current     = evalin('base','zef.ES_total_max_current');
-ES_source_density        = evalin('base','zef.ES_source_density');
-ES_rela_source_amplitude = evalin('base','zef.ES_relative_source_amplitude');
-
-ES_optimize_condition = 'maximum';
-switch evalin('base','zef.ES_obj_fun_2')
-    case {1,3,4}
-        ES_optimize_condition = 'minimum';
-    case {2,5}
-        ES_optimize_condition = 'maximum';
+function [sr, sc] = zef_ES_objective_function(vec, varargin)
+switch nargin
+    case 1
+        if     evalin('base','zef.ES_obj_fun') == 5
+            obj1 = 9;
+        elseif evalin('base','zef.ES_obj_fun') == 2
+            obj1 = 5;
+        end
+        thre_aux = evalin('base','zef.ES_acceptable_threshold');
+        
+        switch evalin('base','zef.ES_obj_fun_2');
+            case {1,3,4}
+                ES_optimize_condition = 'minimum';
+            case {2,5}
+                ES_optimize_condition = 'maximum';
+        end
+        
+    case {2,3} %Intensity
+        if     strcmpi('residual', varargin{1});        obj1 = 2;
+        elseif strcmpi('intensity', varargin{1});       obj1 = 5;
+        elseif strcmpi('angle', varargin{1});           obj1 = 6;
+        elseif strcmpi('relative error', varargin{1});  obj1 = 8;
+        elseif strcmpi('focality', varargin{1});        obj1 = 9;
+        end
+        
+        if nargin == 2; thre_aux = 0.08;
+        else;           thre_aux = varargin{2};
+        end
+        
+        switch varargin{1}
+            case {'residual','angle', 'relative error'}
+                ES_optimize_condition = 'minimum';
+            case {'intensity','focality'}
+                ES_optimize_condition = 'maximum';
+        end
 end
 
+obj_fun_thresh = vec.(obj1){1,1};
 
-    if isempty(ES_active_electrodes)
-        ES_active_electrodes = size(load_aux.y_ES{1,1},1);
-    end
-    ES_separation_angle = NaN;
-
-for i = 1:size(load_aux.y_ES,1)
-    for j = 1:size(load_aux.y_ES,2)
-        ES_y(i,j) =         norm(cell2mat(load_aux.y_ES(i,j)),1);  % L1
-        ES_max(i,j) =          max(cell2mat(load_aux.y_ES(i,j)));  % Max
-        %ES_nnz(i,j) = length(find(cell2mat(load_aux.y_ES(i,j))));
-    end
+if     isequal(ES_optimize_condition, 'minimum')
+    [Idx] = find(abs(obj_fun_thresh(:)) <= thre_aux);
+    obj_fun_2 = vec.(obj1){1,1};
+    [~, Idx_2] = min(obj_fun_2(Idx));
+elseif isequal(ES_optimize_condition, 'maximum')
+    [Idx] = find(abs(obj_fun_thresh(:)) >= thre_aux);
+    obj_fun_2 = vec.(obj1){1,1};
+    [~, Idx_2] = max(obj_fun_2(Idx));
 end
 
-vec = array2table({ ES_y,                   ES_residual,              ES_max,                 ES_flag, ...
-                    ES_magnitude,           ES_angle_error,           ES_rela_norm,           ES_rela_error, ...
-                    ES_off_field,           ES_active_electrodes,     ES_separation_angle,    ES_search_method, ...
-                    ES_max_current_channel, ES_relative_weight_nnz,   ES_cortex_thickness,    ES_total_max_current, ...
-                    ES_source_density,      ES_rela_source_amplitude, max(0,ES_magnitude./ES_off_field)}, ...
-    'VariableNames', ...
-    {'Total dose',               'Residual',                  'Maximum current (A)',        'Optimizer Flag value', ...
-    'Current density (A/m^2)',   'Angle error (deg)',         'Relative magnitude error',   'Relative error', ...
-    'Avg. nuisance field',            'Active electrodes',         'Separation angle',           'Search method', ...
-    'Maximum current limit (A)', 'Relative weight NNZ',       'Cortex thickness',           'Solver maximum current (A)', ...
-    'Source density (A/m2)',     'Relative source amplitude', 'Current density vs. nuisance field ratio'});
-
-%% Obj Fun
-vec_aux = vec(1,[2,5,6,8,19]);
-obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
-obj_funct_threshold = obj_funct;
-if isequal(ES_optimize_condition,'minimum')
-    [Idx] = find(abs(obj_funct_threshold(:)) <= evalin('base','zef.ES_acceptable_threshold'));
-    % [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
-    
-elseif isequal(ES_optimize_condition,'maximum')
-    [Idx] = find(obj_funct_threshold(:)      >= evalin('base','zef.ES_acceptable_threshold'));
-    %[Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
-end
-
-if isequal(ES_optimize_condition,'minimum')
-    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-    [~,Idx_2] = min(obj_funct_2(Idx));
-elseif isequal(ES_optimize_condition,'maximum')
-    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-    [~,Idx_2] = max(obj_funct_2(Idx));
-end
-[sr, sc] = ind2sub(size(obj_funct_2),Idx(Idx_2));
-
+[sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));
 end
