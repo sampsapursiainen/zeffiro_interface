@@ -1,3 +1,17 @@
+zef.ES_search_method_list = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
+
+if not(isfield(zef,'ES_absolute_tolerance'))
+    zef.ES_absolute_tolerance = 1E-03;
+end
+if not(isfield(zef,'ES_relative_tolerance'))
+    zef.ES_relative_tolerance = 1E-03;
+end
+if not(isfield(zef,'ES_simplex'))
+    zef.ES_simplex = 'none';
+end
+if not(isfield(zef,'ES_display'))
+    zef.ES_display = 'off';
+end
 if not(isfield(zef,'mosek_path'))
     zef.mosek_path = '';
 end

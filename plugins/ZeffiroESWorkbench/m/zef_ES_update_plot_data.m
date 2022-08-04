@@ -22,4 +22,3 @@ switch evalin('base','zef.ES_plot_type')
         zef_ES_optimizer_properties_show;
 end
 clear sr sc
-'moi'

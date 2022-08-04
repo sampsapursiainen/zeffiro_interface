@@ -31,13 +31,12 @@ end
 
 source_magnitude  = max(abs(x_ES_projection));
 
-
 J_x_ES                  = setdiff((1:size(zef_data.L_aux,1))',J_x_ES);
 %% Active Electrodes and L_ES_projection
 if ismember(zef_data.search_method,[1 2])
     alpha = norm(zef_data.L_aux,1)*alpha;
     L_ES_projection   = [zef_data.L_aux(J_x_ES,:)  ; L_ES_projection];
-elseif ismember(zef_data.search_method,3)
+elseif ismember(zef_data.search_method,[3 4 5])
     singular_value_max = svds(zef_data.L_aux,1);
     L_ES_projection   = [alpha*eps_val*zef_data.L_aux(J_x_ES,:)  ; L_ES_projection];
     alpha = singular_value_max*alpha;
@@ -58,40 +57,13 @@ L_ES_projection = L_ES_projection*M_mat;
 switch zef_data.search_method
     case 1
         %% LP setup
-%         if isequal(zef_data.search_type,2)
-%             
-%             %opts = struct;
-%             opts.Solver = zef_data.solver_package;
-%             opts.Display    = 'off';
-%         elseif isequal(zef_data.search_type,1)
-%             if isequal(lower(zef_data.solver_package),'mosek')
-%                 opts = mskoptimset('linprog');
-%                 opts.Simplex = zef_data.algorithm;
-%                 if isinf(zef_data.max_n_iterations)
-%                     opts.MaxIter = intmax;
-%                 else
-%                     opts.MaxIter = zef_data.max_n_iterations;
-%                 end
-%             else
-%                 %opts = optimset('linprog');
-%                 opts.TolX    = zef_data.step_tolerance;
-%                 opts.TolCon  = zef_data.constraint_tolerance;
-%                 opts.MaxIter = zef_data.max_n_iterations;
-%                 opts.MaxTime = zef_data.max_time;
-%                 opts.Algorithm  = zef_data.algorithm;
-%                 opts.Display    = 'off';
-%             end
-%             opts.TolFun     = zef_data.solver_tolerance;
-%         end
         
         L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
         x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
         
         g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
         
-        if isequal(zef_data.search_type, 1)
-            
-            
+        if ismember(lower(zef_data.solver_package), {'matlab','mosek','gurobi'})        
             
             [y_ES,~,flag_val] = zef_data.h_linprog(g, ...
                 [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
@@ -102,7 +74,7 @@ switch zef_data.search_method
                 [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
                 zef_data.opts);
             
-        elseif isequal(zef_data.search_type, 2)
+        elseif ismember(lower(zef_data.solver_package), {'sdpt3 (cvx)','sedumi (cvx)'})
             [y_ES,~,flag_val] = zef_cvx_linprog(g, ...
                 [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
                 [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
@@ -112,7 +84,7 @@ switch zef_data.search_method
                 [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
                 zef_data.opts);
         end
-        
+                        
         if not(isempty(y_ES))
             y_ES = y_ES(1:size(L_ES_projection,2));
         else
@@ -125,18 +97,15 @@ switch zef_data.search_method
         
     case 2
         %% SDP setup
-%         %opts = struct;
-%         opts.TolFun     = zef_data.solver_tolerance;
-%         %opts.TolFun     = 1E-12;            %TolFun;
-%         opts.Solver = zef_data.solver_package;
-%         opts.Display    = 'off';
-%         
         
         L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
         x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
         
         g_1 = [zeros(size(L_ES_projection,2),1); zeros(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
         g_2 = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; zeros(size(L_ES_projection,2),1) ];
+        
+        
+        if ismember(lower(zef_data.solver_package),{'sdpt3','sedumi'})
         
         [y_ES,~,flag_val] = zef_cvx_semidefprog(g_1,g_2, ...
             [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
@@ -146,6 +115,8 @@ switch zef_data.search_method
             [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
             [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
             zef_data.opts);
+        
+        end
         
         if not(isempty(y_ES))
             y_ES = y_ES(1:size(L_ES_projection,2));
@@ -162,6 +133,77 @@ switch zef_data.search_method
         y_ES = ((L_ES_projection)' * (L_ES_projection) + alpha^2*eye(size(L_ES_projection,2))) \ L_ES_projection'*x_ES_projection;
         
         flag_val = 1;
+        
+    case 4
+        
+         y_ES = L_ES_projection'*x_ES_projection;
+        
+        flag_val = 1;
+        
+    case 5
+        
+           %% QP setup
+        
+        L_ES_projection = [L_ES_projection; eye(size(L_ES_projection,2))];
+        x_ES_projection = [x_ES_projection; zeros(size(L_ES_projection,2),1)];
+        
+        g = [zeros(size(L_ES_projection,2),1); ones(size(L_ES_projection,1)-size(L_ES_projection,2),1) ; alpha*ones(size(L_ES_projection,2),1) ];
+        
+        
+        if ismember(lower(zef_data.solver_package), {'matlab','mosek','gurobi'})        
+                      
+            [y_ES,~,flag_val] = zef_data.h_quadprog(diag(g), zeros(size(g)), ...
+                [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
+                [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
+                [], ...
+                [], ...
+                [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
+                [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
+            zeros(size(g)),...    
+            zef_data.opts);
+            
+        elseif ismember(lower(zef_data.solver_package), {'sdpt3 (cvx)','sedumi (cvx)'})
+            [y_ES,~,flag_val] = zef_cvx_quadprog(diag(g),zeros(size(g)), ...
+                [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ], ...
+                [-x_ES_projection ; x_ES_projection; zef_data.total_max_current], ...
+                [], ...
+                [], ...
+                [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ], ...
+                [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ],...
+                zef_data.opts);
+            
+        elseif ismember(lower(zef_data.solver_package), {'osqp'})
+
+                 prob = osqp;
+                 P  = diag(g);
+                 q = zeros(size(g));
+                 A = [-L_ES_projection -eye(size(L_ES_projection,1))  ; L_ES_projection -eye(size(L_ES_projection,1)); zeros(1, size(L_ES_projection,1)) ones(1, size(L_ES_projection,2)) ];
+                 l = -Inf*ones(size(A,1),1);
+                 u = [-x_ES_projection ; x_ES_projection; zef_data.total_max_current];
+                 A = [A; eye(length(g))];
+                 l = [l ;  [-zef_data.max_current_channel*ones(size(L_ES_projection,2),1); eps_val*max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2)-length(source_position_index),1); zeros(size(L_ES_projection,2)+length(source_position_index),1) ]];
+                 u = [u ;  [ zef_data.max_current_channel*ones(size(L_ES_projection,2),1); max(source_magnitude)*ones(size(L_ES_projection,1)-size(L_ES_projection,2),1); zef_data.max_current_channel*ones(size(L_ES_projection,2),1) ] ];   
+                 verbose_on = 1; 
+                 if isequal(zef_data.opts.Display,'off')
+                     verbose_on = 0; 
+                 end
+                 prob.setup(P, q, A, l, u, 'eps_abs', zef_data.opts.TolAbs,'eps_rel',zef_data.opts.TolRel,'max_iter',zef_data.opts.MaxIter,'verbose',verbose_on);
+                 res = prob.solve();
+                 y_ES = res.x;
+                 flag_val = res.info.status_val;
+            
+        end
+                        
+        if not(isempty(y_ES))
+            y_ES = y_ES(1:size(L_ES_projection,2));
+        else
+            y_ES = zeros(size(L_ES_projection,1));
+        end
+        
+        if flag_val ~= 1
+            y_ES = zeros(size(L_ES_projection,2),1);
+        end 
+     
         
 end
 %% Postprocess

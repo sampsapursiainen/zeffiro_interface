@@ -35,6 +35,8 @@ if isfield(opts,'TolVal')
     cvx_precision(opts.TolVal)
 end
 
+if isequal(opts.Display,'off')
+
 cvx_begin quiet
 variable x(n)
 minimize(norm(z.*x) + sum(y.*x))
@@ -52,6 +54,26 @@ Aeq*x == beq;
 end
 
 cvx_end
+
+else
+   cvx_begin quiet
+variable x(n)
+minimize(norm(z.*x) + sum(y.*x))
+subject to: 
+
+A*x - b <= 0; %#ok<*VUNUS>
+if not(isempty(lb))
+x >= lb;
+end
+if not(isempty(ub))
+x <= ub;
+end
+if not(isempty(Aeq))
+Aeq*x == beq;
+end
+
+cvx_end
+end
 
 if isequal(cvx_status,'Solved')
     flag_val = 1; 

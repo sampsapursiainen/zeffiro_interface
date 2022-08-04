@@ -1,4 +1,4 @@
-function [x, function_val, flag_val] = zef_cvx_linprog(z,A,b,Aeq,beq,lb,ub,varargin)
+function [x, function_val, flag_val] = zef_cvx_linprog(Q,z,A,b,Aeq,beq,lb,ub,varargin)
 %Finds the minimum of z'*x with respect to x and with the constraint A x  - b <= 0
 %Outputs: x (size: [n x 1]), flag_val (1 if the solution was found -2
 %otherwise)
@@ -35,11 +35,11 @@ if isfield(opts,'TolVal')
     cvx_precision(opts.TolVal)
 end
 
-
 if isequal(opts.Display,'off')
+
 cvx_begin quiet
 variable x(n)
-minimize sum(z.*x)
+minimize 0.5*sum(x.*Q*x) + sum(z.*x)
 subject to: 
 A*x - b <= 0; %#ok<*VUNUS>
 if not(isempty(lb))
@@ -51,11 +51,12 @@ end
 if not(isempty(Aeq))
 Aeq*x == beq;
 end
+
 cvx_end
 else
-   cvx_begin 
+    cvx_begin 
 variable x(n)
-minimize sum(z.*x)
+minimize 0.5*sum(x.*(Q*x)) + sum(z'.*x)
 subject to: 
 A*x - b <= 0; %#ok<*VUNUS>
 if not(isempty(lb))
@@ -67,7 +68,8 @@ end
 if not(isempty(Aeq))
 Aeq*x == beq;
 end
-cvx_end 
+
+cvx_end
 end
 
 if isequal(cvx_status,'Solved')

@@ -16,7 +16,7 @@ ES_off_field             = cell2mat(load_aux.field_source.avg_off_field')';
 ES_active_electrodes     = evalin('base','zef.ES_active_electrodes');
 
 ES_separation_angle      = evalin('base','zef.ES_separation_angle');
-ES_search_method         = evalin('base','zef.h_ES_search_method.Items{zef.ES_search_method}');
+ES_search_method         = evalin('base','zef.ES_search_method_list{zef.ES_search_method}');
 ES_max_current_channel   = evalin('base','zef.ES_max_current_channel');
 
 ES_relative_weight_nnz   = evalin('base','zef.ES_relative_weight_nnz');
