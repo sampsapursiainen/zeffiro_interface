@@ -136,8 +136,10 @@ if ismember(zef.ES_search_type,6)
         zef.ES_acceptable_threshold         = str2double(zef.h_ES_parameter_table.Data{12,2});
         zef.ES_boundary_color_limit         = str2double(zef.h_ES_parameter_table.Data{13,2});
         zef.ES_roi_range                    = str2double(zef.h_ES_parameter_table.Data{14,2});
- zef.ES_max_time = str2double(zef.h_ES_parameter_table.Data{15,2}); 
-  zef.ES_display = (zef.h_ES_parameter_table.Data{16,2});
- 
+ zef.ES_solver_tolerance = str2double(zef.h_ES_parameter_table.Data{15,2}); 
+  zef.ES_max_n_iterations = str2double(zef.h_ES_parameter_table.Data{16,2});
+  zef.ES_algorithm =  (zef.h_ES_parameter_table.Data{17,2});
+ zef.ES_max_time = str2double(zef.h_ES_parameter_table.Data{18,2});
+ zef.ES_display =  (zef.h_ES_parameter_table.Data{19,2});
 end
 

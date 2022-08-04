@@ -9,8 +9,8 @@ zef.ES_obj_fun                          = get(zef.h_ES_obj_fun,'Value');
 zef.ES_obj_fun_2                        = get(zef.h_ES_obj_fun_2,'Value');
 zef.ES_fixed_active_electrodes          = get(zef.h_ES_fixed_active_electrodes,'Value');
 
-zef_ES_init_parameter_table;
-
 if not(ismember(zef.ES_search_method,zef.h_ES_search_method.ItemsData))
     zef.ES_search_method = zef.h_ES_search_method.ItemsData(1);
 end
+
+zef_ES_init_parameter_table;

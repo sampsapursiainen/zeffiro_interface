@@ -39,7 +39,7 @@ if isequal(opts.Display,'off')
 
 cvx_begin quiet
 variable x(n)
-minimize 0.5*sum(x.*Q*x) + sum(z.*x)
+minimize norm(Q*x-z)
 subject to: 
 A*x - b <= 0; %#ok<*VUNUS>
 if not(isempty(lb))

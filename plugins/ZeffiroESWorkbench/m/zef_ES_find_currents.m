@@ -17,7 +17,7 @@ zef_data.score_dose = evalin('base','zef.ES_score_dose');
 zef_data.solver_package = evalin('base','zef.ES_solver_package');
 
 simplex = evalin('base','zef.ES_simplex');
-display = evalin('base','zef.ES_simplex');
+display = evalin('base','zef.ES_display');
 absolute_tolerance = evalin('base','zef.ES_absolute_tolerance');
 relative_tolerance = evalin('base','zef.ES_relative_tolerance');
 
@@ -55,7 +55,6 @@ else
 end
 
 zef_data.Solver = zef_data.solver_package;
-zef_data.opts.Display    = 'off';
 zef_data.opts.Simplex = simplex;
 
 if isinf(max_n_iterations)
@@ -83,8 +82,7 @@ if isequal(lower(zef_data.solver_package),'matlab')
      zef_data.h_linprog = str2func('linprog');
     else
         zef_data.h_quadprog = str2func('quadprog');
-    end
-   
+        end
     cd(pwd_aux)
 elseif not(isempty(solver_path))
     pwd_aux = pwd;

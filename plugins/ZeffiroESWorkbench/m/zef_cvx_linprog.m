@@ -35,7 +35,6 @@ if isfield(opts,'TolVal')
     cvx_precision(opts.TolVal)
 end
 
-
 if isequal(opts.Display,'off')
 cvx_begin quiet
 variable x(n)
