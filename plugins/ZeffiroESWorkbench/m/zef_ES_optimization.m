@@ -51,7 +51,7 @@ zef.h_ES_parameter_table.CellEditCallback                = 'zef_ES_optimization_
 %% Button
 zef.h_ES_plot_data.ButtonPushedFcn                       = 'zef_ES_plot_data;';
 zef.h_ES_update_reconstruction.ButtonPushedFcn           = 'zef_ES_update_reconstruction; zef_plot_meshes;';
-zef.h_ES_find_currents_button.ButtonPushedFcn            = 'zef_ES_find_currents;';%'question_aux = questdlg(''Confirm calculations?'',''ZI Help'',''Yes'',''No'', ''No''); switch question_aux; case ''Yes''; zef_ES_find_current; end;;';
+zef.h_ES_find_currents_button.ButtonPushedFcn            = 'question_aux = questdlg(''Confirm calculations?'',''ZI Help'',''Yes'',''No'', ''No''); switch question_aux; case ''Yes''; zef_ES_find_currents; end;;';
 %% Right-click
 zef.h_ES_plot_data_menu_item_1.MenuSelectedFcn           = 'zef_ES_update_reconstruction; zef_plot_meshes; zef_ES_plot_current_pattern;';
 zef.h_ES_plot_data_menu_item_2.MenuSelectedFcn           = 'zef_ES_plot_barplot;';
