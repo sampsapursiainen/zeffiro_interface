@@ -2,7 +2,7 @@ zef_ES_update_parameter_values;
 
 zef.ES_search_method                    = get(zef.h_ES_search_method,'Value');
 zef.ES_search_type                      = get(zef.h_ES_search_type,'Value');
-zef.ES_solver_package = zef.h_ES_search_type.Items{zef.ES_search_type};
+zef.ES_solver_package = zef.h_ES_search_type.Items{find(ismember(zef.h_ES_search_type.ItemsData,zef.ES_search_type))};
 zef.ES_inv_colormap                     = get(zef.h_ES_inv_colormap,'Value');
 zef.ES_plot_type                        = get(zef.h_ES_plot_type,'Value');
 zef.ES_obj_fun                          = get(zef.h_ES_obj_fun,'Value');

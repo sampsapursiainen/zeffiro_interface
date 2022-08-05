@@ -96,3 +96,4 @@ zef.h_ES_workbench_relative_size = zef_get_relative_size(zef.h_ES_workbench);
 set(zef.h_ES_workbench,'SizeChangedFcn', 'zef.h_ES_workbench_current_size = zef_change_size_function(zef.h_ES_workbench, zef.h_ES_workbench_current_size, zef.h_ES_workbench_relative_size);');
 
 zef_ES_init_parameter_table;
+zef_ES_optimization_update;
