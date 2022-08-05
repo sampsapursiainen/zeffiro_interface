@@ -6,7 +6,7 @@ switch evalin('base','zef.ES_plot_type')
                  %   case 1
                   %      zef.h_barplot_ES = zef_ES_plot_barplot;
                    % case 2
-                        [~, sr, sc] = zef_ES_objective_function;
+                        [sr, sc] = zef_ES_objective_function(zef_ES_table);
                         if isempty(sr)
                             sr = 1;
                         end
