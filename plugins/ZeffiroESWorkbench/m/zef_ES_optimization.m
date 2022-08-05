@@ -23,7 +23,7 @@ zef.h_ES_plot_data_menu_item_4    = zef_data.h_ES_plot_data_menu_item_4;
 zef.h_ES_plot_data_menu_item_5    = zef_data.h_ES_plot_data_menu_item_5;
 
 clear zef_data;
-zef.h_ES_search_type.Items = {'Matlab','SDPT3 (CVX)','SeDuMi (CVX)','OSQP'};
+zef.h_ES_search_type.Items = {'Matlab','SDPT3 (CVX)','SeDuMi (CVX)'};
 zef.h_ES_search_type.ValueChangedFcn = 'zef_ES_optimization_update;';
 zef.h_ES_search_type.ItemsData                           = 1:length(zef.h_ES_search_type.Items);
 if not(isempty(zef.mosek_path))
