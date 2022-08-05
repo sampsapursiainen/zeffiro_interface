@@ -25,7 +25,7 @@
 %     end
     
    % if zef.ES_search_type == 2
-        [~, sr, sc] = zef_ES_objective_function;
+        [sr, sc] = zef_ES_objective_function(zef_ES_table);
         zef.h_ES_optimizer_properties_table.Data{1,1} = 'Current density at source location';
         zef.h_ES_optimizer_properties_table.Data{1,2} = zef.y_ES_interval.field_source.magnitude{sr,sc};
         zef.h_ES_optimizer_properties_table.Data{2,1} = 'Magnitude error';
