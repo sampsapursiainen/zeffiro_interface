@@ -113,7 +113,7 @@ end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
-if not(isfield(zef,'ES_acceptable_threshold (A/m2)'))
+if not(isfield(zef,'ES_acceptable_threshold'))
     zef.ES_acceptable_threshold = 0.80;
 end
 if not(isfield(zef,'ES_boundary_color_limit'))
