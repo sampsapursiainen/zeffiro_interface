@@ -8,6 +8,8 @@ zef.ES_plot_type                        = get(zef.h_ES_plot_type,'Value');
 zef.ES_obj_fun                          = get(zef.h_ES_obj_fun,'Value');
 zef.ES_obj_fun_2                        = get(zef.h_ES_obj_fun_2,'Value');
 zef.ES_fixed_active_electrodes          = get(zef.h_ES_fixed_active_electrodes,'Value');
+zef.ES_algortihm = zef.ES_algorithm_list(zef.h_ES_algorithm.Value);
+zef.ES_threshold_condition = zef.h_ES_threshold_condition.Value;
 
 if not(ismember(zef.ES_search_method,zef.h_ES_search_method.ItemsData))
     zef.ES_search_method = zef.h_ES_search_method.ItemsData(1);

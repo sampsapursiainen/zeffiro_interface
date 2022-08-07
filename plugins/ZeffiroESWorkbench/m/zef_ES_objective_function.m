@@ -1,51 +1,80 @@
-function [sr, sc] = zef_ES_objective_function(vec, varargin)
-switch nargin
-    case 1
-        if     evalin('base','zef.ES_obj_fun') == 5
-            obj1 = 9;
-        elseif evalin('base','zef.ES_obj_fun') == 2
-            obj1 = 5;
+function [sr, sc] = zef_ES_objective_function(varargin)
+ 
+[~, ~, metacriteria_list, metacriteria_type] = zef_ES_table([]);
+
+obj1 = [];
+obj2 = [];
+thre_aux = [];
+thre_type = [];
+vec = [];
+
+if not(isempty(varargin))
+    vec = varargin{1};
+        if length(varargin) > 1
+        obj1 = varargin{2};
         end
-        thre_aux = evalin('base','zef.ES_acceptable_threshold');
-        
-        switch evalin('base','zef.ES_obj_fun_2');
-            case {1,3,4}
-                ES_optimize_condition = 'minimum';
-            case {2,5}
-                ES_optimize_condition = 'maximum';
-        end
-        
-    case {2,3} %Intensity
-        if     strcmpi('residual', varargin{1});        obj1 = 2;
-        elseif strcmpi('intensity', varargin{1});       obj1 = 5;
-        elseif strcmpi('angle', varargin{1});           obj1 = 6;
-        elseif strcmpi('relative error', varargin{1});  obj1 = 8;
-        elseif strcmpi('focality', varargin{1});        obj1 = 9;
-        end
-        
-        if nargin == 2; thre_aux = 0.08;
-        else;           thre_aux = varargin{2};
-        end
-        
-        switch varargin{1}
-            case {'residual','angle', 'relative error'}
-                ES_optimize_condition = 'minimum';
-            case {'intensity','focality'}
-                ES_optimize_condition = 'maximum';
-        end
+    if length(varargin) > 2
+        obj2 = varargin{3};
+    end
+    if length(varargin) > 3
+        thre_aux = varargin{4};
+    end
+     if length(varargin) > 4
+        thre_type = varargin{5};
+    end
 end
 
-obj_fun_thresh = vec.(obj1){1,1};
+if isempty(obj1)
+    vec = zef_ES_table;
+end
 
-if     isequal(ES_optimize_condition, 'minimum')
-    [Idx] = find(abs(obj_fun_thresh(:)) <= thre_aux);
-    obj_fun_2 = vec.(obj1){1,1};
+if isempty(obj1)
+    obj1 = evalin('base','zef.ES_obj_fun');
+end
+
+if isempty(obj2)
+    obj2 = evalin('base','zef.ES_obj_fun_2');
+end
+
+if isempty(thre_aux)
+thre_aux = evalin('base','zef.ES_acceptable_threshold');
+end
+
+if isempty(thre_type)
+thre_type = evalin('base','zef.ES_threshold_condition');
+end
+
+obj_fun_1 = vec.(metacriteria_list{obj1}){1};
+obj_fun_2 = vec.(metacriteria_list{obj2}){1};
+
+if isequal(obj1,obj2)
+    
+if   isequal(metacriteria_type{obj1}, 'minimum')
+[~, Idx] = min(abs(obj_fun_1(:)));
+elseif isequal(metacriteria_type{obj1}, 'maximum')
+ [~, Idx] = max(abs(obj_fun_1(:)));
+end
+
+[sr, sc] = ind2sub(size(obj_fun_1),Idx);
+
+else
+    
+if isequal(thre_type,1)
+  thre_aux = thre_aux*max(abs(obj_fun_1(:)));
+end
+
+if   isequal(metacriteria_type{obj1}, 'minimum')
+    [Idx] = find(abs(obj_fun_1(:)) <= thre_aux);
+elseif isequal(metacriteria_type{obj1}, 'maximum')
+     [Idx] = find(abs(obj_fun_1(:)) >= thre_aux);
+end
+
+if   isequal(metacriteria_type{obj2}, 'minimum')
     [~, Idx_2] = min(obj_fun_2(Idx));
-elseif isequal(ES_optimize_condition, 'maximum')
-    [Idx] = find(abs(obj_fun_thresh(:)) >= thre_aux);
-    obj_fun_2 = vec.(obj1){1,1};
+elseif isequal(metacriteria_type{obj2}, 'maximum')
     [~, Idx_2] = max(obj_fun_2(Idx));
 end
 
 [sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));
+
 end

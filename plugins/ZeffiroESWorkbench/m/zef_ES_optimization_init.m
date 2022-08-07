@@ -1,5 +1,6 @@
 zef.ES_search_method_list = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
 zef.ES_search_type_list = {'Matlab','SDPT3 (CVX)','SeDuMi (CVX)','MOSEK','Gurobi'};
+zef.ES_algorithm_list = {'Interior-point','Interior-point legacy','Dual simplex','Primal simplex'};
 
 if not(isfield(zef,'ES_absolute_tolerance'))
     zef.ES_absolute_tolerance = 1E-03;
@@ -31,9 +32,6 @@ end
 if not(isfield(zef,'ES_obj_fun_2'))
     zef.ES_obj_fun_2 = 4;
 end
-if not(isfield(zef,'ES_solver_package'))
-    zef.ES_solver_package = 'sdpt3';
-end
 if not(isfield(zef,'ES_solver_tolerance'))
     zef.ES_solver_tolerance = 1E-6;
 end
@@ -49,14 +47,11 @@ end
 if not(isfield(zef,'ES_constraint_tolerance'))
     zef.ES_constraint_tolerance = 1E-6;
 end
-if not(isfield(zef,'ES_algorithm'))
-    zef.ES_algorithm = 'dual-simplex';
-end
 if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
 end
 if not(isfield(zef,'ES_relative_weight_nnz'))
-    zef.ES_relative_weight_nnz = 1e-4;
+    zef.ES_relative_weight_nnz = 1e-3;
 end
 if not(isfield(zef,'ES_fixed_active_electrodes'))
     zef.ES_fixed_active_electrodes = 0;
@@ -119,7 +114,7 @@ if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
 if not(isfield(zef,'ES_acceptable_threshold (A/m2)'))
-    zef.ES_acceptable_threshold = 0.11;
+    zef.ES_acceptable_threshold = 0.80;
 end
 if not(isfield(zef,'ES_boundary_color_limit'))
     zef.ES_boundary_color_limit = 0.00025;

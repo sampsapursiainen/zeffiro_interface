@@ -249,18 +249,20 @@ if not(isempty(zef_data.active_electrodes))
     y_ES = y_ES_aux;
 end
 
-%% Flag value from LP solver
+%% Flag value 
 if ismember(flag_val,[1 3])
     ES_optimized_current_density  = reshape(zef_data.L_aux*y_ES,3,size(zef_data.L_aux,1)/3);
     if not(isempty(zef_data.active_electrodes))
-        residual = norm(L_ES_projection*y_ES(zef_data.active_electrodes)-x_ES_projection,1);
-    else
-        residual = norm(L_ES_projection*y_ES-x_ES_projection,1);
+        residual_1 = L_ES_projection'*x_ES_projection;
+        residual_1 = residual_1/norm(residual_1,2);
+        residual_2 = L_ES_projection'*(L_ES_projection*y_ES(zef_data.active_electrodes));
+        residual_2 = residual_2/norm(residual_2,2);
+        residual = norm(residual_2 - residual_1,2);
     end
 else
     y_ES = zeros(size(zef_data.L_aux,2),1);
     ES_optimized_current_density = zeros(size(zef_data.L_aux,2),1);
-    residual = 0;
+    residual = 1;
 end
 
 source_directions = zef_data.source_directions;
