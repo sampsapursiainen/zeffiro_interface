@@ -14,7 +14,7 @@ set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontSize'),'Font
 zef.h_ES_optimizer_properties_copy_all.MenuSelectedFcn = 'zef.ES_temp = zef.h_ES_optimizer_properties_table.Data''; clipboard(''copy'',sprintf(''%s\t%5.10g\n'', zef.ES_temp{:})); zef = rmfield(zef,''ES_temp'');';
 
 %% Autoresize
-set(zef.h_ES_optimizer_properties,'Name',['ZEFFIRO Interface: ES optimizer properties ' num2str(1+length(findobj(groot,'-regexp','Name','ZEFFIRO Interface: ES optimizer properties*')))]);
+set(zef.h_ES_optimizer_properties,'Name',['ZEFFIRO Interface: ES optimizer properties ' num2str(1+length(findall(groot,'-regexp','Name','ZEFFIRO Interface: ES optimizer properties*')))]);
 set(zef.h_ES_optimizer_properties,'AutoResizeChildren','off');
 zef.h_ES_optimizer_properties_current_size = get(zef.h_ES_optimizer_properties,'Position');
 set(zef.h_ES_optimizer_properties,'SizeChangedFcn', 'zef.h_ES_optimizer_properties_current_size = zef_change_size_function(zef.h_ES_optimizer_properties, zef.h_ES_optimizer_properties_current_size);');

@@ -31,8 +31,8 @@ try
 cvx_solver(solver_package)
 end
 
-if isfield(opts,'TolVal')
-    cvx_precision(opts.TolVal)
+if isfield(opts,'TolFun')
+    cvx_precision(opts.TolFun)
 end
 
 if isequal(opts.Display,'off')

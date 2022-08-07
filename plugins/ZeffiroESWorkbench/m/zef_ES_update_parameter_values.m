@@ -48,6 +48,7 @@ if ismember(zef.ES_search_type,2)
         zef.ES_roi_range                    = str2double(zef.h_ES_parameter_table.Data{13,2});
         zef.ES_solver_tolerance                   = str2double(zef.h_ES_parameter_table.Data{14,2});
  zef.ES_display = (zef.h_ES_parameter_table.Data{15,2});
+ zef.ES_algorithm = zef.ES_search_type_list{zef.h_ES_search_type.Value};
 end
 
 if ismember(zef.ES_search_type,3)
@@ -67,6 +68,7 @@ if ismember(zef.ES_search_type,3)
         zef.ES_roi_range                    = str2double(zef.h_ES_parameter_table.Data{13,2});
         zef.ES_solver_tolerance                   = str2double(zef.h_ES_parameter_table.Data{14,2});
     zef.ES_display = (zef.h_ES_parameter_table.Data{15,2});
+    zef.ES_algorithm = zef.ES_search_type_list{zef.h_ES_search_type.Value};
         
 end
 
