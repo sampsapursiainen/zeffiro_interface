@@ -99,7 +99,7 @@ zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum (dB)';
         zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_solver_tolerance);
          zef.h_ES_parameter_table.Data{15,1} = 'Display';
         zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_display);
-
+        zef.ES_algorithm = 'interior-point';
 
 end
 
@@ -137,7 +137,7 @@ zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum (dB)';
         zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_solver_tolerance);
          zef.h_ES_parameter_table.Data{15,1} = 'Display';
         zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_display);
-
+        zef.ES_algorithm = 'interior-point';
 
 end
 
