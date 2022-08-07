@@ -10,8 +10,9 @@ switch nargin
         error('Invalid number of arguments inserted.')
 end
 %% Figure and Axes
-f = figure('Name','ZEFFIRO Interface: Error chart', ...
-    'NumberTitle','off', ...
+n_chart = 1 + length(findobj(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
+f = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart) ', ' vec.Properties.Description], ...
+    'NumberTitle','off', ... 
     'ToolBar','none', ...
     'MenuBar','none');
 pos_aux = findall(groot,'Name','ZEFFIRO Interface: ES Workbench').Position;
@@ -19,15 +20,17 @@ set(f,'Position',[pos_aux(1) pos_aux(2) 800 600]);
 pbaspect([1 1 1])
 %% Tab properties
 h = uitabgroup();
-tab_titles = [{'Current pattern'}; {'Volume current'}];
+tab_titles = [{'Current pattern'}; {'Volume current'}; {'Algorithm'}];
 fieldnames_table = {};
-fieldnames_table{1} = fieldnames(vec(:,1:4));
-fieldnames_table{2} = fieldnames(vec(:,[5:7,9]));
+fieldnames_table{1} = fieldnames(vec(:,[3 2 4 10]));
+fieldnames_table{2} = fieldnames(vec(:,[5 7 9 6]));
+fieldnames_table{3} = fieldnames(vec(:,[11 14]));
 
-for i_idx = 1:2
+for i_idx = 1:3
+    fieldnames_table{i_idx} = fieldnames_table{i_idx}(1:end-3);
     tabs_aux = uitab(h, 'title', tab_titles{i_idx});
     axes('parent', tabs_aux);
-    for w = 1:4
+    for w = 1:length(fieldnames_table{i_idx})
         printing_imagesc(vec, w, fieldnames_table{i_idx});
     end
 end
@@ -43,15 +46,15 @@ end
         ax.XLabel.String       = 'Alpha parameter (dB)';
         ax.XLabel.FontSize     = 10;
         ax.XLabel.FontWeight   = 'bold';
-        ax.XTickLabel          = {num2str(db(vec.('Alpha'){:}),'%1.0f')};
-        ax.XTick               = 1:length(vec.('Alpha'){:});
+        ax.XTickLabel          = {num2str((vec.('Alpha (dB)'){:}),'%1.0f')};
+        ax.XTick               = 1:length(vec.('Alpha (dB)'){:});
         ax.XTickLabelRotation  = 90;
         
         ax.YLabel.String       = 'Nuisance field weight (dB)';
         ax.YLabel.FontSize     = 10;
         ax.YLabel.FontWeight   = 'bold';
-        ax.YTickLabel          = {num2str(db(vec.('Beta'){:}),'%1.0f')};
-        ax.YTick               = 1:length(vec.('Beta'){:});
+        ax.YTickLabel          = {num2str((vec.('Beta (dB)'){:}),'%1.0f')};
+        ax.YTick               = 1:length(vec.('Beta (dB)'){:});
         ax.YTickLabelRotation  = 0;
         
         %%% Colorbar
@@ -69,15 +72,15 @@ end
         cb.Ticks = T;
         
         if         strcmp(fieldnames_table{w}, 'Total dose')
-            TL = arrayfun(@(x) sprintf('%1.1e', x), T, 'un', 0);
+            TL = arrayfun(@(x) sprintf('%1.3e', x), T, 'un', 0);
         elseif strcmp(fieldnames_table{w}, 'Maximum current (A)')
-            TL = arrayfun(@(x) sprintf('%1.1e', x), T, 'un', 0);
+            TL = arrayfun(@(x) sprintf('%1.3e', x), T, 'un', 0);
         elseif     strcmp(fieldnames_table{w}, 'Angle error (deg)')
-            TL = arrayfun(@(x) sprintf('%3.2f', x), T, 'un', 0);
+            TL = arrayfun(@(x) sprintf('%3.3f', x), T, 'un', 0);
         elseif     strcmp(fieldnames_table{w}, 'Relative magnitude error')
-            TL = arrayfun(@(x) sprintf('%1.4f', x), T, 'un', 0);
+            TL = arrayfun(@(x) sprintf('%1.3f', x), T, 'un', 0);
         else
-            TL = arrayfun(@(x) sprintf('%1.2f', x), T, 'un', 0);
+            TL = arrayfun(@(x) sprintf('%1.3f', x), T, 'un', 0);
         end
         set(cb, 'TickLabels', TL);
         
@@ -86,8 +89,8 @@ end
         plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
         plot(sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
         lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
-        lgd.String(1) = {['\alpha : ' num2str(db(vec.('Alpha'){:,:}(sc)), '%1.0f')]};
-        lgd.String(2) = {['\epsilon : ' num2str(db(vec.('Alpha'){:,:}(sr)), '%1.0f')]};
+        lgd.String(1) = {['\alpha : ' num2str((vec.('Alpha (dB)'){:,:}(sc)), '%1.0f')]};
+        lgd.String(2) = {['\epsilon : ' num2str((vec.('Beta (dB)'){:,:}(sr)), '%1.0f')]};
         lgd.AutoUpdate = 'off';
         plot(sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
         

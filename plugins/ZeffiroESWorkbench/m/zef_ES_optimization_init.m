@@ -1,4 +1,5 @@
 zef.ES_search_method_list = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
+zef.ES_search_type_list = {'Matlab','SDPT3 (CVX)','SeDuMi (CVX)','MOSEK','Gurobi'};
 
 if not(isfield(zef,'ES_absolute_tolerance'))
     zef.ES_absolute_tolerance = 1E-03;
@@ -34,19 +35,19 @@ if not(isfield(zef,'ES_solver_package'))
     zef.ES_solver_package = 'sdpt3';
 end
 if not(isfield(zef,'ES_solver_tolerance'))
-    zef.ES_solver_tolerance = 1E-10;
+    zef.ES_solver_tolerance = 1E-6;
 end
 if not(isfield(zef,'ES_max_n_iterations'))
-    zef.ES_max_n_iterations = 1000000;
+    zef.ES_max_n_iterations = 100000;
 end
 if not(isfield(zef,'ES_step_tolerance'))
-    zef.ES_step_tolerance = 1E-10;
+    zef.ES_step_tolerance = 1E-6;
 end
 if not(isfield(zef,'ES_max_time'))
     zef.ES_max_time = 3600;
 end
 if not(isfield(zef,'ES_constraint_tolerance'))
-    zef.ES_constraint_tolerance = 1E-10;
+    zef.ES_constraint_tolerance = 1E-6;
 end
 if not(isfield(zef,'ES_algorithm'))
     zef.ES_algorithm = 'dual-simplex';
@@ -55,7 +56,7 @@ if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
 end
 if not(isfield(zef,'ES_relative_weight_nnz'))
-    zef.ES_relative_weight_nnz = 100;
+    zef.ES_relative_weight_nnz = 1e-4;
 end
 if not(isfield(zef,'ES_fixed_active_electrodes'))
     zef.ES_fixed_active_electrodes = 0;

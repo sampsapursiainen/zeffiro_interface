@@ -5,7 +5,7 @@ if nargin < 4
  Aeq = [];
 end
 
-if nargin > 5
+if nargin < 5
 beq = [];
     end
 

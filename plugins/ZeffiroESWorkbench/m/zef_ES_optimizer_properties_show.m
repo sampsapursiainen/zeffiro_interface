@@ -3,47 +3,34 @@
 
     figure(zef.h_ES_optimizer_properties);
 
-%     if zef.ES_search_type == 1
-%         zef.h_ES_optimizer_properties_table.Data{1,1} = 'Current density at source location';
-%         zef.h_ES_optimizer_properties_table.Data{1,2} = zef.y_ES_single.field_source.magnitude;
-%         zef.h_ES_optimizer_properties_table.Data{2,1} = 'Magnitude error';
-%         zef.h_ES_optimizer_properties_table.Data{2,2} = zef.y_ES_single.field_source.relative_norm;
-%         zef.h_ES_optimizer_properties_table.Data{3,1} = 'Angle error';
-%         zef.h_ES_optimizer_properties_table.Data{3,2} = zef.y_ES_single.field_source.angle;
-%         zef.h_ES_optimizer_properties_table.Data{4,1} = 'Relative error';
-%         zef.h_ES_optimizer_properties_table.Data{4,2} = zef.y_ES_single.field_source.relative_error;
-%         zef.h_ES_optimizer_properties_table.Data{5,1} = 'Maximum current';
-%         zef.h_ES_optimizer_properties_table.Data{5,2} = max(abs(zef.y_ES_single.y_ES));
-%         zef.h_ES_optimizer_properties_table.Data{6,1} = 'Total dose';
-%         zef.h_ES_optimizer_properties_table.Data{6,2} = sum(abs(zef.y_ES_single.y_ES));
-%         zef.h_ES_optimizer_properties_table.Data{7,1} = 'Nuisance field ';
-%         zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_single.field_source.avg_off_field;
-%         zef.h_ES_optimizer_properties_table.Data{8,1} = 'Alpha';
-%         zef.h_ES_optimizer_properties_table.Data{8,2} = zef.y_ES_single.alpha;
-%         zef.h_ES_optimizer_properties_table.Data{9,1} = 'Nuisance field weight';
-%         zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_single.beta;
-%     end
-    
-   % if zef.ES_search_type == 2
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
-        zef.h_ES_optimizer_properties_table.Data{1,1} = 'Current density at source location';
-        zef.h_ES_optimizer_properties_table.Data{1,2} = zef.y_ES_interval.field_source.magnitude{sr,sc};
-        zef.h_ES_optimizer_properties_table.Data{2,1} = 'Magnitude error';
-        zef.h_ES_optimizer_properties_table.Data{2,2} = zef.y_ES_interval.field_source.relative_norm_error{sr,sc};
-        zef.h_ES_optimizer_properties_table.Data{3,1} = 'Angle error';
-        zef.h_ES_optimizer_properties_table.Data{3,2} = zef.y_ES_interval.field_source.angle{sr,sc};
-        zef.h_ES_optimizer_properties_table.Data{4,1} = 'Relative error';
-        zef.h_ES_optimizer_properties_table.Data{4,2} = zef.y_ES_interval.field_source.relative_error{sr,sc};
-        zef.h_ES_optimizer_properties_table.Data{5,1} = 'Maximum current';
-        zef.h_ES_optimizer_properties_table.Data{5,2} = max(abs(zef.y_ES_interval.y_ES{sr,sc}));
-        zef.h_ES_optimizer_properties_table.Data{6,1} = 'Total dose';
-        zef.h_ES_optimizer_properties_table.Data{6,2} = sum(abs(zef.y_ES_interval.y_ES{sr,sc}));
-        zef.h_ES_optimizer_properties_table.Data{7,1} = 'Nuisance field';
-        zef.h_ES_optimizer_properties_table.Data{7,2} = zef.y_ES_interval.field_source.avg_off_field{sr,sc};     
-        zef.h_ES_optimizer_properties_table.Data{8,1} = 'Alpha';
-        zef.h_ES_optimizer_properties_table.Data{8,2} = zef.y_ES_interval.alpha(sc);
-        zef.h_ES_optimizer_properties_table.Data{9,1} = 'Nuiscane field weight';
-        zef.h_ES_optimizer_properties_table.Data{9,2} = zef.y_ES_interval.beta(sr);
- %   end
+    zef.table_aux = zef_ES_table;
 
-clear sr sc
+        [zef_i, zef_j] = zef_ES_objective_function(zef.table_aux);
+        
+        for zef_k = 1 : size(zef.table_aux,2)
+        
+        zef.h_ES_optimizer_properties_table.Data{zef_k,1} = zef.table_aux.Properties.VariableNames{zef_k};
+        if zef_k == 12
+        zef.h_ES_optimizer_properties_table.Data{zef_k,2} = round(zef.table_aux{1,zef_k}{1}(zef_j),4);
+        elseif zef_k == 13
+        zef.h_ES_optimizer_properties_table.Data{zef_k,2} = round(zef.table_aux{1,zef_k}{1}(zef_i),4);
+        else
+        zef.h_ES_optimizer_properties_table.Data{zef_k,2} = round(zef.table_aux{1,zef_k}{1}(zef_i,zef_j),4);  
+        end
+        
+        if zef_k <= 11
+        zef.h_ES_optimizer_properties_table.Data{zef_k,3} = zef_lattice_deviation(zef.table_aux{1,zef_k}{1},'avg',0.5,zef_i,zef_j);
+        zef.h_ES_optimizer_properties_table.Data{zef_k,4} = zef_lattice_deviation(zef.table_aux{1,zef_k}{1},'max',0.5,zef_i,zef_j);
+        end
+        
+        end
+        
+        zef_k = zef_k + 1;
+        
+        zef.h_ES_optimizer_properties_table.Data{zef_k,1} = 'Lattice run time (ms)';
+        zef.h_ES_optimizer_properties_table.Data{zef_k,2} = sum(zef.table_aux{1,11}{1},'all');
+        
+        zef.h_ES_optimizer_properties.Name = [zef.h_ES_optimizer_properties.Name ' . ' zef.table_aux.Properties.Description];
+        
+clear zef_i zef_j zef_k;
+zef = rmfield(zef,'table_aux');
