@@ -27,7 +27,7 @@
         
         zef_k = zef_k + 1;
         
-        zef.h_ES_optimizer_properties_table.Data{zef_k,1} = 'Lattice run time (ms)';
+        zef.h_ES_optimizer_properties_table.Data{zef_k,1} = 'Lattice run time (s)';
         zef.h_ES_optimizer_properties_table.Data{zef_k,2} = sum(zef.table_aux{1,11}{1},'all');
         
         zef.h_ES_optimizer_properties.Name = [zef.h_ES_optimizer_properties.Name ' . ' zef.table_aux.Properties.Description];

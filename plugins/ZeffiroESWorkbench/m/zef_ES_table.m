@@ -32,7 +32,7 @@ ES_nnz             = cell2mat(load_aux.nnz')';
 for i = 1:size(load_aux.y_ES, 1)
     for j = 1:size(load_aux.y_ES, 2)
         ES_y(i,j)   =        1000* norm(cell2mat(load_aux.y_ES(i,j)), 1);
-        ES_max(i,j) =          1000*max(cell2mat(load_aux.y_ES(i,j)));
+        ES_max(i,j) =          1000*max(abs(cell2mat(load_aux.y_ES(i,j))));
         ES_cp_ratio(i,j) = 100*2*max(abs(cell2mat(load_aux.y_ES(i,j))))./sum(abs(cell2mat(load_aux.y_ES(i,j))));
     end
 end
