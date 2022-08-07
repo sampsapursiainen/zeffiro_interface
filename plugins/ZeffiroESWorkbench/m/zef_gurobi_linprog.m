@@ -35,11 +35,11 @@ end
 params.TimeLimit = options.MaxTime;
 params.BarIterLimit = options.MaxIter;
 params.IterationLimit = options.MaxIter;
-if isequal(options.Algorithm,'interior-point')
+if isequal(lower(options.Algorithm),'interior-point')
 params.Method = 2;
-elseif  isequal(options.Algorithm,'dual-simplex')
+elseif  isequal(lower(options.Algorithm),'dual-simplex')
     params.Method = 1;
-elseif isequal(options.Algorithm,'primal-simplex')
+elseif isequal(lower(options.Algorithm),'primal-simplex')
     params.Method = 0;
 end
 if isequal(options.Display,'off')

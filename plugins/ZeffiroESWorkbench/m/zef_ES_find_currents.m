@@ -66,7 +66,7 @@ zef_data.opts.TolAbs    = absolute_tolerance;
 zef_data.opts.TolRel  = relative_tolerance;
 zef_data.opts.MaxIter = max_n_iterations;
 zef_data.opts.MaxTime = max_time;
-zef_data.opts.Algorithm  = algorithm;
+zef_data.opts.Algorithm  = lower(algorithm);
 zef_data.opts.Display    = display;
 zef_data.opts.TolFun     = solver_tolerance;
 
