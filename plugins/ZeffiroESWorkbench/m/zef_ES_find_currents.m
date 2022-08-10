@@ -156,7 +156,7 @@ for i = 1 : lattice_size
             zef_data_2.y_ES_interval.residual{i,j}                     = residual{parallel_ind};
             zef_data_2.y_ES_interval.flag{i,j}                         = flag{parallel_ind};
             zef_data_2.y_ES_interval.source_amplitude{i,j}             = source_amplitude{parallel_ind};
-            zef_data_2.y_ES_interval.nnz{i,j}                          = zef_ES_rwnnz(y_ES{parallel_ind},zef_data.relative_weight_nnz);
+            zef_data_2.y_ES_interval.nnz{i,j}                          = zef_ES_rwnnz(y_ES{parallel_ind},zef_data.relative_weight_nnz,zef_data.ES_score_dose);
             
             if ismember(flag{parallel_ind},[1,3]) && norm(y_ES{parallel_ind},2) > 0
                 for running_index = 1:length(source_position_index{parallel_ind})

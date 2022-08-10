@@ -1,7 +1,5 @@
 function [current_score_nnz, y] = zef_ES_rwnnz(y, rwnnz, varargin)
 
-
-
 if any(isnan(y)) || isempty(y) 
     y = []; 
     current_score_nnz = 0; 
@@ -9,6 +7,7 @@ if any(isnan(y)) || isempty(y)
 end
     
 rwnnz = 1 - rwnnz;
+
 current_score_nnz_lim = Inf;
 if not(isempty(varargin))
     current_score_nnz_lim = varargin{1};
@@ -24,7 +23,7 @@ if not(isequal(current_score_nnz_lim, 2))   %evalin('base','zef.h_ES_fixed_activ
         current_score_nnz = 0;
     else
         sorted_y_normalized = cumsum(sorted_y)/(sorted_sum_y);
-        current_score_nnz = find(round(sorted_y_normalized,9) >= rwnnz,1);
+        current_score_nnz = find(sorted_y_normalized >= rwnnz,1);
         current_score_nnz = min(current_score_nnz, current_score_nnz_lim);
         current_score_ind = find(abs(y) < sorted_y(current_score_nnz));
     end
@@ -51,7 +50,7 @@ else
 
     sorted_y = sorted_y_positive(:);
     sorted_y_normalized = cumsum(sorted_y)/sum(sorted_y);
-    current_score_nnz = find(round(sorted_y_normalized,9) >= rwnnz,1);
+    current_score_nnz = find(sorted_y_normalized >= rwnnz,1);
     if not(isempty(current_score_nnz))
         current_score_nnz = min(current_score_nnz, current_score_nnz_lim_positive);
         current_score_ind_positive = find(y_positive < sorted_y(current_score_nnz));
@@ -61,7 +60,7 @@ else
 
     sorted_y = sorted_y_negative(:);
     sorted_y_normalized = cumsum(sorted_y)/sum(sorted_y);
-    current_score_nnz = find(round(sorted_y_normalized,9) >= rwnnz,1);
+    current_score_nnz = find(sorted_y_normalized >= rwnnz,1);
     if not(isempty(current_score_nnz))
         current_score_nnz = min(current_score_nnz, current_score_nnz_lim_negative);
         current_score_ind_negative = find(y_negative < sorted_y(current_score_nnz));
@@ -69,8 +68,9 @@ else
         current_score_ind_negative = [1 : length(y_negative)]';
     end
 
-    y(intersect(current_score_ind_positive,current_score_ind_negative)) = 0;
-    
+ y = y(intersect(current_score_ind_positive,current_score_ind_negative));
+
+  
 end
 
 end
