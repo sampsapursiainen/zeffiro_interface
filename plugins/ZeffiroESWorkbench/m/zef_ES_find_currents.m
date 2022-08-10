@@ -47,6 +47,7 @@ else
         zef_data.opts = optimset('quadprog');
         end;
     cd(pwd_aux)
+    end
 end
 
 zef_data.Solver = zef_data.solver_package;
@@ -111,7 +112,6 @@ wait_bar_temp = waitbar([0 0],sprintf(['Optimizer: ' zef_data.solver_package ', 
     'Name','ZEFFIRO Interface: ES Optimization...', ...
     'CreateCancelbtn','setappdata(gcbf,''canceling'',1)', ...
     'Visible','on');
-
 
 %% The real task...
 zef_data_2.y_ES_interval = [];
