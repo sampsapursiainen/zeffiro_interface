@@ -60,19 +60,19 @@ end
 else
     
 if isequal(thre_type,1)
-  thre_aux = thre_aux*max(abs(obj_fun_1(:)));
+  thre_aux = thre_aux*max((obj_fun_1(:)));
 end
 
 if   isequal(metacriteria_type{obj1}, 'minimum')
-    [Idx] = find(abs(obj_fun_1(:)) <= thre_aux);
+    [Idx] = find((obj_fun_1(:)) <= thre_aux);
 elseif isequal(metacriteria_type{obj1}, 'maximum')
-     [Idx] = find(abs(obj_fun_1(:)) >= thre_aux);
+     [Idx] = find((obj_fun_1(:)) >= thre_aux);
 end
 
 if   isequal(metacriteria_type{obj2}, 'minimum')
-    [~, Idx_2] = min(obj_fun_2(Idx));
+    [~, Idx_2] = min((obj_fun_2(Idx)));
 elseif isequal(metacriteria_type{obj2}, 'maximum')
-    [~, Idx_2] = max(obj_fun_2(Idx));
+    [~, Idx_2] = max((obj_fun_2(Idx)));
 end
 
 [sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));

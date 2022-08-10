@@ -36,10 +36,7 @@ end
 
 if isequal(lower(zef_data.solver_package),'mosek')
     if not(ismember(zef_data.search_method,[5]))
-    zef_data.opts = mskoptimset('linprog');
-    else
-        zef_data.opts = mskoptimset('quadprog');
-    end
+zef_data.opts = mskoptimset('linprog');
 else
      pwd_aux = pwd;
     dir_aux = [toolboxdir('optim') filesep 'optim'];

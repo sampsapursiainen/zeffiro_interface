@@ -29,14 +29,17 @@ clear zef_data;
 zef.h_ES_search_type.Items = zef.ES_search_type_list;
 zef.h_ES_search_type.ValueChangedFcn = 'zef_ES_optimization_update;';
 zef.h_ES_search_type.ItemsData                           = 1:length(zef.h_ES_search_type.Items);
+zef.h_ES_search_type.Value = zef.ES_search_type;
 
 zef.h_ES_algorithm.Items = zef.ES_algorithm_list;
 zef.h_ES_algorithm.ValueChangedFcn = 'zef_ES_optimization_update;';
 zef.h_ES_algorithm.ItemsData                           = 1:length(zef.h_ES_algorithm.Items);
+zef.h_ES_algorithm.Value = find(ismember(zef.h_ES_algorithm.Items,zef.ES_algorithm),1);
 
 zef.h_ES_threshold_condition.Items = {'Relative','Absolute'};
 zef.h_ES_threshold_condition.ValueChangedFcn = 'zef_ES_optimization_update;';
 zef.h_ES_threshold_condition.ItemsData = 1:length(zef.h_ES_threshold_condition.Items);
+zef.h_ES_threshold_condition.Value =   zef.ES_threshold_condition;
 
 if not(ismember(zef.ES_search_type,zef.h_ES_search_type.ItemsData))
    zef.h_ES_search_type.Value                               = 1;
