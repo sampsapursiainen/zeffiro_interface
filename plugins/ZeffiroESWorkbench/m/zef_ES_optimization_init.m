@@ -11,6 +11,9 @@ end
 if not(isfield(zef,'ES_simplex'))
     zef.ES_simplex = 'none';
 end
+if not(isfield(zef,'ES_algorithm'))
+    zef.ES_simplex = 'interior-point';
+end
 if not(isfield(zef,'ES_display'))
     zef.ES_display = 'off';
 end
