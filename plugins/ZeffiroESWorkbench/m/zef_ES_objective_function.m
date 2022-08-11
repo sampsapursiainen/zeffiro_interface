@@ -64,15 +64,21 @@ if isequal(thre_type,1)
 end
 
 if   isequal(metacriteria_type{obj1}, 'minimum')
-    [Idx] = find((obj_fun_1(:)) <= thre_aux);
+    [Idx] = find(abs(obj_fun_1(:)) <= thre_aux);
+if isempty(Idx)
+[~,Idx] = min(abs(obj_fun_1(:)));
+end
 elseif isequal(metacriteria_type{obj1}, 'maximum')
-     [Idx] = find((obj_fun_1(:)) >= thre_aux);
+     [Idx] = find(abs(obj_fun_1(:)) >= thre_aux);
+if isempty(Idx)
+[~,Idx] = max(abs(obj_fun_1(:)));
+end
 end
 
 if   isequal(metacriteria_type{obj2}, 'minimum')
-    [~, Idx_2] = min((obj_fun_2(Idx)));
+    [~, Idx_2] = min(abs(obj_fun_2(Idx)));
 elseif isequal(metacriteria_type{obj2}, 'maximum')
-    [~, Idx_2] = max((obj_fun_2(Idx)));
+    [~, Idx_2] = max(abs(obj_fun_2(Idx)));
 end
 
 [sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));
