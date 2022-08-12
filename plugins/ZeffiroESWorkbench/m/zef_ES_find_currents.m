@@ -118,10 +118,8 @@ zef_data_2.y_ES_interval = [];
 
 n_parallel = evalin('base','zef.parallel_processes');
 if ismember(evalin('base','zef.ES_search_method'),[1 2])
-    try
-        if isempty(gcp)
+    try 
             parpool(n_parallel)
-        end
     catch
         delete(gcp('nocreate'));
         parpool(n_parallel);
