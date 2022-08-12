@@ -14,6 +14,9 @@ end
 if not(isfield(zef,'ES_algorithm'))
     zef.ES_algorithm = 'interior-point';
 end
+if not(isfield(zef,'ES_threshold_condition'))
+    zef.ES_threshold_condition = 1;
+end
 if not(isfield(zef,'ES_display'))
     zef.ES_display = 'off';
 end
