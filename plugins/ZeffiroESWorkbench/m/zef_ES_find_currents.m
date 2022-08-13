@@ -97,7 +97,6 @@ if isequal(lower(zef_data.solver_package),'matlab')
 %     end
 end
 
-
 if isempty(evalin('base','zef.source_positions'))
     error('--ZI: No discretized sources found. Perhaps you forgot to calculate or load them...?')
 end

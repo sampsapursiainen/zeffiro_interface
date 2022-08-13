@@ -242,7 +242,6 @@ if max(abs(y_ES))      >= zef_data.max_current_channel
     y_ES = zef_data.max_current_channel * y_ES ./ max(abs(y_ES));
 end
 
-
 if not(isempty(zef_data.active_electrodes))
     y_ES_aux = zeros(size(zef_data.L_aux,2),1);
     y_ES_aux(zef_data.active_electrodes) = y_ES;

@@ -4,15 +4,13 @@ if zef.use_github
     !git pull
 end
 
-%%hi
-
 zef.ver = ver;
 if not(license('test','distrib_computing_toolbox')) || not(any(strcmp(cellstr(char(zef.ver.Name)), 'Parallel Computing Toolbox')))
 gpuDeviceCount = 0;
 end
 zef = rmfield(zef, 'ver');
 
-if isequal(zef.start_mode,{'nodisplay'})
+if ismember(zef.start_mode,{'nodisplay'})
    zef.use_display = 0;
 else 
    zef.use_display = 1;
