@@ -21,9 +21,6 @@ colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 c_map = evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
 
-h_contour_old = findobj(h_axes.Children,'Tag','contour');
-delete(h_contour_old);
-
 h_contour_text_old = findobj(h_axes.Children,'Tag','contour_text');
 delete(h_contour_text_old);
 
@@ -62,7 +59,7 @@ nodes_found = 0;
 node_ind = [];
 
 if not(hold_status)
-    hold on; 
+    hold(h_axes,'on'); 
 end
 
 loop_start = 0;
@@ -139,7 +136,7 @@ end
 
  
 if not(hold_status)
-    hold off; 
+    hold(h_axes,'off'); 
 end
 
 
