@@ -21,9 +21,6 @@ colortune_param = evalin('base','zef.colortune_param');
 colormap_cell = evalin('base','zef.colormap_cell');
 c_map = evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
 
-h_contour_text_old = findobj(h_axes.Children,'Tag','contour_text');
-delete(h_contour_text_old);
-
 if isequal(size(surf_func(:),1),size(nodes,1))
 surf_func = (1/3)*(surf_func(triangles(:,1),:) + surf_func(triangles(:,2),:) + surf_func(triangles(:,3),:));
 elseif isequal(size(surf_func(:),1),3*size(triangles,1))
