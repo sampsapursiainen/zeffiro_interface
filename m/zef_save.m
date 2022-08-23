@@ -18,8 +18,8 @@ zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
-zeffiro_interface_mesh_visualization_tool;
-zef_update;
+zef_mesh_visualization_tool;
+zef = zef_update(zef);
 end
 end
 if zef.save_switch == 2
@@ -67,7 +67,7 @@ else
 end
     end
 if not(isequal(zef.file,0));
-zef_process_meshes([]);
+zef = zef_process_meshes(zef);
 zef.surface_mesh_nodes = zef.reuna_p;
 zef.surface_mesh_triangles = zef.reuna_t;
 if zef.imaging_method== 1
@@ -94,7 +94,7 @@ else
 end
     end
 if not(isequal(zef.file,0));
-zef_process_meshes;
+zef = zef_process_meshes(zef);
 zef.tetrahedra = zef.tetra;
 %[zef.sigma,zef.brain_ind] = zef_postprocess_fem_mesh([]);
 if zef.imaging_method== 1
@@ -116,7 +116,7 @@ zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
-zeffiro_interface_mesh_visualization_tool;
+zef_mesh_visualization_tool
 zef_update;
 else
 if zef.use_display

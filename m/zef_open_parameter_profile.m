@@ -9,7 +9,7 @@ set(zef.h_parameter_profile_table,'columnformat',{'char','char',{'Scalar','Strin
 
 set(zef.h_parameter_profile_from_project,'ButtonPushedFcn','zef.h_parameter_profile_table.Data = zef.parameter_profile;');
 
-set(zef.h_parameter_profile_apply,'ButtonPushedFcn','writecell(zef.h_parameter_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_parameters.ini''],''filetype'',''text'',''delimiter'','','');  zef_apply_parameter_profile');
+set(zef.h_parameter_profile_apply,'ButtonPushedFcn','writecell(zef.h_parameter_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_parameters.ini''],''filetype'',''text'',''delimiter'','','');  zef = zef_apply_parameter_profile(zef)');
 
 set(zef.h_parameter_profile_save,'ButtonPushedFcn','writecell(zef.h_parameter_profile_table.Data,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_parameters.ini''],''filetype'',''text'',''delimiter'','','')');
 

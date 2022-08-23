@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = zef_CSM_iteration
 
-h = waitbar(0,['CSM MAP iteration.']);
+h = zef_waitbar(0,['CSM MAP iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 snr_val = evalin('base','zef.inv_snr');
@@ -46,7 +46,7 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
 
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
     L = gpuArray(L);
 end
 
@@ -61,17 +61,17 @@ for f_ind = 1 : number_of_frames
     time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
     end
     f=zef_getTimeStep(f_data, f_ind, false);
     z_vec = nan(size(L,2),1);
     
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
         f = gpuArray(f);
     end
 
 if f_ind == 1
-waitbar(0,h,['CSM MAP initialization. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['CSM MAP initialization. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
 %___ Calculations start ___
@@ -80,7 +80,7 @@ end
     if method_type == 1 || method_type == 2 || method_type == 3
         
             S_mat = (std_lhood^2/theta0)*eye(size(L,1));
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
 
         S_mat = gpuArray(S_mat);
     end
@@ -103,7 +103,7 @@ end
         z_vec = d.*P*f/sqrt(theta0);
     else
         z_vec = P*f;
-        if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+        if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
             P = gather(P);
             L = gather(L);
             z_vec = gather(z_vec);
@@ -123,7 +123,7 @@ end
                 M = sqrtm(P(ind,:)*L(:,ind));
                 z_vec(ind) = (M\z_vec(ind));
                 if number_of_frames <= 1 && i > 1
-                    waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
                 end
             end
             z_vec = z_vec/sqrt(theta0);
@@ -136,20 +136,20 @@ end
                 M = sqrtm(P(ind,:)*L(:,ind));
                 z_vec(ind) = M\z_vec(ind);
                 if number_of_frames <= 1 && i > 1
-                    waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(i/n_interp,h,['Step ' int2str(i) ' of ' int2str(n_interp) '. Ready: ' date_str '.' ]);
                 end
             end
             z_vec = z_vec/sqrt(theta0);
         end
     end
     if f_ind > 1;    
-        waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
     end
     
 elseif method_type == 4
     
         S_mat = (std_lhood^2)*eye(size(L,1));
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
         S_mat = gpuArray(S_mat);
     end
     %__ Sparse Bayesian Learning _
@@ -161,7 +161,7 @@ elseif method_type == 4
     inv_sqrt_C = inv(sqrtm(gather(C_data)));
     gamma = ones(size(L,2),1);
     const = zeros(size(L,2),1);
-    if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
         const = gather(const);
         L = gather(L);
     end
@@ -169,7 +169,7 @@ elseif method_type == 4
     for i = 1:size(L,2)
         const(i) = 1/(rank(L(:,i)*L(:,i)')*size(f,2));
     end
-    if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
         const = gpuArray(const);
         gamma = gpuArray(gamma);
         L = gpuArray(L);
@@ -177,9 +177,9 @@ elseif method_type == 4
    
     for i = 1:n_iter
         if f_ind > 1;    
-            waitbar(i/n_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            zef_waitbar(i/n_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-            waitbar(i/n_iter,h,['SBL MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            zef_waitbar(i/n_iter,h,['SBL MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;        
         f_aux = inv_sqrt_C*f;
         L_aux = inv_sqrt_C*L;
@@ -193,7 +193,7 @@ elseif method_type == 4
     z_vec = real(gamma.*(L'*(C_data\f)));
 end
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 

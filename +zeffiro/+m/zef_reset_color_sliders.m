@@ -1,0 +1,3 @@
+function zef_reset_color_sliders
+zef_reset_color_sliders;
+end

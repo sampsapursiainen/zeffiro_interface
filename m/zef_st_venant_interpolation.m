@@ -21,10 +21,10 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
 
     interpolation_positions = [];
 
-    % Open up a waitbar
+    % Open up a zef_waitbar
 
     wbtitle = 'Lead field interpolation (St. Venant)';
-    wb = waitbar(0, wbtitle);
+    wb = zef_waitbar(0, wbtitle);
 
     % Define cleanup operations, in case of an interruption.
 
@@ -73,11 +73,11 @@ function [G, interpolation_positions] = zef_st_venant_interpolation( ...
 
     for ind = 1 : n_of_iters
 
-        % Update waitbar.
+        % Update zef_waitbar.
 
         if mod(ind, print_interval) == 0
 
-            waitbar(ind / n_of_iters, wb, [wbtitleloop, num2str(ind), ' / ', num2str(n_of_iters)]);
+            zef_waitbar(ind / n_of_iters, wb, [wbtitleloop, num2str(ind), ' / ', num2str(n_of_iters)]);
 
         end
 

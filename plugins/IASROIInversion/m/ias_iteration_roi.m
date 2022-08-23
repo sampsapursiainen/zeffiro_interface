@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,rec_source] = ias_iteration_roi(void)
 
-h = waitbar(0,['IAS MAP iteration.']);
+h = zef_waitbar(0,['IAS MAP iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
@@ -85,9 +85,9 @@ a_d_i_vec = a_d_i_vec(aux_t(:,1));
 n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
-n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
-n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
-n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
+n_vec_aux(:,1) = zef_smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
+n_vec_aux(:,2) = zef_smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
+n_vec_aux(:,3) = zef_smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
 n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
@@ -199,12 +199,12 @@ elseif evalin('base','zef.inv_hyperprior') == 2
 [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L,size(L,2),evalin('base','zef.iasroi_normalize_data'),balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
 end
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 L = gpuArray(L);
 end
 L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
@@ -294,31 +294,31 @@ t = [1:size_f];
 f = mean(f,2);
 end
 if f_ind == 1
-waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 n_ias_map_iter = evalin('base','zef.iasroi_n_map_iterations');
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 f = gpuArray(f);
 end
 
 for i = 1 : n_ias_map_iter
 if f_ind > 1;
-waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 m_max = sqrt(size(L,2));
 u = zeros(length(z_vec),1);
 z_vec = zeros(length(z_vec),1);
 d_sqrt = sqrt(theta);
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
 L = L_aux.*repmat(d_sqrt',size(L,1),1);
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 if evalin('base','zef.inv_hyperprior') == 1

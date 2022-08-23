@@ -68,7 +68,6 @@ zef_data.opts.Algorithm  = lower(algorithm);
 zef_data.opts.Display    = display;
 zef_data.opts.TolFun     = solver_tolerance;
 
-
 if isequal(lower(zef_data.solver_package),'matlab')
     pwd_aux = pwd;
     dir_aux = [toolboxdir('optim') filesep 'optim'];
@@ -103,11 +102,11 @@ end
 
 [alpha, beta] = zef_ES_find_parameters;
 
-%% Waitbar
+%% zef_waitbar
 if exist('wait_bar_temp','var') == 1
     delete(wait_bar_temp)
 end
-wait_bar_temp = waitbar([0 0],sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: i = %d, j = d%' '.'],0,0), ...
+wait_bar_temp = zef_waitbar([0 0],sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: i = %d, j = d%' '.'],0,0), ...
     'Name','ZEFFIRO Interface: ES Optimization...', ...
     'CreateCancelbtn','setappdata(gcbf,''canceling'',1)', ...
     'Visible','on');
@@ -145,7 +144,6 @@ for i = 1 : lattice_size
             run_time{parallel_ind} = now;
             [y_ES{parallel_ind}, volumetric_current_density{parallel_ind}, residual{parallel_ind}, flag{parallel_ind}, source_amplitude{parallel_ind}, source_position_index{parallel_ind}, source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data,alpha(parallel_ind+j),beta(i));
             run_time{parallel_ind} = 86400*(now - run_time{parallel_ind});
-            
         end
         
         for parallel_ind = 1 : p_ind_max
@@ -195,9 +193,9 @@ for i = 1 : lattice_size
             end
             
         end
-        waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+        zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
     end
-    waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+    zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
     
     
 end

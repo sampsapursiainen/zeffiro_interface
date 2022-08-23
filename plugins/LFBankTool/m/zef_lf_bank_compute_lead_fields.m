@@ -44,8 +44,8 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef_update;
 
         zef_process_meshes;
-        zef_attach_sensors_volume(zef.sensors);
-        lead_field_matrix;
+        zef_attach_sensors_volume(zef,zef.sensors);
+        zef_lead_field_matrix;
 
         zef.lf_bank_storage{zef_i}.source_interpolation_ind = zef.source_interpolation_ind;
         zef.lf_bank_storage{zef_i}.parcellation_interp_ind = zef.parcellation_interp_ind;

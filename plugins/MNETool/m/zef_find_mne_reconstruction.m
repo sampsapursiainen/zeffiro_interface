@@ -2,7 +2,7 @@ function [z, info] = zef_mne(void)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
-h = waitbar(0,['MNE Reconstruction.']);
+h = zef_waitbar(0,['MNE Reconstruction.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
@@ -129,9 +129,9 @@ a_d_i_vec = a_d_i_vec(aux_t(:,1));
 n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
-n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
-n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
-n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
+n_vec_aux(:,1) = zef_smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
+n_vec_aux(:,2) = zef_smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
+n_vec_aux(:,3) = zef_smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
 n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
@@ -188,12 +188,12 @@ end
 
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.mne_normalize_data'),0);
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 L = gpuArray(L);
 end
 
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
@@ -266,17 +266,17 @@ t = [1:size_f];
 f = mean(f,2);
 end
 if f_ind == 1
-waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 f = gpuArray(f);
 end
 
 if f_ind > 1;
-waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-waitbar(f_ind/number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+zef_waitbar(f_ind/number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 m_max = sqrt(size(L,2));
 u = zeros(length(z_vec),1);
@@ -286,7 +286,7 @@ d_sqrt = sqrt(theta0)*ones(size(z_vec));
 else
     d_sqrt = sqrt(theta0);
 end
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
 L_inv = L.*repmat(d_sqrt',size(L,1),1);
@@ -308,7 +308,7 @@ end
 
 z_vec = L_inv * f;
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 

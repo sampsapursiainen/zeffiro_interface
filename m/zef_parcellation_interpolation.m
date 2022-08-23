@@ -121,7 +121,7 @@ if evalin('base','zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
-h = waitbar(0,['Interp. 1.']);
+h = zef_waitbar(0,['Interp. 1.']);
 
 p_counter = 0;
 for p_ind = p_selected + 1
@@ -136,7 +136,7 @@ cortex_ind = brain_ind(brain_cortex_ind);
 center_points = nodes(center_points,:);
 size_center_points = size(center_points,1);
 
-waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+zef_waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
 source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
 parcellation_interpolation_ind{p_ind-1}{1} = [];
@@ -153,7 +153,7 @@ if not(isempty(source_positions))
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-%waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+%zef_waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
 source_interpolation_ind = source_interpolation_ind(:);
 
@@ -179,7 +179,7 @@ p_counter = 0;
 for p_ind = p_selected + 1
 p_counter = p_counter + 1;
 
-waitbar([ab_ind/length(aux_brain_ind) p_counter/length(p_selected)],h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
+zef_waitbar([ab_ind/length(aux_brain_ind) p_counter/length(p_selected)],h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
 
 
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [];
@@ -221,7 +221,7 @@ tic;
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-%waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
+%zef_waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
 source_interpolation_ind = source_interpolation_ind(:);
 

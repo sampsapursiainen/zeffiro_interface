@@ -1,16 +1,20 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_import_segmentation_legacy(file_name, folder_name)
+function zef = zef_import_segmentation_legacy(zef, file_name, folder_name)
 
 void = [];
 
-if evalin('base','zef.use_display')
+if nargin == 0
+zef = eval('base','zef');
+end
+
+if eval('zef.use_display')
 if nargin < 2
-[file_name folder_name] = uigetfile({'*.zef'},'Segmentation data file and folder',evalin('base','zef.save_file_path'));
+[file_name folder_name] = uigetfile({'*.zef'},'Segmentation data file and folder',eval('zef.save_file_path'));
 end
 else
-    file_name = evalin('base','zef.file');
-    folder_name = evalin('base','zef.file_path');
+    file_name = eval('zef.file');
+    folder_name = eval('zef.file_path');
 end
 
 if not(isequal(file_name,0));
@@ -40,9 +44,9 @@ s_details = zeros(9,1);
 for i = 1 : n_segmentation
 
 if i == 1
-h_waitbar = waitbar(1/n_segmentation,['Item ' int2str(1) ' of ' int2str(n_segmentation) '.']);
+h_waitbar = zef_waitbar(1/n_segmentation,['Item ' int2str(1) ' of ' int2str(n_segmentation) '.']);
 else
-waitbar(i/n_segmentation,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_segmentation) '.']);
+zef_waitbar(i/n_segmentation,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_segmentation) '.']);
 end
 
 if isequal(ini_cell{1}{n_columns*(i-1)+2},'sensor_points')
@@ -60,54 +64,54 @@ sensor_points(:,2) = sensor_points(:,2) + str2num(ini_cell{1}{n_columns*(i-1)+11
 sensor_points(:,3) = sensor_points(:,3) + str2num(ini_cell{1}{n_columns*(i-1)+12});
 
 assignin('base','zef_data',sensor_points);
-evalin('base','zef.s_points = zef_data;');
+eval('zef.s_points = zef_data;');
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0')) && s_details(3) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_scaling = zef_data;');
+eval('zef.s_scaling = zef_data;');
 s_details(3) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+4},'0'))  && s_details(4) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+4};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_x_correction = zef_data;');
+eval('zef.s_x_correction = zef_data;');
 s_details(4) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+5},'0'))  && s_details(5) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+5};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_y_correction = zef_data;');
+eval('zef.s_y_correction = zef_data;');
 s_details(5) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+6},'0')) && s_details(6) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+6};
 assignin('base','zef_data',aux_var);
-evalin('base','zef.s_z_correction = zef_data;');
+eval('zef.s_z_correction = zef_data;');
 s_details(6) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+7},'0')) && s_details(7) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+7};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_xy_rotation = zef_data;');
+eval('zef.s_xy_rotation = zef_data;');
 s_details(7) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+8},'0')) && s_details(8) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+8};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_yz_rotation = zef_data;');
+eval('zef.s_yz_rotation = zef_data;');
 s_details(8) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+9},'0')) && s_details(9) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+9};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_zx_rotation = zef_data;');
+eval('zef.s_zx_rotation = zef_data;');
 s_details(9) = 1;
 end
 
@@ -128,54 +132,54 @@ n_s_directions = size(sensor_directions,1);
 m_s_directions = size(sensor_directions,2);
 
 assignin('base','zef_data',sensor_directions);
-evalin('base','zef.s_directions = zef_data;');
+eval('zef.s_directions = zef_data;');
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+3},'0')) && s_details(3) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+3};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_scaling = zef_data;');
+eval('zef.s_scaling = zef_data;');
 s_details(3) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+4},'0'))  && s_details(4) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+4};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_x_correction = zef_data;');
+eval('zef.s_x_correction = zef_data;');
 s_details(4) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+5},'0'))  && s_details(5) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+5};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_y_correction = zef_data;');
+eval('zef.s_y_correction = zef_data;');
 s_details(5) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+6},'0')) && s_details(6) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+6};
 assignin('base', 'zef_data', aux_var);
-evalin('base','zef.s_z_correction = zef_data;');
+eval('zef.s_z_correction = zef_data;');
 s_details(6) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+7},'0')) && s_details(7) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+7};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_xy_correction = zef_data;');
+eval('zef.s_xy_correction = zef_data;');
 s_details(7) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+8},'0')) && s_details(8) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+8};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_yz_correction = zef_data;');
+eval('zef.s_yz_correction = zef_data;');
 s_details(8) = 1;
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+9},'0')) && s_details(9) == 0
 aux_var = ini_cell{1}{n_columns*(i-1)+9};
 assignin('base','zef_data', aux_var);
-evalin('base','zef.s_zx_correction = zef_data;');
+eval('zef.s_zx_correction = zef_data;');
 s_details(9) = 1;
 end
 
@@ -227,7 +231,7 @@ triangle_data = stl_data.ConnectivityList;
 elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'VOL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'vol')
 
 volume_count_ind = volume_count_ind + 1;
-[triangle_data, point_data] = zef_surface_mesh(evalin('base','zef.tetra'),evalin('base','zef.nodes'),evalin('base',['find(zef.domain_labels<=' num2str(volume_count_ind) ');']));
+[triangle_data, point_data] = zef_surface_mesh(eval('zef.tetra'),eval('zef.nodes'),eval(['find(zef.domain_labels<=' num2str(volume_count_ind) ');']));
 
 else
 
@@ -278,13 +282,13 @@ merge_on = 1;
 end
 
 if merge_on
-l1_points = evalin('base',['zef.' name_cell{j} '_points']);
+l1_points = eval(['zef.' name_cell{j} '_points']);
 l2_points = point_data;
 point_data = [l1_points; l2_points];
 end
 
 if merge_on
-l1_triangles = evalin('base',['zef.' name_cell{j} '_triangles']);
+l1_triangles = eval(['zef.' name_cell{j} '_triangles']);
 l2_triangles = triangle_data;
 if invert_on
     l2_triangles = l2_triangles(:,[1 3 2]);
@@ -295,31 +299,31 @@ else
     max_val = max(l1_triangles(:));
 end
 triangle_data = [l1_triangles; l2_triangles+max_val];
-assignin('base','zef_data', [evalin('base',['zef.' name_cell{j} '_submesh_ind']) size(triangle_data,1)]);
-evalin('base',['zef.' name_cell{j} '_submesh_ind = zef_data;']);
+assignin('base','zef_data', [eval(['zef.' name_cell{j} '_submesh_ind']) size(triangle_data,1)]);
+eval(['zef.' name_cell{j} '_submesh_ind = zef_data;']);
 else
 if invert_on
     triangle_data = triangle_data(:,[1 3 2]);
 end
 assignin('base','zef_data', size(triangle_data,1));
-evalin('base',['zef.' name_cell{j} '_submesh_ind = zef_data;']);
+eval(['zef.' name_cell{j} '_submesh_ind = zef_data;']);
 end
 
 n_points = size(point_data,1);
 n_triangles = size(triangle_data,1);
 
 assignin('base', 'zef_data', 1);
-evalin('base',['zef.' name_cell{j} '_on = zef_data;']);
+eval(['zef.' name_cell{j} '_on = zef_data;']);
 assignin('base','zef_data', point_data);
-evalin('base',['zef.' name_cell{j} '_points = zef_data;']);
+eval(['zef.' name_cell{j} '_points = zef_data;']);
 assignin('base','zef_data', triangle_data);
-evalin('base',['zef.' name_cell{j} '_triangles = zef_data;']);
-assignin('base','zef_data', evalin('base',['zef.' name_cell{j} '_points']));
-evalin('base',['zef.' name_cell{j} '_points_original_surface_mesh = zef_data;']);
-assignin('base','zef_data', evalin('base',['zef.' name_cell{j} '_triangles']));
-evalin('base',['zef.' name_cell{j} '_triangles_original_surface_mesh = zef_data;']);
-assignin('base','zef_data', evalin('base',['zef.' name_cell{j} '_submesh_ind']));
-evalin('base',['zef.' name_cell{j} '_submesh_ind_original_surface_mesh = zef_data;']);
+eval(['zef.' name_cell{j} '_triangles = zef_data;']);
+assignin('base','zef_data', eval(['zef.' name_cell{j} '_points']));
+eval(['zef.' name_cell{j} '_points_original_surface_mesh = zef_data;']);
+assignin('base','zef_data', eval(['zef.' name_cell{j} '_triangles']));
+eval(['zef.' name_cell{j} '_triangles_original_surface_mesh = zef_data;']);
+assignin('base','zef_data', eval(['zef.' name_cell{j} '_submesh_ind']));
+eval(['zef.' name_cell{j} '_submesh_ind_original_surface_mesh = zef_data;']);
 
 if compartment_count_vec(j+2) == 1
 
@@ -329,7 +333,7 @@ if isstr(aux_var)
     aux_var = str2num(aux_var);
 end
 assignin('base', 'zef_data', aux_var);
-evalin('base',['zef.' name_cell{j} '_scaling = zef_data;'])
+eval(['zef.' name_cell{j} '_scaling = zef_data;'])
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+4},'0'))
@@ -338,7 +342,7 @@ if isstr(aux_var)
     aux_var = str2num(aux_var);
 end
 assignin('base', 'zef_data', aux_var);
-evalin('base', ['zef.' name_cell{j} '_sigma = zef_data;']);
+eval( ['zef.' name_cell{j} '_sigma = zef_data;']);
 end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+5},'0'))
@@ -347,7 +351,7 @@ if isstr(aux_var)
     aux_var = str2num(aux_var);
 end
 assignin('base', 'zef_data', aux_var);
-evalin('base',['zef.' name_cell{j} '_priority = zef_data;']);
+eval(['zef.' name_cell{j} '_priority = zef_data;']);
 end
 
 %if not(isequal(ini_cell{1}{n_columns*(i-1)+6},'0'))
@@ -356,21 +360,21 @@ if isstr(aux_var)
     aux_var = str2num(aux_var);
 end
 assignin('base', 'zef_data', aux_var);
-evalin('base',['zef.' name_cell{j} '_sources = zef_data;']);
+eval(['zef.' name_cell{j} '_sources = zef_data;']);
 %end
 
 if not(isequal(ini_cell{1}{n_columns*(i-1)+7},'0'))
 aux_var = ini_cell{1}{n_columns*(i-1)+7};
 assignin('base', 'zef_data', aux_var);
-evalin('base',['zef.' name_cell{j} '_name = zef_data;']);
+eval(['zef.' name_cell{j} '_name = zef_data;']);
 end
 
 end
 
 end
 
-if isempty(evalin('base',['zef.' name_cell{j} '_points']))
-evalin('base',['zef.' name_cell{j} '_on = 0;']);
+if isempty(eval(['zef.' name_cell{j} '_points']))
+eval(['zef.' name_cell{j} '_on = 0;']);
 end
 
 end
@@ -385,6 +389,10 @@ end
 
 close(h_waitbar);
 
+end
+
+if nargout == 0
+    assignin('base','zef',zef);
 end
 
 end

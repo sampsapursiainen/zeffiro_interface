@@ -19,7 +19,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
     funtitle = 'Electrode matrices';
 
-    wb = waitbar(0,funtitle);
+    wb = zef_waitbar(0,funtitle);
     wbi = 0;
 
     % Cleanup operations
@@ -48,7 +48,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
     if isequal(electrode_model, 'CEM')
 
-        waitbar(0, wb, strcat(cemtitle, ': current triangles'));
+        zef_waitbar(0, wb, strcat(cemtitle, ': current triangles'));
 
         I_triangles = find(ele_ind(:,4)>0);
         ala = zeros(1,size(ele_ind,1));
@@ -67,8 +67,8 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             )                                        ...
         );
 
-        waitbar(1, wb);
-        waitbar(0,wb, strcat(cemtitle, ': initial B and C'));
+        zef_waitbar(1, wb);
+        zef_waitbar(0,wb, strcat(cemtitle, ': initial B and C'));
 
         for ele_loop_ind = 1 : n_of_electrodes
 
@@ -116,13 +116,13 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             end
 
             wbi = wbi + 1;
-            waitbar(wbi / n_of_electrodes, wb);
+            zef_waitbar(wbi / n_of_electrodes, wb);
 
         end
 
         wbi = 0;
 
-        waitbar(wbi, wb, strcat(cemtitle, ': updating B at active electrodes'));
+        zef_waitbar(wbi, wb, strcat(cemtitle, ': updating B at active electrodes'));
 
         entry_vec = (1./impedance_vec(ele_ind(I_triangles,1))) .* ala(I_triangles)';
 
@@ -140,7 +140,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
                 n_of_electrodes          ...
             );
 
-            waitbar(wbi / 3, wb);
+            zef_waitbar(wbi / 3, wb);
 
         end
 
@@ -148,7 +148,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
         if impedance_inf == 0
 
-            waitbar(wbi, wb, strcat(cemtitle, ': modifying stiffness matrix at active electrodes'));
+            zef_waitbar(wbi, wb, strcat(cemtitle, ': modifying stiffness matrix at active electrodes'));
 
             for i = 1 : 3
 
@@ -190,7 +190,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
                 end
 
                 wbi = wbi + 1;
-                waitbar(wbi / 3, wb);
+                zef_waitbar(wbi / 3, wb);
 
             end
 
@@ -202,7 +202,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
         end
 
         wbi = 0;
-        waitbar(wbi, wb, strcat(cemtitle, ': updating C at active electrodes.'));
+        zef_waitbar(wbi, wb, strcat(cemtitle, ': updating C at active electrodes.'));
 
         % Update triangle patches
 
@@ -218,11 +218,11 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
             n_of_electrodes        ...
         );
 
-        waitbar(1,wb);
+        zef_waitbar(1,wb);
 
     elseif isequal(electrode_model, 'PEM')
 
-        waitbar(0, wb, pemtitle);
+        zef_waitbar(0, wb, pemtitle);
 
         if impedance_inf == 0
 
@@ -251,7 +251,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
         end
 
-        waitbar(1, wb);
+        zef_waitbar(1, wb);
 
     else
 
@@ -263,7 +263,7 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
 
     end
 
-    waitbar(1,wb);
+    zef_waitbar(1,wb);
     close(wb);
 
 end

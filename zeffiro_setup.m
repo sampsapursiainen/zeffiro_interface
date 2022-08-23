@@ -1,4 +1,4 @@
-zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zeffiro_interface_start_config.m'],'w');
+zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zef_start_config.m'],'w');
 fprintf(zef_data.fid_temp, ['warning off;']);
 mkdir(fileparts(mfilename('fullpath')),'external')
 
@@ -38,10 +38,11 @@ zef_data.str_temp = 'zef_add_path([zef.program_path filesep ''/external/SESAME/'
 % fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 % %%% Install OSQP BEGIN %%%
 
-
 fprintf(zef_data.fid_temp, '\n warning on;' );
 
 fclose(zef_data.fid_temp);
 clear zef_data;
+
+zef_make_package(mfilename('fullpath'));
 
 

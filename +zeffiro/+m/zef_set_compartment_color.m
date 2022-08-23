@@ -1,0 +1,3 @@
+function zef_set_compartment_color
+zef_set_compartment_color;
+end

@@ -15,7 +15,7 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, volume, tensor)
 
     % Wait bar and its progress index
 
-    wb = waitbar(0,'Stiffness matrix.');
+    wb = zef_waitbar(0,'Stiffness matrix.');
     wbi = 0;
 
     N = size(nodes,1);
@@ -124,11 +124,11 @@ function A = zef_stiffness_matrix(nodes, tetrahedra, volume, tensor)
         end
 
         wbi = wbi + 1;
-        waitbar(wbi / n_of_tetra_faces, wb);
+        zef_waitbar(wbi / n_of_tetra_faces, wb);
 
     end
 
-    waitbar(1,wb);
+    zef_waitbar(1,wb);
     close(wb);
 
 end

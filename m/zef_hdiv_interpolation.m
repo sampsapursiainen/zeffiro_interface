@@ -18,10 +18,10 @@ function [G, interpolation_positions] = zef_hdiv_interpolation( ...
 
     G = [];
 
-    % Open up a waitbar.
+    % Open up a zef_waitbar.
 
     wbtitle = 'Lead field H(div) interpolation';
-    wb = waitbar(0, wbtitle);
+    wb = zef_waitbar(0, wbtitle);
 
     % Define cleanup operations, in case of an interruption.
 
@@ -146,13 +146,13 @@ function [G, interpolation_positions] = zef_hdiv_interpolation( ...
         fi_coeff_row_col_val{i,3} = Coeff_mat(1 : n_coeff_fi, :);
         ew_coeff_row_col_val{i,3} = Coeff_mat(n_coeff_fi+1 : n_coeff, :);
 
-        % Update waitbar.
+        % Update zef_waitbar.
 
         if mod(i, print_interval) == 0
 
             time_val = toc;
 
-            waitbar( ...
+            zef_waitbar( ...
                 i/n_of_iterations, ...
                 wb, ...
                 [ ...
@@ -234,7 +234,7 @@ function [G, interpolation_positions] = zef_hdiv_interpolation( ...
 
     G = G_fi * S_fi + G_ew * S_ew;
 
-    waitbar(1, wb);
+    zef_waitbar(1, wb);
 
 end
 

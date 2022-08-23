@@ -5,11 +5,11 @@ if evalin('caller','exist(''h'')')
     if evalin('caller','isvalid(h)')
 h = evalin('caller','h');
     else
-        h = waitbar([0 0],'Inflating.');
+        h = zef_waitbar([0 0],'Inflating.');
         waitbar_opened = 1;
     end
 else
-      h = waitbar([0 0],'Inflating.');
+      h = zef_waitbar([0 0],'Inflating.');
       waitbar_opened = 1;
 end
 
@@ -41,7 +41,7 @@ n_nearest_neighbors = min(n_nearest_neighbors,size(center_points,1));
 MdlKDT = KDTreeSearcher(center_points);
 nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(node_list(:,1),:)),'K',n_nearest_neighbors);
 
-waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
+zef_waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
 length_node_list = size(node_list,1);
 par_num = evalin('base','zef.parallel_processes');
@@ -114,7 +114,7 @@ nodes_ind_cell{restart_ind} = nodes_ind_cell_aux;
 time_val = toc;
 
     if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-waitbar([restart_ind/n_restarts compartment_counter/length(reuna_p)],h,['Inflating compartment ' int2str(compartment_counter) ' of ' int2str(length(reuna_p)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+zef_waitbar([restart_ind/n_restarts compartment_counter/length(reuna_p)],h,['Inflating compartment ' int2str(compartment_counter) ' of ' int2str(length(reuna_p)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
 
 end

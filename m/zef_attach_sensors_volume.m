@@ -1,10 +1,14 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function  [sensors_attached_volume] = zef_attach_sensors_volume(sensors,varargin)
+function  [sensors_attached_volume] = zef_attach_sensors_volume(zef, sensors,varargin)
+
+if isempty(zef)
+zef = evalin('base','zef');
+end
 
 attach_type = 'mesh';
-nodes = evalin('base','zef.nodes');
- tetra = evalin('base','zef.tetra');
+nodes = eval('zef.nodes');
+ tetra = eval('zef.tetra');
  surface_triangles = [];
 
 if not(isempty(varargin))
@@ -22,23 +26,23 @@ if not(isempty(varargin))
    end
 end
 
-if ismember(evalin('base','zef.imaging_method'),[1,4,5])
+if ismember(eval('zef.imaging_method'),[1,4,5])
 
 %if ismember(attach_type,{'geometry','points'});
-if not(isequal(evalin('base','zef.reuna_type{end,1}'),-1))
-geometry_triangles = evalin('base','zef.reuna_t{end}');
-geometry_nodes = evalin('base','zef.reuna_p{end}');
+if not(isequal(eval('zef.reuna_type{end,1}'),-1))
+geometry_triangles = eval('zef.reuna_t{end}');
+geometry_nodes = eval('zef.reuna_p{end}');
 else
-geometry_triangles = evalin('base','zef.reuna_t{end-1}');
-geometry_nodes = evalin('base','zef.reuna_p{end-1}');
+geometry_triangles = eval('zef.reuna_t{end-1}');
+geometry_nodes = eval('zef.reuna_p{end-1}');
 end
 
 if isempty(surface_triangles)
-surface_triangles = evalin('base','zef.surface_triangles');
+surface_triangles = eval('zef.surface_triangles');
 end
-use_depth_electrodes = evalin('base','zef.use_depth_electrodes');
+use_depth_electrodes = eval('zef.use_depth_electrodes');
 
-%if evalin('base','zef.use_gpu')
+%if eval('zef.use_gpu')
 %    nodes = gpuArray(nodes);
 %    sensors = gpuArray(sensors);
 %end
@@ -176,7 +180,7 @@ sensors_attached_volume = gather(sensors_attached_volume);
 
 if nargout == 0
 assignin('base','zef_data',struct('sensors_attached_volume',sensors_attached_volume));
-evalin('base','zef_assign_data;');
+eval('zef_assign_data;');
 end
 
 end

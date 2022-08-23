@@ -20,14 +20,14 @@ n_ica = length(ica_reference_channels)+1;
 
 f_2 = zeros(size(f));
 
-h = waitbar(0,['Simple ICA filter.']);
+h = zef_waitbar(0,['Simple ICA filter.']);
 
 for i = 1 : size_f
 
   Mdl = rica(f(:,[i ica_reference_channels]),n_ica);
   aux_vec = transform(Mdl,f(:,[i ica_reference_channels]));
   f_2(:,i) = aux_vec(:,1);
-  waitbar(i/size_f,h,['Simple ICA filter.']);
+  zef_waitbar(i/size_f,h,['Simple ICA filter.']);
 
 end
 

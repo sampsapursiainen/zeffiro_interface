@@ -310,5 +310,5 @@ zef_data.contour_line_width = 1;
  zef_apply_init_profile;
  zef_init_compartments;
 zef_init_sensors;
- zef_apply_parameter_profile;
+ zef = zef_apply_parameter_profile(zef);
  % zef_init_parameter_profile;

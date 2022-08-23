@@ -1,11 +1,11 @@
-function [name_cell, variable_cell] = zef_get_profile_parameters(varargin)
+function [name_cell, variable_cell] = zef_get_profile_parameters(zef,varargin)
 
 parameter_index = [];
 if not(isempty(varargin))
     parameter_index = varargin{1};
 end
 
-parameter_profile = evalin('base','zef.parameter_profile');
+parameter_profile = eval('zef.parameter_profile');
 
 zef_n = 0;
 for zef_k =  1  : size(parameter_profile,1)

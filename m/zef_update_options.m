@@ -114,6 +114,6 @@ else
     end
 end
 
-if gpuDeviceCount > 0 & zef.use_gpu == 1
+if zef.gpu_count > 0 & zef.use_gpu == 1
     gpuDevice(zef.gpu_num);
 end

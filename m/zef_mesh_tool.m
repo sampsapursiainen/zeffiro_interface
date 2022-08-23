@@ -1,79 +1,99 @@
-%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
+zef_data = zef_mesh_tool_app_exported;
+zef_data.h_mesh_tool.Visible=zef.use_display;
+zef = zef_assign_data(zef, zef_data);
 
-if zef.mlapp == 1
-zeffiro_interface_mesh_tool;
+set(zef.h_menu_forward_simulation_table_add,'MenuSelectedFcn','zef.h_forward_simulation_table.Data{end+1,1} = []; zef.h_forward_simulation_table.Data = [zef.h_forward_simulation_table.Data(1:zef.forward_simulation_selected(1),:) ; zef.h_forward_simulation_table.Data(end,:) ; zef.h_forward_simulation_table.Data(zef.forward_simulation_selected(1)+1:end-1,:)];');
+set(zef.h_menu_forward_simulation_table_delete,'MenuSelectedFcn','zef.h_forward_simulation_table.Data = zef.h_forward_simulation_table.Data(find(not(ismember([1:size(zef.h_forward_simulation_table.Data,1)],zef.forward_simulation_selected))),:);');
+
+set(zef.h_run_forward_simulation,'ButtonPushedFcn','zef_run_forward_simulation;');
+
+set(zef.h_save_forward_simulation_profile,'ButtonPushedFcn','zef.forward_simulation_table = zef.h_forward_simulation_table.Data; writecell(zef.forward_simulation_table,[zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_forward_simulation.ini''],''filetype'',''text'',''delimiter'','','')');
+
+%set(zef.h_plot_condition,'ButtonPushedFcn','zef_plot_condition;');
+%set(zef.h_make_all,'ButtonPushedFcn','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef.source_interpolation_on = 1; set(zef.h_source_interpolation_on,''value'',1); zef_postprocess_fem_mesh;  zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;zef_process_meshes; zef_attach_sensors_volume(zef.sensors);zef_lead_field_matrix;');
+set(zef.h_pushbutton21,'ButtonPushedFcn','zef_create_finite_element_mesh;');
+%set(zef.h_pushbutton14,'ButtonPushedFcn','zef_delete_original_field;zef_process_meshes;zef_attach_sensors_volume(zef.sensors);zef_lead_field_matrix;');
+set(zef.h_interpolate,'ButtonPushedFcn','zef_source_interpolation;');
+set(zef.h_field_downsampling,'ButtonPushedFcn','zef_field_downsampling;');
+set(zef.h_surface_downsampling,'ButtonPushedFcn','zef_surface_downsampling;');
+
+set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
+set(zef.h_refinement_on,'value',zef.refinement_on);
+set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
+set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
+set(zef.h_inflate_n_iterations,'value',zef.inflate_n_iterations);
+set(zef.h_inflate_strength,'value',zef.inflate_strength);
+
+set(zef.h_downsample_surfaces,'value',zef.downsample_surfaces);
+
+set(zef.h_popupmenu6,'Items',{'mm','cm','m'});
+zef.h_popupmenu6.ItemsData = [1:length(zef.h_popupmenu6.Items)];
+set(zef.h_popupmenu6,'Value',zef.location_unit);
+
+set(zef.h_popupmenu2,'Items',{'Cartesian','Normal','Basis'});
+zef.h_popupmenu2.ItemsData = [1:length(zef.h_popupmenu2.Items)];
+set(zef.h_popupmenu2,'Value',zef.source_direction_mode);
+
+set(zef.h_forward_simulation_table,'data',zef.forward_simulation_table);
+set(zef.h_edit65,'value',(zef.mesh_resolution));
+set(zef.h_edit_meshing_accuracy,'value',(zef.meshing_accuracy));
+set(zef.h_smoothing_strength,'value',(zef.smoothing_strength));
+set(zef.h_edit76,'value',(zef.solver_tolerance));
+set(zef.h_edit75,'value',(zef.n_sources));
+set(zef.h_max_surface_face_count,'value',(zef.max_surface_face_count));
+set(zef.h_pushbutton23,'ButtonPushedFcn','zef_apply_transform;');
+set(zef.h_pushbutton34,'ButtonPushedFcn','zef_postprocess_finite_element_mesh');
+set(zef.h_forward_simulation_update_from_profile,'ButtonPushedFcn','zef.forward_simulation_table = readcell([zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_forward_simulation.ini''],''filetype'',''tex'',''delimiter'','','');zef.h_forward_simulation_table.Data = zef.forward_simulation_table;');
+
+set(zef.h_forward_simulation_table,'CellEditCallback','zef.h_forward_simulation_script.Value = zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1), zef.forward_simulation_column_selected};')
+set(zef.h_forward_simulation_table,'HandleVisibility','on');
+set(zef.h_forward_simulation_script,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_forward_simulation_table,'DisplayDataChangedFcn','zef_update_mesh_tool;');
+set(zef.h_forward_simulation_table,'CellSelectionCallback',@zef_forward_simulation_table_selection);
+if isempty(zef.forward_simulation_table)
+zef.forward_simulation_table = readcell([zef.program_path  filesep 'profile' filesep zef.profile_name filesep 'zeffiro_forward_simulation.ini'],'filetype','tex','delimiter',',');
+end
+zef.h_forward_simulation_table.Data = zef.forward_simulation_table;
+set(zef.h_checkbox_mesh_smoothing_on,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_refinement_on,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_source_interpolation_on,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_downsample_surfaces,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_popupmenu6,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_popupmenu2,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_edit65,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_edit_meshing_accuracy,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_smoothing_strength,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_edit76,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_edit75,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_max_surface_face_count,'ValueChangedFcn','zef_update_mesh_tool;');
+
+set(zef.h_inflate_n_iterations,'ValueChangedFcn','zef_update_mesh_tool;');
+set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
+
+
+zef.h_mesh_tool.Units = 'normalized';
+zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
+zef.h_mesh_tool.Units = 'pixels';
+set(zef.h_mesh_tool,'AutoResizeChildren','off');
+zef_set_size_change_function(zef.h_mesh_tool)
+
+if zef.h_segmentation_tool_toggle == 1
+    
+zef.h_mesh_tool.Position = [zef.h_zeffiro_window_main.Position(1)+ 0.505*zef.h_zeffiro_window_main.Position(3) , ...
+                          zef.h_zeffiro_window_main.Position(2)+0.75*zef.h_zeffiro_window_main.Position(4),...
+                          0.75*0.505*zef.h_zeffiro_window_main.Position(3),...
+                          0.25*zef.h_zeffiro_window_main.Position(4)];
+                          
 else
 
-zef.h_mesh_tool = open('zeffiro_interface_mesh_tool.fig');
-set(findobj(zef.h_mesh_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
-set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
-
-zef.aux_handle_vec = [zef.h_pushbutton31;
-zef.h_pushbutton20;
-zef.h_pushbutton22;
-zef.h_checkbox14;
-zef.h_checkbox15;
-zef.h_checkbox_cp_on;
-zef.h_edit_cp_a;
-zef.h_edit_cp_b;
-zef.h_edit_cp_c;
-zef.h_edit_cp_d;
-zef.h_edit80;
-zef.h_edit81;
-zef.h_edit82;
-zef.h_visualization_type;
-zef.h_pushbutton23;
-zef.h_pushbutton21;
-zef.h_pushbutton34;
-zef.h_checkbox_mesh_smoothing_on;
-zef.h_refinement_on;
-zef.h_edit65;
-zef.h_edit_meshing_accuracy;
-zef.h_edit75;
-zef.h_smoothing_strength;
-zef.h_pushbutton14;
-zef.h_source_interpolation_on;
-zef.h_popupmenu1;
-zef.h_popupmenu6;
-zef.h_popupmenu2;
-zef.h_edit76];
-uistack(flipud(zef.aux_handle_vec),'bottom');
-zef = rmfield(zef,'aux_handle_vec');
-set(zef.h_pushbutton21,'callback','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef_process_meshes; zef_create_fem_mesh;  zef_postprocess_fem_mesh; zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details;');
-set(zef.h_zef_downsample_surfaces,'callback','zef_downsample_surfaces; zef_process_meshes; source_interpolation;');
-set(zef.h_pushbutton14,'callback','zef_process_meshes;zef_attach_sensors_volume(zef.sensors);lead_field_matrix;');
-set(zef.h_make_all,'callback','if zef.downsample_surfaces == 1; zef_downsample_surfaces; end; zef.source_interpolation_on = 1; set(zef.h_source_interpolation_on,''value'',1); zef_process_meshes;zef_create_fem_mesh;zef_postprocess_fem_mesh;  zef.n_sources_mod = 1; zef.source_ind = []; zef_update_fig_details; zef_process_meshes;  zef_attach_sensors_volume(zef.sensors);lead_field_matrix;');
-set(zef.h_pushbutton34,'callback','zef_postprocess_fem_mesh;zef_update_fig_details;');
-set(zef.h_popupmenu2,'string',{'Cartesian','Normal','Basis'});
-set(zef.h_visualization_type,'string',{'Sigma','Recon. (volume)','Recon. (surface)','Parcellation','Topography'});
-set(zef.h_pushbutton31,'string','Visualize volume');
-set(zef.h_checkbox14,'value',zef.attach_electrodes);
-set(zef.h_checkbox_mesh_smoothing_on,'value',zef.mesh_smoothing_on);
-set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
-set(zef.h_checkbox15,'value',zef.axes_visible);
-set(zef.h_refinement_on,'value',zef.refinement_on);
-set(zef.h_checkbox_cp_on,'value',zef.cp_on);
-set(zef.h_edit_cp_a,'string',num2str(zef.cp_a));
-set(zef.h_edit_cp_b,'string',num2str(zef.cp_b));
-set(zef.h_edit_cp_c,'string',num2str(zef.cp_c));
-set(zef.h_edit_cp_d,'string',num2str(zef.cp_d));
-set(zef.h_edit65,'string',num2str(zef.mesh_resolution));
-set(zef.h_popupmenu1,'string',zef.imaging_method_cell);
-set(zef.h_popupmenu1,'value',zef.imaging_method);
-set(zef.h_edit80,'string',num2str(zef.azimuth));
-set(zef.h_edit81,'string',num2str(zef.elevation));
-set(zef.h_edit_meshing_accuracy,'string',num2str(zef.meshing_accuracy));
-set(zef.h_popupmenu6,'value',zef.location_unit);
-set(zef.h_edit82,'value',zef.cam_va);
-set(zef.h_edit75,'string',num2str(zef.n_sources));
-set(zef.h_popupmenu2,'value',zef.source_direction_mode);
-set(zef.h_visualization_type,'value',zef.visualization_type);
-set(zef.h_smoothing_strength,'string',num2str(zef.smoothing_strength));
-set(zef.h_edit76,'string', num2str(zef.inv_pcg_tol));
-set(zef.h_loop_movie,'value',zef.loop_movie);
-set(zef.h_edit76,'string',num2str(zef.solver_tolerance));
-
-zef_update_mesh_tool;
+zef.h_mesh_tool.Position = [zef.h_zeffiro_window_main.Position(1) + zef.h_zeffiro_window_main.Position(3), ...
+                          zef.h_zeffiro_window_main.Position(2)+0.6*zef.h_zeffiro_window_main.Position(4),...
+                          0.75*zef.h_zeffiro_window_main.Position(3),...
+                          0.4*zef.h_zeffiro_window_main.Position(4)]; 
 
 end
+
+set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+
+clear zef_data;

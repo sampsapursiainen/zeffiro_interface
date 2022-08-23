@@ -1,0 +1,11 @@
+warning('off');
+zef.lead_field_type = 1;
+zef.source_interpolation_on = 1;
+set(zef.h_source_interpolation_on,'value',1);
+zef_create_finite_element_mesh;
+zef_postprocess_finite_element_mesh;
+zef.n_sources_mod = 1;
+zef.source_ind = [];
+zef_update_fig_details;
+zef_eeg_lead_field;
+zef_source_interpolation;

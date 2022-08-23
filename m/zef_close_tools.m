@@ -4,5 +4,5 @@ zef.h_tools_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Inter
 zef.h_tools_aux = setdiff(zef.h_tools_aux, findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface: Segmentation tool*'));
 zef.h_tools_aux = setdiff(zef.h_tools_aux, findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface: Figure tool*'));
 zef.h_tools_aux = zef.h_tools_aux(find(isvalid(zef.h_tools_aux)));
-close(zef.h_tools_aux);
-rmfield(zef,'h_tools_aux');
+delete(zef.h_tools_aux);
+zef = rmfield(zef,'h_tools_aux');

@@ -1,5 +1,5 @@
 function [time_serie,time_var] = zef_generate_time_sequence
-h = waitbar(0,['Generate time sequence.']);
+h = zef_waitbar(0,['Generate time sequence.']);
 
 %Sample rate as the number of samples per second
 sampling_freq = evalin('base','max(cell2mat(zef.inv_synth_sampling_frequency))');
@@ -37,7 +37,7 @@ for n = 1:length(peak_time)
         signal_pulse = pulse_amp{n}(j)*blackmanharris_aux.*cos(2*pi*oscillation_freq{n}(j)*time_var_aux+oscillation_phase{n}(j));
         time_serie(n,start_ind:end_ind) = time_serie(n,start_ind:end_ind) + signal_pulse;
     end
-    waitbar(n/size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
+    zef_waitbar(n/size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
 end
 
 close(h);

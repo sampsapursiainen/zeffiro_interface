@@ -68,7 +68,7 @@ tail_length = 10.^(tail_length_db/20);
 a = 1*ones(size(relative_noise_std));
 b = 170*ones(size(relative_noise_std));
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
     relative_noise_std = gpuArray(relative_noise_std);
     a = gpuArray(a);
     b = gpuArray(b);

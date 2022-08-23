@@ -1,6 +1,6 @@
 set(zef.h_zeffiro_window_main,'DeleteFcn','');
 close(zef.h_zeffiro_window_main);
-zeffiro_interface_segmentation_tool;
+zef = zef_segmentation_tool(zef);
 zef_update;
 
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')

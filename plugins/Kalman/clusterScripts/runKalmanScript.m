@@ -111,7 +111,7 @@ switch inv_type
             end
         end
         clear zef_props zef_i;
-        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = make_multires_dec();
+        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = zef_make_multires_dec();
         [zef.reconstruction, zef.reconstruction_information] = zef_KF(i);
         % END KALMAN
     case 'MNE'

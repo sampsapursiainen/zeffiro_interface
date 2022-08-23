@@ -4,7 +4,7 @@ function [z,Var_loc,reconstruction_information] = RAP_MUSIC_iteration
 %- "EEG and MEG Source Localization using Recursively Applied (RAP) MUSIC" (1997)
 %by John C. Mosher and Richard M. Leahy
 
-h = waitbar(0,['RAP MUSIC.']);
+h = zef_waitbar(0,['RAP MUSIC.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 snr_val = evalin('base','zef.inv_snr');
@@ -78,12 +78,12 @@ Var_vec = ones(size(L,2),1);
 f=zef_getTimeStep(f_data, f_ind, true);
 
 S_mat = max(f.^2,[],'all')*(std_lhood^2/theta0)*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
     S_mat = gpuArray(S_mat);
 end
 
 if f_ind == 1
-waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
 %---------------CALCULATIONS STARTS HERE----------------------------------
@@ -142,9 +142,9 @@ end
             search_space = setdiff(search_space,ind_space(d_iter)); %extract the found dipole location from searched nodes.
 
         if f_ind > 1;
-         waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+         zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
-            waitbar(d_iter/n_dipoles,h,['RAP MUSIC iteration ',num2str(d_iter),' of ',num2str(n_dipoles),'. Ready: ' date_str '.']);
+            zef_waitbar(d_iter/n_dipoles,h,['RAP MUSIC iteration ',num2str(d_iter),' of ',num2str(n_dipoles),'. Ready: ' date_str '.']);
         end;
     end
 
@@ -152,7 +152,7 @@ end
     An_interp = size(A_mat,2)/3;
     %Amplitude leadfield a.k.a gain matrix:
     A_mat = sqrt(A_mat(:,1:An_interp).^2+A_mat(:,(An_interp+1):2*An_interp).^2+A_mat(:,(2*An_interp+1):3*An_interp).^2);
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
         A_mat = gpuArray(A_mat);
     end
     z_amp = A_mat'*((A_mat*A_mat'+S_mat)\f);    %amplitude estimation

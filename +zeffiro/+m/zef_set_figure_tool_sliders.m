@@ -1,0 +1,3 @@
+function zef_set_figure_tool_sliders(varargin)
+zef_set_figure_tool_sliders(varargin);
+end

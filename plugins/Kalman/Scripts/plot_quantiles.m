@@ -5,7 +5,7 @@ lm_data = [];
 
 
 for i = 1:50
-    zef_import_figure(['rec_',num2str(i),'.fig'], folder)
+    zef_import_figure([],['rec_',num2str(i),'.fig'], folder)
     h = gcf;
     h_axes = findobj(h.Children, 'type', 'axes');
     sg = findobj(h_axes.Children, 'displayname', 'SG 005');

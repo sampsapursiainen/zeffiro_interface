@@ -1,0 +1,1 @@
+zef_remove_object_fields;

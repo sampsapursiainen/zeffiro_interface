@@ -53,15 +53,15 @@ timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true), 1:number_of_frames, 
 
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE
-% Waitbar for iterations 
-h = waitbar(0,('Kalman iterations.'));
+% zef_waitbar for iterations 
+h = zef_waitbar(0,('Kalman iterations.'));
 
 %z_vec_aux = zeros(size(L_aux,2),1);
 iter_ind = 0;
 source_count_aux = 0;
 
 for n_rep = 1:n_decompositions
-    waitbar([n_rep/n_decompositions, 0],h,['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.']);
+    zef_waitbar([n_rep/n_decompositions, 0],h,['Kalman decompositions ' int2str(n_rep) ' of ' int2str(n_decompositions) '.']);
     iter_ind = iter_ind + 1;
     n_mr_dec = length(multires_dec{n_rep}{1});
     

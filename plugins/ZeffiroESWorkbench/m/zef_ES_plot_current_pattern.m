@@ -36,7 +36,7 @@ end
 [sensors] = zef_process_meshes(evalin('base','zef.explode_everything'));
 %% Sensors attachment
 if evalin('base','zef.attach_electrodes')
-    sensors = zef_attach_sensors_volume(evalin('base','zef.sensors'));
+    sensors = zef_attach_sensors_volume([],evalin('base','zef.sensors'));
 end
 %% Sphere generation and allocation of color indexes
 aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));

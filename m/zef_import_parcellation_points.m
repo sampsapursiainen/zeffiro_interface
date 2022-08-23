@@ -1,11 +1,14 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_import_parcellation_colortable(varargin)
+function zef = zef_import_parcellation_colortable(zef, varargin)
+
+if isempty(zef)
+    zef = evalin('base','zef');
+end
 
 filename = '';
 compartment_tag = ''; 
-parcellation_merge = evalin('base','zef.parcellation_merge');
-zef_data = struct;
+parcellation_merge = zef.parcellation_merge;
 
 if not(isempty(varargin))
 filename = varargin{1};
@@ -16,7 +19,7 @@ end
 
 if isempty(filename)
 
-save_file_path = evalin('base','zef.save_file_path');
+save_file_path = zef.save_file_path;
 
 if not(isempty(save_file_path)) & not(save_file_path==0)
  [file file_path file_type] = uigetfile({'*.asc';'*.dat'},'Import parcellation points',save_file_path);
@@ -37,9 +40,9 @@ end
 
 if not(isempty(filename))
 if not(parcellation_merge)
-    zef_data.parcellation_points = cell(0);
+    zef.parcellation_points = cell(0);
 else
-    zef_data.parcellation_points = evalin('base','zef.parcellation_points');
+    zef.parcellation_points = zef.parcellation_points;
 end
 
 if file_type == 1
@@ -52,30 +55,33 @@ zef_i = fopen(filename);
 zef_k = textscan(zef_i,'%s',zef_j,'delimiter','\n', 'headerlines',2);
 
 zef_k = cellfun(@(v) zef_import_asc(v,1,4),zef_k{1},'uniformoutput',false);
-[zef_data.parcellation_points{length(zef_data.parcellation_points)+1}] = cell2mat(zef_k);
+[zef.parcellation_points{length(zef.parcellation_points)+1}] = cell2mat(zef_k);
 
 clear zef_i zef_j zef_k;
 
 end
 
 if file_type == 2
-[zef_data.parcellation_points{length(zef_data.parcellation_points)+1}] = load(filename);
+[zef.parcellation_points{length(zef.parcellation_points)+1}] = load(filename);
 end
 
-assignin('base','zef_data',zef_data);
-zef_assign_data
 
-if evalin('base','isfield(zef,''h_zef_import_parcellation_points'')')
+
+if isfield(zef,'h_zef_import_parcellation_points')
 if isvalid('base','zef.h_zef_import_parcellation_points')
-if  isempty(evalin('base','zef.parcellation_points'))
-set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[1 0 0]);
+if  isempty(zef.parcellation_points)
+set(zef.h_zef_import_parcellation_points,'foregroundcolor',[1 0 0]);
 else
-set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);
+set(zef.h_zef_import_parcellation_points,'foregroundcolor',[0 0 0]);
 end
 end
 end
 
 end
 
+if nargout == 0
+assignin('base','zef',zef);
+end
 
 end
+

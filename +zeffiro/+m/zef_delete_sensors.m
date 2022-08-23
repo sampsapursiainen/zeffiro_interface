@@ -1,0 +1,3 @@
+function zef_delete_sensors
+zef_delete_sensors;
+end

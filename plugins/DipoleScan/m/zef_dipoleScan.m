@@ -24,7 +24,7 @@ reconstruction_information.inv_hyperprior = evalin('base','zef.inv_hyperprior');
 reconstruction_information.snr_val = evalin('base','zef.inv_snr');
 reconstruction_information.number_of_frames = evalin('base','zef.number_of_frames');
 
-h = waitbar(0,'Dipole scanning');
+h = zef_waitbar(0,'Dipole scanning');
 
 number_of_frames = evalin('base','zef.number_of_frames');
 source_direction_mode = evalin('base','zef.source_direction_mode');
@@ -40,7 +40,7 @@ for f_ind = 1 : number_of_frames
     time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 

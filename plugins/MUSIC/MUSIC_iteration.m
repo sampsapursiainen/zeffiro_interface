@@ -1,6 +1,6 @@
 function [z,Var_loc] = MUSIC_iteration
 
-h = waitbar(0,['MUSIC.']);
+h = zef_waitbar(0,['MUSIC.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 snr_val = evalin('base','zef.inv_snr');
@@ -327,9 +327,9 @@ a_d_i_vec = a_d_i_vec(aux_t(:,1));
 n_vec_aux = cross(aux_p(aux_t(:,2),:)' - aux_p(aux_t(:,1),:)', aux_p(aux_t(:,3),:)' - aux_p(aux_t(:,1),:)')';
 n_vec_aux = n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
-n_vec_aux(:,1) = smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
-n_vec_aux(:,2) = smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
-n_vec_aux(:,3) = smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
+n_vec_aux(:,1) = zef_smooth_field(aux_t, n_vec_aux(:,1), size(aux_p(:,1),1),7);
+n_vec_aux(:,2) = zef_smooth_field(aux_t, n_vec_aux(:,2), size(aux_p(:,1),1),7);
+n_vec_aux(:,3) = zef_smooth_field(aux_t, n_vec_aux(:,3), size(aux_p(:,1),1),7);
 
 n_vec_aux =  - n_vec_aux./repmat(sqrt(sum(n_vec_aux.^2,2)),1,3);
 
@@ -437,7 +437,7 @@ f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.inv_time_1')+sam
 end
 end
 if f_ind == 1
-waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
 if size_f > 1
@@ -549,9 +549,9 @@ end
 
         if mod(n_iter-2,update_waiting_bar) == 0
         if f_ind > 1;
-         waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+         zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
-            waitbar(n_iter/nn,h,['MUSIC iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+            zef_waitbar(n_iter/nn,h,['MUSIC iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
         end;
         end
     end

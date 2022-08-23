@@ -1,0 +1,3 @@
+function zef_set_size_change_function(h_window,type)
+zef_set_size_change_function(h_window,type);
+end

@@ -1,0 +1,3 @@
+function zef_simple_plot_sphere_min(varargin)
+zef_simple_plot_sphere_min(varargin);
+end

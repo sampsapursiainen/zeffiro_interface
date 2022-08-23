@@ -48,7 +48,7 @@ zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3);
 zef.lf_param.dipole_mode = 1;
 
 if ismember(zef.imaging_method, [1 2 3 4])
-[zef.measurements] = compute_gravity_data(zef.nodes_aux,zef.tetra,zef.rho(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
+[zef.measurements] = zef_compute_gravity_data(zef.nodes_aux,zef.tetra,zef.rho(:,1),zef.sensors_aux,zef.brain_ind,zef.source_ind,zef.lf_param);
 end
 
 zef = rmfield(zef,{'nodes_aux','sensors_aux','aux_vec'});

@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = zef_evaluate_topography(void)
 
-h = waitbar(0,['Topography.']);
+h = zef_waitbar(0,['Topography.']);
 
 sampling_freq = evalin('base','zef.top_sampling_frequency');
 high_pass = evalin('base','zef.top_low_cut_frequency');
@@ -67,9 +67,9 @@ t = [1:size(f,2)];
 f = mean(f,2);
 end
 
-waitbar(f_ind/number_of_frames,h,['Topography. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(f_ind/number_of_frames,h,['Topography. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
 f = gpuArray(f);
 end
 

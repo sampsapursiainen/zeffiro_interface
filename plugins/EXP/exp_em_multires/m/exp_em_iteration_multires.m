@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = exp_em_iteration_multires(void)
-h = waitbar(0,['EM MAP iteration for EP.']);
+h = zef_waitbar(0,['EM MAP iteration for EP.']);
 
 n_multires = evalin('base','zef.exp_multires_n_levels');
 sparsity_factor = evalin('base','zef.exp_multires_sparsity');
@@ -60,7 +60,7 @@ reconstruction_information.exp_multires_sparsity = sparsity_factor;
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
     L = gpuArray(L);
 end
 
@@ -77,7 +77,7 @@ for f_ind = 1 : number_of_frames
         time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -85,7 +85,7 @@ for f_ind = 1 : number_of_frames
     z_vec = ones(size(L,2),1);
     theta = zeros(length(z_vec),1)+(beta+1/q)./theta0;
 
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
         f = gpuArray(f);
     end
 
@@ -104,9 +104,9 @@ theta =zeros(size(L,2),1)+(beta+1/q)./theta0;
 end
 
 if f_ind > 1
-    waitbar(n_rep/n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+    zef_waitbar(n_rep/n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 else
-    waitbar(n_rep/n_decompositions,h,['EM MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+    zef_waitbar(n_rep/n_decompositions,h,['EM MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end
 
 for j = 1 : n_multires
@@ -164,7 +164,7 @@ n = size(L_aux_2,2);
 
 opt.SYM = true; opt.POSDEF = true;
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 if q == 1
@@ -185,7 +185,7 @@ else
     end
 end
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 

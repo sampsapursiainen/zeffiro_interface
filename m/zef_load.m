@@ -1,5 +1,12 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+function zef = zef_load(zef)
+
+zef_close_figs;
+
+if nargin == 0
+zef = evalin('base','zef');
+end
 
 zef_data = struct;
 
@@ -58,11 +65,17 @@ end
 clear zef_data;
 zef_reopen_segmentation_tool;
 zef_mesh_tool;
-zeffiro_interface_mesh_visualization_tool;
-zef_close_figs;
-zef_update;
+zef_mesh_visualization_tool
+zef_figure_tool;
+zef = zef_update(zef);
 zef_set_figure_tool_sliders
 
 zef_plugin;
 
 end;
+
+if nargout == 0
+    assignin('base','zef',zef);
+end
+
+end

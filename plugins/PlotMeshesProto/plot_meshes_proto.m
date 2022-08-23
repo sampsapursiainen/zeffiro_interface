@@ -634,9 +634,9 @@ else
 end
 
 if evalin('base','zef.attach_electrodes') & electrode_model == 1
-sensors = zef_attach_sensors_volume(sensors,'geometry');
+sensors = zef_attach_sensors_volume([],sensors,'geometry');
 elseif evalin('base','zef.attach_electrodes') & electrode_model == 2
-  sensors_aux = zef_attach_sensors_volume(sensors,'geometry');
+  sensors_aux = zef_attach_sensors_volume([],sensors,'geometry');
   sensors_point_like_index = find(sensors_aux(:,4)==0);
   sensors_point_like = zeros(length(sensors_point_like_index),3);
 for spl_ind = 1 : length(sensors_point_like_index)
@@ -851,7 +851,7 @@ ab_ind = find(aux_brain_ind==i);
 
 %if i == aux_brain_visible_ind
 %if  iscell(evalin('base','zef.reconstruction'))
-%h_waitbar = waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+%h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
 %set(h_waitbar,'handlevisibility','off');
 %end
 %end
@@ -927,7 +927,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
 if not(ismember(evalin('base','zef.reconstruction_type'), [6]))
@@ -1134,7 +1134,7 @@ return;
     end
 end
 f_ind_aux = f_ind_aux + 1;
-%waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
+%zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
 
 if ismember(evalin('base','zef.visualization_type'),[3])
 for i = intersect(aux_brain_ind,aux_brain_visible_ind)
@@ -1187,7 +1187,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(evalin('base','zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
 end
 
 if not(ismember(evalin('base','zef.reconstruction_type'), [6]))

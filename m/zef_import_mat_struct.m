@@ -1,4 +1,4 @@
-function zef_import_mat_struct(varargin)
+function zef = zef_import_mat_struct(zef,varargin)
 
 mat_struct = [];
 extension = [];

@@ -51,6 +51,6 @@ zef.lead_field_filter_quantile = str2num(get(zef.h_lead_field_filter_quantile,'V
     zef.source_space_creation_iterations = str2num(zef.h_source_space_creation_iterations.Value);
     zef.normalize_lead_field = str2num(zef.h_normalize_lead_field.Value);
 
-if gpuDeviceCount > 0 & zef.use_gpu == 1
+if zef.gpu_count > 0 & zef.use_gpu == 1
     gpuDevice(zef.gpu_num);
 end

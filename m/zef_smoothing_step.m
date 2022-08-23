@@ -50,7 +50,7 @@ L = [];
 surface_triangles = [];
 J = [];
 for k = 1 : length(priority_vec)
-waitbar(k/length_waitbar,h,'Smoothing operators.');
+zef_waitbar(k/length_waitbar,h,'Smoothing operators.');
 if not(pml_vec(k))
 I = find(domain_labels==k);
 [surface_triangles] = [ surface_triangles ; zef_surface_mesh(tetra(I,:))];
@@ -60,13 +60,13 @@ K = unique(J);
 end
 end
 
-waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 surface_triangles = sort(surface_triangles,2);
 surface_triangles = unique(surface_triangles,'rows');
 
 J = setdiff(tetra(:),K);
 
-waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
 %evalin('base','zef.tetra_raw');
 
@@ -89,7 +89,7 @@ end
 end
 end
 
-waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear surface_triangles;
 
 clear A_part;
@@ -121,7 +121,7 @@ if evalin('base','zef.fix_outer_surface')
         outer_surface_nodes_aux = unique(outer_surface_nodes_aux);
 end
 
-waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear B_part;
 B = spones(B);
 sum_B = full(sum(B))';
@@ -131,7 +131,7 @@ end
 taubin_lambda = 1;
 taubin_mu = -1;
 
-%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%if evalin('base','zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
 %if mod(smoothing_repetition_ind,2)==0
 %%A = gpuArray(A);
 %A_K = gpuArray(A_K);
@@ -144,7 +144,7 @@ taubin_mu = -1;
 %end
 %end
 
-%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%if evalin('base','zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
 %nodes = gpuArray(nodes);
 %end
 
@@ -171,14 +171,14 @@ if smoothing_steps_surf(smoothing_repetition_ind) < 1
 else
 convergence_criterion = smoothing_steps_surf(smoothing_repetition_ind).^2/iter_ind_aux;
 end
-waitbar(smoothing_steps_surf(smoothing_repetition_ind)/convergence_criterion,h,'Surface smoothing.');
+zef_waitbar(smoothing_steps_surf(smoothing_repetition_ind)/convergence_criterion,h,'Surface smoothing.');
 
 end
 end
 
 I_sensors = find(not(ismember(domain_labels,find(pml_vec,1))));
 surface_triangles = zef_surface_mesh(tetra(I_sensors,:));
-[sensors_attached_volume] = zef_attach_sensors_volume(sensors,'mesh',nodes,tetra,surface_triangles);
+[sensors_attached_volume] = zef_attach_sensors_volume([],sensors,'mesh',nodes,tetra,surface_triangles);
 L = zef_electrode_struct(sensors_attached_volume);
 electrode_is_point = evalin('base','zef.sensors');
 if not(isempty(L))
@@ -187,10 +187,10 @@ if not(isempty(L))
     else
 electrode_is_point = find(electrode_is_point(:,4)==0);
     end
-    waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
+    zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
     C = [];
 for electrode_ind = 1 : length(L)
- waitbar(electrode_ind/length(L),h,'Sensor smoothing.');
+ zef_waitbar(electrode_ind/length(L),h,'Sensor smoothing.');
  if not(ismember(electrode_ind,electrode_is_point))
  C_sparse = sparse(N, N, 0);
 for i = 1 : 2
@@ -261,7 +261,7 @@ convergence_criterion = norm(nodes_aux_2-nodes_aux_1,'fro')/norm(nodes_aux_1);
 else
  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
 end
-waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
+zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
 end
 end
 
@@ -306,7 +306,7 @@ end
 % else
 %  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
 % end
-% waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
+% zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
 % end
 % end
 %     end

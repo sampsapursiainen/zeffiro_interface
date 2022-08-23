@@ -27,7 +27,7 @@ for zef_i = 1 : length(zef.compartment_tags_aux)
 
     end
 
-    zef_create_compartment(zef.compartment_tags_aux{zef_i},'zef',zef.compartment_structure_aux);
+    zef = zef_create_compartment(zef,zef.compartment_tags_aux{zef_i},'zef',zef.compartment_structure_aux);
 
 end
 

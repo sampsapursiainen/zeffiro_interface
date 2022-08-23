@@ -41,7 +41,7 @@ zef.cone_draw = zef.h_cone_draw.Value;
 zef.streamline_draw = zef.h_streamline_draw.Value;
 zef.volumetric_distribution_mode = zef.h_volumetric_distribution_mode.Value;
 
-set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters);
+set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters(zef));
 zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visualization_parameter_list.Items)];
 
 zef.mesh_visualization_parameter_selected = zef.h_mesh_visualization_parameter_list.Value;

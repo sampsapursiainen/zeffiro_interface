@@ -68,7 +68,7 @@ nodes_aux = nodes(I,:)';
 use_gpu = evalin('base','zef.use_gpu');
 gpu_num = evalin('base','zef.gpu_num');
 
-if use_gpu == 1 & gpuDeviceCount > 0
+if use_gpu == 1 & evalin('base','zef.gpu_count') > 0
 nodes_aux = gpuArray(nodes_aux);
 aux_vec_1 = gpuArray(aux_vec_1);
 aux_vec_4 = gpuArray(aux_vec_4);
@@ -95,7 +95,7 @@ time_val = toc;
 
 if not(isempty(compartment_info))
 if mod(i_ind,bar_ind)==0
-waitbar([i/length_I compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+zef_waitbar([i/length_I compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
 end
 end
 end
@@ -143,7 +143,7 @@ time_val = toc;
 
 if not(isempty(compartment_info))
     if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+zef_waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
 end
 
@@ -161,7 +161,7 @@ end
 %%%%%%%%%%%%%%%%CPU part%%%%%%%%%%%%%%%%%%%
 
 if not(isempty(compartment_info))
-waitbar([1 compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
+zef_waitbar([1 compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
 end
 
 end

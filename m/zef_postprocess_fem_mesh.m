@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [domain_labels,brain_ind,non_source_ind,nodes,tetra,surface_triangles,submesh_ind] = zef_postprocess_fem_mesh(varargin)
 
-h = waitbar(0,'Mesh post-processing');
+h = zef_waitbar(0,'Mesh post-processing');
 
 parameter_profile = evalin('base','zef.parameter_profile');
 
@@ -173,7 +173,7 @@ zef_refinement_step;
 end
 
 if evalin('base','zef.refinement_volume_on_2');
-waitbar(0,h,'Volume refinement.');
+zef_waitbar(0,h,'Volume refinement.');
 n_refinement = evalin('base','zef.refinement_volume_number_2');
 refinement_compartments_aux = evalin('base','zef.refinement_volume_compartments_2');
 
@@ -188,7 +188,7 @@ refinement_compartments = [refinement_compartments ; refinement_compartments_aux
 for i = 1 : n_refinement
 
 [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments);
-waitbar(i/n_refinement,h,'Volume refinement.');
+zef_waitbar(i/n_refinement,h,'Volume refinement.');
 
 end
 

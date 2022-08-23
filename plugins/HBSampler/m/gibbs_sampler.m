@@ -168,7 +168,7 @@ x_history(:,i) = x(pixel_ind_vec);
 
 if mod(i,floor(n_iter/50)) == 0
 time_val = toc;
-waitbar(i/n_iter,h,['Sampling. Ready approx. ' datestr(datevec(now+(n_iter/i - 1)*time_val/86400)) '.']);
+zef_waitbar(i/n_iter,h,['Sampling. Ready approx. ' datestr(datevec(now+(n_iter/i - 1)*time_val/86400)) '.']);
 end
 
 end
