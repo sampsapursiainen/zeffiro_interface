@@ -1,4 +1,4 @@
-classdef SegmentationTool
+classdef SegmentationTool < handle
 
     % SegmentationTool
     %

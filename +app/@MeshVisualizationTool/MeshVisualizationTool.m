@@ -1,4 +1,4 @@
-classdef MeshVisualizationTool
+classdef MeshVisualizationTool < handle
 
     % MeshVisualizationTool
     %

@@ -1,4 +1,4 @@
-classdef ZeffiroInterface
+classdef ZeffiroInterface < handle
 
     % ZeffiroInterface
     %

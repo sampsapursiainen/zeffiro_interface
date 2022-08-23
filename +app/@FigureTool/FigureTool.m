@@ -1,4 +1,4 @@
-classdef FigureTool
+classdef FigureTool < handle
 
     % FigureTool
     %

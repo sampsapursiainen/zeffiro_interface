@@ -1,4 +1,4 @@
-classdef MeshTool
+classdef MeshTool < handle
 
     % MeshTool
     %
