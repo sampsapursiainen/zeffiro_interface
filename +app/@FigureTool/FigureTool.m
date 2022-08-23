@@ -21,8 +21,7 @@ classdef FigureTool < handle
 
             self.zef = zef;
 
-            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
-                'Name', 'Zeffiro Interface: Figure Tool');
+            self.window = uifigure('Name', 'Zeffiro Interface: Figure Tool');
 
         end
 

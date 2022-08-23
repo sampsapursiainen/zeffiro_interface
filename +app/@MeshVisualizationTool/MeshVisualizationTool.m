@@ -21,8 +21,7 @@ classdef MeshVisualizationTool < handle
 
             self.zef = zef;
 
-            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
-                'Name', 'Zeffiro Interface: Mesh Visualization Tool');
+            self.window = uifigure('Name', 'Zeffiro Interface: Mesh Visualization Tool');
 
         end
 

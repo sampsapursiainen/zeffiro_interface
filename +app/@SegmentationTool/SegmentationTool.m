@@ -21,8 +21,7 @@ classdef SegmentationTool < handle
 
             self.zef = zef;
 
-            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
-                'Name', 'Zeffiro Interface: Segmentation Tool');
+            self.window = uifigure('Name', 'Zeffiro Interface: Segmentation Tool');
 
         end
 
