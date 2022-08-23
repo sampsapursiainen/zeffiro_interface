@@ -15,9 +15,9 @@ classdef SegmentationTool < handle
 
     methods
 
-        function tool = SegmentationTool(zef, varargin)
+        function self = SegmentationTool(zef, varargin)
 
-            tool.zef = zef;
+            self.zef = zef;
 
         end
 

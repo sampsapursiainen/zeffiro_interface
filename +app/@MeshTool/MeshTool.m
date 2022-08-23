@@ -15,9 +15,9 @@ classdef MeshTool < handle
 
     methods
 
-        function tool = MeshTool(zef, varargin)
+        function self = MeshTool(zef, varargin)
 
-            tool.zef = zef;
+            self.zef = zef;
 
         end
 

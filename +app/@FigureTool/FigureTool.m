@@ -15,9 +15,9 @@ classdef FigureTool < handle
 
     methods
 
-        function tool = FigureTool(zef, varargin)
+        function self = FigureTool(zef, varargin)
 
-            tool.zef = zef;
+            self.zef = zef;
 
         end
 

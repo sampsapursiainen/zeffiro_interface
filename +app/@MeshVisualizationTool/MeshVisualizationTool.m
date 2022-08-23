@@ -15,9 +15,9 @@ classdef MeshVisualizationTool < handle
 
     methods
 
-        function tool = MeshVisualizationTool(zef, varargin)
+        function self = MeshVisualizationTool(zef, varargin)
 
-            tool.zef = zef;
+            self.zef = zef;
 
         end
 
