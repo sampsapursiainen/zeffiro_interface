@@ -9,6 +9,8 @@ classdef FigureTool < handle
 
         zef app.Zef
 
+        window matlab.ui.Figure
+
         % Other properties here.
 
     end % properties
@@ -18,6 +20,9 @@ classdef FigureTool < handle
         function self = FigureTool(zef, varargin)
 
             self.zef = zef;
+
+            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
+                'Name', 'Zeffiro Interface: Figure Tool');
 
         end
 

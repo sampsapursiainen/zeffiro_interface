@@ -9,6 +9,8 @@ classdef SegmentationTool < handle
 
         zef app.Zef
 
+        window matlab.ui.Figure
+
         % Other properties here.
 
     end % properties
@@ -18,6 +20,9 @@ classdef SegmentationTool < handle
         function self = SegmentationTool(zef, varargin)
 
             self.zef = zef;
+
+            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
+                'Name', 'Zeffiro Interface: Segmentation Tool');
 
         end
 

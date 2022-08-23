@@ -9,6 +9,8 @@ classdef MeshVisualizationTool < handle
 
         zef app.Zef
 
+        window matlab.ui.Figure
+
         % Other properties here.
 
     end % properties
@@ -18,6 +20,9 @@ classdef MeshVisualizationTool < handle
         function self = MeshVisualizationTool(zef, varargin)
 
             self.zef = zef;
+
+            self.window = figure('MenuBar','none', 'NumberTitle', 'off', ...
+                'Name', 'Zeffiro Interface: Mesh Visualization Tool');
 
         end
 
