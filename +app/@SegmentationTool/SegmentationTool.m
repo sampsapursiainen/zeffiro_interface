@@ -53,9 +53,17 @@ classdef SegmentationTool < handle
 
             self.tab = uitab(tabs, 'Title', 'Segmentation Tool');
 
-            self.layout = uigridlayout(self.tab, [4,1]);
+            self.layout = uigridlayout(self.tab, [5,1], 'Scrollable', 'on');
+
+            self.layout.ColumnWidth = { 'fit' };
+
+            rh = 50;
+
+            self.layout.RowHeight = { rh, rh, 'fit', rh, 'fit' };
 
             self.profilelayout = uigridlayout(self.layout, [1,4]);
+
+            self.profilelayout.RowHeight = { rh };
 
             self.profilelabel = uilabel(self.profilelayout, 'Text', 'Profile');
 
