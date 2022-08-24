@@ -13,6 +13,18 @@ classdef SegmentationTool < handle
 
         layout matlab.ui.container.GridLayout
 
+        profilelayout matlab.ui.container.GridLayout
+
+        profilelabel matlab.ui.control.Label
+
+        profiledropdown matlab.ui.control.DropDown
+
+        taglabel matlab.ui.control.Label
+
+        tagdropdown matlab.ui.control.DropDown
+
+        compartment_table matlab.ui.control.Table
+
     end % properties
 
     methods
@@ -23,7 +35,24 @@ classdef SegmentationTool < handle
 
             self.tab = uitab(tabs, 'Title', 'Segmentation Tool');
 
-            self.layout = uigridlayout(self.tab, [1,1]);
+            self.layout = uigridlayout(self.tab, [4,1]);
+
+            self.profilelayout = uigridlayout(self.layout, [1,4]);
+
+            self.profilelabel = uilabel(self.profilelayout, 'Text', 'Profile');
+
+            self.profiledropdown = uidropdown(self.profilelayout);
+
+            self.taglabel = uilabel(self.profilelayout, 'Text', 'Project tag');
+
+            self.tagdropdown = uidropdown(self.profilelayout);
+
+            self.compartment_table = uitable(self.layout, ...
+                'ColumnName', { ...
+                    'ID', 'On', 'Name', 'Visible', 'Surface nodes', ...
+                    'Surface_triangles', 'Merge', 'Invert normal', ...
+                    'Activity', 'Electrical conductivity'
+            });
 
         end
 
