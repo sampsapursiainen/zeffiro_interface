@@ -45,6 +45,8 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
             self.window = uifigure('Name', 'Zeffiro Interface');
 
+            self.window.Position(3:4) = [800, 600];
+
             % Attach layput manager to main window.
 
             self.layout = uigridlayout(self.window, [1,1]);
