@@ -23,7 +23,7 @@ classdef MeshVisualizationTool < handle
 
             self.tab = uitab(tabs, 'Title', 'Mesh Visualization Tool');
 
-            self.layout = uigridlayout(self.tab, [1,1]);
+            self.layout = uigridlayout(self.tab, [1,1], 'Scrollable', 'on');
 
         end
 
