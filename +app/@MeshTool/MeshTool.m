@@ -201,9 +201,9 @@ classdef MeshTool < handle
 
             self.eeg_lf_btn = uibutton(self.rightlayout1, 'Text', 'EEG Lead Field');
 
-            self.meg_lf_btn = uibutton(self.rightlayout1, 'Text', 'MEG Magneto Lead Field');
+            self.meg_lf_btn = uibutton(self.rightlayout1, 'Text', 'MEG Magnetometer Lead Field');
 
-            self.meg_grad_lf_btn = uibutton(self.rightlayout1, 'Text', 'EEG Gradio Lead Field');
+            self.meg_grad_lf_btn = uibutton(self.rightlayout1, 'Text', 'MEG Gradiometer Lead Field');
 
             self.eit_lf_btn = uibutton(self.rightlayout1, 'Text', 'EIT Lead Field');
 
