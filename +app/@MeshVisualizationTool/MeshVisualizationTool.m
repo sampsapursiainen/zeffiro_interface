@@ -11,7 +11,7 @@ classdef MeshVisualizationTool < handle
 
         tab matlab.ui.container.Tab
 
-        % Other properties here.
+        layout matlab.ui.container.GridLayout
 
     end % properties
 
@@ -22,6 +22,8 @@ classdef MeshVisualizationTool < handle
             self.zef = zef;
 
             self.tab = uitab(tabs, 'Title', 'Mesh Visualization Tool');
+
+            self.layout = uigridlayout(self.tab, [1,1]);
 
         end
 

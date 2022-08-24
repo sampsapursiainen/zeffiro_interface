@@ -11,7 +11,7 @@ classdef SegmentationTool < handle
 
         tab matlab.ui.container.Tab
 
-        % Other properties here.
+        layout matlab.ui.container.GridLayout
 
     end % properties
 
@@ -22,6 +22,8 @@ classdef SegmentationTool < handle
             self.zef = zef;
 
             self.tab = uitab(tabs, 'Title', 'Segmentation Tool');
+
+            self.layout = uigridlayout(self.tab, [1,1]);
 
         end
 

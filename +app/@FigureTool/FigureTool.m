@@ -11,6 +11,8 @@ classdef FigureTool < handle
 
         tab matlab.ui.container.Tab
 
+        layout matlab.ui.container.GridLayout
+
     end % properties
 
     methods
@@ -20,6 +22,8 @@ classdef FigureTool < handle
             self.zef = zef;
 
             self.tab = uitab(tabs, 'Title', 'Figure Tool');
+
+            self.layout = uigridlayout(self.tab, [1,1]);
 
         end
 

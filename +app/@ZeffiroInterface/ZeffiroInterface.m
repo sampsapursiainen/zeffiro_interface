@@ -9,12 +9,19 @@ classdef ZeffiroInterface < handle
     properties
 
         zef app.Zef
+
         window matlab.ui.Figure
+
         layout matlab.ui.container.GridLayout
+
         tabs matlab.ui.container.TabGroup
+
         segmentation_tool app.SegmentationTool
+
         mesh_tool app.MeshTool
+
         mesh_visualization_tool app.MeshVisualizationTool
+
         figure_tool app.FigureTool
 
     end % properties
