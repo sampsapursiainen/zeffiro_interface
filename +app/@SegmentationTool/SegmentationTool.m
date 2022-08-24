@@ -23,7 +23,11 @@ classdef SegmentationTool < handle
 
         tagdropdown matlab.ui.control.DropDown
 
+        compartment_table_title matlab.ui.control.Label
+
         compartment_table matlab.ui.control.Table
+
+        infotable_title matlab.ui.control.Label
 
         infotable matlab.ui.control.Table
 
@@ -61,12 +65,16 @@ classdef SegmentationTool < handle
 
             self.tagdropdown = uidropdown(self.profilelayout);
 
+            self.compartment_table_title = uilabel(self.layout, 'Text', "Compartments");
+
             self.compartment_table = uitable(self.layout, ...
                 'ColumnName', { ...
                     'ID', 'On', 'Name', 'Visible', 'Surface nodes', ...
                     'Surface triangles', 'Merge', 'Invert normal', ...
                     'Activity', 'Electrical conductivity'
             });
+
+            self.infotable_title = uilabel(self.layout, 'Text', "Project information");
 
             self.infotable = uitable(self.layout, ...
                 'ColumnName', { 'Field','Value' }, ...
