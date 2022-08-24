@@ -12,23 +12,51 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
         window matlab.ui.Figure
 
+        % Project menu
+
         projectmenu matlab.ui.container.Menu
+
+        new_project_item matlab.ui.container.Menu
+
+        open_project_item matlab.ui.container.Menu
+
+        save_project_item matlab.ui.container.Menu
+
+        save_project_as_item matlab.ui.container.Menu
+
+        % Import menu
 
         importmenu matlab.ui.container.Menu
 
+        % Export menu
+
         exportmenu matlab.ui.container.Menu
+
+        % Edit menu
 
         editmenu matlab.ui.container.Menu
 
+        % Inverse tools menu
+
         inversemenu matlab.ui.container.Menu
+
+        % Forward tools menu
 
         forwardmenu matlab.ui.container.Menu
 
+        % Multi tool menu
+
         multimenu matlab.ui.container.Menu
 
-        settingmenu matlab.ui.container.Menu
+        % Settings menu
+
+        settingsmenu matlab.ui.container.Menu
+
+        % Help menu
 
         helpmenu matlab.ui.container.Menu
+
+        % Application components.
 
         layout matlab.ui.container.GridLayout
 
@@ -65,26 +93,49 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
             self.window.Position(3:4) = [800, 600];
 
-            % A menus to menu bar.
+            % Project menu.
 
             self.projectmenu = uimenu(self.window, 'Text', '&Project');
 
+            self.new_project_item = uimenu(self.projectmenu, 'Text', '&New project');
+
+            self.open_project_item = uimenu(self.projectmenu, 'Text', '&Open project');
+
+            self.save_project_item = uimenu(self.projectmenu, 'Text', '&Save project');
+
+            self.save_project_as_item = uimenu(self.projectmenu, 'Text', '&Save project as...');
+
+            % Import menu.
+
             self.importmenu = uimenu(self.window, 'Text', '&Import');
+
+            % Export menu.
 
             self.exportmenu = uimenu(self.window, 'Text', '&Export');
 
+            % Edit menu.
+
             self.editmenu = uimenu(self.window, 'Text', '&Edit');
+
+            % Forward menu.
 
             self.forwardmenu = uimenu(self.window, 'Text', '&Forward tools');
 
+            % Inverse menu.
+
             self.inversemenu = uimenu(self.window, 'Text', '&Inverse tools');
+
+            % Multi tool menu.
 
             self.multimenu = uimenu(self.window, 'Text', '&Multi tools');
 
-            self.settingmenu = uimenu(self.window, 'Text', '&Settings');
+            % Settings menu.
+
+            self.settingsmenu = uimenu(self.window, 'Text', '&Settings');
+
+            % Help menu.
 
             self.helpmenu = uimenu(self.window, 'Text', '&Help');
-
 
             % Attach layput manager to main window.
 
