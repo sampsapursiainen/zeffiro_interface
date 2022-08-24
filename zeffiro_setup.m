@@ -43,7 +43,7 @@ fprintf(zef_data.fid_temp, '\n warning on;' );
 fclose(zef_data.fid_temp);
 clear zef_data;
 
-run([program_path filesep 'zef_make_package(''' mfilename(fullpath) ''')']);
+run([program_path filesep 'zef_make_package(''' mfilename('fullpath') ''')']);
 
 
 
