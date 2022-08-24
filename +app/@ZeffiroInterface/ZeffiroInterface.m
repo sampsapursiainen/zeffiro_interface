@@ -1,4 +1,4 @@
-classdef ZeffiroInterface < handle
+classdef ZeffiroInterface < matlab.apps.AppBase
 
     % ZeffiroInterface
     %
