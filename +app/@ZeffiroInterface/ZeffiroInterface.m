@@ -70,6 +70,10 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
         helpmenu matlab.ui.container.Menu
 
+        doc_item matlab.ui.container.Menu
+
+        about_item matlab.ui.container.Menu
+
         % Application components.
 
         layout matlab.ui.container.GridLayout
@@ -164,6 +168,10 @@ classdef ZeffiroInterface < matlab.apps.AppBase
             % Help menu.
 
             self.helpmenu = uimenu(self.window, 'Text', '&Help');
+
+            self.doc_item = uimenu(self.helpmenu, 'Text', '&Documentation');
+
+            self.about_item = uimenu(self.helpmenu, 'Text', '&About');
 
             % Attach layput manager to main window.
 
