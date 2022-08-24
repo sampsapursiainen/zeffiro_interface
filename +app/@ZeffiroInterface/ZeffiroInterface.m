@@ -32,6 +32,20 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
         exportmenu matlab.ui.container.Menu
 
+        volume_export_item matlab.ui.container.Menu
+
+        segdata_export_item matlab.ui.container.Menu
+
+        lf_export_item matlab.ui.container.Menu
+
+        source_space_export_item matlab.ui.container.Menu
+
+        sensor_export_item matlab.ui.container.Menu
+
+        recons_export_item matlab.ui.container.Menu
+
+        mesh_export_item matlab.ui.container.Menu
+
         % Edit menu
 
         editmenu matlab.ui.container.Menu
@@ -112,6 +126,20 @@ classdef ZeffiroInterface < matlab.apps.AppBase
             % Export menu.
 
             self.exportmenu = uimenu(self.window, 'Text', '&Export');
+
+            self.volume_export_item = uimenu(self.exportmenu, 'Text', '&Volume data');
+
+            self.segdata_export_item = uimenu(self.exportmenu, 'Text', '&Segmentation data');
+
+            self.lf_export_item = uimenu(self.exportmenu, 'Text', '&Lead field');
+
+            self.source_space_export_item = uimenu(self.exportmenu, 'Text', '&Source space');
+
+            self.sensor_export_item = uimenu(self.exportmenu, 'Text', '&Sensor data');
+
+            self.recons_export_item = uimenu(self.exportmenu, 'Text', '&Reconstruction');
+
+            self.mesh_export_item = uimenu(self.exportmenu, 'Text', '&FE mesh');
 
             % Edit menu.
 
