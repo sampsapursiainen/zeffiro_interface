@@ -29,6 +29,18 @@ classdef SegmentationTool < handle
 
     end % properties
 
+    properties (Constant)
+
+        INFOTABLE_DEFAULT_CONTENT = [
+            "App folder" "None";
+            "Current path" "None";
+            "Project file" "None";
+            "Project folder" "None";
+            "Project size" "None"
+        ];
+
+    end % properties (Constant)
+
     methods
 
         function self = SegmentationTool(zef, tabs, varargin)
@@ -56,17 +68,9 @@ classdef SegmentationTool < handle
                     'Activity', 'Electrical conductivity'
             });
 
-            infotable_default_content = [
-                "App folder" "None";
-                "Current path" "None";
-                "Project file" "None";
-                "Project folder" "None";
-                "Project size" "None"
-            ];
-
             self.infotable = uitable(self.layout, ...
                 'ColumnName', { 'Field','Value' }, ...
-                'Data', infotable_default_content ...
+                'Data', app.SegmentationTool.INFOTABLE_DEFAULT_CONTENT ...
             );
 
         end
