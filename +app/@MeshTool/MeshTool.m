@@ -46,8 +46,11 @@ classdef MeshTool < handle
         % leftlayout2 components
 
         lf_source_int_cb matlab.ui.control.CheckBox
+
         downsample_surf_cb matlab.ui.control.CheckBox
+
         refinement_cb matlab.ui.control.CheckBox
+
         mesh_smoothing_cb matlab.ui.control.CheckBox
 
         % leftlayout3 components
@@ -88,6 +91,18 @@ classdef MeshTool < handle
 
         dir_label matlab.ui.control.Label
 
+        % rightlayout1 components
+
+        eeg_lf_btn matlab.ui.control.Button
+
+        meg_lf_btn matlab.ui.control.Button
+
+        meg_grad_lf_btn matlab.ui.control.Button
+
+        eit_lf_btn matlab.ui.control.Button
+
+        tes_lf_btn matlab.ui.control.Button
+
     end % properties
 
     methods
@@ -112,7 +127,7 @@ classdef MeshTool < handle
 
             self.rightlayout = uigridlayout(self.layout, [3,1]);
 
-            self.rightlayout1 = uigridlayout(self.rightlayout, [3,1]);
+            self.rightlayout1 = uigridlayout(self.rightlayout, [5,1]);
 
             self.rightlayout2 = uigridlayout(self.rightlayout, [3,1]);
 
@@ -181,6 +196,18 @@ classdef MeshTool < handle
             self.dir_label = uilabel(self.leftlayout3, 'Text', 'Directions');
 
             self.dir_dd = uidropdown(self.leftlayout3);
+
+            % rightlayout1
+
+            self.eeg_lf_btn = uibutton(self.rightlayout1, 'Text', 'EEG Lead Field');
+
+            self.meg_lf_btn = uibutton(self.rightlayout1, 'Text', 'MEG Magneto Lead Field');
+
+            self.meg_grad_lf_btn = uibutton(self.rightlayout1, 'Text', 'EEG Gradio Lead Field');
+
+            self.eit_lf_btn = uibutton(self.rightlayout1, 'Text', 'EIT Lead Field');
+
+            self.tes_lf_btn = uibutton(self.rightlayout1, 'Text', 'tES Lead Field');
 
         end
 
