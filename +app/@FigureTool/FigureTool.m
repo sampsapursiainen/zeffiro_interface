@@ -9,19 +9,17 @@ classdef FigureTool < handle
 
         zef app.Zef
 
-        window matlab.ui.Figure
-
-        % Other properties here.
+        tab matlab.ui.container.Tab
 
     end % properties
 
     methods
 
-        function self = FigureTool(zef, varargin)
+        function self = FigureTool(zef, tabs, varargin)
 
             self.zef = zef;
 
-            self.window = uifigure('Name', 'Zeffiro Interface: Figure Tool');
+            self.tab = uitab(tabs, 'Title', 'Figure Tool');
 
         end
 

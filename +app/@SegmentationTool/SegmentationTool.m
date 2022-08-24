@@ -9,7 +9,7 @@ classdef SegmentationTool < handle
 
         zef app.Zef
 
-        window matlab.ui.Figure
+        tab matlab.ui.container.Tab
 
         % Other properties here.
 
@@ -17,11 +17,11 @@ classdef SegmentationTool < handle
 
     methods
 
-        function self = SegmentationTool(zef, varargin)
+        function self = SegmentationTool(zef, tabs, varargin)
 
             self.zef = zef;
 
-            self.window = uifigure('Name', 'Zeffiro Interface: Segmentation Tool');
+            self.tab = uitab(tabs, 'Title', 'Segmentation Tool');
 
         end
 

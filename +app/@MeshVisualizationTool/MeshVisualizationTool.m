@@ -9,7 +9,7 @@ classdef MeshVisualizationTool < handle
 
         zef app.Zef
 
-        window matlab.ui.Figure
+        tab matlab.ui.container.Tab
 
         % Other properties here.
 
@@ -17,11 +17,11 @@ classdef MeshVisualizationTool < handle
 
     methods
 
-        function self = MeshVisualizationTool(zef, varargin)
+        function self = MeshVisualizationTool(zef, tabs, varargin)
 
             self.zef = zef;
 
-            self.window = uifigure('Name', 'Zeffiro Interface: Mesh Visualization Tool');
+            self.tab = uitab(tabs, 'Title', 'Mesh Visualization Tool');
 
         end
 

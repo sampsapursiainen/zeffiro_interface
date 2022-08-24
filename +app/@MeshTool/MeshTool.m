@@ -9,19 +9,17 @@ classdef MeshTool < handle
 
         zef app.Zef
 
-        window matlab.ui.Figure
-
-        % Other properties here.
+        tab matlab.ui.container.Tab
 
     end % properties
 
     methods
 
-        function self = MeshTool(zef, varargin)
+        function self = MeshTool(zef, tabs, varargin)
 
             self.zef = zef;
 
-            self.window = uifigure('Name', 'Zeffiro Interface: Mesh Tool');
+            self.tab = uitab(tabs, 'Title', 'Mesh Tool');
 
         end
 
