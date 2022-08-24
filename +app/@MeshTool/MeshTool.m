@@ -146,39 +146,39 @@ classdef MeshTool < handle
 
             % leftlayout 3
 
-            self.source_count_label = uilabel(self.leftlayout3);
+            self.source_count_label = uilabel(self.leftlayout3, 'Text', 'Source count');
 
             self.source_count_ef = uieditfield(self.leftlayout3);
 
-            self.surf_tri_max_label = uilabel(self.leftlayout3);
+            self.surf_tri_max_label = uilabel(self.leftlayout3, 'Text', 'Max surf tris');
 
             self.surf_tri_max_ef = uieditfield(self.leftlayout3);
 
-            self.inflating_iter_label = uilabel(self.leftlayout3);
+            self.inflating_iter_label = uilabel(self.leftlayout3, 'Text', 'Inflation iters');
 
             self.inflating_iter_ef = uieditfield(self.leftlayout3);
 
-            self.mesh_resolution_label = uilabel(self.leftlayout3);
+            self.mesh_resolution_label = uilabel(self.leftlayout3, 'Text', 'Mesh resolution');
 
             self.mesh_resolution_ef = uieditfield(self.leftlayout3);
 
-            self.smoothing_str_label = uilabel(self.leftlayout3);
+            self.smoothing_str_label = uilabel(self.leftlayout3, 'Text', 'Smoothing str');
 
             self.smoothing_str_ef = uieditfield(self.leftlayout3);
 
-            self.inflating_str_label = uilabel(self.leftlayout3);
+            self.inflating_str_label = uilabel(self.leftlayout3, 'Text', 'Inflation str');
 
             self.inflating_str_ef = uieditfield(self.leftlayout3);
 
-            self.meshing_acc_label = uilabel(self.leftlayout3);
+            self.meshing_acc_label = uilabel(self.leftlayout3, 'Text', 'Meshing acc.');
 
             self.meshing_acc_ef = uieditfield(self.leftlayout3);
 
-            self.solver_tol_label = uilabel(self.leftlayout3);
+            self.solver_tol_label = uilabel(self.leftlayout3, 'Text', 'Solver tol.');
 
             self.solver_tol_ef = uieditfield(self.leftlayout3);
 
-            self.dir_label = uilabel(self.leftlayout3);
+            self.dir_label = uilabel(self.leftlayout3, 'Text', 'Directions');
 
             self.dir_dd = uidropdown(self.leftlayout3);
 
