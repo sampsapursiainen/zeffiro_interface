@@ -25,6 +25,8 @@ classdef SegmentationTool < handle
 
         compartment_table matlab.ui.control.Table
 
+        infotable matlab.ui.control.Table
+
     end % properties
 
     methods
@@ -53,6 +55,19 @@ classdef SegmentationTool < handle
                     'Surface triangles', 'Merge', 'Invert normal', ...
                     'Activity', 'Electrical conductivity'
             });
+
+            infotable_default_content = [
+                "App folder" "None";
+                "Current path" "None";
+                "Project file" "None";
+                "Project folder" "None";
+                "Project size" "None"
+            ];
+
+            self.infotable = uitable(self.layout, ...
+                'ColumnName', { 'Field','Value' }, ...
+                'Data', infotable_default_content ...
+            );
 
         end
 
