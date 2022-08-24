@@ -12,6 +12,24 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
         window matlab.ui.Figure
 
+        projectmenu matlab.ui.container.Menu
+
+        importmenu matlab.ui.container.Menu
+
+        exportmenu matlab.ui.container.Menu
+
+        editmenu matlab.ui.container.Menu
+
+        inversemenu matlab.ui.container.Menu
+
+        forwardmenu matlab.ui.container.Menu
+
+        multimenu matlab.ui.container.Menu
+
+        settingmenu matlab.ui.container.Menu
+
+        helpmenu matlab.ui.container.Menu
+
         layout matlab.ui.container.GridLayout
 
         tabs matlab.ui.container.TabGroup
@@ -46,6 +64,27 @@ classdef ZeffiroInterface < matlab.apps.AppBase
             self.window = uifigure('Name', 'Zeffiro Interface');
 
             self.window.Position(3:4) = [800, 600];
+
+            % A menus to menu bar.
+
+            self.projectmenu = uimenu(self.window, 'Text', '&Project');
+
+            self.importmenu = uimenu(self.window, 'Text', '&Import');
+
+            self.exportmenu = uimenu(self.window, 'Text', '&Export');
+
+            self.editmenu = uimenu(self.window, 'Text', '&Edit');
+
+            self.forwardmenu = uimenu(self.window, 'Text', '&Forward tools');
+
+            self.inversemenu = uimenu(self.window, 'Text', '&Inverse tools');
+
+            self.multimenu = uimenu(self.window, 'Text', '&Multi tools');
+
+            self.settingmenu = uimenu(self.window, 'Text', '&Settings');
+
+            self.helpmenu = uimenu(self.window, 'Text', '&Help');
+
 
             % Attach layput manager to main window.
 
