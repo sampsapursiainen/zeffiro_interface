@@ -121,6 +121,10 @@ classdef MeshVisualizationTool < handle
 
         submesh2_ef matlab.ui.control.EditField
 
+        plot_thresh_lbl matlab.ui.control.Label
+
+        plot_thresh_ef matlab.ui.control.EditField
+
         % More editboxes
 
         layoutrow5 matlab.ui.container.GridLayout
@@ -133,10 +137,39 @@ classdef MeshVisualizationTool < handle
 
         frame_step_ef matlab.ui.control.EditField
 
-        plot_thresh_lbl matlab.ui.control.Label
+        % Clipping plane settings
 
-        plot_thresh_ef matlab.ui.control.EditField
+        layoutrow6 matlab.ui.container.GridLayout
 
+        plane1label matlab.ui.control.Label
+
+        plane1x_ef matlab.ui.control.EditField
+
+        plane1y_ef matlab.ui.control.EditField
+
+        plane1z_ef matlab.ui.control.EditField
+
+        plane1range_ef matlab.ui.control.EditField
+
+        plane2label matlab.ui.control.Label
+
+        plane2x_ef matlab.ui.control.EditField
+
+        plane2y_ef matlab.ui.control.EditField
+
+        plane2z_ef matlab.ui.control.EditField
+
+        plane2range_ef matlab.ui.control.EditField
+
+        plane3label matlab.ui.control.Label
+
+        plane3x_ef matlab.ui.control.EditField
+
+        plane3y_ef matlab.ui.control.EditField
+
+        plane3z_ef matlab.ui.control.EditField
+
+        plane3range_ef matlab.ui.control.EditField
 
     end % properties
 
@@ -148,7 +181,7 @@ classdef MeshVisualizationTool < handle
 
             self.tab = uitab(tabs, 'Title', 'Mesh Visualization Tool');
 
-            self.layout = uigridlayout(self.tab, [4,1], 'Scrollable', 'on');
+            self.layout = uigridlayout(self.tab, [6,1], 'Scrollable', 'on');
 
             % Buttons
 
@@ -226,7 +259,7 @@ classdef MeshVisualizationTool < handle
 
             % Editboxes
 
-            self.layoutrow4 = uigridlayout(self.layout, [3 6]);
+            self.layoutrow4 = uigridlayout(self.layout, [3 6], 'Scrollable','on');
 
             self.orientation_lbl = uilabel(self.layoutrow4, 'Text', 'Orientation height / azimuth');
 
@@ -258,9 +291,13 @@ classdef MeshVisualizationTool < handle
 
             self.submesh2_ef = uieditfield(self.layoutrow4);
 
+            self.plot_thresh_lbl = uilabel(self.layoutrow4, 'Text', 'Plot threshold');
+
+            self.plot_thresh_ef = uieditfield(self.layoutrow4);
+
             % More editboxes
 
-            self.layoutrow5 = uigridlayout(self.layout, [3 6]);
+            self.layoutrow5 = uigridlayout(self.layout, [1 4]);
 
             self.frame_lbl = uilabel(self.layoutrow5, 'Text', 'Frame start / stop / step');
 
@@ -270,9 +307,39 @@ classdef MeshVisualizationTool < handle
 
             self.frame_step_ef = uieditfield(self.layoutrow5);
 
-            self.plot_thresh_lbl = uilabel(self.layoutrow5, 'Text', 'Plot threshold');
+            % Clipping plane settings
 
-            self.plot_thresh_ef = uieditfield(self.layoutrow5);
+            self.layoutrow6 = uigridlayout(self.layout, [3 5]);
+
+            self.plane1label = uilabel(self.layoutrow6, 'Text', 'Clipping plane 1');
+
+            self.plane1x_ef = uieditfield(self.layoutrow6);
+
+            self.plane1y_ef = uieditfield(self.layoutrow6);
+
+            self.plane1z_ef = uieditfield(self.layoutrow6);
+
+            self.plane1range_ef = uieditfield(self.layoutrow6);
+
+            self.plane2label = uilabel(self.layoutrow6, 'Text', 'Clipping plane 2');
+
+            self.plane2x_ef = uieditfield(self.layoutrow6);
+
+            self.plane2y_ef = uieditfield(self.layoutrow6);
+
+            self.plane2z_ef = uieditfield(self.layoutrow6);
+
+            self.plane2range_ef = uieditfield(self.layoutrow6);
+
+            self.plane3label = uilabel(self.layoutrow6, 'Text', 'Clipping plane 3');
+
+            self.plane3x_ef = uieditfield(self.layoutrow6);
+
+            self.plane3y_ef = uieditfield(self.layoutrow6);
+
+            self.plane3z_ef = uieditfield(self.layoutrow6);
+
+            self.plane3range_ef = uieditfield(self.layoutrow6);
 
         end
 
