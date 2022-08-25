@@ -183,7 +183,10 @@ classdef MeshVisualizationTool < handle
 
             self.layout = uigridlayout(self.tab, [6,1], 'Scrollable', 'on');
 
+            self.layout.RowHeight = { 'fit','fit','fit','fit','fit','fit' };
+
             self.layout.ColumnWidth = { 'fit' };
+
 
             % Buttons
 

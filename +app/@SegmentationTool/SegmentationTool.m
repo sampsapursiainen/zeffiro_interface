@@ -55,6 +55,8 @@ classdef SegmentationTool < handle
 
             self.layout = uigridlayout(self.tab, [5,1], 'Scrollable', 'on');
 
+            self.layout.RowHeight = { 'fit','fit','fit','fit','fit' };
+
             self.layout.ColumnWidth = { 'fit' };
 
             rh = 50;

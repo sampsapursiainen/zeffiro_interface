@@ -117,7 +117,15 @@ classdef MeshTool < handle
 
             self.layout = uigridlayout(self.tab, [1,2], 'Scrollable', 'on');
 
+            self.layout.RowHeight = { 'fit' };
+
+            self.layout.ColumnWidth = { 'fit', 'fit' };
+
             self.leftlayout = uigridlayout(self.layout, [3,1]);
+
+            self.leftlayout.RowHeight = { 'fit','fit','fit' };
+
+            self.leftlayout.ColumnWidth = { 'fit', };
 
             self.leftlayout1 = uigridlayout(self.leftlayout, [3,2]);
 
@@ -127,6 +135,11 @@ classdef MeshTool < handle
 
             self.rightlayout = uigridlayout(self.layout, [3,1]);
 
+            self.rightlayout.RowHeight = { 'fit','fit','fit' };
+
+            self.rightlayout.ColumnWidth = { 'fit', };
+
+
             self.rightlayout1 = uigridlayout(self.rightlayout, [5,1]);
 
             self.rightlayout2 = uigridlayout(self.rightlayout, [3,1]);
@@ -134,7 +147,7 @@ classdef MeshTool < handle
             self.rightlayout3 = uigridlayout(self.rightlayout, [3,1]);
 
             % Place widgets into layouts
-            %
+
             % leftlayout1
 
             self.fem_mesh_btn = uibutton(self.leftlayout1, 'Text', 'Create FEM Mesh');
