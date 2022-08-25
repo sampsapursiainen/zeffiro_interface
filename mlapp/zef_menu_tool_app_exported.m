@@ -51,7 +51,6 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
         h_menu_mesh_visualization_tool  matlab.ui.container.Menu
         h_menu_figure_tool              matlab.ui.container.Menu
         h_menu_parcellation_tool        matlab.ui.container.Menu
-        h_menu_reset_windows            matlab.ui.container.Menu
         h_menu_settings                 matlab.ui.container.Menu
         h_menu_options                  matlab.ui.container.Menu
         h_menu_graphics_options         matlab.ui.container.Menu
@@ -62,6 +61,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
         h_menu_init_profile             matlab.ui.container.Menu
         h_menu_plugin_settings          matlab.ui.container.Menu
         h_menu_window                   matlab.ui.container.Menu
+        h_menu_reset_windows            matlab.ui.container.Menu
         h_menu_window_tools             matlab.ui.container.Menu
         h_menu_maximize_tools           matlab.ui.container.Menu
         h_menu_minimize_tools           matlab.ui.container.Menu
@@ -327,10 +327,6 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
             app.h_menu_parcellation_tool.Accelerator = '7';
             app.h_menu_parcellation_tool.Text = 'Parcellation tool';
 
-            % Create h_menu_reset_windows
-            app.h_menu_reset_windows = uimenu(app.h_menu_multi_tools);
-            app.h_menu_reset_windows.Text = 'Reset windows';
-
             % Create h_menu_settings
             app.h_menu_settings = uimenu(app.h_zeffiro_menu);
             app.h_menu_settings.Text = 'Settings';
@@ -371,6 +367,10 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_window
             app.h_menu_window = uimenu(app.h_zeffiro_menu);
             app.h_menu_window.Text = 'Window';
+
+            % Create h_menu_reset_windows
+            app.h_menu_reset_windows = uimenu(app.h_menu_window);
+            app.h_menu_reset_windows.Text = 'Reset windows';
 
             % Create h_menu_window_tools
             app.h_menu_window_tools = uimenu(app.h_menu_window);
