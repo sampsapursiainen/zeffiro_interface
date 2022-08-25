@@ -13,6 +13,82 @@ classdef MeshVisualizationTool < handle
 
         layout matlab.ui.container.GridLayout
 
+        % Button layout
+
+        layoutrow1 matlab.ui.container.GridLayout
+
+        volume_button matlab.ui.control.Button
+
+        surfaces_button matlab.ui.control.Button
+
+        movie_button matlab.ui.control.Button
+
+        popup_button matlab.ui.control.Button
+
+        graph_button matlab.ui.control.Button
+
+        % Tickboxes and dropdowns + labels
+
+        layoutrow2 matlab.ui.container.GridLayout
+
+        att_electr_cb matlab.ui.control.CheckBox
+
+        infl_surf_cb matlab.ui.control.CheckBox
+
+        cone_field_cb matlab.ui.control.CheckBox
+
+        streamlines_cb matlab.ui.control.CheckBox
+
+        contourlabels_cb matlab.ui.control.CheckBox
+
+        clip_plane_1_cb matlab.ui.control.CheckBox
+
+        clip_plane_2_cb matlab.ui.control.CheckBox
+
+        clip_plane_3_cb matlab.ui.control.CheckBox
+
+        axesbox_cb matlab.ui.control.CheckBox
+
+        contour_array_cb matlab.ui.control.CheckBox
+
+        % Dropdowns + labels
+
+        reconstype_lbl matlab.ui.control.Label
+
+        reconsttype_dd matlab.ui.control.DropDown
+
+        visualizationtype_lbl matlab.ui.control.Label
+
+        visualizationtype_dd matlab.ui.control.DropDown
+
+        cutplanemode_lbl matlab.ui.control.Label
+
+        cutplanemode_dd matlab.ui.control.DropDown
+
+        plotscale_lbl matlab.ui.control.Label
+
+        plotscale_dd matlab.ui.control.DropDown
+
+        distr_mode_lbl matlab.ui.control.Label
+
+        distr_mode_dd matlab.ui.control.DropDown
+
+        colormap_lbl matlab.ui.control.Label
+
+        colormap_dd matlab.ui.control.DropDown
+
+        parameter_lbl matlab.ui.control.Label
+
+        parameter_dd matlab.ui.control.DropDown
+
+        graph_lbl matlab.ui.control.Label
+
+        graph_dd matlab.ui.control.DropDown
+
+        % Editboxes
+
+        layoutrow3 matlab.ui.container.GridLayout
+
     end % properties
 
     methods
@@ -23,7 +99,84 @@ classdef MeshVisualizationTool < handle
 
             self.tab = uitab(tabs, 'Title', 'Mesh Visualization Tool');
 
-            self.layout = uigridlayout(self.tab, [1,1], 'Scrollable', 'on');
+            self.layout = uigridlayout(self.tab, [4,1], 'Scrollable', 'on');
+
+            % Buttons
+
+            self.layoutrow1 = uigridlayout(self.layout, [2,3]);
+
+            self.volume_button = uibutton(self.layoutrow1, 'Text', 'Visualize volume');
+
+            self.surfaces_button = uibutton(self.layoutrow1, 'Text', 'Visualize surfaces');
+
+            self.movie_button = uibutton(self.layoutrow1, 'Text', 'Frame / Movie');
+
+            self.popup_button = uibutton(self.layoutrow1, 'Text', 'Axes pop-up');
+
+            self.graph_button = uibutton(self.layoutrow1, 'Text', 'Plot graph');
+
+            % Tickboxes and dropdowns
+
+            self.layoutrow2 = uigridlayout(self.layout, [2,5]);
+
+            self.att_electr_cb = uicheckbox(self.layoutrow2, 'Text', 'Attach electrodes');
+
+            self.infl_surf_cb = uicheckbox(self.layoutrow2, 'Text', 'Use inflated surfaces');
+
+            self.cone_field_cb = uicheckbox(self.layoutrow2, 'Text', 'Cone field');
+
+            self.streamlines_cb = uicheckbox(self.layoutrow2, 'Text', 'Streamlines');
+
+            self.contourlabels_cb = uicheckbox(self.layoutrow2, 'Text', 'Contour labels');
+
+            self.clip_plane_1_cb = uicheckbox(self.layoutrow2, 'Text', 'Clipping plane 1');
+
+            self.clip_plane_2_cb = uicheckbox(self.layoutrow2, 'Text', 'Clipping plane 2');
+
+            self.clip_plane_3_cb = uicheckbox(self.layoutrow2, 'Text', 'Clipping plane 3');
+
+            self.axesbox_cb = uicheckbox(self.layoutrow2, 'Text', 'Axes box');
+
+            self.contour_array_cb = uicheckbox(self.layoutrow2, 'Text', 'Contour array');
+
+            % Dropdowns + labels
+
+            self.layoutrow3 = uigridlayout(self.layout, [2,8]);
+
+            self.reconstype_lbl = uilabel(self.layoutrow3, 'Text', 'Reconstruction type');
+
+            self.reconsttype_dd = uidropdown(self.layoutrow3);
+
+            self.visualizationtype_lbl = uilabel(self.layoutrow3, 'Text', 'Visualization type');
+
+            self.visualizationtype_dd = uidropdown(self.layoutrow3);
+
+            self.cutplanemode_lbl = uilabel(self.layoutrow3, 'Text', 'Cutting plane mode');
+
+            self.cutplanemode_dd = uidropdown(self.layoutrow3);
+
+            self.plotscale_lbl = uilabel(self.layoutrow3, 'Text', 'Plot scale');
+
+            self.plotscale_dd = uidropdown(self.layoutrow3);
+
+            self.distr_mode_lbl = uilabel(self.layoutrow3, 'Text', 'Distribution mode');
+
+            self.distr_mode_dd = uidropdown(self.layoutrow3);
+
+            self.colormap_lbl = uilabel(self.layoutrow3, 'Text', 'Color map');
+
+            self.colormap_dd = uidropdown(self.layoutrow3);
+
+            self.parameter_lbl = uilabel(self.layoutrow3, 'Text', 'Parameter');
+
+            self.parameter_dd = uidropdown(self.layoutrow3);
+
+            self.graph_lbl = uilabel(self.layoutrow3, 'Text', 'Graph type');
+
+            self.graph_dd = uidropdown(self.layoutrow3);
+
+            % Editboxes
+
 
         end
 
