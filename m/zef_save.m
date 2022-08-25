@@ -17,6 +17,7 @@ zef_data = zef;
 zef_remove_object_fields;
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
+zef_segmentation_tool;
 zef_mesh_tool;
 zef_mesh_visualization_tool;
 zef = zef_update(zef);

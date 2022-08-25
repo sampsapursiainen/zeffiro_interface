@@ -34,7 +34,7 @@ void = [];
 
 sensors_point_like = [];
 
-if isequal(eval('zef.h_zeffiro.UserData'),1) || isempty(eval('zef.h_zeffiro.UserData'))
+if isequal(eval('zef.h_toggle_controls.UserData'),1) 
 colorbar_position = [0.60 0.647 0.01 0.29];
 else
 colorbar_position = [0.8769 0.647 0.01 0.29];
@@ -753,7 +753,7 @@ if loop_count == 1
 view(eval('zef.azimuth'),eval('zef.elevation'));
 axis('image');
 end
-camva(eval('zef.cam_va'));
+camva(zef.h_axes1,eval('zef.cam_va'));
 
 if not(isempty(h_axes_text))
 delete(h_axes_text);
@@ -1012,7 +1012,10 @@ end
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 rotate3d on;
+camva(zef.h_axes1,eval('zef.cam_va'));
 
 %if  iscell(volumetric_distribution) &  eval('zef.visualization_type') == 2
 %close(h_waitbar);
 %end
+
+end

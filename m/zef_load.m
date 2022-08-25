@@ -2,8 +2,6 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef = zef_load(zef)
 
-zef_close_figs;
-
 if nargin == 0
 zef = evalin('base','zef');
 end
@@ -20,6 +18,7 @@ end
 if not(isequal(zef.file,0))
 
 zef_close_tools;
+zef.h_zeffiro.DeleteFcn = '';
 zef_close_figs;
 zef_init;
 load([zef.file_path zef.file]);
@@ -45,7 +44,7 @@ zef_data.mlapp = 1;
  clear zef_i;
  zef = rmfield(zef,'fieldnames');
 
- zef_apply_system_settings;
+ zef = zef_apply_system_settings(zef);
 
  zef.save_file = zef_data.save_file;
  zef.save_file_path = zef_data.save_file_path;
@@ -63,14 +62,14 @@ zef.use_display = 0;
 end
 
 clear zef_data;
-zef_reopen_segmentation_tool;
+zef_segmentation_tool;
+zef_reopen_menu_tool;
 zef_mesh_tool;
-zef_mesh_visualization_tool
+zef_mesh_visualization_tool;
 zef_figure_tool;
-zef = zef_update(zef);
 zef_set_figure_tool_sliders
-
 zef_plugin;
+zef = zef_update(zef);
 
 end;
 

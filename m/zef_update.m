@@ -33,7 +33,7 @@ end
 
 if zef.aux_field_2(zef_j)
 
-    zef_get_data_compartment_table;
+ zef_get_data_compartment_table;
 
 zef_n = 0;
 for zef_k =  1  : size(zef.parameter_profile,1)
@@ -130,6 +130,9 @@ zef = zef_update_compartment_table_data(zef);
 
 zef.compartment_tags = fliplr(zef.compartment_tags);
 
+if isfield(zef,'h_zeffiro_menu')
+    if isvalid(zef.h_zeffiro_menu)
+
 zef.h_aux = allchild(zef.h_menu_window);
 
 for zef_i = 1 : length(zef.h_aux)
@@ -166,6 +169,12 @@ if not(contains(zef.aux_field_2,'zef_update;'))
 end
 end
 
+
+zef = rmfield(zef,{'aux_field_2','h_aux'});
+
+    end
+end
+
 zef.h_project_information.Items = ...
     {['App folder: ' zef.program_path],...
     ['Current path: ' pwd],...
@@ -174,7 +183,7 @@ zef.h_project_information.Items = ...
     ['Project size (MB): ' num2str(round(getfield(whos('zef'),'bytes')/1000000))], ...
     ['Number of windows: ' num2str(length(zef.h_windows_open))]};
 
-zef = rmfield(zef,{'aux_field_1','aux_field_2','aux_field_3','aux_field_4','h_aux'});
+zef = rmfield(zef,{'aux_field_1','aux_field_3','aux_field_4'});
 
 if length(zef.h_project_notes.Value) == 1 && isempty(zef.h_project_notes.Value{1})
 zef.h_project_notes.Value = zef.project_notes;
@@ -197,8 +206,11 @@ end
 
 zef.h_profile_name.Value = zef.profile_name;
 
-zef = zef_update_fig_details(zef);
-
+if isfield(zef,'h_zeffiro')
+if isvalid(zef.h_zeffiro)
+    zef = zef_update_fig_details(zef);
+end
+end
 zef_toggle_lock_on;
 zef_toggle_lock_sensor_sets_on;
 zef_toggle_lock_sensor_names_on;
@@ -208,12 +220,16 @@ clear zef_i zef_j zef_k zef_n;
 
 end
 
+if isfield(zef,'h_mesh_visualization_tool');
 if isvalid(zef.h_mesh_visualization_tool)
     zef_update_mesh_visualization_tool;
 end
+end
 
+if isfield(zef,'h_mesh_tool')
 if isvalid(zef.h_mesh_tool)
     zef_update_mesh_tool;
+end
 end
 
 

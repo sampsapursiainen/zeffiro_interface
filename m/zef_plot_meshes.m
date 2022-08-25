@@ -35,7 +35,7 @@ end
 void = [];
 sensors_point_like = [];
 
-if isequal(eval('zef.h_zeffiro.UserData'),1) || isempty(eval('zef.h_zeffiro.UserData'))
+if isequal(eval('zef.h_toggle_controls.UserData'),1) || isempty(eval('zef.h_toggle_controls.UserData'))
     colorbar_position = [0.60 0.647 0.01 0.29];
 else
     colorbar_position = [0.8769 0.647 0.01 0.29];
@@ -881,7 +881,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
             view(eval('zef.azimuth'),eval('zef.elevation'));
             axis('image');
         end
-        camva(eval('zef.cam_va'));
+        camva(zef.h_axes1,eval('zef.cam_va'));
 
         if eval('zef.axes_visible')
             set(eval('zef.h_axes1'),'visible','on');
@@ -1177,7 +1177,7 @@ zef_update_contour;
 
         view(eval('zef.azimuth'),eval('zef.elevation'));
         axis('image');
-        camva(eval('zef.cam_va'));
+        camva(zef.h_axes1,eval('zef.cam_va'));
         if eval('zef.axes_visible')
             set(eval('zef.h_axes1'),'visible','on');
             set(eval('zef.h_axes1'),'xGrid','on');
@@ -1223,5 +1223,6 @@ zef_update_contour;
 end
 
 rotate3d on;
+camva(zef.h_axes1,eval('zef.cam_va'));
 
 end
