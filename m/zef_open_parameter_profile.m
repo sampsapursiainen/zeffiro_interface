@@ -5,7 +5,7 @@ zef.h_parameter_profile_table.Data = readcell([zef.program_path '/profile/' zef.
 
 set(zef.h_parameter_profile_table,'CellSelectionCallback',@zef_parameter_profile_table_selection);
 
-set(zef.h_parameter_profile_table,'columnformat',{'char','char',{'Scalar','String'},'char','char',{'On','Off'},{'On','Off'},{'Segmentation','Sensors'}});
+set(zef.h_parameter_profile_table,'columnformat',{'char','char',{'Scalar','String'},'char','char',{'On','Off'},{'On','Off'},{'Segmentation','Sensors', 'Free-form'}});
 
 set(zef.h_parameter_profile_from_project,'ButtonPushedFcn','zef.h_parameter_profile_table.Data = zef.parameter_profile;');
 
