@@ -53,6 +53,8 @@ classdef MeshVisualizationTool < handle
 
         % Dropdowns + labels
 
+        layoutrow3 matlab.ui.container.GridLayout
+
         reconstype_lbl matlab.ui.control.Label
 
         reconsttype_dd matlab.ui.control.DropDown
@@ -87,7 +89,54 @@ classdef MeshVisualizationTool < handle
 
         % Editboxes
 
-        layoutrow3 matlab.ui.container.GridLayout
+        layoutrow4 matlab.ui.container.GridLayout
+
+        orientation_lbl matlab.ui.control.Label
+
+        orientation_height_ef matlab.ui.control.EditField
+
+        orientation_azimuth_ef matlab.ui.control.EditField
+
+        rotspeed_lbl matlab.ui.control.Label
+
+        rotspeed_height_ef matlab.ui.control.EditField
+
+        rotspeed_azimuth_ef matlab.ui.control.EditField
+
+        distance_lbl matlab.ui.control.Label
+
+        distance_dist_ef matlab.ui.control.EditField
+
+        distance_expl_ef matlab.ui.control.EditField
+
+        transp_lbl matlab.ui.control.Label
+
+        transp_rec_ef matlab.ui.control.EditField
+
+        transp_surf_ef matlab.ui.control.EditField
+
+        submesh_lbl matlab.ui.control.Label
+
+        submesh1_ef matlab.ui.control.EditField
+
+        submesh2_ef matlab.ui.control.EditField
+
+        % More editboxes
+
+        layoutrow5 matlab.ui.container.GridLayout
+
+        frame_lbl matlab.ui.control.Label
+
+        frame_start_ef matlab.ui.control.EditField
+
+        frame_stop_ef matlab.ui.control.EditField
+
+        frame_step_ef matlab.ui.control.EditField
+
+        plot_thresh_lbl matlab.ui.control.Label
+
+        plot_thresh_ef matlab.ui.control.EditField
+
 
     end % properties
 
@@ -177,6 +226,53 @@ classdef MeshVisualizationTool < handle
 
             % Editboxes
 
+            self.layoutrow4 = uigridlayout(self.layout, [3 6]);
+
+            self.orientation_lbl = uilabel(self.layoutrow4, 'Text', 'Orientation height / azimuth');
+
+            self.orientation_height_ef = uieditfield(self.layoutrow4);
+
+            self.orientation_azimuth_ef = uieditfield(self.layoutrow4);
+
+            self.rotspeed_lbl = uilabel(self.layoutrow4, 'Text', 'Rotation speed height / azimuth');
+
+            self.rotspeed_height_ef = uieditfield(self.layoutrow4);
+
+            self.rotspeed_azimuth_ef = uieditfield(self.layoutrow4);
+
+            self.distance_lbl = uilabel(self.layoutrow4, 'Text', 'Distance / Explode');
+
+            self.distance_dist_ef = uieditfield(self.layoutrow4);
+
+            self.distance_expl_ef = uieditfield(self.layoutrow4);
+
+            self.transp_lbl = uilabel(self.layoutrow4, 'Text', 'Transparency rec. / surf.');
+
+            self.transp_rec_ef = uieditfield(self.layoutrow4);
+
+            self.transp_surf_ef = uieditfield(self.layoutrow4);
+
+            self.submesh_lbl = uilabel(self.layoutrow4, 'Text', 'Submesh');
+
+            self.submesh1_ef = uieditfield(self.layoutrow4);
+
+            self.submesh2_ef = uieditfield(self.layoutrow4);
+
+            % More editboxes
+
+            self.layoutrow5 = uigridlayout(self.layout, [3 6]);
+
+            self.frame_lbl = uilabel(self.layoutrow5, 'Text', 'Frame start / stop / step');
+
+            self.frame_start_ef = uieditfield(self.layoutrow5);
+
+            self.frame_stop_ef = uieditfield(self.layoutrow5);
+
+            self.frame_step_ef = uieditfield(self.layoutrow5);
+
+            self.plot_thresh_lbl = uilabel(self.layoutrow5, 'Text', 'Plot threshold');
+
+            self.plot_thresh_ef = uieditfield(self.layoutrow5);
 
         end
 
