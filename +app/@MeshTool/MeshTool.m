@@ -125,7 +125,7 @@ classdef MeshTool < handle
 
             self.leftlayout.RowHeight = { 'fit','fit','fit' };
 
-            self.leftlayout.ColumnWidth = { 'fit', };
+            self.leftlayout.ColumnWidth = { 'fit' };
 
             self.leftlayout1 = uigridlayout(self.leftlayout, [3,2]);
 
@@ -137,8 +137,7 @@ classdef MeshTool < handle
 
             self.rightlayout.RowHeight = { 'fit','fit','fit' };
 
-            self.rightlayout.ColumnWidth = { 'fit', };
-
+            self.rightlayout.ColumnWidth = { 'fit' };
 
             self.rightlayout1 = uigridlayout(self.rightlayout, [5,1]);
 

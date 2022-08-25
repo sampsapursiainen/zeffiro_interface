@@ -8,288 +8,83 @@ classdef Zef < handle
 
     properties
 
-        imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'};
-        update_colorscale = 1;
-        dof_decomposition_type = 2;
-        update_lights = 1;
-        update_colormap = 1;
-        update_zoom = 6;
-        update_transparency_reconstruction = 0;
-        update_transparency_surface = 0;
-        update_transparency_sensor = 0;
-        update_transparency_cones = 0;
-        update_transparency_additional = 0;
-        update_brightness = 0;
-        update_contrast = 0;
-        update_ambience = 0.85;
-        update_diffusion = 0.5;
-        update_specular = 0.1;
-        colorscale_min_slider = 0;
-        colorscale_max_slider = 0;
-        colormap_size = 2048;
-        colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation','Easter','Greyscale'};
-        smoothing_steps_ele = 0.2;
-        use_pem = 0;
-        default_impedance_value = 5E3;
-        cone_alpha = 1;
-        streamline_draw = 0;
-        streamline_linestyle = '-';
-        streamline_linewidth = 1;
-        streamline_color = 'blue';
-        n_streamline = 100;
-        cone_draw = 0;
-        cone_lattice_resolution = 10;
-        cone_scale = 0.5;
-        lead_field_id = 0;
-        lead_field_id_max = 0;
-        inv_amplitude_db = 20;
-        sigma_bypass = 0;
-        source_space_lock_on = 0;
-        lock_on = 0;
-        lock_sensor_names_on = 0;
-        lock_transforms_on = 0;
-        lock_sensor_sets_on = 0;
-        lock_sensors_on = 0;
-        lock_transform_on = 0;
-        sensors_visual_size = 3.5;
-        project_notes = '';
-        current_version = 5.11;
-        font_size = '12';
-        % matlab_release = version('-release');
-        % matlab_release = str2num(matlab_release(1:4)) + double(matlab_release(5))/128;
-
-        % zef_init_system_settings;
-
-        mlapp = 1;
-
-        %%% Here begins initialization variables
-
-        lead_field_filter_quantile = 0.995;
-        reduce_labeling_outliers = 1;
-        zef_patch_sensor = [];
-        adaptive_refinement_number = 1;
-        adaptive_refinement_compartments = 1;
-        compartment_table_size = 9;
-        adaptive_refinement_on = 0;
-        adaptive_refinement_thresh_val = 2;
-        adaptive_refinement_k_param = 5;
-        zeffiro_current_size = cell(0);
-        plugin_cell = [];
-        active_compartment_ind = [];
-        init_profile = [];
-        bypass_inflate = 0;
-        imaging_method= 1;
-        dynamical_plot_queue_table = cell(0);
-        dpq_selected = 1;
-        name_tags = cell(0);
-        project_tag = '';
-        volumetric_distribution_mode = 1;
-        normalize_lead_field = 4;
-        source_space_creation_iterations = 2;
-        exclude_box = 1;
-        fix_outer_surface = 1;
-        mesh_relabeling = 1;
-        pml_outer_radius_unit = 1;
-        pml_outer_radius = 1.1;
-        pml_max_size_unit = 1;
-        pml_max_size = 2;
-        initial_mesh_mode = 1;
-        sigma_anisotropy = [];
-        noise_data = [];
-        top_reconstruction = [];
-        multi_lead_field = 0;
-        colortune_param = 1;
-        submesh_num = 0;
-        parcellation_plot_type = 1;
-        parcellation_time_series = [];
-        parcellation_colormap = [];
-        parcellation_interp_ind = cell(0);
-        parcellation_name = '';
-        parcellation_colortable = cell(0);
-        use_parcellation = 0;
-        parcellation_merge = 1;
-        parcellation_points = cell(0);
-        parcellation_segment = 'LH';
-        parcellation_tolerance = 5;
-        parcellation_selected = [];
-        parcellation_type = [1];
-        parcellation_quantile = [0.98];
-        use_gpu_graphic = 0;
-
-        loop_movie = [0];
-        loop_movie_count = [5];
-        stop_movie = [0];
-        inv_init_guess_mode = [1];
-        inv_eit_noise = 0;
-        inv_bg_data = [];
-        inv_roi_perturbation = 0.1;
-        current_pattern = [];
-        background_data = [];
-        inv_multires_n_decompositions = [20];
-        inv_multires_dec = [];
-        inv_multires_ind = [];
-        inv_multires_count = [];
-        inv_multires_n_levels = [3];
-        inv_multires_sparsity = 8;
-        inv_multires_n_iter = [10 10 10];
-        h_rec_source = [];
-        h_synth_source = [];
-        h_roi_sphere = [];
-        inv_rec_source = [0 0 0 1 0 0 0 3 1];
-        inv_synth_source = [0 0 0 1 0 0 10 0 3 1];
-        inv_roi_mode = 3;
-        inv_roi_threshold = 0.5;
-        inv_roi_sphere = [0 0 0 15];
-        inv_n_sampler = 100;
-        inv_n_burn_in = 10;
-        reconstruction_type = 7;
-        h_colorbar   = [];
-        location_unit= 1;
-        elevation= 0;
-        azimuth= 0;
-        axes_visible= 0;
-        n_sources= 10000;
-        mesh_resolution= 3;
-        attach_electrodes= 1;
-        source_direction_mode = 2;
-        sensors = [];
-        reuna_p = cell(0);
-        reuna_t = cell(0);
-        nodes   = [];
-        tetra  = [];
-        save_file_path = './data/';
-        save_file = 'default_project.mat';
-        tetra_raw = [];
-        nodes_raw = [];
-        cam_va = 6;
-        preconditioner = 2;
-        solver_tolerance = 1e-6;
-        preconditioner_tolerance= 0.001;
-        domain_labels_raw=[];
-        domain_labels = [];
-        sigma=[];
-        sigma_vec=[];
-        sigma_mod=0;
-        sensors_attached_volume = [];
-        surface_triangles = [];
-        n_sources_mod     = 0;
-        n_sources_old     = 10000;
-        location_unit_current = 1;
-        L = [];
-        source_positions = [];
-        source_directions = [];
-        brain_ind = [];
-        source_ind = [];
-        show_contour = 0;
-        show_contour_text = 0;
-        contour_set_text = '0.1:0.2:0.9';
-        contour_n_smoothing = 2;
-        contour_line_width = 1;
-        cp_on = 0;
-        cp_a = 1;
-        cp_b = 0;
-        cp_c = 0;
-        cp_d = 0;
-        meshing_accuracy = 1;
-        on_screen = 0;
-        import_mode = 0;
-        mesh_smoothing_on = 0;
-        file = '';
-        file_path = '';
-        forward_simulation_selected = [];
-        forward_simulation_table = cell(0);
-        prism_layers = 0;
-        n_prism_layers = 2;
-        prism_size = 0.01;
-        prisms = [];
-        sigma_prisms = [];
-        smoothing_strength = 0.40;
-        smoothing_steps_surf = 0.10;
-        smoothing_steps_vol = 0.90;
-        refinement_on = 0;
-        refinement_volume_on = 0;
-        refinement_volume_number = 1;
-        refinement_volume_on_2 = 0;
-        refinement_volume_number_2 = 1;
-        refinement_surface_number = 1;
-        refinement_surface_number_2 = 1;
-        refinement_surface_on = 0;
-        refinement_surface_on_2 = 0;
-        refinement_volume_compartments = 1;
-        refinement_volume_compartments_2 = 1;
-        refinement_surface_compartments = 1;
-        refinement_surface_compartments_2 = 1;
-        surface_sources = 0;
-        visualization_type = 1;
-        source_interpolation_on = 0;
-        measurements = [];
-        reconstruction = [];
-        inv_hyperprior = [1];
-        inv_hyperprior_weight = [1];
-        inv_beta = [1.5];
-        inv_theta0 = [1e-12];
-        inv_likelihood_std = 0.03;
-        inv_n_map_iterations = [1];
-        inv_pcg_tol = [1e-6];
-        inv_sampling_frequency = [20000];
-        inv_low_cut_frequency = [20];
-        inv_high_cut_frequency = [250];
-        inv_data_segment = [1];
-        source_interpolation_ind = [];
-        cp2_on = 0;
-        cp2_a = 1;
-        cp2_b = 0;
-        cp2_c = 0;
-        cp2_d = 0;
-        cp3_on = 0;
-        cp3_a = 1;
-        cp3_b = 0;
-        cp3_c = 0;
-        cp3_d = 0;
-        inv_dynamic_range = 1e2;
-        inv_scale = 2;
-        inv_colormap = 5;
-        brain_transparency = 1;
-        layer_transparency = 1;
-        meshing_threshold = 0.25;
-        clear_axes1 = 1;
-        normalize_data = 1;
-        cp_mode = 1;
-        inv_time_1 = 0;
-        inv_time_2 = 0.002;
-        inv_time_3 = 0.001;
-        number_of_frames = 1;
-        frame_start = 0;
-        frame_stop = 0;
-        frame_step = 1;
-        orbit_1 = 0;
-        orbit_2 = 0;
-        non_source_ind = [];
-        source_model = 2;
-        use_depth_electrodes = 0;
-        inv_hyperprior_tail_length_db = 10;
-        inv_prior_over_measurement_db = 20;
-        inv_snr = 30;
-        downsample_surfaces = 1;
-        max_surface_face_count = 1;
-        inflate_n_iterations = 500;
-        inflate_strength = 0.8;
-        use_inflated_surfaces = 0;
-        use_fem_mesh_inflation = 1;
-        fem_mesh_inflation_strength = 0.05;
-        explode_everything = 1;
-        colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap','zef_greyscale_colormap'};
-        parcellation_compartment = {'g'};
-        compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
-        mesh_smoothing_repetitions = 1;
-        mesh_optimization_repetitions = 10;
-        mesh_optimization_parameter = 1E-5;
-        mesh_labeling_approach = 1;
+        nodes (:,3) double = [];
+        tetra (:,4) double { mustBePositive, mustBeInteger } = [];
+        L double
+        data struct
 
     end % properties
 
+    events
+
+        DataChanged
+
+    end % events
+
     methods
 
+        function self = Zef(data)
+
+            % Zef.Zef
+            %
+            % A constructor for Zef.
+            %
+            % Input:
+            %
+            % - data
+            %
+            %   A struct with the fields a Zef might have. These should
+            %   ideally be statically defined, but for interoperability with
+            %   an older implementation
+            %
+            % Output:
+            %
+            % - self
+            %
+            %   An instance of Zef.
+
+            try
+                self.L = data.L;
+            catch
+                warning('Could not read lead field from give data. Setting L = [];')
+                self.L = [];
+            end
+
+            try
+                self.nodes = data.nodes;
+            catch
+                warning('Could not read nodes from give data. Setting L = [];')
+                self.nodes = [];
+            end
+
+            try
+                self.tetra = data.tetra;
+            catch
+                warning('Could not read tetrahedra from give data. Setting L = [];')
+                self.tetra = [];
+            end
+
+            self.data = data;
+
+        end % function
+
     end % methods
+
+    methods (Static)
+
+        function self = load_from_file(filepath)
+
+            try
+                data = load(filepath).zef_data;
+            catch
+                warning('Could not find zef_data within the given pickle file. Setting Zef.data field as an empty struct.')
+                data = struct;
+            end
+
+            self = app.Zef(data);
+
+        end % function
+
+    end % methods (Static)
 
 end % classdef
