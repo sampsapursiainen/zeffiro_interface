@@ -8,33 +8,63 @@ classdef Zef < handle
     %
     % Zef Properties:
     %
-    % - nodes
+    % - active_compartment_tags
     %
-    %   The nodes that make up a finite element mesh.
+    %   An array that contains the compartment tags of active compartments.
+    %   Tags are added here when they are active and removed when made
+    %   inactive.
     %
-    % - tetra
+    % - bypass_inflate
     %
-    %   The finite elements formed from nodes.
+    %   A boolean for expressing whether to bypass the inflation step during
+    %   mesh downsampling.
+    %
+    % - compartment_tags
+    %
+    %   A cell array that contains the textual compartment tags of a domain.
+    %
+    % - data
+    %
+    %   Other auxiliary data. Allows storing fields from zef_data structs that
+    %   have not yet been statically declared here. A backwards-compatibility
+    %   field, in other words.
     %
     % - L
     %
     %   A lead field matrix computed by solving Maxwell's equations in the
     %   domain defined by the finite element mesh.
     %
-    % - data
+    % - nodes
     %
-    %   Other auxiliary data.
+    %   The nodes that make up a finite element mesh.
+    %
+    % - surface_downsampling_on
+    %
+    %   A flag for deciding whether to downsample surfaces during FE mesh
+    %   generation.
+    %
+    % - tetra
+    %
+    %   The finite elements formed from nodes.
 
 
     properties
 
-        nodes (:,3) double = [];
+        active_compartment_tags string = [];
 
-        tetra (:,4) double { mustBePositive, mustBeInteger } = [];
+        bypass_inflate (1,1) logical = false;
 
-        L double
+        compartment_tags string = [];
 
         data struct
+
+        L (:,:) double
+
+        nodes (:,3) double = [];
+
+        surface_downsampling_on (1,1) logical = false;
+
+        tetra (:,4) double { mustBePositive, mustBeInteger } = [];
 
     end % properties
 
@@ -94,6 +124,22 @@ classdef Zef < handle
 
                     self.tetra = data.(finame);
 
+                elseif strcmp(finame, 'compartment_tags')
+
+                    self.compartment_tags = data.(finame);
+
+                elseif strcmp(finame, 'active_compartment_tags')
+
+                    self.active_compartment_tags = data.(finame);
+
+                elseif strcmp(finame, 'bypass_inflate')
+
+                    self.bypass_inflate = data.(finame);
+
+                elseif strcmp(finame, 'surface_downsampling_on')
+
+                    self.surface_downsamplig_on = data.(finame);
+
                 elseif strcmp(finame, 'L')
 
                     self.L = data.(finame);
@@ -140,6 +186,8 @@ classdef Zef < handle
             self = app.Zef(data);
 
         end % function
+
+        patch_data = set_surface_resolution(patch_data, surface_resolution)
 
     end % methods (Static)
 

@@ -8,7 +8,7 @@ function self = create_finite_element_mesh(self)
         self app.Zef
     end
 
-    if self.downsample_surfaces == 1;
+    if self.surface_downsampling_on
         self = downsample_surfaces(self);
     end;
 
