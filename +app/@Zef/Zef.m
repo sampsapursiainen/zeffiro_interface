@@ -29,6 +29,10 @@ classdef Zef < handle
     %   have not yet been statically declared here. A backwards-compatibility
     %   field, in other words.
     %
+    % - gpu_count
+    %
+    %   The claimed number of GPUs available.
+    %
     % - L
     %
     %   A lead field matrix computed by solving Maxwell's equations in the
@@ -61,6 +65,8 @@ classdef Zef < handle
         compartment_tags string = [];
 
         data struct
+
+        gpu_count (1,1) double { mustBeNonnegative }
 
         L (:,:) double
 
@@ -134,6 +140,10 @@ classdef Zef < handle
 
                     self.compartment_tags = data.(finame);
 
+                elseif strcmp(finame, 'gpu_count') || strcmp(finame, 'gpu_num')
+
+                    self.gpu_count = data.(finame);
+
                 elseif strcmp(finame, 'active_compartment_tags')
 
                     self.active_compartment_tags = data.(finame);
@@ -167,6 +177,8 @@ classdef Zef < handle
         % Finite element mesh construction
 
         self = create_finite_element_mesh(self);
+
+        nodes = inflate_surface(self, nodes, surface_triangles);
 
     end % methods
 
