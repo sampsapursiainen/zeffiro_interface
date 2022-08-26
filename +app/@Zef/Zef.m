@@ -5,12 +5,35 @@ classdef Zef < handle
     % A handle class that functions as the back-end of the Zeffiro Interface
     % application. The GUI callback functions simply call the methods defined
     % in this class, when a user presses a button to initiate an action.
+    %
+    % Zef Properties:
+    %
+    % - nodes
+    %
+    %   The nodes that make up a finite element mesh.
+    %
+    % - tetra
+    %
+    %   The finite elements formed from nodes.
+    %
+    % - L
+    %
+    %   A lead field matrix computed by solving Maxwell's equations in the
+    %   domain defined by the finite element mesh.
+    %
+    % - data
+    %
+    %   Other auxiliary data.
+
 
     properties
 
         nodes (:,3) double = [];
+
         tetra (:,4) double { mustBePositive, mustBeInteger } = [];
+
         L double
+
         data struct
 
     end % properties
