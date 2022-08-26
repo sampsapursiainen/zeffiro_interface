@@ -221,6 +221,8 @@ classdef Zef < handle
 
         [nodes,triangles,interp_vec] = triangular_mesh_refinement(nodes,triangles);
 
+        [smoothed_nodes] = smooth_surface(nodes,triangles,smoothing_parameter,n_smoothing)
+
     end % methods (Static)
 
 end % classdef
