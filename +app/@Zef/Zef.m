@@ -23,6 +23,11 @@ classdef Zef < handle
     %
     %   A cell array that contains the textual compartment tags of a domain.
     %
+    % - create_sensor_fn
+    %
+    %   A function handle to decide which function to use in constructing
+    %   electrodes.
+    %
     % - data
     %
     %   Other auxiliary data. Allows storing fields from zef_data structs that
@@ -68,6 +73,8 @@ classdef Zef < handle
         bypass_inflate (1,1) logical = false;
 
         compartment_tags string = [];
+
+        create_sensor_fn function_handle
 
         data struct
 
@@ -150,6 +157,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'use_gpu')
 
                     self.use_gpu = data.(finame);
+
+                elseif strcmp(finame, 'create_patch_sensor')
+
+                    self.create_sensor_fn = data.(finame);
 
                 elseif strcmp(finame, 'gpu_count') || strcmp(finame, 'gpu_num')
 
