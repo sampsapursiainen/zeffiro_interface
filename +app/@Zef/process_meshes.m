@@ -403,13 +403,11 @@ function self = process_meshes(self)
 
     end % if
 
-    if nargout == 0
-        self.data.sensors = sensors;
-        self.data.reuna_p = reuna_p;
-        self.data.reuna_t = reuna_t;
-        self.data.reuna_p_inf = reuna_p_inf;
-        self.data.reuna_submesh_ind = reuna_submesh_ind;
-        self.data.reuna_type = reuna_type;
-    end % if
+    self.data.sensors = sensors;
+    self.data.reuna_p = reuna_p;
+    self.data.reuna_t = reuna_t;
+    self.data.reuna_p_inf = reuna_p_inf;
+    self.data.reuna_submesh_ind = reuna_submesh_ind;
+    self.data.reuna_type = reuna_type;
 
 end % function
