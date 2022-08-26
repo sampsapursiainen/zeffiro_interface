@@ -161,9 +161,9 @@ function self = downsample_surfaces(self)
 
                 temp_patch_data.vertices = temp_patch_data.vertices_all;
 
-                temp_patch_data_aux = zef_set_surface_resolution(temp_patch_data,self.max_surface_face_count);
+                temp_patch_data_aux = app.Zef.set_surface_resolution(temp_patch_data,self.max_surface_face_count);
 
-                temp_patch_data_aux.vertices = zef_smooth_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces,1e-2,1);
+                temp_patch_data_aux.vertices = app.Zef.smooth_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces,1e-2,1);
 
                 if self.data.(sources_name) > 0
 
