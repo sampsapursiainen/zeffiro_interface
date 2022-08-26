@@ -136,7 +136,10 @@ function self = downsample_surfaces(self)
 
                         end
 
-                        evalin('base',['self.' current_compartment_tag '_points_inf = [self.' current_compartment_tag '_points_inf ;  temp_patch_data_aux.vertices_inflated];']);
+                        self.data.(points_inf_name) = [
+                            self.data.(points_inf_name) ;
+                            temp_patch_data_aux.vertices_inflated
+                        ];
 
                         self.data.(points_inf_name) = [
                             self.data.(points_inf_name) ;
