@@ -142,7 +142,15 @@ classdef Zef < handle
 
                 elseif strcmp(finame, 'gpu_count') || strcmp(finame, 'gpu_num')
 
-                    self.gpu_count = data.(finame);
+                    if gpuDeviceCount > 0
+
+                        self.gpu_count = data.(finame);
+
+                    else
+
+                        self.gpu_count = 0;
+
+                    end
 
                 elseif strcmp(finame, 'active_compartment_tags')
 
