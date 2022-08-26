@@ -12,7 +12,7 @@ function self = process_meshes(self)
 
     output_mode = 'compact';
 
-    explode_param = self.explode_everything;
+    explode_param = self.data.explode_everything;
 
     i = 0;
     sensors = [];
