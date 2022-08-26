@@ -54,6 +54,11 @@ classdef Zef < handle
     % - tetra
     %
     %   The finite elements formed from nodes.
+    %
+    % - use_gpu
+    %
+    %   A boolean flag to determine whether to use GPU in computations, when
+    %   available.
 
 
     properties
@@ -65,6 +70,8 @@ classdef Zef < handle
         compartment_tags string = [];
 
         data struct
+
+        use_gpu (1,1) logical = false;
 
         gpu_count (1,1) double { mustBeNonnegative }
 
@@ -139,6 +146,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'compartment_tags')
 
                     self.compartment_tags = data.(finame);
+
+                elseif strcmp(finame, 'use_gpu')
+
+                    self.use_gpu = data.(finame);
 
                 elseif strcmp(finame, 'gpu_count') || strcmp(finame, 'gpu_num')
 
