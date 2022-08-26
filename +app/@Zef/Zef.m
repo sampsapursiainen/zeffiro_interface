@@ -175,9 +175,10 @@ classdef Zef < handle
 
                     self.mesh_resolution = data.(finame);
 
-                elseif strcmp(finame, 'surface_downsampling_on')
+                elseif strcmp(finame, 'surface_downsampling_on') ...
+                || strcmp(finame, 'downsample_surfaces')
 
-                    self.surface_downsamplig_on = data.(finame);
+                    self.surface_downsampling_on = data.(finame);
 
                 elseif strcmp(finame, 'L')
 
