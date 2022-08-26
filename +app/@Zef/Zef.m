@@ -88,15 +88,15 @@ classdef Zef < handle
 
                 elseif strcmp(finame, 'nodes')
 
-                    self.nodes = data.(finame)
+                    self.nodes = data.(finame);
 
                 elseif strcmp(finame, 'tetra')
 
-                    self.tetra = data.(finame)
+                    self.tetra = data.(finame);
 
                 elseif strcmp(finame, 'L')
 
-                    self.L = data.(finame)
+                    self.L = data.(finame);
 
                 else
 
