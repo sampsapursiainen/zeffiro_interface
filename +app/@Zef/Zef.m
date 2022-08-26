@@ -174,20 +174,11 @@ classdef Zef < handle
 
     methods (Static)
 
-        function self = load_from_file(filepath)
+        self = load_from_file(filepath);
 
-            try
-                data = load(filepath).zef_data;
-            catch
-                warning('Could not find zef_data within the given pickle file. Setting Zef.data field as an empty struct.')
-                data = struct;
-            end
+        patch_data = set_surface_resolution(patch_data, surface_resolution);
 
-            self = app.Zef(data);
-
-        end % function
-
-        patch_data = set_surface_resolution(patch_data, surface_resolution)
+        [nodes,triangles,interp_vec] = triangular_mesh_refinement(nodes,triangles);
 
     end % methods (Static)
 
