@@ -162,11 +162,14 @@ function self = process_meshes(self)
     s_data_aux = [];
 
     if ismember(evalin('base','zef.imaging_method'),1)
-    f_handle = evalin('base','zef.create_patch_sensor');
-    if not(isempty(f_handle))
-    s_points = f_handle(s_points);
-    end
-    end
+
+        f_handle = evalin('base','zef.create_patch_sensor');
+
+        if not(isempty(f_handle))
+            s_points = f_handle(s_points);
+        end
+
+    end % if
 
     if ismember(evalin('base','zef.imaging_method'),[2 3])
 
@@ -179,13 +182,13 @@ function self = process_meshes(self)
 
     else
 
-    if size(s_points,2)==6
-        s_data_aux = s_points(:,4:6);
-        s_points = s_points(:,1:3);
-    end
+        if size(s_points,2)==6
+            s_data_aux = s_points(:,4:6);
+            s_points = s_points(:,1:3);
+        end
 
-    s_directions = [];
-    s_directions_g = [];
+        s_directions = [];
+        s_directions_g = [];
 
     end % if
 
