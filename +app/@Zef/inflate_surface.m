@@ -10,7 +10,7 @@ function [nodes] = inflate_surface(self, nodes, surface_triangles)
         surface_triangles (:,3) double { mustBeInteger, mustBePositive }
     end
 
-    N = size(self.nodes,1);
+    N = size(nodes,1);
 
     smoothing_steps_surf = self.data.inflate_n_iterations;
 
@@ -62,30 +62,30 @@ function [nodes] = inflate_surface(self, nodes, surface_triangles)
 
         smoothing_param = gpuArray(smoothing_param);
 
-        self.nodes = gpuArray(self.nodes);
+        nodes = gpuArray(nodes);
 
     end
 
     for iter_ind_aux_1 = 1 : smoothing_steps_surf
 
-        nodes_aux = A * self.nodes;
+        nodes_aux = A * nodes;
 
         nodes_aux = nodes_aux./sum_A;
 
-        nodes_aux = nodes_aux - self.nodes;
+        nodes_aux = nodes_aux - nodes;
 
-        self.nodes =  self.nodes + taubin_lambda * smoothing_param * nodes_aux;
+        nodes =  nodes + taubin_lambda * smoothing_param * nodes_aux;
 
-        nodes_aux = A * self.nodes;
+        nodes_aux = A * nodes;
 
         nodes_aux = nodes_aux ./ sum_A;
 
-        nodes_aux = nodes_aux - self.nodes;
+        nodes_aux = nodes_aux - nodes;
 
-        self.nodes =  self.nodes + taubin_mu * smoothing_param * nodes_aux;
+        nodes =  nodes + taubin_mu * smoothing_param * nodes_aux;
 
     end
 
-    self.nodes = gather(nodes);
+    nodes = gather(nodes);
 
 end
