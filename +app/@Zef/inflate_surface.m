@@ -22,7 +22,12 @@ function [nodes] = inflate_surface(self, nodes, surface_triangles)
 
         for j = i+1 : 3
 
-            A_part = sparse(surface_triangles(:,i),surface_triangles(:,j),double(ones(size(surface_triangles,1),1)),N,N);
+            A_part = sparse( ...
+                surface_triangles(:,i), ...
+                surface_triangles(:,j), ...
+                double(ones(size(surface_triangles,1),1)), ...
+                N,N ...
+            );
 
             if i == j
 
@@ -47,7 +52,7 @@ function [nodes] = inflate_surface(self, nodes, surface_triangles)
 
     taubin_mu = -1;
 
-    if self.data.use_gpu && self.gpu_count > 0
+    if self.use_gpu && self.gpu_count > 0
 
         A = gpuArray(A);
 
