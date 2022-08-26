@@ -1,23 +1,24 @@
-function self = triangular_mesh_refinement(self)
+function [nodes,triangles,interp_vec] = triangular_mesh_refinement(nodes,triangles)
 
     % triangular_mesh_refinement
     %
     % Performs a triangular mesh refinement.
 
     arguments
-        self app.Zef
+        nodes (:,3) double
+        triangles (:,3) double { mustBeInteger, mustBePositive }
     end
 
     eps_val = 15;
 
-    n_nodes = size(self.nodes,1);
+    n_nodes = size(nodes,1);
     n_triangles = size(triangles,1);
 
-    self.nodes = [
-        self.nodes;
-        (1/2)*(self.nodes(triangles(:,1),:) + self.nodes(triangles(:,2),:));
-        (1/2)*(self.nodes(triangles(:,2),:) + self.nodes(triangles(:,3),:));
-        (1/2)*(self.nodes(triangles(:,3),:) + self.nodes(triangles(:,1),:))
+    nodes = [
+        nodes;
+        (1/2)*(nodes(triangles(:,1),:) + nodes(triangles(:,2),:));
+        (1/2)*(nodes(triangles(:,2),:) + nodes(triangles(:,3),:));
+        (1/2)*(nodes(triangles(:,3),:) + nodes(triangles(:,1),:))
     ];
 
     interp_vec = [1:n_triangles]';

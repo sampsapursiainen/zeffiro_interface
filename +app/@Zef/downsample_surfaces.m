@@ -55,13 +55,13 @@ function self = downsample_surfaces(self)
 
                 if not(isempty(self.data.(orig_points_name)))
 
-                    temp_patch_data.vertices_all = self.data.(orig_points_name));
+                    temp_patch_data.vertices_all = self.data.(orig_points_name);
                     temp_patch_data.faces_all = self.data.(orig_triangles_name);
                     temp_patch_data.submesh_ind = self.data.(orig_submesh_name);
 
                 else
 
-                    temp_patch_data.vertices_all = self.data.(points_name));
+                    temp_patch_data.vertices_all = self.data.(points_name);
                     temp_patch_data.faces_all = self.data.(triangles_name);
                     temp_patch_data.submesh_ind = self.data.(submesh_name);
 
@@ -107,7 +107,7 @@ function self = downsample_surfaces(self)
 
                     temp_patch_data.vertices = temp_patch_data.vertices_all(temp_patch_data.unique_faces_ind,:);
 
-                    temp_patch_data_aux = zef_set_surface_resolution(temp_patch_data,self.max_surface_face_count);
+                    temp_patch_data_aux = app.Zef.set_surface_resolution(temp_patch_data,self.max_surface_face_count);
 
                     temp_patch_data_aux.vertices = zef_smooth_surface( ...
                         temp_patch_data_aux.vertices, ...
@@ -123,35 +123,71 @@ function self = downsample_surfaces(self)
 
                         else
 
-                            [temp_patch_data_aux.vertices_inflated] = zef_inflate_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces);
+                            [temp_patch_data_aux.vertices_inflated] = app.Zef.inflate_surface( ...
+                                temp_patch_data_aux.vertices, ...
+                                temp_patch_data_aux.faces ...
+                            );
 
                         end
 
                         evalin('base',['self.' current_compartment_tag '_points_inf = [self.' current_compartment_tag '_points_inf ;  temp_patch_data_aux.vertices_inflated];']);
 
+                        self.data.(points_inf_name) = [
+                            self.data.(points_inf_name) ;
+                            temp_patch_data_aux.vertices_inflated
+                        ];
+
                     end
 
-                    evalin('base',['self.' current_compartment_tag '_triangles = [self.' current_compartment_tag '_triangles; temp_patch_data_aux.faces+size(self.' current_compartment_tag '_points,1)];']);
-                    evalin('base',['self.' current_compartment_tag '_points = [self.' current_compartment_tag '_points ;  temp_patch_data_aux.vertices];']);
+                    self.data.(triangles_name) = [
+                        self.data.(triangles_name) ;
+                        temp_patch_data_aux.faces + size(self.data.(points_name),1)
+                    ];
+
+                    self.data.(points_name) = [
+                        self.data.(points_name) ;
+                        temp_patch_data_aux.vertices
+                    ];
+
                     zef_i = temp_patch_data.submesh_ind(zef_j);
-                    evalin('base',['self.' current_compartment_tag '_submesh_ind(' int2str(zef_j) ') = size(self.' current_compartment_tag '_triangles,1);']);
+
+                    self.data.(submesh_ind_name)(int2str(zef_j)) = size(self.data(triangles_name),1);
 
                 end % for
 
             else
 
                 temp_patch_data.faces = temp_patch_data.faces_all;
+
                 temp_patch_data.vertices = temp_patch_data.vertices_all;
+
                 temp_patch_data_aux = zef_set_surface_resolution(temp_patch_data,self.max_surface_face_count);
+
                 temp_patch_data_aux.vertices = zef_smooth_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces,1e-2,1);
 
-                if evalin('base',['self.' current_compartment_tag '_sources']) > 0
-                    temp_patch_data_aux.vertices_inflated = zef_inflate_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces);
-                    evalin('base',['self.' current_compartment_tag '_points_inf = [self.' current_compartment_tag '_points_inf ;  temp_patch_data_aux.vertices_inflated];']);
+                if self.data.(sources_name) > 0
+
+                    temp_patch_data_aux.vertices_inflated = app.Zef.inflate_surface( ...
+                        temp_patch_data_aux.vertices, ...
+                        temp_patch_data_aux.faces ...
+                    );
+
+                    self.data.(points_inf_name) = [
+                        self.data.(points_inf_name) ;
+                        temp_patch_data_aux.vertices_inflated
+                    ];
+
                 end
 
-                evalin('base',['self.' current_compartment_tag '_points = [self.' current_compartment_tag '_points ;  temp_patch_data_aux.vertices];']);
-                evalin('base',['self.' current_compartment_tag '_triangles = [self.' current_compartment_tag '_triangles; temp_patch_data_aux.faces];']);
+                self.data.(points_name) = [
+                    self.data.(points_name) ;
+                    temp_patch_data_aux.vertices
+                ];
+
+                self.data.(triangles_name) = [
+                    self.data.(triangles_name) ;
+                    temp_patch_data_aux.faces
+                ];
 
             end % if
 

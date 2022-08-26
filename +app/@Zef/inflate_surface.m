@@ -1,11 +1,12 @@
-function self = inflate_surface(self)
+function [nodes] = inflate_surface(nodes, surface_triangles)
 
     % inflate_surface
     %
     % Post-processes a given finite element mesh.
 
     arguments
-        self app.Zef
+        nodes (:,3) double
+        surface_triangles (:,3) double { mustBeInteger, mustBePositive }
     end
 
     N = size(self.nodes,1);

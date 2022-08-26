@@ -5,7 +5,8 @@ function patch_data = set_surface_resolution(patch_data, surface_resolution)
     % Re-assesses a given surface resolution.
 
     arguments
-        self app.Zef
+        patch_data
+        surface_resolution
     end
 
     if not(isempty(patch_data.vertices))
@@ -25,7 +26,7 @@ function patch_data = set_surface_resolution(patch_data, surface_resolution)
                 n_ref = floor((log(face_count_from_volume) - log(face_count_from_surface))/log(4));
 
                 for i = 1 : n_ref
-                    [patch_data.vertices, patch_data.faces] = zef_triangular_mesh_refinement(patch_data.vertices,patch_data.faces);
+                    [patch_data.vertices, patch_data.faces] = app.Zef.triangular_mesh_refinement(patch_data.vertices,patch_data.faces);
                 end
 
             else
