@@ -152,11 +152,11 @@ classdef Zef < handle
 
             end
 
-            % Finite element mesh construction
-
-            self = create_finite_element_mesh(self);
-
         end % function
+
+        % Finite element mesh construction
+
+        self = create_finite_element_mesh(self);
 
     end % methods
 
