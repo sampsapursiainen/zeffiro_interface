@@ -106,9 +106,25 @@ classdef Zef < handle
 
             end
 
+            % Finite element mesh construction
+
+            self = create_finite_element_mesh(self);
+
         end % function
 
     end % methods
+
+    methods (Access = private)
+
+        self = downsample_surfaces(self);
+
+        self = process_meshes(self);
+
+        self = create_fem_mesh(self);
+
+        self = postprocess_fem_mesh(self);
+
+    end % methods (Access = private)
 
     methods (Static)
 
