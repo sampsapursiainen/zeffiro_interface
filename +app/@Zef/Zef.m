@@ -17,8 +17,6 @@ classdef Zef < handle
 
     events
 
-        DataChanged
-
     end % events
 
     methods
@@ -37,34 +35,53 @@ classdef Zef < handle
             %   ideally be statically defined, but for interoperability with
             %   an older implementation
             %
+            %   NOTE: Zef explicitly ignores graphics objects, because it
+            %   represents the back-end of Zeffiro Interface. Back-ends do not
+            %   handle graphics.
+            %
             % Output:
             %
             % - self
             %
             %   An instance of Zef.
 
-            try
-                self.L = data.L;
-            catch
-                warning('Could not read lead field from give data. Setting L = [];')
-                self.L = [];
+            arguments
+                data struct
             end
 
-            try
-                self.nodes = data.nodes;
-            catch
-                warning('Could not read nodes from give data. Setting L = [];')
-                self.nodes = [];
-            end
+            fieldkeys = fieldnames(data);
 
-            try
-                self.tetra = data.tetra;
-            catch
-                warning('Could not read tetrahedra from give data. Setting L = [];')
-                self.tetra = [];
-            end
+            for fi = 1 : length(fieldkeys)
 
-            self.data = data;
+                finame = fieldkeys{fi};
+
+                fival = data.(finame);
+
+                is_graphics_obj = isa(fival, 'matlab.graphics.Graphics');
+
+                if is_graphics_obj || strcmp(finame, "fieldnames")
+
+                    % Ignore graphical handles
+
+                elseif strcmp(finame, 'nodes')
+
+                    self.nodes = data.(finame)
+
+                elseif strcmp(finame, 'tetra')
+
+                    self.tetra = data.(finame)
+
+                elseif strcmp(finame, 'L')
+
+                    self.L = data.(finame)
+
+                else
+
+                    self.data(1).(finame) = data.(finame);
+
+                end
+
+            end
 
         end % function
 
