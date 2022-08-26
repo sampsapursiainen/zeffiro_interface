@@ -34,6 +34,10 @@ classdef Zef < handle
     %   A lead field matrix computed by solving Maxwell's equations in the
     %   domain defined by the finite element mesh.
     %
+    % - mesh_resolution
+    %
+    %   The resolution of the contained FE mesh.
+    %
     % - nodes
     %
     %   The nodes that make up a finite element mesh.
@@ -59,6 +63,8 @@ classdef Zef < handle
         data struct
 
         L (:,:) double
+
+        mesh_resolution (1,1) double { mustBePositive } = 1;
 
         nodes (:,3) double = [];
 
@@ -135,6 +141,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'bypass_inflate')
 
                     self.bypass_inflate = data.(finame);
+
+                elseif strcmp(finame, 'mesh_resolution')
+
+                    self.mesh_resolution = data.(finame);
 
                 elseif strcmp(finame, 'surface_downsampling_on')
 
