@@ -26,51 +26,56 @@ function self = process_meshes(self)
 
     for k = 1 : length(compartment_tags)
 
-        var_0 = ['zef.' compartment_tags{k} '_on'];
-        var_1 = ['zef.' compartment_tags{k} '_scaling'];
-        var_2 = ['zef.' compartment_tags{k} '_x_correction'];
-        var_3 = ['zef.' compartment_tags{k} '_y_correction'];
-        var_4 = ['zef.' compartment_tags{k} '_z_correction'];
-        var_5 = ['zef.' compartment_tags{k} '_xy_rotation'];
-        var_6 = ['zef.' compartment_tags{k} '_yz_rotation'];
-        var_7 = ['zef.' compartment_tags{k} '_zx_rotation'];
-        var_8 = ['zef.' compartment_tags{k} '_points_inf'];
-        var_9 = ['zef.' compartment_tags{k} '_points'];
-        var_10 = ['zef.' compartment_tags{k} '_triangles'];
-        var_11 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        var_12 = ['zef.' compartment_tags{k} '_sources'];
-        var_13 = ['zef.' compartment_tags{k} '_affine_transform'];
+        % Build variable names dynamically, no matter if it makes debugging
+        % harder.
+
+        var_0 = [compartment_tags{k} '_on'];
+        var_1 = [compartment_tags{k} '_scaling'];
+        var_2 = [compartment_tags{k} '_x_correction'];
+        var_3 = [compartment_tags{k} '_y_correction'];
+        var_4 = [compartment_tags{k} '_z_correction'];
+        var_5 = [compartment_tags{k} '_xy_rotation'];
+        var_6 = [compartment_tags{k} '_yz_rotation'];
+        var_7 = [compartment_tags{k} '_zx_rotation'];
+        var_8 = [compartment_tags{k} '_points_inf'];
+        var_9 = [compartment_tags{k} '_points'];
+        var_10 = [compartment_tags{k} '_triangles'];
+        var_11 = [compartment_tags{k} '_submesh_ind'];
+        var_12 = [compartment_tags{k} '_sources'];
+        var_13 = [compartment_tags{k} '_affine_transform'];
         var_14 = [compartment_tags{k} '_affine_transform'];
 
-    on_val = evalin('base',var_0);
+        on_val = self.data.(var_0);
 
     if on_val
 
         i = i + 1;
-        reuna_p_inf{i} = evalin('base',var_8);
-        reuna_p{i} = evalin('base',var_9);
-        reuna_t{i} = evalin('base',var_10);
-        reuna_type{i,1} = evalin('base',var_12);
-        reuna_type{i,2} = evalin('base',['zef.compartment_activity{' var_12 '+2' '}']);
+
+        reuna_p_inf{i} = self.data.(var_8);
+        reuna_p{i} = self.data.(var_9);
+        reuna_t{i} = self.data.(var_10);
+        reuna_type{i,1} = self.data.(var_12);
+        reuna_type{i,2} = self.data.compartment_activity{ self.data.(var_12) + 2 };
         reuna_type{i,3} = k;
         reuna_type{i,4} = compartment_tags{k};
-        reuna_submesh_ind{i} = evalin('base',var_11);
+        reuna_submesh_ind{i} = self.data.(var_11);
+
         mean_vec = repmat(mean(reuna_p{i},1),size(reuna_p{i},1),1);
 
-        for t_ind = 1 : length(evalin('base',var_1))
+        for t_ind = 1 : length(self.data.(var_1))
 
-            scaling_val = evalin('base',[var_1 '(' num2str(t_ind) ')']);
-            translation_vec(1) = evalin('base',[var_2 '(' num2str(t_ind) ')']);
-            translation_vec(2) = evalin('base',[var_3 '(' num2str(t_ind) ')']);
-            translation_vec(3) = evalin('base',[var_4 '(' num2str(t_ind) ')']);
-            theta_angle_vec(1) =  evalin('base',[var_5 '(' num2str(t_ind) ')']);
-            theta_angle_vec(2) =  evalin('base',[var_6 '(' num2str(t_ind) ')']);
-            theta_angle_vec(3) =  evalin('base',[var_7 '(' num2str(t_ind) ')']);
+            scaling_val = self.data.(var_1)(t_ind);
+            translation_vec(1) = self.data.(var_2)(t_ind);
+            translation_vec(2) = self.data.(var_3)(t_ind);
+            translation_vec(3) =  self.data.(var_4)(t_ind);
+            theta_angle_vec(1) =  self.data.(var_5)(t_ind);
+            theta_angle_vec(2) =  self.data.(var_6)(t_ind);
+            theta_angle_vec(3) =  self.data.(var_7)(t_ind);
 
-            if evalin('base',['isfield(zef,''' var_14 ''')'])
+            if isfield(self.data, var_14)
 
-                if evalin('base',['length(' var_13 ')']) >= t_ind
-                    affine_transform =  cell2mat(evalin('base',[var_13 '(' num2str(t_ind) ')']));
+                if length(self.data.(var_13)) >= t_ind
+                    affine_transform =  cell2mat(self.data.(var_13)(t_ind));
                 else
                     affine_transform = eye(4);
                 end
@@ -150,14 +155,19 @@ function self = process_meshes(self)
 
     end % if
 
-    sensor_tag = evalin('base','zef.current_sensors');
+    sensor_tag = self.data.current_sensors;
 
-    s_points = evalin('base',['zef.' sensor_tag '_points']);
+    sensor_tag_pts_name = [sensor_tag '_points'];
+
+    sensor_tag_dirs_name = [sensor_tag '_directions'];
+
+    s_points = self.data.(sensor_tag_pts_name);
+
     s_data_aux = [];
 
-    if ismember(evalin('base','zef.imaging_method'),1)
+    if ismember(self.data.imaging_method, 1)
 
-        f_handle = evalin('base','zef.create_patch_sensor');
+        f_handle = self.create_sensor_fn;
 
         if not(isempty(f_handle))
             s_points = f_handle(s_points);
@@ -165,13 +175,14 @@ function self = process_meshes(self)
 
     end % if
 
-    if ismember(evalin('base','zef.imaging_method'),[2 3])
+    if ismember(self.data.imaging_method, [2 3])
 
-        s_directions = evalin('base',['zef.' sensor_tag '_directions(:,1:3)']);
+        s_directions = self.data.(sensor_tag_dirs_name)(:,1:3);
+
         s_directions_g = [];
 
-        if size(evalin('base',['zef.' sensor_tag '_directions']),2) == 6
-            s_directions_g = evalin('base',['zef.' sensor_tag '_directions(:,4:6)']);
+        if size(self.data.(sensor_tag_dirs_name), 2) == 6
+            s_directions_g = self.data.(sensor_tag_dirs_name)(:,4:6);
         end
 
     else
@@ -186,16 +197,25 @@ function self = process_meshes(self)
 
     end % if
 
-    s_scaling = evalin('base',['zef.' sensor_tag '_scaling']);
-    s_x_correction = evalin('base',['zef.' sensor_tag '_x_correction']);
-    s_y_correction = evalin('base',['zef.' sensor_tag '_y_correction']);
-    s_z_correction = evalin('base',['zef.' sensor_tag '_z_correction']);
-    s_xy_rotation = evalin('base',['zef.' sensor_tag '_xy_rotation']);
-    s_yz_rotation = evalin('base',['zef.' sensor_tag '_yz_rotation']);
-    s_zx_rotation = evalin('base',['zef.' sensor_tag '_zx_rotation']);
+    sensor_tag_scaling_name = [sensor_tag '_scaling'];
+    sensor_tag_x_corr_name = [sensor_tag '_x_correction'];
+    sensor_tag_y_corr_name = [sensor_tag '_y_correction'];
+    sensor_tag_z_corr_name = [sensor_tag '_z_correction'];
+    sensor_tag_xy_rot_name = [sensor_tag '_xy_rotation'];
+    sensor_tag_yz_rot_name = [sensor_tag '_yz_rotation'];
+    sensor_tag_zx_rot_name = [sensor_tag '_zx_rotation'];
+    sensor_tag_aff_trans_name = [sensor_tag '_affine_transform'];
 
-    if evalin('base',['isfield(zef,''' sensor_tag '_affine_transform'')']);
-        s_affine_transform = evalin('base',['zef.' sensor_tag '_affine_transform']);
+    s_scaling = self.data.(sensor_tag_scaling_name);
+    s_x_correction = self.data.(sensor_tag_x_corr_name);
+    s_y_correction = self.data.(sensor_tag_y_corr_name);
+    s_z_correction = self.data.(sensor_tag_z_corr_name);
+    s_xy_rotation = self.data.(sensor_tag_xy_rot_name);
+    s_yz_rotation = self.data.(sensor_tag_yz_rot_name);
+    s_zx_rotation = self.data.(sensor_tag_zx_rot_name);
+
+    if isfield(self.data, sensor_tag_aff_trans_name)
+        s_affine_transform = self.data.(ensor_tag_aff_trans_name);
     else
         s_affine_transform = cell(0);
     end
@@ -216,8 +236,8 @@ function self = process_meshes(self)
 
     use_pem = 0;
 
-    if ismember(evalin('base','zef.imaging_method'),[1 5])
-        use_pem = evalin('base','zef.use_pem');
+    if ismember(self.data.imaging_method, [1 5])
+        use_pem = self.data.use_pem;
     end
 
     for t_ind = 1 : length(s_scaling)
@@ -236,11 +256,11 @@ function self = process_meshes(self)
                 sensors_aux = sensors_aux*s_affine_transform{t_ind}';
                 sensors(:,1: 3) = sensors_aux(:,1:3);
 
-                if size(sensors_aux,2) >= 6 && ismember(evalin('base','zef.imaging_method'),[2 3])
+                if size(sensors_aux,2) >= 6 && ismember(self.data.imaging_method, [2 3])
                     sensors(:,4:6) = sensors(:,4:6)*s_affine_transform{t_ind}(1:3,1:3)';
                 end
 
-                if size(sensors_aux,2) >= 9 && ismember(evalin('base','zef.imaging_method'),[3])
+                if size(sensors_aux,2) >= 9 && ismember(self.data.imaging_method, [3])
                     sensors(:,7:9) = sensors(:,7:9)*s_affine_transform{t_ind}(1:3,1:3)';
                 end
 
@@ -336,11 +356,11 @@ function self = process_meshes(self)
 
     if not(isequal(box_ind,0))
 
-        pml_outer_radius_unit = evalin('base','zef.pml_outer_radius_unit');
-        pml_outer_radius = evalin('base','zef.pml_outer_radius');
+        pml_outer_radius_unit = self.data.pml_outer_radius_unit;
+        pml_outer_radius = self.data.pml_outer_radius;
 
         if pml_outer_radius_unit == 1
-            box_outer_radius = pml_outer_radius*max_val;
+            box_outer_radius = pml_outer_radius * max_val;
         elseif pml_outer_radius_unit == 2
             box_outer_radius = pml_outer_radius;
         end
@@ -371,24 +391,25 @@ function self = process_meshes(self)
             7  8  6;
         ];
 
-        assignin('base','zef_data',reuna_p{box_ind});
-        evalin('base',['zef.' compartment_tags{reuna_type{box_ind,3}} '_points = zef_data;']);
-        assignin('base','zef_data',reuna_t{box_ind});
-        evalin('base',['zef.' compartment_tags{reuna_type{box_ind,3}} '_triangles = zef_data;']);
-        evalin('base',['zef.' compartment_tags{reuna_type{box_ind,3}} '_submesh_ind = size(zef_data,1);']);
-        evalin('base','clear zef_data;');
+        tag = compartment_tags{reuna_type{box_ind,3}};
+
+        tag_points_name = [tag '_points'];
+        tag_triangles_name = [tag '_triangles'];
+        tag_submesh_ind_name = [tag '_submesh_ind'];
+
+        self.data.(tag_points_name) = reuna_p{box_ind};
+        self.data.(tag_triangles_name) = reuna_t{box_ind};
+        self.data.(tag_submesh_ind_name) = size(reuna_t{box_ind},1);
 
     end % if
 
     if nargout == 0
-        zef_data.sensors = sensors;
-        zef_data.reuna_p = reuna_p;
-        zef_data.reuna_t = reuna_t;
-        zef_data.reuna_p_inf = reuna_p_inf;
-        zef_data.reuna_submesh_ind = reuna_submesh_ind;
-        zef_data.reuna_type = reuna_type;
-        assignin('base', 'zef_data', zef_data);
-        evalin('base', 'zef_assign_data;');
+        self.data.sensors = sensors;
+        self.data.reuna_p = reuna_p;
+        self.data.reuna_t = reuna_t;
+        self.data.reuna_p_inf = reuna_p_inf;
+        self.data.reuna_submesh_ind = reuna_submesh_ind;
+        self.data.reuna_type = reuna_type;
     end % if
 
 end % function
