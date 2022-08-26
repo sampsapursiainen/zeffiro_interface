@@ -12,13 +12,7 @@ function self = process_meshes(self)
 
     output_mode = 'compact';
 
-    explode_param = 1;
-
-    if not(isempty(varargin))
-        if not(isempty(varargin{1}))
-            explode_param = varargin{1};
-        end
-    end
+    explode_param = self.explode_everything;
 
     i = 0;
     sensors = [];
@@ -28,7 +22,7 @@ function self = process_meshes(self)
     reuna_submesh_ind = cell(0);
     reuna_type = cell(0);
 
-    compartment_tags = evalin('base','zef.compartment_tags');
+    compartment_tags = self.compartment_tags;
 
     for k = 1 : length(compartment_tags)
 
