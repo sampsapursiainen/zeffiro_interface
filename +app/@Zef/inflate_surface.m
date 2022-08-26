@@ -1,10 +1,11 @@
-function [nodes] = inflate_surface(nodes, surface_triangles)
+function [nodes] = inflate_surface(self, nodes, surface_triangles)
 
     % inflate_surface
     %
     % Post-processes a given finite element mesh.
 
     arguments
+        self app.Zef
         nodes (:,3) double
         surface_triangles (:,3) double { mustBeInteger, mustBePositive }
     end
@@ -46,7 +47,7 @@ function [nodes] = inflate_surface(nodes, surface_triangles)
 
     taubin_mu = -1;
 
-    if self.data.use_gpu && self.data.gpu_count > 0
+    if self.data.use_gpu && self.gpu_count > 0
 
         A = gpuArray(A);
 

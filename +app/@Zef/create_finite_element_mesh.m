@@ -9,7 +9,7 @@ function self = create_finite_element_mesh(self)
     end
 
     if self.surface_downsampling_on
-        self = downsample_surfaces(self);
+        self = self.downsample_surfaces();
     end
 
     self = process_meshes(self);

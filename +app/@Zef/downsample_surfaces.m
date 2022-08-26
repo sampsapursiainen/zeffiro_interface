@@ -29,7 +29,9 @@ function self = downsample_surfaces(self)
 
         current_compartment_tag = self.compartment_tags{zef_k};
 
-        if ismember(current_compartment_tag, self.active_compartment_tags)
+        compartment_on_name = [ current_compartment_tag '_on' ];
+
+        if self.data.(compartment_on_name)
 
             % Construct field names for querying self.data.
 
@@ -43,15 +45,15 @@ function self = downsample_surfaces(self)
 
             triangles_name = [current_compartment_tag '_triangles'];
 
-            submesh_name = [current_compartment_tag '_submesh_ind'];
+            submesh_ind_name = [current_compartment_tag '_submesh_ind'];
 
             points_inf_name = [current_compartment_tag '_points_inf'];
 
-            points_inf_name = [current_compartment_tag '_sources'];
+            sources_name = [current_compartment_tag '_sources'];
 
             % Index into self.data with the names.
 
-            if isfield(self.data.(orig_points_name))
+            if isfield(self.data, orig_points_name)
 
                 if not(isempty(self.data.(orig_points_name)))
 
@@ -107,7 +109,11 @@ function self = downsample_surfaces(self)
 
                     temp_patch_data.vertices = temp_patch_data.vertices_all(temp_patch_data.unique_faces_ind,:);
 
-                    temp_patch_data_aux = app.Zef.set_surface_resolution(temp_patch_data,self.max_surface_face_count);
+                    temp_patch_data_aux = app.Zef.set_surface_resolution( ...
+                        self, ...
+                        temp_patch_data, ...
+                        self.data.max_surface_face_count ...
+                    );
 
                     temp_patch_data_aux.vertices = zef_smooth_surface( ...
                         temp_patch_data_aux.vertices, ...
@@ -123,7 +129,7 @@ function self = downsample_surfaces(self)
 
                         else
 
-                            [temp_patch_data_aux.vertices_inflated] = app.Zef.inflate_surface( ...
+                            [temp_patch_data_aux.vertices_inflated] = self.inflate_surface( ...
                                 temp_patch_data_aux.vertices, ...
                                 temp_patch_data_aux.faces ...
                             );
@@ -151,7 +157,7 @@ function self = downsample_surfaces(self)
 
                     zef_i = temp_patch_data.submesh_ind(zef_j);
 
-                    self.data.(submesh_ind_name)(int2str(zef_j)) = size(self.data(triangles_name),1);
+                    self.data.(submesh_ind_name)(zef_j) = size(self.data.(triangles_name),1);
 
                 end % for
 
