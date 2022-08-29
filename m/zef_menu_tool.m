@@ -131,6 +131,8 @@ clear  zef_k
 zef = rmfield(zef,'h_temp');
 zef = rmfield(zef,'menu_accelerator_vec');
 
+zef_set_size_change_function(zef.h_zeffiro_menu);
+
 if zef.h_segmentation_tool_toggle == 1
     
 zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
@@ -146,6 +148,7 @@ zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
                           0]; 
 
 end
+
 
 
 zef.menu_expanded_size = 0.8*zef.segmentation_tool_default_position(4);

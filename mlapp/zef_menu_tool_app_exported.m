@@ -87,6 +87,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
         h_menu_documentation            matlab.ui.container.Menu
         h_menu_about                    matlab.ui.container.Menu
         CheckBox                        matlab.ui.control.CheckBox
+        h_menu_logo                     matlab.ui.control.Image
     end
 
     
@@ -472,6 +473,11 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
             app.CheckBox = uicheckbox(app.h_zeffiro_menu);
             app.CheckBox.Visible = 'off';
             app.CheckBox.Position = [43 346 81 22];
+
+            % Create h_menu_logo
+            app.h_menu_logo = uiimage(app.h_zeffiro_menu);
+            app.h_menu_logo.Position = [18 80 764 229];
+            app.h_menu_logo.ImageSource = 'zeffiro_logo_compass.png';
 
             % Show the figure after all components are created
             app.h_zeffiro_menu.Visible = 'off';
