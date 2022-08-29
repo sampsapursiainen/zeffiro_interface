@@ -68,7 +68,7 @@ function self = create_fem_mesh(self)
 
     size_xyz = size(X);
 
-    wb = zef_waitbar(0,'Initial mesh.');
+    wb = waitbar(0,'Initial mesh.');
 
     if isequal(self.data.initial_mesh_mode, 1)
 
@@ -99,7 +99,7 @@ function self = create_fem_mesh(self)
 
         for i_x = 1 : size(X,2) - 1
 
-            zef_waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
 
             for i_y = 1 : size(X,1) - 1
 
@@ -159,7 +159,7 @@ function self = create_fem_mesh(self)
 
         for i_x = 1 : size(X,2) - 1
 
-            zef_waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
 
             for i_y = 1 : size(X,1) - 1
 
@@ -288,13 +288,13 @@ function self = create_fem_mesh(self)
 
             if length(n_refinement) == 1
 
-                zef_waitbar(0,wb,'Volume refinement.');
+                waitbar(0,wb,'Volume refinement.');
 
                 for i = 1 : n_refinement
 
                     [self.nodes,tetra,self.domain_labels] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments);
 
-                    zef_waitbar(i/n_refinement,wb,'Volume refinement.');
+                    waitbar(i/n_refinement,wb,'Volume refinement.');
 
                     if self.data.mesh_relabeling
 
@@ -309,7 +309,7 @@ function self = create_fem_mesh(self)
 
             else
 
-                zef_waitbar(0/length(n_refinement),wb,'Volume refinement.');
+                waitbar(0/length(n_refinement),wb,'Volume refinement.');
 
                 for j = 1 : length(n_refinement)
 
@@ -326,7 +326,7 @@ function self = create_fem_mesh(self)
 
                         end % if
 
-                        zef_waitbar(i/length(n_refinement(j)),wb,'Volume refinement.');
+                        waitbar(i/length(n_refinement(j)),wb,'Volume refinement.');
 
                     end % for
 
@@ -352,7 +352,7 @@ function self = create_fem_mesh(self)
 
             if length(n_refinement) == 1
 
-                zef_waitbar(0,wb,'Adaptive volume refinement.');
+                waitbar(0,wb,'Adaptive volume refinement.');
 
                 for i = 1 : n_refinement
 
@@ -366,7 +366,7 @@ function self = create_fem_mesh(self)
 
                     tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
-                    zef_waitbar(i/n_refinement,wb,'Adaptive volume refinement.');
+                    waitbar(i/n_refinement,wb,'Adaptive volume refinement.');
 
                     if self.data.mesh_relabeling
 
@@ -381,7 +381,7 @@ function self = create_fem_mesh(self)
 
             else
 
-                zef_waitbar(0/length(n_refinement),wb,'Adaptive volume refinement.');
+                waitbar(0/length(n_refinement),wb,'Adaptive volume refinement.');
 
                 for j = 1 : length(n_refinement)
 
@@ -406,7 +406,7 @@ function self = create_fem_mesh(self)
 
                         end % if
 
-                        zef_waitbar(i/length(n_refinement(j)),wb,'Adaptive volume refinement.');
+                        waitbar(i/length(n_refinement(j)),wb,'Adaptive volume refinement.');
 
                     end % for
 

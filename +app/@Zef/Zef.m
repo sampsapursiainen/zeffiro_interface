@@ -274,6 +274,8 @@ classdef Zef < handle
 
         self = segmentation_couter_step(self);
 
+        [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_info);
+
     end % methods (Access = private)
 
     methods (Static)
