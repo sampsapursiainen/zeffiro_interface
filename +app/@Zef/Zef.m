@@ -38,6 +38,10 @@ classdef Zef < handle
     %
     %   The claimed number of GPUs available.
     %
+    % - initial_mesh_mode
+    %
+    %   The mode used in meshing.
+    %
     % - L
     %
     %   A lead field matrix computed by solving Maxwell's equations in the
@@ -47,9 +51,18 @@ classdef Zef < handle
     %
     %   The resolution of the contained FE mesh.
     %
+    % - name_tags
+    %
+    %   Names of the different brain compartments.
+    %
     % - nodes
     %
     %   The nodes that make up a finite element mesh.
+    %
+    % - sensors
+    %
+    %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
+    %   more columns.
     %
     % - surface_downsampling_on
     %
@@ -82,11 +95,17 @@ classdef Zef < handle
 
         gpu_count (1,1) double { mustBeNonnegative }
 
+        initial_mesh_mode (1,1) double { mustBeInteger }
+
         L (:,:) double
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
+        name_tags string = [];
+
         nodes (:,3) double = [];
+
+        sensors (:,:) double = [];
 
         surface_downsampling_on (1,1) logical = false;
 
@@ -154,6 +173,10 @@ classdef Zef < handle
 
                     self.compartment_tags = data.(finame);
 
+                elseif strcmp(finame, 'name_tags')
+
+                    self.name_tags = data.(finame);
+
                 elseif strcmp(finame, 'use_gpu')
 
                     self.use_gpu = data.(finame);
@@ -185,6 +208,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'mesh_resolution')
 
                     self.mesh_resolution = data.(finame);
+
+                elseif strcmp(finame, 'sensors')
+
+                    self.sensors = data.(finame);
 
                 elseif strcmp(finame, 'surface_downsampling_on') ...
                 || strcmp(finame, 'downsample_surfaces')
@@ -222,6 +249,8 @@ classdef Zef < handle
         self = create_fem_mesh(self);
 
         self = postprocess_fem_mesh(self);
+
+        self = segmentation_couter_step(self);
 
     end % methods (Access = private)
 
