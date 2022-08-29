@@ -64,6 +64,11 @@ classdef Zef < handle
     %   How many cores are to be used in parallel computations, when enough
     %   cores are available.
     %
+    % - parallel_vectors
+    %
+    %   Used to determine how many restarts are needed when inflating meshes
+    %   and finding points within compartments.
+    %
     % - sensors
     %
     %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
@@ -111,6 +116,8 @@ classdef Zef < handle
         nodes (:,3) double = [];
 
         parallel_processes double { mustBeInteger, mustBePositive }
+
+        parallel_vectors double { mustBeInteger, mustBePositive }
 
         sensors (:,:) double = [];
 
@@ -232,6 +239,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'parallel_processes')
 
                     self.parallel_processes = data.(finame);
+
+                elseif strcmp(finame, 'parallel_vectors')
+
+                    self.parallel_vectors = data.(finame);
 
                 else
 
