@@ -357,6 +357,7 @@ function self = process_meshes(self)
     if not(isequal(box_ind,0))
 
         pml_outer_radius_unit = self.data.pml_outer_radius_unit;
+
         pml_outer_radius = self.data.pml_outer_radius;
 
         if pml_outer_radius_unit == 1

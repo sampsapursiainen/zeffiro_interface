@@ -1,7 +1,11 @@
-function self = mesh_labeling_step(self);
+function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_compartments)
 
     arguments
         self app.Zef
+        label_ind { mustBeInteger, mustBePositive }
+        labeling_flag { mustBeInteger, mustBePositive }
+        tetra double { mustBeInteger, mustBeNonnegative }
+        n_compartments { mustBeInteger, mustBePositive }
     end
 
     label_ind = uint32(label_ind);
@@ -12,7 +16,7 @@ function self = mesh_labeling_step(self);
         %Initialize labeling.
         %***********************************************************
 
-        I = zeros(size(nodes,1), 1);
+        I = zeros(size(self.nodes,1), 1);
 
         I_2 = [1 : length(I)]';
 
@@ -20,7 +24,9 @@ function self = mesh_labeling_step(self);
 
         pml_counter = 0;
 
-        for i_labeling = 1 : length(reuna_p)
+        submesh_cell = self.data.submesh_cell;
+
+        for i_labeling = 1 : length(self.data.reuna_p)
 
             for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
 
@@ -28,25 +34,25 @@ function self = mesh_labeling_step(self);
 
                 if isempty(submesh_cell{i_labeling})
 
-                    reuna_t_aux = reuna_t{i_labeling};
+                    reuna_t_aux = self.data.reuna_t{i_labeling};
 
                 else
 
                     if k_labeling == 1
 
-                        reuna_t_aux = reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
+                        reuna_t_aux = self.data.reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
 
                     else
 
-                        reuna_t_aux = reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
+                        reuna_t_aux = self.data.reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
 
                     end
 
                 end % if
 
-                if not(isequal(i_labeling,pml_ind_aux))
+                if not(isequal(i_labeling, self.data.pml_ind_aux))
 
-                    I_1 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_2,:),[compartment_counter n_compartments]);
+                    I_1 = zef_point_in_compartment(self.data.reuna_p{i_labeling},reuna_t_aux,self.nodes(I_2,:),[compartment_counter n_compartments]);
 
                     I(I_2(I_1)) = compartment_counter;
 
@@ -206,7 +212,7 @@ function self = mesh_labeling_step(self);
                         break
                     end
 
-                    if isempty(self.data.submesh_cell{i_labeling})
+                    if isempty(submesh_cell{i_labeling})
 
                         reuna_t_aux = reuna_t{i_labeling};
 

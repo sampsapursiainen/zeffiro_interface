@@ -130,7 +130,7 @@ function self = create_fem_mesh(self)
 
         end % for
 
-    elseif isequal(elf.data.initial_mesh_mode, 2)
+    elseif isequal(self.data.initial_mesh_mode, 2)
 
         ind_mat_1 = [
             3     4     1     7 ;
@@ -153,7 +153,7 @@ function self = create_fem_mesh(self)
 
         end
 
-        nodes = [X(:) Y(:) Z(:)];
+        self.nodes = [X(:) Y(:) Z(:)];
 
         i = 1;
 
@@ -195,7 +195,7 @@ function self = create_fem_mesh(self)
 
     labeling_flag = 1;
 
-    zef_mesh_labeling_step;
+    self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
     refinement_compartments_aux = self.data.refinement_surface_compartments;
 
@@ -292,7 +292,7 @@ function self = create_fem_mesh(self)
 
                 for i = 1 : n_refinement
 
-                    [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments);
+                    [self.nodes,tetra,self.domain_labels] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments);
 
                     zef_waitbar(i/n_refinement,wb,'Volume refinement.');
 
@@ -315,7 +315,7 @@ function self = create_fem_mesh(self)
 
                     for i = 1 : n_refinement(j)
 
-                        [nodes,tetra,domain_labels] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j));
+                        [self.nodes,tetra,self.domain_labels] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments(j));
 
                         if self.data.mesh_relabeling
 
@@ -360,9 +360,9 @@ function self = create_fem_mesh(self)
 
                     thresh_val  = self.data.adaptive_refinement_thresh_val;
 
-                    tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
+                    tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, self.nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
-                    [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments, tetra_refine_ind);
+                    [self.nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments, tetra_refine_ind);
 
                     tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
@@ -391,9 +391,9 @@ function self = create_fem_mesh(self)
 
                         thresh_val  = self.data.adaptive_refinement_thresh_val;
 
-                        tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
+                        tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, self.nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
-                        [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels,refinement_compartments(j),tetra_refine_ind);
+                        [self.nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments(j),tetra_refine_ind);
 
                         tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
@@ -420,16 +420,12 @@ function self = create_fem_mesh(self)
 
     close(wb);
 
-    self.nodes = nodes;
+    self.name_tags = name_tags;
 
     self.tetra = tetra;
 
-    self.domain_labels = domain_labels;
-
-    self.name_tags = name_tags;
-
 % if nargout == 0
-%     assignin('base','zef_data',struct('nodes',nodes,'nodes_raw',nodes,'tetra',tetra,'tetra_raw',tetra,'domain_labels',domain_labels,'domain_labels_raw',domain_labels,'name_tags',name_tags));
+%     assignin('base','zef_data',struct('nodes',nodes,'nodes_raw',nodes,'tetra',tetra,'tetra_raw',tetra,'self.domain_labels',self.domain_labels,'domain_labels_raw',self.domain_labels,'name_tags',name_tags));
 % end
 
 end % function
