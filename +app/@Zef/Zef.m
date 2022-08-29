@@ -59,6 +59,11 @@ classdef Zef < handle
     %
     %   The nodes that make up a finite element mesh.
     %
+    % - parallel_processes
+    %
+    %   How many cores are to be used in parallel computations, when enough
+    %   cores are available.
+    %
     % - sensors
     %
     %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
@@ -104,6 +109,8 @@ classdef Zef < handle
         name_tags string = [];
 
         nodes (:,3) double = [];
+
+        parallel_processes double { mustBeInteger, mustBePositive }
 
         sensors (:,:) double = [];
 
@@ -221,6 +228,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'L')
 
                     self.L = data.(finame);
+
+                elseif strcmp(finame, 'parallel_processes')
+
+                    self.parallel_processes = data.(finame);
 
                 else
 
