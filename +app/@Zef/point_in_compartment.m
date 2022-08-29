@@ -168,9 +168,9 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
     ind_inc = 0;
     for restart_ind = 1 : n_restarts
         for i = 1 : length(sub_cell_aux_2{restart_ind})
-     length_sub_cell = length(sub_cell_aux_2{restart_ind}{i});
-    ind_vec_aux(ind_inc+1:ind_inc+length_sub_cell) = sub_cell_aux_2{restart_ind}{i};
-    ind_inc = ind_inc + length_sub_cell;
+            length_sub_cell = length(sub_cell_aux_2{restart_ind}{i});
+            ind_vec_aux(ind_inc+1:ind_inc+length_sub_cell) = sub_cell_aux_2{restart_ind}{i};
+            ind_inc = ind_inc + length_sub_cell;
         end
     end
 
