@@ -14,6 +14,8 @@ function self = mesh_refinement_step(self, tetra)
 
     if self.refinement_on;
 
+        nodes = self.nodes;
+
         if refinement_flag == 1
 
             surface_refinement_on = self.refinement_surface_on;
@@ -176,6 +178,7 @@ function self = mesh_refinement_step(self, tetra)
             waitbar(5/length_waitbar,wb,'Surface refinement.');
 
             I =find(edge_ind(:,4));
+
             edge_ind(I,4) = edge_ind(I,4) + size_nodes;
             edge_ind = sortrows(edge_ind,[5 3 6]);
             edge_mat = reshape(edge_ind(:,4),6,length(J_aux))';
@@ -372,7 +375,7 @@ function self = mesh_refinement_step(self, tetra)
 
             if refinement_flag == 2
 
-                [nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
+                [nodes,optimizer_flag] = self.fix_negatives(nodes, tetra);
 
                 if optimizer_flag == 1
                     [tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
