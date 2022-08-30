@@ -141,7 +141,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                     while not(isempty(tetra_ind_aux))
 
                         I_1 = find(domain_labels <= compartment_counter);
-                        [I_2] = zef_surface_mesh(label_ind(I_1,:));
+                        [I_2] = self.surface_mesh(label_ind(I_1,:));
                         I_1 = setdiff([1:size(domain_labels,1)]',I_1);
                         [I_2, ~] = find(ismember(label_ind(I_1,:),I_2));
                         I_3 = label_ind(I_1(I_2),:);
@@ -163,7 +163,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                         while not(isempty(I_3)) && compartment_counter < max_compartments
 
                             I_1 = find(domain_labels <= compartment_counter);
-                            [~,~,I_2] = zef_surface_mesh(label_ind(I_1,:));
+                            [~,~,I_2] = self.surface_mesh(label_ind(I_1,:));
                             I_3 = accumarray(I_2,ones(size(I_2)),[size(I_1,1) 1]);
                             I_3 = find(I_3 >1);
                             domain_labels(I_1(I_3)) = compartment_counter+1;
@@ -175,7 +175,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                         while not(isempty(I_3)) && compartment_counter < max_compartments
 
                             I_1 = find(domain_labels <= compartment_counter);
-                            [~,~,~,~,I_2] = zef_surface_mesh(label_ind,[],I_1);
+                            [~,~,~,~,I_2] = self.surface_mesh(label_ind,[],I_1);
                             I_2 = I_2(find(I_2));
                             I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
                             I_3 = find(I_3 >= 3);
@@ -251,7 +251,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                         else
 
                             loop_steps = loop_steps + 1;
-                            [I_2] = zef_surface_mesh(label_ind(I_1,:));
+                            [I_2] = self.surface_mesh(label_ind(I_1,:));
                             I_1 = setdiff([1:size(domain_labels,1)]',I_1);
                             [I_2, ~] = find(ismember(label_ind(I_1,:),I_2));
                             I_3 = label_ind(I_1(I_2),:);
@@ -277,7 +277,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                         while not(isempty(I_3)) && compartment_counter < max_compartments
 
                             I_1 = find(domain_labels <= compartment_counter);
-                            [~,~,I_2] = zef_surface_mesh(label_ind(I_1,:));
+                            [~,~,I_2] = self.surface_mesh(label_ind(I_1,:));
                             I_3 = accumarray(I_2,ones(size(I_2)),[size(I_1,1) 1]);
                             I_3 = find(I_3 >1);
                             domain_labels(I_1(I_3)) = compartment_counter+1;
