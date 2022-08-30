@@ -230,7 +230,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
-                        zef_mesh_labeling_step;
+                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -249,7 +249,7 @@ function self = create_fem_mesh(self)
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 2;
-                            zef_mesh_labeling_step;
+                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
@@ -266,7 +266,7 @@ function self = create_fem_mesh(self)
         pml_ind = [];
         label_ind = uint32(tetra);
         labeling_flag = 2;
-        zef_mesh_labeling_step;
+        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
     end % if
 
@@ -301,7 +301,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
-                        zef_mesh_labeling_step;
+                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -322,7 +322,7 @@ function self = create_fem_mesh(self)
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 2;
-                            zef_mesh_labeling_step;
+                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
@@ -373,7 +373,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 3;
-                        zef_mesh_labeling_step;
+                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -402,7 +402,7 @@ function self = create_fem_mesh(self)
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 3;
-                            zef_mesh_labeling_step;
+                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
