@@ -1,10 +1,27 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
+
+if zef.h_segmentation_tool_toggle == 1
+    
+zef.size_temp = [zef.segmentation_tool_default_position(1) + 0.505*zef.segmentation_tool_default_position(3), ...
+                          zef.segmentation_tool_default_position(2),...
+                          0.75*0.505*zef.segmentation_tool_default_position(3),...
+                          0.75*zef.segmentation_tool_default_position(4)];
+                          
+else
+
+zef.size_temp = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
+                          zef.segmentation_tool_default_position(2),...
+                          0.75*zef.segmentation_tool_default_position(3),...
+                          0.6*zef.segmentation_tool_default_position(4)]; 
+
+end
+
 zef.h_zeffiro = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
-'Units','normalized',...
-'Position',[0.2    0.3    0.40    0.5134],...
+'Units','Pixels',...
+'OuterPosition',zef.size_temp,...
 'Renderer',get(0,'defaultfigureRenderer'),...
 'Visible',zef.use_display,...
 'Color',get(0,'defaultfigureColor'),...
@@ -160,8 +177,6 @@ set(findobj(get(gcf,'Children'),'Tag','loop_count'),'UserData',str2num(get(findo
 set(findobj(get(gcf,'Children'),'Tag','loop_movie'),'UserData',get(findobj(get(gcf,'Children'),'Tag','loop_count'),'Value'));
 
 
-
-
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
 set(zef.h_zeffiro,'papersize',[zef.snapshot_vertical_resolution/200 zef.snapshot_horizontal_resolution/200]);
 
@@ -185,25 +200,6 @@ set(zef.h_zeffiro,'AutoResizeChildren','off');
 
 set(zef.h_zeffiro,'Tag',num2str(zef_fig_num));
 
-zef.h_zeffiro.SizeChangedFcn = '';
-
-zef.h_zeffiro.Units = 'Pixels';
-zef_set_size_change_function(zef.h_zeffiro,1);
-if zef.h_segmentation_tool_toggle == 1
-    
-zef.h_zeffiro.OuterPosition = [zef.segmentation_tool_default_position(1) + 0.505*zef.segmentation_tool_default_position(3), ...
-                          zef.segmentation_tool_default_position(2),...
-                          0.75*0.505*zef.segmentation_tool_default_position(3),...
-                          0.75*zef.segmentation_tool_default_position(4)];
-                          
-else
-
-zef.h_zeffiro.OuterPosition = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
-                          zef.segmentation_tool_default_position(2),...
-                          0.75*zef.segmentation_tool_default_position(3),...
-                          0.6*zef.segmentation_tool_default_position(4)]; 
-
-end
 
 set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -212,4 +208,5 @@ set(findobj(zef.h_zeffiro.Children,'Tag','copyright_text'),'FontSize',0.5*zef.fo
 zef.h_zeffiro.SizeChangedFcn = '';
 zef.h_zeffiro.Units = 'normalized';
 zef_set_size_change_function(zef.h_zeffiro,1);
+zef = rmfield(zef,'size_temp');
 

@@ -81,7 +81,7 @@ end
             end
         end
 
-        %zef.start_mode = 'nodisplay';
+        zef.start_mode = 'nodisplay';
         %eval('zef_assign_data;');
         %clear zef_data;
         zef = zef_start(zef);
