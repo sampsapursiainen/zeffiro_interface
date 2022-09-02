@@ -15,7 +15,7 @@ function zef_or_zi = main(project_file_path, use_gui)
     %
     % - use_gui
     %
-    %   A boolean, which determines hether to start the program with or
+    %   A boolean, which determines whether to start the program with or
     %   without a GUI. If no GUI is used, an object of type Zef is returned,
     %   which should be captured on the command line if one wishes to use the
     %   back-end of the program and its methods as-is.
