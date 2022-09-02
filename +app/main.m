@@ -6,7 +6,7 @@ function zef_or_zi = main(project_file_path, use_gui)
     %
     % Input:
     %
-    % - project_file
+    % - project_file_path
     %
     %   A Zeffiro Interface project file, which is loaded into the back-end
     %   before a GUI is loaded, if it is loaded. If this is empty, "none" or
