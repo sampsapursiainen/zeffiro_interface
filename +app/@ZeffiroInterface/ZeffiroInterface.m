@@ -92,7 +92,7 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
     methods
 
-        function self = ZeffiroInterface(varargin)
+        function self = ZeffiroInterface(zef)
 
             % ZeffiroInterface
             %
@@ -103,7 +103,11 @@ classdef ZeffiroInterface < matlab.apps.AppBase
             % The object that contains all the numerical data and mathematical
             % methods.
 
-            self.zef = app.Zef(varargin{:});
+            arguments
+                zef app.Zef
+            end
+
+            self.zef = zef;
 
             % The main window of the application.
 
@@ -183,19 +187,19 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
             % The segmentation tool window object.
 
-            self.segmentation_tool = app.SegmentationTool(self.zef, self.tabs, varargin{:});
+            self.segmentation_tool = app.SegmentationTool(self.zef, self.tabs);
 
             % The mesh tool window object.
 
-            self.mesh_tool = app.MeshTool(self.zef, self.tabs, varargin{:});
+            self.mesh_tool = app.MeshTool(self.zef, self.tabs);
 
             % The visualization tool window object.
 
-            self.mesh_visualization_tool = app.MeshVisualizationTool(self.zef, self.tabs, varargin{:});
+            self.mesh_visualization_tool = app.MeshVisualizationTool(self.zef, self.tabs);
 
             % The figure tool window object.
 
-            self.figure_tool = app.FigureTool(self.zef, self.tabs, varargin{:});
+            self.figure_tool = app.FigureTool(self.zef, self.tabs);
 
         end
 
