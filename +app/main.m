@@ -70,4 +70,18 @@ function zef_or_zi = main(project_file_path, use_gui)
 
     end
 
+    % If caller did not order an application handle, do not return anything.
+
+    if nargout == 0
+
+        if ~ use_gui
+
+            warning("Zeffiro Interface initialized without a GUI, but no handle to the Zef object was ordered by the caller. The back-end will be unavailable.")
+
+        end
+
+        clear zef_or_zi;
+
+    end
+
 end
