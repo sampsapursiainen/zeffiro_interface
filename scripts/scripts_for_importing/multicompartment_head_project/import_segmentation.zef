@@ -1,4 +1,5 @@
 type,sensors,name,Electrodes,filename,electrodes.dat,filetype,points,modality,EEG
+type,box,name,Box
 type,segmentation,name,Skin,filename,outer_skin.asc,parameter_name,sigma,parameter_value,0.33,activity,0
 type,segmentation,name,Skull,filename,outer_skull.asc,parameter_name,sigma,parameter_value,0.0064,activity,0
 type,segmentation,name,CSF,filename,inner_skull.asc,parameter_name,sigma,parameter_value,1.79,activity,0

@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef = zef_load(zef)
+function zef = zef_load(zef,file_name,path_name)
 
 if nargin == 0
 zef = evalin('base','zef');
@@ -8,17 +8,21 @@ end
 
 zef_data = struct;
 
-if zef.use_display
+if nargin < 3
 if not(isempty(zef.save_file_path)) && not(isequal(zef.save_file_path,0))
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project',zef.save_file_path);
 else
 [zef.file, zef.file_path] = uigetfile('*.mat','Open project');
 end
+else 
+    zef.file = file_name; 
+    zef.file_path = path_name;
 end
 if not(isequal(zef.file,0))
-
 zef_close_tools;
+if isvalid(zef.h_zeffiro)
 zef.h_zeffiro.DeleteFcn = '';
+end
 zef_close_figs;
 zef_init;
 load([zef.file_path zef.file]);
@@ -67,7 +71,7 @@ zef_reopen_menu_tool;
 zef_mesh_tool;
 zef_mesh_visualization_tool;
 zef_figure_tool;
-zef_set_figure_tool_sliders
+zef = zef_set_figure_tool_sliders(zef);
 zef_plugin;
 zef = zef_update(zef);
 

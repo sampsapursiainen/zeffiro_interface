@@ -1,14 +1,32 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+function zef_save(zef,file_name,path_name,save_switch)
+
+if nargin == 0
+    zef = evalin('base','zef');
+end
+
+if nargin == 3
+    zef.save_switch = 1;
+elseif nargin == 4
+    zef.save_switch = save_switch;
+end
+
 if zef.save_switch == 1
+    
+if nargin < 3    
 if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
- end
-if not(isequal(zef.file,0));
+end
+else
+    zef.file = file_name;
+    zef.file_path = path_name;
+end
+if not(isequal(zef.file,0))
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
 zef_close_tools;

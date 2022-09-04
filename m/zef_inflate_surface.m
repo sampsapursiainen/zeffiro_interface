@@ -1,8 +1,8 @@
-function [nodes] = zef_inflate_surface(nodes, surface_triangles)
+function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles)
 
 N = size(nodes,1);
-smoothing_steps_surf = evalin('base','zef.inflate_n_iterations');
-smoothing_param = evalin('base','zef.inflate_strength');
+smoothing_steps_surf = eval('zef.inflate_n_iterations');
+smoothing_param = eval('zef.inflate_strength');
 
 A = sparse(N, N, 0);
 
@@ -25,7 +25,7 @@ sum_A = sum_A(:,[1 1 1]);
 taubin_lambda = 1;
 taubin_mu = -1;
 
-if evalin('base','zef.use_gpu') && evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') && eval('zef.gpu_count') > 0
     A = gpuArray(A);
     sum_A = gpuArray(sum_A);
     taubin_lambda = gpuArray(taubin_lambda);

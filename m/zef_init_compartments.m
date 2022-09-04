@@ -2,6 +2,7 @@
 
 zef.compartment_tags = cell(0);
 zef.compartment_transform_name = cell(0);
+zef.compartment_structure_aux = cell(0);
 
 if not(zef.new_empty_project)
 

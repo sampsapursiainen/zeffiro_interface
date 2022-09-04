@@ -1,4 +1,8 @@
-function nodes = zef_inflate_surfaces(nodes,tetra,domain_labels)
+function nodes = zef_inflate_surfaces(zef, nodes, tetra, domain_labels)
+
+if isempty(zef)
+zef = eval('zef');
+end
 
 waitbar_opened = 0;
 if evalin('caller','exist(''h'')')
@@ -13,10 +17,10 @@ else
       waitbar_opened = 1;
 end
 
-inflation_strength = evalin('base','zef.fem_mesh_inflation_strength');
-reuna_t = evalin('base','zef.reuna_t');
-reuna_p = evalin('base','zef.reuna_p');
-reuna_type = evalin('base','zef.reuna_type');
+inflation_strength = eval('zef.fem_mesh_inflation_strength');
+reuna_t = eval('zef.reuna_t');
+reuna_p = eval('zef.reuna_p');
+reuna_type = eval('zef.reuna_type');
 
 if isequal(reuna_type{end,1},-1)
 compartment_length = length(reuna_p)-1;
@@ -44,8 +48,8 @@ nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(node_list(:,1),:)),'K',n_ne
 zef_waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
 length_node_list = size(node_list,1);
-par_num = evalin('base','zef.parallel_processes');
-vec_num = evalin('base','zef.parallel_vectors');
+par_num = eval('zef.parallel_processes');
+vec_num = eval('zef.parallel_vectors');
 n_restarts = ceil(length_node_list/(vec_num*par_num));
 bar_ind = ceil(length_node_list/(50*par_num));
 i_ind = 0;

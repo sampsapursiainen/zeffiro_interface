@@ -6,7 +6,7 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-
+if isfield(zef,'h_zeffiro_window_main')
 if isvalid(zef.h_zeffiro_window_main)
 
 zef.aux_field_1 = zef.h_compartment_table.Data;
@@ -237,4 +237,5 @@ if nargout == 0
     assignin('base','zef',zef);
 end
 
+end
 end

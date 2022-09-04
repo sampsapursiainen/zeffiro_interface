@@ -1,5 +1,7 @@
-set(zef.h_zeffiro_menu,'DeleteFcn','');
+if isvalid(zef.h_zeffiro_menu)
+    set(zef.h_zeffiro_menu,'DeleteFcn','');
 delete(zef.h_zeffiro_menu);
+end
 zef_menu_tool
 zef = zef_update(zef);
 

@@ -5,7 +5,7 @@ if zef.downsample_surfaces == 1;
 end;
 zef.source_interpolation_on = 1;
 set(zef.h_source_interpolation_on,'value',1);
-zef_postprocess_fem_mesh;
+zef = zef_postprocess_fem_mesh(zef);
 zef.n_sources_mod = 1;
 zef.source_ind = [];
 zef_update_fig_details;

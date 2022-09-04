@@ -1,9 +1,9 @@
 function zef = zef_create_compartment(zef,compartment_tag, varargin)
 
 n_compartments = eval('length(zef.compartment_tags)');
-color_default = [0.5810    0.4690    0.3430 ; 
+color_default = [ 0.3984    0.7615    0.4435 ;
+                  0.5810    0.4690    0.3430 ; 
                    0.7000    0.7000    0.6000 ; 
-                   0.3984    0.7615    0.4435 ;
                    0.4200    0.4800    0.4200 ;
                     0.3500    0.3500    0.3500 ;
                      0.8000    0.8000    0.8000];

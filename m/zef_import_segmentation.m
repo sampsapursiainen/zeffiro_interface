@@ -6,13 +6,13 @@ end
 
 domain_label_counter = 0;
 atlas_on = 0;
-if zef.use_display
 if nargin < 3
+if zef.use_display
 [file_name, folder_name] = uigetfile({'*.zef;*.mat'},'Segmentation data file and folder',eval('zef.save_file_path'));
-end
 else
     file_name = eval('zef.file');
     folder_name = eval('zef.file_path');
+end
 end
 
 if not(isequal(file_name,0))
@@ -60,7 +60,13 @@ for i = 1 : size(ini_cell,1)
     name = (ini_cell{i,find(ismember(ini_cell(i,:),'name'),1)+1});
     end
     
-    if isequal(type,'segmentation')
+    if isequal(type,'box')
+        if isempty(name)
+        zef = zef_add_bounding_box(zef); 
+        else 
+        zef = zef_add_bounding_box(zef,name);  
+        end
+    elseif isequal(type,'segmentation')
         if not(isempty(compartment_data))
             if ismember(name,compartment_data(:,3))
             compartment_ind = find(ismember(compartment_data(:,3),name));

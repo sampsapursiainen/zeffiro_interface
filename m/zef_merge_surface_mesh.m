@@ -28,7 +28,7 @@ end
 
 eval(['zef.' compartment_tag '_points = points;']);
 eval(['zef.' compartment_tag '_triangles = triangles;']);
-eval(['zef' compartment_tag '_submesh_ind = submesh_ind;']);
+eval(['zef.' compartment_tag '_submesh_ind = submesh_ind;']);
 
 if nargout == 0
 assign('base','zef',zef);

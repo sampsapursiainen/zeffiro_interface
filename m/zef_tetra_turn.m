@@ -1,4 +1,8 @@
-function [tetra, flag_val, nodes_ind] = zef_tetra_turn(nodes, tetra, thresh_val)
+function [tetra, flag_val, nodes_ind] = zef_tetra_turn(zef, nodes, tetra, thresh_val)
+
+if isempty(zef)
+    zef = eval('zef');
+end
 
 flag_val = 1;
 
@@ -11,7 +15,7 @@ ind_m = [1 4 7; 2 5 8 ; 3 6 9];
 
 [condition_number, tilavuus] = zef_condition_number(nodes,tetra);
 
-while not(isempty(tetra_ind)) & iter_ind_aux_0 < evalin('base','zef.mesh_optimization_repetitions')
+while not(isempty(tetra_ind)) & iter_ind_aux_0 < eval('zef.mesh_optimization_repetitions')
 
      iter_ind_aux_0 =  iter_ind_aux_0 + 1;
 

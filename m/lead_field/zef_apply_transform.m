@@ -8,7 +8,10 @@ if evalin('base',['zef.' zef.compartment_tags{zef_i} '_on'])
 end
 end
 
-[zef.apply_transform_sensors,zef.apply_transform_reuna_p,zef.apply_transform_reuna_t] = zef_process_meshes;
+zef = zef_process_meshes(zef);
+zef.apply_transform_sensors = zef.sensors; 
+zef.apply_transform_reuna_p = zef.reuna_p; 
+zef.apply_transform_reuna_t = zef.reuna_t;
 
 evalin('base',['zef.' evalin('base','zef.current_sensors') '_points = zef.apply_transform_sensors(:,1:3);']);
 

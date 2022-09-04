@@ -1,10 +1,14 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [I] = zef_point_in_compartment(reuna_p,reuna_t,nodes,varargin)
+function [I] = zef_point_in_compartment(zef,reuna_p,reuna_t,nodes,varargin)
 
-if evalin('base','exist(''zef'')')
-if evalin('base','isfield(zef,''meshing_threshold'')')
-meshing_threshold = evalin('base','zef.meshing_threshold');
+if isempty(zef)
+zef = eval('zef');
+end
+
+if eval('exist(''zef'')')
+if eval('isfield(zef,''meshing_threshold'')')
+meshing_threshold = eval('zef.meshing_threshold');
 else
 meshing_threshold = 0.5;
 end
@@ -29,7 +33,7 @@ min_z = min(reuna_p(:,3));
 max_norm = max(sqrt(sum(reuna_p.^2,2)));
 nodes_norm_vec = sqrt(sum(nodes.^2,2));
 
-meshing_accuracy = evalin('base','zef.meshing_accuracy');
+meshing_accuracy = eval('zef.meshing_accuracy');
 
 if meshing_accuracy < 1
 P.faces = reuna_t;
@@ -65,17 +69,17 @@ nodes_aux = nodes(I,:)';
 
 %%%%%%%%%%%%%%%%GPU part%%%%%%%%%%%%%%%%%%%
 
-use_gpu = evalin('base','zef.use_gpu');
-gpu_num = evalin('base','zef.gpu_num');
+use_gpu = eval('zef.use_gpu');
+gpu_num = eval('zef.gpu_num');
 
-if use_gpu == 1 & evalin('base','zef.gpu_count') > 0
+if use_gpu == 1 & eval('zef.gpu_count') > 0
 nodes_aux = gpuArray(nodes_aux);
 aux_vec_1 = gpuArray(aux_vec_1);
 aux_vec_4 = gpuArray(aux_vec_4);
 ones_vec = gpuArray(ones_vec);
 ind_vec_aux = gpuArray(ind_vec_aux);
 
-par_num = evalin('base','zef.parallel_vectors');
+par_num = eval('zef.parallel_vectors');
 bar_ind = ceil(length_I/(50*par_num));
 i_ind = 0;
 
@@ -106,8 +110,8 @@ else
 
 %%%%%%%%%%%%%%%%CPU part%%%%%%%%%%%%%%%%%%%
 
-par_num = evalin('base','zef.parallel_processes');
-vec_num = evalin('base','zef.parallel_vectors');
+par_num = eval('zef.parallel_processes');
+vec_num = eval('zef.parallel_vectors');
 n_restarts = ceil(length_I/(vec_num*par_num));
 bar_ind = ceil(length_I/(50*par_num));
 i_ind = 0;
@@ -167,6 +171,6 @@ end
 end
 
 ind_vec(I) = gather(ind_vec_aux);
-I = find(ind_vec > evalin('base','zef.meshing_threshold'));
+I = find(ind_vec > eval('zef.meshing_threshold'));
 
 end

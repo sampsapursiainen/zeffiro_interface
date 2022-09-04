@@ -6,7 +6,14 @@ progress_value = min(1,progress_value(:));
 progress_value = max(0,progress_value(:));
 progress_bar_text = '';
 
-visible_value = evalin('base','zef.h_zeffiro.Visible');
+if isequal(evalin('caller','exist(''zef'')'),1)
+zef = evalin('caller','zef');  
+else
+zef = evalin('base','zef');
+end
+
+visible_value = zef.use_display;
+font_size = zef.font_size;
 
 if ishandle(varargin{2})
     h_waitbar = varargin{2};
@@ -74,7 +81,7 @@ end
 if not(ishandle(varargin{2}))
 
     set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
-set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',evalin('base','zef.font_size'));
+set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
   %  set(h_waitbar,'AutoResizeChildren','off');
 %h_waitbar.UserData = get(h_waitbar,'Position');

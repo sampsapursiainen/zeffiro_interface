@@ -10,32 +10,32 @@ function zef = zeffiro_interface(varargin)
 %following:
 %
 %start_mode (display/nodisplay), open_project (project file name),
-%import_segmentation (file name), import_update (file name), import_segmentation_legacy (file name),
-%import_segmentation_update_legacy (file name), save_project (file name),
+%import_to_new_project (file name), import_to_existing_project (file name), save_project (file name),
 %export_fem_mesh (file name), open_figure (file name), open_figure_folder
 %(file name), run_script (file name), exit_zeffiro, quit_matlab.
 
+zef = struct;
 option_counter = 1;
 zeffiro_restart = 0;
 if not(isempty(varargin))
     if isequal(varargin{1},'restart')
 zeffiro_restart = 1;
-zef_close_figs
-zef_close_tools
 option_counter = option_counter + 1;
     end
 end
 
 if nargout == 0
 if isequal(zeffiro_restart,0)
-    if evalin('base','exist(''zef'');')
+    if isequal(evalin('base','exist(''zef'')'),1)
         error('It looks like that another instance of Zeffiro interface is already open. To enable this script, close Zeffiro Interface by command ''zef_close_all'' or clear zef by command ''clear zef''.')
     end
 end
 end
 
+
     program_path_aux = mfilename('fullpath');
     [program_path, ~] = fileparts(program_path_aux);
+    run([program_path filesep 'm/zef_close_all.m']);
     zef.program_path = program_path;
     zef.code_path = [zef.program_path filesep 'm'];
     %evalin('base',['run(''' zef_data.code_path filesep 'zef_close_all.m'')'])
@@ -58,7 +58,8 @@ end
     %assignin('base','zef_data',zef_data);
     %eval('zef_assign_data;');
     %clear zef_data;
-
+   
+    
     if not(isempty(varargin))
 
         start_mode = 'display';
@@ -85,6 +86,9 @@ end
         %eval('zef_assign_data;');
         %clear zef_data;
         zef = zef_start(zef);
+            if isequal(zeffiro_restart,0) && isequal(exist([zef.program_path filesep 'data' filesep 'default_project.mat']),2)
+        zef = zef_load(zef,'default_project.mat',[zef.program_path filesep 'data' filesep]);
+    end
 
         option_counter = 1;
 
@@ -109,10 +113,10 @@ end
                 %assignin('base','zef_data',zef_data);
                 %eval('zef_assign_data;');
                 %clear zef_data;
-                zef = zef_load(zef);
+                zef = zef_load(zef,zef.file,zef.file_path);
                 option_counter = option_counter + 2;
 
-            elseif isequal(varargin{option_counter},lower('import_segmentation'))
+            elseif isequal(varargin{option_counter},lower('import_to_new_project'))
 
                 import_segmentation_file = varargin{option_counter+1};
                 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
@@ -126,18 +130,18 @@ end
                     file_2 = '.mat';
                 end
 
-                zef.file_path = [file_path];
-                zef.file = [file_1 file_2];
                 zef.new_empty_project = 1;
                 %assignin('base','zef_data',zef_data);
                 %eval('zef_assign_data;');
                 %clear zef_data;
                 zef_start_new_project;
+                zef.file_path = [file_path];
+                zef.file = [file_1 file_2];
                 zef = zef_import_segmentation(zef);
                 zef = zef_build_compartment_table(zef);
                 option_counter = option_counter + 2;
 
-            elseif isequal(varargin{option_counter},lower('import_update'))
+            elseif isequal(varargin{option_counter},lower('import_to_existing_project'))
 
                 import_segmentation_file = varargin{option_counter+1};
                 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
@@ -158,56 +162,57 @@ end
                 %eval('zef_assign_data;');
                 %clear zef_data;
                 zef = zef_import_segmentation(zef);
-                option_counter = option_counter + 2;
-
-            elseif isequal(varargin{option_counter},lower('import_segmentation_legacy'))
-
-                import_segmentation_file = varargin{option_counter+1};
-                [file_path, file_1, file_2] = fileparts(import_segmentation_file);
-                file_path = [file_path filesep];
-
-                if isempty(file_path)
-                    file_path = './data/';
-                end
-
-                if isempty(file_2)
-                    file_2 = '.mat';
-                end
-
-                zef.file_path = [file_path];
-                zef.file = [file_1 file_2];
-                zef.new_empty_project = 0;
-                %assignin('base','zef_data',zef_data);
-                %eval('zef_assign_data;');
-                %clear zef_data;
-                zef_start_new_project;
-                zef = zef_import_segmentation_legacy(zef);
                 zef = zef_build_compartment_table(zef);
                 option_counter = option_counter + 2;
 
-            elseif isequal(varargin{option_counter},lower('import_segmentation_update_legacy'))
-
-                import_segmentation_file = varargin{option_counter+1};
-                [file_path, file_1, file_2] = fileparts(import_segmentation_file);
-                file_path = [file_path filesep];
-
-                if isempty(file_path)
-                    file_path = './data/';
-                end
-
-                if isempty(file_2)
-                    file_2 = '.mat';
-                end
-
-                zef.file_path = [file_path];
-                zef.file = [file_1 file_2];
-                zef.new_empty_project = 0;
-                %assignin('base','zef_data',zef_data);
-                %eval('zef_assign_data;');
-                %clear zef_data;
-                zef = zef_import_segmentation_legacy(zef);
-                zef = zef_build_compartment_table(zef);
-                option_counter = option_counter + 2;
+%             elseif isequal(varargin{option_counter},lower('import_segmentation_legacy'))
+% 
+%                 import_segmentation_file = varargin{option_counter+1};
+%                 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
+%                 file_path = [file_path filesep];
+% 
+%                 if isempty(file_path)
+%                     file_path = './data/';
+%                 end
+% 
+%                 if isempty(file_2)
+%                     file_2 = '.mat';
+%                 end
+% 
+%                 zef.file_path = [file_path];
+%                 zef.file = [file_1 file_2];
+%                 zef.new_empty_project = 0;
+%                 %assignin('base','zef_data',zef_data);
+%                 %eval('zef_assign_data;');
+%                 %clear zef_data;
+%                 zef_start_new_project;
+%                 zef = zef_import_segmentation_legacy(zef);
+%                 zef = zef_build_compartment_table(zef);
+%                 option_counter = option_counter + 2;
+% 
+%             elseif isequal(varargin{option_counter},lower('import_segmentation_update_legacy'))
+% 
+%                 import_segmentation_file = varargin{option_counter+1};
+%                 [file_path, file_1, file_2] = fileparts(import_segmentation_file);
+%                 file_path = [file_path filesep];
+% 
+%                 if isempty(file_path)
+%                     file_path = './data/';
+%                 end
+% 
+%                 if isempty(file_2)
+%                     file_2 = '.mat';
+%                 end
+% 
+%                 zef.file_path = [file_path];
+%                 zef.file = [file_1 file_2];
+%                 zef.new_empty_project = 0;
+%                 %assignin('base','zef_data',zef_data);
+%                 %eval('zef_assign_data;');
+%                 %clear zef_data;
+%                 zef = zef_import_segmentation_legacy(zef);
+%                 zef = zef_build_compartment_table(zef);
+%                 option_counter = option_counter + 2;
 
             elseif isequal(varargin{option_counter},lower('save_project'))
 
@@ -355,6 +360,9 @@ end
 
     else
         zef = zef_start(zef);
+            if isequal(zeffiro_restart,0) && isequal(exist([zef.program_path filesep 'data' filesep 'default_project.mat']),2)
+        zef = zef_load(zef,'default_project.mat',[zef.program_path filesep 'data' filesep]);
+    end
     end
     
     if exist('zef_start_config.m')

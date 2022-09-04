@@ -1,7 +1,13 @@
 
-function [nodes,flag_val] = zef_fix_negatives(nodes, tetra)
+function [nodes,flag_val] = zef_fix_negatives(zef, nodes, tetra)
 
-fix_n_max = evalin('base','zef.mesh_optimization_repetitions');
+if isempty(zef)
+    zef = eval('zef');
+end
+
+threshold_value = zef.meshing_threshold;
+
+fix_n_max = eval('zef.mesh_optimization_repetitions');
 fix_param = 0.5;
 fix_it = 0;
 
@@ -46,7 +52,7 @@ u_tri = unique(tri);
 u_tri_rand = randperm(length(u_tri));
 vec_3 = mean(nodes(u_tri(u_tri_rand(1:end-3)),:),1);
 
-p_in_c = zef_point_in_cluster(nodes,tri,vec_3);
+p_in_c = zef_point_in_cluster(nodes,tri,vec_3,threshold_value);
 if isempty(p_in_c)
 [~, lambda_1] = zef_find_intersecting_triangle(vec_1, vec_2,1,tri,nodes,'nonconvex');
 if not(isempty(lambda_1))
@@ -60,7 +66,7 @@ end
 
 node_ind = 0;
 if not(isempty(vec_3))
-p_in_c = zef_point_in_cluster(nodes,tri,vec_3);
+p_in_c = zef_point_in_cluster(nodes,tri,vec_3,threshold_value);
 while  isempty(p_in_c)  && node_ind < length(u_tri)
 node_ind = node_ind + 1;
 vec_2 = nodes(u_tri(node_ind),:);
