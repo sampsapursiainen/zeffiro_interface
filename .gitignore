@@ -5,6 +5,7 @@
 # Allow specific files
 
 !.gitignore
+!.gitattributes
 !LICENSE
 
 # Allow file types (in subfolders) with a !
