@@ -127,6 +127,47 @@ classdef Zef < handle
 
     end % properties
 
+    properties (Constant)
+
+        % The names of the volumentric compartments that can be found in some
+        % older Zeffiro project files. The point of this is to help with
+        % backwards-compatibility.
+
+        VOLUME_COMPARTMENT_FIELD_NAMES = [
+            "color",
+            "condition_number",
+            "delta",
+            "epsilon",
+            "invert",
+            "merge",
+            "mu",
+            "name",
+            "on",
+            "points",
+            "points_original_surface_mesh",
+            "points_inf",
+            "priority",
+            "rho",
+            "scaling",
+            "sigma",
+            "sources",
+            "submesh_ind",
+            "submesh_ind_original_surface_mesh",
+            "tetra",
+            "transform_name",
+            "triangles",
+            "triangles_original_surface_mesh",
+            "visible",
+            "x_correction",
+            "xy_rotation",
+            "y_correction",
+            "yz_rotation",
+            "z_correction",
+            "zx_rotation"
+        ];
+
+    end % properties (Constant)
+
     events
 
     end % events
