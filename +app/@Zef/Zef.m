@@ -210,6 +210,8 @@ classdef Zef < handle
 
                 fival = data.(finame);
 
+                % Check if the field is a graphics object.
+
                 is_graphics_obj = isa(fival, 'matlab.graphics.Graphics');
 
                 if is_graphics_obj || strcmp(finame, "fieldnames")
@@ -289,9 +291,82 @@ classdef Zef < handle
 
                     self.data(1).(finame) = data.(finame);
 
+                end % if
+
+            end % for
+
+            % Loop over the fields again to construct the compartment tables,
+            % after compartment tags are known.
+
+            compartment_table = cell(0,2);
+
+            for fi = 1 : length(fieldkeys)
+
+                % Bail early, if compartment tags were not found from the
+                % project file.
+
+                if isempty(self.compartment_tags)
+
+                    break;
+
                 end
 
-            end
+                finame = fieldkeys{fi};
+
+                fival = data.(finame);
+
+                % Parse the field name to see if it is a known compartment
+                % property, and store them in a set of compartment properties.
+
+                compartment_table_len = size(compartment_table, 1);
+
+                if contains(finame, "_")
+
+                    split_fi_name = strsplit(finame, "_");
+
+                    prefix = string(split_fi_name{1});
+
+                    suffix_parts = split_fi_name{2:end};
+
+                    suffix = string(join(suffix_parts, "_"));
+
+                    if ismember(prefix, self.compartment_tags) ...
+                    && ismember(suffix, app.Zef.VOLUME_COMPARTMENT_FIELD_NAMES)
+
+                        % Check if compartment name is already in the
+                        % compartment table.
+
+                        name_col = [compartment_table{:,1}];
+
+                        if isempty(name_col)
+
+                            compartment_ind = 0;
+
+                        else
+
+                            compartment_ind = ismember(prefix, name_col);
+
+                        end
+
+                        compartment_exists = any(compartment_ind);
+
+                        if compartment_exists
+
+                            compartment_table{compartment_ind, 2}.(suffix) = fival;
+
+                        else
+
+                            compartment_table{compartment_table_len+1, 1} = prefix;
+
+                            compartment_table{compartment_table_len+1, 2}.(suffix) = struct;
+
+                        end
+
+                    end % if
+
+                end % if
+
+            end % for
 
         end % function
 
