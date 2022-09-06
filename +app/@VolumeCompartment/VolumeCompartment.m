@@ -9,7 +9,7 @@ classdef VolumeCompartment
     %
     % - color
     %
-    %   The color of this compartment. Should probably not be stored here, but
+    %   The RGB color of this compartment. Should probably not be stored here, but
     %   in the GUI.
     %
     % - condition_number
@@ -181,7 +181,7 @@ classdef VolumeCompartment
 
             end
 
-            self.color
+            self.color = args.color;
 
             self.condition_number = args.condition_number;
 
@@ -204,6 +204,8 @@ classdef VolumeCompartment
             self.sigma = args.sigma;
 
             self.sources = args.sources;
+
+            self.sources_original_surface_mesh = args.sources_original_surface_mesh;
 
             self.submesh_ind args.submesh_ind;
 
