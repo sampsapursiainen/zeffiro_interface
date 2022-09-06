@@ -159,7 +159,9 @@ classdef VolumeCompartment
 
         submesh_ind_original_surface_mesh double { mustBeInteger, mustBePositive } = [];
 
-        sources (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+        sources (1,1) double { mustBeInteger } = 0;
+
+        sources_original_surface_mesh (1,1) double { mustBeInteger, mustBeNonnegative }  = 0;
 
         transform_name (1,1) string { mustBeText } = "";
 
@@ -181,51 +183,157 @@ classdef VolumeCompartment
 
             end
 
-            self.color = args.color;
+            if isfield(args, "color")
 
-            self.condition_number = args.condition_number;
+                self.color = args.color;
 
-            self.delta = args.delta;
+            end
 
-            self.epsilon = args.epsilon;
+            if isfield(args, "condition_number")
 
-            self.is_on = args.is_on;
+                self.condition_number = args.condition_number;
 
-            self.name = args.name;
+            end
 
-            self.points = args.points;
+            if isfield(args, "delta")
 
-            self.points_inf = args.points_inf;
+                self.delta = args.delta;
 
-            self.points_original_surface_mesh = args.points_original_surface_mesh;
+            end
 
-            self.scaling = args.scaling;
+            if isfield(args, "epsilon")
 
-            self.sigma = args.sigma;
+                self.epsilon = args.epsilon;
 
-            self.sources = args.sources;
+            end
 
-            self.sources_original_surface_mesh = args.sources_original_surface_mesh;
+            if isfield(args, "on")
 
-            self.submesh_ind args.submesh_ind;
+                try
 
-            self.submesh_ind_original_surface_mesh = args.submesh_ind_original_surface_mesh;
+                    self.is_on = args.on;
 
-            self.transform_name = args.transform_name;
+                catch
 
-            self.triangles = args.triangles;
+                    warning("Could not initialize self.is_on from legacy file. Using default value.")
 
-            self.x_correction = args.x_correction;
+                end
 
-            self.xy_rotation = args.xy_rotation;
+            end
 
-            self.y_correction = args.y_correction;
+            if isfield(args, "name")
 
-            self.yz_rotation = args.yz_rotation;
+                self.name = args.name;
 
-            self.z_correction = args.z_correction;
+            end
 
-            self.zx_rotation = args.zx_rotation;
+            if isfield(args, "points")
+
+                self.points = args.points;
+
+            end
+
+            if isfield(args, "points_inf")
+
+                self.points_inf = args.points_inf;
+
+            end
+
+            if isfield(args, "points_original_surface_mesh")
+
+                self.points_original_surface_mesh = args.points_original_surface_mesh;
+
+            end
+
+            if isfield(args, "scaling")
+
+                self.scaling = args.scaling;
+
+            end
+
+            if isfield(args, "sigma")
+
+                self.sigma = args.sigma;
+
+            end
+
+            if isfield(args, "sources")
+
+                self.sources = args.sources;
+
+            end
+
+            if isfield(args, "sources_old")
+
+                self.sources_original_surface_mesh = args.sources_on;
+
+            end
+
+            if isfield(args, "submesh_ind")
+
+                self.submesh_ind = args.submesh_ind;
+
+            end
+
+            if isfield(args, "submesh_ind_original_surface_mesh")
+
+                self.submesh_ind_original_surface_mesh = args.submesh_ind_original_surface_mesh;
+
+            end
+
+            if isfield(args, "transform_name")
+
+                self.transform_name = args.transform_name;
+
+            end
+
+            if isfield(args, "triangles")
+
+                self.triangles = args.triangles;
+
+            end
+
+            if isfield(args, "triangles_original_surface_mesh")
+
+                self.triangles = args.triangles_original_surface_mesh;
+
+            end
+
+            if isfield(args, "x_correction")
+
+                self.x_correction = args.x_correction;
+
+            end
+
+            if isfield(args, "xy_rotation")
+
+                self.xy_rotation = args.xy_rotation;
+
+            end
+
+            if isfield(args, "y_correction")
+
+                self.y_correction = args.y_correction;
+
+            end
+
+            if isfield(args, "yz_rotation")
+
+                self.yz_rotation = args.yz_rotation;
+
+            end
+
+            if isfield(args, "z_correction")
+
+                self.z_correction = args.z_correction;
+
+            end
+
+            if isfield(args, "zx_rotation")
+
+                self.zx_rotation = args.zx_rotation;
+
+            end
 
         end % function
 

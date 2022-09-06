@@ -23,6 +23,10 @@ classdef Zef < handle
     %
     %   A cell array that contains the textual compartment tags of a domain.
     %
+    % - compartments
+    %
+    %   An array of VolumeCompartment objects.
+    %
     % - create_sensor_fn
     %
     %   A function handle to decide which function to use in constructing
@@ -97,6 +101,8 @@ classdef Zef < handle
 
         compartment_tags string = [];
 
+        compartments app.VolumeCompartment
+
         create_sensor_fn function_handle
 
         data struct
@@ -151,6 +157,7 @@ classdef Zef < handle
             "scaling",
             "sigma",
             "sources",
+            "sources_old",
             "submesh_ind",
             "submesh_ind_original_surface_mesh",
             "tetra",
@@ -367,6 +374,19 @@ classdef Zef < handle
                 end % if
 
             end % for
+
+            % Then iterate over the accumulated compartment info to generate
+            % the compartment objects.
+
+            n_of_compartment_structs = size(compartment_table, 1);
+
+            for ii = 1 : n_of_compartment_structs
+
+                a_struct = compartment_table{ii,2};
+
+                self.compartments(ii) = app.VolumeCompartment(a_struct);
+
+            end
 
         end % function
 
