@@ -26,3 +26,5 @@ zef.plugin_settings_relative_size = zef_get_relative_size(zef.h_plugin_settings)
 set(zef.h_plugin_settings,'SizeChangedFcn','zef.plugin_settings_current_size = zef_change_size_function(zef.h_plugin_settings,zef.plugin_settings_current_size,zef.plugin_settings_relative_size);');
 
 zef.h_plugin_settings.Name = 'ZEFFIRO Interface: Plugin settings';
+
+set(zef.h_plugin_settings,'DeleteFcn','zef_closereq;');

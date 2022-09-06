@@ -23,3 +23,5 @@ zef.system_settings_relative_size = zef_get_relative_size(zef.h_system_settings)
 set(zef.h_system_settings,'SizeChangedFcn','zef.system_settings_current_size = zef_change_size_function(zef.h_system_settings,zef.system_settings_current_size,zef.system_settings_relative_size);');
 
 zef.h_system_settings.Name = 'ZEFFIRO Interface: System settings';
+
+set(zef.h_system_settings,'DeleteFcn','zef_closereq;');

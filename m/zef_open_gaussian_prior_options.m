@@ -33,4 +33,7 @@ set(zef.h_zef_gaussian_prior_options,'AutoResizeChildren','off');
 zef.gaussian_prior_options_current_size = get(zef.h_zef_gaussian_prior_options,'Position');
 set(zef.h_zef_gaussian_prior_options,'SizeChangedFcn','zef.gaussian_prior_options_current_size = zef_change_size_function(zef.h_zef_gaussian_prior_options,zef.gaussian_prior_options_current_size);');
 
+set(zef.h_zef_gaussian_prior_options,'DeleteFcn','zef_closereq;');
+
+
 clear zef_data;

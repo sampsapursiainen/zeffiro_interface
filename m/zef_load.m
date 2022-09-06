@@ -28,7 +28,7 @@ zef_init;
 load([zef.file_path zef.file]);
 zef_data.save_file = zef.file;
 zef_data.save_file_path = zef.file_path;
-zef_remove_object_fields;
+zef_data = zef_remove_object_handles(zef_data);
 zef_remove_system_fields;
 
 zef_data.matlab_release = version('-release');

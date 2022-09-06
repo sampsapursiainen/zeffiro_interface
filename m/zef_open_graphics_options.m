@@ -39,4 +39,7 @@ set(zef.h_zef_graphics_processing_options,'AutoResizeChildren','off');
 zef.graphics_options_current_size = get(zef.h_zef_graphics_processing_options,'Position');
 set(zef.h_zef_graphics_processing_options,'SizeChangedFcn','zef.graphics_options_current_size = zef_change_size_function(zef.h_zef_graphics_processing_options,zef.graphics_options_current_size);');
 
+set(zef.h_zef_graphics_processing_options,'DeleteFcn','zef_closereq;');
+
+
 clear zef_data;

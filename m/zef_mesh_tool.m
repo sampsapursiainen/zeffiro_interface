@@ -70,6 +70,7 @@ set(zef.h_max_surface_face_count,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_inflate_n_iterations,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 
+set(zef.h_mesh_tool,'DeleteFcn','zef_closereq;');
 
 zef.h_mesh_tool.Units = 'normalized';
 zef.h_mesh_tool.Position(1:2) = [0.2 0.2];

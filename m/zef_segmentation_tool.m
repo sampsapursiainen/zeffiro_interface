@@ -51,7 +51,7 @@ set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
 zef_set_size_change_function(zef.h_zeffiro_window_main);
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
-set(zef.h_zeffiro_window_main,'DeleteFcn','closereq;');
+set(zef.h_zeffiro_window_main,'DeleteFcn','zef_closereq;');
 
 if isempty(zef.h_segmentation_tool_toggle.UserData)
 zef.h_segmentation_tool_toggle.ButtonPushedFcn = 'zef_segmentation_tool_toggle(zef,zef.h_segmentation_tool_toggle);';
