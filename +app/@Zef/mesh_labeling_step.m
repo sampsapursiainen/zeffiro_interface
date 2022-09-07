@@ -53,6 +53,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                 if not(isequal(i_labeling, self.data.pml_ind_aux))
 
                     I_1 = point_in_compartment( ...
+                        self, ...
                         self.data.reuna_p{i_labeling}, ...
                         reuna_t_aux, ...
                         self.nodes(I_2,:), ...
@@ -148,6 +149,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                         [I_4,~,I_5] = unique(I_3);
                         I_6 = find(test_ind(I_4) < 0);
                         I_7 = point_in_compartment( ...
+                            self, ...
                             self.data.reuna_p{i_labeling}, ...
                             reuna_t_aux, ...
                             nodes(I_4(I_6),:), ...
@@ -262,7 +264,8 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
                             I_3 = label_ind(I_1(I_2),:);
                             [I_4,~,I_5] = unique(I_3);
                             I_6 = find(test_ind(I_4) < 0);
-                            I_7 = zef_point_in_compartment( ...
+                            I_7 = point_in_compartment( ...
+                                self, ...
                                 self.data.reuna_p{i_labeling}, ...
                                 reuna_t_aux, ...
                                 nodes(I_4(I_6),:), ...
@@ -336,7 +339,7 @@ end % function
 
 %% Local helper functions
 
-function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_info)
+function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_info)
 
     % point_in_compartment
     %
@@ -359,7 +362,7 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
     %   A set of indices.
 
     arguments
-        self app.Zef
+        zef app.Zef
         reuna_p (:,3) double
         reuna_t
         nodes (:,3) double
@@ -374,9 +377,9 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
 
     cu_obj = onCleanup(@() cu_fn(wb));
 
-    if isfield(self.data,'meshing_threshold')
+    if isfield(zef.data,'meshing_threshold')
 
-        meshing_threshold = self.data.meshing_threshold;
+        meshing_threshold = zef.data.meshing_threshold;
 
     else
 
@@ -393,7 +396,7 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
     max_norm = max(sqrt(sum(reuna_p.^2,2)));
     nodes_norm_vec = sqrt(sum(nodes.^2,2));
 
-    meshing_accuracy = self.data.meshing_accuracy;
+    meshing_accuracy = zef.data.meshing_accuracy;
 
     if meshing_accuracy < 1
 
@@ -433,10 +436,10 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
 
     %%%%%%%%%%%%%%%% GPU part %%%%%%%%%%%%%%%%%%%
 
-    use_gpu = self.use_gpu;
-    gpu_num = self.gpu_count;
+    use_gpu = zef.use_gpu;
+    gpu_num = zef.gpu_count;
 
-    if use_gpu == 1 & self.gpu_count > 0
+    if use_gpu == 1 & zef.gpu_count > 0
 
     nodes_aux = gpuArray(nodes_aux);
     aux_vec_1 = gpuArray(aux_vec_1);
@@ -444,7 +447,7 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
     ones_vec = gpuArray(ones_vec);
     ind_vec_aux = gpuArray(ind_vec_aux);
 
-    par_num = self.data.parallel_vectors;
+    par_num = zef.data.parallel_vectors;
 
     bar_ind = ceil(length_I/(50*par_num));
 
@@ -478,9 +481,9 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
 
     %%%%%%%%%%%%%%%%GPU part%%%%%%%%%%%%%%%%%%%
 
-    par_num = self.parallel_processes;
+    par_num = zef.parallel_processes;
 
-    vec_num = self.parallel_vectors;
+    vec_num = zef.parallel_vectors;
 
     n_restarts = ceil(length_I/(vec_num*par_num));
     bar_ind = ceil(length_I/(50*par_num));
@@ -541,6 +544,6 @@ function [I] = point_in_compartment(self, reuna_p, reuna_t, nodes, compartment_i
     end
 
     ind_vec(I) = gather(ind_vec_aux);
-    I = find(ind_vec > self.data.meshing_threshold);
+    I = find(ind_vec > zef.data.meshing_threshold);
 
 end
