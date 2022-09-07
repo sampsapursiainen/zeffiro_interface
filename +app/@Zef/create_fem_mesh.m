@@ -60,7 +60,7 @@ function self = create_fem_mesh(self)
             pml_max_size = mesh_res*pml_max_size;
         end
 
-        [X, Y, Z, pml_ind] = self.pml_mesh(pml_inner_radius,pml_outer_radius,mesh_res,pml_max_size);
+        [X, Y, Z, pml_ind] = pml_mesh(pml_inner_radius,pml_outer_radius,mesh_res,pml_max_size);
 
         n_cubes = prod(size(X)-1);
 
