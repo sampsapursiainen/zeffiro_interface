@@ -16,7 +16,13 @@ fields = fieldnames(eval(node_name));
 for i = 1 : length(fields)
     aux_string = [node_name '.' fields{i}];
 aux_field = eval(aux_string);
-if isobject(aux_field) & ( ishandle(aux_field) | isempty(whos(aux_string)))
+try
+isvalid(aux_field);
+handle_test = true; 
+catch
+handle_test = false;
+end
+if isobject(aux_field) &  handle_test 
 if isempty(h_list) | ismember(aux_field,h_list) 
 aux_struct = rmfield(eval(node_name),fields{i});
 eval([node_name  ' = aux_struct;']);

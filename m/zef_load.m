@@ -40,7 +40,9 @@ zef_data.mlapp = 1;
 
  zef.fieldnames = fieldnames(zef_data);
  for zef_i = 1:length(zef.fieldnames)
+     if not(isequal(zef.fieldnames{zef_i},'fieldnames'))
  zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+     end
  end
   if isempty(find(contains(zef.fieldnames,'current_version'),1))
      zef.current_version = 2.2;

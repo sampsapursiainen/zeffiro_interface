@@ -11,8 +11,14 @@ end
 fields = fieldnames(eval(node_name));
 for i = 1 : length(fields)
 aux_string = [node_name '.' fields{i}];
-    aux_field = eval(aux_string);
-    if isobject(aux_field) &  ( ishandle(aux_field) | isempty(whos(aux_string)))
+aux_field = eval(aux_string);
+try
+isvalid(aux_field);
+handle_test = true; 
+catch
+handle_test = false;
+end
+    if isobject(aux_field) &  handle_test
         if ismember(aux_field,h_input)
             h_output.(fields{i}) = aux_field;
         end
