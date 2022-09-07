@@ -347,15 +347,23 @@ classdef Zef < handle
 
                         if isempty(name_col)
 
-                            compartment_ind = 0;
+                            compartment_ind = compartment_table_len + 1;
+
+                            compartment_exists = false;
 
                         else
 
-                            compartment_ind = ismember(prefix, name_col);
+                            compartment_ind = find(ismember(name_col, prefix));
+
+                            compartment_exists = any(compartment_ind);
+
+                            if ~ compartment_exists
+
+                                compartment_ind = compartment_table_len + 1;
+
+                            end
 
                         end
-
-                        compartment_exists = any(compartment_ind);
 
                         if compartment_exists
 
@@ -363,9 +371,9 @@ classdef Zef < handle
 
                         else
 
-                            compartment_table{compartment_table_len+1, 1} = prefix;
+                            compartment_table{compartment_ind, 1} = prefix;
 
-                            compartment_table{compartment_table_len+1, 2}.(suffix) = struct;
+                            compartment_table{compartment_ind, 2}.(suffix) = struct;
 
                         end
 
