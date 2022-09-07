@@ -67,8 +67,8 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
 
                     pml_counter = compartment_counter;
 
-                    if not(isempty(pml_ind))
-                        I(pml_ind) = pml_counter;
+                    if not(isempty(self.data.pml_ind))
+                        I(self.data.pml_ind) = pml_counter;
                     end
 
                 end % if
@@ -77,7 +77,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
 
         end % for
 
-        if not(isempty(pml_ind_aux))
+        if not(isempty(self.data.pml_ind_aux))
             I(find(I==0)) = pml_counter;
         end
 
