@@ -24,58 +24,41 @@ function self = process_meshes(self)
 
     compartment_tags = self.compartment_tags;
 
-    for k = 1 : length(compartment_tags)
+    for k = 1 : length(self.compartments)
 
-        % Build variable names dynamically, no matter if it makes debugging
-        % harder.
+        compartment = self.compartments(k);
 
-        var_0 = [compartment_tags{k} '_on'];
-        var_1 = [compartment_tags{k} '_scaling'];
-        var_2 = [compartment_tags{k} '_x_correction'];
-        var_3 = [compartment_tags{k} '_y_correction'];
-        var_4 = [compartment_tags{k} '_z_correction'];
-        var_5 = [compartment_tags{k} '_xy_rotation'];
-        var_6 = [compartment_tags{k} '_yz_rotation'];
-        var_7 = [compartment_tags{k} '_zx_rotation'];
-        var_8 = [compartment_tags{k} '_points_inf'];
-        var_9 = [compartment_tags{k} '_points'];
-        var_10 = [compartment_tags{k} '_triangles'];
-        var_11 = [compartment_tags{k} '_submesh_ind'];
-        var_12 = [compartment_tags{k} '_sources'];
-        var_13 = [compartment_tags{k} '_affine_transform'];
-        var_14 = [compartment_tags{k} '_affine_transform'];
-
-        on_val = self.data.(var_0);
+        on_val = compartment.is_on;
 
     if on_val
 
         i = i + 1;
 
-        reuna_p_inf{i} = self.data.(var_8);
-        reuna_p{i} = self.data.(var_9);
-        reuna_t{i} = self.data.(var_10);
-        reuna_type{i,1} = self.data.(var_12);
-        reuna_type{i,2} = self.data.compartment_activity{ self.data.(var_12) + 2 };
+        reuna_p_inf{i} = compartment.points_inf;
+        reuna_p{i} = compartment.points;
+        reuna_t{i} = compartment.triangles;
+        reuna_type{i,1} = compartment.sources;
+        reuna_type{i,2} = self.data.compartment_activity{ compartment.sources + 2 };
         reuna_type{i,3} = k;
         reuna_type{i,4} = compartment_tags{k};
-        reuna_submesh_ind{i} = self.data.(var_11);
+        reuna_submesh_ind{i} = compartment.submesh_ind;
 
         mean_vec = repmat(mean(reuna_p{i},1),size(reuna_p{i},1),1);
 
-        for t_ind = 1 : length(self.data.(var_1))
+        for t_ind = 1 : length(compartment.scaling)
 
-            scaling_val = self.data.(var_1)(t_ind);
-            translation_vec(1) = self.data.(var_2)(t_ind);
-            translation_vec(2) = self.data.(var_3)(t_ind);
-            translation_vec(3) =  self.data.(var_4)(t_ind);
-            theta_angle_vec(1) =  self.data.(var_5)(t_ind);
-            theta_angle_vec(2) =  self.data.(var_6)(t_ind);
-            theta_angle_vec(3) =  self.data.(var_7)(t_ind);
+            scaling_val = compartment.scaling(t_ind);
+            translation_vec(1) = compartment.x_correction(t_ind);
+            translation_vec(2) = compartment.y_correction(t_ind);
+            translation_vec(3) = compartment.z_correction(t_ind);
+            theta_angle_vec(1) = compartment.xy_rotation(t_ind);
+            theta_angle_vec(2) = compartment.yz_rotation(t_ind);
+            theta_angle_vec(3) = compartment.zx_rotation(t_ind);
 
-            if isfield(self.data, var_14)
+            if ~ isempty(compartment.affine_transform)
 
-                if length(self.data.(var_13)) >= t_ind
-                    affine_transform =  cell2mat(self.data.(var_13)(t_ind));
+                if length(compartment.affine_transform) >= t_ind
+                    affine_transform =  cell2mat(compartment.affine_transform(t_ind));
                 else
                     affine_transform = eye(4);
                 end
