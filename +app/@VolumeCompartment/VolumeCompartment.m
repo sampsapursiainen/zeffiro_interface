@@ -123,6 +123,8 @@ classdef VolumeCompartment
 
     properties
 
+        affine_transform double = [];
+
         color (1,3) double {} = [0 0 0];
 
         condition_number (1,1) double = 1;
@@ -186,6 +188,12 @@ classdef VolumeCompartment
             arguments
 
                 args struct
+
+            end
+
+            if isfield(args, "affine_transform")
+
+                self.affine_transform = args.affine_transform;
 
             end
 

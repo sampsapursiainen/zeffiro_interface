@@ -140,6 +140,7 @@ classdef Zef < handle
         % backwards-compatibility.
 
         VOLUME_COMPARTMENT_FIELD_NAMES = [
+            "affine_transform",
             "color",
             "condition_number",
             "delta",
