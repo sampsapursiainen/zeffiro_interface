@@ -1,7 +1,7 @@
 function zef = zef_update_transform(zef)
 
 if nargin == 0
-    zef = eval('zef');
+    zef = eval('base','zef');
 end
 
 zef.aux_field_1 = zef.h_transform_table.Data;

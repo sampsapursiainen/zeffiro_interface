@@ -5,7 +5,7 @@ function zef = zef_process_meshes(zef,varargin)
 explode_param = 1; 
 
 if nargin == 0
-zef = eval('zef');
+zef = eval('base','zef');
 end
 
 reuna_p_inf = [];

@@ -3,7 +3,7 @@
 function [I] = zef_point_in_compartment(zef,reuna_p,reuna_t,nodes,varargin)
 
 if isempty(zef)
-zef = eval('zef');
+zef = eval('base','zef');
 end
 
 if eval('exist(''zef'')')

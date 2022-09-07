@@ -1,7 +1,7 @@
 function [tetra, flag_val, nodes_ind] = zef_tetra_turn(zef, nodes, tetra, thresh_val)
 
 if isempty(zef)
-    zef = eval('zef');
+    zef = eval('base','zef');
 end
 
 flag_val = 1;

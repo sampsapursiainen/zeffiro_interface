@@ -2,7 +2,7 @@
 function [nodes,flag_val] = zef_fix_negatives(zef, nodes, tetra)
 
 if isempty(zef)
-    zef = eval('zef');
+    zef = eval('base','zef');
 end
 
 threshold_value = zef.meshing_threshold;

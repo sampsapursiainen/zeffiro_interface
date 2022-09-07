@@ -2,7 +2,7 @@ function zef = zef_add_transform(zef)
 
 
 if nargin == 0
-    zef = eval('zef');
+    zef = eval('base','zef');
 end
 
 if not(eval('zef.lock_transforms_on'))
