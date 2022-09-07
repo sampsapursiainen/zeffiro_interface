@@ -33,7 +33,6 @@ zef_close_tools;
 zef_close_figs;
 zef_data = zef;
 zef_data = zef_remove_object_handles(zef_data);
-keyboard
 save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
 clear zef_data;
 zef_segmentation_tool;
