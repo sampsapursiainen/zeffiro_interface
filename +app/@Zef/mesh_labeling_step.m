@@ -298,17 +298,17 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
 
                         while not(isempty(I_3)) && compartment_counter < max_compartments
 
-                        I_1 = find(domain_labels <= compartment_counter);
+                            I_1 = find(domain_labels <= compartment_counter);
 
-                        [~,~,~,~,I_2] = self.surface_mesh(label_ind,[],I_1);
+                            [~,~,~,~,I_2] = self.surface_mesh(label_ind,[],I_1);
 
-                        I_2 = I_2(find(I_2));
+                            I_2 = I_2(find(I_2));
 
-                        I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
+                            I_3 = accumarray(I_2,ones(size(I_2)),[size(domain_labels,1) 1]);
 
-                        I_3 = find(I_3 >= 3);
+                            I_3 = find(I_3 >= 3);
 
-                        domain_labels(I_3) = compartment_counter;
+                            domain_labels(I_3) = compartment_counter;
 
                         end % while
 
