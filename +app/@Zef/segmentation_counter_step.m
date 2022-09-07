@@ -23,16 +23,11 @@ function self = segmentation_counter_step(self)
 
     for k = 1 : length(compartment_tags)
 
-        var_0 = [compartment_tags{k} '_on'];
-        var_1 = [compartment_tags{k} '_sigma'];
-        var_2 = [compartment_tags{k} '_priority'];
-        var_3 = [compartment_tags{k} '_submesh_ind'];
-        var_4 = [compartment_tags{k} '_name'];
-        var_5 = [compartment_tags{k} '_sources'];
+        compartment = self.compartments(k);
 
-        on_val = self.data.(var_0);
-        sigma_val = self.data.(var_1);
-        priority_val = self.data.(var_2);
+        on_val = compartment.is_on;
+        sigma_val = compartment.sigma;
+        priority_val = compartment.priority;
 
         if on_val
 
@@ -40,14 +35,14 @@ function self = segmentation_counter_step(self)
 
             sigma_vec(i,1) = sigma_val;
             priority_vec(i,1) = priority_val;
-            submesh_cell{i} = self.data.(var_3);
-            name_tags{i} = self.data.(var_4);
+            submesh_cell{i} = compartment.submesh_ind;
+            name_tags{i} = compartment.name;
 
-            if isequal(self.data.(var_5),-1)
+            if isequal(compartment.sources,-1)
                 pml_ind_aux = i;
             end
 
-            if ismember(self.data.(var_5),[1 2])
+            if ismember(compartment.sources,[1 2])
                 aux_brain_ind = [aux_brain_ind i];
             end
 
