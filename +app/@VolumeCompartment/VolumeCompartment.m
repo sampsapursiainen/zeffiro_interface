@@ -50,6 +50,10 @@ classdef VolumeCompartment
     %   The set of points that belong to this volume compartment, before being
     %   modified by the mesh creation process.
     %
+    % - priority
+    %
+    %   Describes the priority of this compartment.
+    %
     % - sigma
     %
     %   The condutivity of this compartment.
@@ -151,6 +155,8 @@ classdef VolumeCompartment
 
         points_original_surface_mesh (:,3) double = [];
 
+        priority (1,1) double { mustBeInteger, mustBePositive } = 1;
+
         triangles (:,3) double { mustBeInteger, mustBePositive } = [];
 
         sigma (1,1) double { mustBeNonnegative } = 1;
@@ -242,6 +248,12 @@ classdef VolumeCompartment
             if isfield(args, "points_original_surface_mesh")
 
                 self.points_original_surface_mesh = args.points_original_surface_mesh;
+
+            end
+
+            if isfield(args, "priority")
+
+                self.priority = args.priority;
 
             end
 
