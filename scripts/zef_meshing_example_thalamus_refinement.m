@@ -7,7 +7,7 @@ project_struct.refinement_surface_on = 1;
 project_struct.refinement_volume_on = 1;
 project_struct.refinement_surface_number = [1];
 project_struct.refinement_surface_compartments = [1 23 22];
-project_struct.refinement_volume_number = [1];
+project_struct.refinement_volume_number = [2];
 project_struct.refinement_volume_compartments = [8];
 project_struct = zef_create_finite_element_mesh(project_struct);
 zef_save(project_struct,'example_project.mat','data/');

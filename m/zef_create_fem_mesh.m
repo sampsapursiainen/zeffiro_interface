@@ -3,7 +3,7 @@
 function zef = zef_create_fem_mesh(zef)
 
 if nargin == 0
-    zef = eval('zef');
+    zef = evalin('base','zef');
 end
 
 zef_segmentation_counter_step;
