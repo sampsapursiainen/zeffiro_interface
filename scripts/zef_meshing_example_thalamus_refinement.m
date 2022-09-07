@@ -1,4 +1,4 @@
-function zef_meshing_example_2
+function zef_meshing_example_thalamus_refinement
 
 project_struct = zeffiro_interface('start_mode','nodisplay','import_to_existing_project','scripts/scripts_for_importing/multicompartment_head_project/import_segmentation.zef');
 project_struct.mesh_smoothing_on = 1;
