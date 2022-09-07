@@ -1,7 +1,7 @@
 function nodes = zef_inflate_surfaces(zef, nodes, tetra, domain_labels)
 
 if isempty(zef)
-zef = eval('base','zef');
+zef = evalin('base','zef');
 end
 
 waitbar_opened = 0;

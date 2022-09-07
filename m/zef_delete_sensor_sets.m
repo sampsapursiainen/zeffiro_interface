@@ -1,7 +1,7 @@
 function zef = zef_delete_sensor_sets(zef)
 
 if nargin == 0
-    zef = eval('base','zef');
+    zef = evalin('base','zef');
 end
 
 table_data = eval('zef.h_sensors_table.Data');

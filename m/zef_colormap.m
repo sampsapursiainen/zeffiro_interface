@@ -3,7 +3,7 @@ function colormap_vec = zef_colormap(inv_colormap)
 if isequal(evalin('caller','exist(''zef'')'),1)
 zef = evalin('caller','zef');
 else
-zef = eval('base','zef');
+zef = evalin('base','zef');
 end
 
 colortune_param = eval('zef.colortune_param');

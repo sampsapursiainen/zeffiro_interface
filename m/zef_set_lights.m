@@ -3,7 +3,7 @@ function zef_set_lights(lights_vec,varargin)
 if isequal(evalin('caller','exist(''zef'')'),1)
 zef = evalin('caller','zef');
 else
-zef = eval('base','zef');
+zef = evalin('base','zef');
 end
 
 if not(isempty(varargin))

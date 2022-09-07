@@ -5,7 +5,7 @@ function zef = zef_import_segmentation_legacy(zef, file_name, folder_name)
 void = [];
 
 if nargin == 0
-zef = eval('base','zef');
+zef = evalin('base','zef');
 end
 
 if eval('zef.use_display')

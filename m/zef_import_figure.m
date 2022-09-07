@@ -3,7 +3,7 @@
 function zef = zef_import_figure(zef,varargin)
 
 if isempty(zef)
-    zef = eval('base','zef');
+    zef = evalin('base','zef');
 end
 
 file_name = [];
