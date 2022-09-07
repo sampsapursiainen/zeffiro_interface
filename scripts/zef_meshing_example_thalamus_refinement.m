@@ -4,6 +4,7 @@ project_struct = zeffiro_interface('start_mode','nodisplay','import_to_existing_
 project_struct.mesh_smoothing_on = 1;
 project_struct.refinement_on = 1;
 project_struct.refinement_surface_on = 1;
+project_struct.refinement_volume_on = 1;
 project_struct.refinement_surface_number = [1];
 project_struct.refinement_surface_compartments = [1 23 22];
 project_struct.refinement_volume_number = [1];
