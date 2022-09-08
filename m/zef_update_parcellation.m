@@ -3,7 +3,7 @@
 function zef = zef_update_parcellation(zef)
 
 if nargin==0
-zef = evalin('base','zef',zef);
+zef = evalin('base','zef');
 end
 
 set(zef.h_parcellation_name,'string',zef.parcellation_name);
