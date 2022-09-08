@@ -330,11 +330,11 @@ classdef Zef < handle
 
                 if contains(finame, "_")
 
-                    split_fi_name = strsplit(finame, "_");
+                    split_fi_name = string(strsplit(finame, "_"));
 
-                    prefix = string(split_fi_name{1});
+                    prefix = split_fi_name(1);
 
-                    suffix_parts = split_fi_name{2:end};
+                    suffix_parts = split_fi_name(2:end);
 
                     suffix = string(join(suffix_parts, "_"));
 
