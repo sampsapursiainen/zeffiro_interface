@@ -33,7 +33,7 @@ zef_close_tools;
 zef_close_figs;
 zef_data = zef;
 zef_data = zef_remove_object_handles(zef_data);
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
 zef_segmentation_tool;
 zef_mesh_tool;
@@ -132,7 +132,7 @@ zef_close_tools;
 zef_close_figs;
 zef_data = zef;
 zef_data = zef_remove_object_handles(zef_data);
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
 zef_mesh_visualization_tool
@@ -152,7 +152,7 @@ zef_close_tools;
 zef_close_figs;
 zef_data = zef;
 zef_data = zef_remove_object_handles(zef_data);
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
 end
 end

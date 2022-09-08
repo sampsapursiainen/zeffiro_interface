@@ -25,7 +25,12 @@ zef.h_zeffiro.DeleteFcn = '';
 end
 zef_close_figs;
 zef_init;
+zef_data_aux = matfile([zef.file_path zef.file]);
+if isequal(length(whos(zef_data_aux)),1)
 load([zef.file_path zef.file]);
+else
+zef_data = load([zef.file_path zef.file]); 
+end
 zef_data.save_file = zef.file;
 zef_data.save_file_path = zef.file_path;
 zef_data = zef_remove_object_handles(zef_data);
