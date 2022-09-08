@@ -68,9 +68,9 @@ for i = 1 : length(h_c)
            end
        end
 end
-scale_factor_x = figure_width/(max_x-min_x)
-scale_factor_y = figure_height/(max_y-min_y)
-scale_factor = min(scale_factor_x, scale_factor_y)
+scale_factor_x = figure_width/(max_x-min_x);
+scale_factor_y = figure_height/(max_y-min_y);
+scale_factor = min(scale_factor_x, scale_factor_y);
 %if scale_factor_y < scale_factor_x
 %  h_fig.Position(3) = (scale_factor_y/scale_factor_x)*h_fig.Position(3);
 %else
