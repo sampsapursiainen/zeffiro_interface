@@ -7,6 +7,11 @@ classdef VolumeCompartment
     %
     % Properties:
     %
+    % - affine_transform
+    %
+    %   A transformation matrix used during the mesh construction of this
+    %   compartment.
+    %
     % - color
     %
     %   The RGB color of this compartment. Should probably not be stored here, but
