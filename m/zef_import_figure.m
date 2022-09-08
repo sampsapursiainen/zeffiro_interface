@@ -116,8 +116,7 @@ else
 end
 
 set(h_fig,'AutoResizeChildren','off');
-assignin('base','zef_data',get(h_fig,'Position'));
-eval('zef.zeffiro_current_size{zef_fig_num} = zef_data; clear zef_data;');
+zef.zeffiro_current_size{zef_fig_num} = get(h_fig,'Position');
 set(h_fig,'Tag',num2str(zef_fig_num));
 
 set(h_fig,'SizeChangedFcn','zef_set_figure_current_size;');
