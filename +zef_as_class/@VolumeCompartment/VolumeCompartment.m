@@ -62,7 +62,7 @@ classdef VolumeCompartment
     %
     %   A number indicating the number of sources in this volume.
     %
-    % - sources_original_surface_mesh
+    % - sources_old
     %
     %   A number indicating the number of sources in this volume, before being
     %   modified by the mesh creation routine.
@@ -169,7 +169,7 @@ classdef VolumeCompartment
 
         sources (1,1) double { mustBeInteger } = 0;
 
-        sources_original_surface_mesh (1,1) double { mustBeInteger, mustBeNonnegative }  = 0;
+        sources_old (1,1) double { mustBeInteger }  = 0;
 
         transform_name (1,1) string { mustBeText } = "";
 
@@ -285,7 +285,7 @@ classdef VolumeCompartment
 
             if isfield(args, "sources_old")
 
-                self.sources_original_surface_mesh = args.sources_on;
+                self.sources_old = args.sources_old;
 
             end
 
