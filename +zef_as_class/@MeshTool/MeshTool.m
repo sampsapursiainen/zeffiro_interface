@@ -7,7 +7,7 @@ classdef MeshTool < handle
 
     properties
 
-        zef app.Zef
+        zef zef_as_class.Zef
 
         tab matlab.ui.container.Tab
 

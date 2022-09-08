@@ -5,7 +5,7 @@ function self = postprocess_fem_mesh(self)
     % Post-processes a given finite element mesh.
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
 end

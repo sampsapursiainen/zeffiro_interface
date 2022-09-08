@@ -1,6 +1,6 @@
 function zef_or_zi = main(project_file_path, use_gui)
 
-    % app.main
+    % zef_as_class.main
     %
     % The main function of Zeffiro Interface.
     %
@@ -50,11 +50,11 @@ function zef_or_zi = main(project_file_path, use_gui)
     || strcmp(fixed_project_file_path, "none") ...
     || strcmp(fixed_project_file_path, "no project") ...
 
-        zef = app.Zef(struct);
+        zef = zef_as_class.Zef(struct);
 
     else
 
-        zef = app.Zef.load_from_file(project_file_path);
+        zef = zef_as_class.Zef.load_from_file(project_file_path);
 
     end
 
@@ -62,7 +62,7 @@ function zef_or_zi = main(project_file_path, use_gui)
 
     if use_gui
 
-        zef_or_zi = app.ZeffiroInterface(zef);
+        zef_or_zi = zef_as_class.ZeffiroInterface(zef);
 
     else
 

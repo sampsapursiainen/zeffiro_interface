@@ -1,6 +1,6 @@
 classdef VolumeCompartment
 
-    % app.VolumeCompartment
+    % zef_as_class.VolumeCompartment
     %
     % A class that describes how volumetric compartments are structured and
     % what operations are defined on them.
@@ -179,7 +179,7 @@ classdef VolumeCompartment
 
         function self = VolumeCompartment(args)
 
-            % app.VolumeCompartment.VolumeCompartment
+            % zef_as_class.VolumeCompartment.VolumeCompartment
             %
             % Constructor for this class. Takes as an input a struct whose
             % contents will be converted to the properties of this

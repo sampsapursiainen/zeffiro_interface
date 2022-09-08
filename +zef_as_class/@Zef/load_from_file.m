@@ -25,6 +25,6 @@ function self = load_from_file(filepath)
         zef_data = struct;
     end
 
-    self = app.Zef(zef_data);
+    self = zef_as_class.Zef(zef_data);
 
 end % function

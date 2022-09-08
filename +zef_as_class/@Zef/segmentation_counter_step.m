@@ -1,7 +1,7 @@
 function self = segmentation_counter_step(self)
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
     pml_ind_aux = [];

@@ -5,7 +5,7 @@ function self = create_finite_element_mesh(self)
     % Calls the functions needed to construct a finite element mesh.
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
     if self.surface_downsampling_on

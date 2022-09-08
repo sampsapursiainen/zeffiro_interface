@@ -7,7 +7,7 @@ classdef SegmentationTool < handle
 
     properties
 
-        zef app.Zef
+        zef zef_as_class.Zef
 
         tab matlab.ui.container.Tab
 
@@ -88,7 +88,7 @@ classdef SegmentationTool < handle
 
             self.infotable = uitable(self.layout, ...
                 'ColumnName', { 'Field','Value' }, ...
-                'Data', app.SegmentationTool.INFOTABLE_DEFAULT_CONTENT ...
+                'Data', zef_as_class.SegmentationTool.INFOTABLE_DEFAULT_CONTENT ...
             );
 
         end

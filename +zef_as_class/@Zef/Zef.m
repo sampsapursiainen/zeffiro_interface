@@ -101,7 +101,7 @@ classdef Zef < handle
 
         compartment_tags string = [];
 
-        compartments app.VolumeCompartment
+        compartments zef_as_class.VolumeCompartment
 
         create_sensor_fn function_handle
 
@@ -339,7 +339,7 @@ classdef Zef < handle
                     suffix = string(join(suffix_parts, "_"));
 
                     if ismember(prefix, self.compartment_tags) ...
-                    && ismember(suffix, app.Zef.VOLUME_COMPARTMENT_FIELD_NAMES)
+                    && ismember(suffix, zef_as_class.Zef.VOLUME_COMPARTMENT_FIELD_NAMES)
 
                         % Check if compartment name is already in the
                         % compartment table.
@@ -393,7 +393,7 @@ classdef Zef < handle
 
                 a_struct = compartment_table{ii,2};
 
-                self.compartments(ii) = app.VolumeCompartment(a_struct);
+                self.compartments(ii) = zef_as_class.VolumeCompartment(a_struct);
 
             end
 

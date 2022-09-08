@@ -5,7 +5,7 @@ function self = process_meshes(self)
     % Processes a contained finite element mesh.
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
     reuna_p_inf = [];

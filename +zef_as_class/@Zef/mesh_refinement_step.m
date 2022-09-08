@@ -3,7 +3,7 @@ function self = mesh_refinement_step(self, tetra)
     % mesh_refinement_step
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
     refinement_flag = self.refinement_flag;

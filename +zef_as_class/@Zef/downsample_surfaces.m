@@ -5,7 +5,7 @@ function self = downsample_surfaces(self)
     % Downsamples the surfaces of a contained finite element mesh.
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
     end
 
     % Initialize waitbar and add a cleanup object to make it disappear in case
@@ -109,13 +109,13 @@ function self = downsample_surfaces(self)
 
                     temp_patch_data.vertices = temp_patch_data.vertices_all(temp_patch_data.unique_faces_ind,:);
 
-                    temp_patch_data_aux = app.Zef.set_surface_resolution( ...
+                    temp_patch_data_aux = zef_as_class.Zef.set_surface_resolution( ...
                         self, ...
                         temp_patch_data, ...
                         self.data.max_surface_face_count ...
                     );
 
-                    temp_patch_data_aux.vertices = app.Zef.smooth_surface( ...
+                    temp_patch_data_aux.vertices = zef_as_class.Zef.smooth_surface( ...
                         temp_patch_data_aux.vertices, ...
                         temp_patch_data_aux.faces, ...
                         1e-2, 1 ...
@@ -170,9 +170,9 @@ function self = downsample_surfaces(self)
 
                 temp_patch_data.vertices = temp_patch_data.vertices_all;
 
-                temp_patch_data_aux = app.Zef.set_surface_resolution(temp_patch_data,self.max_surface_face_count);
+                temp_patch_data_aux = zef_as_class.Zef.set_surface_resolution(temp_patch_data,self.max_surface_face_count);
 
-                temp_patch_data_aux.vertices = app.Zef.smooth_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces,1e-2,1);
+                temp_patch_data_aux.vertices = zef_as_class.Zef.smooth_surface(temp_patch_data_aux.vertices,temp_patch_data_aux.faces,1e-2,1);
 
                 if self.data.(sources_name) > 0
 

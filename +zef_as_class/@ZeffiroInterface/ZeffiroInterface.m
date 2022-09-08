@@ -8,7 +8,7 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
     properties
 
-        zef app.Zef
+        zef zef_as_class.Zef
 
         window matlab.ui.Figure
 
@@ -80,13 +80,13 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
         tabs matlab.ui.container.TabGroup
 
-        segmentation_tool app.SegmentationTool
+        segmentation_tool zef_as_class.SegmentationTool
 
-        mesh_tool app.MeshTool
+        mesh_tool zef_as_class.MeshTool
 
-        mesh_visualization_tool app.MeshVisualizationTool
+        mesh_visualization_tool zef_as_class.MeshVisualizationTool
 
-        figure_tool app.FigureTool
+        figure_tool zef_as_class.FigureTool
 
     end % properties
 
@@ -104,7 +104,7 @@ classdef ZeffiroInterface < matlab.apps.AppBase
             % methods.
 
             arguments
-                zef app.Zef
+                zef zef_as_class.Zef
             end
 
             self.zef = zef;
@@ -187,19 +187,19 @@ classdef ZeffiroInterface < matlab.apps.AppBase
 
             % The segmentation tool window object.
 
-            self.segmentation_tool = app.SegmentationTool(self.zef, self.tabs);
+            self.segmentation_tool = zef_as_class.SegmentationTool(self.zef, self.tabs);
 
             % The mesh tool window object.
 
-            self.mesh_tool = app.MeshTool(self.zef, self.tabs);
+            self.mesh_tool = zef_as_class.MeshTool(self.zef, self.tabs);
 
             % The visualization tool window object.
 
-            self.mesh_visualization_tool = app.MeshVisualizationTool(self.zef, self.tabs);
+            self.mesh_visualization_tool = zef_as_class.MeshVisualizationTool(self.zef, self.tabs);
 
             % The figure tool window object.
 
-            self.figure_tool = app.FigureTool(self.zef, self.tabs);
+            self.figure_tool = zef_as_class.FigureTool(self.zef, self.tabs);
 
         end
 

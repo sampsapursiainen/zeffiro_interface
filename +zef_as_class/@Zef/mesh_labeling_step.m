@@ -1,7 +1,7 @@
 function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_compartments)
 
     arguments
-        self app.Zef
+        self zef_as_class.Zef
         label_ind { mustBeInteger, mustBePositive }
         labeling_flag { mustBeInteger, mustBePositive }
         tetra double { mustBeInteger, mustBeNonnegative }
@@ -362,7 +362,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
     %   A set of indices.
 
     arguments
-        zef app.Zef
+        zef zef_as_class.Zef
         reuna_p (:,3) double
         reuna_t
         nodes (:,3) double
