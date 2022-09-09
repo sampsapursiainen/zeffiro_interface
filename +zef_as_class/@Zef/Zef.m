@@ -8,12 +8,6 @@ classdef Zef < handle
     %
     % Zef Properties:
     %
-    % - active_compartment_tags
-    %
-    %   An array that contains the compartment tags of active compartments.
-    %   Tags are added here when they are active and removed when made
-    %   inactive.
-    %
     % - bypass_inflate
     %
     %   A boolean for expressing whether to bypass the inflation step during
@@ -94,8 +88,6 @@ classdef Zef < handle
 
 
     properties
-
-        active_compartment_tags string = [];
 
         bypass_inflate (1,1) logical = false;
 
@@ -261,10 +253,6 @@ classdef Zef < handle
                         self.gpu_count = 0;
 
                     end
-
-                elseif strcmp(finame, 'active_compartment_tags')
-
-                    self.active_compartment_tags = data.(finame);
 
                 elseif strcmp(finame, 'bypass_inflate')
 
