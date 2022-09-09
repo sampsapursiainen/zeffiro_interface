@@ -354,7 +354,8 @@ classdef Zef < handle
 
                     self.surface_refinement_on = data.(finame);
 
-                elseif strcmp(finame, 'volume_refinement_on')
+                elseif strcmp(finame, 'volume_refinement_on') ...
+                || strcmp(finame, 'refinement_volume_on')
 
                     self.volume_refinement_on = data.(finame);
 
