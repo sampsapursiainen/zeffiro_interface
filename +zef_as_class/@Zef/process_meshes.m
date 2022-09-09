@@ -389,11 +389,21 @@ function self = process_meshes(self)
 
     end % for
 
+    self.sensors = sensors;
     self.data.sensors = sensors;
     self.data.reuna_p = reuna_p;
     self.data.reuna_t = reuna_t;
     self.data.reuna_p_inf = reuna_p_inf;
     self.data.reuna_submesh_ind = reuna_submesh_ind;
     self.data.reuna_type = reuna_type;
+
+    for ind = 1 : numel(self.compartments)
+
+        self.compartments(ind).points = reuna_p{ind};
+        self.compartments(ind).points_inf = reuna_p_inf{ind};
+        self.compartments(ind).triangles = reuna_t{ind};
+        self.compartments(ind).submesh_ind = reuna_submesh_ind{ind};
+
+    end
 
 end % function
