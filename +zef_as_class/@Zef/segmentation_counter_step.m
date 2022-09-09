@@ -62,6 +62,10 @@ function self = segmentation_counter_step(self)
     submesh_ind_1 = ones(n_compartments,1);
     submesh_ind_2 = ones(n_compartments,1);
 
+    % Re-organize compartment priorities.
+
+    old_priorities = arrayfun(@(c) c.priority, self.compartments);
+
     for i = 1 : length(self.compartments)
 
         compartment = self.compartments(i);
@@ -69,7 +73,7 @@ function self = segmentation_counter_step(self)
         for k = 1 : max(1,length(compartment.submesh_ind))
 
             compartment_counter = compartment_counter + 1;
-            priority_vec_aux(compartment_counter) = priority_vec(i);
+            self.compartments(compartment_counter).priority = old_priorities(i);
             submesh_ind_1(compartment_counter) = i;
             submesh_ind_2(compartment_counter) = k;
 
