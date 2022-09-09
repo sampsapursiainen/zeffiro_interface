@@ -87,11 +87,11 @@ function self = create_fem_mesh(self)
 
     if isequal(self.data.initial_mesh_mode, 1)
 
-        [nodes, tetra, label_ind] = initial_mesh_in_mode_1(self, X, Y, Z, n_cubes);
+        [self.nodes, self.tetra, label_ind] = initial_mesh_in_mode_1(self, X, Y, Z, n_cubes);
 
     elseif isequal(self.data.initial_mesh_mode, 2)
 
-        [nodes, tetra, label_ind] = initial_mesh_in_mode_2(self, X, Y, Z, n_cubes);
+        [self.nodes, self.tetra, label_ind] = initial_mesh_in_mode_2(self, X, Y, Z, n_cubes);
 
     else
 
@@ -103,7 +103,7 @@ function self = create_fem_mesh(self)
 
     labeling_flag = 1;
 
-    self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+    self = mesh_labeling_step(self, self.nodes, label_ind, labeling_flag, self.tetra, n_compartments);
 
     % Then perform mesh refinement, either surface and/or volumetric, in
     % adapted and/or non-adapted mode.
@@ -134,7 +134,7 @@ function self = create_fem_mesh(self)
 
                 for i_surface_refinement = 1 : n_surface_refinement
 
-                    zef_refinement_step;
+                    self = self.mesh_refinement_step();
 
                     if self.data.mesh_relabeling
 
@@ -153,7 +153,7 @@ function self = create_fem_mesh(self)
 
                     for i_surface_refinement = 1 : n_surface_refinement(j_surface_refinement)
 
-                        zef_refinement_step;
+                        self = self.mesh_refinement_step();
 
                         if self.data.mesh_relabeling
 
@@ -304,7 +304,7 @@ function self = create_fem_mesh(self)
 
                         tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
-                        [nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments(j),tetra_refine_ind);
+                        [nodes,tetra,self.domain_labels,tetra_interp_vec] = mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments(j),tetra_refine_ind);
 
                         tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 

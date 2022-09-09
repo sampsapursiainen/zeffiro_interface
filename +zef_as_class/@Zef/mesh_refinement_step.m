@@ -1,4 +1,4 @@
-function self = mesh_refinement_step(self, tetra)
+function self = mesh_refinement_step(self)
 
     % mesh_refinement_step
 
@@ -9,7 +9,7 @@ function self = mesh_refinement_step(self, tetra)
     refinement_flag = self.refinement_flag;
 
     if refinement_flag == 1
-        tetra_aux = tetra;
+        tetra_aux = self.tetra;
     end
 
     if self.refinement_on;
@@ -388,5 +388,9 @@ function self = mesh_refinement_step(self, tetra)
         end % if
 
     end % if
+
+    self.nodes = nodes;
+
+    self.tetra = tetra;
 
 end % function
