@@ -122,8 +122,6 @@ function self = create_fem_mesh(self)
 
     refinement_flag = 1;
 
-    surface_refinement_on = self.data.refinement_surface_on;
-
     n_surface_refinement = self.data.refinement_surface_number;
 
     if self.refinement_on
