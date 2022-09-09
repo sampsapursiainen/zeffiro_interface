@@ -1,7 +1,12 @@
-function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_compartments)
+function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments)
+
+    % mesh_labeling_step
+    %
+    % Determines which tetra and nodes belong to which volumetric compartment.
 
     arguments
         self zef_as_class.Zef
+        nodes (:,3) double
         label_ind { mustBeInteger, mustBePositive }
         labeling_flag { mustBeInteger, mustBePositive }
         tetra double { mustBeInteger, mustBeNonnegative }
@@ -16,7 +21,7 @@ function self = mesh_labeling_step(self, label_ind, labeling_flag, tetra, n_comp
         %Initialize labeling.
         %***********************************************************
 
-        I = zeros(size(self.nodes,1), 1);
+        I = zeros(size(nodes,1), 1);
 
         I_2 = [1 : length(I)]';
 

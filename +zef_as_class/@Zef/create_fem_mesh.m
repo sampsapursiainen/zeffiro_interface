@@ -153,7 +153,7 @@ function self = create_fem_mesh(self)
 
         end
 
-        self.nodes = [X(:) Y(:) Z(:)];
+        nodes = [X(:) Y(:) Z(:)];
 
         i = 1;
 
@@ -195,7 +195,7 @@ function self = create_fem_mesh(self)
 
     labeling_flag = 1;
 
-    self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+    self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
     refinement_compartments_aux = self.data.refinement_surface_compartments;
 
@@ -230,7 +230,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
-                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -249,7 +249,7 @@ function self = create_fem_mesh(self)
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 2;
-                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                            self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
@@ -266,7 +266,7 @@ function self = create_fem_mesh(self)
         pml_ind = [];
         label_ind = uint32(tetra);
         labeling_flag = 2;
-        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
     end % if
 
@@ -292,7 +292,7 @@ function self = create_fem_mesh(self)
 
                 for i = 1 : n_refinement
 
-                    [self.nodes,tetra,self.domain_labels] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments);
+                    [nodes,tetra,self.domain_labels] = zef_mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments);
 
                     waitbar(i/n_refinement,wb,'Volume refinement.');
 
@@ -301,7 +301,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
-                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -315,14 +315,14 @@ function self = create_fem_mesh(self)
 
                     for i = 1 : n_refinement(j)
 
-                        [self.nodes,tetra,self.domain_labels] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments(j));
+                        [nodes,tetra,self.domain_labels] = zef_mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments(j));
 
                         if self.data.mesh_relabeling
 
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 2;
-                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                            self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
@@ -360,9 +360,9 @@ function self = create_fem_mesh(self)
 
                     thresh_val  = self.data.adaptive_refinement_thresh_val;
 
-                    tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, self.nodes, tetra,self.domain_labels,reuna_p,reuna_t);
+                    tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
-                    [self.nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments, tetra_refine_ind);
+                    [nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments, tetra_refine_ind);
 
                     tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
@@ -373,7 +373,7 @@ function self = create_fem_mesh(self)
                         pml_ind = [];
                         label_ind = uint32(tetra);
                         labeling_flag = 3;
-                        self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                     end % if
 
@@ -391,9 +391,9 @@ function self = create_fem_mesh(self)
 
                         thresh_val  = self.data.adaptive_refinement_thresh_val;
 
-                        tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, self.nodes, tetra,self.domain_labels,reuna_p,reuna_t);
+                        tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
-                        [self.nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(self.nodes,tetra,self.domain_labels,refinement_compartments(j),tetra_refine_ind);
+                        [nodes,tetra,self.domain_labels,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,self.domain_labels,refinement_compartments(j),tetra_refine_ind);
 
                         tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
@@ -402,7 +402,7 @@ function self = create_fem_mesh(self)
                             pml_ind = [];
                             label_ind = uint32(tetra);
                             labeling_flag = 3;
-                            self = mesh_labeling_step(self,label_ind, labeling_flag, tetra, n_compartments);
+                            self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
                         end % if
 
@@ -421,6 +421,8 @@ function self = create_fem_mesh(self)
     close(wb);
 
     self.name_tags = name_tags;
+
+    self.nodes = nodes;
 
     self.tetra = tetra;
 
