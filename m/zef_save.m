@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_save(zef,file_name,path_name,save_switch)
+function zef = zef_save(zef,file_name,path_name,save_switch)
 
 if nargin == 0
     zef = evalin('base','zef');
@@ -199,3 +199,9 @@ print(gcf,'-dtiff','-r200',[zef.file_path zef.file]);
     end
 end;
 end;
+
+if nargout == 0
+    assignin('base','zef',zef);
+end
+
+end
