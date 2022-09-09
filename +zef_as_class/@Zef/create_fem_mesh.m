@@ -47,8 +47,8 @@ function self = create_fem_mesh(self)
     else
 
         pml_inner_radius = max(abs([x_lim(:); y_lim(:); z_lim(:)]));
-        pml_outer_radius_unit = self.data.pml_outer_radius_unit;
-        pml_outer_radius = self.data.pml_outer_radius;
+        pml_outer_radius_unit = self.pml_outer_radius_unit;
+        pml_outer_radius = self.pml_outer_radius;
         pml_max_size_unit = self.data.pml_max_size_unit;
         pml_max_size = self.data.pml_max_size;
 

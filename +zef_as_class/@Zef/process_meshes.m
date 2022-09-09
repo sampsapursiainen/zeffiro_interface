@@ -339,14 +339,12 @@ function self = process_meshes(self)
 
         if not(isequal(box_ind,0))
 
-            pml_outer_radius_unit = self.data.pml_outer_radius_unit;
-
-            pml_outer_radius = self.data.pml_outer_radius;
-
-            if pml_outer_radius_unit == 1
-                box_outer_radius = pml_outer_radius * max_val;
+            if self.pml_outer_radius_unit == 1
+                box_outer_radius = self.pml_outer_radius * max_val;
             elseif pml_outer_radius_unit == 2
-                box_outer_radius = pml_outer_radius;
+                box_outer_radius = self.pml_outer_radius;
+            else
+                error("Unknown PML outer radius unit.");
             end
 
             reuna_p{box_ind} = [
