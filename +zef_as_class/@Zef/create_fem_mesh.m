@@ -12,6 +12,8 @@ function self = create_fem_mesh(self)
 
     self = self.segmentation_counter_step();
 
+    % Determine mesh limits in a Cartesian system.
+
     x_lim = [0 0];
     y_lim = [0 0];
     z_lim = [0 0];
@@ -20,17 +22,24 @@ function self = create_fem_mesh(self)
 
     reuna_p = self.data.reuna_p;
 
-    for k = 1 : length(self.data.reuna_p)
+    for k = 1 : length(self.compartments)
 
-        n_compartments = n_compartments + max(1,length(self.data.submesh_cell{k}));
+        compartment = self.compartments(k);
+
+        n_compartments = n_compartments + max(1,length(compartment.submesh_ind));
+
+        reuna_p = compartment.points;
 
         if not(isequal(self.data.reuna_type{k},-1))
-            x_lim = [min(x_lim(1),min(reuna_p{k}(:,1))) max(x_lim(2),max(reuna_p{k}(:,1)))];
-            y_lim = [min(y_lim(1),min(reuna_p{k}(:,2))) max(y_lim(2),max(reuna_p{k}(:,2)))];
-            z_lim = [min(z_lim(1),min(reuna_p{k}(:,3))) max(z_lim(2),max(reuna_p{k}(:,3)))];
+            x_lim = [min(x_lim(1),min(reuna_p(:,1))) max(x_lim(2),max(reuna_p(:,1)))];
+            y_lim = [min(y_lim(1),min(reuna_p(:,2))) max(y_lim(2),max(reuna_p(:,2)))];
+            z_lim = [min(z_lim(1),min(reuna_p(:,3))) max(z_lim(2),max(reuna_p(:,3)))];
         end
 
     end % for
+
+    % Generate a grid based on the limits and the mesh resolution, either as
+    % cubes or perfectly matched layers (PML).
 
     mesh_res = self.mesh_resolution;
 
@@ -85,6 +94,8 @@ function self = create_fem_mesh(self)
         error('Unknown initial mesh mode.')
 
     end % if
+
+    % Start labeling generated tetra.
 
     labeling_flag = 1;
 

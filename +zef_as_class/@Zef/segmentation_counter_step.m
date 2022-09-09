@@ -21,7 +21,7 @@ function self = segmentation_counter_step(self)
     aux_brain_ind = [];
     compartment_tags = self.compartment_tags;
 
-    for k = 1 : length(compartment_tags)
+    for k = 1 : length(self.compartments)
 
         compartment = self.compartments(k);
 
@@ -52,8 +52,12 @@ function self = segmentation_counter_step(self)
 
     n_compartments = 0;
 
-    for k = 1 : length(reuna_p)
-        n_compartments = n_compartments + max(1,length(submesh_cell{k}));
+    for k = 1 : length(self.compartments)
+
+        compartment = self.compartments(k);
+
+        n_compartments = n_compartments + max(1,length(compartment.submesh_ind));
+
     end
 
     priority_vec_aux = zeros(n_compartments,1);
@@ -61,9 +65,11 @@ function self = segmentation_counter_step(self)
     submesh_ind_1 = ones(n_compartments,1);
     submesh_ind_2 = ones(n_compartments,1);
 
-    for i = 1 : length(reuna_p)
+    for i = 1 : length(self.compartments)
 
-        for k = 1 : max(1,length(submesh_cell{i}))
+        compartment = self.compartments(i);
+
+        for k = 1 : max(1,length(compartment.submesh_ind))
 
             compartment_counter = compartment_counter + 1;
             priority_vec_aux(compartment_counter) = priority_vec(i);
