@@ -69,7 +69,7 @@ classdef Zef < handle
     %
     % - pml_outer_radius
     %
-    %   The radius used in the Perfectly Layered Mesh (PML) construction
+    %   The radius used in the Perfectly Matched Layer (PML) construction
     %   during mesh generation.
     %
     % - pml_outer_radius_unit
