@@ -32,7 +32,7 @@ function self = segmentation_counter_step(self)
 
             sigma_vec(i,1) = sigma_val;
             priority_vec(i,1) = priority_val;
-            self.compartments(i).submesh_ind = compartment.submesh_ind;
+            self.compartments(i).submesh_ind = compartment.submesh_ind_original_surface_mesh;
             self.compartments(i).name = compartment.name;
 
             if isequal(compartment.sources,-1)
