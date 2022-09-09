@@ -8,6 +8,11 @@ classdef Zef < handle
     %
     % Zef Properties:
     %
+    % - adaptive_refinement_on
+    %
+    %   A boolean that determines whether adaptive refinement is used during
+    %   mesh construction.
+    %
     % - bypass_inflate
     %
     %   A boolean for expressing whether to bypass the inflation step during
@@ -121,6 +126,8 @@ classdef Zef < handle
 
 
     properties
+
+        adaptive_refinement_on (1,1) logical = false;
 
         bypass_inflate (1,1) logical = false;
 
@@ -264,6 +271,10 @@ classdef Zef < handle
                 if is_graphics_obj || strcmp(finame, "fieldnames")
 
                     % Ignore graphical handles
+
+                elseif strcmp(finame, 'adaptive_refinement_on')
+
+                    self.adaptive_refinement_on = data.(finame);
 
                 elseif strcmp(finame, 'nodes')
 
