@@ -29,27 +29,27 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
         pml_counter = 0;
 
-        submesh_cell = self.data.submesh_cell;
+        for i_labeling = 1 : length(self.compartments)
 
-        for i_labeling = 1 : length(self.data.reuna_p)
+            compartment = self.compartments(i_labeling);
 
-            for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
+            for k_labeling = 1 : max(1,length(compartment.submesh_ind))
 
                 compartment_counter = compartment_counter + 1;
 
-                if isempty(submesh_cell{i_labeling})
+                if isempty(compartment.submesh_ind)
 
-                    reuna_t_aux = self.data.reuna_t{i_labeling};
+                    reuna_t_aux = compartment.triangles;
 
                 else
 
                     if k_labeling == 1
 
-                        reuna_t_aux = self.data.reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
+                        reuna_t_aux = compartment.triangles(1:compartment.submesh_ind,:);
 
                     else
 
-                        reuna_t_aux = self.data.reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
+                        reuna_t_aux = compartment.triangles(compartment.submesh_ind(k_labeling-1)+1: compartment.submesh_ind(k_labeling),:);
 
                     end
 
@@ -113,9 +113,11 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
         unique_domain_labels = unique(domain_labels);
 
-        for i_labeling = 1 : length(reuna_p)
+        for i_labeling = 1 : length(self.compartments)
 
-            for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
+            compartment = self.compartments(i_labeling);
+
+            for k_labeling = 1 : max(1,length(compartment.submesh_ind))
 
             compartment_counter = compartment_counter + 1;
 
@@ -127,16 +129,16 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
                         break
                     end
 
-                    if isempty(submesh_cell{i_labeling})
+                    if isempty(compartment.submesh_ind)
 
-                        reuna_t_aux = self.data.reuna_t{i_labeling};
+                        reuna_t_aux = compartment.triangles;
 
                     else
 
                         if k_labeling == 1
-                            reuna_t_aux = self.data.reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
+                            reuna_t_aux = compartment.triangles(1:compartment.submesh_ind,:);
                         else
-                            reuna_t_aux = self.data.reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
+                            reuna_t_aux = compartment.triangles(compartment.submesh_ind(k_labeling-1)+1: compartment.submesh_ind(k_labeling),:);
                         end
 
                     end % if
@@ -215,9 +217,11 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
         unique_domain_labels = unique(domain_labels);
 
-        for i_labeling = 1 : length(reuna_p)
+        for i_labeling = 1 : length(self.compartments)
 
-            for k_labeling = 1 : max(1,length(submesh_cell{i_labeling}))
+            compartment = self.compartments(i_labeling);
+
+            for k_labeling = 1 : max(1,length(compartment.submesh_ind))
 
                 compartment_counter = compartment_counter + 1;
 
@@ -229,19 +233,19 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
                         break
                     end
 
-                    if isempty(submesh_cell{i_labeling})
+                    if isempty(compartment.submesh_ind)
 
-                        reuna_t_aux = self.data.reuna_t{i_labeling};
+                        reuna_t_aux = compartment.triangles;
 
                     else
 
                         if k_labeling == 1
 
-                            reuna_t_aux = self.data.reuna_t{i_labeling}(1:submesh_cell{i_labeling},:);
+                            reuna_t_aux = compartment.triangles(1:compartment.submesh_ind,:);
 
                         else
 
-                            reuna_t_aux = self.data.reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
+                            reuna_t_aux = compartment.triangles(compartment.submesh_ind(k_labeling-1)+1: compartment.submesh_ind(k_labeling),:);
 
                         end
 

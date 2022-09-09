@@ -8,9 +8,6 @@ function self = segmentation_counter_step(self)
     pml_ind = [];
 
     mesh_res = self.mesh_resolution;
-    reuna_p = self.data.reuna_p;
-    reuna_t = self.data.reuna_t;
-    reuna_type = self.data.reuna_type;
     sensors = self.sensors;
 
     i = 0;
@@ -35,8 +32,8 @@ function self = segmentation_counter_step(self)
 
             sigma_vec(i,1) = sigma_val;
             priority_vec(i,1) = priority_val;
-            submesh_cell{i} = compartment.submesh_ind;
-            name_tags{i} = compartment.name;
+            self.compartments(i).submesh_ind = compartment.submesh_ind;
+            self.compartments(i).name = compartment.name;
 
             if isequal(compartment.sources,-1)
                 pml_ind_aux = i;

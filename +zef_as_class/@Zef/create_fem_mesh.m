@@ -30,7 +30,7 @@ function self = create_fem_mesh(self)
 
         reuna_p = compartment.points;
 
-        if not(isequal(self.data.reuna_type{k},-1))
+        if not(isequal(compartment.sources,-1))
             x_lim = [min(x_lim(1),min(reuna_p(:,1))) max(x_lim(2),max(reuna_p(:,1)))];
             y_lim = [min(y_lim(1),min(reuna_p(:,2))) max(y_lim(2),max(reuna_p(:,2)))];
             z_lim = [min(z_lim(1),min(reuna_p(:,3))) max(z_lim(2),max(reuna_p(:,3)))];
