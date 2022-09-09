@@ -86,6 +86,10 @@ classdef Zef < handle
     %   The unit of self.pml_outer_radius. Used in deciding the size of the
     %   bounding box of each volume compartment.
     %
+    % - refinement_on
+    %
+    %   Determines whether refimenent is used during mesh generation.
+    %
     % - sensors
     %
     %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
@@ -143,6 +147,8 @@ classdef Zef < handle
         pml_outer_radius (1,1) double { mustBePositive } = 1;
 
         pml_outer_radius_unit (1,1) double { mustBeInteger, mustBePositive } = 1;
+
+        refinement_on (1,1) logical = false;
 
         sensors (:,:) double = [];
 
@@ -325,6 +331,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'pml_outer_radius_unit')
 
                     self.pml_outer_radius_unit = data.(finame);
+
+                elseif strcmp(finame, 'refinement_on')
+
+                    self.refinement_on = data.(finame);
 
                 else
 
