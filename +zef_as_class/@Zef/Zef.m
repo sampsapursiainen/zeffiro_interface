@@ -45,6 +45,11 @@ classdef Zef < handle
     %   have not yet been statically declared here. A backwards-compatibility
     %   field, in other words.
     %
+    % - domain_labels
+    %
+    %   Seems like this contains indices for determining which tetra belong to
+    %   which volume compartment.
+    %
     % - gpu_count
     %
     %   The claimed number of GPUs available.
@@ -150,6 +155,8 @@ classdef Zef < handle
         create_sensor_fn function_handle
 
         data struct
+
+        domain_labels (:,1) double { mustBeInteger, mustBePositive } = [];
 
         gpu_count (1,1) double { mustBeNonnegative }
 
@@ -307,6 +314,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'compartment_tags')
 
                     self.compartment_tags = data.(finame);
+
+                elseif strcmp(finame, 'domain_labels')
+
+                    self.domain_labels = data.(finame);
 
                 elseif strcmp(finame, 'name_tags')
 
