@@ -79,6 +79,10 @@ function self = create_fem_mesh(self)
 
     wb = waitbar(0,'Initial mesh.');
 
+    cleanup_fn = @(h) close(h);
+
+    cleanup_obj = onCleanup(@() cleanup_fn(wb));
+
     % Construct initial mesh.
 
     if isequal(self.data.initial_mesh_mode, 1)
