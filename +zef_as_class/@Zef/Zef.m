@@ -13,6 +13,14 @@ classdef Zef < handle
     %   A boolean that determines whether adaptive refinement is used during
     %   mesh construction.
     %
+    % - adaptive_refinement_k_param
+    %
+    %   A parameter used in the adaptive refinement of a finite element mesh.
+    %
+    % - adaptive_refinement_thresh_val
+    %
+    %   A threshold value for ending adaptive refinement.
+    %
     % - bypass_inflate
     %
     %   A boolean for expressing whether to bypass the inflation step during
@@ -128,6 +136,10 @@ classdef Zef < handle
     properties
 
         adaptive_refinement_on (1,1) logical = false;
+
+        adaptive_refinement_k_param (1,1) double { mustBeReal, mustBePositive } = 1;
+
+        adaptive_refinement_thresh_val (1,1) double { mustBeReal, mustBePositive } = 1;
 
         bypass_inflate (1,1) logical = false;
 
@@ -275,6 +287,14 @@ classdef Zef < handle
                 elseif strcmp(finame, 'adaptive_refinement_on')
 
                     self.adaptive_refinement_on = data.(finame);
+
+                elseif strcmp(finame, 'adaptive_refinement_k_param')
+
+                    self.adaptive_refinement_k_param = data.(finame);
+
+                elseif strcmp(finame, 'adaptive_refinement_thresh_val')
+
+                    self.adaptive_refinement_thresh_val = data.(finame);
 
                 elseif strcmp(finame, 'nodes')
 
@@ -492,7 +512,7 @@ classdef Zef < handle
 
         self = postprocess_fem_mesh(self);
 
-        self = segmentation_couter_step(self);
+        self = segmentation_counter_step(self);
 
         self = mesh_refinement_step(self);
 

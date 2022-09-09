@@ -245,9 +245,10 @@ function self = create_fem_mesh(self)
 
     end % if
 
-    if self.data.adaptive_refinement_on
+    if self.adaptive_refinement_on
 
         n_refinement = self.data.adaptive_refinement_number;
+
         refinement_compartments_aux = sort(self.data.adaptive_refinement_compartments);
 
         refinement_compartments = [];
@@ -296,9 +297,9 @@ function self = create_fem_mesh(self)
 
                 for i = 1 : n_refinement(j)
 
-                    k_param = self.data.adaptive_refinement_k_param;
+                    k_param = self.adaptive_refinement_k_param;
 
-                    thresh_val  = self.data.adaptive_refinement_thresh_val;
+                    thresh_val  = self.adaptive_refinement_thresh_val;
 
                     tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,self.domain_labels,reuna_p,reuna_t);
 
