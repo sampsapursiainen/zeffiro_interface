@@ -67,6 +67,15 @@ classdef Zef < handle
     %   Used to determine how many restarts are needed when inflating meshes
     %   and finding points within compartments.
     %
+    % - pml_max_size
+    %
+    %   The maximum size of Perfectly Matched Layers (PML) during mesh
+    %   generation.
+    %
+    % - pml_max_size_unit
+    %
+    %   The unit of self.pml_max_size.
+    %
     % - pml_outer_radius
     %
     %   The radius used in the Perfectly Matched Layer (PML) construction
@@ -126,6 +135,10 @@ classdef Zef < handle
         parallel_processes double { mustBeInteger, mustBePositive } = 1;
 
         parallel_vectors double { mustBeInteger, mustBePositive } = 1;
+
+        pml_max_size_unit (1,1) double = 1;
+
+        pml_max_size (1,1) double = 1;
 
         pml_outer_radius (1,1) double { mustBePositive } = 1;
 
@@ -296,6 +309,14 @@ classdef Zef < handle
                 elseif strcmp(finame, 'parallel_vectors')
 
                     self.parallel_vectors = data.(finame);
+
+                elseif strcmp(finame, 'pml_max_size')
+
+                    self.pml_max_size = data.(finame);
+
+                elseif strcmp(finame, 'pml_max_size_unit')
+
+                    self.pml_max_size_unit = data.(finame);
 
                 elseif strcmp(finame, 'pml_outer_radius')
 
