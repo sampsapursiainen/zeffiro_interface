@@ -350,14 +350,14 @@ function self = process_meshes(self)
             end
 
             reuna_p{box_ind} = [
-                -box_outer_radius   -box_outer_radius   -box_outer_radius;
-                box_outer_radius    -box_outer_radius   -box_outer_radius;
-                box_outer_radius    box_outer_radius    -box_outer_radius;
-                -box_outer_radius   box_outer_radius    -box_outer_radius;
-                -box_outer_radius   -box_outer_radius   box_outer_radius ;
-                box_outer_radius    -box_outer_radius   box_outer_radius;
-                box_outer_radius    box_outer_radius    box_outer_radius;
-                -box_outer_radius   box_outer_radius    box_outer_radius;
+                -box_outer_radius   -box_outer_radius   -box_outer_radius ;
+                 box_outer_radius   -box_outer_radius   -box_outer_radius ;
+                 box_outer_radius    box_outer_radius   -box_outer_radius ;
+                -box_outer_radius    box_outer_radius   -box_outer_radius ;
+                -box_outer_radius   -box_outer_radius    box_outer_radius ;
+                 box_outer_radius   -box_outer_radius    box_outer_radius ;
+                 box_outer_radius    box_outer_radius    box_outer_radius ;
+                -box_outer_radius    box_outer_radius    box_outer_radius ;
             ];
 
             reuna_t{box_ind} = [
