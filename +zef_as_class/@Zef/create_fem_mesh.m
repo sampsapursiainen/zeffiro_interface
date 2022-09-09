@@ -70,126 +70,19 @@ function self = create_fem_mesh(self)
 
     wb = waitbar(0,'Initial mesh.');
 
+    % Construct initial mesh.
+
     if isequal(self.data.initial_mesh_mode, 1)
 
-        ind_mat_1{1}{2}{1} = [2 5 6 7; 7 5 4 2;  2 3 4 7; 1 2 4 5 ; 4 7 8 5];
-        ind_mat_1{1}{2}{2} = [6 2 1 3; 1 3 8 6; 8 7 6 3;  5 8 6 1; 3 8 4 1 ];
-        ind_mat_1{2}{2}{2} = [5 2 1 4; 4 2 7 5; 5 8 7 4;  5 7 6 2;  3 7 4 2];
-        ind_mat_1{2}{2}{1} = [1 5 6 8; 6 8 3 1; 3 4 1 8; 2 3 1 6 ; 3 7 8 6  ];
-        ind_mat_1{1}{1}{2} = [4 3 7 2; 2 7 4 5;  5 7 6 2; 1 5 2 4;  8 7 5 4 ];
-        ind_mat_1{2}{1}{2} = [3 6 8 1; 1 3 4 8; 5 8 6 1; 1 6 2 3  ; 8 7 6 3  ];
-        ind_mat_1{1}{1}{1} = [7 8 3 6; 8 1 3 6; 2 3 1 6;  1 5 6 8 ; 1 3 4 8   ];
-        ind_mat_1{2}{1}{1} = [ 7 8 4 5; 5 4 7 2;  2 4 1 5; 2 5 6 7   ;  2 3 4 7 ];
-
-        tetra = zeros(5*n_cubes,4);
-
-        if isequal(self.data.mesh_labeling_approach,1)
-
-            label_ind = zeros(5*n_cubes,8);
-
-        elseif isequal(self.data.mesh_labeling_approach, 2)
-
-            label_ind = zeros(5*n_cubes,4);
-
-        end
-
-        nodes = [X(:) Y(:) Z(:)];
-
-        i = 1;
-
-        for i_x = 1 : size(X,2) - 1
-
-            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
-
-            for i_y = 1 : size(X,1) - 1
-
-                for i_z = 1 : size(X,3) - 1
-
-                    x_ind = [i_x   i_x+1  i_x+1  i_x    i_x    i_x+1  i_x+1  i_x]';
-                    y_ind = [i_y   i_y    i_y+1  i_y+1  i_y    i_y    i_y+1  i_y+1]';
-                    z_ind = [i_z   i_z    i_z    i_z    i_z+1  i_z+1  i_z+1  i_z+1]';
-                    ind_mat_2 = sub2ind(size_xyz,y_ind,x_ind,z_ind);
-
-                    tetra(i:i+4,:) = ind_mat_2(ind_mat_1{2-mod(i_x,2)}{2-mod(i_y,2)}{2-mod(i_z,2)});
-
-                    if isequal(self.data.mesh_labeling_approach, 1)
-
-                        label_ind(i:i+4,:) = ind_mat_2(:,ones(5,1))';
-
-                    elseif isequal(self.data.mesh_labeling_approach, 2)
-
-                        label_ind(i:i+4,:) = ind_mat_2(ind_mat_1{2-mod(i_x,2)}{2-mod(i_y,2)}{2-mod(i_z,2)});
-
-                    end
-
-                    i = i + 5;
-
-                end % for
-
-            end % for
-
-        end % for
+        [nodes, tetra, label_ind] = initial_mesh_in_mode_1(self, X, Y, Z, n_cubes);
 
     elseif isequal(self.data.initial_mesh_mode, 2)
 
-        ind_mat_1 = [
-            3     4     1     7 ;
-            2     3     1     7 ;
-            1     2     7     6 ;
-            7     1     6     5 ;
-            7     4     1     8 ;
-            7     8     1     5
-        ];
+        [nodes, tetra, label_ind] = initial_mesh_in_mode_2(self, X, Y, Z, n_cubes);
 
-        tetra = zeros(6*n_cubes,4);
+    else
 
-        if isequal(self.data.mesh_labeling_approach,1)
-
-            label_ind = zeros(6*n_cubes,8);
-
-        elseif isequal(self.data.mesh_labeling_approach, 2)
-
-            label_ind = zeros(6*n_cubes,4);
-
-        end
-
-        nodes = [X(:) Y(:) Z(:)];
-
-        i = 1;
-
-        for i_x = 1 : size(X,2) - 1
-
-            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
-
-            for i_y = 1 : size(X,1) - 1
-
-                for i_z = 1 : size(X,3) - 1
-
-                    x_ind = [i_x   i_x+1  i_x+1  i_x    i_x    i_x+1  i_x+1  i_x]';
-                    y_ind = [i_y   i_y    i_y+1  i_y+1  i_y    i_y    i_y+1  i_y+1]';
-                    z_ind = [i_z   i_z    i_z    i_z    i_z+1  i_z+1  i_z+1  i_z+1]';
-
-                    ind_mat_2 = sub2ind(size_xyz,y_ind,x_ind,z_ind);
-
-                    tetra(i:i+5,:) = ind_mat_2(ind_mat_1);
-
-                    if isequal(self.data.mesh_labeling_approach, 1)
-
-                        label_ind(i:i+5,:) = ind_mat_2(:,ones(6,1))';
-
-                    elseif isequal(self.data.mesh_labeling_approach, 2)
-
-                        label_ind(i:i+5,:) = ind_mat_2(ind_mat_1);
-
-                    end;
-
-                    i = i + 6;
-
-                end % for
-
-            end % for
-
-        end % for
+        error('Unknown initial mesh mode.')
 
     end % if
 
@@ -475,14 +368,24 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_1( ...
         n_cubes (1,1) double { mustBeInteger, mustBePositive }
     end
 
-    ind_mat_1{1}{2}{1} = [2 5 6 7; 7 5 4 2;  2 3 4 7; 1 2 4 5 ; 4 7 8 5];
-    ind_mat_1{1}{2}{2} = [6 2 1 3; 1 3 8 6; 8 7 6 3;  5 8 6 1; 3 8 4 1 ];
-    ind_mat_1{2}{2}{2} = [5 2 1 4; 4 2 7 5; 5 8 7 4;  5 7 6 2;  3 7 4 2];
-    ind_mat_1{2}{2}{1} = [1 5 6 8; 6 8 3 1; 3 4 1 8; 2 3 1 6 ; 3 7 8 6  ];
-    ind_mat_1{1}{1}{2} = [4 3 7 2; 2 7 4 5;  5 7 6 2; 1 5 2 4;  8 7 5 4 ];
-    ind_mat_1{2}{1}{2} = [3 6 8 1; 1 3 4 8; 5 8 6 1; 1 6 2 3  ; 8 7 6 3  ];
-    ind_mat_1{1}{1}{1} = [7 8 3 6; 8 1 3 6; 2 3 1 6;  1 5 6 8 ; 1 3 4 8   ];
-    ind_mat_1{2}{1}{1} = [ 7 8 4 5; 5 4 7 2;  2 4 1 5; 2 5 6 7   ;  2 3 4 7 ];
+    % Initialize waitbar and cleanup object.
+
+    wb = waitbar(0, "Initial mesh.");
+
+    cu_fn = @(h) close(h);
+
+    cu_obj = onCleanup(@() cu_fn(wb));
+
+    % Routine start.
+
+    ind_mat_1{1}{2}{1} = [ 2 5 6 7 ; 7 5 4 2 ; 2 3 4 7 ; 1 2 4 5 ; 4 7 8 5 ];
+    ind_mat_1{1}{2}{2} = [ 6 2 1 3 ; 1 3 8 6 ; 8 7 6 3 ; 5 8 6 1 ; 3 8 4 1 ];
+    ind_mat_1{2}{2}{2} = [ 5 2 1 4 ; 4 2 7 5 ; 5 8 7 4 ; 5 7 6 2 ; 3 7 4 2 ];
+    ind_mat_1{2}{2}{1} = [ 1 5 6 8 ; 6 8 3 1 ; 3 4 1 8 ; 2 3 1 6 ; 3 7 8 6 ];
+    ind_mat_1{1}{1}{2} = [ 4 3 7 2 ; 2 7 4 5 ; 5 7 6 2 ; 1 5 2 4 ; 8 7 5 4 ];
+    ind_mat_1{2}{1}{2} = [ 3 6 8 1 ; 1 3 4 8 ; 5 8 6 1 ; 1 6 2 3 ; 8 7 6 3 ];
+    ind_mat_1{1}{1}{1} = [ 7 8 3 6 ; 8 1 3 6 ; 2 3 1 6 ; 1 5 6 8 ; 1 3 4 8 ];
+    ind_mat_1{2}{1}{1} = [ 7 8 4 5 ; 5 4 7 2 ; 2 4 1 5 ; 2 5 6 7 ; 2 3 4 7 ];
 
     tetra = zeros(5*n_cubes,4);
 
@@ -582,6 +485,16 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_2( ...
         Z (:,:,:) double
         n_cubes (1,1) double { mustBeInteger, mustBePositive }
     end
+
+    % Initialize waitbar and cleanup object.
+
+    wb = waitbar(0, "Initial mesh.");
+
+    cu_fn = @(h) close(h);
+
+    cu_obj = onCleanup(@() cu_fn(wb));
+
+    % Routine start.
 
     ind_mat_1 = [
         3     4     1     7 ;
