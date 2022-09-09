@@ -346,6 +346,8 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
     self.data.domain_labels = domain_labels;
 
+    self.domain_labels = domain_labels;
+
 end % function
 
 %% Local helper functions
