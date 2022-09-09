@@ -100,9 +100,19 @@ classdef Zef < handle
     %   A flag for deciding whether to downsample surfaces during FE mesh
     %   generation.
     %
+    % - surface_refinement_on
+    %
+    %   A flag for deciding whether to refine surfaces during FE mesh
+    %   generation.
+    %
     % - tetra
     %
     %   The finite elements formed from nodes.
+    %
+    % - volume_refinement_on
+    %
+    %   A flag for deciding whether to refine the volume during FE mesh
+    %   generation.
     %
     % - use_gpu
     %
@@ -121,8 +131,6 @@ classdef Zef < handle
         create_sensor_fn function_handle
 
         data struct
-
-        use_gpu (1,1) logical = false;
 
         gpu_count (1,1) double { mustBeNonnegative }
 
@@ -154,7 +162,13 @@ classdef Zef < handle
 
         surface_downsampling_on (1,1) logical = false;
 
+        surface_refinement_on (1,1) logical = false;
+
         tetra (:,4) double { mustBePositive, mustBeInteger } = [];
+
+        volume_refinement_on (1,1) logical = false;
+
+        use_gpu (1,1) logical = false;
 
     end % properties
 
@@ -335,6 +349,14 @@ classdef Zef < handle
                 elseif strcmp(finame, 'refinement_on')
 
                     self.refinement_on = data.(finame);
+
+                elseif strcmp(finame, 'surface_refinement_on')
+
+                    self.surface_refinement_on = data.(finame);
+
+                elseif strcmp(finame, 'volume_refinement_on')
+
+                    self.volume_refinement_on = data.(finame);
 
                 else
 
