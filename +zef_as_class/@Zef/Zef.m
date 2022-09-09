@@ -67,6 +67,16 @@ classdef Zef < handle
     %   Used to determine how many restarts are needed when inflating meshes
     %   and finding points within compartments.
     %
+    % - pml_outer_radius
+    %
+    %   The radius used in the Perfectly Layered Mesh (PML) construction
+    %   during mesh generation.
+    %
+    % - pml_outer_radius_unit
+    %
+    %   The unit of self.pml_outer_radius. Used in deciding the size of the
+    %   bounding box of each volume compartment.
+    %
     % - sensors
     %
     %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
@@ -113,9 +123,13 @@ classdef Zef < handle
 
         nodes (:,3) double = [];
 
-        parallel_processes double { mustBeInteger, mustBePositive }
+        parallel_processes double { mustBeInteger, mustBePositive } = 1;
 
-        parallel_vectors double { mustBeInteger, mustBePositive }
+        parallel_vectors double { mustBeInteger, mustBePositive } = 1;
+
+        pml_outer_radius (1,1) double { mustBePositive } = 1;
+
+        pml_outer_radius_unit (1,1) double { mustBeInteger, mustBePositive } = 1;
 
         sensors (:,:) double = [];
 
@@ -282,6 +296,14 @@ classdef Zef < handle
                 elseif strcmp(finame, 'parallel_vectors')
 
                     self.parallel_vectors = data.(finame);
+
+                elseif strcmp(finame, 'pml_outer_radius')
+
+                    self.pml_outer_radius = data.(finame);
+
+                elseif strcmp(finame, 'pml_outer_radius_unit')
+
+                    self.pml_outer_radius_unit = data.(finame);
 
                 else
 
