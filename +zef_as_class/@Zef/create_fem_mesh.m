@@ -101,6 +101,9 @@ function self = create_fem_mesh(self)
 
     self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
 
+    % Then perform mesh refinement, either surface and/or volumetric, in
+    % adapted and/or non-adapted mode.
+
     refinement_compartments_aux = self.data.refinement_surface_compartments;
 
     refinement_compartments = [];
