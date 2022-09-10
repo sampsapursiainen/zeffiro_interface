@@ -146,7 +146,13 @@ classdef Zef < handle
     %
     %   A boolean flag to determine whether to use GPU in computations, when
     %   available.
-
+    %
+    % - use_gui
+    %
+    %   Determines whether Zef was intended to be started with a GUI on. This
+    %   affects things like whether a textual or graphical progress bar is
+    %   shown during long computations.
+    %
 
     properties
 
@@ -209,6 +215,8 @@ classdef Zef < handle
         volume_refinement_on (1,1) logical = false;
 
         use_gpu (1,1) logical = false;
+
+        use_gui (1,1) logical = false;
 
     end % properties
 
@@ -346,6 +354,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'use_gpu')
 
                     self.use_gpu = data.(finame);
+
+                elseif strcmp(finame, 'use_gui')
+
+                    self.use_gui = data.(finame);
 
                 elseif strcmp(finame, 'create_patch_sensor')
 
