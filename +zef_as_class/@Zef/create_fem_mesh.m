@@ -375,11 +375,19 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_1( ...
 
     % Initialize waitbar and cleanup object.
 
-    wb = waitbar(0, "Initial mesh.");
+    if zef.use_gui
 
-    cu_fn = @(h) close(h);
+        wb = waitbar(0, "Initial mesh.");
 
-    cu_obj = onCleanup(@() cu_fn(wb));
+        cu_fn = @(h) close(h);
+
+        cu_obj = onCleanup(@() cu_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar("Initial mesh", size(X,2) - 1);
+
+    end
 
     % Routine start.
 
@@ -416,7 +424,15 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_1( ...
 
     for i_x = 1 : size(X,2) - 1
 
-        waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+        if zef.use_gui
+
+            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+
+        else
+
+            wb = wb.progress();
+
+        end
 
         for i_y = 1 : size(X,1) - 1
 
@@ -493,11 +509,19 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_2( ...
 
     % Initialize waitbar and cleanup object.
 
-    wb = waitbar(0, "Initial mesh.");
+    if zef.use_gui
 
-    cu_fn = @(h) close(h);
+        wb = waitbar(0, "Initial mesh.");
 
-    cu_obj = onCleanup(@() cu_fn(wb));
+        cu_fn = @(h) close(h);
+
+        cu_obj = onCleanup(@() cu_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar("Initial mesh", size(X,2) - 1);
+
+    end
 
     % Routine start.
 
@@ -532,7 +556,15 @@ function [nodes, tetra, label_ind] = initial_mesh_in_mode_2( ...
 
     for i_x = 1 : size(X,2) - 1
 
-        waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+        if zef.use_gui
+
+            waitbar(i_x/(size(X,2)-1),wb,'Initial mesh.');
+
+        else
+
+            wb = wb.progress();
+
+        end
 
         for i_y = 1 : size(X,1) - 1
 
