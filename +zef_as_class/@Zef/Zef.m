@@ -63,6 +63,11 @@ classdef Zef < handle
     %   A lead field matrix computed by solving Maxwell's equations in the
     %   domain defined by the finite element mesh.
     %
+    % - label_ind
+    %
+    %   An initial index set, produced by an initial mesh generation routine,
+    %   before labeling and refinement.
+    %
     % - mesh_resolution
     %
     %   The resolution of the contained FE mesh.
@@ -163,6 +168,8 @@ classdef Zef < handle
         initial_mesh_mode (1,1) double { mustBeInteger }
 
         L (:,:) double
+
+        label_ind (:,1) double {mustBeInteger, mustBePositive }
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
@@ -363,6 +370,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'L')
 
                     self.L = data.(finame);
+
+                elseif strcmp(finame, 'label_ind')
+
+                    self.label_ind = data.(finame);
 
                 elseif strcmp(finame, 'parallel_processes')
 
