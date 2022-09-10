@@ -87,11 +87,11 @@ function self = create_fem_mesh(self)
 
     if isequal(self.data.initial_mesh_mode, 1)
 
-        [self.nodes, self.tetra, label_ind] = initial_mesh_in_mode_1(self, X, Y, Z, n_cubes);
+        [self.nodes, self.tetra, self.label_ind] = initial_mesh_in_mode_1(self, X, Y, Z, n_cubes);
 
     elseif isequal(self.data.initial_mesh_mode, 2)
 
-        [self.nodes, self.tetra, label_ind] = initial_mesh_in_mode_2(self, X, Y, Z, n_cubes);
+        [self.nodes, self.tetra, self.label_ind] = initial_mesh_in_mode_2(self, X, Y, Z, n_cubes);
 
     else
 
