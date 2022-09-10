@@ -77,10 +77,6 @@ classdef Zef < handle
     %
     %   The resolution of the contained FE mesh.
     %
-    % - name_tags
-    %
-    %   Names of the different brain compartments.
-    %
     % - n_compartments
     %
     %   The number of compartments in the volume.
@@ -183,8 +179,6 @@ classdef Zef < handle
         labeling_mode (1,1) string { mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
-
-        name_tags string = [];
 
         n_compartments (1,1) double { mustBeInteger, mustBePositive } = 1;
 
@@ -344,10 +338,6 @@ classdef Zef < handle
                 elseif strcmp(finame, 'domain_labels')
 
                     self.domain_labels = data.(finame);
-
-                elseif strcmp(finame, 'name_tags')
-
-                    self.name_tags = data.(finame);
 
                 elseif strcmp(finame, 'n_compartments')
 
