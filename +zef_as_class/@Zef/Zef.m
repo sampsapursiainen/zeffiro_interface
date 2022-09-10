@@ -68,6 +68,11 @@ classdef Zef < handle
     %   An initial index set, produced by an initial mesh generation routine,
     %   before labeling and refinement.
     %
+    % - labeling_mode (labeling_flag)
+    %
+    %   One of {"initial","repeated","adaptive-repeated"}. Tells how the mesh
+    %   labeling routine should proceed with its input.
+    %
     % - mesh_resolution
     %
     %   The resolution of the contained FE mesh.
@@ -171,6 +176,8 @@ classdef Zef < handle
 
         label_ind (:,:) double { mustBeInteger, mustBePositive } = [];
 
+        labeling_mode (1,1) string { mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
+
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
         name_tags string = [];
@@ -244,6 +251,12 @@ classdef Zef < handle
             "yz_rotation",
             "z_correction",
             "zx_rotation"
+        ];
+
+        MESH_LABELING_MODES = [
+            "initial",
+            "repeated",
+            "adaptive-repeated"
         ];
 
     end % properties (Constant)
@@ -374,6 +387,41 @@ classdef Zef < handle
                 elseif strcmp(finame, 'label_ind')
 
                     self.label_ind = data.(finame);
+
+                elseif strcmp(finame, 'labeling_flag') ...
+                || strcmp(finame, 'labeling_mode')
+
+                    lmode = data.(finame);
+
+                    if ismember(lmode, zef_as_class.Zef.MESH_LABELING_MODES)
+
+                        self.labeling_mode = lmode;
+
+                        continue
+
+                    end
+
+                    if isinteger(lmode)
+
+                        if lmode == 1
+
+                            self.labeling_mode = "initial";
+
+                        elseif lmode == 2
+
+                            self.labeling_mode = "repeated";
+
+                        elseif lmode == 3
+
+                            self.labeling_mode = "adaptive-repeated";
+
+                        else
+
+                            self.labeling_mode = "initial";
+
+                        end
+
+                    end
 
                 elseif strcmp(finame, 'parallel_processes')
 
