@@ -169,7 +169,7 @@ classdef Zef < handle
 
         L (:,:) double
 
-        label_ind (:,1) double {mustBeInteger, mustBePositive }
+        label_ind (:,:) double { mustBeInteger, mustBePositive } = [];
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
