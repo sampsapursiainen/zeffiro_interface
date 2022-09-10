@@ -324,8 +324,6 @@ function self = create_fem_mesh(self)
 
     end % if
 
-    close(wb);
-
     self.name_tags = name_tags;
 
     self.nodes = nodes;
