@@ -69,7 +69,7 @@ classdef TerminalWaitbar
 
             self.current_val = 0;
 
-            self.message = self.title_string;
+            self.message = self.title_string + " starting...";
 
             self.max_val = max_val;
 
@@ -83,7 +83,7 @@ classdef TerminalWaitbar
 
             end
 
-            fprintf(1, '%s', self.title_string);
+            fprintf(1, '%s', self.message);
 
         end % function
 
@@ -96,7 +96,21 @@ classdef TerminalWaitbar
 
             previous_message = self.message;
 
-            chars_to_delete = strlength(previous_message);
+            percent = 100 * self.current_val / self.max_val;
+
+            self.message = sprintf("%s: %3.0f %%", self.title_string, percent);
+
+            prev_len = strlength(previous_message);
+
+            curr_len = strlength(self.message);
+
+            len_diff = curr_len - prev_len;
+
+            new_shorter_than_old = len_diff < 0;
+
+            chars_to_delete = max(curr_len, prev_len);
+
+            % Move cursor to start of line.
 
             for ii = 1 : chars_to_delete
 
@@ -104,13 +118,26 @@ classdef TerminalWaitbar
 
             end
 
-            % message_drainer = repmat(sprintf('\b'), 1, length(previous_message));
+            % Backspace does not actually delete characters, so we need to
+            % fill the remaining existing space with spaces to make it seem
+            % empty and then move the cursor back again. If the previous
+            % string was longer than the current one, that is.
 
-            percent = 100 * self.current_val / self.max_val;
+            if new_shorter_than_old
 
-            self.message = sprintf("%s: %3.0f %%", self.title_string, percent);
+                needed_spaces = repmat(' ', 1, chars_to_delete);
 
-            fprintf(1, '%s', self.message);
+                needed_backspaces = repmat(sprintf('\b'), 1, chars_to_delete);
+
+                fprintf(1, '%s%s%s', needed_spaces, needed_backspaces, self.message);
+
+            else
+
+                fprintf(1, '%s', self.message);
+
+            end
+
+            % Print a new line upon completion.
 
             if self.current_val == self.max_val
 
