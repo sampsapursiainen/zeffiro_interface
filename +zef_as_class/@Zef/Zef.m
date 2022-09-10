@@ -81,6 +81,10 @@ classdef Zef < handle
     %
     %   Names of the different brain compartments.
     %
+    % - n_compartments
+    %
+    %   The number of compartments in the volume.
+    %
     % - nodes
     %
     %   The nodes that make up a finite element mesh.
@@ -181,6 +185,8 @@ classdef Zef < handle
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
         name_tags string = [];
+
+        n_compartments (1,1) double { mustBeInteger, mustBePositive } = 1;
 
         nodes (:,3) double = [];
 
@@ -342,6 +348,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'name_tags')
 
                     self.name_tags = data.(finame);
+
+                elseif strcmp(finame, 'n_compartments')
+
+                    self.n_compartments = data.(finame);
 
                 elseif strcmp(finame, 'use_gpu')
 
