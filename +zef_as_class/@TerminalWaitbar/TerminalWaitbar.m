@@ -14,7 +14,7 @@ classdef TerminalWaitbar
     %
     %   wb.progress(); .
     %
-    % This might seem sille, but it relieves us of the need to always declare
+    % This might seem silly, but it relieves us of the need to always declare
     % a cleanup object when a terminal waitbar is to be used.
     %
     % Properties:
@@ -23,6 +23,10 @@ classdef TerminalWaitbar
     %
     %   The title of this waitbar, diplayed before the progress bar itself.
     %
+    % - message
+    %
+    %   The message that was last displayed.
+    %
     % - current_val
     %
     %   The current state of the waitbar, on its way towards completion.
@@ -30,6 +34,10 @@ classdef TerminalWaitbar
     % - max_val
     %
     %   The maximum value that the waitbar is progressing towards.
+    %
+    % - print_interval
+    %
+    %   The interval between state displays.
     %
 
     properties
