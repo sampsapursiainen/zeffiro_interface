@@ -324,12 +324,6 @@ function self = create_fem_mesh(self)
 
     end % if
 
-    self.name_tags = name_tags;
-
-    self.nodes = nodes;
-
-    self.tetra = tetra;
-
 % if nargout == 0
 %     assignin('base','zef_data',struct('nodes',nodes,'nodes_raw',nodes,'tetra',tetra,'tetra_raw',tetra,'self.domain_labels',self.domain_labels,'domain_labels_raw',self.domain_labels,'name_tags',name_tags));
 % end
