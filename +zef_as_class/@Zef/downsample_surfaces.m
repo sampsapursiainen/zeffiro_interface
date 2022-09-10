@@ -11,17 +11,25 @@ function self = downsample_surfaces(self)
     % Initialize waitbar and add a cleanup object to make it disappear in case
     % of an interruption.
 
-    wb = waitbar(0,'Resampling surfaces.');
+    number_of_compartments = length(self.compartment_tags);
 
-    cu_fn = @(h) close(h);
+    if self.use_gui
 
-    cu_obj = onCleanup(@() cu_fn(wb));
+        wb = waitbar(0,'Resampling surfaces.');
+
+        cu_fn = @(h) close(h);
+
+        cu_obj = onCleanup(@() cu_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar('Resampling surfaces', number_of_compartments);
+
+    end
 
     % Start actual downsampling.
 
     temp_time = now;
-
-    number_of_compartments = length(self.compartment_tags);
 
     for zef_k = 1 : number_of_compartments
 
@@ -204,11 +212,19 @@ function self = downsample_surfaces(self)
 
         % Update waitbar.
 
-        waitbar( ...
-            zef_k / number_of_compartments, ...
-            wb, ...
-            ['Resampling surfaces. Ready approx.: ' datestr(now + (number_of_compartments-zef_k)*(now-temp_time)/zef_k) '.'] ...
-        );
+        if self.use_gui
+
+            waitbar( ...
+                zef_k / number_of_compartments, ...
+                wb, ...
+                ['Resampling surfaces. Ready approx.: ' datestr(now + (number_of_compartments-zef_k)*(now-temp_time)/zef_k) '.'] ...
+            );
+
+        else
+
+            wb = wb.progress();
+
+        end
 
     end % for
 
