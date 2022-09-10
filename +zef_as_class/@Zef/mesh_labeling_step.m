@@ -1,4 +1,4 @@
-function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments)
+function self = mesh_labeling_step(self)
 
     % mesh_labeling_step
     %
@@ -6,16 +6,16 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
     arguments
         self zef_as_class.Zef
-        nodes (:,3) double
-        label_ind { mustBeInteger, mustBePositive }
-        labeling_flag { mustBeInteger, mustBePositive }
-        tetra double { mustBeInteger, mustBeNonnegative }
-        n_compartments { mustBeInteger, mustBePositive }
     end
 
-    label_ind = uint32(label_ind);
+    nodes = self.nodes;
+    tetra = self.tetra;
+    label_ind = uint32(self.label_ind);
+    labeling_mode = self.labeling_mode;
+    n_compartments = self.n_compartments;
 
-    if isequal(labeling_flag,1)
+
+    if isequal(labeling_mode, "initial")
 
         %***********************************************************
         %Initialize labeling.
@@ -101,7 +101,7 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
         nodes = nodes(unique_vec_1,:);
 
-    elseif isequal(labeling_flag,2)
+    elseif isequal(labeling_mode, "repeated")
 
         %**************************************************************
         %Re-labeling.
@@ -205,7 +205,7 @@ function self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra,
 
         end % for
 
-    elseif isequal(labeling_flag,3)
+    elseif isequal(labeling_mode, "adaptive-repeated")
 
         %**************************************************************
         %Re-labeling (adaptive).
@@ -460,7 +460,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
     ones_vec = gpuArray(ones_vec);
     ind_vec_aux = gpuArray(ind_vec_aux);
 
-    par_num = zef.data.parallel_vectors;
+    par_num = zef.parallel_vectors;
 
     bar_ind = ceil(length_I/(50*par_num));
 

@@ -101,9 +101,9 @@ function self = create_fem_mesh(self)
 
     % Start labeling generated tetra.
 
-    labeling_flag = 1;
+    self.labeling_mode = "initial";
 
-    self = mesh_labeling_step(self, self.nodes, label_ind, labeling_flag, self.tetra, n_compartments);
+    self = mesh_labeling_step(self);
 
     % Then perform mesh refinement, either surface and/or volumetric, in
     % adapted and/or non-adapted mode.
@@ -138,8 +138,8 @@ function self = create_fem_mesh(self)
 
                         pml_ind = [];
                         label_ind = uint32(tetra);
-                        labeling_flag = 2;
-                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                        self.labeling_mode = "repeated";
+                        self = mesh_labeling_step(self);
 
                     end % if
 
@@ -157,8 +157,8 @@ function self = create_fem_mesh(self)
 
                             pml_ind = [];
                             label_ind = uint32(tetra);
-                            labeling_flag = 2;
-                            self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                            self.labeling_mode = "repeated";
+                            self = mesh_labeling_step(self);
 
                         end % if
 
@@ -174,8 +174,8 @@ function self = create_fem_mesh(self)
 
         pml_ind = [];
         label_ind = uint32(tetra);
-        labeling_flag = 2;
-        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+        self.labeling_mode = "repeated";
+        self = mesh_labeling_step(self);
 
     end % if
 
@@ -207,8 +207,8 @@ function self = create_fem_mesh(self)
 
                     pml_ind = [];
                     label_ind = uint32(tetra);
-                    labeling_flag = 2;
-                    self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                    self.labeling_mode = "repeated";
+                    self = mesh_labeling_step(self);
 
                 end % if
 
@@ -228,8 +228,8 @@ function self = create_fem_mesh(self)
 
                         pml_ind = [];
                         label_ind = uint32(tetra);
-                        labeling_flag = 2;
-                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                        self.labeling_mode = 2;
+                        self = mesh_labeling_step(self);
 
                     end % if
 
@@ -280,8 +280,8 @@ function self = create_fem_mesh(self)
 
                     pml_ind = [];
                     label_ind = uint32(tetra);
-                    labeling_flag = 3;
-                    self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                    self.labeling_mode = "adaptive-repeated";
+                    self = mesh_labeling_step(self);
 
                 end % if
 
@@ -309,8 +309,8 @@ function self = create_fem_mesh(self)
 
                         pml_ind = [];
                         label_ind = uint32(tetra);
-                        labeling_flag = 3;
-                        self = mesh_labeling_step(self, nodes, label_ind, labeling_flag, tetra, n_compartments);
+                        self.labeling_mode = "adaptive-repeated";
+                        self = mesh_labeling_step(self);
 
                     end % if
 
