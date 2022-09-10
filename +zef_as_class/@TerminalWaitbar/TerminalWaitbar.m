@@ -5,6 +5,18 @@ classdef TerminalWaitbar
     % A waitbar that can be displayed when Zeffiro is used in a terminal. This
     % is activated by Zef's methods, when it is no using a GUI.
     %
+    % NOTE: this class is not a handle class for now, and therefore it should
+    % be advanced with
+    %
+    %   wb = wb.progress();
+    %
+    % and not just with
+    %
+    %   wb.progress(); .
+    %
+    % This might seem sille, but it relieves us of the need to always declare
+    % a cleanup object when a terminal waitbar is to be used.
+    %
     % Properties:
     %
     % - title_string
@@ -22,13 +34,15 @@ classdef TerminalWaitbar
 
     properties
 
-        title_string (1,1) string
+        title_string (1,1) string = "";
 
         message (1,1) string = "";
 
         current_val (1,1) double { mustBeReal, mustBeNonnegative } = 0;
 
-        max_val (1,1) double { mustBeReal, mustBePositive }
+        max_val (1,1) double { mustBeReal, mustBePositive } = 1;
+
+        print_interval (1,1) double { mustBeInteger, mustBePositive } = 1;
 
     end % properties
 
@@ -55,13 +69,25 @@ classdef TerminalWaitbar
 
             self.current_val = 0;
 
-            self.message = "";
+            self.message = self.title_string;
 
             self.max_val = max_val;
 
+            if max_val < 1000
+
+                self.print_interval = ceil(self.max_val / 20);
+
+            else
+
+                self.print_interval = ceil(self.max_val / 100);
+
+            end
+
+            fprintf(1, '%s', self.title_string);
+
         end % function
 
-        function self = show_progress()
+        function self = show_progress(self)
 
             % show_progress
             %
@@ -70,13 +96,27 @@ classdef TerminalWaitbar
 
             previous_message = self.message;
 
-            message_drainer = repmat(sprintf('\b'), 1, length(previous_message));
+            chars_to_delete = strlength(previous_message);
+
+            for ii = 1 : chars_to_delete
+
+                fprintf(1, '\b');
+
+            end
+
+            % message_drainer = repmat(sprintf('\b'), 1, length(previous_message));
 
             percent = 100 * self.current_val / self.max_val;
 
-            self.message = sprintf(self.title + ": %3.0f", percent);
+            self.message = sprintf("%s: %3.0f %%", self.title_string, percent);
 
-            fprintf(message_drainer + self.message);
+            fprintf(1, '%s', self.message);
+
+            if self.current_val == self.max_val
+
+                fprintf(1, '\n');
+
+            end
 
         end % function
 
@@ -88,15 +128,13 @@ classdef TerminalWaitbar
             % most a whole 1 % of the self.max_value has been advanced.
             %
 
-            self.current_val += 1;
+            self.current_val = self.current_val + 1;
 
-            percent = floor(100 * self.current_val / self.max_val);
+            has_advanced_enough = mod(self.current_val, self.print_interval) == 0;
 
-            has_advanced_a_percent = mod(percent, 100) == 0;
+            if has_advanced_enough || self.current_val == self.max_val
 
-            if has_advanced_a_percent
-
-                self.show_progress();
+                self = self.show_progress();
 
             end
 
