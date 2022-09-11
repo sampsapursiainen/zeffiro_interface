@@ -4,6 +4,24 @@ function self = segmentation_counter_step(self)
         self zef_as_class.Zef
     end
 
+    n_of_iterations = length(self.compartments);
+
+    fn_title = "Segmentation counter";
+
+    if self.use_gui
+
+        wb = waitbar(0, fn_title);
+
+        cleanup_fn = @(h) close(h);
+
+        cleanup_obj = onCleanup(@() cleanup_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar(fn_title, n_of_iterations);
+
+    end
+
     pml_ind_aux = [];
     pml_ind = [];
 
@@ -19,6 +37,16 @@ function self = segmentation_counter_step(self)
     compartment_tags = self.compartment_tags;
 
     for k = 1 : length(self.compartments)
+
+        if self.use_gui
+
+            waitbar(i_x/(size(X,2)-1),wb, fn_title);
+
+        else
+
+            wb = wb.progress();
+
+        end
 
         compartment = self.compartments(k);
 
