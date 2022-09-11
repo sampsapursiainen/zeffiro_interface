@@ -11,7 +11,7 @@ function self = downsample_surfaces(self)
     % Initialize waitbar and add a cleanup object to make it disappear in case
     % of an interruption.
 
-    number_of_compartments = length(self.compartment_tags);
+    number_of_compartments = length(self.compartments);
 
     if self.use_gui
 
@@ -33,71 +33,38 @@ function self = downsample_surfaces(self)
 
     for zef_k = 1 : number_of_compartments
 
+        compartment = self.compartments(zef_k);
+
         temp_patch_data = struct;
 
-        current_compartment_tag = self.compartment_tags{zef_k};
+        if compartment.is_on
 
-        compartment_on_name = [ current_compartment_tag '_on' ];
+            if not(isempty(compartment.points_original_surface_mesh))
 
-        if self.data.(compartment_on_name)
-
-            % Construct field names for querying self.data.
-
-            orig_points_name = [current_compartment_tag '_points_original_surface_mesh'];
-
-            orig_triangles_name = [current_compartment_tag '_triangles_original_surface_mesh'];
-
-            orig_submesh_name = [current_compartment_tag '_submesh_ind_original_surface_mesh'];
-
-            points_name = [current_compartment_tag '_points'];
-
-            triangles_name = [current_compartment_tag '_triangles'];
-
-            submesh_ind_name = [current_compartment_tag '_submesh_ind'];
-
-            points_inf_name = [current_compartment_tag '_points_inf'];
-
-            sources_name = [current_compartment_tag '_sources'];
-
-            % Index into self.data with the names.
-
-            if isfield(self.data, orig_points_name)
-
-                if not(isempty(self.data.(orig_points_name)))
-
-                    temp_patch_data.vertices_all = self.data.(orig_points_name);
-                    temp_patch_data.faces_all = self.data.(orig_triangles_name);
-                    temp_patch_data.submesh_ind = self.data.(orig_submesh_name);
-
-                else
-
-                    temp_patch_data.vertices_all = self.data.(points_name);
-                    temp_patch_data.faces_all = self.data.(triangles_name);
-                    temp_patch_data.submesh_ind = self.data.(submesh_name);
-
-                    self.data(1).(orig_points_name) = self.data(points_name);
-                    self.data(1).(orig_triangles_name) = self.data(triangles_name);
-                    self.data(1).(orig_submesh_ind_name) = self.data.(submesh_ind_name);
-
-                end % if
+                temp_patch_data.vertices_all = compartment.points_original_surface_mesh;
+                temp_patch_data.faces_all = compartment.triangles_original_surface_mesh;
+                temp_patch_data.submesh_ind = compartment.submesh_ind_original_surface_mesh;
 
             else
 
-                temp_patch_data.vertices_all = self.data.(points_name);
-                temp_patch_data.faces_all = self.data.(triangles_name);
-                temp_patch_data.submesh_ind = self.data.(submesh_ind_name);
+                temp_patch_data.vertices_all = compartment.points;
+                temp_patch_data.faces_all = compartment.triangles;
+                temp_patch_data.submesh_ind = compartment.submesh_ind;
 
-                self.data(1).(orig_points_name) = self.data(points_name);
-                self.data(1).(orig_triangles_name) = self.data(triangles_name);
-                self.data(1).(orig_submesh_ind_name) = self.data.(submesh_ind_name);
+                self.compartments(zef_k).points_original_surface_mesh = ...
+                    compartment.points;
+                self.compartments(zef_k).triangles_original_surface_mesh = ...
+                    compartment.triangles;
+                self.compartments(zef_k).submesh_ind_original_surface_mesh = ...
+                    compartmment.submesh_ind;
 
             end % if
 
-            self.data(1).(points_inf_name) = [];
-            self.data(1).(points_name) = [];
-            self.data(1).(triangles_name) = [];
+            compartment.points_inf = [];
+            compartment.points = [];
+            compartment.triangles = [];
 
-            if not(isempty(self.data.(submesh_ind_name)))
+            if not(isempty(compartment.submesh_ind))
 
                 zef_i = 0;
 
@@ -129,7 +96,7 @@ function self = downsample_surfaces(self)
                         1e-2, 1 ...
                     );
 
-                    if self.data.(sources_name)
+                    if compartment.sources
 
                         if isempty(temp_patch_data_aux.vertices) || self.bypass_inflate
 
@@ -144,31 +111,27 @@ function self = downsample_surfaces(self)
 
                         end
 
-                        self.data.(points_inf_name) = [
-                            self.data.(points_inf_name) ;
-                            temp_patch_data_aux.vertices_inflated
-                        ];
-
-                        self.data.(points_inf_name) = [
-                            self.data.(points_inf_name) ;
+                        self.compartments(zef_k).points_inf = [
+                            compartment.points_inf ;
                             temp_patch_data_aux.vertices_inflated
                         ];
 
                     end
 
-                    self.data.(triangles_name) = [
-                        self.data.(triangles_name) ;
-                        temp_patch_data_aux.faces + size(self.data.(points_name),1)
+                    self.compartments(zef_k).triangles = [
+                        compartment.triangles ;
+                        temp_patch_data_aux.faces + size(compartment.points,1)
                     ];
 
-                    self.data.(points_name) = [
-                        self.data.(points_name) ;
+                    self.compartments(zef_k).points = [
+                        compartment.points ;
                         temp_patch_data_aux.vertices
                     ];
 
                     zef_i = temp_patch_data.submesh_ind(zef_j);
 
-                    self.data.(submesh_ind_name)(zef_j) = size(self.data.(triangles_name),1);
+                    self.compartments(zef_k).submesh_ind(zef_j) = ...
+                        size(self.compartments(zef_k).triangles, 1);
 
                 end % for
 
@@ -189,20 +152,20 @@ function self = downsample_surfaces(self)
                         temp_patch_data_aux.faces ...
                     );
 
-                    self.data.(points_inf_name) = [
-                        self.data.(points_inf_name) ;
+                    self.compartments(zef_k).points_inf = [
+                        compartment.points_inf ;
                         temp_patch_data_aux.vertices_inflated
                     ];
 
                 end
 
-                self.data.(points_name) = [
-                    self.data.(points_name) ;
+                self.compartments(zef_k).points = [
+                    compartment.points ;
                     temp_patch_data_aux.vertices
                 ];
 
-                self.data.(triangles_name) = [
-                    self.data.(triangles_name) ;
+                self.compartments(zef_k).triangles = [
+                    compartment.triangles ;
                     temp_patch_data_aux.faces
                 ];
 
