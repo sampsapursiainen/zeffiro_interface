@@ -73,6 +73,10 @@ classdef Zef < handle
     %   One of {"initial","repeated","adaptive-repeated"}. Tells how the mesh
     %   labeling routine should proceed with its input.
     %
+    % - mesh_labeling_approach
+    %
+    %   Determines how label_ind is generated during initial mesh generation.
+    %
     % - mesh_resolution
     %
     %   The resolution of the contained FE mesh.
@@ -182,9 +186,14 @@ classdef Zef < handle
 
         label_ind (:,:) double { mustBeInteger, mustBePositive } = [];
 
-        labeling_mode (1,1) string { mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
+        labeling_mode (1,1) string { ...
+            mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
+
+        mesh_labeling_approach (1,1) double { ...
+            mustBeInteger, ...
+            mustBeMember( mesh_labeling_approach, [ 1, 2 ] ) } = 1;
 
         n_compartments (1,1) double { mustBeInteger, mustBePositive } = 1;
 
@@ -382,6 +391,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'mesh_resolution')
 
                     self.mesh_resolution = data.(finame);
+
+                elseif strcmp(finame, 'mesh_labeling_approach')
+
+                    self.mesh_labeling_approach = data.(finame);
 
                 elseif strcmp(finame, 'sensors')
 
