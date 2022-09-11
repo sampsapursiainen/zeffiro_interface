@@ -173,3 +173,7 @@ zef = rmfield(zef,'h_temp');
 
 set(findobj(zef.h_zeffiro_menu.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+if not(ismember('ZefTool',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefTool');
+end
+zef.h_zeffiro_menu.ZefTool = mfilename;

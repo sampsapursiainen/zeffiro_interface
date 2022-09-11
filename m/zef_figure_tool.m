@@ -198,7 +198,10 @@ end
 set(zef.h_zeffiro,'Name',[get(zef.h_zeffiro,'Name') ' ' num2str(zef_fig_num)]);
 set(zef.h_zeffiro,'AutoResizeChildren','off');
 
-set(zef.h_zeffiro,'Tag',num2str(zef_fig_num));
+if not(ismember('ZefFig',properties(zef.h_zeffiro)))
+addprop(zef.h_zeffiro,'ZefFig');
+end
+set(zef.h_zeffiro,'ZefFig',zef_fig_num);
 
 
 set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')

@@ -64,4 +64,9 @@ end
 
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+if not(ismember('ZefTool',properties(zef.h_zeffiro_window_main)))
+addprop(zef.h_zeffiro_window_main,'ZefTool');
+end
+zef.h_zeffiro_window_main.ZefTool = mfilename;
+
 zef = zef_update(zef);

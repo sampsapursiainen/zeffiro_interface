@@ -67,8 +67,8 @@ zef.h_ES_plot_data_menu_item_5.MenuSelectedFcn           = 'zef_ES_plot_distance
 %% Checkboxes
 %zef.h_ES_fixed_active_electrodes.Value                   = zef.ES_fixed_active_electrodes;
 
-zef.h_ES_fixed_active_electrodes.ValueChangedFcn         = 'zef.ES_active_electrodes = zef_ES_fix_active_electrodes;';
-zef.ES_active_electrodes                                 = zef_ES_fix_active_electrodes;
+zef.h_ES_fixed_active_electrodes.ValueChangedFcn         = 'zef.ES_active_electrodes = zef_ES_fix_active_electrodes(zef);';
+zef.ES_active_electrodes                                 = zef_ES_fix_active_electrodes(zef);
 %% Drop Down
 zef.h_ES_plot_type.ValueChangedFcn                       = 'zef_ES_optimization_update;';
 zef.h_ES_plot_type.ItemsData                             = 1:length(zef.h_ES_plot_type.Items);

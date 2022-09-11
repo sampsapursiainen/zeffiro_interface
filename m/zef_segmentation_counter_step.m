@@ -12,7 +12,7 @@ i = 0;
 sigma_vec = [];
 priority_vec = [];
 submesh_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 compartment_tags = eval('zef.compartment_tags');
 
 for k = 1 : length(compartment_tags)
@@ -41,7 +41,7 @@ pml_ind_aux = i;
 end
 
 if ismember(eval(var_5),[1 2])
-aux_brain_ind = [aux_brain_ind i];
+aux_active_compartment_ind = [aux_active_compartment_ind i];
 end
 
 end

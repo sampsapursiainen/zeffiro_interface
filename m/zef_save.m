@@ -31,6 +31,15 @@ zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
+
+if isfield(zef,'zeffiro_variable_data')
+    if not(isempty(zef.zeffiro_variable_data))
+       time_val = now;
+       I = ismember(zef.zeffiro_variable_data(:,2),fieldnames(zef));
+       zef.zeffiro_variable_data(I,5) = {time_val};
+    end
+end
+
 zef_data = zef;
 zef_data = zef_remove_object_handles(zef_data);
 save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');

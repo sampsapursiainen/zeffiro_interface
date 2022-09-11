@@ -152,7 +152,7 @@ zef.h_aux(zef_i).Name = [zef.h_aux(zef_i).Name ' [' zef.project_tag ']' ];
 end
 end
 
-zef.h_aux = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
+zef.h_aux = findall(groot, '-property','ZefFig','-or','-property','ZefTool','-not','ZefTool','zef_menu_tool');
 zef.h_windows_open = zef.h_windows_open(find(ismember(zef.h_windows_open,zef.h_aux)));
 zef.h_windows_open = [zef.h_windows_open ; setdiff(zef.h_aux, zef.h_windows_open)];
 

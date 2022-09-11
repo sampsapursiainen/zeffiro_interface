@@ -1,6 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef = zef_postprocess_fem_mesh(zef, varargin)
+function zef = zef_postprocess_fem_mesh(zef)
+
+if nargin==0
+zef = evalin('base','zef');
+end
 
 if isempty(zef)
 zef = evalin('base','zef');
@@ -23,31 +27,12 @@ non_source_ind = [];
 
 optimizer_flag = 1;
 
-if eval('zef.sigma_bypass')
 
-   sigma = eval('zef.sigma');
-   brain_ind = eval('zef.brain_ind');
-   non_source_ind = eval('zef.non_source_ind');
-   nodes = eval('zef.nodes');
-   tetra = eval('zef.tetra');
-   sigma_prisms = eval('zef.sigma_prisms');
-   prisms = eval('zef.prisms');
-   submesh_ind = eval('zef.submesh_ind');
-
-else
 
 thresh_val = eval('zef.mesh_optimization_parameter');
 compartment_tags = eval('zef.compartment_tags');
 aux_compartment_ind = zeros(1,length(compartment_tags));
 
-if eval('zef.import_mode')
-
-   sigma = eval('zef.sigma');
-   brain_ind = eval('zef.brain_ind');
-   nodes = eval('zef.nodes');
-   tetra = eval('zef.tetra');
-
-else
 
 sigma = [];
 i = 0;
@@ -55,7 +40,7 @@ length_reuna = 0;
 sigma_vec = [];
 priority_vec = [];
 pml_vec = [];
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 submesh_cell = cell(0);
 
 for k = 1 : length(compartment_tags)
@@ -88,7 +73,7 @@ else
     pml_vec(i,1) = 1;
 end
 if ismember(eval(var_4),[1 2])
-aux_brain_ind(i,1) = 1 ;
+aux_active_compartment_ind(i,1) = 1 ;
 end
 
 end
@@ -145,12 +130,6 @@ for i_surface_refinement = 1 : n_surface_refinement
 
 zef_refinement_step;
 
-% if eval('zef.mesh_relabeling')
-% pml_ind = [];
-% label_ind = uint32(tetra);
-% labeling_flag = 2;
-% zef_mesh_labeling_step;
-% end
 
 end
 
@@ -161,14 +140,6 @@ end
 
 zef_refinement_step;
 
-% if eval('zef.mesh_relabeling')
-%
-% pml_ind = [];
-% label_ind = uint32(tetra);
-% labeling_flag = 2;
-% zef_mesh_labeling_step;
-%
-% end
 
  end
         end
@@ -183,7 +154,7 @@ refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
 
 refinement_compartments = [];
 if ismember(1,refinement_compartments_aux)
-refinement_compartments = aux_brain_ind(:);
+refinement_compartments = aux_active_compartment_ind(:);
 end
 
 refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
@@ -195,17 +166,6 @@ for i = 1 : n_refinement
 zef_waitbar(i/n_refinement,h,'Volume refinement.');
 
 end
-
-%[tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
-
-% if eval('zef.mesh_relabeling')
-%
-% pml_ind = [];
-% label_ind = uint32(tetra);
-% labeling_flag = 2;
-% zef_mesh_labeling_step;
-%
-% end
 
 max_domain_labels = max(domain_labels);
 I_5 = 0;
@@ -225,42 +185,19 @@ if optimizer_flag == 1
 [tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
 end
 
-%  if eval('zef.mesh_relabeling')
-%
-%  pml_ind = [];
-%  label_ind = uint32(tetra);
-%  labeling_flag = 2;
-%  zef_mesh_labeling_step;
-%
-%  end
+active_compartment_ind = zef_find_active_compartment_ind(zef,domain_labels);
 
-brain_ind = [];
-for k = 1 : length(compartment_tags)
-if eval(['zef.' compartment_tags{k} '_sources'])>0 && not(eval(['zef.' compartment_tags{k} '_sources'])==3)
-if not(aux_compartment_ind(k)==0)
-[brain_ind]= [brain_ind ; find(domain_labels==aux_compartment_ind(k))];
-end
-end
-end
-
-if sum(aux_compartment_ind) == 0
-brain_ind = find(domain_labels);
-end
-
-brain_ind = brain_ind(:);
 
 submesh_ind = submesh_ind_2(domain_labels);
-submesh_ind = submesh_ind(brain_ind);
+submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
 
 I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I_2 = zeros(size(tetra,1),1);
 I_2(I) = [1:length(I)];
-brain_ind = I_2(brain_ind);
-brain_ind = brain_ind(find(brain_ind));
-non_source_ind = I_2(non_source_ind);
-non_source_ind = non_source_ind(find(non_source_ind));
+active_compartment_ind = I_2(active_compartment_ind);
+active_compartment_ind = active_compartment_ind(find(active_compartment_ind));
 domain_labels = domain_labels(I,:);
 [unique_vec_1, ~, unique_vec_3] = unique(tetra(I,:));
 tetra = reshape(unique_vec_3,length(I),4);
@@ -281,21 +218,12 @@ tetra_vec = sum(ismember(tetra,J),2);
 non_source_ind = find(tetra_vec > 2);
 clear tetra_vec;
 
-end
-
-%brain_ind = single(brain_ind);
-%tetra = single(tetra);
-
-end
-
 condition_number = zef_condition_number(nodes,tetra);
 
 close(h);
 
-active_compartment_ind = brain_ind;
-
 zef.domain_labels = domain_labels;
-zef.brain_ind = brain_ind; 
+zef.brain_ind = active_compartment_ind; 
 zef.active_compartment_ind = active_compartment_ind;
 zef.non_source_ind = non_source_ind; 
 zef.nodes = nodes;

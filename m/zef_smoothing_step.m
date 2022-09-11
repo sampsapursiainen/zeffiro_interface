@@ -1,3 +1,4 @@
+
 if eval('zef.mesh_smoothing_on')
 
 length_waitbar = 4+length(priority_vec);

@@ -36,8 +36,8 @@ zef.h_as_opt_5.Multiselect = 'on';
 zef.h_use_fem_mesh_inflation.Value = zef.use_fem_mesh_inflation;
 zef.h_fem_mesh_inflation_strength.Value = num2str(zef.fem_mesh_inflation_strength);
 
-if max(zef.refinement_surface_compartments) <= length(zef.h_as_opt_5.ItemsData)
-zef.h_as_opt_5.Value = zef.refinement_surface_compartments;
+if max(zef.refinement_surface_compartments_2) <= length(zef.h_as_opt_5.ItemsData)
+zef.h_as_opt_5.Value = zef.refinement_surface_compartments_2;
 else
     zef.h_as_opt_5.Value = 1;
 end

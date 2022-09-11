@@ -4,15 +4,16 @@ tetra_aux = tetra;
 end
 
 if eval('zef.refinement_on')
+    
 
-  if refinement_flag == 1
+if refinement_flag == 1
 surface_refinement_on = eval('zef.refinement_surface_on');
 elseif refinement_flag == 2
-    surface_refinement_on = eval('zef.refinement_surface_on_2');
+surface_refinement_on = eval('zef.refinement_surface_on_2');
 end
 
-    if surface_refinement_on
-        
+if surface_refinement_on
+     
  length_waitbar = 11;
 zef_waitbar(0,h,'Surface refinement.');
 
@@ -31,14 +32,15 @@ end
 
 if ismember(1,refinement_type)
 if refinement_flag == 1
-I = find(ismember(domain_labels,zef_compartment_to_subcompartment(zef,aux_brain_ind(:))));
-elseif refinement_flag == 2
-I = brain_ind(:);
-end
-end
+I = zef_find_active_compartment_ind(zef,submesh_ind_1(domain_labels));
 refinement_type = zef_compartment_to_subcompartment(zef,setdiff(refinement_type,1) - 1);
-
- I = [I ; find(ismember(domain_labels,refinement_type(:)))];
+I = [I ; find(ismember(domain_labels,refinement_type(:)))];
+elseif refinement_flag == 2
+    I = zef_find_active_compartment_ind(zef,domain_labels);
+    refinement_type = setdiff(refinement_type,1) - 1;
+    I = [I ; find(ismember(domain_labels,refinement_type(:)))];
+end
+end
 
 tetra = tetra_aux;
 
@@ -279,22 +281,6 @@ I = find(tilavuus > 0);
 tetra(I,:) = tetra(I,[2 1 3 4]);
 clear tilavuus I;
 
-if refinement_flag == 2
-brain_ind = [];
-for k = 1 : length(compartment_tags)
-if eval(['zef.' compartment_tags{k} '_sources'])>0
-if not(aux_compartment_ind(k)==0) && not(eval(['zef.' compartment_tags{k} '_sources'])==3)
-[brain_ind] = [brain_ind ; find(domain_labels==aux_compartment_ind(k))];
-end
-end
-end
-
-if sum(aux_compartment_ind) == 0
-brain_ind = find(domain_labels);
-end
-
-sigma = sigma_vec(domain_labels);
-
 end
 
 zef_waitbar(1,h,'Surface refinement.');
@@ -303,20 +289,8 @@ tetra_vec = sum(ismember(tetra,J_c),2);
 J = find(tetra_vec);
 J_c = unique(tetra(J,:));
 tetra_vec = sum(ismember(tetra,J_c),2);
-if refinement_flag == 2
-non_source_ind = find(tetra_vec > 2);
-non_source_ind = intersect(brain_ind, non_source_ind);
-end
-
-   if refinement_flag == 2
-       [nodes,optimizer_flag] = zef_fix_negatives(zef, nodes, tetra);
-if optimizer_flag == 1
-       [tetra, optimizer_flag] = zef_tetra_turn(zef, nodes, tetra, thresh_val);
-end
-end
 
 tetra_aux = tetra;
 
     end
 
-end

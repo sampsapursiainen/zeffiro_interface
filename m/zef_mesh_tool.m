@@ -96,5 +96,9 @@ end
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+if not(ismember('ZefTool',properties(zef.h_mesh_tool)))
+addprop(zef.h_mesh_tool,'ZefTool');
+end
+zef.h_mesh_tool.ZefTool = mfilename;
 
 clear zef_data;

@@ -151,7 +151,7 @@ refinement_compartments_aux = eval('zef.refinement_surface_compartments');
 
 refinement_compartments = [];
 if ismember(1,refinement_compartments_aux)
-refinement_compartments = aux_brain_ind(:);
+refinement_compartments = aux_active_compartment_ind(:);
 end
 
 refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
@@ -220,7 +220,7 @@ refinement_compartments_aux = sort(eval('zef.refinement_volume_compartments'));
 
 refinement_compartments = [];
 if ismember(1,refinement_compartments_aux)
-refinement_compartments = aux_brain_ind(:);
+refinement_compartments = aux_active_compartment_ind(:);
 end
 
 refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
@@ -278,7 +278,7 @@ refinement_compartments_aux = sort(eval('zef.adaptive_refinement_compartments'))
 
 refinement_compartments = [];
 if ismember(1,refinement_compartments_aux)
-refinement_compartments = aux_brain_ind(:);
+refinement_compartments = aux_active_compartment_ind(:);
 end
 
 refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
