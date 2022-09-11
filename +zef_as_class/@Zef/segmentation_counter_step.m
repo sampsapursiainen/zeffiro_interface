@@ -34,7 +34,6 @@ function self = segmentation_counter_step(self)
     priority_vec = [];
     submesh_cell = cell(0);
     aux_brain_ind = [];
-    compartment_tags = self.compartment_tags;
 
     for k = 1 : length(self.compartments)
 
