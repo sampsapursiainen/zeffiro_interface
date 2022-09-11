@@ -166,6 +166,8 @@ classdef VolumeCompartment
 
         triangles (:,3) double { mustBeInteger, mustBePositive } = [];
 
+        triangles_original_surface_mesh (:,3) double { mustBeInteger, mustBePositive } = [];
+
         sigma (1,1) double { mustBeNonnegative } = 1;
 
         submesh_ind double { mustBeInteger, mustBePositive } = [];
@@ -320,7 +322,7 @@ classdef VolumeCompartment
 
             if isfield(args, "triangles_original_surface_mesh")
 
-                self.triangles = args.triangles_original_surface_mesh;
+                self.triangles_original_surface_mesh = args.triangles_original_surface_mesh;
 
             end
 
