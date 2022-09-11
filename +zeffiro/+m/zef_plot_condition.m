@@ -1,0 +1,3 @@
+function zef_plot_condition
+zef_plot_condition;
+end

@@ -17,7 +17,7 @@ size_center_points = size(source_points,2);
 center_points = source_points;
 
 if n_rep == 1
-h = waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
+h = zef_waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
 end
 
 exp_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
@@ -41,7 +41,7 @@ aux_ind = randperm(size_center_points);
 source_points = source_points_aux(:,aux_ind(1:size_source_points));
 ones_vec = ones(size(source_points,2),1);
 
-if use_gpu == 1 & gpuDeviceCount > 0
+if use_gpu == 1 & evalin('base','zef.gpu_count') > 0
 center_points = gpuArray(center_points);
 source_points = gpuArray(source_points);
 source_interpolation_aux = gpuArray(source_interpolation_aux);
@@ -63,9 +63,9 @@ source_interpolation_aux(block_ind) = min_ind(:);
 
 time_val = toc;
 if i == 1
-waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
+zef_waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
 elseif mod(i_ind,bar_ind)==0
-waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+zef_waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
 end
 
 end

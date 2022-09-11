@@ -4,16 +4,14 @@
 zef_delete_original_surface_meshes;
 zef_delete_original_field;
 
- zef.fieldnames = fieldnames(zef);
+zef.fieldnames = fieldnames(zef);
 
 for zef_i = 1 : length(zef.fieldnames)
     zef_data.(zef.fieldnames{zef_i}) = zef.(zef.fieldnames{zef_i});
 end
 
 zef_data.imaging_method_cell = {'Scalar field', 'Vector field', 'Vector field gradient'};
-
 zef_data.update_colorscale = 1;
-
 zef_data.dof_decomposition_type = 2;
 zef_data.update_lights = 1;
 zef_data.update_colormap = 1;
@@ -66,10 +64,8 @@ zef_data.current_version = 5.11;
 zef_data.font_size = zef.font_size;
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
-
-%zef_init_system_settings;
-
 zef_data.mlapp = 1;
+zef_data.zeffiro_restart = 0;
 
 %%% Here begins initialization variables
 zef_data.lead_field_filter_quantile = 0.995;
@@ -95,7 +91,7 @@ zef_data.project_tag = '';
 zef_data.volumetric_distribution_mode = 1;
 zef_data.normalize_lead_field = 4;
 zef_data.source_space_creation_iterations = 2;
-zef_data.exclude_box = 0;
+zef_data.exclude_box = 1;
 zef_data.fix_outer_surface = 1;
 zef_data.mesh_relabeling = 1;
 zef_data.pml_outer_radius_unit = 1;
@@ -104,6 +100,8 @@ zef_data.pml_max_size_unit = 1;
 zef_data.pml_max_size = 2;
 zef_data.initial_mesh_mode = 1;
 zef_data.sigma_anisotropy = [];
+zef_data.zeffiro_variable_data = cell(0);
+zef_data.project_matfile = '';
 zef_data.noise_data = [];
 zef_data.top_reconstruction = [];
           zef_data.multi_lead_field = 0;
@@ -195,8 +193,10 @@ zef_data.sensors_attached_volume = [];
              zef_data.show_contour = 0;
              zef_data.show_contour_text = 0;
              zef_data.contour_set_text = '0.1:0.2:0.9';
+zef_data.contour_n_smoothing = 2; 
+zef_data.contour_line_width = 1;
 
-            zef_data.cp_on       = 0;
+zef_data.cp_on       = 0;
             zef_data.cp_a        = 1;
             zef_data.cp_b        = 0;
             zef_data.cp_c        = 0;
@@ -204,12 +204,9 @@ zef_data.sensors_attached_volume = [];
        zef_data.meshing_accuracy = 1;
        zef_data.on_screen        = 0;
        zef_data.import_mode      = 0;
-
        zef_data.mesh_smoothing_on = 0;
-       
        zef.file = '';
        zef.file_path = '';
-
        zef_data.forward_simulation_selected = [];
        zef_data.forward_simulation_table = cell(0);
        zef_data.prism_layers = 0;
@@ -295,18 +292,16 @@ zef_data.sensors_attached_volume = [];
        zef_data.colormap_cell = {'zef_monterosso_colormap','zef_intensity_1_colormap','zef_intensity_2_colormap','zef_intensity_3_colormap','zef_contrast_1_colormap','zef_contrast_2_colormap','zef_contrast_3_colormap','zef_contrast_4_colormap','zef_contrast_5_colormap','zef_blue_brain_1_colormap','zef_blue_brain_2_colormap','zef_blue_brain_3_colormap','zef_parcellation_colormap','zef_easter_colormap','zef_greyscale_colormap'}; 
        zef_data.parcellation_compartment = {'g'};
        zef_data.compartment_activity = {'Bounding box','Inactive','Constrained field','Unconstrained field','Active surface'};
+zef_data.mesh_smoothing_repetitions = 1;
+zef_data.mesh_optimization_repetitions = 10;
+zef_data.mesh_optimization_parameter = 1E-5;
+zef_data.mesh_labeling_approach = 1;
 
-    zef_data.mesh_smoothing_repetitions = 1;
-    zef_data.mesh_optimization_repetitions = 10;
-   zef_data.mesh_optimization_parameter = 1E-5;
-    zef_data.mesh_labeling_approach = 1;
+zef = zef_data;
 
- zef = zef_data;
+clear zef_i zef_data;
 
- clear zef_i zef_data;
-
- zef_apply_init_profile;
- zef_init_compartments;
+zef_apply_init_profile;
+zef_init_compartments;
 zef_init_sensors;
- zef_apply_parameter_profile;
- % zef_init_parameter_profile;
+zef = zef_apply_parameter_profile(zef);

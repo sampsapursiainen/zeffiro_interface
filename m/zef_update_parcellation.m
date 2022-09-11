@@ -1,5 +1,11 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+function zef = zef_update_parcellation(zef)
+
+if nargin==0
+zef = evalin('base','zef');
+end
+
 set(zef.h_parcellation_name,'string',zef.parcellation_name);
 set(zef.h_parcellation_tolerance,'string',zef.parcellation_tolerance);
 zef.parcellation_list = cell(0);
@@ -33,7 +39,7 @@ for zef_i = 1 : size(zef.parcellation_colortable{zef_j}{2},1)
  if isempty(zef.parcellation_list)
      zef.parcellation_list = 1;
  end
- set(zef.h_parcellation_list,'string',zef.parcellation_list,'value',zef.parcellation_selected,'max',zef_k,'min',1)
+ set(zef.h_parcellation_list,'string',zef.parcellation_list,'value',zef.parcellation_selected,'max',zef_k,'min',1);
 clear zef_i zef_j zef_k;
 
 set(zef.h_use_parcellation,'value',zef.use_parcellation);
@@ -53,16 +59,16 @@ end
 
 zef.parcellation_colormap = 0.5*zef.parcellation_colormap;
 
-if  isempty(evalin('base','zef.parcellation_colortable'))
-    set(evalin('base','zef.h_import_parcellation_colortable'),'foregroundcolor',[1 0 0]);
+if  isempty(eval('zef.parcellation_colortable'))
+    set(zef.h_import_parcellation_colortable,'foregroundcolor',[1 0 0]);
 else
-set(evalin('base','zef.h_import_parcellation_colortable'),'foregroundcolor',[0 0 0]);
+set(zef.h_import_parcellation_colortable,'foregroundcolor',[0 0 0]);
 end;
 
-if  isempty(evalin('base','zef.parcellation_points'))
-    set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[1 0 0]);
+if  isempty(eval('zef.parcellation_points'))
+    set(zef.h_zef_import_parcellation_points,'foregroundcolor',[1 0 0]);
 else
-set(evalin('base','zef.h_zef_import_parcellation_points'),'foregroundcolor',[0 0 0]);
+set(zef.h_zef_import_parcellation_points,'foregroundcolor',[0 0 0]);
 end;
 
 if isempty(zef.parcellation_selected) && not(isempty(zef.parcellation_list))
@@ -86,4 +92,10 @@ end
 
 if isfield(zef,'parcellation_status')
 zef = rmfield(zef,'parcellation_status');
+end
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
 end

@@ -15,6 +15,19 @@
 % 7. saves the figure
 
 %================================================
+loadCarstenData = true;
+loadAuditoryData = false;
+
+if loadCarstenData
+    load(fullfile(zef.save_file_path, 'carsten_synth_source_data.mat'), 'carsten_synth_source_data');
+    zef.synth_source_data = carsten_synth_source_data;
+end
+
+if loadAuditoryData
+    load(fullfile(zef.save_file_path, 'carsten_synth_source_data.mat'), 'carsten_synth_source_data')
+end
+
+
 
 % open GUI tools
 zef_start_dataBank;
@@ -28,9 +41,11 @@ zef_update;
 
 % SNR 1, 3, 5, 10. 0dB, 9.542dB, 13.98dB, 20dB
 % Set noise level
-noise_level = -20;
-for zef_n = 1:length(zef.synth_source_data)
-    zef.synth_source_data{zef_n}.parameters{8,2} = num2str(noise_level);
+if not(loadCarstenData)
+    noise_level = -30;
+    for zef_n = 1:length(zef.synth_source_data)
+        zef.synth_source_data{zef_n}.parameters{8,2} = num2str(noise_level);
+    end
 end
 % Default -46dB ,-25 -15, -5
 bg_noise = -46;
@@ -50,7 +65,7 @@ zef_dataBank_getHashForMenu;
 zef_dataBank_setData;
 
 zef_update;
-for i = 1:2
+for i = logspace(-13,-5,1)
 %find synth source
 
 
@@ -62,7 +77,7 @@ zef_update_fss;
 zef_update_fss; 
 zef.measurements = zef_find_source;
 
-inv_type = 'MNE';
+inv_type = 'kalman';
 switch inv_type
     case 'kalman'
         % RUN KALMAN
@@ -72,7 +87,7 @@ switch inv_type
 
 
         % Basic Kalman,EnKF,Kalman sLORETA 1,2,3
-        zef.KF.filter_type.Value = '1';
+        zef.KF.filter_type.Value = '3';
         zef.KF.number_of_ensembles.Value = '100';
         %Spatially balanced, Spatially constant 1,2
         zef.KF.mne_prior.Value = '1';
@@ -80,9 +95,9 @@ switch inv_type
         zef.KF.inv_sampling_frequency.Value = '5000';
         zef.KF.inv_low_cut_frequency.Value = '0';
         zef.KF.inv_high_cut_frequency.Value = '0';
-        zef.KF.inv_time_1.Value = '0.121';
+        zef.KF.inv_time_1.Value = '0.115';
         zef.KF.inv_time_2.Value = '0';
-        zef.KF.number_of_frames.Value = '48';
+        zef.KF.number_of_frames.Value = '2';
         zef.KF.inv_time_3.Value = '0.0002';
 
         zef.KF.normalize_data.Value = '4';
@@ -96,8 +111,8 @@ switch inv_type
             end
         end
         clear zef_props zef_i;
-        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = make_multires_dec();
-        [zef.reconstruction, zef.reconstruction_information] = zef_KF;
+        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = zef_make_multires_dec();
+        [zef.reconstruction, zef.reconstruction_information] = zef_KF(i);
         % END KALMAN
     case 'MNE'
         zef.h_mne_prior.Value = 2;
@@ -131,8 +146,11 @@ zef.h_parcellation_plot_type.Value = 20;
 zef.h_time_series_tools_list.Value = 21;
 
 % Take sg006 and lh023
-zef.h_parcellation_list.Value = [23,78];
+zef.h_parcellation_list.Value = [23, 78, 110];
 zef.parcellation_selected = get(zef.h_parcellation_list,'value');
+
+
+[zef.parcellation_interp_ind] = zef_parcellation_interpolation([]); zef_update_parcellation; set(zef.h_parcellation_interpolation,'foregroundcolor',[0 0 0]);
 
 zef.parcellation_time_series = zef_parcellation_time_series([]);
 zef_plot_parcellation_time_series([]);

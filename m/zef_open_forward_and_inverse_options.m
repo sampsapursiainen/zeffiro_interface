@@ -21,7 +21,7 @@ zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_f
 zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef = rmfield(zef,'aux_field');
-zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers; 
+zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers;
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
@@ -36,15 +36,15 @@ zef.h_as_opt_5.Multiselect = 'on';
 zef.h_use_fem_mesh_inflation.Value = zef.use_fem_mesh_inflation;
 zef.h_fem_mesh_inflation_strength.Value = num2str(zef.fem_mesh_inflation_strength);
 
-if max(zef.refinement_surface_compartments) < length(zef.h_as_opt_5.ItemsData)
-zef.h_as_opt_5.Value = zef.refinement_surface_compartments;
+if max(zef.refinement_surface_compartments_2) <= length(zef.h_as_opt_5.ItemsData)
+zef.h_as_opt_5.Value = zef.refinement_surface_compartments_2;
 else
     zef.h_as_opt_5.Value = 1;
 end
 
 zef.h_refinement_volume_compartments.ItemsData = [1:length(zef.h_refinement_volume_compartments.Items)];
 zef.h_refinement_volume_compartments.Multiselect = 'on';
-if max(zef.refinement_volume_compartments) < length(zef.h_refinement_volume_compartments.ItemsData)
+if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_compartments.ItemsData)
 zef.h_refinement_volume_compartments.Value = zef.refinement_volume_compartments;
 else
     zef.h_refinement_volume_compartments.Value = 1;
@@ -52,7 +52,7 @@ end
 
 zef.h_refinement_volume_compartments_2.ItemsData = [1:length(zef.h_refinement_volume_compartments_2.Items)];
 zef.h_refinement_volume_compartments_2.Multiselect = 'on';
-if max(zef.refinement_volume_compartments_2) < length(zef.h_refinement_volume_compartments_2.ItemsData)
+if max(zef.refinement_volume_compartments_2) <= length(zef.h_refinement_volume_compartments_2.ItemsData)
 zef.h_refinement_volume_compartments_2.Value = zef.refinement_volume_compartments_2;
 else
     zef.h_refinement_volume_compartments_2.Value = 1;
@@ -60,7 +60,7 @@ end
 
 zef.h_refinement_surface_compartments.ItemsData = [1:length(zef.h_refinement_surface_compartments.Items)];
 zef.h_refinement_surface_compartments.Multiselect = 'on';
-if max(zef.refinement_surface_compartments) < length(zef.h_refinement_surface_compartments.ItemsData)
+if max(zef.refinement_surface_compartments) <= length(zef.h_refinement_surface_compartments.ItemsData)
 zef.h_refinement_surface_compartments.Value = zef.refinement_surface_compartments;
 else
     zef.h_refinement_surface_compartments.Value = 1;
@@ -68,7 +68,7 @@ end
 
 zef.h_adaptive_refinement_compartments.ItemsData = [1:length(zef.h_adaptive_refinement_compartments.Items)];
 zef.h_adaptive_refinement_compartments.Multiselect = 'on';
-if max(zef.adaptive_refinement_compartments) < length(zef.h_adaptive_refinement_compartments.ItemsData)
+if max(zef.adaptive_refinement_compartments) <= length(zef.h_adaptive_refinement_compartments.ItemsData)
 zef.h_adaptive_refinement_compartments.Value = zef.adaptive_refinement_compartments;
 else
     zef.h_adaptive_refinement_compartments.Value = 1;
@@ -108,8 +108,14 @@ zef.h_adaptive_refinement_k_param.Value = num2str(zef.adaptive_refinement_k_para
 
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
-zef.h_source_model.ItemsData = [1:length(zef.h_source_model.Items)];
-zef.h_source_model.Value = zef.source_model;
+zef.h_source_model.Items = arrayfun(@to_string, setdiff(ZefSourceModel.variants, ZefSourceModel.Error));
+zef.h_source_model.ItemsData = arrayfun(@ZefSourceModel.from, setdiff(ZefSourceModel.variants, ZefSourceModel.Error));
+zef.source_model = ZefSourceModel.from(zef.source_model);
+if eq(zef.source_model, ZefSourceModel.Error)
+    warning("Invalid source model. Setting it as H(div)");
+    zef.source_model = ZefSourceModel.Hdiv;
+end
+zef.h_source_model.Value = ZefSourceModel.from(zef.source_model);
 zef.h_use_gpu.Value = zef.use_gpu;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);
 zef.h_mesh_labeling_approach.ItemsData = [1:length(zef.h_mesh_labeling_approach.Items)];
@@ -129,5 +135,7 @@ set(findobj(zef.h_zef_forward_and_inverse_processing_options.Children,'-property
 set(zef.h_zef_forward_and_inverse_processing_options,'AutoResizeChildren','off');
 zef.forward_and_inverse_options_current_size = get(zef.h_zef_forward_and_inverse_processing_options,'Position');
 set(zef.h_zef_forward_and_inverse_processing_options,'SizeChangedFcn','zef.forward_and_inverse_options_current_size = zef_change_size_function(zef.h_zef_forward_and_inverse_processing_options,zef.forward_and_inverse_options_current_size);');
+
+set(zef.h_zef_forward_and_inverse_processing_options,'DeleteFcn','zef_closereq;');
 
 clear zef_data;

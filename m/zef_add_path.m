@@ -19,7 +19,7 @@ for i = 1 : length(d)
    
 [a, b, c] = fileparts(d(i).name);
 if not(isempty(b)) 
-if not(isequal(b(1),'+')) && not(isequal(b(1),'@'))
+if not(isequal(b,'external')) && not(isequal(b(1),'+')) && not(isequal(b(1),'@'))
 if isequal(b,'.')
 b = '';
 end

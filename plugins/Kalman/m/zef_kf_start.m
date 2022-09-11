@@ -37,7 +37,7 @@ clear zef_props zef_i
 zef.KF.inv_multires_n_levels.ValueChangedFcn = 'zef.inv_multires_n_levels = str2num(zef.KF.inv_multires_n_levels.Value);';
 zef.KF.inv_multires_n_decompositions.ValueChangedFcn = 'zef.inv_multires_n_decompositions = str2num(zef.KF.inv_multires_n_decompositions.Value);';
 zef.KF.inv_multires_sparsity.ValueChangedFcn = 'zef.inv_multires_sparsity = str2num(zef.KF.inv_multires_sparsity.Value);';
-zef.KF.CreatemultiresolutiondecompositionButton.ButtonPushedFcn = '[zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = make_multires_dec();';
+zef.KF.CreatemultiresolutiondecompositionButton.ButtonPushedFcn = '[zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = zef_make_multires_dec();';
 zef.KF.mne_prior.ValueChangedFcn = 'zef.mne_prior = str2num(zef.KF.mne_prior.Value);';
 zef.KF.inv_snr.ValueChangedFcn = 'zef.inv_snr = str2num(zef.KF.inv_snr.Value);';
 zef.KF.inv_sampling_frequency.ValueChangedFcn = 'zef.inv_sampling_frequency = str2num(zef.KF.inv_sampling_frequency.Value);';

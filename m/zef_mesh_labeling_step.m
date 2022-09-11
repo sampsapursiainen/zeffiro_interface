@@ -28,7 +28,7 @@ end
 end
 
 if not(isequal(i_labeling,pml_ind_aux))
-I_1 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_2,:),[compartment_counter n_compartments]);
+I_1 = zef_point_in_compartment(zef,reuna_p{i_labeling},reuna_t_aux,nodes(I_2,:),[compartment_counter n_compartments]);
 I(I_2(I_1)) = compartment_counter;
 
 I_2 = find(I==0);
@@ -101,7 +101,7 @@ I_1 = setdiff([1:size(domain_labels,1)]',I_1);
 I_3 = label_ind(I_1(I_2),:);
 [I_4,~,I_5] = unique(I_3);
 I_6 = find(test_ind(I_4) < 0);
-I_7 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
+I_7 = zef_point_in_compartment(zef,reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
 test_ind(I_4(I_6)) = 0;
 test_ind(I_4(I_6(I_7))) = 1;
 I_5 = reshape(test_ind(I_4(I_5)),size(I_3));
@@ -110,7 +110,7 @@ domain_labels(tetra_ind_aux) = min(max_compartments, unique_domain_labels(domain
 
 end
 
-if evalin('base','zef.reduce_labeling_outliers')
+if eval('zef.reduce_labeling_outliers')
 
 I_3 = 0;
 while not(isempty(I_3)) && compartment_counter < max_compartments
@@ -189,7 +189,7 @@ I_1 = setdiff([1:size(domain_labels,1)]',I_1);
 I_3 = label_ind(I_1(I_2),:);
 [I_4,~,I_5] = unique(I_3);
 I_6 = find(test_ind(I_4) < 0);
-I_7 = zef_point_in_compartment(reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
+I_7 = zef_point_in_compartment(zef,reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
 test_ind(I_4(I_6)) = 0;
 test_ind(I_4(I_6(I_7))) = 1;
 I_5 = reshape(test_ind(I_4(I_5)),size(I_3));

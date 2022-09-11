@@ -3,9 +3,9 @@ function [z_inverse] = EnKF(m, A, P, Q, L, R, timeSteps, number_of_frames, n_ens
 %x_ensemble = mvnrnd(zeros(size(m)), 100* ones(size(m,1)), n_ensembles)';
 x_ensemble = mvnrnd(zeros(size(m)), P, n_ensembles)';
 z_inverse = cell(0);
-h = waitbar(0, 'EnKF Filtering');
+h = zef_waitbar(0, 'EnKF Filtering');
 for f_ind = 1:number_of_frames
-    waitbar(f_ind/number_of_frames,h,...
+    zef_waitbar(f_ind/number_of_frames,h,...
         ['EnKF Filtering ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     f = timeSteps{f_ind};
     w = mvnrnd(zeros(size(m)), Q, n_ensembles)';

@@ -1,9 +1,9 @@
-function zef_create_compartment(compartment_tag, varargin)
+function zef = zef_create_compartment(zef,compartment_tag, varargin)
 
-n_compartments = evalin('base','length(zef.compartment_tags)');
-color_default = [0.5810    0.4690    0.3430 ; 
+n_compartments = eval('length(zef.compartment_tags)');
+color_default = [ 0.3984    0.7615    0.4435 ;
+                  0.5810    0.4690    0.3430 ; 
                    0.7000    0.7000    0.6000 ; 
-                   0.3984    0.7615    0.4435 ;
                    0.4200    0.4800    0.4200 ;
                     0.3500    0.3500    0.3500 ;
                      0.8000    0.8000    0.8000];
@@ -51,14 +51,16 @@ end
 
 for i = 1 : length(field_cell_default)
 
-evalin('base',[zef_struct_name '.' compartment_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
+eval([zef_struct_name '.' compartment_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
 
 end
 
 for i = 1 : length(field_cell_update)
 
-evalin('base',[zef_struct_name '.' compartment_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]);
+eval([zef_struct_name '.' compartment_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]);
 
 end
 
-evalin('base',[zef_struct_name '.compartment_tags = ['''  compartment_tag ''', ' zef_struct_name '.compartment_tags];']);
+eval([zef_struct_name '.compartment_tags = ['''  compartment_tag ''', ' zef_struct_name '.compartment_tags];']);
+
+end

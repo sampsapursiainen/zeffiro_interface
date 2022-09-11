@@ -1,6 +1,6 @@
 if zef.current_version <= 2.2
      for zef_i = 1 : 22
- evalin('base',['zef.d' num2str(zef_i) '_priority =' num2str(28-zef_i) ';']);
+ eval(['zef.d' num2str(zef_i) '_priority =' num2str(28-zef_i) ';']);
      end
  end
 clear zef_i

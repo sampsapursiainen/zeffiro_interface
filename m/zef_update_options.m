@@ -9,7 +9,7 @@ if zef.mlapp == 1
     zef.refinement_type = get(zef.h_as_opt_5,'Value');
     zef.surface_sources = get(zef.h_as_opt_6,'Value');
     zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'Value');
-    zef.source_model = get(zef.h_source_model,'Value');
+    zef.source_model = ZefSourceModel.from(get(zef.h_source_model,'Value'));
     zef.colortune_param = str2num(get(zef.h_colortune_param,'Value'));
     zef.inv_hyperprior_weight = get(zef.h_inv_hyperprior_weight,'Value');
     zef.use_gpu         = get(zef.h_use_gpu,'Value');
@@ -42,11 +42,11 @@ if zef.mlapp == 1
 else
 
     zef.submesh_num = str2num(get(zef.h_submesh_num,'string'));
-    zef.reconstruction_type = get(zef.h_reconstruction_type,'value');
-    zef.parcellation_type = get(zef.h_parcellation_type,'value');
+    zef.reconstruction_type = get(zef.h_reconstruction_type,'Value');
+    zef.parcellation_type = get(zef.h_parcellation_type,'Value');
     zef.parcellation_quantile = str2num(get(zef.h_parcellation_quantile,'string'));
-    zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'value');
-    zef.source_model = get(zef.h_source_model,'value');
+    zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'Value');
+    zef.source_model = ZefSourceModel.from(get(zef.h_source_model,'Value'));
     zef.use_gpu         = get(zef.h_use_gpu,'value');
     zef.use_gpu_graphic = get(zef.h_use_gpu_graphic,'value');
     zef.gpu_num = str2num(get(zef.h_gpu_num,'string'));
@@ -114,6 +114,6 @@ else
     end
 end
 
-if gpuDeviceCount > 0 & zef.use_gpu == 1
+if zef.gpu_count > 0 & zef.use_gpu == 1
     gpuDevice(zef.gpu_num);
 end

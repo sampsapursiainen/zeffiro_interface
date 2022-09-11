@@ -1,6 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_import_figure(varargin)
+function zef = zef_import_figure(zef,varargin)
+
+if isempty(zef)
+    zef = evalin('base','zef');
+end
 
 file_name = [];
 folder_name = []; 
@@ -10,15 +14,15 @@ if not(isempty(varargin))
     folder_name = varargin{2};
 end
 
-evalin('base','zef.zeffiro_current_size_aux = zef.zeffiro_current_size;');
-evalin('base','zef.zeffiro_current_size = cell(0);');
+eval('zef.zeffiro_current_size_aux = zef.zeffiro_current_size;');
+eval('zef.zeffiro_current_size = cell(0);');
 
 if isempty(file_name)
-if evalin('base','zef.use_display')
-[file_name folder_name] = uigetfile({'*.fig'},'Open figure file',evalin('base','zef.save_file_path'));
+if eval('zef.use_display')
+[file_name folder_name] = uigetfile({'*.fig'},'Open figure file',eval('zef.save_file_path'));
 else
-    file_name = evalin('base','zef.file');
-    folder_name = evalin('base','zef.file_path');
+    file_name = eval('zef.file');
+    folder_name = eval('zef.file_path');
 end
 end
 
@@ -28,7 +32,7 @@ h_fig = open([folder_name '/' file_name]);
 set(h_fig,'Tag','');
 set(h_fig,'SizeChangedFcn','');
 
-evalin('base','zef.zeffiro_current_size = zef.zeffiro_current_size_aux;');
+eval('zef.zeffiro_current_size = zef.zeffiro_current_size_aux;');
 
 set(h_fig,'MenuBar','figure');
 h_fig.Units = 'normalized';
@@ -64,9 +68,9 @@ for i = 1 : length(h_c)
            end
        end
 end
-scale_factor_x = figure_width/(max_x-min_x)
-scale_factor_y = figure_height/(max_y-min_y)
-scale_factor = min(scale_factor_x, scale_factor_y)
+scale_factor_x = figure_width/(max_x-min_x);
+scale_factor_y = figure_height/(max_y-min_y);
+scale_factor = min(scale_factor_x, scale_factor_y);
 %if scale_factor_y < scale_factor_x
 %  h_fig.Position(3) = (scale_factor_y/scale_factor_x)*h_fig.Position(3);
 %else
@@ -112,8 +116,7 @@ else
 end
 
 set(h_fig,'AutoResizeChildren','off');
-assignin('base','zef_data',get(h_fig,'Position'));
-evalin('base','zef.zeffiro_current_size{zef_fig_num} = zef_data; clear zef_data;');
+zef.zeffiro_current_size{zef_fig_num} = get(h_fig,'Position');
 set(h_fig,'Tag',num2str(zef_fig_num));
 
 set(h_fig,'SizeChangedFcn','zef_set_figure_current_size;');
@@ -131,6 +134,10 @@ end
 
 end
 
-evalin('base','zef = rmfield(zef,''zeffiro_current_size_aux'');');
+eval('zef = rmfield(zef,''zeffiro_current_size_aux'');');
+
+if nargout == 0 
+    assignin('base','zef',zef)
+end
 
 end

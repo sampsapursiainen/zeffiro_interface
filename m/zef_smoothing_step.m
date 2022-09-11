@@ -1,39 +1,40 @@
-if evalin('base','zef.mesh_smoothing_on');
+
+if eval('zef.mesh_smoothing_on')
 
 length_waitbar = 4+length(priority_vec);
 
-%nodes = evalin('base','zef.nodes_raw');
-sensors = evalin('base','zef.sensors');
+%nodes = eval('zef.nodes_raw');
+sensors = eval('zef.sensors');
 
-smoothing_param = evalin('base','zef.smoothing_strength');
-smoothing_steps_surf = evalin('base','zef.smoothing_steps_surf');
+smoothing_param = eval('zef.smoothing_strength');
+smoothing_steps_surf = eval('zef.smoothing_steps_surf');
 if length(smoothing_steps_surf) == 1
-   smoothing_steps_surf = repmat([ 0 smoothing_steps_surf],1,evalin('base','zef.mesh_smoothing_repetitions'));
+   smoothing_steps_surf = repmat([ 0 smoothing_steps_surf],1,eval('zef.mesh_smoothing_repetitions'));
 else
    smoothing_steps_surf = reshape([zeros(size(smoothing_steps_surf)) ;smoothing_steps_surf],1,2*length(smoothing_steps_surf));
 end
-smoothing_steps_vol =  evalin('base','zef.smoothing_steps_vol');
+smoothing_steps_vol =  eval('zef.smoothing_steps_vol');
 if length(smoothing_steps_vol) == 1
-   smoothing_steps_vol = repmat([smoothing_steps_vol smoothing_steps_vol],1,evalin('base','zef.mesh_smoothing_repetitions'));
+   smoothing_steps_vol = repmat([smoothing_steps_vol smoothing_steps_vol],1,eval('zef.mesh_smoothing_repetitions'));
 else
    smoothing_steps_vol =  reshape([smoothing_steps_vol ;smoothing_steps_vol],1,2*length(smoothing_steps_vol));
 end
-smoothing_steps_ele = evalin('base','zef.smoothing_steps_ele');
+smoothing_steps_ele = eval('zef.smoothing_steps_ele');
 if length(smoothing_steps_ele) == 1
-   smoothing_steps_ele = repmat([ 0 smoothing_steps_ele],1,evalin('base','zef.mesh_smoothing_repetitions'));
+   smoothing_steps_ele = repmat([ 0 smoothing_steps_ele],1,eval('zef.mesh_smoothing_repetitions'));
 else
    smoothing_steps_ele = reshape([zeros(size(smoothing_steps_ele)) ;smoothing_steps_ele],1,2*length(smoothing_steps_ele));
 end
 
-for smoothing_repetition_ind  = 1 : 2*evalin('base','zef.mesh_smoothing_repetitions')
+for smoothing_repetition_ind  = 1 : 2*eval('zef.mesh_smoothing_repetitions')
 
-    if evalin('base','zef.mesh_relabeling') && smoothing_repetition_ind > 2
+    if eval('zef.mesh_relabeling') && smoothing_repetition_ind > 2
 
     if smoothing_repetition_ind == 1
         zef_segmentation_counter_step;
     elseif smoothing_repetition_ind > 1
 
-        if evalin('base','zef.mesh_relabeling')
+        if eval('zef.mesh_relabeling')
     pml_ind = [];
     labeling_flag = 2;
     label_ind = uint32(tetra);
@@ -50,7 +51,7 @@ L = [];
 surface_triangles = [];
 J = [];
 for k = 1 : length(priority_vec)
-waitbar(k/length_waitbar,h,'Smoothing operators.');
+zef_waitbar(k/length_waitbar,h,'Smoothing operators.');
 if not(pml_vec(k))
 I = find(domain_labels==k);
 [surface_triangles] = [ surface_triangles ; zef_surface_mesh(tetra(I,:))];
@@ -60,15 +61,15 @@ K = unique(J);
 end
 end
 
-waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 surface_triangles = sort(surface_triangles,2);
 surface_triangles = unique(surface_triangles,'rows');
 
 J = setdiff(tetra(:),K);
 
-waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
-%evalin('base','zef.tetra_raw');
+%eval('zef.tetra_raw');
 
 smoothing_ok = 0;
 
@@ -89,7 +90,7 @@ end
 end
 end
 
-waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear surface_triangles;
 
 clear A_part;
@@ -116,12 +117,12 @@ end
 end
 
 outer_surface_nodes_aux = [];
-if evalin('base','zef.fix_outer_surface')
+if eval('zef.fix_outer_surface')
         [outer_surface_nodes_aux] = zef_surface_mesh(tetra);
         outer_surface_nodes_aux = unique(outer_surface_nodes_aux);
 end
 
-waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
+zef_waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 clear B_part;
 B = spones(B);
 sum_B = full(sum(B))';
@@ -131,7 +132,7 @@ end
 taubin_lambda = 1;
 taubin_mu = -1;
 
-%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%if eval('zef.use_gpu')==1 && eval('zef.gpu_count') > 0
 %if mod(smoothing_repetition_ind,2)==0
 %%A = gpuArray(A);
 %A_K = gpuArray(A_K);
@@ -144,7 +145,7 @@ taubin_mu = -1;
 %end
 %end
 
-%if evalin('base','zef.use_gpu')==1 && gpuDeviceCount > 0
+%if eval('zef.use_gpu')==1 && eval('zef.gpu_count') > 0
 %nodes = gpuArray(nodes);
 %end
 
@@ -171,26 +172,26 @@ if smoothing_steps_surf(smoothing_repetition_ind) < 1
 else
 convergence_criterion = smoothing_steps_surf(smoothing_repetition_ind).^2/iter_ind_aux;
 end
-waitbar(smoothing_steps_surf(smoothing_repetition_ind)/convergence_criterion,h,'Surface smoothing.');
+zef_waitbar(smoothing_steps_surf(smoothing_repetition_ind)/convergence_criterion,h,'Surface smoothing.');
 
 end
 end
 
 I_sensors = find(not(ismember(domain_labels,find(pml_vec,1))));
 surface_triangles = zef_surface_mesh(tetra(I_sensors,:));
-[sensors_attached_volume] = zef_attach_sensors_volume(sensors,'mesh',nodes,tetra,surface_triangles);
+[sensors_attached_volume] = zef_attach_sensors_volume(zef,sensors,'mesh',nodes,tetra,surface_triangles);
 L = zef_electrode_struct(sensors_attached_volume);
-electrode_is_point = evalin('base','zef.sensors');
+electrode_is_point = eval('zef.sensors');
 if not(isempty(L))
     if size(electrode_is_point,2) == 3
     electrode_is_point = zeros(size(electrode_is_point,1),1);
     else
 electrode_is_point = find(electrode_is_point(:,4)==0);
     end
-    waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
+    zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
     C = [];
 for electrode_ind = 1 : length(L)
- waitbar(electrode_ind/length(L),h,'Sensor smoothing.');
+ zef_waitbar(electrode_ind/length(L),h,'Sensor smoothing.');
  if not(ismember(electrode_ind,electrode_is_point))
  C_sparse = sparse(N, N, 0);
 for i = 1 : 2
@@ -261,24 +262,24 @@ convergence_criterion = norm(nodes_aux_2-nodes_aux_1,'fro')/norm(nodes_aux_1);
 else
  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
 end
-waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
+zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
 end
 end
 
 nodes = gather(nodes);
 
-if evalin('base','zef.use_fem_mesh_inflation')
-nodes = zef_inflate_surfaces(nodes,tetra,domain_labels);
+if eval('zef.use_fem_mesh_inflation')
+nodes = zef_inflate_surfaces(zef, nodes,tetra,domain_labels);
 end
 
 optimizer_counter = 1;
 optimizer_flag = -1;
-while optimizer_flag < 0 && optimizer_counter <= evalin('base','zef.mesh_optimization_repetitions')
+while optimizer_flag < 0 && optimizer_counter <= eval('zef.mesh_optimization_repetitions')
 optimizer_counter = optimizer_counter + 1;
 
-[nodes,optimizer_flag] = zef_fix_negatives(nodes, tetra);
+[nodes,optimizer_flag] = zef_fix_negatives(zef,nodes, tetra);
 if optimizer_flag == 1
-    [tetra, optimizer_flag] = zef_tetra_turn(nodes, tetra, thresh_val);
+    [tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
 end
     %     if optimizer_flag == -1
 % if smoothing_steps_vol(smoothing_repetition_ind) > 0
@@ -306,7 +307,7 @@ end
 % else
 %  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
 % end
-% waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
+% zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
 % end
 % end
 %     end
@@ -319,13 +320,13 @@ smoothing_ok = 1;
 end
 
 if smoothing_ok == 0
-nodes = evalin('base','zef.nodes_raw');
+nodes = eval('zef.nodes_raw');
 sigma = [sigma(:) domain_labels(:)];
 errordlg('Mesh smoothing failed.');
 return;
 end
 
-% if evalin('base','zef.mesh_relabeling')
+% if eval('zef.mesh_relabeling')
 %
 % pml_ind = [];
 % label_ind = uint32(tetra);
@@ -347,7 +348,7 @@ smoothing_ok = 1;
 end
 
 if smoothing_ok == 0
-nodes = evalin('base','zef.nodes_raw');
+nodes = eval('zef.nodes_raw');
 sigma = [sigma(:) domain_labels(:)];
 errordlg('Mesh smoothing failed.');
 return;

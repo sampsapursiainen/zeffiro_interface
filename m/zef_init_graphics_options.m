@@ -10,6 +10,15 @@ if not(isfield(zef,'cone_alpha'));
     zef.cone_alpha = 1;
 end;
 
+if not(isfield(zef,'contour_n_smoothing'));
+    zef.contour_n_smoothing = 2;
+end;
+
+if not(isfield(zef,'contour_line_width'));
+    zef.contour_line_width = 1;
+end;
+
+
 if not(isfield(zef,'cone_lattice_resolution'));
     zef.cone_field_lattice_resolution = 10;
 end;

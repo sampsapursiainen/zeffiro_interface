@@ -1,7 +1,7 @@
 zef.show_contour = zef.h_show_contour.Value;
 zef.show_contour_text = zef.h_show_contour_text.Value;
 zef.contour_set_text = zef.h_contour_set_text.Value;
-zef.contour_set = str2num(zef.h_contour_set_text);
+zef.contour_set = str2num(zef.contour_set_text);
 zef.attach_electrodes = zef.h_checkbox14.Value;
 zef.axes_visible = zef.h_checkbox15.Value;
 zef.azimuth = zef.h_edit80.Value;
@@ -41,7 +41,7 @@ zef.cone_draw = zef.h_cone_draw.Value;
 zef.streamline_draw = zef.h_streamline_draw.Value;
 zef.volumetric_distribution_mode = zef.h_volumetric_distribution_mode.Value;
 
-set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters);
+set(zef.h_mesh_visualization_parameter_list,'Items',zef_get_profile_parameters(zef));
 zef.h_mesh_visualization_parameter_list.ItemsData = [1:length(zef.h_mesh_visualization_parameter_list.Items)];
 
 zef.mesh_visualization_parameter_selected = zef.h_mesh_visualization_parameter_list.Value;

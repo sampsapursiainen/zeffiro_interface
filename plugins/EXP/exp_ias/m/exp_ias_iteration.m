@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = exp_ias_iteration(void)
-h = waitbar(0,['IAS MAP iteration.']);
+h = zef_waitbar(0,['IAS MAP iteration.']);
 
 hyper_type = evalin('base','zef.exp_ias_hyper_type');
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
@@ -82,7 +82,7 @@ for f_ind = 1 : number_of_frames
         time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -97,7 +97,7 @@ for f_ind = 1 : number_of_frames
 % inversion starts here
 
 if f_ind == 1
-waitbar(0,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
@@ -113,9 +113,9 @@ gamma =zeros(length(z_vec),1)+(beta+1/q-1)./theta0;
         for i = 1 : n_ias_map_iter
         %_Draw waitbar_
         if f_ind > 1;
-        waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+        zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;
         w = 1./(gamma*std_lhood^2*max(f)^2);
 
@@ -129,9 +129,9 @@ gamma =zeros(length(z_vec),1)+(beta+1/q-1)./theta0;
         for i = 1 : n_ias_map_iter
         %_Draw waitbar_
         if f_ind > 1;
-        waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-        waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+        zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;
         %focal activity
         z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);

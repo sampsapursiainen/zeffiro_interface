@@ -1,3 +1,9 @@
+function zef = zef_update_transform(zef)
+
+if nargin == 0
+    zef = evalin('base','zef');
+end
+
 zef.aux_field_1 = zef.h_transform_table.Data;
 zef.aux_field_2 = [];
 zef.aux_field_3 = [];
@@ -23,17 +29,17 @@ end
 for zef_i = 1 : length(zef.aux_field_4)
 
 if zef_i == 1
-evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
 for zef_j = 1 : length(zef.aux_field_5)
-evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';']);
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';']);
 end
 elseif zef_i == 9
-evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
 for zef_j = 1 : length(zef.aux_field_5)
-evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ' zef.aux_field_5{zef_j} ';']);
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ' zef.aux_field_5{zef_j} ';']);
 end
 else
-evalin('base',['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
 end
 end
 
@@ -41,3 +47,9 @@ zef = rmfield(zef,{'aux_field_1','aux_field_2','aux_field_3','aux_field_4','aux_
 clear zef_i zef_j;
 
 zef_init_transform;
+
+if nargout == 0
+    assignin('base','zef',zef);
+end
+    
+end

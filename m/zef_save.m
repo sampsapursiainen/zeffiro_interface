@@ -1,25 +1,53 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+function zef = zef_save(zef,file_name,path_name,save_switch)
+
+if nargin == 0
+    zef = evalin('base','zef');
+end
+
+if nargin == 3
+    zef.save_switch = 1;
+elseif nargin == 4
+    zef.save_switch = save_switch;
+end
+
 if zef.save_switch == 1
+    
+if nargin < 3    
 if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
- end
-if not(isequal(zef.file,0));
+end
+else
+    zef.file = file_name;
+    zef.file_path = path_name;
+end
+if not(isequal(zef.file,0))
 zef.save_file = zef.file;
 zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
+
+if isfield(zef,'zeffiro_variable_data')
+    if not(isempty(zef.zeffiro_variable_data))
+       time_val = now;
+       I = ismember(zef.zeffiro_variable_data(:,2),fieldnames(zef));
+       zef.zeffiro_variable_data(I,5) = {time_val};
+    end
+end
+
 zef_data = zef;
-zef_remove_object_fields;
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+zef_data = zef_remove_object_handles(zef_data);
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
+zef_segmentation_tool;
 zef_mesh_tool;
-zeffiro_interface_mesh_visualization_tool;
-zef_update;
+zef_mesh_visualization_tool;
+zef = zef_update(zef);
 end
 end
 if zef.save_switch == 2
@@ -67,7 +95,7 @@ else
 end
     end
 if not(isequal(zef.file,0));
-zef_process_meshes([]);
+zef = zef_process_meshes(zef);
 zef.surface_mesh_nodes = zef.reuna_p;
 zef.surface_mesh_triangles = zef.reuna_t;
 if zef.imaging_method== 1
@@ -94,7 +122,7 @@ else
 end
     end
 if not(isequal(zef.file,0));
-zef_process_meshes;
+zef = zef_process_meshes(zef);
 zef.tetrahedra = zef.tetra;
 %[zef.sigma,zef.brain_ind] = zef_postprocess_fem_mesh([]);
 if zef.imaging_method== 1
@@ -112,11 +140,11 @@ if not(isempty(zef.save_file)) & not(isempty(zef.save_file_path)) & not(zef.save
 zef_close_tools;
 zef_close_figs;
 zef_data = zef;
-zef_remove_object_fields;
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+zef_data = zef_remove_object_handles(zef_data);
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
 zef_mesh_tool;
-zeffiro_interface_mesh_visualization_tool;
+zef_mesh_visualization_tool
 zef_update;
 else
 if zef.use_display
@@ -132,8 +160,8 @@ zef.save_file_path = zef.file_path;
 zef_close_tools;
 zef_close_figs;
 zef_data = zef;
-zef_remove_object_fields;
-save([zef.save_file_path zef.save_file],'zef_data','-v7.3');
+zef_data = zef_remove_object_handles(zef_data);
+save([zef.save_file_path zef.save_file],'-struct','zef_data','-v7.3');
 clear zef_data;
 end
 end
@@ -180,3 +208,9 @@ print(gcf,'-dtiff','-r200',[zef.file_path zef.file]);
     end
 end;
 end;
+
+if nargout == 0
+    assignin('base','zef',zef);
+end
+
+end

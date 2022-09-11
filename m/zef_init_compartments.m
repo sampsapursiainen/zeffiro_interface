@@ -2,6 +2,7 @@
 
 zef.compartment_tags = cell(0);
 zef.compartment_transform_name = cell(0);
+zef.compartment_structure_aux = cell(0);
 
 if not(zef.new_empty_project)
 
@@ -27,7 +28,7 @@ for zef_i = 1 : length(zef.compartment_tags_aux)
 
     end
 
-    zef_create_compartment(zef.compartment_tags_aux{zef_i},'zef',zef.compartment_structure_aux);
+    zef = zef_create_compartment(zef,zef.compartment_tags_aux{zef_i},'zef',zef.compartment_structure_aux);
 
 end
 

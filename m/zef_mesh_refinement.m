@@ -1,6 +1,10 @@
 %Copyright © 2021- Sampsa Pursiainen & GPU-ToRRe-3D Development Team
 %See: https://github.com/sampsapursiainen/GPU-Torre-3D
-function [nodes,tetra,domain_labels_aux,tetra_interp_vec] = zef_mesh_refinement(nodes,tetra,domain_labels_aux,varargin)
+function [nodes,tetra,domain_labels_aux,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels_aux,varargin)
+
+if isempty(zef)
+zef = evalin('base',zef);
+end
 
 eps_val = 15;
 
@@ -28,7 +32,7 @@ if not(isempty(compartment_ind))
 if isequal(compartment_ind,0) || (isempty(compartment_ind) && not(isempty(tetra_ref_ind)))
 I = tetra_ref_ind;
 else
-    I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(compartment_ind)));
+    I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(zef,compartment_ind)));
 if not(isempty(tetra_ref_ind))
 tetra_ref_ind = intersect(tetra_ref_ind,I);
 I = tetra_ref_ind;

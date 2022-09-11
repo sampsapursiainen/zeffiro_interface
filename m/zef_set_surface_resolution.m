@@ -1,8 +1,8 @@
-function  patch_data = zef_set_surface_resolution(patch_data,surface_resolution)
+function  patch_data = zef_set_surface_resolution(zef,patch_data,surface_resolution)
 
 if not(isempty(patch_data.vertices))
 
-mesh_res = evalin('base','zef.mesh_resolution');
+mesh_res = eval('zef.mesh_resolution');
 
 area_val = sum(sqrt(sum(cross(patch_data.vertices(patch_data.faces(:,2),:)'-patch_data.vertices(patch_data.faces(:,1),:)', patch_data.vertices(patch_data.faces(:,3),:)'-patch_data.vertices(patch_data.faces(:,1),:)').^2))/2);
 

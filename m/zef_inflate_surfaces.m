@@ -1,22 +1,26 @@
-function nodes = zef_inflate_surfaces(nodes,tetra,domain_labels)
+function nodes = zef_inflate_surfaces(zef, nodes, tetra, domain_labels)
+
+if isempty(zef)
+zef = evalin('base','zef');
+end
 
 waitbar_opened = 0;
 if evalin('caller','exist(''h'')')
     if evalin('caller','isvalid(h)')
 h = evalin('caller','h');
     else
-        h = waitbar([0 0],'Inflating.');
+        h = zef_waitbar([0 0],'Inflating.');
         waitbar_opened = 1;
     end
 else
-      h = waitbar([0 0],'Inflating.');
+      h = zef_waitbar([0 0],'Inflating.');
       waitbar_opened = 1;
 end
 
-inflation_strength = evalin('base','zef.fem_mesh_inflation_strength');
-reuna_t = evalin('base','zef.reuna_t');
-reuna_p = evalin('base','zef.reuna_p');
-reuna_type = evalin('base','zef.reuna_type');
+inflation_strength = eval('zef.fem_mesh_inflation_strength');
+reuna_t = eval('zef.reuna_t');
+reuna_p = eval('zef.reuna_p');
+reuna_type = eval('zef.reuna_type');
 
 if isequal(reuna_type{end,1},-1)
 compartment_length = length(reuna_p)-1;
@@ -41,11 +45,11 @@ n_nearest_neighbors = min(n_nearest_neighbors,size(center_points,1));
 MdlKDT = KDTreeSearcher(center_points);
 nearest_neighbor_ind = knnsearch(MdlKDT,gather(nodes(node_list(:,1),:)),'K',n_nearest_neighbors);
 
-waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
+zef_waitbar([0 compartment_counter/length(reuna_p)], h, 'Inflating.');
 
 length_node_list = size(node_list,1);
-par_num = evalin('base','zef.parallel_processes');
-vec_num = evalin('base','zef.parallel_vectors');
+par_num = eval('zef.parallel_processes');
+vec_num = eval('zef.parallel_vectors');
 n_restarts = ceil(length_node_list/(vec_num*par_num));
 bar_ind = ceil(length_node_list/(50*par_num));
 i_ind = 0;
@@ -114,7 +118,7 @@ nodes_ind_cell{restart_ind} = nodes_ind_cell_aux;
 time_val = toc;
 
     if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-waitbar([restart_ind/n_restarts compartment_counter/length(reuna_p)],h,['Inflating compartment ' int2str(compartment_counter) ' of ' int2str(length(reuna_p)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+zef_waitbar([restart_ind/n_restarts compartment_counter/length(reuna_p)],h,['Inflating compartment ' int2str(compartment_counter) ' of ' int2str(length(reuna_p)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
     end
 
 end

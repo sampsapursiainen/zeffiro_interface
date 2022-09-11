@@ -1,0 +1,3 @@
+function zef_sensors_name_table_selection(hObject,eventdata,handles)
+zef_sensors_name_table_selection(hObject,eventdata,handles);
+end

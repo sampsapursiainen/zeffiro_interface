@@ -1,43 +1,33 @@
-function [h_barplot_ES] = zef_ES_plot_barplot(varargin)
-n = length(varargin);
-switch n
+function zef_ES_plot_barplot(varargin)
+switch nargin
     case 0
-            switch evalin('base','zef.ES_search_type')
-                case 1
-                    y_ES = evalin('base','zef.y_ES_single.y_ES');
-                case 2
-                    [~, sr, sc] = zef_ES_objective_function;
-                    if isempty(sr)
-                        sr = 1;
-                    end
-                    if isempty(sc)
-                        sc = 1;
-                    end
-                    load_aux = evalin('base','zef.y_ES_interval.y_ES');
-                    y_ES = load_aux{sr, sc};
-            end
+        [sr, sc] = zef_ES_objective_function(zef_ES_table);
+        y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
     case 1
-        if isvector(A)
+        if isvector(varargin{1})
             y_ES = varargin{1};
         else
-            error('Inserted argument is not a vector!')
+            error('Inserted argument is not a vector.')
         end
     case 2
         [sr, sc] = deal(varargin{1:2});
-        load_aux = evalin('base','zef.y_ES_interval.y_ES');
-        y_ES = cell2mat(load_aux(sr, sc));
+        try
+            y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+        catch
+            error('No y_ES data found.')
+        end
     case 3
-        if numel(varargin{1}) > 1
+        if isvector(varargin{1})
             y_ES = varargin{1};
         else
-            error('This is not a y_ES value')
+            error('Invalid y_ES data inserted. Not a vector.')
         end
-        [~, sr, sc] = varargin{:};
+        [sr, sc] = deal(varargin{2}, varargin{3});
     otherwise
-        error('Too many input arguments declared. Insert 2, 3 or no argument.')
+        error('Too many input arguments.')
 end
 
-if n ~= 3
+if nargin ~= 3
     fig_aux = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
     try
@@ -50,11 +40,7 @@ if n ~= 3
     fig_aux.Position(2) = win_temp(2)+(win_temp(4)-fig_aux.Position(4));
     fig_aux.Position(3) = 750;
     fig_aux.Position(4) = 250;
-
-        if evalin('base','zef.ES_search_type') == 2
-            sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-        end
-    
+    sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
 end
 
 h_barplot_ES = bar(y_ES,0.3);
@@ -64,39 +50,44 @@ pbaspect([4 1 1]);
 
 h_axes = gca;
 h_axes.XLabel.String = 'Electrode channel';
-h_axes.XLabel.FontSize = 11;
+h_axes.XLabel.FontSize = 10;
 h_axes.XLabel.FontWeight = 'bold';
-h_axes.XLabel.FontName = 'Arial';
 
 h_axes.YLabel.String = 'Amplitude (mA)';
-h_axes.YLabel.FontSize = 11;
+h_axes.YLabel.FontSize = 10;
 h_axes.YLabel.FontWeight = 'bold';
-h_axes.YLabel.FontName = 'Arial';
 
 h_axes.XGrid = 'off';
 h_axes.YGrid = 'on';
 
-max_current = evalin('base','zef.ES_total_max_current');
+max_current_montage = evalin('base','zef.ES_total_max_current');
+max_current_channel = evalin('base','zef.ES_max_current_channel');
 
-h_axes.XLim = [0 length(y_ES)+1];
-%h_axes.YLim = [-0.005 0.005];
+h_axes.XLim = [0 length(y_ES)];
+% h_axes.YLim = [-max_current max_current]*1.05;
 
 if max(abs(y_ES)) == 0
-    p_max = 1; p_min = 0;
+    p_max = 1;
+    p_min = 0;
 else
-    p_max = max(abs(y_ES)); p_min = -p_max;
+    p_max = max(abs(y_ES));
+    p_min = -p_max;
 end
 
-if p_max > max_current
+if p_max > max_current_montage
     h_axes.YLim = [p_min p_max]*1.05;
 else
-    h_axes.YLim = [-max_current max_current]*1.05;
+    h_axes.YLim = [-max_current_montage max_current_montage]*1.05;
 end
 
 hold on;
-plot(xlim,[ max_current  max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
-plot(xlim,[-max_current -max_current],'LineWidth',1.0,'Color','r','LineStyle','--');
+plot(xlim,[ max_current_montage  max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
+plot(xlim,[ max_current_channel  max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
+legend('Channel','Total Max','Channel Max','location','eastoutside','AutoUpdate','off');
+plot(xlim,[-max_current_montage -max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
+plot(xlim,[-max_current_channel -max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
 hold off;
 
-h_barplot_ES = [h_axes; h_barplot_ES];
+
+%h_barplot_ES = [h_axes; h_barplot_ES];
 end

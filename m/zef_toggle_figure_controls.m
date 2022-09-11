@@ -46,14 +46,14 @@ set(h_axes,'units','normalized');
 h_colorbar = findobj(h,'Tag','rightColorbar');
 set(h_colorbar,'units','normalized');
 if toggle_status == 1
-    toggle_scale = 83/68;
+    toggle_scale = 8769/6000;
     set(h_axes,'Position',[toggle_scale*h_axes.Position(1) h_axes.Position(2:4) ]);
     h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))
         set(h_colorbar,'Position',[toggle_scale*h_colorbar.Position(1) h_colorbar.Position(2:4) ]);
     end
 else
-    toggle_scale = 68/83;
+    toggle_scale = 6000/8769;
     set(h_axes,'Position',[toggle_scale*h_axes.Position(1) h_axes.Position(2:4) ])
         h_colorbar = findobj(h,'Tag','rightColorbar');
     if not(isempty(h_colorbar))

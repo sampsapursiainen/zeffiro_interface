@@ -1,84 +1,86 @@
-function [vec, sr, sc] = zef_ES_objective_function
-load_aux = evalin('base','zef.y_ES_interval');
+function [sr, sc] = zef_ES_objective_function(varargin)
+ 
+[~, ~, metacriteria_list, metacriteria_type] = zef_ES_table([]);
 
-ES_y                     = zeros(size(load_aux.y_ES));
-ES_residual              = cell2mat(load_aux.residual);
-ES_residual = round(ES_residual/max(abs(ES_residual(:))),6);
-ES_max                   = zeros(size(load_aux.y_ES));
-ES_flag                  = cell2mat(load_aux.flag')';
+obj1 = [];
+obj2 = [];
+thre_aux = [];
+thre_type = [];
+vec = [];
 
-ES_magnitude             = cell2mat(load_aux.field_source.magnitude')';
-ES_angle_error           = cell2mat(load_aux.field_source.angle')';
-ES_rela_norm             = cell2mat(load_aux.field_source.relative_norm_error')';
-ES_rela_error            = cell2mat(load_aux.field_source.relative_error')';
-
-ES_off_field             = cell2mat(load_aux.field_source.avg_off_field')';
-ES_active_electrodes     = evalin('base','zef.ES_active_electrodes');
-
-ES_separation_angle      = evalin('base','zef.ES_separation_angle');
-ES_search_method         = evalin('base','zef.h_ES_search_method.Items{zef.ES_search_method}');
-ES_max_current_channel   = evalin('base','zef.ES_max_current_channel');
-
-ES_relative_weight_nnz   = evalin('base','zef.ES_relative_weight_nnz');
-ES_cortex_thickness      = evalin('base','zef.ES_cortex_thickness');
-ES_total_max_current     = evalin('base','zef.ES_total_max_current');
-ES_source_density        = evalin('base','zef.ES_source_density');
-ES_rela_source_amplitude = evalin('base','zef.ES_relative_source_amplitude');
-
-ES_optimize_condition = 'maximum';
-switch evalin('base','zef.ES_obj_fun_2')
-    case {1,3,4}
-        ES_optimize_condition = 'minimum';
-    case {2,5}
-        ES_optimize_condition = 'maximum';
-end
-
-
-    if isempty(ES_active_electrodes)
-        ES_active_electrodes = size(load_aux.y_ES{1,1},1);
+if not(isempty(varargin))
+    vec = varargin{1};
+        if length(varargin) > 1
+        obj1 = varargin{2};
+        end
+    if length(varargin) > 2
+        obj2 = varargin{3};
     end
-    ES_separation_angle = NaN;
-
-for i = 1:size(load_aux.y_ES,1)
-    for j = 1:size(load_aux.y_ES,2)
-        ES_y(i,j) =         norm(cell2mat(load_aux.y_ES(i,j)),1);  % L1
-        ES_max(i,j) =          max(cell2mat(load_aux.y_ES(i,j)));  % Max
-        %ES_nnz(i,j) = length(find(cell2mat(load_aux.y_ES(i,j))));
+    if length(varargin) > 3
+        thre_aux = varargin{4};
+    end
+     if length(varargin) > 4
+        thre_type = varargin{5};
     end
 end
 
-vec = array2table({ ES_y,                   ES_residual,              ES_max,                 ES_flag, ...
-                    ES_magnitude,           ES_angle_error,           ES_rela_norm,           ES_rela_error, ...
-                    ES_off_field,           ES_active_electrodes,     ES_separation_angle,    ES_search_method, ...
-                    ES_max_current_channel, ES_relative_weight_nnz,   ES_cortex_thickness,    ES_total_max_current, ...
-                    ES_source_density,      ES_rela_source_amplitude, max(0,ES_magnitude./ES_off_field)}, ...
-    'VariableNames', ...
-    {'Total dose',               'Residual',                  'Maximum current (A)',        'Optimizer Flag value', ...
-    'Current density (A/m^2)',   'Angle error (deg)',         'Relative magnitude error',   'Relative error', ...
-    'Avg. nuisance field',            'Active electrodes',         'Separation angle',           'Search method', ...
-    'Maximum current limit (A)', 'Relative weight NNZ',       'Cortex thickness',           'Solver maximum current (A)', ...
-    'Source density (A/m2)',     'Relative source amplitude', 'Current density vs. nuisance field ratio'});
+if isempty(obj1)
+    vec = zef_ES_table;
+end
 
-%% Obj Fun
-vec_aux = vec(1,[2,5,6,8,19]);
-obj_funct   = cell2mat(vec_aux{1, evalin('base','zef.ES_obj_fun')});
-obj_funct_threshold = obj_funct;
-if isequal(ES_optimize_condition,'minimum')
-    [Idx] = find(abs(obj_funct_threshold(:)) <= evalin('base','zef.ES_acceptable_threshold'));
-    % [Idx] = find(abs(obj_funct_threshold(:)) <= min(obj_funct_threshold(:))+(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+if isempty(obj1)
+    obj1 = evalin('base','zef.ES_obj_fun');
+end
+
+if isempty(obj2)
+    obj2 = evalin('base','zef.ES_obj_fun_2');
+end
+
+if isempty(thre_aux)
+thre_aux = evalin('base','zef.ES_acceptable_threshold');
+end
+
+if isempty(thre_type)
+thre_type = evalin('base','zef.ES_threshold_condition');
+end
+
+obj_fun_1 = vec.(metacriteria_list{obj1}){1};
+obj_fun_2 = vec.(metacriteria_list{obj2}){1};
+
+if isequal(obj1,obj2)
     
-elseif isequal(ES_optimize_condition,'maximum')
-    [Idx] = find(obj_funct_threshold(:)      >= evalin('base','zef.ES_acceptable_threshold'));
-    %[Idx] = find(obj_funct_threshold(:)      >= max(obj_funct_threshold(:))-(max(obj_funct_threshold(:))-min(obj_funct_threshold(:))).* (1-evalin('base','zef.ES_acceptable_threshold')/100));
+if   isequal(metacriteria_type{obj1}, 'minimum')
+[~, Idx] = min(abs(obj_fun_1(:)));
+elseif isequal(metacriteria_type{obj1}, 'maximum')
+ [~, Idx] = max(abs(obj_fun_1(:)));
 end
 
-if isequal(ES_optimize_condition,'minimum')
-    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-    [~,Idx_2] = min(obj_funct_2(Idx));
-elseif isequal(ES_optimize_condition,'maximum')
-    obj_funct_2   = cell2mat(vec_aux{1,evalin('base','zef.ES_obj_fun_2')});
-    [~,Idx_2] = max(obj_funct_2(Idx));
+[sr, sc] = ind2sub(size(obj_fun_1),Idx);
+
+else
+    
+if isequal(thre_type,1)
+  thre_aux = thre_aux*max((obj_fun_1(:)));
 end
-[sr, sc] = ind2sub(size(obj_funct_2),Idx(Idx_2));
+
+if   isequal(metacriteria_type{obj1}, 'minimum')
+    [Idx] = find(abs(obj_fun_1(:)) <= thre_aux);
+if isempty(Idx)
+[~,Idx] = min(abs(obj_fun_1(:)));
+end
+elseif isequal(metacriteria_type{obj1}, 'maximum')
+     [Idx] = find(abs(obj_fun_1(:)) >= thre_aux);
+if isempty(Idx)
+[~,Idx] = max(abs(obj_fun_1(:)));
+end
+end
+
+if   isequal(metacriteria_type{obj2}, 'minimum')
+    [~, Idx_2] = min(abs(obj_fun_2(Idx)));
+elseif isequal(metacriteria_type{obj2}, 'maximum')
+    [~, Idx_2] = max(abs(obj_fun_2(Idx)));
+end
+
+[sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));
 
 end

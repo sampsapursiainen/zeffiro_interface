@@ -25,9 +25,9 @@ n_project = length(ini_cell{:})/n_columns;
 for i = 1 : n_project
 
 if i == 1
-h_waitbar = waitbar(1/n_project,['Item ' int2str(1) ' of ' int2str(n_project) '.']);
+h_waitbar = zef_waitbar(1/n_project,['Item ' int2str(1) ' of ' int2str(n_project) '.']);
 else
-waitbar(i/n_project,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_project) '.']);
+zef_waitbar(i/n_project,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_project) '.']);
 end
 
 if isequal(ini_cell{1}{n_columns*(i-1)+2},compartment_cell{1})

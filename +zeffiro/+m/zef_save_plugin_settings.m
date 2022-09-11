@@ -1,0 +1,1 @@
+zef_save_plugin_settings;

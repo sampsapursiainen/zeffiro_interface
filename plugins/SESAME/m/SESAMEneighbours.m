@@ -37,5 +37,5 @@ for i = 1 : length(neighbours_aux)
     neighbours(i,1:length_aux) = neighbours_aux{i}; 
 
 end
-    
+
 end

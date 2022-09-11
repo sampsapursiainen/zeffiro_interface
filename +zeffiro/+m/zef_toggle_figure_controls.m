@@ -1,0 +1,3 @@
+function zef_toggle_figure_controls
+zef_toggle_figure_controls;
+end

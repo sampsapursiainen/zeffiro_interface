@@ -1,5 +1,5 @@
 function [GMModel,GMModelDipoles,GMModelAmplitudes,GMModelTimeVariables] = zef_GMModeling_K
-h = waitbar(0,['Gaussian mixature model.']);
+h = zef_waitbar(0,['Gaussian mixature model.']);
 GMModelTimeVariables = [];
 if evalin('base','isfield(zef,''reconstruction_information'')')
     reconstruction_information = evalin('base','zef.reconstruction_information');
@@ -86,7 +86,7 @@ if length(K) < T
     K = [K,K(end)*ones(1,T-length(K))];
 end
 
-waitbar(0,h,['Step 1 of ',num2str(T),'. Please wait.']);
+zef_waitbar(0,h,['Step 1 of ',num2str(T),'. Please wait.']);
 tic;
 for t=t_start:T
     if T > 1
@@ -169,7 +169,7 @@ for t=t_start:T
     end
 
     if T==1
-      waitbar(0,h,['Step ','1 of 1. ',date_str]);
+      zef_waitbar(0,h,['Step ','1 of 1. ',date_str]);
     end
 
     if T > 1
@@ -195,7 +195,7 @@ for t=t_start:T
             GMModelAmplitudes{t} = amp;
         end
 
-        waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
+        zef_waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
        ind2 = [];
         for k = 1:size(GMModel.mu,1)

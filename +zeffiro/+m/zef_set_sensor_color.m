@@ -1,0 +1,3 @@
+function zef_set_sensor_color
+zef_set_sensor_color;
+end
