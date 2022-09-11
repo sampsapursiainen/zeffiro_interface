@@ -50,6 +50,10 @@ classdef Zef < handle
     %   Seems like this contains indices for determining which tetra belong to
     %   which volume compartment.
     %
+    % - explode_everything
+    %
+    %   TODO.
+    %
     % - gpu_count
     %
     %   The claimed number of GPUs available.
@@ -181,6 +185,8 @@ classdef Zef < handle
         data struct
 
         domain_labels (:,1) double { mustBeInteger, mustBePositive } = [];
+
+        explode_everything (1,1) logical = false;
 
         gpu_count (1,1) double { mustBeNonnegative }
 
@@ -347,6 +353,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'adaptive_refinement_thresh_val')
 
                     self.adaptive_refinement_thresh_val = data.(finame);
+
+                elseif strcmp(finame, 'explode_everything')
+
+                    self.explode_everything = data.(finame);
 
                 elseif strcmp(finame, 'nodes')
 
