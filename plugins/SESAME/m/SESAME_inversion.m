@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = SESAME_inversion(void)
 
-h = zef_waitbar(0,['SESAME iteration.']);
+h = waitbar(0,['SESAME iteration.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 sampling_freq = evalin('base','zef.inv_sampling_frequency');
 number_of_frames = evalin('base','zef.number_of_frames');
@@ -51,7 +51,7 @@ else
 end
 
 if f_ind >= 1
-zef_waitbar(f_ind/number_of_frames,h,['SESAME iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+waitbar(f_ind/number_of_frames,h,['SESAME iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
 %save sesame_data L_aux source_positions f;
