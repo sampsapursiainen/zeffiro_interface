@@ -20,8 +20,6 @@ function self = create_fem_mesh(self)
 
     n_compartments = 0;
 
-    reuna_p = self.data.reuna_p;
-
     for k = 1 : length(self.compartments)
 
         compartment = self.compartments(k);
