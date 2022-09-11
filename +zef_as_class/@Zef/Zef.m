@@ -180,7 +180,9 @@ classdef Zef < handle
 
         gpu_count (1,1) double { mustBeNonnegative }
 
-        initial_mesh_mode (1,1) double { mustBeInteger }
+        initial_mesh_mode (1,1) double { ...
+            mustBeInteger, ...
+            mustBeMember( initial_mesh_mode, [ 1, 2 ] ) } = 1;
 
         L (:,:) double
 
