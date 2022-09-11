@@ -14,6 +14,24 @@ function self = mesh_labeling_step(self)
     labeling_mode = self.labeling_mode;
     n_compartments = self.n_compartments;
 
+    % Initialize waitbar and cleanup object.
+
+    n_of_iterations = length(self.compartments);
+
+    if self.use_gui
+
+        wb = waitbar(0, "Mesh labeling.");
+
+        cu_fn = @(h) close(h);
+
+        cu_obj = onCleanup(@() cu_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar("Mesh labeling", n_of_iterations);
+
+    end
+
 
     if isequal(labeling_mode, "initial")
 
@@ -30,6 +48,16 @@ function self = mesh_labeling_step(self)
         pml_counter = 0;
 
         for i_labeling = 1 : length(self.compartments)
+
+            if self.use_gui
+
+                waitbar(i_labeling/n_of_iterations, wb, 'Mesh labeling.');
+
+            else
+
+                wb = wb.progress();
+
+            end
 
             compartment = self.compartments(i_labeling);
 
@@ -114,6 +142,16 @@ function self = mesh_labeling_step(self)
         unique_domain_labels = unique(domain_labels);
 
         for i_labeling = 1 : length(self.compartments)
+
+            if self.use_gui
+
+                waitbar(i_labeling/n_of_iterations, wb, 'Mesh labeling.');
+
+            else
+
+                wb = wb.progress();
+
+            end
 
             compartment = self.compartments(i_labeling);
 
@@ -218,6 +256,16 @@ function self = mesh_labeling_step(self)
         unique_domain_labels = unique(domain_labels);
 
         for i_labeling = 1 : length(self.compartments)
+
+            if self.use_gui
+
+                waitbar(i_labeling/n_of_iterations, wb, 'Mesh labeling.');
+
+            else
+
+                wb = wb.progress();
+
+            end
 
             compartment = self.compartments(i_labeling);
 
