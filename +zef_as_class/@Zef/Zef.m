@@ -99,6 +99,10 @@ classdef Zef < handle
     %   Used to determine how many restarts are needed when inflating meshes
     %   and finding points within compartments.
     %
+    % - pml_ind
+    %
+    %   Indices of the PML mesh generation.
+    %
     % - pml_max_size
     %
     %   The maximum size of Perfectly Matched Layers (PML) during mesh
@@ -204,6 +208,8 @@ classdef Zef < handle
         parallel_processes double { mustBeInteger, mustBePositive } = 1;
 
         parallel_vectors double { mustBeInteger, mustBePositive } = 1;
+
+        pml_ind (:,1) double { mustBeInteger, mustBePositive } = [];
 
         pml_max_size_unit (1,1) double = 1;
 
@@ -457,6 +463,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'parallel_vectors')
 
                     self.parallel_vectors = data.(finame);
+
+                elseif strcmp(finame, 'pml_ind')
+
+                    self.pml_ind = data.(finame);
 
                 elseif strcmp(finame, 'pml_max_size')
 
