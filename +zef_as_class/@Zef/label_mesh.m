@@ -489,15 +489,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_co
 
     end
 
-    if isfield(zef.data,'meshing_threshold')
-
-        meshing_threshold = zef.data.meshing_threshold;
-
-    else
-
-        meshing_threshold = 0.5;
-
-    end
+    meshing_threshold = zef.labeling_threshold;
 
     max_x = max(reuna_p(:,1));
     min_x = min(reuna_p(:,1));
@@ -660,6 +652,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_co
     end
 
     ind_vec(I) = gather(ind_vec_aux);
-    I = find(ind_vec > zef.data.meshing_threshold);
+
+    I = find(ind_vec > zef.labeling_threshold);
 
 end
