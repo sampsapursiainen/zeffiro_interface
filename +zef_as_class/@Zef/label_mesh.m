@@ -500,7 +500,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_co
     max_norm = max(sqrt(sum(reuna_p.^2,2)));
     nodes_norm_vec = sqrt(sum(nodes.^2,2));
 
-    meshing_accuracy = zef.data.meshing_accuracy;
+    meshing_accuracy = zef.labeling_accuracy;
 
     if meshing_accuracy < 1
 
