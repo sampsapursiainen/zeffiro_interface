@@ -72,6 +72,11 @@ classdef Zef < handle
     %   An initial index set, produced by an initial mesh generation routine,
     %   before labeling and refinement.
     %
+    % - labeling_accuracy (meshing_accuracy)
+    %
+    %   participates in telling how sensitive the labeling routine is to
+    %   determining whether the value belongs to a compartment or not.
+    %
     % - labeling_mode (labeling_flag)
     %
     %   One of {"initial","repeated","adaptive-repeated"}. Tells how the mesh
@@ -217,6 +222,8 @@ classdef Zef < handle
         L (:,:) double
 
         label_ind (:,:) double { mustBeInteger, mustBePositive } = [];
+
+        labeling_accuracy (1,1) double { mustBeReal, mustBePositive } = 1;
 
         labeling_mode (1,1) string { ...
             mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
@@ -501,6 +508,11 @@ classdef Zef < handle
                         end
 
                     end
+
+                elseif strcmp(finame, 'meshing_accuracy') ...
+                || strcmp(finame, 'labeling_accuracy')
+
+                    self.labeling_accuracy = data.(finame);
 
                 elseif strcmp(finame, 'meshing_threshold') ...
                 || strcmp(finame, 'labeling_threshold')
