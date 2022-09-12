@@ -1,4 +1,4 @@
-function zeffiro_downloader(varargin)
+function zeffiro_installer(varargin)
 % This function downloads Zeffiro Interface in a given folder and sets it
 % to be a local repository of the remote origin at
 %
@@ -13,7 +13,7 @@ function zeffiro_downloader(varargin)
 % default profile name (profile_name) can be set by calling the function as
 % follows:
 %
-% zeffiro_downloader('install_directory',<directory string>,...
+% zeffiro_installer('install_directory',<directory string>,...
 % 'branch_name',<branch name string>,...
 % 'profile_name',<profile name string>,'folder_name',<folder name string'>);
 %
@@ -21,7 +21,7 @@ function zeffiro_downloader(varargin)
 % zeffiro_interface-branch_name. The number of arguments is variable. By
 % calling the function without arguments the default settings will be used.
 % By default the installation directory will be the directory of the file
-% zeffiro_downloader.m, branch will be main_development_branch, and
+% zeffiro_installer.m, branch will be main_development_branch, and
 % profile will be multicompartment_head.
 
 % Note: Some other branch than the master should be used for pushes. The
