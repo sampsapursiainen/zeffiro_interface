@@ -121,7 +121,8 @@ function self = mesh_labeling_step(self, labeling_mode)
                         compartment.points, ...
                         reuna_t_aux, ...
                         nodes(I_2,:), ...
-                        [compartment_counter n_compartments] ...
+                        compartment_counter, ...
+                        n_compartments ...
                     );
 
                     I(I_2(I_1)) = compartment_counter;
@@ -229,7 +230,8 @@ function self = mesh_labeling_step(self, labeling_mode)
                             compartment.points, ...
                             reuna_t_aux, ...
                             nodes(I_4(I_6),:), ...
-                            [compartment_counter n_compartments] ...
+                            compartment_counter, ...
+                            n_compartments ...
                         );
                         test_ind(I_4(I_6)) = 0;
                         test_ind(I_4(I_6(I_7))) = 1;
@@ -357,7 +359,8 @@ function self = mesh_labeling_step(self, labeling_mode)
                                 compartment.points, ...
                                 reuna_t_aux, ...
                                 nodes(I_4(I_6),:), ...
-                                [compartment_counter n_compartments] ...
+                                compartment_counter, ...
+                                n_compartments ...
                             );
                             test_ind(I_4(I_6)) = 0;
                             test_ind(I_4(I_6(I_7))) = 1;
@@ -431,7 +434,7 @@ end % function
 
 %% Local helper functions
 
-function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_info)
+function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_counter, n_compartments)
 
     % point_in_compartment
     %
@@ -445,7 +448,9 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
     %
     % - nodes
     %
-    % - compartment_info
+    % - compartment_counter
+    %
+    % - n_compartments
     %
     % Output:
     %
@@ -454,20 +459,35 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
     %   A set of indices.
 
     arguments
+
         zef zef_as_class.Zef
+
         reuna_p (:,3) double
+
         reuna_t
+
         nodes (:,3) double
-        compartment_info (1,2) double
+
+        compartment_counter (1,1) double { mustBeInteger, mustBePositive }
+
+        n_compartments (1,1) double { mustBeInteger, mustBePositive }
     end
 
     % Init waitbar and an object that destroys it in case of an interruption.
 
-    wb = waitbar(0, 'Labeling compartment');
+    if zef.use_gui
 
-    cu_fn = @(h) close(h);
+        wb = waitbar(0, 'Labeling compartment');
 
-    cu_obj = onCleanup(@() cu_fn(wb));
+        cu_fn = @(h) close(h);
+
+        cu_obj = onCleanup(@() cu_fn(wb));
+
+    else
+
+        wb = zef_as_class.TerminalWaitbar("",1);
+
+    end
 
     if isfield(zef.data,'meshing_threshold')
 
@@ -559,13 +579,13 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
         ind_vec_aux(block_ind) = aux_vec_6(:);
         time_val = toc;
 
-        if not(isempty(compartment_info))
+        if zef.use_gui
 
             if mod(i_ind,bar_ind)==0
-                waitbar(compartment_info(1)/compartment_info(2), wb,['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+                waitbar(compartment_counter/n_compartments, wb,['Labeling compartment ' int2str(compartment_counter) ' of ' int2str(n_compartments) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
             end
 
-        end % if
+        end
 
     end % for
 
@@ -610,10 +630,12 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
 
     time_val = toc;
 
-    if not(isempty(compartment_info))
+    if zef.use_gui
+
         if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-            waitbar(compartment_info(1)/compartment_info(2), wb,['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+            waitbar(compartment_counter/n_compartments, wb,['Labeling compartment ' int2str(compartment_counter) ' of ' int2str(n_compartments) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
         end
+
     end
 
     end
@@ -629,9 +651,11 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_in
 
     %%%%%%%%%%%%%%%%CPU part%%%%%%%%%%%%%%%%%%%
 
-    if not(isempty(compartment_info))
-        waitbar(compartment_info(1)/compartment_info(2), wb, ['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
-    end
+        if zef.use_gui
+
+            waitbar(compartment_counter/n_compartments, wb, ['Labeling compartment ' int2str(compartment_counter) ' of ' int2str(n_compartments) '. Ready: ' datestr(datevec(now)) '.']);
+
+        end
 
     end
 
