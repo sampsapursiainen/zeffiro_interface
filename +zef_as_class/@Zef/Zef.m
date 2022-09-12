@@ -646,6 +646,10 @@ classdef Zef < handle
 
         % Finite element mesh construction
 
+        self = build_initial_mesh(self, initial_mesh_mode, mesh_labeling_approach);
+
+        self = label_mesh(self, labeling_mode);
+
         self = create_finite_element_mesh(self);
 
         nodes = inflate_surface(self, nodes, surface_triangles);
