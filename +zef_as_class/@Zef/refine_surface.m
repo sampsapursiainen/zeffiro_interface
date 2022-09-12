@@ -32,7 +32,7 @@ function self = refine_surface(self, n_of_refinements)
 
     self.n_of_surface_refinements = n_of_refinements;
 
-    for n = self.n_of_surface_refinements
+    for n = 1 : self.n_of_surface_refinements
 
         % TODO
 

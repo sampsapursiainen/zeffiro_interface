@@ -54,7 +54,7 @@ function self = refine_volume_adaptively(self, n_of_refinements, tolerance, iter
 
     self.adaptive_refinement_k_param = iteration_param;
 
-    for n = self.n_of_adaptive_volume_refinements
+    for n = 1 : self.n_of_adaptive_volume_refinements
 
         % TODO
 

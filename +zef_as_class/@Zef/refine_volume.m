@@ -32,7 +32,7 @@ function self = refine_volume(self, n_of_refinements)
 
     self.n_of_volume_refinements = n_of_refinements;
 
-    for n = self.n_of_volume_refinements
+    for n = 1 : self.n_of_volume_refinements
 
         % TODO
 
