@@ -11,14 +11,7 @@ function self = load_from_file(filepath)
 
     if isfile(filepath)
 
-        data = load(filepath);
-
-        if isfield(data, 'zef_data')
-            zef_data = data.zef_data;
-        else
-            warning('Could not find zef_data within the given pickle file. Setting Zef.data field as an empty struct.')
-            zef_data = struct;
-        end
+        zef_data = load(filepath);
 
     else
         warning('Given file does not exist. Setting Zef.data field as an empty struct.')
