@@ -21,8 +21,8 @@ function zef = zeffiro_interface(varargin)
 %Property: 'run_script'                  Value: <file name>, 
 %Property: 'exit_zeffiro'                Value: none
 %Property: 'quit_matlab'                 Vaule: none
-%Property: 'use_github'                  Value: 'yes' or 'no'
-%Property: 'use_gpu'                     Value: 'yes' or 'no'
+%Property: 'use_github'                  Value: 1 (yes) or 0 (no)
+%Property: 'use_gpu'                     Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 
 option_counter = 1;
@@ -320,6 +320,12 @@ end
                     zef.h_mesh_visualization_tool.Visible = 1;
                     zef.h_zeffiro_menu.Visible = 1;
                     zef.use_display = 1;
+                    if exist('use_gpu','var')
+                        zef.use_gpu = use_gpu;
+                    end
+                    if exist('parallel_processes','var')
+                        zef.parallel_processes = parallel_processes;
+                    end
                 end
             end
         end
