@@ -9,10 +9,21 @@ function zef = zeffiro_interface(varargin)
 %different operations. The list of properties (and their values) is the
 %following:
 %
-%start_mode (display/nodisplay), open_project (project file name),
-%import_to_new_project (file name), import_to_existing_project (file name), save_project (file name),
-%export_fem_mesh (file name), open_figure (file name), open_figure_folder
-%(file name), run_script (file name), exit_zeffiro, quit_matlab.
+%Property: 'restart'                     Value: none
+%Property: 'start_mode'                  Value: 'display' or 'nodisplay' 
+%Propertu: 'open_project'                Value: <project file name>,
+%Property: 'import_to_new_project'       Value: <file name>, 
+%Property: 'import_to_existing_project'  Value: <file name>, 
+%Property: 'save_project'                Value: <file name>,
+%Property: 'export_fem_mesh'             Value: <file name>, 
+%Property: 'open_figure'                 Value: <file name>, 
+%Property: 'open_figure_folder'          Value: <file name>, 
+%Property: 'run_script'                  Value: <file name>, 
+%Property: 'exit_zeffiro'                Value: none
+%Property: 'quit_matlab'                 Vaule: none
+%Property: 'use_github'                  Value: 'yes' or 'no'
+%Property: 'use_gpu'                     Value: 'yes' or 'no'
+%Property: 'parallel_processes'          Value: <parallel pool size>
 
 option_counter = 1;
 zeffiro_restart = 0;
@@ -152,7 +163,35 @@ end
                 zef = zef_import_segmentation(zef);
                 zef = zef_build_compartment_table(zef);
                 option_counter = option_counter + 2;
+                
+            elseif isequal(varargin{option_counter},lower('use_github'))
+                
+                use_github = varargin{option_counter+1};
+                if isequal(use_github, 'yes')
+                use_github = 1;
+                else
+                use_github = 0;
+                end
+               
+                option_counter = option_counter + 2;
 
+                elseif isequal(varargin{option_counter},lower('use_gpu'))
+                
+                use_gpu = varargin{option_counter+1};    
+                if isequal(use_gpu, 'yes')
+                use_gpu = 1;
+                else
+                use_gpu = 0;
+                end
+               
+                option_counter = option_counter + 2;  
+                
+               elseif isequal(varargin{option_counter},lower('parallel_processes'))
+                
+               parallel_processes = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2;  
+                
             elseif isequal(varargin{option_counter},lower('save_project'))
 
                 save_project_file = varargin{option_counter+1};
