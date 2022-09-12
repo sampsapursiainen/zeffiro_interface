@@ -101,7 +101,9 @@ end
         option_counter = 1;
 
         while option_counter <= length(varargin)
-
+            
+            if ischar(varargin{option_counter})
+                
             if isequal(varargin{option_counter},lower('open_project'))
 
                 open_project_file = varargin{option_counter+1};
@@ -307,6 +309,9 @@ end
             else
                 option_counter = option_counter + 1;
             end
+            else
+                 option_counter = option_counter + 1;
+        end
         end
 
         if exist('zef','var')
