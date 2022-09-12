@@ -93,6 +93,21 @@ classdef Zef < handle
     %
     %   The nodes that make up a finite element mesh.
     %
+    % - n_of_surface_refinements
+    %
+    %   The number of surface refinements that are to be performed on the
+    %   mesh.
+    %
+    % - n_of_volume_refinements
+    %
+    %   The number of volume refinements that are to be performed on the
+    %   mesh.
+    %
+    % - n_of_adaptive_volume_refinements
+    %
+    %   The number of adaptive volume refinements that are to be performed on
+    %   the mesh.
+    %
     % - parallel_processes
     %
     %   How many cores are to be used in parallel computations, when enough
@@ -210,6 +225,12 @@ classdef Zef < handle
         n_compartments (1,1) double { mustBeInteger, mustBePositive } = 1;
 
         nodes (:,3) double = [];
+
+        n_of_surface_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+
+        n_of_volume_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+
+        n_of_adaptive_volume_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
 
         parallel_processes double { mustBeInteger, mustBePositive } = 1;
 
@@ -377,6 +398,18 @@ classdef Zef < handle
                 elseif strcmp(finame, 'n_compartments')
 
                     self.n_compartments = data.(finame);
+
+                elseif strcmp(finame, 'n_of_surface_refinements')
+
+                    self.n_of_surface_refinements = data.(finame);
+
+                elseif strcmp(finame, 'n_of_volume_refinements')
+
+                    self.n_of_volume_refinements = data.(finame);
+
+                elseif strcmp(finame, 'n_of_adaptive_volume_refinements')
+
+                    self.n_of_adaptive_volume_refinements = data.(finame);
 
                 elseif strcmp(finame, 'use_gpu')
 
