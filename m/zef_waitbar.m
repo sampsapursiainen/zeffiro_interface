@@ -6,7 +6,7 @@ progress_value = min(1,progress_value(:));
 progress_value = max(0,progress_value(:));
 progress_bar_text = '';
 
-if isequal(evalin('caller','exist(''zef'')'),1)
+if evalin('caller','exist(''zef'',''var'')')
 zef = evalin('caller','zef');  
 else
 zef = evalin('base','zef');

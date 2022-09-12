@@ -21,8 +21,8 @@ function zef = zeffiro_interface(varargin)
 %Property: 'run_script'                  Value: <file name>, 
 %Property: 'exit_zeffiro'                Value: none
 %Property: 'quit_matlab'                 Vaule: none
-%Property: 'use_github'                  Value: 'yes' or 'no'
-%Property: 'use_gpu'                     Value: 'yes' or 'no'
+%Property: 'use_github'                  Value: 1 (yes) or 0 (no)
+%Property: 'use_gpu'                     Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 
 option_counter = 1;
@@ -77,7 +77,8 @@ end
 
         start_mode = 'display';
 
-        while option_counter <= length(varargin)
+     while option_counter <= length(varargin)
+            if ischar(varargin{option_counter})
             if ismember(lower(varargin{option_counter}),{lower('display'),lower('nodisplay')})
                 start_mode = lower(varargin{option_counter});
                 option_counter = option_counter + 1;
@@ -87,10 +88,32 @@ end
             elseif ismember(varargin{option_counter},lower('profile_name'))
                 zef.ini_cell_mod = {'Profile name',varargin{option_counter+1},'profile_name','string'};
                 option_counter = option_counter + 2;
-            else
-                option_counter = option_counter + 1;
+
+            elseif isequal(varargin{option_counter},lower('use_github'))
+                
+                use_github = varargin{option_counter+1};
+               
+                option_counter = option_counter + 2;
+
+                elseif isequal(varargin{option_counter},lower('use_gpu'))
+                
+                use_gpu = varargin{option_counter+1};    
+   
+               
+                option_counter = option_counter + 2;  
+                
+               elseif isequal(varargin{option_counter},lower('parallel_processes'))
+                
+               parallel_processes = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2; 
+                else
+                option_counter = option_counter + 1; 
             end
-        end
+            else
+               option_counter = option_counter + 1; 
+            end
+     end
 
         zef.start_mode = 'nodisplay';
         zef = zef_start(zef);
@@ -101,7 +124,9 @@ end
         option_counter = 1;
 
         while option_counter <= length(varargin)
-
+            
+            if ischar(varargin{option_counter})
+                
             if isequal(varargin{option_counter},lower('open_project'))
 
                 open_project_file = varargin{option_counter+1};
@@ -164,33 +189,6 @@ end
                 zef = zef_build_compartment_table(zef);
                 option_counter = option_counter + 2;
                 
-            elseif isequal(varargin{option_counter},lower('use_github'))
-                
-                use_github = varargin{option_counter+1};
-                if isequal(use_github, 'yes')
-                use_github = 1;
-                else
-                use_github = 0;
-                end
-               
-                option_counter = option_counter + 2;
-
-                elseif isequal(varargin{option_counter},lower('use_gpu'))
-                
-                use_gpu = varargin{option_counter+1};    
-                if isequal(use_gpu, 'yes')
-                use_gpu = 1;
-                else
-                use_gpu = 0;
-                end
-               
-                option_counter = option_counter + 2;  
-                
-               elseif isequal(varargin{option_counter},lower('parallel_processes'))
-                
-               parallel_processes = varargin{option_counter+1};    
-          
-                option_counter = option_counter + 2;  
                 
             elseif isequal(varargin{option_counter},lower('save_project'))
 
@@ -307,7 +305,12 @@ end
             else
                 option_counter = option_counter + 1;
             end
+            else
+                 option_counter = option_counter + 1;
+            end
         end
+       
+       
 
         if exist('zef','var')
         if isfield(zef,'h_zeffiro_window_main')
@@ -320,6 +323,12 @@ end
                     zef.h_mesh_visualization_tool.Visible = 1;
                     zef.h_zeffiro_menu.Visible = 1;
                     zef.use_display = 1;
+                    if exist('use_gpu','var')
+                        zef.use_gpu = use_gpu;
+                    end
+                    if exist('parallel_processes','var')
+                        zef.parallel_processes = parallel_processes;
+                    end
                 end
             end
         end

@@ -7,9 +7,16 @@ end
 zef = zef_apply_system_settings(zef);
 
 if isequal(zef.zeffiro_restart,0)
-if zef.use_github
+    
+    use_github = zef.use_github;
+    if evalin('caller','exist(''use_github'',''var'')')
+        use_github = evalin('caller','use_github');
+    end
+    
+if use_github
     !git pull
 end
+
 end
 
 zef.ver = ver;
