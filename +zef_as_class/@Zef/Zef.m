@@ -77,6 +77,11 @@ classdef Zef < handle
     %   One of {"initial","repeated","adaptive-repeated"}. Tells how the mesh
     %   labeling routine should proceed with its input.
     %
+    % - labeling_threshold (meshing_threshold)
+    %
+    %   Tells how sensitive the labeling routine is to determining whether the
+    %   value belongs to a compartment or not.
+    %
     % - mesh_labeling_approach
     %
     %   Determines how label_ind is generated during initial mesh generation.
@@ -215,6 +220,8 @@ classdef Zef < handle
 
         labeling_mode (1,1) string { ...
             mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
+
+        labeling_threshold (1,1) double { mustBeReal, mustBePositive } = 0.5;
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
@@ -498,6 +505,11 @@ classdef Zef < handle
                         end
 
                     end
+
+                elseif strcmp(finame, 'meshing_threshold') ...
+                || strcmp(finame, 'labeling_threshold')
+
+                    self.labeling_threshold = data.(finame);
 
                 elseif strcmp(finame, 'parallel_processes')
 
