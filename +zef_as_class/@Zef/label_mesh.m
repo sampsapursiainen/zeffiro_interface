@@ -1,6 +1,6 @@
-function self = mesh_labeling_step(self, labeling_mode)
+function self = label_mesh(self, labeling_mode)
 
-    % mesh_labeling_step
+    % label_mesh
     %
     % Determines which tetra and nodes belong to which volumetric compartment.
     %
