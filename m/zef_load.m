@@ -42,7 +42,9 @@ end
 
 h_waitbar = zef_waitbar(0,'Loading fields.');
 n_fields = length(matfile_fieldnames);
+if zef.use_display
 figure(h_waitbar);
+end
 for i = 1 : n_fields
 aux_struct = load([path_name filesep file_name],matfile_fieldnames{i});
 zef_data.(matfile_fieldnames{i}) = aux_struct.(matfile_fieldnames{i});

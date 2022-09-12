@@ -1,16 +1,16 @@
 Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team,
 is an open source code package constituting an accessible tool for
 multidisciplinary finite element (FE) based forward and inverse
-simulations in complex geometries. Install ZI using zeffiro_installer.m
+simulations in complex geometries. Install ZI using zeffiro_downloader.m
 to allow automatic updates between the local and remote repositories. The
 installer and then ZI can be obtained on matlab's command line as follows:
 
-urlwrite('https://tinyurl.com/zeffiro','zeffiro_installer.m');
-zeffiro_installer;
+urlwrite('https://tinyurl.com/zeffiro','zeffiro_downloader.m');
+zeffiro_downloader;
 
 where the URL is a shortcut to the page:
 
-https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_installer.m
+https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_downloader.m
 
 With ZI, one can segment a realistic multilayer geometry and generate a
 multi-compartment FE mesh, if triangular ASCII surface grids (in DAT or

@@ -77,7 +77,8 @@ end
 
         start_mode = 'display';
 
-        while option_counter <= length(varargin)
+     while option_counter <= length(varargin)
+            if ischar(varargin{option_counter})
             if ismember(lower(varargin{option_counter}),{lower('display'),lower('nodisplay')})
                 start_mode = lower(varargin{option_counter});
                 option_counter = option_counter + 1;
@@ -87,10 +88,32 @@ end
             elseif ismember(varargin{option_counter},lower('profile_name'))
                 zef.ini_cell_mod = {'Profile name',varargin{option_counter+1},'profile_name','string'};
                 option_counter = option_counter + 2;
-            else
-                option_counter = option_counter + 1;
+
+            elseif isequal(varargin{option_counter},lower('use_github'))
+                
+                use_github = varargin{option_counter+1};
+               
+                option_counter = option_counter + 2;
+
+                elseif isequal(varargin{option_counter},lower('use_gpu'))
+                
+                use_gpu = varargin{option_counter+1};    
+   
+               
+                option_counter = option_counter + 2;  
+                
+               elseif isequal(varargin{option_counter},lower('parallel_processes'))
+                
+               parallel_processes = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2; 
+                else
+                option_counter = option_counter + 1; 
             end
-        end
+            else
+               option_counter = option_counter + 1; 
+            end
+     end
 
         zef.start_mode = 'nodisplay';
         zef = zef_start(zef);
@@ -166,33 +189,6 @@ end
                 zef = zef_build_compartment_table(zef);
                 option_counter = option_counter + 2;
                 
-            elseif isequal(varargin{option_counter},lower('use_github'))
-                
-                use_github = varargin{option_counter+1};
-                if isequal(use_github, 'yes')
-                use_github = 1;
-                else
-                use_github = 0;
-                end
-               
-                option_counter = option_counter + 2;
-
-                elseif isequal(varargin{option_counter},lower('use_gpu'))
-                
-                use_gpu = varargin{option_counter+1};    
-                if isequal(use_gpu, 'yes')
-                use_gpu = 1;
-                else
-                use_gpu = 0;
-                end
-               
-                option_counter = option_counter + 2;  
-                
-               elseif isequal(varargin{option_counter},lower('parallel_processes'))
-                
-               parallel_processes = varargin{option_counter+1};    
-          
-                option_counter = option_counter + 2;  
                 
             elseif isequal(varargin{option_counter},lower('save_project'))
 
@@ -311,8 +307,10 @@ end
             end
             else
                  option_counter = option_counter + 1;
+            end
         end
-        end
+       
+       
 
         if exist('zef','var')
         if isfield(zef,'h_zeffiro_window_main')

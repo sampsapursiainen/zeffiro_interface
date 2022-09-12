@@ -18,6 +18,7 @@ function zeffiro_downloader(varargin)
 % Property: <folder_name>, Value: <program folder name>
 % Property: <branch_name>, Value: <branch to be downloaded from github>
 % Property: <profile_name>, Value: <name of the profile>
+% Property: <run_setup>, Value: 'yes' or 'no'
 %
 % The length of the argument list can vary. By calling the function without 
 % arguments the default settings will be used. The default values are:
@@ -25,6 +26,7 @@ function zeffiro_downloader(varargin)
 % Property: <folder_name>, Default: 'zeffiro_interface-<branch_name>'
 % Property: <branch_name>, Default: 'main_development_branch' and
 % Property: <profile_name>, Default: 'multicompartment_head'
+% Property: <run_setup>, Default: 'yes' 
 %
 % Note: Some other branch than the master should be used for pushes. The
 % preferred branch is main_development_branch which will be merged with
@@ -34,6 +36,7 @@ install_directory = pwd;
 branch_name = 'main_development_branch';
 profile_name = 'multicompartment_head';
 folder_name = [];
+run_setup = 'yes';
 
 if not(isempty(varargin))
 zef_i = 1;
@@ -61,6 +64,8 @@ aux_row = find(ismember(ini_cell(:,3),'profile_name'));
 ini_cell{aux_row,2} = profile_name;
 writecell(ini_cell,[program_path filesep 'profile' filesep 'zeffiro_interface.ini'],'FileType','text');
 
+if isequal(run_setup,'yes')
 run([program_path filesep 'zeffiro_setup.m']);
+end
 
 end
