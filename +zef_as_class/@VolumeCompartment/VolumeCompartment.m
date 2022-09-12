@@ -206,7 +206,15 @@ classdef VolumeCompartment
 
             if isfield(args, "color")
 
-                self.color = args.color;
+                try
+
+                    self.color = args.color;
+
+                catch
+
+                    warning("Could not initialize self.is_on from legacy file. Using default value.")
+
+                end
 
             end
 
