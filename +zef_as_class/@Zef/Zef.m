@@ -672,6 +672,12 @@ classdef Zef < handle
 
         self = create_finite_element_mesh(self);
 
+        self = refine_surface(self, n_of_refinements);
+
+        self = refine_volume(self, n_of_refinements);
+
+        self = refine_volume_adaptively(self, n_of_refinements, tolerance, iteration_param);
+
         nodes = inflate_surface(self, nodes, surface_triangles);
 
     end % methods
