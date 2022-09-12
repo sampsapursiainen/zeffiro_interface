@@ -25,6 +25,7 @@ function zef = zeffiro_interface(varargin)
 %Property: 'use_gpu'                     Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 
+warning off;
 option_counter = 1;
 zeffiro_restart = 0;
 if not(isempty(varargin))
@@ -350,5 +351,5 @@ end
     if exist('zef','var')
     zef.zeffiro_restart = 0;
     end
-
+warning on;
 end
