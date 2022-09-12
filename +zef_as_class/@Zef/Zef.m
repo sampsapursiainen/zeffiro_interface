@@ -422,10 +422,6 @@ classdef Zef < handle
 
                     self.use_gpu = data.(finame);
 
-                elseif strcmp(finame, 'use_gui')
-
-                    self.use_gui = data.(finame);
-
                 elseif strcmp(finame, 'create_patch_sensor')
 
                     self.create_sensor_fn = data.(finame);
