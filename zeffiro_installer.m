@@ -9,21 +9,22 @@ function zeffiro_installer(varargin)
 %
 % Set up instructions:
 %
-% The installation directory (install_directory), branch (branch_name) and
-% default profile name (profile_name) can be set by calling the function as
-% follows:
+% The arguments of this function are property-value pair of the form: 
+% <property 1>,<property value 1>,<property 2>,<property value 2>,...
+% 
+% These properties and their values are the following:
+% Property: <install_directory>, Value: <directory of the program folder>
+% Property: <folder_name>, Value: <program folder name>
+% Property: <branch_name>, Value: <branch to be downloaded from github>
+% Property: <profile_name>, Value: <name of the profile>
 %
-% zeffiro_installer('install_directory',<directory string>,...
-% 'branch_name',<branch name string>,...
-% 'profile_name',<profile name string>,'folder_name',<folder name string'>);
+% The length of the argument list can vary. By calling the function without 
+% arguments the default settings will be used. The default values are:
+% Property: <install_directory>, Default: <directory of the file>
+% Property: <folder_name>, Default: 'zeffiro_interface-<branch_name>'
+% Property: <branch_name>, Default: 'main_development_branch' and
+% Property: <profile_name>, Default: 'multicompartment_head'
 %
-% The folder name of the repository will be of the form
-% zeffiro_interface-branch_name. The number of arguments is variable. By
-% calling the function without arguments the default settings will be used.
-% By default the installation directory will be the directory of the file
-% zeffiro_installer.m, branch will be main_development_branch, and
-% profile will be multicompartment_head.
-
 % Note: Some other branch than the master should be used for pushes. The
 % preferred branch is main_development_branch which will be merged with
 % master on a mothly basis.
