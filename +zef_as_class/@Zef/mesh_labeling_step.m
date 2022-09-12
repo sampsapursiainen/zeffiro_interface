@@ -1,17 +1,48 @@
-function self = mesh_labeling_step(self)
+function self = mesh_labeling_step(self, labeling_mode)
 
     % mesh_labeling_step
     %
     % Determines which tetra and nodes belong to which volumetric compartment.
+    %
+    % Inputs:
+    %
+    % - self
+    %
+    %   The instance of Zef calling this method.
+    %
+    % - labeling_mode (optional)
+    %
+    %   The mode in which the labeling is to be performed. Must be in
+    %   {"initial", "repeated", "adaptive-repeated"}.
+    %
+    %   default = "initial"
+    %
+    % Outputs
+    %
+    % - self
+    %
+    %   The instance of Zef that called this method.
 
     arguments
+
         self zef_as_class.Zef
+
+        labeling_mode (1,1) string { mustBeMember(labeling_mode, ["initial", "repeated", "adaptive-repeated"]) } = "initial";
+
     end
 
+    % Read and write needed initial values.
+
     nodes = self.nodes;
+
     tetra = self.tetra;
+
     label_ind = uint32(self.label_ind);
+
+    self.labeling_mode = labeling_mode;
+
     labeling_mode = self.labeling_mode;
+
     n_compartments = self.n_compartments;
 
     % Initialize waitbar and cleanup object.
