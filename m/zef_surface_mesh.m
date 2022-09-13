@@ -6,7 +6,7 @@ function [ ...
     tetra_ind_diff, ...
     node_ind, ...
     node_pair ...
-] = zef_surface_mesh(tetra, varargin)
+] = zef_surface_mesh(tetra, nodes, I, gpu_mode)
 
     % TODO Documentation
     %
@@ -42,18 +42,39 @@ function [ ...
     % - node_pair: TODO: pairs of neigbouring nodes on different sides of the
     %   triangular surface.
 
-I = [];
+
+tetra = uint32(tetra);
+
 surface_nodes = [];
-nodes = [];
 
 % Get nodes and indices from varargin.
 
-if not(isempty(varargin))
-    nodes = varargin{1};
-    if length(varargin) > 1
-        I = varargin{2};
-    end
+if nargin < 2 
+nodes = []; 
+end 
+
+if nargin < 3
+ I = []; 
+end 
+
+if nargin < 4
+gpu_mode = 'normal';
 end
+
+use_gpu = 0;
+if evalin('caller', 'exist(''zef'', ''var'' )')
+zef = evalin('caller', 'zef');
+if zef.gpu_count > 0
+if isequal(gpu_mode,'normal')
+use_gpu = zef.use_gpu;
+elseif isequal(gpu_mode,'graphics')
+if zef.use_gpu
+use_gpu = zef.use_gpu_graphic;
+end
+end
+end
+end
+
 
 if not(isempty(I))
     I_global = [1 : size(tetra,1)]';
@@ -74,38 +95,55 @@ ind_m = [ 2 4 3 ;
 
 % Find tetra indices I that share a face, by sorting and subtracting.
 
-tetra_sort = [
-    tetra(:,[2 4 3]) 1*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    tetra(:,[1 3 4]) 2*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    tetra(:,[1 4 2]) 3*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    tetra(:,[1 2 3]) 4*ones(size(tetra,1),1) [1:size(tetra,1)]';
-];
+tetra_sort_1 = uint32([
+    tetra(:,[2 4 3]);
+    tetra(:,[1 3 4]);
+    tetra(:,[1 4 2]);
+    tetra(:,[1 2 3]);
+]);
 
-tetra_sort(:,1:3) = sort(tetra_sort(:,1:3),2);
-tetra_sort = sortrows(tetra_sort,[1 2 3]);
+tetra_sort_2 = uint32([
+     1*ones(size(tetra,1),1) [1:size(tetra,1)]';
+     2*ones(size(tetra,1),1) [1:size(tetra,1)]';
+     3*ones(size(tetra,1),1) [1:size(tetra,1)]';
+     4*ones(size(tetra,1),1) [1:size(tetra,1)]';
+]);
 
-tetra_ind = zeros(size(tetra_sort,1),1);
+if use_gpu
+tetra_sort_1 = gpuArray(tetra_sort_1);
+end
+tetra_sort_1 = sort(tetra_sort_1,2);
+[tetra_sort_1,J] = sortrows(tetra_sort_1,[1 2 3]);
 
-I = find(sum(abs(tetra_sort(2:end,1:3)-tetra_sort(1:end-1,1:3)),2)==0);
+tetra_ind = zeros(size(tetra_sort_1,1),1);
+
+I = find(sum(abs(tetra_sort_1(2:end,1:3)-tetra_sort_1(1:end-1,1:3)),2)==0);
+clear tetra_sort_1;
+tetra_sort_2 = tetra_sort_2(J,:);
 
 tetra_ind(I) = 1;
 tetra_ind(I+1) = 1;
 
 I = find(tetra_ind == 0);
 
-tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
+tetra_ind = sub2ind(size(tetra),repmat(tetra_sort_2(I,2),1,3),ind_m(tetra_sort_2(I,1),:));
 surface_triangles = tetra(tetra_ind);
-surface_triangles = surface_triangles(:,[1 3 2]);
+surface_triangles = uint32(surface_triangles(:,[1 3 2]));
 
-tetra_ind = tetra_sort(I,5);
+tetra_ind = tetra_sort_2(I,2);
 
 if nargout > 4
     surface_triangles_aux = surface_triangles;
 end
 
 if not(isempty(nodes))
+if  use_gpu 
+surface_triangles = gpuArray(surface_triangles);
+end
     [u_val, ~, u_ind] = unique(surface_triangles);
-    surface_nodes = nodes(u_val,:);
+surface_triangles = gather(surface_triangles);
+ 
+ surface_nodes = nodes(u_val,:);
     surface_triangles = reshape(u_ind,size(surface_triangles));
 end
 
@@ -119,21 +157,71 @@ end
 
 if nargout > 4 && nargin > 2
 
+if use_gpu
+surface_triangles_aux = gpuArray(surface_triangles_aux);
+end
+
     surface_triangles_aux = sort(surface_triangles_aux,2);
+    
+    if use_gpu
+    aux_vec_1 = gpuArray(tetra_diff(:,[2 4 3]));
+    else
+    aux_vec_1 = tetra_diff(:,[2 4 3]);
+    end
+    aux_vec_2 = gather(sort(aux_vec_1,2));
+    clear aux_vec_1;
+   if use_gpu
+    aux_vec_2 = gpuArray(aux_vec_2);
+    end
+    [~, tetra_ind_diff] = (ismember(surface_triangles_aux, aux_vec_2,'rows'));
+    clear aux_vec_2; 
+    tetra_ind_diff = gather(tetra_ind_diff);
 
-    [~, tetra_ind_diff] = ismember(surface_triangles_aux, sort(tetra_diff(:,[2 4 3]),2),'rows');
+    if use_gpu
+    aux_vec_1 = gpuArray(tetra_diff(:,[1 3 4]));
+    else
+    aux_vec_1 = tetra_diff(:,[1 3 4]);
+    end
+    aux_vec_2 = gather(sort(aux_vec_1,2));
+    clear aux_vec_1;
+   if use_gpu
+    aux_vec_2 = gpuArray(aux_vec_2);
+    end
+    [~, I] = (ismember(surface_triangles_aux, aux_vec_2,'rows'));
+    clear aux_vec_2
+    tetra_ind_diff = tetra_ind_diff + gather(I);
 
-    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 3 4]),2),'rows');
 
-    tetra_ind_diff = tetra_ind_diff + I;
+    if use_gpu
+    aux_vec_1 = gpuArray(tetra_diff(:,[1 4 2]));
+    else
+    aux_vec_1 = tetra_diff(:,[1 4 2]);
+    end
+    aux_vec_2 = gather(sort(aux_vec_1,2));
+    clear aux_vec_1;
+   if use_gpu
+    aux_vec_2 = gpuArray(aux_vec_2);
+    end
+    [~, I] = (ismember(surface_triangles_aux, aux_vec_2,'rows'));
+    clear aux_vec_2
+    tetra_ind_diff = tetra_ind_diff + gather(I);
 
-    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 4 2]),2),'rows');
+    if use_gpu
+    aux_vec_1 = gpuArray(tetra_diff(:,[1 2 3]));
+    else
+    aux_vec_1 = tetra_diff(:,[1 2 3]);
+    end
+    aux_vec_2 = gather(sort(aux_vec_1,2));
+    clear aux_vec_1;
+   if use_gpu
+    aux_vec_2 = gpuArray(aux_vec_2);
+    end
+    [~, I] = (ismember(surface_triangles_aux, sort(aux_vec_2,2),'rows'));
+    clear aux_vec_2
+    tetra_ind_diff = gather(tetra_ind_diff + gather(I));
 
-    tetra_ind_diff = tetra_ind_diff + I;
+clear surface_triangles_aux
 
-    [~, I] = ismember(surface_triangles_aux, sort(tetra_diff(:,[1 2 3]),2),'rows');
-
-    tetra_ind_diff = tetra_ind_diff + I;
 
     if nargout > 5 && nargin > 2
 
@@ -143,8 +231,18 @@ if nargout > 4 && nargin > 2
 
         tetra_aux = tetra_diff(tetra_ind_diff(I_aux_1),:);
 
+        if use_gpu
+        tetra_aux = gpuArray(tetra_aux);
+        surface_triangles = gpuArray(surface_triangles);
+        end
+
         [I,J] = find(not(ismember(tetra_aux,surface_triangles)));
 
+        if use_gpu 
+        tetra_aux = gather(tetra_aux);
+        surface_triangles = gather(surface_triangles);
+        end 
+  
         I_aux_2 = sub2ind(size(tetra_aux), I, J);
 
         node_ind(I_aux_1(I)) = tetra_aux(I_aux_2);
