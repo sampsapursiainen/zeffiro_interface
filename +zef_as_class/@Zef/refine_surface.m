@@ -26,7 +26,7 @@ function self = refine_surface(self, n_of_refinements)
 
         self zef_as_class.Zef
 
-        n_of_refinements (1,1) double { mustBeInteger, mustBePositive } = 1;
+        n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
 
     end
 

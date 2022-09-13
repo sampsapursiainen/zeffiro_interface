@@ -38,7 +38,7 @@ function self = refine_volume_adaptively(self, n_of_refinements, tolerance, iter
 
         self zef_as_class.Zef
 
-        n_of_refinements (1,1) double { mustBeInteger, mustBePositive } = 1;
+        n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
 
         tolerance (1,1) double  { mustBeReal, mustBePositive } = 1;
 
