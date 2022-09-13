@@ -1,4 +1,4 @@
-function V = tetra_volume(self, take_absolute_value, subinds)
+function V = tetra_volume(nodes, tetra, take_absolute_value, edge_inds)
 
 % tetra_volume
 %
@@ -7,9 +7,14 @@ function V = tetra_volume(self, take_absolute_value, subinds)
 %
 % Inputs:
 %
-% - self
+% - nodes
 %
-%   The instance of Zef whose tetrahedral volumes we wish to uncover.
+%   The nodes from which the coordinates of the tetra vertices will be
+%   retrieved.
+%
+% - tetra
+%
+%   The tetra (an N × 4 index set of nodes) whose volumes we are computing.
 %
 % - take_absolute_value (optional)
 %
@@ -18,10 +23,10 @@ function V = tetra_volume(self, take_absolute_value, subinds)
 %
 %   default = false
 %
-% - subinds (optional)
+% - edge_inds (optional)
 %
-%   An index array for choosing the subset of the tetra whose volumes we wish to
-%   uncover. If this is empty, all tetra will be used.
+%   An index array for choosing the subset of the tetra whose edges will be
+%   used in the volume computation. If this is empty, all tetra will be used.
 %
 %   default = []
 %
@@ -33,11 +38,13 @@ function V = tetra_volume(self, take_absolute_value, subinds)
 
     arguments
 
-        self zef_as_class.Zef
+        nodes (:,3) double
+
+        tetra (:,4) double { mustBeInteger, mustBePositive }
 
         take_absolute_value (1,1) logical = false;
 
-        subinds (:,1) double { mustBeInteger, mustBePositive } = [];
+        edge_inds (:,1) double { mustBeInteger, mustBePositive } = [];
 
     end
 
@@ -47,7 +54,7 @@ function V = tetra_volume(self, take_absolute_value, subinds)
 
     % Directed edges from 4th vertex of each tetrahedron.
 
-    if isempty(subinds)
+    if isempty(edge_inds)
 
         edges = [
             nodes(tetra(:,1),:)';

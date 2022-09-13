@@ -680,8 +680,6 @@ classdef Zef < handle
 
         nodes = inflate_surface(self, nodes, surface_triangles);
 
-        V = tetra_volume(self, take_absolute_value, subinds);
-
     end % methods
 
     methods (Access = private)
@@ -719,6 +717,8 @@ classdef Zef < handle
         [nodes,triangles,interp_vec] = triangular_mesh_refinement(nodes,triangles);
 
         [smoothed_nodes] = smooth_surface(nodes,triangles,smoothing_parameter,n_smoothing)
+
+        V = tetra_volume(nodes, tetra, take_absolute_value, edge_inds);
 
     end % methods (Static)
 
