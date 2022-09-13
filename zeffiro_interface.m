@@ -353,6 +353,9 @@ end
                     end
                     if exist('gpu_num','var')
                         zef.gpu_num = gpu_num;
+                        if and(zef.gpu_count > 0, use_gpu)
+                        gpuDevice(zef.gpu_num);
+                        end
                       end
                     if exist('parallel_processes','var')
                         zef.parallel_processes = parallel_processes;
