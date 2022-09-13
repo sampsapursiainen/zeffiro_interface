@@ -23,9 +23,12 @@ function zef = zeffiro_interface(varargin)
 %Property: 'quit_matlab'                 Vaule: none
 %Property: 'use_github'                  Value: 1 (yes) or 0 (no)
 %Property: 'use_gpu'                     Value: 1 (yes) or 0 (no)
+%Property: 'gpu_num'                     Value: <gpu device number>
+%Property: 'use_display'                 Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 
 warning off;
+use_display = 0;
 option_counter = 1;
 zeffiro_restart = 0;
 if not(isempty(varargin))
@@ -100,8 +103,18 @@ end
                 
                 use_gpu = varargin{option_counter+1};    
    
+                
+                elseif isequal(varargin{option_counter},lower('gpu_num'))
+                
+                gpu_num = varargin{option_counter+1};  
                
-                option_counter = option_counter + 2;  
+                option_counter = option_counter + 2; 
+                
+                elseif isequal(varargin{option_counter},lower('use_display'))
+                
+                use_display = varargin{option_counter+1};  
+               
+                option_counter = option_counter + 2; 
                 
                elseif isequal(varargin{option_counter},lower('parallel_processes'))
                 
@@ -316,7 +329,7 @@ end
         if exist('zef','var')
         if isfield(zef,'h_zeffiro_window_main')
             if isvalid(zef.h_zeffiro_window_main)
-                if ismember(start_mode,'display')
+                if ismember(start_mode,'display') || use_display
                     zef.start_mode = start_mode;
                     zef.h_zeffiro.Visible = 1;
                     zef.h_zeffiro_window_main.Visible = 1;
@@ -327,9 +340,16 @@ end
                     if exist('use_gpu','var')
                         zef.use_gpu = use_gpu;
                     end
+                    if exist('gpu_num','var')
+                        zef.gpu_num = gpu_num;
+                      end
                     if exist('parallel_processes','var')
                         zef.parallel_processes = parallel_processes;
                     end
+                     if exist('use_display','var')
+                        zef.use_display =  use_display;
+                    end
+
                 end
             end
         end
