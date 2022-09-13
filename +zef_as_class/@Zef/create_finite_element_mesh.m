@@ -12,7 +12,7 @@ function self = create_finite_element_mesh(self)
         self = self.downsample_surfaces();
     end
 
-    self = process_meshes(self);
+    self = preprocess_meshes(self);
 
     self = create_fem_mesh(self);
 

@@ -686,7 +686,7 @@ classdef Zef < handle
 
         self = downsample_surfaces(self);
 
-        self = process_meshes(self);
+        self = preprocess_meshes(self);
 
         self = create_fem_mesh(self);
 
