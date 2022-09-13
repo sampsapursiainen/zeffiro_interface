@@ -464,7 +464,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_co
 
         reuna_p (:,3) double
 
-        reuna_t
+        reuna_t (:,3) double { mustBeInteger, mustBePositive }
 
         nodes (:,3) double
 
@@ -485,7 +485,7 @@ function [I] = point_in_compartment(zef, reuna_p, reuna_t, nodes, compartment_co
 
     else
 
-        wb = zef_as_class.TerminalWaitbar("",1);
+        wb = zef_as_class.TerminalWaitbar("Labeling compartment", n_compartments);
 
     end
 
