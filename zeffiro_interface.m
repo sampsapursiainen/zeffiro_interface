@@ -66,7 +66,7 @@ end
     addpath(genpath([zef.program_path filesep 'mlapp']));
     addpath(genpath([zef.program_path filesep 'fig']));
     addpath(genpath([zef.program_path filesep 'plugins']));
-    addpath(genpath(zef_[zef.program_path filesep 'profile']));
+    addpath(genpath([zef.program_path filesep 'profile']));
     addpath(genpath([zef.program_path filesep 'scripts']));
     addpath([zef.program_path filesep 'external']);
     
