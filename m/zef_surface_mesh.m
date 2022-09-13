@@ -162,7 +162,7 @@ surface_triangles_aux = gpuArray(surface_triangles_aux);
 end
 
     surface_triangles_aux = sort(surface_triangles_aux,2);
-    
+
     if use_gpu
     aux_vec_1 = gpuArray(tetra_diff(:,[2 4 3]));
     else
@@ -184,7 +184,7 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, I] = intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [~, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
     clear aux_vec_2
     tetra_ind_diff = [tetra_ind_diff; gather(I)];
 
