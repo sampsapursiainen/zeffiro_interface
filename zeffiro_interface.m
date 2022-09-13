@@ -142,6 +142,28 @@ end
             if isequal(zef.zeffiro_restart,0) && isequal(exist([zef.program_path filesep 'data' filesep 'default_project.mat']),2)
         zef = zef_load(zef,'default_project.mat',[zef.program_path filesep 'data' filesep]);
             end
+   
+              if exist('use_github','var')
+         zef.use_github = use_github;
+          end
+         if exist('use_gpu','var')
+         zef.use_gpu = use_gpu;
+          end
+         if exist('use_gpu_graphic','var')
+           zef.use_gpu_graphic = use_gpu_graphic;
+          end
+             if exist('gpu_num','var')
+           zef.gpu_num = gpu_num;
+       end
+         if exist('parallel_processes','var')
+         zef.parallel_processes = parallel_processes;
+         end
+           if exist('use_display','var')
+               zef.use_display =  use_display;
+           end
+       if and(zef.gpu_count > 0, zef.use_gpu)
+      gpuDevice(zef.gpu_num);
+       end
     
         option_counter = 1;
 
@@ -167,6 +189,28 @@ end
                 zef.file = [file_1 file_2];
                 zef = zef_load(zef,zef.file,zef.file_path);
                 option_counter = option_counter + 2;
+                
+               if exist('use_github','var')
+         zef.use_github = use_github;
+          end
+         if exist('use_gpu','var')
+         zef.use_gpu = use_gpu;
+          end
+         if exist('use_gpu_graphic','var')
+           zef.use_gpu_graphic = use_gpu_graphic;
+          end
+             if exist('gpu_num','var')
+           zef.gpu_num = gpu_num;
+       end
+         if exist('parallel_processes','var')
+         zef.parallel_processes = parallel_processes;
+         end
+           if exist('use_display','var')
+               zef.use_display =  use_display;
+           end
+       if and(zef.gpu_count > 0, zef.use_gpu)
+      gpuDevice(zef.gpu_num);
+       end
 
             elseif isequal(varargin{option_counter},lower('import_to_new_project'))
 
@@ -345,30 +389,34 @@ end
                     zef.h_mesh_visualization_tool.Visible = 1;
                     zef.h_zeffiro_menu.Visible = 1;
                     zef.use_display = 1;
-                    if exist('use_gpu','var')
-                        zef.use_gpu = use_gpu;
-                    end
-                    if exist('use_gpu_graphic','var')
-                        zef.use_gpu_graphic = use_gpu_graphic;
-                    end
-                    if exist('gpu_num','var')
-                        zef.gpu_num = gpu_num;
-                        if and(zef.gpu_count > 0, use_gpu)
-                        gpuDevice(zef.gpu_num);
-                        end
-                      end
-                    if exist('parallel_processes','var')
-                        zef.parallel_processes = parallel_processes;
-                    end
-                     if exist('use_display','var')
-                        zef.use_display =  use_display;
-                    end
+                    
+          if exist('use_github','var')
+         zef.use_github = use_github;
+          end
+         if exist('use_gpu','var')
+         zef.use_gpu = use_gpu;
+          end
+         if exist('use_gpu_graphic','var')
+           zef.use_gpu_graphic = use_gpu_graphic;
+          end
+             if exist('gpu_num','var')
+           zef.gpu_num = gpu_num;
+       end
+         if exist('parallel_processes','var')
+         zef.parallel_processes = parallel_processes;
+         end
+           if exist('use_display','var')
+               zef.use_display =  use_display;
+           end
+       if and(zef.gpu_count > 0, zef.use_gpu)
+      gpuDevice(zef.gpu_num);
+       end
 
                 end
             end
         end
         end
-
+        
     else
         zef = zef_start(zef);
     if isequal(zef.zeffiro_restart,0) && exist([zef.program_path filesep 'data' filesep 'default_project.mat'],'file')
