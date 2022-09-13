@@ -58,7 +58,7 @@ if nargin < 3
 end 
 
 if nargin < 4
-gpu_mode = 'normal';
+gpu_mode = 'graphics';
 end
 
 use_gpu = 0;
