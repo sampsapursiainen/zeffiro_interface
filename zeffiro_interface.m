@@ -66,7 +66,7 @@ end
     addpath(genpath([zef.program_path filesep 'mlapp']));
     addpath(genpath([zef.program_path filesep 'fig']));
     addpath(genpath([zef.program_path filesep 'plugins']));
-    addpath(genpath([zef.program_path filesep 'profile']));
+    addpath(genpath(zef_[zef.program_path filesep 'profile']));
     addpath(genpath([zef.program_path filesep 'scripts']));
     addpath([zef.program_path filesep 'external']);
     
@@ -108,7 +108,7 @@ end
                 
                 elseif isequal(varargin{option_counter},lower('use_gpu_graphic'))
                 
-                use_gpu = varargin{option_counter+1};    
+                use_gpu_graphic = varargin{option_counter+1};    
    
                 option_counter = option_counter + 2; 
                 
