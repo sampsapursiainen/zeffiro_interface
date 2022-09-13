@@ -216,7 +216,6 @@ end
 
 clear surface_triangles_aux
 
-
     if nargout > 5 && nargin > 2
 
         node_ind = zeros(size(tetra_ind_diff,1),1);
@@ -228,9 +227,6 @@ clear surface_triangles_aux
         end
 
         [I,J] = find(not(ismember(tetra_aux,surface_triangles)));
-size(tetra_ind_diff)
-size(triangle_ind_diff)
-size(I)
         
         if use_gpu 
         tetra_aux = gather(tetra_aux);
