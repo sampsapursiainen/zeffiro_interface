@@ -680,6 +680,8 @@ classdef Zef < handle
 
         nodes = inflate_surface(self, nodes, surface_triangles);
 
+        V = tetra_volume(self, take_absolute_value, subinds);
+
     end % methods
 
     methods (Access = private)
