@@ -331,7 +331,7 @@ end
         if isfield(zef,'h_zeffiro_window_main')
             if isvalid(zef.h_zeffiro_window_main)
                 if ismember(start_mode,'display') | use_display
-                    zef.start_mode = start_mode;
+                    zef.start_mode = start_mode; 
                     zef.h_zeffiro.Visible = 1;
                     zef.h_zeffiro_window_main.Visible = 1;
                     zef.h_mesh_tool.Visible = 1;
