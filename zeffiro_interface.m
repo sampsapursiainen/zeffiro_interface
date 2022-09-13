@@ -23,6 +23,7 @@ function zef = zeffiro_interface(varargin)
 %Property: 'quit_matlab'                 Vaule: none
 %Property: 'use_github'                  Value: 1 (yes) or 0 (no)
 %Property: 'use_gpu'                     Value: 1 (yes) or 0 (no)
+%Property: 'use_gpu_graphic'             Value: 1 (yes) or 0 (no)
 %Property: 'gpu_num'                     Value: <gpu device number>
 %Property: 'use_display'                 Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
@@ -100,6 +101,12 @@ end
                 option_counter = option_counter + 2;
 
                 elseif isequal(varargin{option_counter},lower('use_gpu'))
+                
+                use_gpu = varargin{option_counter+1};    
+   
+                option_counter = option_counter + 2; 
+                
+                elseif isequal(varargin{option_counter},lower('use_gpu_graphic'))
                 
                 use_gpu = varargin{option_counter+1};    
    
@@ -340,6 +347,9 @@ end
                     zef.use_display = 1;
                     if exist('use_gpu','var')
                         zef.use_gpu = use_gpu;
+                    end
+                    if exist('use_gpu_graphic','var')
+                        zef.use_gpu_graphic = use_gpu_graphic;
                     end
                     if exist('gpu_num','var')
                         zef.gpu_num = gpu_num;
