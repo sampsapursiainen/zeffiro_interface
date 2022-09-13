@@ -162,7 +162,7 @@ surface_triangles_aux = gpuArray(surface_triangles_aux);
 end
 
     surface_triangles_aux = sort(surface_triangles_aux,2);
-
+    
     if use_gpu
     aux_vec_1 = gpuArray(tetra_diff(:,[2 4 3]));
     else
@@ -173,9 +173,10 @@ end
    if use_gpu
     aux_vec_2 = gpuArray(aux_vec_2);
     end
-    [~, tetra_ind_diff] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [~, triangle_ind_diff, tetra_ind_diff] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
     clear aux_vec_2; 
     tetra_ind_diff = gather(tetra_ind_diff);
+    triangle_ind_diff = gather(triangle_ind_diff);
 
     if use_gpu
     aux_vec_1 = gpuArray(tetra_diff(:,[1 3 4]));
@@ -184,9 +185,10 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
     clear aux_vec_2
     tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
     if use_gpu
     aux_vec_1 = gpuArray(tetra_diff(:,[1 4 2]));
@@ -195,9 +197,10 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
     clear aux_vec_2
     tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
     if use_gpu
     aux_vec_1 = gpuArray(tetra_diff(:,[1 2 3]));
@@ -206,9 +209,10 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, I] = (intersect(surface_triangles_aux, sort(aux_vec_2,2),'rows'));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
     clear aux_vec_2
     tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
 clear surface_triangles_aux
 
@@ -216,10 +220,7 @@ clear surface_triangles_aux
     if nargout > 5 && nargin > 2
 
         node_ind = zeros(size(tetra_ind_diff,1),1);
-
-        I_aux_1 = find(tetra_ind_diff);
-
-        tetra_aux = tetra_diff(tetra_ind_diff(I_aux_1),:);
+        tetra_aux = tetra_diff(tetra_ind_diff,:);
 
         if use_gpu
         tetra_aux = gpuArray(tetra_aux);
@@ -234,21 +235,15 @@ clear surface_triangles_aux
         end 
   
         I_aux_2 = sub2ind(size(tetra_aux), I, J);
-
-        node_ind(I_aux_1(I)) = tetra_aux(I_aux_2);
-
-        node_pair = [surface_triangles(:,1) node_ind; ...
-                    surface_triangles(:,2) node_ind; ...
-                    surface_triangles(:,3) node_ind];
-
-        node_pair = node_pair(find(node_pair(:,2)),:);
+        node_ind(I) = tetra_aux(I_aux_2);
+        node_pair = [surface_triangles(triangle_ind_diff,1) node_ind; ...
+                    surface_triangles(triangle_ind_diff,2) node_ind; ...
+                    surface_triangles(triangle_ind_diff,3) node_ind];
 
         [~, I_aux_1] = unique(node_pair(:,1));
-
         node_pair = node_pair(I_aux_1,:);
 
     end % if
-
 
     tetra_ind_diff = I_diff(tetra_ind_diff);
 
