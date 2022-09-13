@@ -103,6 +103,7 @@ end
                 
                 use_gpu = varargin{option_counter+1};    
    
+                option_counter = option_counter + 2; 
                 
                 elseif isequal(varargin{option_counter},lower('gpu_num'))
                 
