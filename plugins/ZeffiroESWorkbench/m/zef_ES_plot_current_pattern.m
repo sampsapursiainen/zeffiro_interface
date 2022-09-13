@@ -1,5 +1,5 @@
 function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
-zef = evalin('base',zef);
+zef = evalin('caller','zef');
 
 %% clear Axes handle && ES_Colorbar
 if isfield(eval('zef'),'h_current_ES')

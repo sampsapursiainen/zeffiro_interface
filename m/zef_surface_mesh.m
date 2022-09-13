@@ -228,7 +228,10 @@ clear surface_triangles_aux
         end
 
         [I,J] = find(not(ismember(tetra_aux,surface_triangles)));
-
+size(tetra_ind_diff)
+size(triangle_ind_diff)
+size(I)
+        
         if use_gpu 
         tetra_aux = gather(tetra_aux);
         surface_triangles = gather(surface_triangles);
@@ -239,7 +242,9 @@ clear surface_triangles_aux
         node_pair = [surface_triangles(triangle_ind_diff,1) node_ind; ...
                     surface_triangles(triangle_ind_diff,2) node_ind; ...
                     surface_triangles(triangle_ind_diff,3) node_ind];
-
+                
+        node_pair = node_pair(find(node_pair(:,2)),:);
+                
         [~, I_aux_1] = unique(node_pair(:,1));
         node_pair = node_pair(I_aux_1,:);
 

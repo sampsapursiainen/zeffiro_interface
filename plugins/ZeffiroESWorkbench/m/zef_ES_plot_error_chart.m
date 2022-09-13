@@ -1,4 +1,5 @@
 function zef_ES_plot_error_chart(varargin)
+
 %% Variables and parameters setup
 h_dial = helpdlg('Plotting data...','ZI: Help');
 switch nargin

@@ -4,8 +4,8 @@ if ismember(zef.ES_search_type,1)
 
     zef.h_ES_search_method.Items = zef.ES_search_method_list([1 3 4]);
 zef.h_ES_search_method.ItemsData = [1 3 4];
-   zef.h_ES_algorithm.Items = zef.ES_algorithm_list([1 2 3]);
-zef.h_ES_algorithm.ItemsData = [1 2 3];
+   zef.h_ES_algorithm.Items = zef.ES_algorithm_list([2 3]);
+zef.h_ES_algorithm.ItemsData = [2 3];
 
 if not(isequal(zef.ES_search_method,4))
     zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum (dB)';
