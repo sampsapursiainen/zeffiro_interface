@@ -81,6 +81,8 @@ function self = perform_refinement(self)
         tetra_aux = self.tetra;
     end
 
+    tetra = self.tetra;
+
     if self.refinement_on;
 
         nodes = self.nodes;
