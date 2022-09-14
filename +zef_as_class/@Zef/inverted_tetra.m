@@ -1,5 +1,60 @@
 function [tetra, flag_val, nodes_ind] = inverted_tetra(self, nodes, tetra, thresh_val)
 
+% inverted_tetra (tetra_turn)
+%
+% Finds out which tetra have been inverted, as in which tetra have vertices
+% that have been pulled through their opposite face, inverting the sign of the
+% volume of the tetrahedron during mesh smoothing.
+%
+% Also modifies the tetra by scaling them with the discovered volume ratios
+% and returns them.
+%
+% Inputs
+%
+% - self
+%
+%   The instance of Zef which called one of the Zef refinement methods.
+%
+% - nodes
+%
+%   Nodes in the Zef finite element mesh.
+%
+% - tetra
+%
+%   Node index quadruplets in the finite element mesh.
+%
+% - thresh_val
+%
+%   The tolarance of interpreting whether a tetra has inverted.
+%
+% Outputs:
+%
+% - tetra
+%
+%   The modified tetra.
+%
+% - flag_val
+%
+%   A logical flag which tells whether the condition numbers of each tetra was
+%   within the tolerance adjusted by the given thresh_val.
+%
+% - nodes_ind
+%
+%   The indices of tetra whose codition numbers are within the given
+%   tolerance.
+
+    arguments
+
+        self zef_as_class.Zef
+
+        nodes (:,3) double
+
+        tetra (:,4) double { mustBeInteger, mustBePositive }
+
+        thresh_val (1,1) double { mustBeReal, mustBePositive }
+
+    end
+
     flag_val = 1;
 
     if self.use_gui
@@ -15,10 +70,6 @@ function [tetra, flag_val, nodes_ind] = inverted_tetra(self, nodes, tetra, thres
         wb = zef_as_class.TerminalWaitbar("Mesh optimization", self.mesh_optimization_repetitions);
 
     end
-
-    nodes = self.nodes;
-
-    tetra = self.tetra;
 
     tetra_ind = 0;
 
