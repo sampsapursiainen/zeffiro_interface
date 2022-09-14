@@ -165,7 +165,6 @@ n_surface_refinement = eval('zef.refinement_surface_number');
 if eval('zef.refinement_on')
 
 if surface_refinement_on
-
 if length(n_surface_refinement) == 1
 
 for i_surface_refinement = 1 : n_surface_refinement

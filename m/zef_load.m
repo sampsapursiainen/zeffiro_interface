@@ -57,7 +57,6 @@ zef_data = zef_remove_object_handles(zef_data);
 zef_remove_system_fields;
 zef_data.project_matfile = [path_name filesep file_name];
 
-
 zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.code_path = zef.code_path;
