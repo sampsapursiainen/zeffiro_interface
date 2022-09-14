@@ -27,6 +27,7 @@ function zef = zeffiro_interface(varargin)
 %Property: 'gpu_num'                     Value: <gpu device number>
 %Property: 'use_display'                 Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
+%Property: 'verbose_mode'                Value: 1 (yes) or 0 (no)
 
 warning off;
 option_counter = 1;
@@ -125,6 +126,12 @@ end
                parallel_processes = varargin{option_counter+1};    
           
                 option_counter = option_counter + 2; 
+                
+               elseif isequal(varargin{option_counter},lower('verbose_mode'))
+                
+               verbose_mode = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2; 
                 else
                 option_counter = option_counter + 1; 
             end
@@ -153,6 +160,9 @@ end
        end
          if exist('parallel_processes','var')
          zef.parallel_processes = parallel_processes;
+         end
+        if exist('verbose_mode','var')
+         zef.zeffiro_verbose_mode = verbose_mode;
          end
            if exist('use_display','var')
                zef.use_display =  use_display;
@@ -200,6 +210,9 @@ end
        end
          if exist('parallel_processes','var')
          zef.parallel_processes = parallel_processes;
+         end
+         if exist('verbose_mode','var')
+         zef.zeffiro_verbose_mode = verbose_mode;
          end
            if exist('use_display','var')
                zef.use_display =  use_display;
@@ -402,6 +415,9 @@ end
        end
          if exist('parallel_processes','var')
          zef.parallel_processes = parallel_processes;
+         end
+         if exist('verbose_mode','var')
+         zef.zeffiro_verbose_mode = verbose_mode;
          end
            if exist('use_display','var')
                zef.use_display =  use_display;
