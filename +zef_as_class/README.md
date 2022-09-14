@@ -9,7 +9,7 @@ The core back-end of the application, that holds the data and methods
 necessary to actually perform computations. Can be used by itself in the
 terminal, or via `ZeffiroInterface`.
 
-## [ZeffiroInterface](./@ZeffiroIterface/)
+## [ZeffiroInterface](./@ZeffiroInterface/)
 
 A main GUI component that holds onto an instance of `Zef` and other GUI
 subcomponents listed below. If this is activated, that is. Zef can be used
