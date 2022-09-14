@@ -87,6 +87,11 @@ classdef Zef < handle
     %   Tells how sensitive the labeling routine is to determining whether the
     %   value belongs to a compartment or not.
     %
+    % - mesh_generation_phase
+    %
+    %   The stage at which Zef is in mesh generation. Must be one of
+    %   {"initial", "post-processing", "done"}.
+    %
     % - mesh_labeling_approach
     %
     %   Determines how label_ind is generated during initial mesh generation.
@@ -229,6 +234,8 @@ classdef Zef < handle
             mustBeMember( labeling_mode, [ "initial", "repeated", "adaptive-repeated" ] ) } = "initial";
 
         labeling_threshold (1,1) double { mustBeReal, mustBePositive } = 0.5;
+
+        mesh_generation_phase (1,1) string { mustBeMember(mesh_generation_phase, ["initial", "post-processing", "done"]) } = "done";
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
@@ -408,6 +415,37 @@ classdef Zef < handle
                 elseif strcmp(finame, 'domain_labels')
 
                     self.domain_labels = data.(finame);
+
+                elseif strcmp(finame, 'refinement_flag') ...
+                || strcmp(finame, 'mesh_generation_stage')
+
+                    if isnumeric(fival)
+
+                        if fival == 1
+
+                            self.mesh_generation_stage = "initial";
+
+                        elseif fival == 2
+
+                            self.mesh_generation_stage = "post-processing";
+
+                        else
+
+                            self.mesh_generation_stage = "done";
+
+                        end
+
+                    elseif isstring(fival)
+
+                        self.mesh_generation_stage = fival;
+
+                    else
+
+                        self.mesh_generation_stage = "done";
+
+                    end
+
+                    self.n_compartments = data.(finame);
 
                 elseif strcmp(finame, 'n_compartments')
 
