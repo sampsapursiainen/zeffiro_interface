@@ -75,7 +75,7 @@ function [tetra, flag_val, nodes_ind] = inverted_tetra(self, nodes, tetra, thres
 
     iter_ind_aux_0 = 0;
 
-    [condition_number, tilavuus] = self.condition_number(nodes,tetra);
+    [condition_number, tilavuus] = zef_as_class.Zef.condition_number(nodes,tetra);
 
     while not(isempty(tetra_ind)) & iter_ind_aux_0 < self.mesh_optimization_repetitions
 
