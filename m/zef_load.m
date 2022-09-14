@@ -39,7 +39,6 @@ matfile_fieldnames = setdiff(matfile_fieldnames,zeffiro_variable_data(:,2));
 end
 end
 
-
 h_waitbar = zef_waitbar(0,'Loading fields.');
 n_fields = length(matfile_fieldnames);
 if zef.use_display

@@ -29,7 +29,6 @@ function zef = zeffiro_interface(varargin)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 
 warning off;
-use_display = 0;
 option_counter = 1;
 zeffiro_restart = 0;
 if not(isempty(varargin))
@@ -57,7 +56,6 @@ end
     zef.code_path = [zef.program_path filesep 'm'];    
     zef.cluster_path =  [zef.program_path filesep 'cluster'];
     
-    if isequal(zeffiro_restart,0)
     addpath(zef.program_path); 
     addpath(zef.code_path); 
     addpath(zef.program_path); 
@@ -70,8 +68,6 @@ end
     addpath(genpath([zef.program_path filesep 'scripts']));
     addpath([zef.program_path filesep 'external']);
     
-    end
-    
     zef.start_mode = 'default';
    
     if exist('zef_start_config.m','file')
@@ -81,6 +77,7 @@ end
     if not(isempty(varargin))
 
         start_mode = 'display';
+        use_display = 1; 
 
      while option_counter <= length(varargin)
             if ischar(varargin{option_counter})
