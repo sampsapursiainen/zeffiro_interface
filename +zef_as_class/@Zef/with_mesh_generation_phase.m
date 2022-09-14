@@ -1,4 +1,4 @@
-function self = with_mesh_generation_stage(self, stage)
+function self = with_mesh_generation_phase(self, phase)
 
 %
 % with_mesh_generation_stage
@@ -23,6 +23,6 @@ function self = with_mesh_generation_stage(self, stage)
 %   The same Zef instance that was given as input.
 %
 
-    self.mesh_generation_stage = stage;
+    self.mesh_generation_phase = phase;
 
 end
