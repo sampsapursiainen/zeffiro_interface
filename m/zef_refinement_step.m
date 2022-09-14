@@ -5,7 +5,6 @@ end
 
 if eval('zef.refinement_on')
     
-
 if refinement_flag == 1
 surface_refinement_on = eval('zef.refinement_surface_on');
 elseif refinement_flag == 2

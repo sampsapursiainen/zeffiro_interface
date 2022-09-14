@@ -66,6 +66,8 @@ zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.mlapp = 1;
 zef_data.zeffiro_restart = 0;
+zef_data.zeffiro_verbose_mode = 1;
+zef_data.use_waitbar= 1;
 
 %%% Here begins initialization variables
 zef_data.lead_field_filter_quantile = 0.995;

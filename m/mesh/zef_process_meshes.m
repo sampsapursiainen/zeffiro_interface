@@ -83,7 +83,9 @@ end
 
 if scaling_val ~= 1
 reuna_p{i} = scaling_val*reuna_p{i};
+if not(isempty(reuna_p_inf{i}))
 reuna_p_inf{i} = scaling_val*reuna_p_inf{i};
+end
 end
 for j = 1 : 3
 switch j
@@ -99,14 +101,18 @@ if theta_angle_vec(j) ~= 0
 theta_angle = theta_angle_vec(j)*pi/180;
 R_mat = [cos(theta_angle) -sin(theta_angle); sin(theta_angle) cos(theta_angle)];
 reuna_p{i}(:,axes_ind) = (reuna_p{i}(:,axes_ind)-mean_vec(:,axes_ind))*R_mat' + mean_vec(:,axes_ind);
+if not(isempty(reuna_p_inf{i}))
 reuna_p_inf{i}(:,axes_ind) = (reuna_p_inf{i}(:,axes_ind)-mean_vec(:,axes_ind))*R_mat' + mean_vec(:,axes_ind);
+end
 
 end
 end
 for j = 1 : 3
 if translation_vec(j) ~= 0
 reuna_p{i}(:,j) = reuna_p{i}(:,j) + translation_vec(j);
+if not(isempty(reuna_p_inf{i}))
 reuna_p_inf{i}(:,j) = reuna_p_inf{i}(:,j) + translation_vec(j);
+end
 end
 end
 
