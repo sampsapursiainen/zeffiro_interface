@@ -15,6 +15,11 @@ end
 visible_value = zef.use_display;
 font_size = zef.font_size;
 verbose_mode = zef.zeffiro_verbose_mode;
+use_waitbar = zef.use_waitbar;
+
+if not(use_waitbar)
+    visible_value = 0;
+end
 
 if ishandle(varargin{2})
     h_waitbar = varargin{2};

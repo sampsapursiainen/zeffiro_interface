@@ -1,4 +1,4 @@
-zef.fields_to_be_removed = {'gpu_count','compartment_activity','start_mode','colormap_cell','path_cell','use_display','current_version','matfile_object','zeffiro_restart','zeffiro_verbose_mode'};
+zef.fields_to_be_removed = {'gpu_count','compartment_activity','start_mode','colormap_cell','path_cell','use_display','current_version','matfile_object','zeffiro_restart','zeffiro_verbose_mode','use_waitbar'};
 
 zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 zef.system_fields = zef.ini_cell(:,3);
