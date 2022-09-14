@@ -32,7 +32,7 @@ if not(isempty(compartment_ind))
 if isequal(compartment_ind,0) || (isempty(compartment_ind) && not(isempty(tetra_ref_ind)))
 I = tetra_ref_ind;
 else
-    I = find(ismember(domain_labels_aux,zef_compartment_to_subcompartment(zef,compartment_ind)));
+    I = find(ismember(domain_labels_aux,compartment_ind));
 if not(isempty(tetra_ref_ind))
 tetra_ref_ind = intersect(tetra_ref_ind,I);
 I = tetra_ref_ind;

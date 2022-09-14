@@ -231,7 +231,7 @@ if length(n_refinement) == 1
 zef_waitbar(0,h,'Volume refinement.');
 
 for i = 1 : n_refinement
-[nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments);
+[nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments));
 zef_waitbar(i/n_refinement,h,'Volume refinement.');
 if eval('zef.mesh_relabeling')
 
@@ -250,7 +250,7 @@ zef_waitbar(0/length(n_refinement),h,'Volume refinement.');
 for j = 1 : length(n_refinement)
 for i = 1 : n_refinement(j)
 
-[nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments(j));
+[nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments(j)));
 
 if eval('zef.mesh_relabeling')
 
@@ -292,7 +292,7 @@ for i = 1 : n_refinement
 k_param = eval('zef.adaptive_refinement_k_param');
 thresh_val  = eval('zef.adaptive_refinement_thresh_val');
 tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-[nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments, tetra_refine_ind);
+[nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments), tetra_refine_ind);
 tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 zef_waitbar(i/n_refinement,h,'Adaptive volume refinement.');
 if eval('zef.mesh_relabeling')
@@ -315,7 +315,7 @@ for i = 1 : n_refinement(j)
         k_param = eval('zef.adaptive_refinement_k_param');
          thresh_val  = eval('zef.adaptive_refinement_thresh_val');
          tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
-        [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments(j),tetra_refine_ind);
+        [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments(j)),tetra_refine_ind);
   tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
 if eval('zef.mesh_relabeling')
