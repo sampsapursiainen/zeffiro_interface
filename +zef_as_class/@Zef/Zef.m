@@ -720,6 +720,10 @@ classdef Zef < handle
 
         V = tetra_volume(nodes, tetra, take_absolute_value, edge_inds);
 
+        [condition_number, volume, longest_edge] = tetra_condition_number(nodes, tetra);
+
+        longest_edge = tetra_longest_edge(nodes, tetra);
+
     end % methods (Static)
 
 end % classdef
