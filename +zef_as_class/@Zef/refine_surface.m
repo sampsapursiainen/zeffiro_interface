@@ -51,7 +51,7 @@ end
 
 %% Local helper functions.
 
-function self = perform_refinement(self, meshgen_stage)
+function self = perform_refinement(self)
 
     % perform_refinement
     %
@@ -73,13 +73,11 @@ function self = perform_refinement(self, meshgen_stage)
 
         self zef_as_class.Zef
 
-        meshgen_stage (1,1) string { mustBeMember(meshgen_stage, ["mesh generation", "post-processing"]) }
-
     end
 
-    refinement_flag = self.refinement_flag;
+    mesh_generation_phase = self.mesh_generation_phase;
 
-    if refinement_flag == 1
+    if mesh_generation_phase == "initial"
         tetra_aux = self.tetra;
     end
 
@@ -87,11 +85,11 @@ function self = perform_refinement(self, meshgen_stage)
 
         nodes = self.nodes;
 
-        if refinement_flag == 1
+        if mesh_generation_phase == "initial"
 
-            surface_refinement_on = self.refinement_surface_on;
+            surface_refinement_on = self.surface_refinement_on;
 
-        elseif refinement_flag == 2
+        elseif mesh_generation_phase == "post-processing"
 
             surface_refinement_on = self.refinement_surface_on_2;
 
@@ -119,11 +117,11 @@ function self = perform_refinement(self, meshgen_stage)
 
             I = [];
 
-            if self.refinement_flag == 1
+            if self.mesh_generation_phase == "initial"
 
                 refinement_type = self.refinement_surface_compartments;
 
-            elseif self.refinement_flag == 2
+            elseif self.mesh_generation_phase == "post-processing"
 
                 refinement_type = self.refinement_surface_compartments_2;
 
@@ -139,11 +137,11 @@ function self = perform_refinement(self, meshgen_stage)
 
             if ismember(1,refinement_type)
 
-                if refinement_flag == 1
+                if mesh_generation_phase == "initial"
 
                     I = find(ismember(domain_labels, compartment_to_subcompartment(aux_brain_ind(:))));
 
-                elseif refinement_flag == 2
+                elseif mesh_generation_phase == "post-processing"
 
                     I = brain_ind(:);
 
@@ -522,7 +520,7 @@ function self = perform_refinement(self, meshgen_stage)
 
             tetra(I,:) = tetra(I,[2 1 3 4]);
 
-            if refinement_flag == 2
+            if mesh_generation_phase == "post-processing"
 
                 brain_ind = [];
 
@@ -570,7 +568,7 @@ function self = perform_refinement(self, meshgen_stage)
 
             tetra_vec = sum(ismember(tetra,J_c),2);
 
-            if refinement_flag == 2
+            if mesh_generation_phase == "post-processing"
 
                 non_source_ind = find(tetra_vec > 2);
 
@@ -578,7 +576,7 @@ function self = perform_refinement(self, meshgen_stage)
 
             end
 
-            if refinement_flag == 2
+            if mesh_generation_phase == "post-processing"
 
                 [nodes,optimizer_flag] = self.fix_negatives(nodes, tetra);
 
