@@ -77,7 +77,6 @@ end
     if not(isempty(varargin))
 
         start_mode = 'display';
-        use_display = 1; 
 
      while option_counter <= length(varargin)
             if ischar(varargin{option_counter})
@@ -373,12 +372,14 @@ end
             end
         end
        
-       
 
         if exist('zef','var')
         if isfield(zef,'h_zeffiro_window_main')
             if isvalid(zef.h_zeffiro_window_main)
-                if or(ismember(start_mode,'display'), use_display)
+                if exist('use_display','var')
+                    start_mode = 'display';
+                end
+                if ismember(start_mode,'display')
                     zef.start_mode = start_mode; 
                     zef.h_zeffiro.Visible = 1;
                     zef.h_zeffiro_window_main.Visible = 1;
