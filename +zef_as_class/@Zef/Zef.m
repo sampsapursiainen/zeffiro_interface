@@ -744,6 +744,8 @@ classdef Zef < handle
             node_pair ...
         ] = surface_mesh(self, tetra, varargin);
 
+        self = with_mesh_generation_stage(self, stage);
+
     end % methods (Access = private)
 
     methods (Static)
