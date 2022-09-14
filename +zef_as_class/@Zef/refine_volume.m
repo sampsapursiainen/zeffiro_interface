@@ -1,4 +1,4 @@
-function self = refine_volume(self, n_of_refinements)
+function self = refine_volume(self, meshgen_stage, n_of_refinements)
 
 % Zef.refine_volume
 %
@@ -9,6 +9,11 @@ function self = refine_volume(self, n_of_refinements)
 % - self
 %
 %   The Zef object calling this method.
+%
+% - meshgen_stage
+%
+%   Tells whether the refinement occurs during mesh generation or
+%   post-processing. Must be one of {"mesh generation", "post-processing"}.
 %
 % - n_of_refinements
 %
@@ -25,6 +30,8 @@ function self = refine_volume(self, n_of_refinements)
     arguments
 
         self zef_as_class.Zef
+
+        meshgen_stage (1,1) string { mustBeMember(meshgen_stage, ["mesh generation","post-processing"]) }
 
         n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
 
