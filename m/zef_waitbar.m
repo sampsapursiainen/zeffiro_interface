@@ -14,6 +14,7 @@ end
 
 visible_value = zef.use_display;
 font_size = zef.font_size;
+verbose_mode = zef.zeffiro_verbose_mode;
 
 if ishandle(varargin{2})
     h_waitbar = varargin{2};
@@ -87,6 +88,10 @@ set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 %h_waitbar.UserData = get(h_waitbar,'Position');
 %set(h_waitbar,'SizeChangedFcn','set(gcf,''UserData'', zef_change_size_function(gcf,get(gcf,''UserData'')));');
 
-    end
+end
+    
+if and(verbose_mode,not(visible_value))
+    disp([progress_bar_text ' Progress: ' num2str(round(100*progress_value(:)')) ' %.'])
+end
 
 end
