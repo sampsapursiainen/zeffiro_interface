@@ -90,7 +90,7 @@ classdef Sensor
 
         end
 
-        function self = set_inner_radius_to(radius)
+        function self = set_inner_radius_to(self, radius)
 
         %
         % set_inner_radius_to
@@ -114,7 +114,7 @@ classdef Sensor
 
         end % functions
 
-        function self = set_outer_radius_to(radius)
+        function self = set_outer_radius_to(self, radius)
 
         %
         % set_outer_radius_to
@@ -150,7 +150,7 @@ classdef Sensor
         end % function
 
 
-        function self = set_impedance_to(impedance)
+        function self = set_impedance_to(self, impedance)
 
             %
             % set_impedance_to
@@ -163,7 +163,7 @@ classdef Sensor
 
         end
 
-        function self = set_conductance_to(conductance)
+        function self = set_conductance_to(self, conductance)
 
             %
             % set_conductance_to
