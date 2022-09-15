@@ -204,7 +204,7 @@ function self = preprocess_mesh(self)
         s_zx_rotation = self.data.(sensor_tag_zx_rot_name);
 
         if isfield(self.data, sensor_tag_aff_trans_name)
-            s_affine_transform = self.data.(ensor_tag_aff_trans_name);
+            s_affine_transform = self.data.(sensor_tag_aff_trans_name);
         else
             s_affine_transform = cell(0);
         end
