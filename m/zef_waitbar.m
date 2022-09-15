@@ -91,6 +91,21 @@ h_waitbar.Colormap = [[ 0 1 1]; [ 0.145   0.624    0.631]];
 
 end
 
+ detail_condition =or((86400*now - h_waitbar.UserData(2)) >= 2,first_step);
+
+if detail_condition
+    var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
+var_1_max = 6;
+progress_value_1 = min(max(0,log10(var_1))/var_1_max,1);
+var_2 = round(86400*now - h_waitbar.UserData(3));
+var_2_max = 6;
+progress_value_2 = min(max(0,log10(var_2))/var_2_max,1);
+var_3 = round(100*(cputime - h_waitbar.UserData(1))/(86400*now - h_waitbar.UserData(2)));
+var_3_max = 100*feature('numcores');
+h_waitbar.UserData(1:2) = [cputime now*86400];
+progress_value_3 = min(1,var_3/var_3_max);
+end
+
 if isequal(h_waitbar.Visible,'on') || isequal(h_waitbar.Visible,1)
 
 h_axes = findobj(h_waitbar.Children,'Tag','progress_bar_main_axes');
@@ -103,20 +118,12 @@ h_bar(2).FaceColor = [ 0.145   0.624    0.631];
 h_axes.Visible = 'off';
 uistack(h_text,'top');
 
-if or((86400*now - h_waitbar.UserData(2)) >= 2,first_step)
+if detail_condition
+
 h_axes_2 = findobj(h_waitbar.Children,'Tag','progress_bar_auxiliary_axes_1');
 h_axes_3 = findobj(h_waitbar.Children,'Tag','progress_bar_auxiliary_axes_2');
 h_axes_4 = findobj(h_waitbar.Children,'Tag','progress_bar_auxiliary_axes_3');
-var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
-var_1_max = 6;
-progress_value_1 = min(max(0,log10(var_1))/var_1_max,1);
-var_2 = round(86400*now - h_waitbar.UserData(3));
-var_2_max = 6;
-progress_value_2 = min(max(0,log10(var_2))/var_2_max,1);
-var_3 = round(100*(cputime - h_waitbar.UserData(1))/(86400*now - h_waitbar.UserData(2)));
-var_3_max = 100*feature('numcores');
-h_waitbar.UserData(1:2) = [cputime now*86400];
-progress_value_3 = min(1,var_3/var_3_max);
+
 h_pie = pie(h_axes_2,[progress_value_1 1-progress_value_1]);
 h_axes_2.Visible = 'off';
 h_pie(2).String = num2str(var_1); 
@@ -153,7 +160,9 @@ set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 end
     
 if and(verbose_mode,not(visible_value))
+    if detail_condition
     disp([progress_bar_text ' Progress: ' num2str(round(100*progress_value(:)')) ' %, Workspace size: ' num2str(val_1) ' MB, Time: ' num2str(val_2) ' s, CPU usage: ' num2str(val_1) ' %.'])
-end
+    end
+    end
 
 end
