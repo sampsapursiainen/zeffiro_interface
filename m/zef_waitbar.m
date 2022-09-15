@@ -11,9 +11,9 @@ progress_bar_text = '';
 if evalin('caller','exist(''zef'',''var'')')
 zef = evalin('caller','zef');
 evalin('caller','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
-else
-zef = evalin('base','zef');
-evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
+%else
+%zef = evalin('base','zef');
+%evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
 end
 
 visible_value = zef.use_display;
@@ -173,8 +173,9 @@ set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 end
     
 if detail_condition
-
-output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';'];
+caller_file_name = {dbstack(1).file};
+caller_file_name = caller_file_name{1};
+output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';'];
 if use_log
     fprintf(fid,'%s',[output_line newline]);
 end
