@@ -159,10 +159,10 @@ set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
 end
     
-if and(verbose_mode,not(visible_value))
-    if detail_condition
-    disp([progress_bar_text ' Progress: ' num2str(round(100*progress_value(:)')) ' %, Workspace size: ' num2str(val_1) ' MB, Time: ' num2str(val_2) ' s, CPU usage: ' num2str(val_1) ' %.'])
-    end
-    end
-
+  if and(and(verbose_mode,not(visible_value)), detail_condition)
+    disp([progress_bar_text ' Progress: ' num2str(round(100*progress_value(:)')) ' %, Workspace size: ' num2str(var_1) ' MB, Time: ' num2str(var_2) ' s, CPU usage: ' num2str(var_3) ' %.'])
+  end
+    
 end
+
+
