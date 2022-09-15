@@ -41,6 +41,8 @@ function self = build_initial_mesh(self, initial_mesh_mode, mesh_labeling_approa
 
     % Set initial values.
 
+    self.mesh_generation_phase = "initial build";
+
     self.initial_mesh_mode = initial_mesh_mode;
 
     self.mesh_labeling_approach = mesh_labeling_approach;

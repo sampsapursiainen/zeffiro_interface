@@ -30,6 +30,8 @@ function self = refine_volume(self, n_of_refinements)
 
     end
 
+    self.mesh_generation_phase = "refinement";
+
     self.n_of_volume_refinements = n_of_refinements;
 
     for n = 1 : self.n_of_volume_refinements

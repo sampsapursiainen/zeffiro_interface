@@ -48,6 +48,8 @@ function self = refine_volume_adaptively(self, n_of_refinements, tolerance, iter
 
     % Set refinement parameters.
 
+    self.mesh_generation_phase = "refinement";
+
     self.n_of_adaptive_volume_refinements = n_of_refinements;
 
     self.adaptive_refinement_thresh_val = tolerance;

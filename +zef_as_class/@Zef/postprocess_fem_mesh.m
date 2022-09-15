@@ -8,4 +8,6 @@ function self = postprocess_fem_mesh(self)
         self zef_as_class.Zef
     end
 
+    self.mesh_generation_phase = "post-processing";
+
 end

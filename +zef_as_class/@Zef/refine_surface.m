@@ -30,6 +30,8 @@ function self = refine_surface(self, n_of_refinements)
 
     end
 
+    self.mesh_generation_phase = "refinement";
+
     self.n_of_surface_refinements = n_of_refinements;
 
     for n = 1 : self.n_of_surface_refinements
@@ -39,8 +41,10 @@ function self = refine_surface(self, n_of_refinements)
         if self.mesh_relabeling
 
             pml_ind = [];
+
             label_ind = uint32(tetra);
-            self = self.mesh_labeling_step("repeated");
+
+            self = self.label_mesh("repeated");
 
         end % if
 

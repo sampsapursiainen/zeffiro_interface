@@ -1,4 +1,4 @@
-function self = process_meshes(self)
+function self = preprocess_mesh(self)
 
     % process_meshes
     %
@@ -7,6 +7,8 @@ function self = process_meshes(self)
     arguments
         self zef_as_class.Zef
     end
+
+    self.mesh_generation_phase = "pre-processing";
 
     reuna_p_inf = [];
 
