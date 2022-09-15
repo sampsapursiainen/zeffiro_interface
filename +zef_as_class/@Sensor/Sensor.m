@@ -66,6 +66,30 @@ classdef Sensor
 
         end
 
+        function self = set_position_to(position)
+
+        %
+        % set_position_to
+        %
+        % Sets the position of this electrode to a given value.
+        %
+
+            self.position = position;
+
+        end
+
+        function p = position(self)
+
+        %
+        % position
+        %
+        % Returns self.position.
+        %
+
+            p = self.position;
+
+        end
+
         function i = impedance(self)
 
         %
