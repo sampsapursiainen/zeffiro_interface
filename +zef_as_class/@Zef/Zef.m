@@ -270,7 +270,7 @@ classdef Zef < handle
 
         refinement_on (1,1) logical = false;
 
-        sensors (:,:) double = [];
+        sensors (:,1) zef_as_class.Sensor;
 
         surface_downsampling_on (1,1) logical = false;
 
@@ -510,7 +510,25 @@ classdef Zef < handle
 
                 elseif strcmp(finame, 'sensors')
 
-                    self.sensors = data.(finame);
+                    n_of_sensors = size(fival, 1);
+
+                    % Preallocate default objects.
+
+                    self.sensors = repmat(zef_as_class.Sensor.default, n_of_sensors, 1);
+
+                    for row = 1 : n_of_sensors
+
+                        position = fival(row, 1:3);
+
+                        inner_radius = fival(row, 4);
+
+                        outer_radius = fival(row, 5);
+
+                        impedance = fival(row, 6);
+
+                        self.sensors(row) = zef_as_class.Sensor(position, inner_radius, outer_radius, impedance);
+
+                    end
 
                 elseif strcmp(finame, 'surface_downsampling_on') ...
                 || strcmp(finame, 'downsample_surfaces')
