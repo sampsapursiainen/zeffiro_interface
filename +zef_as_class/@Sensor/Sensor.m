@@ -1,10 +1,12 @@
 classdef Sensor
 
+%
 % Sensor
 %
 % A sensor such as an electrode that resides on the surface of the object
-% being measured. Cna operate in 2 modes: PEM or CEM, Point Electrode Model or
-% Complete Electrode Model.
+% being measured. Can operate in 2 modes: PEM or CEM, Point Electrode Model or
+% Complete Electrode Model. In case of PEM, only the position is relevant and
+% the inner and outer radii are set to 0 and impedance to ∞.
 %
 % Properties:
 %
@@ -13,6 +15,19 @@ classdef Sensor
 %   The position of this electrode in 3D Cartesian space.
 %
 % - inner_radius
+%
+%   The inner radius of this sensor. Must be less than or equal to
+%   self.outer_radius.
+%
+% - outer_radius
+%
+%   The outer radius of this sensor. Must be more than or equal to
+%   self.inner_radius.
+%
+% - impedance
+%
+%   The (real) impedance of this sensor.
+%
 
     properties (Access = private)
 
