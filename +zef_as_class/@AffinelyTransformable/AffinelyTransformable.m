@@ -92,7 +92,15 @@ classdef AffinelyTransformable
 
             if isfield(args, "affine_transform")
 
-                self.affine_transform = args.affine_transform;
+                if iscell(args.affine_transform)
+
+                    self.affine_transform = args.affine_transform{1};
+
+                else
+
+                    self.affine_transform = args.affine_transform;
+
+                end
 
             end
 
