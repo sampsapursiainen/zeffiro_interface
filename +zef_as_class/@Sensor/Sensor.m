@@ -61,7 +61,7 @@ classdef Sensor
 
             c = 1 / self.impedance;
 
-        end
+        end % function
 
         function set_inner_radius_to(radius)
 
@@ -75,7 +75,7 @@ classdef Sensor
         % difference in size is maintained.
         %
 
-            if radius > self.outer_radius
+            if radius >= self.outer_radius
 
                 diff_in_size = self.outer_radius - self.inner_radius;
 
@@ -85,7 +85,42 @@ classdef Sensor
 
             self.inner_radius = radius;
 
-        end
+        end % functions
+
+        function set_outer_radius_to(radius)
+
+        %
+        % set_outer_radius_to
+        %
+        % Sets the outer radius of this sensor to a given value.
+        %
+        % NOTE: If the value is less than the current value of the inner
+        % radius, the value of self.inner_radius is also decreased so that the
+        % difference in size is maintained, or set to 0 if this cannot be
+        % done.
+        %
+
+            if radius <= self.inner_radius
+
+                diff_in_size = self.outer_radius - self.inner_radius;
+
+                new_inner_size = self.inner_radius - diff_in_size;
+
+                if new_inner_size < 0
+
+                    self.inner_radius = 0;
+
+                else
+
+                    self.inner_radius = new_inner_size;
+
+                end
+
+            end
+
+            self.outer_radius = radius;
+
+        end % function
 
     end % methods
 
