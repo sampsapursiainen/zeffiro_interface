@@ -1,4 +1,4 @@
-function self = label_mesh(self, labeling_mode)
+function self = label_mesh(self)
 
     % label_mesh
     %
@@ -10,13 +10,6 @@ function self = label_mesh(self, labeling_mode)
     %
     %   The instance of Zef calling this method.
     %
-    % - labeling_mode (optional)
-    %
-    %   The mode in which the labeling is to be performed. Must be in
-    %   {"initial", "repeated", "adaptive-repeated"}.
-    %
-    %   default = "initial"
-    %
     % Outputs
     %
     % - self
@@ -27,21 +20,17 @@ function self = label_mesh(self, labeling_mode)
 
         self zef_as_class.Zef
 
-        labeling_mode (1,1) string { mustBeMember(labeling_mode, ["initial", "repeated", "adaptive-repeated"]) } = "initial";
-
     end
 
     % Read and write needed initial values.
+
+    mesh_generation_phase = self.mesh_generation_phase;
 
     nodes = self.nodes;
 
     tetra = self.tetra;
 
     label_ind = uint32(self.label_ind);
-
-    self.labeling_mode = labeling_mode;
-
-    labeling_mode = self.labeling_mode;
 
     n_compartments = self.n_compartments;
 
@@ -64,7 +53,7 @@ function self = label_mesh(self, labeling_mode)
     end
 
 
-    if isequal(labeling_mode, "initial")
+    if isequal(mesh_generation_phase, "initial build")
 
         %***********************************************************
         %Initialize labeling.
@@ -161,7 +150,7 @@ function self = label_mesh(self, labeling_mode)
 
         nodes = nodes(unique_vec_1,:);
 
-    elseif isequal(labeling_mode, "repeated")
+    elseif isequal(mesh_generation_phase, "refinement")
 
         %**************************************************************
         %Re-labeling.
@@ -276,7 +265,7 @@ function self = label_mesh(self, labeling_mode)
 
         end % for
 
-    elseif isequal(labeling_mode, "adaptive-repeated")
+    elseif isequal(mesh_generation_phase, "adaptive refinement")
 
         %**************************************************************
         %Re-labeling (adaptive).
@@ -414,6 +403,10 @@ function self = label_mesh(self, labeling_mode)
 
         end % for
 
+    else
+
+        error("Invalid mesh generation phase from the point of view of mesh labeling. Returning without doing anything...");
+
     end % if
 
     %**************************************************************
@@ -425,8 +418,6 @@ function self = label_mesh(self, labeling_mode)
     priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 
     [domain_labels] = domain_labels(priority_ind);
-
-    self.data.domain_labels = domain_labels;
 
     self.domain_labels = domain_labels;
 

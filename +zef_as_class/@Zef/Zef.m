@@ -90,7 +90,8 @@ classdef Zef < handle
     % - mesh_generation_phase
     %
     %   The stage at which Zef is in mesh generation. Must be one of
-    %   {"pre-processing", "initial build", "refinement", "post-processing", "done"}.
+    %   {"pre-processing", "initial build", "refinement", "adaptive
+    %   refinement", "post-processing", "done"}.
     %
     % - mesh_labeling_approach
     %
@@ -235,7 +236,7 @@ classdef Zef < handle
 
         labeling_threshold (1,1) double { mustBeReal, mustBePositive } = 0.5;
 
-        mesh_generation_phase (1,1) string { mustBeMember(mesh_generation_phase, ["pre-processing", "initial build", "refinement", "post-processing", "done"]) } = "done";
+        mesh_generation_phase (1,1) string { mustBeMember(mesh_generation_phase, ["pre-processing", "initial build", "refinement", "adaptive refinement", "post-processing", "done"]) } = "done";
 
         mesh_resolution (1,1) double { mustBePositive } = 1;
 
@@ -434,6 +435,10 @@ classdef Zef < handle
                             self.mesh_generation_stage = "refinement";
 
                         elseif fival == 4
+
+                            self.mesh_generation_stage = "adaptive refinement";
+
+                        elseif fival == 5
 
                             self.mesh_generation_stage = "post-processing";
 
