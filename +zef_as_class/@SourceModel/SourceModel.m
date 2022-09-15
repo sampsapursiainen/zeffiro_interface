@@ -21,6 +21,8 @@ classdef SourceModel
             % SourceModel based on given p_input. Generates a
             % SourceModel.Error on invalid p_input.
 
+            import zef_as_class.SourceModel;
+
             % Assume p_input is invalid. If valid p_input is found, this will
             % change to a valid return value.
 
@@ -39,23 +41,69 @@ classdef SourceModel
             if isenum(p_input)
 
                 switch p_input
+
                     case SourceModel.Error
+
                         source_model = p_input;
+
                     case SourceModel.Whitney
+
                         source_model = p_input;
+
                     case SourceModel.Hdiv
+
                         source_model = p_input;
+
                     case SourceModel.StVenant
+
                         source_model = p_input;
+
                     case SourceModel.ContinuousWhitney
+
                         source_model = p_input;
+
                     case SourceModel.ContinuousHdiv
+
                         source_model = p_input;
+
                     case SourceModel.ContinuousStVenant
+
                         source_model = p_input;
-                    otherwise
-                        warning("I received an enum that is not a SourceModel. Setting erraneous return value.")
+
+                    case ZefSourceModel.Error
+
                         source_model = SourceModel.Error;
+
+                    case ZefSourceModel.Whitney
+
+                        source_model = SourceModel.Whitney;
+
+                    case ZefSourceModel.Hdiv
+
+                        source_model = SourceModel.Hdiv;
+
+                    case ZefSourceModel.StVenant
+
+                        source_model = SourceModel.StVenant;
+
+                    case ZefSourceModel.ContinuousWhitney
+
+                        source_model = SourceModel.ContinuousWhitney;
+
+                    case ZefSourceModel.ContinuousHdiv
+
+                        source_model = SourceModel.ContinuousHdiv;
+
+                    case ZefSourceModel.ContinuousStVenant
+
+                        source_model = SourceModel.ContinuousStVenant;
+
+                    otherwise
+
+                        warning("I received an enum that is not a SourceModel. Setting erraneous return value.")
+
+                        source_model = SourceModel.Error;
+
                 end
 
                 return
@@ -169,6 +217,8 @@ classdef SourceModel
             %
             %   A string representation of the given variant. "None", if given
             %   variant does not exist.
+
+            import zef_as_class.SourceModel;
 
             switch variant
 
