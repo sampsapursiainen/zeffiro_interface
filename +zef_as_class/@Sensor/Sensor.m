@@ -53,11 +53,37 @@ classdef Sensor
 
         function c = conductivity(self)
 
+        %
         % conductivity
         %
         % Returns the conductivity computed from self.impedance.
+        %
 
             c = 1 / self.impedance;
+
+        end
+
+        function set_inner_radius_to(radius)
+
+        %
+        % set_inner_radius_to
+        %
+        % Sets the inner radius of this sensor to a given value.
+        %
+        % NOTE: If the value is greater than the current value of the outer
+        % radius, the value of self.outer_radius is also inreased so that the
+        % difference in size is maintained.
+        %
+
+            if radius > self.outer_radius
+
+                diff_in_size = self.outer_radius - self.inner_radius;
+
+                self.outer_radius = radius + diff_in_size;
+
+            end
+
+            self.inner_radius = radius;
 
         end
 
