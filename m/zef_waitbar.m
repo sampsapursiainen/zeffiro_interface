@@ -10,10 +10,10 @@ progress_bar_text = '';
 
 if evalin('caller','exist(''zef'',''var'')')
 zef = evalin('caller','zef');
-evalin('caller','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
-%else
-%zef = evalin('base','zef');
-%evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
+workspace_mode = 'caller';
+elseif evalin('caller','exist(''zef'',''var'')')
+ zef = evalin('base','zef');
+ workspace_mode = 'base';
 end
 
 visible_value = zef.use_display;
@@ -47,6 +47,13 @@ else
     progress_bar_text = varargin{2};
     end
     
+    first_step = 1;
+    if isequal(workspace_mode,'caller')
+    evalin('caller','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
+    else 
+   evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');   
+    end
+    
 h_waitbar = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
 'Units','normalized',...
@@ -75,7 +82,6 @@ h_waitbar = figure(...
 'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
 'ScreenPixelsPerInchMode','manual' );
 
-first_step = 1;
 h_waitbar.UserData = [cputime now*86400 now*86400];
 
 
@@ -107,7 +113,12 @@ end
  detail_condition =or((86400*now - h_waitbar.UserData(2)) >= log_frequency,first_step);
 
 if detail_condition
-    var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
+    if isequal(workspace_mode,'caller')
+ var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
+    else
+        var_1 = evalin('base','round(sum(cell2mat({whos().bytes}))/1E6)');
+    end
+        
 var_1_max = 6;
 progress_value_1 = min(max(0,log10(var_1))/var_1_max,1);
 var_2 = round(86400*now - h_waitbar.UserData(3));
@@ -166,10 +177,13 @@ if not(ishandle(varargin{2}))
     set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
-  %  set(h_waitbar,'AutoResizeChildren','off');
-%h_waitbar.UserData = get(h_waitbar,'Position');
-%set(h_waitbar,'SizeChangedFcn','set(gcf,''UserData'', zef_change_size_function(gcf,get(gcf,''UserData'')));');
+for i = 1 : length(h_waitbar.Children)
+    
+    set(findobj(h_waitbar.Children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
+set(findobj(h_waitbar.Children(i).Children,'-property','FontSize'),'FontSize',font_size);
 
+end
+  
 end
     
 if detail_condition
