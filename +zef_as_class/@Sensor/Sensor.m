@@ -14,6 +14,10 @@ classdef Sensor
 %
 %   The position of this electrode in 3D Cartesian space.
 %
+% - direction
+%
+%   The direction this electrode points in, in 3D Cartesian space.
+%
 % - inner_radius
 %
 %   The inner radius of this sensor. Must be less than or equal to
@@ -33,6 +37,8 @@ classdef Sensor
 
         position (1,3) double = [ 0 , 0 , 0 ];
 
+        direction (1,3) double = [ 1 , 0 , 0 ];
+
         inner_radius (1,1) double { mustBeReal , mustBeNonnegative} = 0;
 
         outer_radius (1,1) double { mustBeReal , mustBeNonnegative} = 0;
@@ -43,7 +49,7 @@ classdef Sensor
 
     methods
 
-        function self = Sensor(position, inner_radius, outer_radius, impedance)
+        function self = Sensor(position, direction, inner_radius, outer_radius, impedance)
 
         % Sensor
         %
@@ -69,6 +75,8 @@ classdef Sensor
             end
 
             self.position = position;
+
+            self.direction = direction;
 
             self.inner_radius = inner_radius;
 
@@ -182,7 +190,7 @@ classdef Sensor
 
         function self = default()
 
-            self = zef_as_class.Sensor([0, 0 ,0], 0, 0, Inf);
+            self = zef_as_class.Sensor([0, 0 ,0], [1, 0, 0], 0, 0, Inf);
 
         end
 

@@ -522,6 +522,8 @@ classdef Zef < handle
 
                         position = fival(row, 1:3);
 
+                        direction = [1, 0, 0];
+
                         if n_of_sensor_fields == 6
 
                             inner_radius = fival(row, 4);
@@ -540,7 +542,13 @@ classdef Zef < handle
 
                         end
 
-                        self.sensors(row) = zef_as_class.Sensor(position, inner_radius, outer_radius, impedance);
+                        self.sensors(row) = zef_as_class.Sensor( ...
+                            position, ...
+                            direction, ...
+                            inner_radius, ...
+                            outer_radius, ...
+                            impedance ...
+                        );
 
                     end
 
