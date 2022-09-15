@@ -28,7 +28,9 @@ function zef = zeffiro_interface(varargin)
 %Property: 'use_display'                 Value: 1 (yes) or 0 (no)
 %Property: 'parallel_processes'          Value: <parallel pool size>
 %Property: 'verbose_mode'                Value: 1 (yes) or 0 (no)
-%Property: 'use_waitbar'                Value: 1 (yes) or 0 (no)
+%Property: 'use_waitbar'                 Value: 1 (yes) or 0 (no)
+%Property: 'use_log'                     Value: 1 (yes) or 0 (no)
+%Property: 'log_file_name'               Value: <log file name>
 
 warning off;
 option_counter = 1;
@@ -53,6 +55,7 @@ end
     run([program_path filesep 'm/zef_close_all.m']);
     zef = struct;
     
+    zef.zeffiro_task_id = 0;
     zef.zeffiro_restart_time = now; 
     zef.zeffiro_restart = zeffiro_restart;
     zef.program_path = program_path;
@@ -134,6 +137,18 @@ end
                verbose_mode = varargin{option_counter+1};    
           
                 option_counter = option_counter + 2; 
+                
+                elseif isequal(varargin{option_counter},lower('use_log'))
+                
+               use_log = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2; 
+                
+                  elseif isequal(varargin{option_counter},lower('log_file_name'))
+                
+               log_file_name = varargin{option_counter+1};    
+          
+                option_counter = option_counter + 2; 
             
             elseif isequal(varargin{option_counter},lower('use_waitbar'))
                 
@@ -173,8 +188,14 @@ end
         if exist('verbose_mode','var')
          zef.zeffiro_verbose_mode = verbose_mode;
         end
-                 if exist('use_waitbar','var')
-         zef.use_waitbar = verbose_mode;
+        if exist('use_log','var')
+         zef.use_log = use_log;
+        end
+        if exist('log_file_name','var')
+         zef.zeffiro_log_file_name = log_file_name;
+        end
+         if exist('use_waitbar','var')
+         zef.use_waitbar = use_waitbar;
          end
            if exist('use_display','var')
                zef.use_display =  use_display;
@@ -226,6 +247,12 @@ end
          if exist('verbose_mode','var')
          zef.zeffiro_verbose_mode = verbose_mode;
          end
+         if exist('use_log','var')
+         zef.use_log = use_log;
+        end
+        if exist('log_file_name','var')
+         zef.zeffiro_log_file_name = log_file_name;
+        end
         if exist('use_waitbar','var')
          zef.use_waitbar = use_waitbar;
          end
@@ -434,6 +461,12 @@ end
          if exist('verbose_mode','var')
          zef.zeffiro_verbose_mode = verbose_mode;
          end
+         if exist('use_log','var')
+         zef.use_log = use_log;
+        end
+        if exist('log_file_name','var')
+         zef.zeffiro_log_file_name = log_file_name;
+        end
     if exist('use_waitbar','var')
          zef.use_waitbar = use_waitbar;
          end

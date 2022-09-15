@@ -1,6 +1,7 @@
 
 function h_waitbar = zef_waitbar(varargin)
 
+log_frequency = 5;
 first_step = 0;
 progress_value = varargin{1};
 progress_value = min(1,progress_value(:));
@@ -8,15 +9,26 @@ progress_value = max(0,progress_value(:));
 progress_bar_text = '';
 
 if evalin('caller','exist(''zef'',''var'')')
-zef = evalin('caller','zef');  
+zef = evalin('caller','zef');
+evalin('caller','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
 else
 zef = evalin('base','zef');
+evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
 end
 
 visible_value = zef.use_display;
 font_size = zef.font_size;
 verbose_mode = zef.zeffiro_verbose_mode;
 use_waitbar = zef.use_waitbar;
+task_id = zef.zeffiro_task_id + 1;
+use_log = zef.use_log; 
+log_name = zef.zeffiro_log_file_name;
+program_path = zef.program_path; 
+current_log_file = zef.current_log_file;
+
+if use_log
+fid = fopen(current_log_file,'a');
+end
 
 if not(use_waitbar)
     visible_value = 0;
@@ -49,7 +61,7 @@ h_waitbar = figure(...
 'DoubleBuffer','off',...
 'MenuBar','none',...
 'ToolBar','none',...
-'Name','ZEFFIRO Interface: Progress bar',...
+'Name',['ZEFFIRO Interface: Task ' num2str(task_id)],...
 'NumberTitle','off',...
 'HandleVisibility','callback',...
 'DeleteFcn','delete(gcf);',...
@@ -65,6 +77,7 @@ h_waitbar = figure(...
 
 first_step = 1;
 h_waitbar.UserData = [cputime now*86400 now*86400];
+
 
 h_axes = axes(h_waitbar,'Position',[0.1 0.5 0.8 0.3]);
 h_axes.Visible = 'off';
@@ -91,7 +104,7 @@ h_waitbar.Colormap = [[ 0 1 1]; [ 0.145   0.624    0.631]];
 
 end
 
- detail_condition =or((86400*now - h_waitbar.UserData(2)) >= 2,first_step);
+ detail_condition =or((86400*now - h_waitbar.UserData(2)) >= log_frequency,first_step);
 
 if detail_condition
     var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
@@ -159,9 +172,20 @@ set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
 end
     
-  if and(and(verbose_mode,not(visible_value)), detail_condition)
-    disp([progress_bar_text ' Progress: ' num2str(round(100*progress_value(:)')) ' %, Workspace size: ' num2str(var_1) ' MB, Time: ' num2str(var_2) ' s, CPU usage: ' num2str(var_3) ' %.'])
+if detail_condition
+
+output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';' newline];
+if use_log
+    fprintf(fid,'%s',[output_line]);
+end
+
+  if and(verbose_mode,not(visible_value))
+    disp(output_line)
   end
+  
+end
+
+fclose(fid);
     
 end
 
