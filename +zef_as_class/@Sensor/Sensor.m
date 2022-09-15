@@ -33,9 +33,9 @@ classdef Sensor
 
         position (3,1) double = [ 0 ; 0 ; 0 ];
 
-        inner_radius = (1,1) double { mustBeReal , mustBeNonnegative} = 0;
+        inner_radius (1,1) double { mustBeReal , mustBeNonnegative} = 0;
 
-        outer_radius = (1,1) double { mustBeReal , mustBeNonnegative} = 0;
+        outer_radius (1,1) double { mustBeReal , mustBeNonnegative} = 0;
 
         impedance (1,1) double { mustBeReal , mustBeNonnegative} = Inf;
 
@@ -78,7 +78,7 @@ classdef Sensor
 
         end
 
-        function p = position(self)
+        function p = get_position(self)
 
         %
         % position
@@ -90,7 +90,7 @@ classdef Sensor
 
         end
 
-        function i = impedance(self)
+        function i = get_impedance(self)
 
         %
         % impedance
@@ -102,7 +102,7 @@ classdef Sensor
 
         end
 
-        function c = conductance(self)
+        function c = get_conductance(self)
 
         %
         % conductance
