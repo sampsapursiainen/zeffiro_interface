@@ -1,4 +1,4 @@
-classdef VolumeCompartment
+classdef VolumeCompartment < zef_as_class.AffinelyTransformable
 
     % zef_as_class.VolumeCompartment
     %
@@ -128,8 +128,6 @@ classdef VolumeCompartment
 
     properties
 
-        affine_transform double = [];
-
         color (1,3) double {} = [0 0 0];
 
         condition_number (1,1) double = 1;
@@ -141,20 +139,6 @@ classdef VolumeCompartment
         is_on (1,1) logical = true;
 
         name (1,1) string = "";
-
-        scaling (1,1) double { mustBePositive } = 1;
-
-        x_correction (1,1) double = 0;
-
-        y_correction (1,1) double = 0;
-
-        z_correction (1,1) double = 0;
-
-        xy_rotation (1,1) double = 0
-
-        yz_rotation (1,1) double = 0
-
-        zx_rotation (1,1) double = 0
 
         points_inf (:,3) double = [];
 
@@ -178,8 +162,6 @@ classdef VolumeCompartment
 
         sources_old (1,1) double { mustBeInteger }  = 0;
 
-        transform_name (1,1) string { mustBeText } = "";
-
     end % properties
 
     methods
@@ -198,11 +180,11 @@ classdef VolumeCompartment
 
             end
 
-            if isfield(args, "affine_transform")
+            % Initialize superclass fields.
 
-                self.affine_transform = args.affine_transform;
+            self = self@zef_as_class.AffinelyTransformable(args);
 
-            end
+            % Initialize own fields.
 
             if isfield(args, "color")
 
@@ -280,12 +262,6 @@ classdef VolumeCompartment
 
             end
 
-            if isfield(args, "scaling")
-
-                self.scaling = args.scaling;
-
-            end
-
             if isfield(args, "sigma")
 
                 self.sigma = args.sigma;
@@ -316,12 +292,6 @@ classdef VolumeCompartment
 
             end
 
-            if isfield(args, "transform_name")
-
-                self.transform_name = args.transform_name;
-
-            end
-
             if isfield(args, "triangles")
 
                 self.triangles = args.triangles;
@@ -331,42 +301,6 @@ classdef VolumeCompartment
             if isfield(args, "triangles_original_surface_mesh")
 
                 self.triangles_original_surface_mesh = args.triangles_original_surface_mesh;
-
-            end
-
-            if isfield(args, "x_correction")
-
-                self.x_correction = args.x_correction;
-
-            end
-
-            if isfield(args, "xy_rotation")
-
-                self.xy_rotation = args.xy_rotation;
-
-            end
-
-            if isfield(args, "y_correction")
-
-                self.y_correction = args.y_correction;
-
-            end
-
-            if isfield(args, "yz_rotation")
-
-                self.yz_rotation = args.yz_rotation;
-
-            end
-
-            if isfield(args, "z_correction")
-
-                self.z_correction = args.z_correction;
-
-            end
-
-            if isfield(args, "zx_rotation")
-
-                self.zx_rotation = args.zx_rotation;
 
             end
 
