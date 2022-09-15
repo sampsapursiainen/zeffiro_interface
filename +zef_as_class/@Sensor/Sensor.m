@@ -29,7 +29,7 @@ classdef Sensor
 %   The (real) impedance of this sensor.
 %
 
-    properties (Access = private)
+    properties (SetAccess = private, GetAccess = public)
 
         position (3,1) double = [ 0 ; 0 ; 0 ];
 
@@ -89,42 +89,6 @@ classdef Sensor
             self.position = position;
 
         end
-
-        function p = get_position(self)
-
-        %
-        % position
-        %
-        % Returns self.position.
-        %
-
-            p = self.position;
-
-        end
-
-        function i = get_impedance(self)
-
-        %
-        % impedance
-        %
-        % Returns self.impedance.
-        %
-
-            i = self.impedance;
-
-        end
-
-        function c = get_conductance(self)
-
-        %
-        % conductance
-        %
-        % Returns the conductance computed from self.impedance.
-        %
-
-            c = 1 / self.impedance;
-
-        end % function
 
         function self = set_inner_radius_to(radius)
 
