@@ -166,6 +166,10 @@ classdef Zef < handle
     %   An N × 3 array of sensor positions when PEM is used. With CEM, has 3
     %   more columns.
     %
+    % - source_model
+    %
+    %   The source model used in lead field calculations.
+    %
     % - surface_downsampling_on
     %
     %   A flag for deciding whether to downsample surfaces during FE mesh
@@ -271,6 +275,8 @@ classdef Zef < handle
         refinement_on (1,1) logical = false;
 
         sensors (:,1) zef_as_class.Sensor;
+
+        source_model (1,1) zef_as_class.SourceModel = zef_as_class.SourceModel.Hdiv;
 
         surface_downsampling_on (1,1) logical = false;
 
@@ -641,6 +647,10 @@ classdef Zef < handle
                 elseif strcmp(finame, 'refinement_on')
 
                     self.refinement_on = data.(finame);
+
+                elseif strcmp(finame, 'source_model')
+
+                    self.source_model = zef_as_class.SourceModel.from(fival);
 
                 elseif strcmp(finame, 'surface_refinement_on')
 
