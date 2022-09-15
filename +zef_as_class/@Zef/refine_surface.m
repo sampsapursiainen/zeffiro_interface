@@ -153,7 +153,7 @@ function self = perform_refinement(self)
 
         end % if
 
-        refinement_type = zef_compartment_to_subcompartment(setdiff(refinement_type,1) - 1);
+        refinement_type = compartment_to_subcompartment(setdiff(refinement_type,1) - 1);
 
         I = [I ; find(ismember(domain_labels,refinement_type(:)))];
 
