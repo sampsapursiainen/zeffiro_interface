@@ -177,3 +177,23 @@ if not(ismember('ZefTool',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefTool');
 end
 zef.h_zeffiro_menu.ZefTool = mfilename;
+
+if not(ismember('ZefSystemSettings',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefSystemSettings');
+end
+zef = zef_apply_system_settings(zef);
+
+if not(ismember('ZefCurrentLogFile',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefCurrentLogFile');
+end
+zef.h_zeffiro_menu.ZefCurrentLogFile = zef.current_log_file;
+
+if not(ismember('ZefTaskId',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefTaskId');
+end
+zef.h_zeffiro_menu.ZefTaskId = zef.zeffiro_task_id;
+
+if not(ismember('ZefRestartTime',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefRestartTime');
+end
+zef.h_zeffiro_menu.ZefRestartTime = zef.zeffiro_restart_time;

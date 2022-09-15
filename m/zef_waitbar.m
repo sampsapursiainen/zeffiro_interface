@@ -1,6 +1,16 @@
 
 function h_waitbar = zef_waitbar(varargin)
 
+h_zeffiro_menu = findobj(groot,'-property','ZefSystemSettings');
+
+if isempty(h_zeffiro_menu)
+    
+h_waitbar = figure('Visible','off','Position',[0 0 0 0]);
+
+else
+
+h_zeffiro_menu = h_zeffiro_menu(1);
+
 log_frequency = 5;
 first_step = 0;
 progress_value = varargin{1};
@@ -8,23 +18,16 @@ progress_value = min(1,progress_value(:));
 progress_value = max(0,progress_value(:));
 progress_bar_text = '';
 
-if evalin('caller','exist(''zef'',''var'')')
-zef = evalin('caller','zef');
-workspace_mode = 'caller';
-elseif evalin('caller','exist(''zef'',''var'')')
- zef = evalin('base','zef');
- workspace_mode = 'base';
-end
-
-visible_value = zef.use_display;
-font_size = zef.font_size;
-verbose_mode = zef.zeffiro_verbose_mode;
-use_waitbar = zef.use_waitbar;
-task_id = zef.zeffiro_task_id + 1;
-use_log = zef.use_log; 
-log_name = zef.zeffiro_log_file_name;
-program_path = zef.program_path; 
-current_log_file = zef.current_log_file;
+visible_value = h_zeffiro_menu.ZefSystemSettings.use_display;
+font_size = h_zeffiro_menu.ZefSystemSettings.font_size;
+verbose_mode = h_zeffiro_menu.ZefSystemSettings.zeffiro_verbose_mode;
+use_waitbar = h_zeffiro_menu.ZefSystemSettings.use_waitbar;
+use_log = h_zeffiro_menu.ZefSystemSettings.use_log; 
+log_name = h_zeffiro_menu.ZefSystemSettings.zeffiro_log_file_name;
+program_path = h_zeffiro_menu.ZefSystemSettings.program_path; 
+current_log_file = h_zeffiro_menu.ZefCurrentLogFile;
+task_id = h_zeffiro_menu.ZefTaskID;
+restart_time = h_zeffiro_menu.ZefRestartTime;
 
 if use_log
 fid = fopen(current_log_file,'a');
@@ -48,11 +51,8 @@ else
     end
     
     first_step = 1;
-    if isequal(workspace_mode,'caller')
-    evalin('caller','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');
-    else 
-   evalin('base','zef.zeffiro_task_id = zef.zeffiro_task_id + 1;');   
-    end
+    task_id = task_id + 1; 
+    h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
     
 h_waitbar = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
@@ -189,7 +189,7 @@ end
 if detail_condition
 caller_file_name = {dbstack(1).file};
 caller_file_name = caller_file_name{1};
-output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';'];
+output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(restart_time) ';'];
 if use_log
     fprintf(fid,'%s',[output_line newline]);
 end
@@ -201,7 +201,8 @@ end
 end
 
 fclose(fid);
-    
+  
+end
 end
 
 
