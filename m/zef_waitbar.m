@@ -174,9 +174,9 @@ end
     
 if detail_condition
 
-output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';' newline];
+output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(zef.zeffiro_restart_time) ';'];
 if use_log
-    fprintf(fid,'%s',[output_line]);
+    fprintf(fid,'%s',[output_line newline]);
 end
 
   if and(verbose_mode,not(visible_value))
