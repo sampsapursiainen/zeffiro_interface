@@ -79,7 +79,7 @@ first_step = 1;
 h_waitbar.UserData = [cputime now*86400 now*86400];
 
 
-h_axes = axes(h_waitbar,'Position',[0.1 0.5 0.8 0.3]);
+h_axes = axes(h_waitbar,'Position',[0.1 0.525 0.8 0.3]);
 h_axes.Visible = 'off';
 h_axes.Tag= 'progress_bar_main_axes';
 
