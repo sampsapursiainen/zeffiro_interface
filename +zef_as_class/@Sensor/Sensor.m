@@ -178,4 +178,14 @@ classdef Sensor
 
     end % methods
 
+    methods (Static)
+
+        function self = default()
+
+            self = zef_as_class.Sensor([0, 0 ,0], 0, 0, Inf);
+
+        end
+
+    end % methods (Static)
+
 end % classdef
