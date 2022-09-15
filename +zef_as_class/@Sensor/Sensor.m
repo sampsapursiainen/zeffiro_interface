@@ -56,6 +56,18 @@ classdef Sensor
 
             end
 
+            if outer_radius > 0 && isinf(impedance)
+
+                error("If a Sensor is complete, as in has a size, it cannot have infinite impedance. Aborting...");
+
+            end
+
+            if ~ isinf(impedance) && outer_radius == 0
+
+                error("A point-like sensor cannot have a finite impedance. Aborting...")
+
+            end
+
             self.position = position;
 
             self.inner_radius = inner_radius;
