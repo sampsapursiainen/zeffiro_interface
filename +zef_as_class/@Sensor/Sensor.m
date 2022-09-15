@@ -31,7 +31,7 @@ classdef Sensor
 
     properties (SetAccess = private, GetAccess = public)
 
-        position (3,1) double = [ 0 ; 0 ; 0 ];
+        position (1,3) double = [ 0 , 0 , 0 ];
 
         inner_radius (1,1) double { mustBeReal , mustBeNonnegative} = 0;
 
