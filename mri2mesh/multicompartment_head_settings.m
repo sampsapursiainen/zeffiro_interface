@@ -9,5 +9,5 @@ zef_add_compartment;
 zef.compartment_tags = zef.compartment_tags([2:end 1]);
 evalin('base',['zef.' zef.compartment_tags{end} '_name = ''Box''; ']);
 evalin('base',['zef.' zef.compartment_tags{end} '_sources = -1; ']);
-zef.refinement_surface_compartments = [19 1 18];
+zef.refinement_surface_compartments = [18 -1 17];
 zef_build_compartment_table;

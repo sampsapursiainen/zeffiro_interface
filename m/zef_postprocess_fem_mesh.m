@@ -147,17 +147,18 @@ zef_refinement_step;
     end
 end
 
+
 if eval('zef.refinement_volume_on_2');
 zef_waitbar(0,h,'Volume refinement.');
 n_refinement = eval('zef.refinement_volume_number_2');
 refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
 
 refinement_compartments = [];
-if ismember(1,refinement_compartments_aux)
-refinement_compartments = aux_active_compartment_ind(:);
+if ismember(-1,refinement_compartments_aux)
+   [~, refinement_compartments] = zef_find_active_compartment_ind(zef,zef.domain_labels);
 end
 
-refinement_compartments_aux = setdiff(refinement_compartments_aux,1)-1;
+refinement_compartments_aux = setdiff(refinement_compartments_aux,-1);
 refinement_compartments = [refinement_compartments ; refinement_compartments_aux(:)];
 
 for i = 1 : n_refinement

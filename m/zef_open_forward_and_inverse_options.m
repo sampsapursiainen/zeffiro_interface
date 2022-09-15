@@ -30,7 +30,7 @@ zef.h_as_opt_3.Value = num2str(zef.smoothing_steps_surf);
 zef.h_as_opt_4.Value = num2str(zef.smoothing_steps_vol);
 zef.h_lead_field_filter_quantile.Value = num2str(zef.lead_field_filter_quantile);
 zef.h_meshing_threshold.Value = num2str(zef.meshing_threshold);
-zef.h_as_opt_5.ItemsData = [1:length(zef.h_as_opt_5.Items)];
+zef.h_as_opt_5.ItemsData = [-1 1:length(zef.h_as_opt_5.Items)-1];
 zef.h_as_opt_5.Multiselect = 'on';
 
 zef.h_use_fem_mesh_inflation.Value = zef.use_fem_mesh_inflation;
@@ -39,39 +39,39 @@ zef.h_fem_mesh_inflation_strength.Value = num2str(zef.fem_mesh_inflation_strengt
 if max(zef.refinement_surface_compartments_2) <= length(zef.h_as_opt_5.ItemsData)
 zef.h_as_opt_5.Value = zef.refinement_surface_compartments_2;
 else
-    zef.h_as_opt_5.Value = 1;
+    zef.h_as_opt_5.Value = -1;
 end
 
-zef.h_refinement_volume_compartments.ItemsData = [1:length(zef.h_refinement_volume_compartments.Items)];
+zef.h_refinement_volume_compartments.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments.Items)-1];
 zef.h_refinement_volume_compartments.Multiselect = 'on';
 if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_compartments.ItemsData)
 zef.h_refinement_volume_compartments.Value = zef.refinement_volume_compartments;
 else
-    zef.h_refinement_volume_compartments.Value = 1;
+    zef.h_refinement_volume_compartments.Value = -1;
 end
 
-zef.h_refinement_volume_compartments_2.ItemsData = [1:length(zef.h_refinement_volume_compartments_2.Items)];
+zef.h_refinement_volume_compartments_2.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments_2.Items)-1];
 zef.h_refinement_volume_compartments_2.Multiselect = 'on';
 if max(zef.refinement_volume_compartments_2) <= length(zef.h_refinement_volume_compartments_2.ItemsData)
 zef.h_refinement_volume_compartments_2.Value = zef.refinement_volume_compartments_2;
 else
-    zef.h_refinement_volume_compartments_2.Value = 1;
+    zef.h_refinement_volume_compartments_2.Value = -1;
 end
 
-zef.h_refinement_surface_compartments.ItemsData = [1:length(zef.h_refinement_surface_compartments.Items)];
+zef.h_refinement_surface_compartments.ItemsData = [-1 1:length(zef.h_refinement_surface_compartments.Items)-1];
 zef.h_refinement_surface_compartments.Multiselect = 'on';
 if max(zef.refinement_surface_compartments) <= length(zef.h_refinement_surface_compartments.ItemsData)
 zef.h_refinement_surface_compartments.Value = zef.refinement_surface_compartments;
 else
-    zef.h_refinement_surface_compartments.Value = 1;
+    zef.h_refinement_surface_compartments.Value = -1;
 end
 
-zef.h_adaptive_refinement_compartments.ItemsData = [1:length(zef.h_adaptive_refinement_compartments.Items)];
+zef.h_adaptive_refinement_compartments.ItemsData = [-1 1:length(zef.h_adaptive_refinement_compartments.Items)-1];
 zef.h_adaptive_refinement_compartments.Multiselect = 'on';
 if max(zef.adaptive_refinement_compartments) <= length(zef.h_adaptive_refinement_compartments.ItemsData)
 zef.h_adaptive_refinement_compartments.Value = zef.adaptive_refinement_compartments;
 else
-    zef.h_adaptive_refinement_compartments.Value = 1;
+    zef.h_adaptive_refinement_compartments.Value = -1;
 end
 
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;

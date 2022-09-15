@@ -53,6 +53,7 @@ end
     run([program_path filesep 'm/zef_close_all.m']);
     zef = struct;
     
+    zef.zeffiro_restart_time = now; 
     zef.zeffiro_restart = zeffiro_restart;
     zef.program_path = program_path;
     zef.code_path = [zef.program_path filesep 'm'];    
