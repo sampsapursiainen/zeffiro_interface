@@ -50,7 +50,7 @@ zef_data = struct;
 zef_init;
 
 if zef.use_log
-    zef.current_log_file = [zef.program_path filesep 'data' filesep 'log' filesep zef.zeffiro_log_file_name '_' num2str(length(dir([zef.program_path filesep 'data' filesep 'log']))-2) '.log'];
+    zef.current_log_file = [zef.program_path filesep 'data' filesep 'log' filesep zef.zeffiro_log_file_name '_' num2str(length(dir([zef.program_path filesep 'data' filesep 'log']))-1) '.log'];
 fid = fopen(zef.current_log_file,'a'); 
 fprintf(fid,'%s',['**************************************************************************' newline]);
 fprintf(fid,'%s',['ZEFFIRO Interface ' num2str(zef.current_version) ' Log file: ' datestr(now) newline]);
