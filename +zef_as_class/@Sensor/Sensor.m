@@ -51,19 +51,31 @@ classdef Sensor
 
         end
 
-        function c = conductivity(self)
+        function i = impedance(self)
 
         %
-        % conductivity
+        % impedance
         %
-        % Returns the conductivity computed from self.impedance.
+        % Returns self.impedance.
+        %
+
+            i = self.impedance;
+
+        end
+
+        function c = conductance(self)
+
+        %
+        % conductance
+        %
+        % Returns the conductance computed from self.impedance.
         %
 
             c = 1 / self.impedance;
 
         end % function
 
-        function set_inner_radius_to(radius)
+        function self = set_inner_radius_to(radius)
 
         %
         % set_inner_radius_to
@@ -87,7 +99,7 @@ classdef Sensor
 
         end % functions
 
-        function set_outer_radius_to(radius)
+        function self = set_outer_radius_to(radius)
 
         %
         % set_outer_radius_to
@@ -121,6 +133,33 @@ classdef Sensor
             self.outer_radius = radius;
 
         end % function
+
+
+        function self = set_impedance_to(impedance)
+
+            %
+            % set_impedance_to
+            %
+            % Sets the value of the impedance to the given value, returning
+            % self.
+            %
+
+            self.impedance = impedance;
+
+        end
+
+        function self = set_conductance_to(conductance)
+
+            %
+            % set_conductance_to
+            %
+            % Sets the value of the impedance to the given value, returning
+            % self.
+            %
+
+            self.impedance = 1 / conductance;
+
+        end
 
     end % methods
 
