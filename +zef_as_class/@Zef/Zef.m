@@ -512,6 +512,8 @@ classdef Zef < handle
 
                     n_of_sensors = size(fival, 1);
 
+                    n_of_sensor_fields = size(fival, 2);
+
                     % Preallocate default objects.
 
                     self.sensors = repmat(zef_as_class.Sensor.default, n_of_sensors, 1);
@@ -520,11 +522,23 @@ classdef Zef < handle
 
                         position = fival(row, 1:3);
 
-                        inner_radius = fival(row, 4);
+                        if n_of_sensor_fields == 6
 
-                        outer_radius = fival(row, 5);
+                            inner_radius = fival(row, 4);
 
-                        impedance = fival(row, 6);
+                            outer_radius = fival(row, 5);
+
+                            impedance = fival(row, 6);
+
+                        else
+
+                            inner_radius = 0;
+
+                            outer_radius = 0;
+
+                            impedance = Inf;
+
+                        end
 
                         self.sensors(row) = zef_as_class.Sensor(position, inner_radius, outer_radius, impedance);
 
