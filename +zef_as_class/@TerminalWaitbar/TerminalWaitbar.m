@@ -42,21 +42,23 @@ classdef TerminalWaitbar
 
     properties
 
-        title_string (1,1) string = "";
+        title_string (1,1) string;
+
+        max_val (1,1) double { mustBeReal, mustBePositive } = 1;
 
         message (1,1) string = "";
 
         current_val (1,1) double { mustBeReal, mustBeNonnegative } = 0;
 
-        max_val (1,1) double { mustBeReal, mustBePositive } = 1;
-
         print_interval (1,1) double { mustBeInteger, mustBePositive } = 1;
+
+        runs_in_parallel (1,1) logical = false;
 
     end % properties
 
     methods
 
-        function self = TerminalWaitbar(title_string, max_val)
+        function self = TerminalWaitbar(title_string, max_val, runs_in_parallel)
 
             % TerminalWaitbar
             %
@@ -72,10 +74,34 @@ classdef TerminalWaitbar
             %
             %   The maximum value that the waitbar progresses towards.
             %
+            % - runs_in_parallel (optional, default = false)
+            %
+            %   A logical flag for determining whether this waitbar runs in
+            %   parallel. If it does, it prints a new line every time it
+            %   updates its display.
+            %
+
+            arguments
+
+                title_string (1,1) string
+
+                max_val (1,1) double { mustBeReal, mustBePositive };
+
+                runs_in_parallel (1,1) logical = false;
+
+            end
 
             self.title_string = title_string;
 
             self.current_val = 0;
+
+            self.runs_in_parallel = runs_in_parallel;
+
+            if runs_in_parallel
+
+                fprintf(1, "\n");
+
+            end
 
             self.message = self.title_string + " starting...";
 
@@ -101,6 +127,12 @@ classdef TerminalWaitbar
             %
             % Displays the state of this waitbar.
             %
+
+            if self.runs_in_parallel
+
+                fprintf(1, "\n");
+
+            end
 
             previous_message = self.message;
 
