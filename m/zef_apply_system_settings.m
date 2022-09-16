@@ -4,7 +4,7 @@ if nargin == 0
 zef = evalin('base','zef');
 end
 
-h_zeffiro_menu = findobj(groot,'-property','ZefSystemSettings');
+h_zeffiro_menu = findall(groot,'-property','ZefSystemSettings');
 
 zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 for zef_i =  1 : size(zef.ini_cell,1)

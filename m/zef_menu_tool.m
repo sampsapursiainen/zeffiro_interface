@@ -197,3 +197,8 @@ if not(ismember('ZefRestartTime',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefRestartTime');
 end
 zef.h_zeffiro_menu.ZefRestartTime = zef.zeffiro_restart_time;
+
+if not(ismember('ZefProgramPath',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefProgramPath');
+end
+zef.h_zeffiro_menu.ZefProgramPath = zef.program_path;

@@ -1,11 +1,53 @@
 
 function h_waitbar = zef_waitbar(varargin)
 
-h_zeffiro_menu = findobj(groot,'-property','ZefSystemSettings');
+h_zeffiro_menu = findall(groot,'-property','ZefSystemSettings');
+
+
 
 if isempty(h_zeffiro_menu)
-    
-h_waitbar = figure('Visible','off','Position',[0 0 0 0]);
+   
+    if nargin < 3 
+        
+        h_waitbar = varargin{2};
+    else
+h_waitbar = figure(...
+'PaperUnits',get(0,'defaultfigurePaperUnits'),...
+'Units','normalized',...
+'Position',[0.375 0.35 0.2 0.2],...
+'Renderer',get(0,'defaultfigureRenderer'),...
+'Visible',0,...
+'Color',get(0,'defaultfigureColor'),...
+'CloseRequestFcn','closereq;',...
+'CurrentAxesMode','manual',...
+'IntegerHandle','off',...
+'NextPlot',get(0,'defaultfigureNextPlot'),...
+'DoubleBuffer','off',...
+'MenuBar','none',...
+'ToolBar','none',...
+'Name',['ZEFFIRO Interface: Task '],...
+'NumberTitle','off',...
+'HandleVisibility','callback',...
+'DeleteFcn','delete(gcf);',...
+'Tag','progress_bar',...
+'UserData',[],...
+'WindowStyle',get(0,'defaultfigureWindowStyle'),...
+'Resize',get(0,'defaultfigureResize'),...
+'PaperPosition',get(0,'defaultfigurePaperPosition'),...
+'PaperSize',[20.99999864 29.69999902],...
+'PaperType',get(0,'defaultfigurePaperType'),...
+'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
+'ScreenPixelsPerInchMode','manual' );
+
+h_axes = axes(h_waitbar,'Position',[0.1 0.525 0.8 0.3]);
+h_axes.Visible = 'off';
+h_axes.Tag= 'progress_bar_main_axes';
+
+uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.7 0.8 0.15]);
+
+set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
+set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
+    end
 
 else
 
@@ -24,10 +66,10 @@ verbose_mode = h_zeffiro_menu.ZefSystemSettings.zeffiro_verbose_mode;
 use_waitbar = h_zeffiro_menu.ZefSystemSettings.use_waitbar;
 use_log = h_zeffiro_menu.ZefSystemSettings.use_log; 
 log_name = h_zeffiro_menu.ZefSystemSettings.zeffiro_log_file_name;
-program_path = h_zeffiro_menu.ZefSystemSettings.program_path; 
 current_log_file = h_zeffiro_menu.ZefCurrentLogFile;
-task_id = h_zeffiro_menu.ZefTaskID;
+task_id = h_zeffiro_menu.ZefTaskId;
 restart_time = h_zeffiro_menu.ZefRestartTime;
+program_path = h_zeffiro_menu.ZefProgramPath; 
 
 if use_log
 fid = fopen(current_log_file,'a');
@@ -113,12 +155,9 @@ end
  detail_condition =or((86400*now - h_waitbar.UserData(2)) >= log_frequency,first_step);
 
 if detail_condition
-    if isequal(workspace_mode,'caller')
- var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
-    else
-        var_1 = evalin('base','round(sum(cell2mat({whos().bytes}))/1E6)');
-    end
-        
+
+    
+var_1 = evalin('caller','round(sum(cell2mat({whos().bytes}))/1E6)');
 var_1_max = 6;
 progress_value_1 = min(max(0,log10(var_1))/var_1_max,1);
 var_2 = round(86400*now - h_waitbar.UserData(3));
@@ -188,7 +227,12 @@ end
     
 if detail_condition
 caller_file_name = {dbstack(1).file};
+if not(isempty(caller_file_name))
 caller_file_name = caller_file_name{1};
+else
+    caller_file_name = 'no caller script';
+end
+
 output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(restart_time) ';'];
 if use_log
     fprintf(fid,'%s',[output_line newline]);
