@@ -74,7 +74,8 @@ function [G, interpolation_positions] = zef_whitney_interpolation( ...
 
     % Define cleanup operations, in case of an interruption.
 
-    cleanupfn = @(wb) close(wb);
+    cleanupfn = @(h) close(h);
+
     cleanupobj = onCleanup(@() cleanupfn(wb));
 
     % Dipoles and their adjacency and weight matrices T and G.

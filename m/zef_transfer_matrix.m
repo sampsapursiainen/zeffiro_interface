@@ -130,8 +130,13 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
     A_aux = A(perm_vec,perm_vec);
     A = A_aux;
 
+    % Create waitbar and its cleanup object.
+
     wbtitle = 'Stencil PCG iteration';
     wb = zef_waitbar(0, wbtitle);
+
+    cleanupfn = @(h) close(h);
+    cleanupobj = onCleanup(@() cleanupfn(wb));
 
     % Initialize transfer matrix T and Schur_complement
 
@@ -200,7 +205,6 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
             end
 
             if tol_val < relres_vec(i)
-                close(wb);
                 'Error: PCG iteration did not converge.'
                 T = [];
                 return
@@ -308,7 +312,6 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
             end
 
             if not(isempty(find(tol_val < relres_vec)))
-                close(wb);
                 warning('Error: PCG iteration did not converge. Returning empty transfer matrix...')
                 T = [];
                 return
@@ -328,6 +331,5 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
     end
 
     zef_waitbar(1,wb);
-    close(wb);
 
 end
