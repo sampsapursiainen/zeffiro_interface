@@ -172,10 +172,11 @@ end
     clear aux_vec_1;
    if use_gpu
     aux_vec_2 = gpuArray(aux_vec_2);
-    end
-    [~, triangle_ind_diff, tetra_ind_diff] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+   end
+    [I_aux, ~] = find(ismember(aux_vec_2, surface_triangles_aux));
+    [~, triangle_ind_diff, tetra_ind_diff] = (intersect(surface_triangles_aux, aux_vec_2(I_aux,:),'rows'));
     clear aux_vec_2; 
-    tetra_ind_diff = gather(tetra_ind_diff);
+    tetra_ind_diff = gather(I_aux(tetra_ind_diff));
     triangle_ind_diff = gather(triangle_ind_diff);
 
     if use_gpu
@@ -185,9 +186,10 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [I_aux, ~] = find(ismember(aux_vec_2, surface_triangles_aux));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2(I_aux,:),'rows'));
     clear aux_vec_2
-    tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    tetra_ind_diff = [tetra_ind_diff; gather(I_aux(I))];
     triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
     if use_gpu
@@ -197,9 +199,10 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [I_aux, ~] = find(ismember(aux_vec_2, surface_triangles_aux));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2(I_aux,:),'rows'));
     clear aux_vec_2
-    tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    tetra_ind_diff = [tetra_ind_diff; gather(I_aux(I))];
     triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
     if use_gpu
@@ -209,9 +212,11 @@ end
     end
     aux_vec_2 = gather(sort(aux_vec_1,2));
     clear aux_vec_1;
-    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2,'rows'));
+    [I_aux, ~] = find(ismember(aux_vec_2, surface_triangles_aux));
+    [I_aux, ~] = unique(ind2sub(size(aux_vec_2), I_aux));
+    [~, K, I] = (intersect(surface_triangles_aux, aux_vec_2(I_aux,:),'rows'));
     clear aux_vec_2
-    tetra_ind_diff = [tetra_ind_diff; gather(I)];
+    tetra_ind_diff = [tetra_ind_diff; gather(I_aux(I))];
     triangle_ind_diff = [triangle_ind_diff; gather(K)];
 
 clear surface_triangles_aux
