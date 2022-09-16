@@ -3,10 +3,8 @@ function h_waitbar = zef_waitbar(varargin)
 
 h_zeffiro_menu = findall(groot,'-property','ZefSystemSettings');
 
-
-
 if isempty(h_zeffiro_menu)
-   
+
     if nargin < 3 
         
         h_waitbar = varargin{2};
@@ -95,11 +93,22 @@ else
     first_step = 1;
     task_id = task_id + 1; 
     h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
+ 
+    position_vec_0 = h_zeffiro_menu.Position;
+    position_vec_1 = h_zeffiro_menu.ZefSystemSettings.segmentation_tool_default_position;
+    screen_size = get(groot,'ScreenSize');
+    position_vec_0([1 3]) = position_vec_0([1 3])/screen_size(3);
+    position_vec_0([2 4]) = position_vec_0([2 4])/screen_size(4);
+    position_vec_1([1 3]) = position_vec_1([1 3])/screen_size(3);
+    position_vec_1([2 4]) = position_vec_1([2 4])/screen_size(4);
     
+    position_vec = [position_vec_0(1) position_vec_0(2)-0.3*position_vec_1(4) 0.5*position_vec_1(3) 0.3*position_vec_1(4)];
+
+ 
 h_waitbar = figure(...
 'PaperUnits',get(0,'defaultfigurePaperUnits'),...
 'Units','normalized',...
-'Position',[0.375 0.35 0.2 0.2],...
+'Position',position_vec,...
 'Renderer',get(0,'defaultfigureRenderer'),...
 'Visible',visible_value,...
 'Color',get(0,'defaultfigureColor'),...
@@ -190,15 +199,27 @@ h_axes_4 = findobj(h_waitbar.Children,'Tag','progress_bar_auxiliary_axes_3');
 h_pie = pie(h_axes_2,[progress_value_1 1-progress_value_1]);
 h_axes_2.Visible = 'off';
 h_pie(2).String = num2str(var_1); 
+h_pie(2).FontUnits = 'pixels';
+h_pie(2).FontSize = font_size;
 h_pie(4).String = '';
+h_pie(4).FontUnits = 'pixels';
+h_pie(4).FontSize = font_size;
 h_pie = pie(h_axes_3,[progress_value_2 1-progress_value_2]);
 h_axes_3.Visible = 'off';
 h_pie(2).String = num2str(var_2); 
+h_pie(2).FontUnits = 'pixels';
+h_pie(2).FontSize = font_size;
 h_pie(4).String = '';
+h_pie(4).FontUnits = 'pixels';
+h_pie(4).FontSize = font_size;
 h_pie = pie(h_axes_4,[progress_value_3 1-progress_value_3]);
 h_axes_4.Visible = 'off';
 h_pie(2).String = num2str(var_3);
+h_pie(2).FontUnits = 'pixels';
+h_pie(2).FontSize = font_size;
 h_pie(4).String = '';
+h_pie(4).FontUnits = 'pixels';
+h_pie(4).FontSize = font_size;
 end
 pause(1e-6)
 
@@ -216,13 +237,6 @@ if not(ishandle(varargin{2}))
     set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
-for i = 1 : length(h_waitbar.Children)
-    
-    set(findobj(h_waitbar.Children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
-set(findobj(h_waitbar.Children(i).Children,'-property','FontSize'),'FontSize',font_size);
-
-end
-  
 end
     
 if detail_condition
@@ -245,7 +259,7 @@ end
 end
 
 fclose(fid);
-  
+
 end
 end
 
