@@ -85,6 +85,6 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
         n_of_tetra                              ...
     );
 
-    zef_waitbar(1,wb); close(wb);
+    zef_waitbar(1,wb);
 
 end
