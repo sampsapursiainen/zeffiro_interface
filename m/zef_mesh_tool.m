@@ -1,3 +1,9 @@
+if isfield(zef,'h_mesh_tool')
+if isvalid(zef.h_mesh_tool)
+    delete(zef.h_mesh_tool)
+end
+end
+
 zef_data = zef_mesh_tool_app_exported;
 zef_data.h_mesh_tool.Visible=zef.use_display;
 zef = zef_assign_data(zef, zef_data);

@@ -1,3 +1,8 @@
+if isfield(zef,'h_zeffiro_window_main')
+if isvalid(zef.h_zeffiro_window_main)
+    delete(zef.h_zeffiro_window_main)
+end
+end
 
 set(groot,'defaultFigureVisible','off')
 zef_data = zef_segmentation_tool_app_exported;
