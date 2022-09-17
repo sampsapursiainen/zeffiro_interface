@@ -1,4 +1,4 @@
-classdef Sensor < handle
+classdef Sensor
 
 %
 % Sensor
@@ -330,7 +330,7 @@ classdef Sensor < handle
 
                     end
 
-                    sensors(row).set_inner_radius_to(inner_radius);
+                    sensors(row) = sensors(row).set_inner_radius_to(inner_radius);
 
                     if isscalar(outer_radii)
 
@@ -346,7 +346,7 @@ classdef Sensor < handle
 
                     end
 
-                    sensors(row).set_outer_radius_to(outer_radius);
+                    sensors(row) = sensors(row).set_outer_radius_to(outer_radius);
 
                     if isscalar(impedances)
 
@@ -362,7 +362,7 @@ classdef Sensor < handle
 
                     end
 
-                    sensors(row).set_impedance_to(impedance);
+                    sensors(row) = sensors(row).set_impedance_to(impedance);
 
                 end
 
