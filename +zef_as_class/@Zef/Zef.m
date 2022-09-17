@@ -504,50 +504,6 @@ classdef Zef < handle
 
                     self.mesh_labeling_approach = data.(finame);
 
-                elseif strcmp(finame, 'sensors')
-
-                    n_of_sensors = size(fival, 1);
-
-                    n_of_sensor_fields = size(fival, 2);
-
-                    % Preallocate default objects.
-
-                    self.sensors = repmat(zef_as_class.Sensor.default, n_of_sensors, 1);
-
-                    for row = 1 : n_of_sensors
-
-                        position = fival(row, 1:3);
-
-                        direction = [1, 0, 0];
-
-                        if n_of_sensor_fields == 6
-
-                            inner_radius = fival(row, 4);
-
-                            outer_radius = fival(row, 5);
-
-                            impedance = fival(row, 6);
-
-                        else
-
-                            inner_radius = 0;
-
-                            outer_radius = 0;
-
-                            impedance = Inf;
-
-                        end
-
-                        self.sensors(row) = zef_as_class.Sensor( ...
-                            position, ...
-                            direction, ...
-                            inner_radius, ...
-                            outer_radius, ...
-                            impedance ...
-                        );
-
-                    end
-
                 elseif strcmp(finame, 'surface_downsampling_on') ...
                 || strcmp(finame, 'downsample_surfaces')
 
@@ -752,6 +708,47 @@ classdef Zef < handle
                 self.compartments(ii) = zef_as_class.VolumeCompartment(a_struct);
 
             end
+
+            % Build sensors.
+
+            if isfield(self.data, "sensors")
+
+                if isfield(self.data, "s_directions")
+
+                    directions = self.data.s_directions
+
+                else
+
+                    directions = [];
+
+                end
+
+                if size(self.data.sensors, 2) == 3
+
+                    self.sensors = zef_as_class.Sensor.from_arrays( ...
+                        self.data.sensors(:,1:3), ...
+                        directions, [], [], [] ...
+                    );
+
+                elseif size(self.data.sensors, 2) == 6
+
+                    self.sensors = zef_as_class.Sensor.from_arrays( ...
+                        self.data.sensors(:,1:3), ...
+                        directions, ...
+                        self.data.sensors(:,4), ...
+                        self.data.sensors(:,5), ...
+                        self.data.sensors(:,6) ...
+                    );
+
+                else
+
+                    self.sensors = [];
+
+                end
+
+            end
+
+
 
         end % function
 
