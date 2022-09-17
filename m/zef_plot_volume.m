@@ -30,8 +30,6 @@ if not(isempty(h_colorbar))
     delete(h_colorbar(:));
 end
 
-void = [];
-
 sensors_point_like = [];
 
 if isequal(eval('zef.h_toggle_controls.UserData'),1) 

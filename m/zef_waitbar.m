@@ -287,6 +287,13 @@ function h_waitbar = zef_waitbar(varargin)
     end
 
     if detail_condition
+        
+            caller_file_name = {dbstack(1).file};
+        if isempty(caller_file_name)
+        caller_file_name = 'no caller file'
+        else
+        caller_file_name = caller_file_name{1};
+        end
 
         output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(restart_time) ';'];
 
