@@ -90,6 +90,7 @@ zef_data.mlapp = 1;
 
 if ismember(zef.start_mode,{'nodisplay'})
 zef.use_display = 0;
+
 end
 
 clear zef_data;

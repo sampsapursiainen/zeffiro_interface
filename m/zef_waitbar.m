@@ -1,7 +1,7 @@
 
 function h_waitbar = zef_waitbar(varargin)
 
-    h_zeffiro_menu = findall(groot,'-property','ZefSystemSettings');
+    h_zeffiro_menu = findall(groot,'ZefTool','zef_menu_tool');
 
     % Set our plan of action. Start by setting constants.
 
@@ -41,9 +41,11 @@ function h_waitbar = zef_waitbar(varargin)
 
         if plan_of_action == INITIALIZING
 
-            h_waitbar = init_figure([0.375 0.35 0.2 0.2], 1, -1);
+            h_waitbar = init_figure([0.375 0.35 0.2 0.2], 0, -1);
 
             progress_bar_text = varargin{2};
+            
+            caller_file_name = 'no caller file';
 
         elseif plan_of_action == PROGRESSING
 
@@ -63,7 +65,7 @@ function h_waitbar = zef_waitbar(varargin)
 
             % uicontrol('Tag','progress_bar_text_container','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.7 0.8 0.15]);
 
-            font_size = 12;
+            font_size = 10;
 
             set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
             set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
@@ -77,6 +79,12 @@ function h_waitbar = zef_waitbar(varargin)
         return % early
 
     end
+    
+    position_vec_0 = h_zeffiro_menu.Position;
+    position_vec_1 = h_zeffiro_menu.ZefWaitbarSize;
+    position_vec_0([1 3]) = position_vec_0([1 3])/zef_eval_entry(get(groot,'ScreenSize'),3);
+    position_vec_0([2 4]) = position_vec_0([2 4])/zef_eval_entry(get(groot,'ScreenSize'),4);
+    position_vec = [position_vec_0(1) position_vec_0(2)-position_vec_1(2) position_vec_1(1) position_vec_1(2)];
 
     h_zeffiro_menu = h_zeffiro_menu(1);
 
@@ -87,12 +95,12 @@ function h_waitbar = zef_waitbar(varargin)
     progress_value = max(0,progress_value(:));
     progress_bar_text = '';
 
-    visible_value = h_zeffiro_menu.ZefSystemSettings.use_display;
-    font_size = h_zeffiro_menu.ZefSystemSettings.font_size;
-    verbose_mode = h_zeffiro_menu.ZefSystemSettings.zeffiro_verbose_mode;
-    use_waitbar = h_zeffiro_menu.ZefSystemSettings.use_waitbar;
-    use_log = h_zeffiro_menu.ZefSystemSettings.use_log;
-    log_name = h_zeffiro_menu.ZefSystemSettings.zeffiro_log_file_name;
+    visible_value = h_zeffiro_menu.Visible;
+    font_size = h_zeffiro_menu.ZefFontSize;
+    verbose_mode = h_zeffiro_menu.ZefVerboseMode;
+    use_waitbar = h_zeffiro_menu.ZefUseWaitbar;
+    use_log = h_zeffiro_menu.ZefUseLog;
+    log_name = h_zeffiro_menu.ZefLogFileName;
     current_log_file = h_zeffiro_menu.ZefCurrentLogFile;
     task_id = h_zeffiro_menu.ZefTaskId;
     restart_time = h_zeffiro_menu.ZefRestartTime;
@@ -109,8 +117,18 @@ function h_waitbar = zef_waitbar(varargin)
     % Choose whether to update and existing waitbar or an new one.
 
     if plan_of_action == INITIALIZING
-
-        h_waitbar = init_figure([0.375 0.35 0.2 0.2], 1, -1);
+        
+        first_step = 1;
+        task_id = task_id + 1;
+        h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
+        h_waitbar = init_figure(position_vec, visible_value, task_id);
+        
+        caller_file_name = {dbstack(1).file};
+        if isempty(caller_file_name)
+        caller_file_name = 'no caller file'
+        else
+        caller_file_name = caller_file_name{1};
+        end
 
         progress_bar_text = varargin{2};
 
@@ -136,30 +154,23 @@ function h_waitbar = zef_waitbar(varargin)
 
     % Update waitbar.
 
-    first_step = 1;
-    task_id = task_id + 1;
-    h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
 
-    position_vec_0 = h_zeffiro_menu.Position;
-    position_vec_1 = h_zeffiro_menu.ZefSystemSettings.segmentation_tool_default_position;
-    screen_size = get(groot,'ScreenSize');
-    position_vec_0([1 3]) = position_vec_0([1 3])/screen_size(3);
-    position_vec_0([2 4]) = position_vec_0([2 4])/screen_size(4);
-    position_vec_1([1 3]) = position_vec_1([1 3])/screen_size(3);
-    position_vec_1([2 4]) = position_vec_1([2 4])/screen_size(4);
-
-    position_vec = [position_vec_0(1) position_vec_0(2)-0.3*position_vec_1(4) 0.5*position_vec_1(3) 0.3*position_vec_1(4)];
-
-    h_waitbar.UserData = [cputime now*86400 now*86400];
 
     % Create bar elements on first run.
 
     if plan_of_action == INITIALIZING
 
-        uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.7 0.8 0.15]);
+    h_waitbar.UserData = [cputime now*86400 now*86400];
+        
+    h_caller_file_name = uicontrol('Tag','caller_file_name','Style','text','FontWeight','bold','Parent',h_waitbar,'Units','normalized','String',caller_file_name,'HorizontalAlignment','center','Position',[0.1 0.78 0.8 0.15]);
+        uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.70 0.8 0.15]);
         uicontrol('Tag','auxiliary_text_1','Style','text','Parent',h_waitbar,'Units','normalized','String','Workspace size (MB)','HorizontalAlignment','center','Position',[0.15 0.05 0.2 0.15]);
         uicontrol('Tag','auxiliary_text_2','Style','text','Parent',h_waitbar,'Units','normalized','String','Time (s)','HorizontalAlignment','center','Position',[0.4 0.05 0.2 0.15]);
         uicontrol('Tag','auxiliary_text_3','Style','text','Parent',h_waitbar,'Units','normalized','String','CPU usage (%)','HorizontalAlignment','center','Position',[0.65 0.05 0.2 0.15]);
+    
+        font_size = h_zeffiro_menu.ZefFontSize;
+        set(findobj(h_waitbar.Children,'-property','FontUnits'),'FontUnits','pixels');
+         set(findobj(h_waitbar.Children,'-property','FontSize'),'FontSize',font_size);
 
     end
 
@@ -167,10 +178,10 @@ function h_waitbar = zef_waitbar(varargin)
 
     if plan_of_action == INITIALIZING
 
-        h_axes = axes(h_waitbar,'Position',[0.1 0.525 0.8 0.3]);
-        h_axes_2 = axes(h_waitbar,'Position',[0.15 0.25 0.2 0.2]);
-        h_axes_3 = axes(h_waitbar,'Position',[0.4 0.25 0.2 0.2]);
-        h_axes_4 = axes(h_waitbar,'Position',[0.65 0.25 0.2 0.2]);
+        h_axes = axes(h_waitbar,'Position',[0.1 0.50 0.8 0.25]);
+        h_axes_2 = axes(h_waitbar,'Position',[0.15 0.225 0.2 0.2]);
+        h_axes_3 = axes(h_waitbar,'Position',[0.4 0.225 0.2 0.2]);
+        h_axes_4 = axes(h_waitbar,'Position',[0.65 0.225 0.2 0.2]);
 
     else
 
@@ -180,7 +191,8 @@ function h_waitbar = zef_waitbar(varargin)
         h_axes_4 = findobj(h_waitbar.Children,'Tag','progress_bar_auxiliary_axes_3');
 
     end
-
+    
+    
     h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
     h_text.String = progress_bar_text;
 
@@ -225,6 +237,16 @@ function h_waitbar = zef_waitbar(varargin)
         uistack(h_text,'top');
 
         if detail_condition
+            
+            caller_file_name = {dbstack(1).file};
+        if isempty(caller_file_name)
+        caller_file_name = 'no caller file'
+        else
+        caller_file_name = caller_file_name{1};
+        end
+        
+        h_caller_name.String = caller_file_name;
+
 
             h_pie = pie(h_axes_2,[progress_value_1 1-progress_value_1]);
             h_axes_2.Visible = 'off';
@@ -259,20 +281,12 @@ function h_waitbar = zef_waitbar(varargin)
         h_axes_2.Tag= 'progress_bar_auxiliary_axes_1';
         h_axes_3.Tag= 'progress_bar_auxiliary_axes_2';
         h_axes_4.Tag= 'progress_bar_auxiliary_axes_3';
-        h_text.Tag='progress_bar_text';
+        h_text.Tag= 'progress_bar_text';
         h_waitbar.Tag ='progress_bar';
 
     end
 
     if detail_condition
-
-        caller_file_name = {dbstack(1).file};
-
-        if not(isempty(caller_file_name))
-            caller_file_name = caller_file_name{1};
-        else
-            caller_file_name = 'no caller script';
-        end
 
         output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Total time; ' num2str(restart_time) ';'];
 

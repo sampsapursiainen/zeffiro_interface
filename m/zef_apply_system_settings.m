@@ -4,7 +4,6 @@ if nargin == 0
 zef = evalin('base','zef');
 end
 
-h_zeffiro_menu = findall(groot,'-property','ZefSystemSettings');
 
 zef.ini_cell = readcell([zef.program_path '/profile/zeffiro_interface.ini'],'FileType','text');
 for zef_i =  1 : size(zef.ini_cell,1)
@@ -16,14 +15,7 @@ elseif isequal(zef.ini_cell{zef_i,4},'string')
     zef.ini_cell{zef_i,2} = num2str(zef.ini_cell{zef_i,2});
 end
 
-
 zef.(zef.ini_cell{zef_i,3})  = zef.ini_cell{zef_i,2};
-
-if not(isempty(h_zeffiro_menu))
-for i = 1 : length(h_zeffiro_menu)
-h_zeffiro_menu(i).ZefSystemSettings.(zef.ini_cell{zef_i,3}) = zef.ini_cell{zef_i,2};
-end
-end
 
 end
 
@@ -40,11 +32,6 @@ end
     
 zef.(zef.ini_cell_mod{zef_i,3})  =  num2str(zef.ini_cell_mod{zef_i,2});
 
-if not(isempty(h_zeffiro_menu))
-for i = 1 : length(h_zeffiro_menu)
-h_zeffiro_menu(i).ZefSystemSettings.(zef.ini_cell_mod{zef_i,3}) = num2str(zef.ini_cell_mod{zef_i,2});
-end
-end
 end
 zef = rmfield(zef,'ini_cell_mod');
 end
@@ -52,7 +39,5 @@ end
 if nargout == 0
 assignin('base','zef',zef);
 end
-
-
 
 end
