@@ -766,7 +766,11 @@ classdef Zef < handle
 
         self = refine_volume_adaptively(self, n_of_refinements, tolerance, iteration_param);
 
+        % Fetching and setting properties.
+
         nodes = inflate_surface(self, nodes, surface_triangles);
+
+        compartments = active_compartments(self);
 
     end % methods
 
