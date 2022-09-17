@@ -24,6 +24,8 @@ function self = preprocess_mesh(self)
     reuna_submesh_ind = cell(0);
     reuna_type = cell(0);
 
+    % Adjusting compartment positions and directions.
+
     compartment_tags = self.compartment_tags;
 
     for k = 1 : length(self.compartments)
@@ -143,6 +145,8 @@ function self = preprocess_mesh(self)
             end % for
 
         end % if
+
+        % Adjusting sensor positions and orientations.
 
         sensor_tag = self.data.current_sensors;
 
@@ -330,6 +334,8 @@ function self = preprocess_mesh(self)
             sensors = sensors(:,1:3);
         end
 
+        % More compartment adjustments.
+
         max_val = 0;
         box_ind = 0;
 
@@ -353,7 +359,7 @@ function self = preprocess_mesh(self)
 
             if self.pml_outer_radius_unit == 1
                 box_outer_radius = self.pml_outer_radius * max_val;
-            elseif pml_outer_radius_unit == 2
+            elseif self.pml_outer_radius_unit == 2
                 box_outer_radius = self.pml_outer_radius;
             else
                 error("Unknown PML outer radius unit.");
@@ -390,11 +396,12 @@ function self = preprocess_mesh(self)
     end % for
 
     self.sensors = sensors;
-    self.data.sensors = sensors;
-    self.data.reuna_p = reuna_p;
-    self.data.reuna_t = reuna_t;
-    self.data.reuna_p_inf = reuna_p_inf;
-    self.data.reuna_submesh_ind = reuna_submesh_ind;
-    self.data.reuna_type = reuna_type;
+
+    % self.data.sensors = sensors;
+    % self.data.reuna_p = reuna_p;
+    % self.data.reuna_t = reuna_t;
+    % self.data.reuna_p_inf = reuna_p_inf;
+    % self.data.reuna_submesh_ind = reuna_submesh_ind;
+    % self.data.reuna_type = reuna_type;
 
 end % function
