@@ -81,7 +81,7 @@ function self = perform_refinement(self)
 
     mesh_generation_phase = self.mesh_generation_phase;
 
-    if mesh_generation_phase == "initial build"
+    if mesh_generation_phase == "refinement"
         tetra_aux = self.tetra;
     end
 
@@ -89,7 +89,7 @@ function self = perform_refinement(self)
 
     nodes = self.nodes;
 
-    if mesh_generation_phase == "initial build"
+    if mesh_generation_phase == "refinement"
 
         surface_refinement_on = self.surface_refinement_on;
 
@@ -139,7 +139,7 @@ function self = perform_refinement(self)
 
     if ismember(1,refinement_type)
 
-        if mesh_generation_phase == "initial build"
+        if mesh_generation_phase == "refinement"
 
             I = find(ismember(domain_labels, compartment_to_subcompartment(aux_brain_ind(:))));
 
