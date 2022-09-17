@@ -26,10 +26,6 @@ classdef Zef < handle
     %   A boolean for expressing whether to bypass the inflation step during
     %   mesh downsampling.
     %
-    % - compartment_tags
-    %
-    %   A cell array that contains the textual compartment tags of a domain.
-    %
     % - compartments
     %
     %   An array of VolumeCompartment objects.
@@ -210,8 +206,6 @@ classdef Zef < handle
         adaptive_refinement_thresh_val (1,1) double { mustBeReal, mustBePositive } = 1;
 
         bypass_inflate (1,1) logical = false;
-
-        compartment_tags string = [];
 
         compartments zef_as_class.VolumeCompartment
 
@@ -414,10 +408,6 @@ classdef Zef < handle
                 elseif strcmp(finame, 'tetra')
 
                     self.tetra = data.(finame);
-
-                elseif strcmp(finame, 'compartment_tags')
-
-                    self.compartment_tags = data.(finame);
 
                 elseif strcmp(finame, 'domain_labels')
 
@@ -679,7 +669,7 @@ classdef Zef < handle
                 % Bail early, if compartment tags were not found from the
                 % project file.
 
-                if isempty(self.compartment_tags)
+                if isempty(self.data.compartment_tags)
 
                     break;
 
@@ -704,7 +694,7 @@ classdef Zef < handle
 
                     suffix = string(join(suffix_parts, "_"));
 
-                    if ismember(prefix, self.compartment_tags) ...
+                    if ismember(prefix, self.data.compartment_tags) ...
                     && ismember(suffix, zef_as_class.Zef.VOLUME_COMPARTMENT_FIELD_NAMES)
 
                         % Check if compartment name is already in the
