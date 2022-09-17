@@ -382,6 +382,29 @@ function self = preprocess_mesh(self)
 
     end % for
 
-    self.sensors = sensors;
+    % Place modified sensors into self.
+
+    if size(sensors, 2) == 3
+
+        self.sensors = zef_as_class.Sensor.from_arrays( ...
+            sensors(:,1:3), ...
+            s_directions, [], [], [] ...
+        );
+
+    elseif size(sensors, 2) == 6
+
+        self.sensors = zef_as_class.Sensor.from_arrays( ...
+            sensors(:,1:3), ...
+            s_directions, ...
+            sensors(:,4), ...
+            sensors(:,5), ...
+            sensors(:,6) ...
+        );
+
+    else
+
+        self.sensors = [];
+
+    end
 
 end % function
