@@ -44,7 +44,7 @@ function self = refine_surface(self, n_of_refinements)
 
             label_ind = uint32(tetra);
 
-            self = self.label_mesh("repeated");
+            self = self.label_mesh();
 
         end % if
 
