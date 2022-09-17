@@ -10,23 +10,15 @@ function self = preprocess_mesh(self)
 
     self.mesh_generation_phase = "pre-processing";
 
-    reuna_p_inf = [];
-
     output_mode = 'compact';
 
     explode_param = self.explode_everything;
 
     i = 0;
     sensors = [];
-    reuna_p = cell(0);
-    reuna_t = cell(0);
-    reuna_p_inf = cell(0);
     reuna_submesh_ind = cell(0);
-    reuna_type = cell(0);
 
-    % Adjusting compartment positions and directions.
-
-    compartment_tags = self.compartment_tags;
+    % Adjusting existing compartment positions and directions.
 
     for k = 1 : length(self.compartments)
 
@@ -41,11 +33,6 @@ function self = preprocess_mesh(self)
             self.compartments(i).points_inf = compartment.points_inf;
             self.compartments(i).points = compartment.points;
             self.compartments(i).triangles = compartment.triangles;
-
-            reuna_type{i,1} = compartment.sources;
-            reuna_type{i,2} = self.data.compartment_activity{ compartment.sources + 2 };
-            reuna_type{i,3} = k;
-            reuna_type{i,4} = compartment_tags{k};
 
             reuna_submesh_ind{i} = compartment.submesh_ind;
 
@@ -163,7 +150,7 @@ function self = preprocess_mesh(self)
             f_handle = self.create_sensor_fn;
 
             if not(isempty(f_handle))
-                s_points = f_handle(s_points);
+                % s_points = f_handle(s_points);
             end
 
         end % if
@@ -396,12 +383,5 @@ function self = preprocess_mesh(self)
     end % for
 
     self.sensors = sensors;
-
-    % self.data.sensors = sensors;
-    % self.data.reuna_p = reuna_p;
-    % self.data.reuna_t = reuna_t;
-    % self.data.reuna_p_inf = reuna_p_inf;
-    % self.data.reuna_submesh_ind = reuna_submesh_ind;
-    % self.data.reuna_type = reuna_type;
 
 end % function
