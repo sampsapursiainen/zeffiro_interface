@@ -130,7 +130,7 @@ classdef Sensor
 
             if radius >= self.outer_radius
 
-                diff_in_size = self.outer_radius - self.inner_radius;
+                diff_in_size = abs(self.outer_radius - self.inner_radius);
 
                 self.outer_radius = radius + diff_in_size;
 
@@ -153,11 +153,23 @@ classdef Sensor
         % done.
         %
 
-            if radius <= self.inner_radius
+            old_diff_in_size = abs(self.outer_radius - self.inner_radius);
 
-                diff_in_size = self.outer_radius - self.inner_radius;
+            self.outer_radius = radius;
 
-                new_inner_size = self.inner_radius - diff_in_size;
+            % Also adjust inner radius, if it is larger than new outer radius.
+
+            if radius < self.inner_radius
+
+                if old_diff_in_size == 0
+
+                    new_inner_size = radius;
+
+                else
+
+                    new_inner_size = self.inner_size - old_diff_in_size;
+
+                end
 
                 if new_inner_size < 0
 
@@ -170,8 +182,6 @@ classdef Sensor
                 end
 
             end
-
-            self.outer_radius = radius;
 
         end % function
 
@@ -219,7 +229,7 @@ classdef Sensor
 
         function sensors = from_arrays(positions, directions, inner_radii, outer_radii, impedances)
 
-        % from_array
+        % from_arrays
         %
         % Builds a set of sensors from a given array.
         %
