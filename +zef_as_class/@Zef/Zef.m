@@ -21,6 +21,11 @@ classdef Zef < handle
     %
     %   A threshold value for ending adaptive refinement.
     %
+    % - brain_ind
+    %
+    %   The indices of the tetra that are a part of the active brain
+    %   compartments.
+    %
     % - bypass_inflate
     %
     %   A boolean for expressing whether to bypass the inflation step during
@@ -773,6 +778,8 @@ classdef Zef < handle
         compartments = active_compartments(self);
 
         compartment_inds = active_compartment_inds(self);
+
+        tetra_inds = active_tetra_inds(self);
 
     end % methods
 
