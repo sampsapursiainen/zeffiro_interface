@@ -781,6 +781,8 @@ classdef Zef < handle
 
         tetra_inds = active_tetra_inds(self);
 
+        tetra_inds = tetra_inds_in_compartment(self, compartments);
+
     end % methods
 
     methods (Access = private)
