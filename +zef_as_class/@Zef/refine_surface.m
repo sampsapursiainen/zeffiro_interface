@@ -120,7 +120,7 @@ function self = perform_refinement(self, compartment_inds)
 
         self zef_as_class.Zef
 
-        compartment_inds (:,1) double { mustBeInteger, mustBePositive }
+        compartment_ind (1,1) double { mustBeInteger, mustBePositive }
 
     end
 
@@ -134,7 +134,7 @@ function self = perform_refinement(self, compartment_inds)
 
     nodes = self.nodes;
 
-    compartments = self.compartments(compartment_inds);
+    compartment = self.compartments(compartment_ind);
 
     length_waitbar = 11;
 
