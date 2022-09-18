@@ -94,7 +94,7 @@ end % function
 
 %% Local helper functions.
 
-function self = perform_refinement(self, compartment_inds)
+function self = perform_refinement(self, compartment_ind)
 
     % perform_refinement
     %
