@@ -60,12 +60,19 @@ function self = create_finite_element_mesh( ...
     %   stored within and can be retrieved with the method Zef.get_mesh.
 
     arguments
+
         self zef_as_class.Zef
-        n_of_surface_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
-        n_of_volume_refinements (1,1) double { mustBeInteger, mustBeNonnegative }  = 0;
-        n_of_adaptive_volume_refinements (1,1) double { mustBeInteger, mustBeNonnegative }  = 0;
-        adaptive_tolerance (1,1) double { mustBeReal, mustBeNonnegative }  = 1;
-        adaptive_iteration_param (1,1) double { mustBeInteger, mustBeNonnegative }  = 10;
+
+        n_of_surface_refinements (:,1) double { mustBeInteger, mustBeNonnegative };
+
+        n_of_volume_refinements (:,1) double { mustBeInteger, mustBeNonnegative };
+
+        n_of_adaptive_volume_refinements (:,1) double { mustBeInteger, mustBeNonnegative };
+
+        adaptive_tolerance (1,1) double { mustBeReal, mustBeNonnegative };
+
+        adaptive_iteration_param (1,1) double { mustBeInteger, mustBeNonnegative };
+
     end
 
     if self.surface_downsampling_on

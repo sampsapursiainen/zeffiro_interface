@@ -12,9 +12,13 @@ function self = refine_surface(self, n_of_refinements)
 %
 % - n_of_refinements
 %
-%   The number of refinements that are to be performed.
+%   The numbers of refinements that are to be performed for each compartment
+%   in an array. A value of 0 at index I indicates that the compartment at
+%   that index is not to be refined.
 %
-%   default = 1
+%   NOTE: if N is the number of compartments, the array should actually
+%   contain N+1 values. The last one indicates how many times all active
+%   compartments are to be refined.
 %
 % Output
 %
@@ -26,46 +30,85 @@ function self = refine_surface(self, n_of_refinements)
 
         self zef_as_class.Zef
 
-        n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+        n_of_refinements (:,1) double { mustBeInteger, mustBeNonnegative } = zeros(numel(self.compartments) + 1, 1);
+
+    end
+
+    % Declare initial values.
+
+    n_of_compartments = numel(self.compartments);
+
+    if numel(n_of_refinements) ~= n_of_compartments + 1
+
+        error("The size of n_of_refinements must match the size of self.compartments + 1. Aborting...");
 
     end
 
     self.mesh_generation_phase = "refinement";
 
-    self.n_of_surface_refinements = n_of_refinements;
+    % First go over individual compartments.
 
-    for n = 1 : self.n_of_surface_refinements
+    for cind = 1 : n_of_compartments
 
-        self = perform_refinement(self);
+        iterations_for_this_compartment = n_of_refinements(cind);
 
-        if self.mesh_relabeling
+        for n_of_ref = 1 : iterations_for_this_compartment
 
-            pml_ind = [];
+            self = perform_refinement(self, cind);
 
-            label_ind = uint32(tetra);
+            if self.mesh_relabeling
 
-            self = self.label_mesh();
+                label_ind = uint32(tetra);
 
-        end % if
+                self = self.label_mesh();
 
+            end % if
+
+        end % for
+
+    end % for
+
+    % Then go over all active compartments, if specified.
+
+    for cind = self.active_compartment_inds()
+
+        n_of_refs = n_of_refinements(end);
+
+        for ref = 1 : n_of_refs
+
+            self = perform_refinement(self, cind);
+
+            if self.mesh_relabeling
+
+                label_ind = uint32(tetra);
+
+                self = self.label_mesh();
+
+            end % if
+
+        end
 
     end
 
-end
+end % function
 
 %% Local helper functions.
 
-function self = perform_refinement(self)
+function self = perform_refinement(self, compartment_inds)
 
     % perform_refinement
     %
-    % Does the actual surface refinement.
+    % Does the actual surface refinement for a given compartment index.
     %
     % Input:
     %
     % - self
     %
     %   The instance of Zef that called Zef.refine_surface.
+    %
+    % - compartment_ind
+    %
+    %   The index of the compartment that is to be refined.
     %
     % Output:
     %
@@ -76,6 +119,8 @@ function self = perform_refinement(self)
     arguments
 
         self zef_as_class.Zef
+
+        compartment_inds (:,1) double { mustBeInteger, mustBePositive }
 
     end
 
@@ -89,15 +134,7 @@ function self = perform_refinement(self)
 
     nodes = self.nodes;
 
-    if mesh_generation_phase == "refinement"
-
-        surface_refinement_on = self.surface_refinement_on;
-
-    elseif mesh_generation_phase == "post-processing"
-
-        surface_refinement_on = self.refinement_surface_on_2;
-
-    end % if
+    compartments = self.compartments(compartment_inds);
 
     length_waitbar = 11;
 
@@ -118,20 +155,6 @@ function self = perform_refinement(self)
     J_c = [];
 
     I = [];
-
-    if mesh_generation_phase == "refinement"
-
-        refinement_type = self.refinement_surface_compartments;
-
-    elseif mesh_generation_phase == "post-processing"
-
-        refinement_type = self.refinement_surface_compartments_2;
-
-    else
-
-        error("Unknown refinement flag type")
-
-    end % if
 
     if length(n_surface_refinement) > 1
         refinement_type = refinement_type(j_surface_refinement);
