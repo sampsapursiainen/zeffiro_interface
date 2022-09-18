@@ -33,10 +33,12 @@ eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
 for zef_j = 1 : length(zef.aux_field_5)
 eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ''' zef.aux_field_5{zef_j} ''';']);
 end
+
 elseif zef_i == 9
-eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = cell(0);']);
-for zef_j = 1 : length(zef.aux_field_5)
-eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '{' num2str(zef_j) '} = ' zef.aux_field_5{zef_j} ';']);
+   if not(isfield(zef,[zef.current_tag '_' zef.aux_field_4{zef_i}]))
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = repmat({eye(4)},1,length(zef.aux_field_3));']);
+    else
+eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
 end
 else
 eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
