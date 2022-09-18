@@ -56,13 +56,7 @@ function self = refine_surface(self, n_of_refinements)
 
             self = perform_refinement(self, cind);
 
-            if self.mesh_relabeling
-
-                label_ind = uint32(tetra);
-
-                self = self.label_mesh();
-
-            end % if
+            self = self.label_mesh();
 
         end % for
 
@@ -78,13 +72,7 @@ function self = refine_surface(self, n_of_refinements)
 
             self = perform_refinement(self, cind);
 
-            if self.mesh_relabeling
-
-                label_ind = uint32(tetra);
-
-                self = self.label_mesh();
-
-            end % if
+            self = self.label_mesh();
 
         end
 
@@ -591,6 +579,8 @@ function self = perform_refinement(self, compartment_ind)
     self.nodes = nodes;
 
     self.tetra = tetra;
+
+    self.label_ind = tetra;
 
 end % function
 
