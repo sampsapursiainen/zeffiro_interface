@@ -2,7 +2,8 @@ function self = label_mesh(self)
 
     % label_mesh
     %
-    % Determines which tetra and nodes belong to which volumetric compartment.
+    % Determines which tetra belong to which volumetric compartment, by
+    % constructing and setting self.domain_labels.
     %
     % Inputs:
     %
