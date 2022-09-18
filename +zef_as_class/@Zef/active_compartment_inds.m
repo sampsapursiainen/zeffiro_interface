@@ -1,4 +1,4 @@
-function compartments = active_compartments(self)
+function compartment_inds = active_compartment_inds(self)
 
     %
     % active_compartments
@@ -24,8 +24,10 @@ function compartments = active_compartments(self)
 
     end
 
-    active_inds = self.active_compartment_inds();
+    active_fn = @(c) c.is_on;
 
-    compartments = self.compartments(active_inds);
+    activities = arrayfun(active_fn, self.compartments);
+
+    compartment_inds = find(activities);
 
 end

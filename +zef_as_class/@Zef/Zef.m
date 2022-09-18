@@ -772,6 +772,8 @@ classdef Zef < handle
 
         compartments = active_compartments(self);
 
+        compartment_inds = active_compartment_inds(self);
+
     end % methods
 
     methods (Access = private)
