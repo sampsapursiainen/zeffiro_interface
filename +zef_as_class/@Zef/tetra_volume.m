@@ -48,10 +48,6 @@ function V = tetra_volume(nodes, tetra, take_absolute_value, edge_inds)
 
     end
 
-    nodes = self.nodes;
-
-    tetra = self.tetra;
-
     % Directed edges from 4th vertex of each tetrahedron.
 
     if isempty(edge_inds)
