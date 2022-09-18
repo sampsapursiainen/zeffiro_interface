@@ -157,6 +157,8 @@ function self = label_mesh(self)
         %Re-labeling.
         %**************************************************************
 
+        domain_labels = self.domain_labels;
+
         compartment_counter = 0;
         pml_counter = 0;
         max_compartments = max(domain_labels);
@@ -271,6 +273,8 @@ function self = label_mesh(self)
         %**************************************************************
         %Re-labeling (adaptive).
         %**************************************************************
+
+        domain_labels = self.domain_labels;
 
         compartment_counter = 0;
         pml_counter = 0;
