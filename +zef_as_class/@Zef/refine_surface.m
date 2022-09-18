@@ -126,17 +126,13 @@ function self = perform_refinement(self, compartment_ind)
 
     mesh_generation_phase = self.mesh_generation_phase;
 
-    if mesh_generation_phase == "refinement"
-        tetra_aux = self.tetra;
-    end
-
     tetra = self.tetra;
 
     nodes = self.nodes;
 
-    compartment = self.compartments(compartment_ind);
-
     length_waitbar = 11;
+
+    % Initialize waitbar and cleanup object, if necessary.
 
     if self.use_gui
 
@@ -153,34 +149,6 @@ function self = perform_refinement(self, compartment_ind)
     end
 
     J_c = [];
-
-    I = [];
-
-    if length(n_surface_refinement) > 1
-        refinement_type = refinement_type(j_surface_refinement);
-    end
-
-    if ismember(1,refinement_type)
-
-        if mesh_generation_phase == "refinement"
-
-            I = find(ismember(domain_labels, compartment_to_subcompartment(aux_brain_ind(:))));
-
-        elseif mesh_generation_phase == "post-processing"
-
-            I = brain_ind(:);
-
-        end % if
-
-    end % if
-
-    refinement_type = compartment_to_subcompartment(setdiff(refinement_type,1) - 1);
-
-    I = [I ; find(ismember(domain_labels,refinement_type(:)))];
-
-    tetra = tetra_aux;
-
-    tetra = tetra(I,:);
 
     ind_m = [
         2 4 3 ;
@@ -213,8 +181,6 @@ function self = perform_refinement(self, compartment_ind)
     surface_triangles = [ tetra(tetra_ind)];
 
     J_c = [J_c ;  unique(surface_triangles)];
-
-    tetra = tetra_aux;
 
     if self.use_gui
 
@@ -382,7 +348,8 @@ function self = perform_refinement(self, compartment_ind)
     for i = 1 : 7
 
         tetra_new = [ tetra_new ; t_ind_2(:,t_ind_1(i,:)) ];
-        domain_labels_new = [domain_labels_new ; domain_labels(J,:)];
+
+        domain_labels_new = [domain_labels_new ; self.domain_labels(J,:)];
 
     end
 
@@ -399,7 +366,8 @@ function self = perform_refinement(self, compartment_ind)
     end
 
     tetra = [tetra ; tetra_new ];
-    domain_labels = [domain_labels ; (domain_labels_new)];
+
+    self.domain_labels = [self.domain_labels ; (domain_labels_new)];
 
     if self.use_gui
 
@@ -435,13 +403,16 @@ function self = perform_refinement(self, compartment_ind)
         I = find(edge_mat(ind_aux,i));
 
         tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
-        domain_labels_new = [domain_labels_new ; domain_labels(J_2(I),:)];
+
+        domain_labels_new = [domain_labels_new ; self.domain_labels(J_2(I),:)];
+
         tetra(J_2(I),:) = [edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,2)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
 
     end
 
     tetra = [tetra ; tetra_new];
-    domain_labels = [domain_labels ; (domain_labels_new)];
+
+    self.domain_labels = [self.domain_labels ; (domain_labels_new)];
 
     if self.use_gui
 
@@ -482,7 +453,7 @@ function self = perform_refinement(self, compartment_ind)
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,1))  edge_mat(ind_aux(I),col_ind_aux(1)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))];
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
-            domain_labels_new = [domain_labels_new ; repmat(domain_labels(J_3(I),:),3,1)];
+            domain_labels_new = [domain_labels_new ; repmat(self.domain_labels(J_3(I),:),3,1)];
             tetra(J_3(I),:) = [edge_mat(ind_aux(I),col_ind_aux(1))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
         end
 
@@ -514,9 +485,13 @@ function self = perform_refinement(self, compartment_ind)
                     col_ind_aux_2 = fliplr(col_ind_aux_2);
                 end
 
+
                 tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(k_ind))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
+
                 tetra_new = [tetra_new ; tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(2)) edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
-                domain_labels_new = [domain_labels_new ; repmat(domain_labels(J_3(I(j_ind)),:),2,1)];
+
+                domain_labels_new = [domain_labels_new ; repmat(self.domain_labels(J_3(I(j_ind)),:),2,1)];
+
                 tetra(J_3(I(j_ind)),:) = [tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(1))) tetra(J_3(I(j_ind)),nodes_ind_aux(i_ind(2)))  edge_mat(ind_aux(I(j_ind)),col_ind_aux_2(1)) tetra(J_3(I(j_ind)),nodes_ind_aux(4))];
 
             end % for
@@ -527,7 +502,7 @@ function self = perform_refinement(self, compartment_ind)
 
     tetra = [tetra ; tetra_new];
 
-    domain_labels = [domain_labels ; (domain_labels_new)];
+    self.domain_labels = [self.domain_labels ; (domain_labels_new)];
 
     if self.use_gui
 
@@ -557,7 +532,7 @@ function self = perform_refinement(self, compartment_ind)
 
                 if not(aux_compartment_ind(k)==0) && not(compartment.sources==3)
 
-                    [brain_ind] = [brain_ind ; find(domain_labels==aux_compartment_ind(k))];
+                    [brain_ind] = [brain_ind ; find(self.domain_labels==aux_compartment_ind(k))];
 
                 end
 
@@ -567,11 +542,11 @@ function self = perform_refinement(self, compartment_ind)
 
         if sum(aux_compartment_ind) == 0
 
-            brain_ind = find(domain_labels);
+            brain_ind = find(self.domain_labels);
 
         end
 
-        sigma = sigma_vec(domain_labels);
+        sigma = sigma_vec(self.domain_labels);
 
     end % if
 
@@ -612,8 +587,6 @@ function self = perform_refinement(self, compartment_ind)
         end
 
     end % if
-
-    tetra_aux = tetra;
 
     self.nodes = nodes;
 
