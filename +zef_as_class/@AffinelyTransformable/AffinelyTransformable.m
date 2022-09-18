@@ -54,7 +54,12 @@ classdef AffinelyTransformable
 
     properties
 
-        affine_transform double = [];
+        affine_transform (:,:) double = [
+            1 0 0 0 ;
+            0 1 0 0 ;
+            0 0 1 0 ;
+            0 0 0 1
+        ];
 
         scaling (1,1) double { mustBePositive } = 1;
 
