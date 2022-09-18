@@ -28,6 +28,6 @@ function tetra_inds = tetra_inds_in_compartment(self, compartments)
 
     end
 
-    tetra_inds = ismember(self.domain_labels, compartments);
+    tetra_inds = find(ismember(self.domain_labels, compartments));
 
 end

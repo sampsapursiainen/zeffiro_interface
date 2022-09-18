@@ -27,6 +27,6 @@ function tetra_inds = active_tetra_inds(self)
 
     end
 
-    tetra_inds = ismember(self.domain_labels, self.active_compartment_inds);
+    tetra_inds = find(ismember(self.domain_labels, self.active_compartment_inds));
 
 end
