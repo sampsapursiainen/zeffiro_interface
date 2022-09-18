@@ -1,3 +1,3 @@
-function s_points = zef_cem_electrode(s_points)
-s_points = zef_cem_electrode(s_points);
+function s_points = zef_cem_electrode(zef,s_points)
+s_points = zef_cem_electrode(zef,s_points);
 end

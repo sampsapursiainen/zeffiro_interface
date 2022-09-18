@@ -166,7 +166,9 @@ end
 
         zef.start_mode = 'nodisplay';
         zef = zef_start(zef);
-            if isequal(zef.zeffiro_restart,0) && isequal(exist([zef.program_path filesep 'data' filesep 'default_project.mat']),2)
+            
+        
+        if isequal(zef.zeffiro_restart,0) && isequal(exist([zef.program_path filesep 'data' filesep 'default_project.mat']),2)
         zef = zef_load(zef,'default_project.mat',[zef.program_path filesep 'data' filesep]);
             end
    
@@ -200,6 +202,9 @@ end
            if exist('use_display','var')
                zef.use_display =  use_display;
            end
+           
+         zef = zef_start_log(zef);
+           
        if and(zef.gpu_count > 0, zef.use_gpu)
       gpuDevice(zef.gpu_num);
        end
@@ -443,7 +448,17 @@ end
                     zef.h_zeffiro_menu.Visible = 1;
                     zef.use_display = 1;
                     
-          if exist('use_github','var')
+          
+       if and(zef.gpu_count > 0, zef.use_gpu)
+      gpuDevice(zef.gpu_num);
+       end
+
+                end
+            end
+        end
+        
+        
+        if exist('use_github','var')
          zef.use_github = use_github;
           end
          if exist('use_gpu','var')
@@ -473,30 +488,24 @@ end
            if exist('use_display','var')
                zef.use_display =  use_display;
            end
-       if and(zef.gpu_count > 0, zef.use_gpu)
-      gpuDevice(zef.gpu_num);
-       end
 
-                end
-            end
+    zef.zeffiro_restart = 0;
         end
-        end
-        
-    else
+    
+            else
         zef = zef_start(zef);
+        zef = zef_start_log(zef);
     if isequal(zef.zeffiro_restart,0) && exist([zef.program_path filesep 'data' filesep 'default_project.mat'],'file')
         zef = zef_load(zef,'default_project.mat',[zef.program_path filesep 'data' filesep]);
     end
     end
     
-    if nargout == 0
+        if nargout == 0
     if    exist('zef','var')
         assignin('base','zef',zef);
     end
     end
+        
     
-    if exist('zef','var')
-    zef.zeffiro_restart = 0;
-    end
 warning on;
 end

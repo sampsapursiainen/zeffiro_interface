@@ -100,7 +100,6 @@ function h_waitbar = zef_waitbar(varargin)
     verbose_mode = h_zeffiro_menu.ZefVerboseMode;
     use_waitbar = h_zeffiro_menu.ZefUseWaitbar;
     use_log = h_zeffiro_menu.ZefUseLog;
-    log_name = h_zeffiro_menu.ZefLogFileName;
     current_log_file = h_zeffiro_menu.ZefCurrentLogFile;
     task_id = h_zeffiro_menu.ZefTaskId;
     restart_time = h_zeffiro_menu.ZefRestartTime;
@@ -290,7 +289,7 @@ function h_waitbar = zef_waitbar(varargin)
         
             caller_file_name = {dbstack(1).file};
         if isempty(caller_file_name)
-        caller_file_name = 'no caller file'
+        caller_file_name = 'no caller file';
         else
         caller_file_name = caller_file_name{1};
         end

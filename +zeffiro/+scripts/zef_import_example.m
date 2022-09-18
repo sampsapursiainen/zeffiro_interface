@@ -1,0 +1,3 @@
+function zef_import_example
+zef_import_example;
+end

@@ -177,11 +177,6 @@ addprop(zef.h_zeffiro_menu,'ZefTool');
 end
 zef.h_zeffiro_menu.ZefTool = mfilename;
 
-if not(ismember('ZefCurrentLogFile',properties(zef.h_zeffiro_menu)))
-addprop(zef.h_zeffiro_menu,'ZefCurrentLogFile');
-end
-zef.h_zeffiro_menu.ZefCurrentLogFile = zef.current_log_file;
-
 if not(ismember('ZefVerboseMode',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
 end
@@ -196,16 +191,6 @@ if not(ismember('ZefUseLog',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefUseLog');
 end
 zef.h_zeffiro_menu.ZefUseLog = zef.use_log;
-
-if not(ismember('ZefLogFileName',properties(zef.h_zeffiro_menu)))
-addprop(zef.h_zeffiro_menu,'ZefLogFileName');
-end
-zef.h_zeffiro_menu.ZefLogFileName = zef.zeffiro_log_file_name;
-
-if not(ismember('ZefLogFileName',properties(zef.h_zeffiro_menu)))
-addprop(zef.h_zeffiro_menu,'ZefLogFileName');
-end
-zef.h_zeffiro_menu.ZefLogFileName = zef.zeffiro_log_file_name;
 
 if not(ismember('ZefWaitbarSize',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');

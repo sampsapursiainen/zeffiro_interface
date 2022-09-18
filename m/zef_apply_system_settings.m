@@ -36,6 +36,12 @@ end
 zef = rmfield(zef,'ini_cell_mod');
 end
 
+if isequal(zef.segmentation_tool_default_position,[0 0 0 0])
+   h_groot = groot; 
+   screen_size = h_groot.ScreenSize;
+   zef.segmentation_tool_default_position = [screen_size(3)/10 screen_size(4)/10 screen_size(3)/3 2*screen_size(4)/3];
+end
+
 if nargout == 0
 assignin('base','zef',zef);
 end
