@@ -53,7 +53,7 @@ function self = preprocess_mesh(self)
                 if ~ isempty(compartment.affine_transform)
 
                     if length(compartment.affine_transform) >= t_ind
-                        affine_transform =  cell2mat(compartment.affine_transform(t_ind));
+                        affine_transform =  compartment.affine_transform(t_ind);
                     else
                         affine_transform = eye(4);
                     end
