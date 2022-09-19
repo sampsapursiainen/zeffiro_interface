@@ -74,4 +74,6 @@ addprop(zef.h_zeffiro_window_main,'ZefTool');
 end
 zef.h_zeffiro_window_main.ZefTool = mfilename;
 
+zef = zef_build_compartment_table(zef);
+
 zef = zef_update(zef);
