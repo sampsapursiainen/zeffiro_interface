@@ -26,13 +26,11 @@ function self = refine_volume(self, n_of_refinements)
 
         self zef_as_class.Zef
 
-        n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+        n_of_refinements (:,1) double { mustBeInteger, mustBeNonnegative } = zeros(numel(self.compartments) + 1, 1);
 
     end
 
     self.mesh_generation_phase = "refinement";
-
-    self.n_of_volume_refinements = n_of_refinements;
 
     for n = 1 : self.n_of_volume_refinements
 

@@ -38,7 +38,7 @@ function self = refine_volume_adaptively(self, n_of_refinements, tolerance, iter
 
         self zef_as_class.Zef
 
-        n_of_refinements (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+        n_of_refinements (:,1) double { mustBeInteger, mustBeNonnegative } = zeros(numel(self.compartments) + 1, 1);
 
         tolerance (1,1) double  { mustBeReal, mustBePositive } = 1;
 
@@ -49,8 +49,6 @@ function self = refine_volume_adaptively(self, n_of_refinements, tolerance, iter
     % Set refinement parameters.
 
     self.mesh_generation_phase = "adaptive refinement";
-
-    self.n_of_adaptive_volume_refinements = n_of_refinements;
 
     self.adaptive_refinement_thresh_val = tolerance;
 
