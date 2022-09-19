@@ -43,8 +43,17 @@ function [ ...
     %   triangular surface.
 
     arguments
+
         self zef_as_class.Zef
+
         tetra (:,4) double { mustBeInteger, mustBePositive }
+
+    end
+
+    arguments (Repeating)
+
+        varargin
+
     end
 
     I = [];
