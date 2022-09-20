@@ -114,11 +114,11 @@ function self = perform_refinement(self, compartment_ind)
 
     mesh_generation_phase = self.mesh_generation_phase;
 
-    tetra = self.tetra;
-
     nodes = self.nodes;
 
     domain_labels = self.domain_labels;
+
+    tetra = self.tetra(find(domain_labels == compartment_ind), :);
 
     length_waitbar = 11;
 
