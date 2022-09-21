@@ -97,9 +97,10 @@ for n_rep = 1:n_decompositions
         evalin('base','zef_init_gaussian_prior_options');
         evolution_prior_db = evalin('base', 'zef.inv_evolution_prior');
         q_value = find_evolution_prior(L_aux, theta0, time_step, evolution_prior_db);
+        q_value = 100;
         Q = q_value*eye(size(L_aux,2));
     end
-    
+    reconstruction_information.Q = q_value;
     % std_lhood
     R = std_lhood^2 * eye(size(L_aux,1));
     

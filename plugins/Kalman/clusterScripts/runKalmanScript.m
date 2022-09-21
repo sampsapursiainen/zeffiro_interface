@@ -65,9 +65,13 @@ zef_dataBank_getHashForMenu;
 zef_dataBank_setData;
 
 zef_update;
-for i = logspace(-13,-5,1)
+for i = 1:50
+% Load 10k leadfield
+zef.dataBank.hash = 'node_7';
+zef.dataBank.loadParents=false; 
+zef_dataBank_getHashForMenu;
+zef_dataBank_setData;
 %find synth source
-
 
 % Generate time sequence "button"
 zef_update_fss; 
@@ -76,6 +80,12 @@ zef_update_fss;
 % Create synthetic data "button"
 zef_update_fss; 
 zef.measurements = zef_find_source;
+
+% Load 1,8k leadfield
+zef.dataBank.hash = 'node_5';
+zef.dataBank.loadParents=false; 
+zef_dataBank_getHashForMenu;
+zef_dataBank_setData;
 
 inv_type = 'kalman';
 switch inv_type
@@ -97,7 +107,7 @@ switch inv_type
         zef.KF.inv_high_cut_frequency.Value = '0';
         zef.KF.inv_time_1.Value = '0.115';
         zef.KF.inv_time_2.Value = '0';
-        zef.KF.number_of_frames.Value = '2';
+        zef.KF.number_of_frames.Value = '118';
         zef.KF.inv_time_3.Value = '0.0002';
 
         zef.KF.normalize_data.Value = '4';
@@ -111,8 +121,8 @@ switch inv_type
             end
         end
         clear zef_props zef_i;
-        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = zef_make_multires_dec();
-        [zef.reconstruction, zef.reconstruction_information] = zef_KF(i);
+        [zef.kf_multires_dec, zef.kf_multires_ind, zef.kf_multires_count] = make_multires_dec();
+        [zef.reconstruction, zef.reconstruction_information] = zef_KF;
         % END KALMAN
     case 'MNE'
         zef.h_mne_prior.Value = 2;
@@ -146,7 +156,7 @@ zef.h_parcellation_plot_type.Value = 20;
 zef.h_time_series_tools_list.Value = 21;
 
 % Take sg006 and lh023
-zef.h_parcellation_list.Value = [23, 78, 110];
+zef.h_parcellation_list.Value = [23, 77, 110];
 zef.parcellation_selected = get(zef.h_parcellation_list,'value');
 
 
