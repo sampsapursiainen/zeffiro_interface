@@ -112,7 +112,9 @@ function [surface_triangles, tetra_ind] = surface_triangles(tetra)
 
     surface_triangles = tetra(tetra_ind);
 
-    surface_triangles = surface_triangles(:,[1 3 2]);
+    % This permutation is done in the original function, but why?
+    %
+    % surface_triangles = surface_triangles(:,[1 3 2]);
 
     tetra_ind = tetra_inds_in_relation;
 
