@@ -843,6 +843,8 @@ classdef Zef < handle
 
         longest_edge = tetra_longest_edge(nodes, tetra);
 
+        [surface_triangles, surface_tetra_inds] = surface_triangles(tetra);
+
     end % methods (Static)
 
 end % classdef
