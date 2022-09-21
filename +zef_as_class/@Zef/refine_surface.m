@@ -342,7 +342,9 @@ function self = perform_refinement(self, compartment_ind)
     end
 
     ind_aux = length(J) + [1 : length(J_2)]';
+
     tetra_new = [];
+
     domain_labels_new = [];
 
     for i = 1 : 6
