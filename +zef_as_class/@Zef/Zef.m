@@ -338,6 +338,20 @@ classdef Zef < handle
             "adaptive-repeated"
         ];
 
+        % TETRA_FACES
+        %
+        % A matrix whose row indices denote node indices within a single
+        % tetrahedron and each row contains the node indices of the nodes that
+        % form the face opposite to the node at each row index. In other
+        % words, maps nodes to their opposing faces.
+
+        TETRA_FACES = [
+            2 4 3 ;
+            1 3 4 ;
+            1 4 2 ;
+            1 2 3
+        ];
+
     end % properties (Constant)
 
     events
