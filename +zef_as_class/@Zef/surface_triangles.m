@@ -43,7 +43,7 @@ function [surface_triangles, tetra_ind] = surface_triangles(tetra)
         tetra(:,face_inds(2,:)) ;
         tetra(:,face_inds(3,:)) ;
         tetra(:,face_inds(4,:))
-    ]
+    ];
 
     opposite_node_inds = [
         1 * ones(n_of_tetra, 1) ;
