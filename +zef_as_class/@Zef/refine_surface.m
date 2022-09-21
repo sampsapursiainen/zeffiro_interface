@@ -364,7 +364,10 @@ function self = perform_refinement(self, compartment_ind)
 
         I = find(edge_mat(ind_aux,i));
 
-        tetra_new = [tetra_new ; edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))];
+        tetra_new = [
+            tetra_new ;
+            edge_mat(ind_aux(I),i) tetra(J_2(I),nodes_aux_vec(:,1)) tetra(J_2(I),nodes_aux_vec(:,3)) tetra(J_2(I),nodes_aux_vec(:,4))
+        ];
 
         domain_labels_new = [domain_labels_new ; domain_labels(J_2(I),:)];
 
@@ -412,11 +415,17 @@ function self = perform_refinement(self, compartment_ind)
         I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==0);
 
         if length(I) > 0
+
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,1))  edge_mat(ind_aux(I),col_ind_aux(1)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
+
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,2))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(1)) tetra(J_3(I),nodes_ind_aux(:,4))];
+
             tetra_new = [tetra_new ; tetra(J_3(I),nodes_ind_aux(:,3))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
+
             domain_labels_new = [domain_labels_new ; repmat(domain_labels(J_3(I),:),3,1)];
+
             tetra(J_3(I),:) = [edge_mat(ind_aux(I),col_ind_aux(1))  edge_mat(ind_aux(I),col_ind_aux(2)) edge_mat(ind_aux(I),col_ind_aux(3)) tetra(J_3(I),nodes_ind_aux(:,4))];
+
         end
 
         I = find(sum(not(edge_mat(ind_aux,col_ind_aux)),2)==1);
