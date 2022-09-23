@@ -1,13 +1,13 @@
-function M = zef_volume_scalar_DD(nodes, tetra, scalar_field, weighting, g_i_ind, g_j_ind)
+function M = zef_volume_scalar_DD(nodes, tetra, g_i_ind, g_j_ind, scalar_field, weighting)
 
 N = size(nodes,1);
 K = size(tetra,1);
 
-if nargin < 4
+if nargin < 6
 weighting = 1;    
 end
 
-if nargin < 3
+if nargin < 5
 scalar_field = ones(size(tetra,1),1);
 end
 
@@ -24,6 +24,7 @@ M = spalloc(N,N,0);
 
 for i = 1 : 4
         [g_i] = zef_volume_barycentric(nodes,tetra,i,det);
+        
     for j = i : 4
         [g_j] = zef_volume_barycentric(nodes,tetra,j,det);
         
@@ -43,5 +44,4 @@ for i = 1 : 4
         
     end
 end
-
 end

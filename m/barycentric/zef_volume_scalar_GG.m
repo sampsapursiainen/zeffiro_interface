@@ -1,6 +1,6 @@
-function M = zef_volume_scalar_GG(nodes,tetra,scalar_field,g_i_ind,g_j_ind)
+function M = zef_volume_scalar_GG(nodes,tetra,g_i_ind,g_j_ind,scalar_field)
 
-weighting = 1;
-M = zef_volume_scalar_DD(nodes,tetra,scalar_field,weighting,g_i_ind,g_j_ind);
+weighting = zef_barycentric_weighting('GG');
+M = zef_volume_scalar_DD(nodes,tetra,g_i_ind,g_j_ind,scalar_field,weighting);
 
 end

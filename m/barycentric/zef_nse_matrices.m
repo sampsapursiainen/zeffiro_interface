@@ -5,9 +5,9 @@ h = 1;
 
 K = [];
 L =[];
-Q = zef_volume_scalar_GF(nodes,tetra,ones(size(rho)),h);
-Q_bar = zef_volume_scalar_GF(nodes,tetra,rho,h);
+Q = zef_volume_scalar_GF(nodes,tetra,h,ones(size(rho)));
+Q_bar = zef_volume_scalar_GF(nodes,tetra,h,rho);
 M = zef_volume_scalar_FF(nodes,tetra,rho);
-L = zef_volume_scalar_GG(nodes,tetra,mu,r,r);
+L = zef_volume_scalar_GG(nodes,tetra,r,r,mu);
 
 end
