@@ -339,10 +339,10 @@ end
 end
 
 zef.nodes = nodes; 
-zef.tetra = uint32(tetra); 
-zef.domain_labels = uint32(domain_labels); 
+zef.tetra = double(tetra); 
+zef.domain_labels = double(domain_labels); 
 zef.name_tags = name_tags;
-zef.domain_labels_with_subdomains = uint32(domain_labels);
+zef.domain_labels_with_subdomains = double(domain_labels);
 
 close(h);
 

@@ -221,15 +221,15 @@ condition_number = zef_condition_number(nodes,tetra);
 
 close(h);
 
-zef.domain_labels_with_subdomains = uint32(domain_labels_with_subdomains);
-zef.domain_labels = uint32(domain_labels);
-zef.brain_ind = uint32(active_compartment_ind); 
-zef.active_compartment_ind = uint32(active_compartment_ind);
-zef.non_source_ind = uint32(non_source_ind); 
+zef.domain_labels_with_subdomains = double(domain_labels_with_subdomains);
+zef.domain_labels = double(domain_labels);
+zef.brain_ind = double(active_compartment_ind); 
+zef.active_compartment_ind = double(active_compartment_ind);
+zef.non_source_ind = double(non_source_ind); 
 zef.nodes = nodes;
-zef.tetra = uint32(tetra);
-zef.surface_triangles = uint32(surface_triangles);
-zef.submesh_ind = uint32(submesh_ind);
+zef.tetra = double(tetra);
+zef.surface_triangles = double(surface_triangles);
+zef.submesh_ind = double(submesh_ind);
 zef.condition_number = condition_number;
 
 for zef_j = 1 : size(parameter_profile,1)

@@ -14,7 +14,7 @@ zef = rmfield(zef,'fieldnames');
 
 clear zef_data;
 
-[~, ~,zef.aux_field] = zef_get_active_compartments('name');
+[~, ~,zef.aux_field] = zef_get_active_compartments(zef,'name');
 zef.h_as_opt_5.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_volume_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_field{:}};
