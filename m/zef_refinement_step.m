@@ -29,19 +29,12 @@ if length(n_surface_refinement) > 1
     refinement_type = refinement_type(j_surface_refinement);
 end
 
-if refinement_flag == 1
 if ismember(-1,refinement_type)
     I = zef_find_active_compartment_ind(zef,submesh_ind_1(domain_labels));
 end
     refinement_type = zef_compartment_to_subcompartment(zef,setdiff(refinement_type,-1));
 I = [I ; find(ismember(domain_labels,refinement_type(:)))];
-elseif refinement_flag == 2
-    if ismember(-1,refinement_type)
-    I = zef_find_active_compartment_ind(zef,domain_labels);
-    end
-    refinement_type = setdiff(refinement_type,-1);
-    I = [I ; find(ismember(domain_labels,refinement_type(:)))];
-end
+
 
 tetra = tetra_aux;
 

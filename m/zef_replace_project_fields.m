@@ -21,12 +21,12 @@ if zef.current_version < 4
         end
     end
 
-    if isfield(zef,'nodes_b') && isempty(zef.nodes_raw)
-    zef.nodes_raw = zef.nodes_b;
+    if isfield(zef,'nodes_b')
+    zef = rmfield(zef,'nodes_b');
     end
 
-    if isfield(zef,'tetra_aux') && isempty(zef.tetra_raw)
-    zef.tetra_raw = zef.tetra_aux;
+    if isfield(zef,'tetra_aux') 
+    zef = rmfield(zef,'tetra_aux');
     end
 
 end

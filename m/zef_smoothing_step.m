@@ -53,7 +53,7 @@ J = [];
 for k = 1 : length(priority_vec)
 zef_waitbar(k/length_waitbar,h,'Smoothing operators.');
 if not(pml_vec(k))
-I = find(domain_labels==k);
+I = find(submesh_ind_1(domain_labels)==k);
 [surface_triangles] = [ surface_triangles ; zef_surface_mesh(tetra(I,:))];
 
 J = [J ; unique(surface_triangles)];
@@ -269,7 +269,7 @@ end
 nodes = gather(nodes);
 
 if eval('zef.use_fem_mesh_inflation')
-nodes = zef_inflate_surfaces(zef, nodes,tetra,domain_labels);
+nodes = zef_inflate_surfaces(zef, nodes,tetra,submesh_ind_1(domain_labels));
 end
 
 optimizer_counter = 1;
@@ -320,10 +320,7 @@ smoothing_ok = 1;
 end
 
 if smoothing_ok == 0
-nodes = eval('zef.nodes_raw');
-sigma = [sigma(:) domain_labels(:)];
-errordlg('Mesh smoothing failed.');
-return;
+error('Mesh smoothing failed.');
 end
 
 % if eval('zef.mesh_relabeling')
@@ -348,10 +345,7 @@ smoothing_ok = 1;
 end
 
 if smoothing_ok == 0
-nodes = eval('zef.nodes_raw');
-sigma = [sigma(:) domain_labels(:)];
-errordlg('Mesh smoothing failed.');
-return;
+error('Mesh smoothing failed.');
 end
 
 clear A B;
