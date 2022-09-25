@@ -304,7 +304,8 @@ function self = perform_refinement(self, compartment_ind)
 
     %% Step 4
     %
-    % TODO
+    % Here we split the surface edges in two, generating new nodes that will
+    % be inserted into the mesh.
 
     if self.use_gui
 
@@ -316,9 +317,11 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    [edge_val_aux edge_ind_2] = unique(edge_ind(:,4));
+    [~ edge_ind_2] = unique(edge_ind(:,4));
 
     edge_ind_2 = edge_ind_2(2:end,:);
+
+    % Calculate the middle points of surface edges.
 
     nodes_new = (1/2)*(nodes(edge_ind(edge_ind_2,1),:) + nodes(edge_ind(edge_ind_2,2),:));
 
@@ -340,7 +343,7 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    I =find(edge_ind(:,4));
+    I = find(edge_ind(:,4));
 
     edge_ind(I,4) = edge_ind(I,4) + size_nodes;
 
