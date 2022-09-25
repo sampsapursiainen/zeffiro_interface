@@ -187,7 +187,11 @@ function self = perform_refinement(self, compartment_ind)
 
     J_3 = find(sum_aux==3);
 
-    % Step 2
+    %% Step 2
+    %
+    % Here we find out which tetra share edges via a similar method to what
+    % Zef.surface_triangles uses to find surface triangles: sorting an
+    % edge_ind relation.
 
     if self.use_gui
 
@@ -203,15 +207,33 @@ function self = perform_refinement(self, compartment_ind)
 
     aux_vec = [ones(size(J)); 2*ones(size(J_2)); 3*ones(size(J_3))];
 
+    % The sorting relation. The first 2 columns will contain pairs of node
+    % indices within each tetra.
+
     edge_ind = zeros(6*length(J_aux),6);
 
-    aux_ind = [1 2 ; 1 3 ; 1 4 ; 2 3 ; 2 4 ; 3 4];
+    % Each tetra has 6 edges (node index pairs), and these are the edge
+    % combinations.
+
+    node_pairs = [ 1 2 ; 1 3 ; 1 4 ; 2 3 ; 2 4 ; 3 4 ];
 
     for i = 1 : 6
-        edge_ind((i-1)*length(J_aux) + 1:i*length(J_aux),[1 2 3 5 6]) = [tetra(J_aux, aux_ind(i,:)) J_aux aux_vec i*ones(length(J_aux),1)];
+
+        rowind = (i-1) * length(J_aux) + 1 : i * length(J_aux);
+
+        colind = [1 2 3 5 6];
+
+        edge_ind(rowind, colind) = [tetra(J_aux, node_pairs(i,:)) J_aux aux_vec i*ones(length(J_aux),1)];
+
     end
 
+    % Here we sort the first 2 columns of the relation horizontally.
+
     edge_ind(:,1:2) = sort(edge_ind(:,1:2),2);
+
+    % Sorting the horizontally sorted rows vertically places the tetra indices
+    % in the 5th column that share an edge next to each other, if they share
+    % an edge.
 
     edge_ind = sortrows(edge_ind,[1 2 5]);
 
@@ -219,7 +241,9 @@ function self = perform_refinement(self, compartment_ind)
 
     current_edge = [0 0];
 
-    %  Step 3
+    %% Step 3
+    %
+    % TODO
 
     if self.use_gui
 
@@ -261,7 +285,9 @@ function self = perform_refinement(self, compartment_ind)
 
     end % for
 
-    %  Step 4
+    %% Step 4
+    %
+    % TODO
 
     if self.use_gui
 
@@ -283,7 +309,9 @@ function self = perform_refinement(self, compartment_ind)
 
     nodes = [nodes ; nodes_new];
 
-    %  Step 5
+    %% Step 5
+    %
+    % TODO
 
     if self.use_gui
 
@@ -303,7 +331,9 @@ function self = perform_refinement(self, compartment_ind)
 
     edge_mat = reshape(edge_ind(:,4),6,length(J_aux))';
 
-    %  Step 6
+    %% Step 6
+    %
+    % TODO
 
     if self.use_gui
 
@@ -342,7 +372,9 @@ function self = perform_refinement(self, compartment_ind)
 
     tetra(J,:) = [ t_ind_2(:,t_ind_1(8,:)) ];
 
-    %  Step 7
+    %% Step 7
+    %
+    % TODO
 
     if self.use_gui
 
@@ -358,7 +390,9 @@ function self = perform_refinement(self, compartment_ind)
 
     domain_labels = [domain_labels ; (domain_labels_new)];
 
-    %  Step 8
+    %% Step 8
+    %
+    % TODO
 
     if self.use_gui
 
@@ -410,7 +444,9 @@ function self = perform_refinement(self, compartment_ind)
 
     domain_labels = [domain_labels ; (domain_labels_new)];
 
-    %  Step 9
+    %% Step 9
+    %
+    % TODO
 
     if self.use_gui
 
@@ -508,7 +544,9 @@ function self = perform_refinement(self, compartment_ind)
 
     domain_labels = [domain_labels ; (domain_labels_new)];
 
-    %  Step 10
+    %% Step 10
+    %
+    % TODO
 
     if self.use_gui
 
@@ -556,7 +594,9 @@ function self = perform_refinement(self, compartment_ind)
 
     end % if
 
-    %  Step 11
+    %% Step 11
+    %
+    % TODO
 
     if self.use_gui
 
