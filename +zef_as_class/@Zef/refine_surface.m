@@ -138,11 +138,11 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    J_c = [];
-
-    surface_triangles = zef_as_class.Zef.surface_triangles(tetra); % [ tetra(tetra_ind)];
-
-    J_c = [J_c ;  unique(surface_triangles)];
+    %% Step 1
+    %
+    % Here we build sets of tetra indices J, J_2 and J_3. These give the tetra
+    % that have 4, 2, and 3 nodes participating in compartment surface
+    % triangles, respectively.
 
     if self.use_gui
 
@@ -154,13 +154,28 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    tetra_vec = sum(ismember(tetra,J_c),2);
+    surface_triangles = zef_as_class.Zef.surface_triangles(tetra); % [ tetra(tetra_ind)];
 
-    J = find(tetra_vec);
+    % Unique node indices which participate in surface triangles.
+
+    J_c = unique(surface_triangles);
+
+    % Tetra indices J that contain at least one surface triangle index.
+
+    tetra_row_sums = sum(ismember(tetra,J_c),2);
+
+    J = find(tetra_row_sums);
+
+    % Node indices which participate in surface triangles.
 
     ind_aux = unique(tetra(J,:));
 
+    % Tetra indices which have all 4 nodes participating in surface triangles.
+
     J = find(sum(ismember(tetra,ind_aux),2)==4);
+
+    % In a similar manner, find out which tetra contain 2 and 3 surface
+    % triangle nodes, J_2 and J_3 respectively.
 
     ind_aux = unique(tetra(J,:));
 
@@ -171,6 +186,8 @@ function self = perform_refinement(self, compartment_ind)
     J_2 = find(sum_aux==2);
 
     J_3 = find(sum_aux==3);
+
+    % Step 2
 
     if self.use_gui
 
@@ -201,6 +218,8 @@ function self = perform_refinement(self, compartment_ind)
     new_node_ind = 0;
 
     current_edge = [0 0];
+
+    %  Step 3
 
     if self.use_gui
 
@@ -242,6 +261,8 @@ function self = perform_refinement(self, compartment_ind)
 
     end % for
 
+    %  Step 4
+
     if self.use_gui
 
         waitbar(4/length_waitbar,wb,'Surface refinement.');
@@ -262,6 +283,8 @@ function self = perform_refinement(self, compartment_ind)
 
     nodes = [nodes ; nodes_new];
 
+    %  Step 5
+
     if self.use_gui
 
         waitbar(5/length_waitbar,wb,'Surface refinement.');
@@ -279,6 +302,8 @@ function self = perform_refinement(self, compartment_ind)
     edge_ind = sortrows(edge_ind,[5 3 6]);
 
     edge_mat = reshape(edge_ind(:,4),6,length(J_aux))';
+
+    %  Step 6
 
     if self.use_gui
 
@@ -317,6 +342,8 @@ function self = perform_refinement(self, compartment_ind)
 
     tetra(J,:) = [ t_ind_2(:,t_ind_1(8,:)) ];
 
+    %  Step 7
+
     if self.use_gui
 
         waitbar(7/length_waitbar,wb,'Surface refinement.');
@@ -330,6 +357,8 @@ function self = perform_refinement(self, compartment_ind)
     tetra = [tetra ; tetra_new ];
 
     domain_labels = [domain_labels ; (domain_labels_new)];
+
+    %  Step 8
 
     if self.use_gui
 
@@ -380,6 +409,8 @@ function self = perform_refinement(self, compartment_ind)
     tetra = [tetra ; tetra_new];
 
     domain_labels = [domain_labels ; (domain_labels_new)];
+
+    %  Step 9
 
     if self.use_gui
 
@@ -477,6 +508,8 @@ function self = perform_refinement(self, compartment_ind)
 
     domain_labels = [domain_labels ; (domain_labels_new)];
 
+    %  Step 10
+
     if self.use_gui
 
         waitbar(10/length_waitbar,wb,'Surface refinement.');
@@ -523,6 +556,8 @@ function self = perform_refinement(self, compartment_ind)
 
     end % if
 
+    %  Step 11
+
     if self.use_gui
 
         waitbar(1,wb,'Surface refinement.');
@@ -533,17 +568,17 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    tetra_vec = sum(ismember(tetra,J_c),2);
+    tetra_row_sums = sum(ismember(tetra,J_c),2);
 
-    J = find(tetra_vec);
+    J = find(tetra_row_sums);
 
     J_c = unique(tetra(J,:));
 
-    tetra_vec = sum(ismember(tetra,J_c),2);
+    tetra_row_sums = sum(ismember(tetra,J_c),2);
 
     if mesh_generation_phase == "post-processing"
 
-        non_source_ind = find(tetra_vec > 2);
+        non_source_ind = find(tetra_row_sums > 2);
 
         non_source_ind = intersect(brain_ind, non_source_ind);
 
