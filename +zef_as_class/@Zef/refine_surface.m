@@ -317,7 +317,7 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
-    [~ edge_ind_2] = unique(edge_ind(:,4));
+    [edge_ind_1 edge_ind_2] = unique(edge_ind(:,4));
 
     edge_ind_2 = edge_ind_2(2:end,:);
 
