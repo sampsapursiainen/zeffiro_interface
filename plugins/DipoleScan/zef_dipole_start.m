@@ -64,7 +64,7 @@ zef.dipole_app.inv_data_segment.ValueChangedFcn = 'zef.inv_data_segment = str2nu
 zef.dipole_app.normalize_data.ValueChangedFcn = 'zef.normalize_data = str2num(zef.dipole_app.normalize_data.Value);';
 zef.dipole_app.normalize_leadfield.ValueChangedFcn = 'zef.normalize_leadfield = str2num(zef.dipole_app.normalize_leadfield.Value);';
 
-zef.dipole_app.StartButton.ButtonPushedFcn = '[zef.reconstruction, zef.reconstruction_information]=zef_dipoleScan;';
+zef.dipole_app.StartButton.ButtonPushedFcn = '[zef.reconstruction, zef.reconstruction_information]=zef_dipoleScan(zef);';
 zef.dipole_app.CloseButton.ButtonPushedFcn = 'delete(zef.dipole_app);';
 
 %set fonts

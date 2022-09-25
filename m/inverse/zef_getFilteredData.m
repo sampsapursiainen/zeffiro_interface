@@ -1,26 +1,29 @@
-function [f] = zef_getFilteredData(varargin)
+function [f] = zef_getFilteredData(object_string,use_normalization,zef)
 %zef_getFilteredData reads the datafrom zef.measurement and applies the
 %filter that are specified in zef.inv_low_cut_frequency and
 %zef.inv_low_cut_frequency at a sampling frequency of
 %zef.inv_sampling_frequency.
 % f has the same size as the measurement
 
+if or(nargin == 0,isempty(object_string))
 object_string = 'inv';
+end 
+
+if or(nargin<2,isempty(use_normalization))
 use_normalization = 0;
-if not(isempty(varargin))
-object_string = varargin{1};
-if length(varargin) > 1
-use_normalization = varargin{2};
-end
 end
 
-f = evalin('base','zef.measurements');
-high_pass = evalin('base',['zef.' object_string '_low_cut_frequency']);
-low_pass = evalin('base',['zef.' object_string '_high_cut_frequency']);
-sampling_freq = evalin('base',['zef.' object_string '_sampling_frequency']);
+if or(nargin<3)
+    zef = evalin('base','zef');
+end
+
+f = eval('zef.measurements');
+high_pass = eval(['zef.' object_string '_low_cut_frequency']);
+low_pass = eval(['zef.' object_string '_high_cut_frequency']);
+sampling_freq = eval(['zef.' object_string '_sampling_frequency']);
 
 if use_normalization
-switch evalin('base','zef.normalize_data')
+switch eval('zef.normalize_data')
     case 1
         data_norm = max(abs(f(:)));
     case 2

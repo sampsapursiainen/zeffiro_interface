@@ -1,10 +1,10 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [z, reconstruction_information] = zef_dipoleScan
+function [z, reconstruction_information] = zef_dipoleScan(zef)
 
-invMethod=evalin('base', 'zef.dipole_app.InversionmethodDropDown.Value');
-regType=evalin('base', 'zef.dipole_app.regType.Value');
-regValue=evalin('base', 'zef.dipole_app.regValue.Value');
+invMethod=eval( 'zef.dipole_app.InversionmethodDropDown.Value');
+regType=eval( 'zef.dipole_app.regType.Value');
+regValue=eval( 'zef.dipole_app.regValue.Value');
 
 %super unelegant call for the information
 reconstruction_information.tag =strcat('Dipole', invMethod);
@@ -12,22 +12,22 @@ reconstruction_information.type = 'Dipole';
 reconstruction_information.invMethod=invMethod;
 reconstruction_information.regType=regType;
 reconstruction_information.regValue=regValue;
-reconstruction_information.inv_time_1 = evalin('base','zef.inv_time_1');
-reconstruction_information.inv_time_2 = evalin('base','zef.inv_time_2');
-reconstruction_information.inv_time_3 = evalin('base','zef.inv_time_3');
-reconstruction_information.sampling_freq = evalin('base','zef.inv_sampling_frequency');
-reconstruction_information.low_pass = evalin('base','zef.inv_high_cut_frequency');
-reconstruction_information.high_pass = evalin('base','zef.inv_low_cut_frequency');
-reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
-reconstruction_information.source_directions = evalin('base','zef.source_directions');
-reconstruction_information.inv_hyperprior = evalin('base','zef.inv_hyperprior');
-reconstruction_information.snr_val = evalin('base','zef.inv_snr');
-reconstruction_information.number_of_frames = evalin('base','zef.number_of_frames');
+reconstruction_information.inv_time_1 = eval('zef.inv_time_1');
+reconstruction_information.inv_time_2 = eval('zef.inv_time_2');
+reconstruction_information.inv_time_3 = eval('zef.inv_time_3');
+reconstruction_information.sampling_freq = eval('zef.inv_sampling_frequency');
+reconstruction_information.low_pass = eval('zef.inv_high_cut_frequency');
+reconstruction_information.high_pass = eval('zef.inv_low_cut_frequency');
+reconstruction_information.source_direction_mode = eval('zef.source_direction_mode');
+reconstruction_information.source_directions = eval('zef.source_directions');
+reconstruction_information.inv_hyperprior = eval('zef.inv_hyperprior');
+reconstruction_information.snr_val = eval('zef.inv_snr');
+reconstruction_information.number_of_frames = eval('zef.number_of_frames');
 
 h = zef_waitbar(0,'Dipole scanning');
 
-number_of_frames = evalin('base','zef.number_of_frames');
-source_direction_mode = evalin('base','zef.source_direction_mode');
+number_of_frames = eval('zef.number_of_frames');
+source_direction_mode = eval('zef.source_direction_mode');
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 

@@ -1,46 +1,46 @@
-function [z, info] = zef_mne(void)
+function [z, info] = zef_mne(zef)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
 h = zef_waitbar(0,['MNE Reconstruction.']);
-[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+[s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
-pm_val = evalin('base','zef.inv_prior_over_measurement_db');
-amplitude_db = evalin('base','zef.inv_amplitude_db');
+pm_val = eval('zef.inv_prior_over_measurement_db');
+amplitude_db = eval('zef.inv_amplitude_db');
 pm_val = pm_val - amplitude_db;
 
-snr_val = evalin('base','zef.inv_snr');
-mne_type = evalin('base','zef.mne_type');
-mne_prior = evalin('base','zef.mne_prior');
+snr_val = eval('zef.inv_snr');
+mne_type = eval('zef.mne_type');
+mne_prior = eval('zef.mne_prior');
 std_lhood = 10^(-snr_val/20);
-sampling_freq = evalin('base','zef.mne_sampling_frequency');
-high_pass = evalin('base','zef.mne_low_cut_frequency');
-low_pass = evalin('base','zef.mne_high_cut_frequency');
-number_of_frames = evalin('base','zef.mne_number_of_frames');
-time_step = evalin('base','zef.mne_time_3');
-source_direction_mode = evalin('base','zef.source_direction_mode');
-source_directions = evalin('base','zef.source_directions');
+sampling_freq = eval('zef.mne_sampling_frequency');
+high_pass = eval('zef.mne_low_cut_frequency');
+low_pass = eval('zef.mne_high_cut_frequency');
+number_of_frames = eval('zef.mne_number_of_frames');
+time_step = eval('zef.mne_time_3');
+source_direction_mode = eval('zef.source_direction_mode');
+source_directions = eval('zef.source_directions');
 
 info=[];
 info.tag='mne_type';
 info.type='mne_type';
 info.std_lhood=std_lhood;
 
-info.snr_val = evalin('base','zef.inv_snr');
-info.mne_type = evalin('base','zef.mne_type');
-info.mne_prior = evalin('base','zef.mne_prior');
-info.sampling_freq = evalin('base','zef.mne_sampling_frequency');
-info.high_pass = evalin('base','zef.mne_low_cut_frequency');
-info.low_pass = evalin('base','zef.mne_high_cut_frequency');
-info.number_of_frames = evalin('base','zef.mne_number_of_frames');
-info.time_step = evalin('base','zef.mne_time_3');
-info.source_direction_mode = evalin('base','zef.source_direction_mode');
-info.source_directions = evalin('base','zef.source_directions');
+info.snr_val = eval('zef.inv_snr');
+info.mne_type = eval('zef.mne_type');
+info.mne_prior = eval('zef.mne_prior');
+info.sampling_freq = eval('zef.mne_sampling_frequency');
+info.high_pass = eval('zef.mne_low_cut_frequency');
+info.low_pass = eval('zef.mne_high_cut_frequency');
+info.number_of_frames = eval('zef.mne_number_of_frames');
+info.time_step = eval('zef.mne_time_3');
+info.source_direction_mode = eval('zef.source_direction_mode');
+info.source_directions = eval('zef.source_directions');
 
 if source_direction_mode == 2
 
-[s_ind_3] = evalin('base','zef.source_interpolation_ind{3}');
+[s_ind_3] = eval('zef.source_interpolation_ind{3}');
 
 i = 0;
 length_reuna = 0;
@@ -51,19 +51,19 @@ color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
-compartment_tags = evalin('base','zef.compartment_tags');
+compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
-on_val = evalin('base',var_0);
-sigma_val = evalin('base',var_1);
-priority_val = evalin('base',var_2);
-visible_val = evalin('base',var_3);
-submesh_ind = evalin('base',var_4);
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
+on_val = eval(var_0);
+sigma_val = eval(var_1);
+priority_val = eval(var_2);
+visible_val = eval(var_3);
+submesh_ind = eval(var_4);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
@@ -71,9 +71,9 @@ priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = submesh_ind;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
+if eval(['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
-    aux_dir_mode = [aux_dir_mode evalin('base',['zef.' compartment_tags{k} '_sources'])-1];
+    aux_dir_mode = [aux_dir_mode eval(['zef.' compartment_tags{k} '_sources'])-1];
 end
 end
 end
@@ -93,12 +93,12 @@ for k = 1 : length(compartment_tags)
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
-on_val = evalin('base',var_0);
-sigma_val = evalin('base',var_1);
-priority_val = evalin('base',var_2);
-visible_val = evalin('base',var_3);
-submesh_ind = evalin('base',var_4);
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
+on_val = eval(var_0);
+sigma_val = eval(var_1);
+priority_val = eval(var_2);
+visible_val = eval(var_3);
+submesh_ind = eval(var_4);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
@@ -106,9 +106,9 @@ priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 submesh_cell{i} = submesh_ind;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
+if eval(['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
-    aux_dir_mode = [aux_dir_mode evalin('base',['zef.' compartment_tags{k} '_sources'])-1];
+    aux_dir_mode = [aux_dir_mode eval(['zef.' compartment_tags{k} '_sources'])-1];
 end
 end
 end
@@ -119,9 +119,9 @@ aux_t = [];
 
 for ab_ind = 1 : length(aux_brain_ind)
 
-aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
-aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
-a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
+aux_t = [aux_t ; size(aux_p,1) + eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_p = [aux_p ; eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
 
 end
 
@@ -153,7 +153,7 @@ end
 
 s_ind_1 = s_ind_1(:);
 
-L = evalin('base','zef.L');
+L = eval('zef.L');
 L = L(:,s_ind_1);
 
 if source_direction_mode == 2
@@ -174,7 +174,7 @@ clear L_0 L_1 L_2 L_3 s_1 s_2 s_3;
 end
 
 source_count = n_interp;
-if evalin('base','zef.mne_normalize_data')==1;
+if eval('zef.mne_normalize_data')==1;
     normalize_data = 'maximum';
 else
     normalize_data = 'average';
@@ -186,14 +186,14 @@ else
     balance_spatially = 0;
 end
 
-[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.mne_normalize_data'),0);
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.mne_normalize_data'),0);
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 L = gpuArray(L);
 end
 
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
@@ -203,20 +203,20 @@ else
 number_of_frames = 1;
 end
 
-if iscell(evalin('base','zef.measurements'));
-f = evalin('base',['zef.measurements{' int2str(evalin('base','zef.mne_data_segment')) '}']);
+if iscell(eval('zef.measurements'));
+f = eval(['zef.measurements{' int2str(eval('zef.mne_data_segment')) '}']);
 else
-f = evalin('base','zef.measurements');
+f = eval('zef.measurements');
 end
 
 data_norm = 1;
-if evalin('base','zef.mne_normalize_data')==1;
+if eval('zef.mne_normalize_data')==1;
 data_norm = max(abs(f(:)));
 %std_lhood = std_lhood^2;
-elseif evalin('base','zef.mne_normalize_data')==2;
+elseif eval('zef.mne_normalize_data')==2;
 data_norm = max(sqrt(sum(abs(f).^2)));
 %std_lhood = std_lhood^2;
-elseif evalin('base','zef.mne_normalize_data')==3;
+elseif eval('zef.mne_normalize_data')==3;
 data_norm = sum(sqrt(sum(abs(f).^2)))/size(f,2);
 %std_lhood = std_lhood^2;
 end;
@@ -255,8 +255,8 @@ z_vec = ones(size(L,2),1);
 %theta = theta0*aux_norm;
 
 if size_f > 1
-if evalin('base','zef.mne_time_2') >=0 && evalin('base','zef.mne_time_1') >= 0 && 1 + sampling_freq*evalin('base','zef.mne_time_1') <= size_f;
-f = f_data(:, max(1, 1 + floor(sampling_freq*evalin('base','zef.mne_time_1')+sampling_freq*(f_ind - 1)*evalin('base','zef.mne_time_3'))) : min(size_f, 1 + floor(sampling_freq*(evalin('base','zef.mne_time_1') + evalin('base','zef.mne_time_2'))+sampling_freq*(f_ind - 1)*evalin('base','zef.mne_time_3'))));
+if eval('zef.mne_time_2') >=0 && eval('zef.mne_time_1') >= 0 && 1 + sampling_freq*eval('zef.mne_time_1') <= size_f;
+f = f_data(:, max(1, 1 + floor(sampling_freq*eval('zef.mne_time_1')+sampling_freq*(f_ind - 1)*eval('zef.mne_time_3'))) : min(size_f, 1 + floor(sampling_freq*(eval('zef.mne_time_1') + eval('zef.mne_time_2'))+sampling_freq*(f_ind - 1)*eval('zef.mne_time_3'))));
 end
 end
 if size_f > 1
@@ -269,7 +269,7 @@ if f_ind == 1
 zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 f = gpuArray(f);
 end
 
@@ -286,7 +286,7 @@ d_sqrt = sqrt(theta0)*ones(size(z_vec));
 else
     d_sqrt = sqrt(theta0);
 end
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
 L_inv = L.*repmat(d_sqrt',size(L,1),1);
@@ -308,7 +308,7 @@ end
 
 z_vec = L_inv * f;
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 
