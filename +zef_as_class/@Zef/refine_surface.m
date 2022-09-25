@@ -203,12 +203,21 @@ function self = perform_refinement(self, compartment_ind)
 
     end
 
+    % Again, the tetra that participate in surface triangles in one vector.
+
     J_aux = [J; J_2; J_3];
+
+    % Info on how many surface nodes each tetra contains: 1 ↦ 4, 2 ↦ 2, 3 ↦ 3.
 
     aux_vec = [ones(size(J)); 2*ones(size(J_2)); 3*ones(size(J_3))];
 
-    % The sorting relation. The first 2 columns will contain pairs of node
-    % indices within each tetra.
+    % Pre-allocate the sorting relation.
+    %
+    % The first 2 columns will contain pairs of node indices within each
+    % tetra. Column 3 contains the tetra indices that contain a surface edge.
+    % Column 4 is the info on how many surface nodes the related tetra
+    % contains. Column 5 stores the info on what edge the row contains in the
+    % order specified by the below node_pairs.
 
     edge_ind = zeros(6*length(J_aux),6);
 
@@ -217,11 +226,14 @@ function self = perform_refinement(self, compartment_ind)
 
     node_pairs = [ 1 2 ; 1 3 ; 1 4 ; 2 3 ; 2 4 ; 3 4 ];
 
+    % Set the values of the pre-allocated relation columns in a loop. Notice
+    % that the number of surface nodes (col 4) is not modified.
+
+    colind = [1 2 3 5 6];
+
     for i = 1 : 6
 
         rowind = (i-1) * length(J_aux) + 1 : i * length(J_aux);
-
-        colind = [1 2 3 5 6];
 
         edge_ind(rowind, colind) = [tetra(J_aux, node_pairs(i,:)) J_aux aux_vec i*ones(length(J_aux),1)];
 
@@ -231,19 +243,14 @@ function self = perform_refinement(self, compartment_ind)
 
     edge_ind(:,1:2) = sort(edge_ind(:,1:2),2);
 
-    % Sorting the horizontally sorted rows vertically places the tetra indices
-    % in the 5th column that share an edge next to each other, if they share
-    % an edge.
+    % Sorting the horizontally sorted rows vertically places same edges next
+    % to each other.
 
     edge_ind = sortrows(edge_ind,[1 2 5]);
 
-    new_node_ind = 0;
-
-    current_edge = [0 0];
-
     %% Step 3
     %
-    % TODO
+    % Here we go over the sorted edge relation edge_ind and
 
     if self.use_gui
 
@@ -254,6 +261,10 @@ function self = perform_refinement(self, compartment_ind)
         wb = wb.progress();
 
     end
+
+    new_node_ind = 0;
+
+    current_edge = [0 0];
 
     for i = 1 : size(edge_ind,1)
 
