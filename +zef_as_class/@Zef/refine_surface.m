@@ -250,7 +250,10 @@ function self = perform_refinement(self, compartment_ind)
 
     %% Step 3
     %
-    % Here we go over the sorted edge relation edge_ind and
+    % Here we go over the sorted edge relation edge_ind and add information on
+    % what edges need to be split in two during the following refinement
+    % steps. This happens by adding new node indices into the relation in
+    % column 4.
 
     if self.use_gui
 
@@ -270,6 +273,9 @@ function self = perform_refinement(self, compartment_ind)
 
         if edge_ind(i,5) == 1
 
+            % We are looking at the first edge in the possible node pair
+            % combinations.
+
             if edge_ind(i,1:2) == current_edge
 
                 edge_ind(i,4) = new_node_ind;
@@ -284,7 +290,7 @@ function self = perform_refinement(self, compartment_ind)
 
             end % if
 
-        else
+        else % this is and edge other than the first one.
 
             if edge_ind(i,1:2) == current_edge
 
