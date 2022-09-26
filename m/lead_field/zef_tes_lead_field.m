@@ -1,6 +1,6 @@
 warning('off');
-
 zef.lead_field_type = 5;
+zef.imaging_method = 1;
 zef_delete_original_field;
 zef_process_meshes;
 zef_attach_sensors_volume(zef,zef.sensors);
