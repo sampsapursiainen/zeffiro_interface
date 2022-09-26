@@ -1,33 +1,33 @@
 function [zef] = zef_KF(zef, q_value)
 % Optimal q_value as parameter
 %% Initial parameters
-snr_val = eval('zef.inv_snr');
-pm_val = eval('zef.inv_prior_over_measurement_db');
-amplitude_db = eval('zef.inv_amplitude_db');
+snr_val = zef.inv_snr;
+pm_val = zef.inv_prior_over_measurement_db;
+amplitude_db = zef.inv_amplitude_db;
 pm_val = pm_val - amplitude_db;
 std_lhood = 10^(-snr_val/20);
-sampling_freq = eval('zef.inv_sampling_frequency');
-high_pass = eval('zef.inv_low_cut_frequency');
-low_pass = eval('zef.inv_high_cut_frequency');
-number_of_frames = eval('zef.number_of_frames');
-source_direction_mode = eval('zef.source_direction_mode'); 
-source_directions = eval('zef.source_directions');
-source_positions = eval( 'zef.source_positions');
-time_step = eval('zef.inv_time_3');
+sampling_freq = zef.inv_sampling_frequency;
+high_pass = zef.inv_low_cut_frequency;
+low_pass = zef.inv_high_cut_frequency;
+number_of_frames = zef.number_of_frames;
+source_direction_mode = zef.source_direction_mode; 
+source_directions = zef.source_directions;
+source_positions = zef.source_positions;
+time_step = zef.inv_time_3;
 
 %% Reconstruction identifiers
 reconstruction_information.tag = 'Kalman';
-reconstruction_information.inv_time_1 = eval('zef.inv_time_1');
-reconstruction_information.inv_time_2 = eval('zef.inv_time_2');
-reconstruction_information.inv_time_3 = eval('zef.inv_time_3');
-reconstruction_information.sampling_freq = eval('zef.inv_sampling_frequency');
-reconstruction_information.low_pass = eval('zef.inv_high_cut_frequency');
-reconstruction_information.high_pass = eval('zef.inv_low_cut_frequency');
-reconstruction_information.number_of_frames = eval('zef.number_of_frames');
-reconstruction_information.source_direction_mode = eval('zef.source_direction_mode');
-reconstruction_information.source_directions = eval('zef.source_directions');
-reconstruction_information.snr_val = eval('zef.inv_snr');
-reconstruction_information.pm_val = eval('zef.inv_prior_over_measurement_db');
+reconstruction_information.inv_time_1 = zef.inv_time_1;
+reconstruction_information.inv_time_2 = zef.inv_time_2;
+reconstruction_information.inv_time_3 = zef.inv_time_3;
+reconstruction_information.sampling_freq = zef.inv_sampling_frequency;
+reconstruction_information.low_pass = zef.inv_high_cut_frequency;
+reconstruction_information.high_pass = zef.inv_low_cut_frequency;
+reconstruction_information.number_of_frames = zef.number_of_frames;
+reconstruction_information.source_direction_mode = zef.source_direction_mode;
+reconstruction_information.source_directions = zef.source_directions;
+reconstruction_information.snr_val = zef.inv_snr;
+reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
 
 %%
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
@@ -41,7 +41,7 @@ z_inverse_results = cell(0);
 % m_0 = prior mean
 m = zeros(size(L,2), 1);
     
-[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.normalize_data'),0);
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),zef.normalize_data,0);
     
 % Transition matrix is Identity matrix
 P = eye(size(L,2)) * theta0;
@@ -52,8 +52,8 @@ A = eye(size(L,2));
 if nargin > 1
     Q = q_value*eye(size(L,2));
 else
-    eval('zef_init_gaussian_prior_options');
-    evolution_prior_db = eval( 'zef.inv_evolution_prior');
+    zef_init_gaussian_prior_options;
+    evolution_prior_db = zef.inv_evolution_prior;
     q_value = find_evolution_prior(L, theta0, time_step, evolution_prior_db);
     Q = q_value*eye(size(L,2));
 end
@@ -65,12 +65,12 @@ R = std_lhood^2 * eye(size(L,1));
 Q_Store = cell(0);
 
 %% KALMAN FILTER
-filter_type = eval( 'zef.KF.filter_type.Value');
-smoothing = eval('zef.kf_smoothing');
+filter_type = zef.KF.filter_type.Value;
+smoothing = zef.kf_smoothing;
 if filter_type == '1'
     [P_store, z_inverse] = zeffiro.plugins.Kalman.m.kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
 elseif filter_type == '2'
-    n_ensembles = str2double(eval( 'zef.KF.number_of_ensembles.Value'));
+    n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = zeffiro.plugins.Kalman.m.EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == '3'
     [P_store, z_inverse] = zeffiro.plugins.Kalman.m.kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
