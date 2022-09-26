@@ -70,7 +70,7 @@ zef_data.zeffiro_verbose_mode = 1;
 zef_data.use_waitbar= 1;
 
 %%% Here begins initialization variables
-zef_data.lead_field_filter_quantile = 0.995;
+zef_data.lead_field_filter_quantile = 1.000;
 zef_data.reduce_labeling_outliers = 1;
 zef_data.zef_patch_sensor = [];
 zef_data.adaptive_refinement_number = 1;
