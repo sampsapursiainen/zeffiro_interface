@@ -20,7 +20,7 @@ function [A, I, J] = zef_adjacency_matrix(nodes, tetra)
     wbtitle = 'Adjacency matrix';
     wb = zef_waitbar(0, wbtitle);
 
-    cleanupfn = @(wb) close(wb);
+    cleanupfn = @(h) close(h);
     cleanupobj = onCleanup(@() cleanupfn(wb));
 
     % Begin iteration.

@@ -19,7 +19,7 @@ if not(isfield(zef,'mne_normalize_data'));
     zef.mne_normalize_data = 1;
 end;
 
-zef.mne_time_1 = zef.inv_time_1
+zef.mne_time_1 = zef.inv_time_1;
 zef.mne_time_2 = zef.inv_time_2;
 zef.mne_time_3 = zef.inv_time_3;
 zef.mne_number_of_frames = zef.number_of_frames;

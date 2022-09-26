@@ -1,3 +1,3 @@
-function ES_active_electrodes = zef_ES_fix_active_electrodes
-ES_active_electrodes = zef_ES_fix_active_electrodes;
+function ES_active_electrodes = zef_ES_fix_active_electrodes(zef)
+ES_active_electrodes = zef_ES_fix_active_electrodes(zef);
 end

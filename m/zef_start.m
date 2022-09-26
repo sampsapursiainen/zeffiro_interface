@@ -6,6 +6,7 @@ end
 
 zef = zef_apply_system_settings(zef);
 
+
 if isequal(zef.zeffiro_restart,0)
     
     use_github = zef.use_github;
@@ -47,6 +48,7 @@ zef.new_empty_project = 0;
 zef_data = struct;
 
 zef_init;
+
 if zef.mlapp == 1
 zef_segmentation_tool;
 else

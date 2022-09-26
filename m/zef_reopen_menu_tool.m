@@ -2,7 +2,13 @@ if isvalid(zef.h_zeffiro_menu)
     set(zef.h_zeffiro_menu,'DeleteFcn','');
 delete(zef.h_zeffiro_menu);
 end
-zef_menu_tool
+
+zef.current_log_file = zef.h_zeffiro_menu.ZefCurrentLogFile;
+zef.zeffiro_task_id = zef.h_zeffiro_menu.ZefTaskId;
+zef.zeffiro_restart_time = zef.h_zeffiro_menu.ZefRestartTime;
+
+zef_menu_tool;
+
 zef = zef_update(zef);
 
 set(findobj(zef.h_zeffiro_menu.Children,'-property','FontUnits'),'FontUnits','pixels')

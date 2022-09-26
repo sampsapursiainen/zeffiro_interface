@@ -1,8 +1,10 @@
 function zef_ES_plot_barplot(varargin)
+zef = eval('caller','zef');
+
 switch nargin
     case 0
         [sr, sc] = zef_ES_objective_function(zef_ES_table);
-        y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+        y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
     case 1
         if isvector(varargin{1})
             y_ES = varargin{1};
@@ -12,7 +14,7 @@ switch nargin
     case 2
         [sr, sc] = deal(varargin{1:2});
         try
-            y_ES = evalin('base',['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+            y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
         catch
             error('No y_ES data found.')
         end
@@ -60,8 +62,8 @@ h_axes.YLabel.FontWeight = 'bold';
 h_axes.XGrid = 'off';
 h_axes.YGrid = 'on';
 
-max_current_montage = evalin('base','zef.ES_total_max_current');
-max_current_channel = evalin('base','zef.ES_max_current_channel');
+max_current_montage = eval('zef.ES_total_max_current');
+max_current_channel = eval('zef.ES_max_current_channel');
 
 h_axes.XLim = [0 length(y_ES)];
 % h_axes.YLim = [-max_current max_current]*1.05;

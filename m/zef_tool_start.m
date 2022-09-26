@@ -1,11 +1,35 @@
-function [zef] = zef_tool_start(zef,tool_script)
+function [zef] = zef_tool_start(zef,tool_script,relative_size,scale_positions)
+
+if nargin < 3
+    relative_size = 1/3;
+end
+
+if isempty(relative_size)
+    relative_size = 1/3;
+end
+
+if nargin < 4
+    scale_positions = 1;
+end
+
+
+h_tool = findall(groot,'ZefTool',tool_script);
+
+if not(isempty(h_tool))
+    if zef.use_display
+        for i = 1 : length(h_tool)
+        figure(h_tool(i));
+        end
+    end
+
+else
 
 visible_val = get(0,'DefaultFigureVisible');
 set(0,'DefaultFigureVisible','off');
 h_groot = groot;
 h_groot_children_1 = findall(groot,'-regexp','Name','ZEFFIRO Interface*');
 J = [];
-if not(isempty(zef.zeffiro_variable_data)) & not(isempty(zef.project_matfile))
+if and(not(isempty(zef.zeffiro_variable_data)), not(isempty(zef.project_matfile)))
 I = find(ismember(zef.zeffiro_variable_data(:,1),tool_script));
 time_val = now;
 for i = 1 : length(I) 
@@ -25,7 +49,7 @@ zef.zeffiro_variable_data = zef.zeffiro_variable_data(I,:);
 end
 variable_list_1 = fieldnames(zef);
 
-eval(tool_script);
+evalc(['zef =' tool_script '(zef);']);
 
 variable_list_2 = fieldnames(zef);
 h_groot_children_2 = findall(groot,'-regexp','Name','ZEFFIRO Interface*');
@@ -34,7 +58,7 @@ set(h_groot_children,'Visible',zef.use_display);
 variable_list = setdiff(variable_list_2,variable_list_1);
 I = [];
 for i = 1 : length(variable_list)
-if not(any(ishandle(zef.(variable_list{i})))) | isnumeric(zef.(variable_list{i}))
+if or(not(any(ishandle(zef.(variable_list{i})))),isnumeric(zef.(variable_list{i})))
 I(end+1) = i;
 end
 end
@@ -45,8 +69,8 @@ if not(isempty(zef.zeffiro_variable_data))
 variable_data_ind = [];
 for j = 1 : size(variable_cell,1)
 K = find(ismember(zef.zeffiro_variable_data(:,2),variable_cell(j,2)));
-zef.zeffiro_variable_data(K,2:3) = variable_cell(j,2:3);
 if not(isempty(K))
+zef.zeffiro_variable_data(K,2:3) = variable_cell(j,2:3);
 variable_data_ind(end+1) = j;
 end
 end
@@ -60,12 +84,24 @@ set(0,'DefaultFigureVisible',visible_val);
 
 for i = 1 : length(h_groot_children)
     
-if isempty(findobj(h_groot_children(i).Children,'Type','uitable'));
-    zef_set_size_change_function(h_groot_children(i),1);
+set(h_groot_children(i),'DeleteFcn',['zef_closereq(''' tool_script ''');'])
+
+h_groot_children(i).Units = zef.h_zeffiro_menu.Units; 
+
+width_aux = relative_size*zef.h_zeffiro_menu.Position(3);
+height_aux = relative_size*h_groot_children(i).Position(4)*zef.h_zeffiro_menu.Position(3)/h_groot_children(i).Position(3);
+vertical_aux = zef.h_zeffiro_menu.Position(2)+zef.h_zeffiro_menu.Position(4)-height_aux;
+horizontal_aux = zef.h_zeffiro_menu.Position(1)+zef.h_zeffiro_menu.Position(3)-width_aux;
+
+if isempty(findall(h_groot_children(i),'Type','uitable','-or','Type','uipanel'))
+    zef_set_size_change_function(h_groot_children(i),1,scale_positions);
 else
-    zef_set_size_change_function(h_groot_children(i),2);
+    zef_set_size_change_function(h_groot_children(i),2,scale_positions);
 end
-set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels')
+
+h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+
+set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 if not(isempty(findobj(h_groot_children(i),'-property','Resize')))
@@ -77,7 +113,7 @@ addprop(h_groot_children(i),'ZefTool');
 end
 h_groot_children(i).ZefTool = tool_script;
 
-set(h_groot_children(i),'DeleteFcn',['zef_closereq(''' tool_script ''');'])
+end
 
 end
 

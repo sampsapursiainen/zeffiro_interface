@@ -1,3 +1,9 @@
+if isfield(zef,'h_mesh_tool')
+if isvalid(zef.h_mesh_tool)
+    delete(zef.h_mesh_tool)
+end
+end
+
 zef_data = zef_mesh_tool_app_exported;
 zef_data.h_mesh_tool.Visible=zef.use_display;
 zef = zef_assign_data(zef, zef_data);
@@ -42,7 +48,7 @@ set(zef.h_edit76,'value',(zef.solver_tolerance));
 set(zef.h_edit75,'value',(zef.n_sources));
 set(zef.h_max_surface_face_count,'value',(zef.max_surface_face_count));
 set(zef.h_pushbutton23,'ButtonPushedFcn','zef_apply_transform;');
-set(zef.h_pushbutton34,'ButtonPushedFcn','zef_postprocess_finite_element_mesh');
+set(zef.h_pushbutton34,'ButtonPushedFcn','zef_postprocess_finite_element_mesh; zef_update;');
 set(zef.h_forward_simulation_update_from_profile,'ButtonPushedFcn','zef.forward_simulation_table = readcell([zef.program_path ''/profile/'' zef.profile_name ''/zeffiro_forward_simulation.ini''],''filetype'',''tex'',''delimiter'','','');zef.h_forward_simulation_table.Data = zef.forward_simulation_table;');
 
 set(zef.h_forward_simulation_table,'CellEditCallback','zef.h_forward_simulation_script.Value = zef.h_forward_simulation_table.Data{zef.forward_simulation_selected(1), zef.forward_simulation_column_selected};')
@@ -76,7 +82,7 @@ zef.h_mesh_tool.Units = 'normalized';
 zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
 zef.h_mesh_tool.Units = 'pixels';
 set(zef.h_mesh_tool,'AutoResizeChildren','off');
-zef_set_size_change_function(zef.h_mesh_tool)
+zef_set_size_change_function(zef.h_mesh_tool,2)
 
 if zef.h_segmentation_tool_toggle == 1
     

@@ -1,5 +1,5 @@
 addpath([pwd filesep 'm']);
-zef_make_package(mfilename('fullpath'));
+zef_make_package(fileparts(mfilename('fullpath')));
 
 zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zef_start_config.m'],'w');
 fprintf(zef_data.fid_temp, ['warning off;']);

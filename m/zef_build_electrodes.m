@@ -264,6 +264,5 @@ function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec,
     end
 
     zef_waitbar(1,wb);
-    close(wb);
 
 end

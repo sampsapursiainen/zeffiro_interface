@@ -137,7 +137,7 @@ ind_m = [ 2 3 4 ;
           4 1 2 ;
           1 2 3 ];
 
-h=waitbar(0,'MEG load vectors.');
+h=zef_waitbar(0,'MEG load vectors.');
 waitbar_ind = 0;
 
 B = zeros(N,L);
@@ -174,16 +174,16 @@ B(:,j) = B(:,j) + b_vec;
 load_vec_count = load_vec_count + 1;
 if mod(load_vec_count, floor(4*L/50))==0
 time_val = toc;
-waitbar(load_vec_count/(4*L),h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/load_vec_count - 1)*time_val/86400)) '.']);
+zef_waitbar(load_vec_count/(4*L),h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/load_vec_count - 1)*time_val/86400)) '.']);
 end
 
 end
 end
 
 time_val = toc;
-waitbar(1,h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
+zef_waitbar(1,h,['MEG load vectors. Ready: ' datestr(datevec(now+(4*L/i - 1)*time_val/86400)) '.']);
 
-waitbar(0,h,'System matrices.')
+zef_waitbar(0,h,'System matrices.')
 
 for i = 1 : 4
 
@@ -245,7 +245,7 @@ end
 end
 
 waitbar_ind = waitbar_ind + 1;
-waitbar(waitbar_ind/waitbar_length,h);
+zef_waitbar(waitbar_ind/waitbar_length,h);
 
 end
 
@@ -410,7 +410,7 @@ end
 clear cross_mat;
 
 
-waitbar(0,h,'PCG iteration.');
+zef_waitbar(0,h,'PCG iteration.');
 
 if eval('zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
 precond_vec = gpuArray(1./full(diag(A)));
@@ -459,7 +459,7 @@ if tol_val < relres_vec(i)
     return
 end
 time_val = toc;
-waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+zef_waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
 end
 
 %**************************************************************************
@@ -553,7 +553,7 @@ if not(isempty(find(tol_val < relres_vec)))
 end
 time_val = toc;
 
-waitbar((i+length(block_ind)-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+length(block_ind)-1) - 1)*time_val/86400)) '.']);
+zef_waitbar((i+length(block_ind)-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+length(block_ind)-1) - 1)*time_val/86400)) '.']);
 
 end
 
@@ -565,7 +565,7 @@ clear S r p x aux_vec inv_M_r a b;
 
 waitbar_ind = 0;
 
-waitbar(waitbar_ind/waitbar_length,h,'Interpolation.');
+zef_waitbar(waitbar_ind/waitbar_length,h,'Interpolation.');
 Aux_mat_2 = eye(L,L) - (1/L)*ones(L,L);
 L_meg_fi = Aux_mat_2*L_meg_fi/(4*pi);
 if source_model == ZefSourceModel.Hdiv
@@ -615,7 +615,7 @@ tic;
 
 if mod(i,floor(M2/50))==0
 time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
+zef_waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
 end
 end
 end
@@ -636,14 +636,14 @@ tic;
 
 if mod(i,floor(M2/50))==0
 time_val = toc;
-waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
+zef_waitbar(i/M2,h,['Interpolation. Ready: ' datestr(datevec(now+(M2/i - 1)*time_val/86400)) '.']);
 end
 end
 end
 
 end
 
-waitbar(1,h);
+zef_waitbar(1,h);
 
 close(h);
 

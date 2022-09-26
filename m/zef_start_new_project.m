@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-if isequal(zef.use_display,1)
+if zef.use_display
 zef = zeffiro_interface('restart');
 else
 zef = zeffiro_interface('restart','start_mode','nodisplay');

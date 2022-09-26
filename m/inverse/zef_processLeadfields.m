@@ -1,21 +1,25 @@
-function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode)
+function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef)
 %zef_processLeadfields processes the leadfield in zef and applies all
 %visibility options.
 %L is the leadfield, the procFile has all information needed for the
 %postProcessing step, but should not be needed in the inverse method
 
-source_directions = evalin('base','zef.source_directions');
+if nargin == 1
+    zef = evalin('base','zef');
+end
+
+source_directions = eval('zef.source_directions');
 
 s_ind_2=[];
 s_ind_3=[];
 s_ind_4=[];
 
-[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+[s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
 if source_direction_mode == 2
 
-    [s_ind_3] = evalin('base','zef.source_interpolation_ind{3}');
+    [s_ind_3] = eval('zef.source_interpolation_ind{3}');
 
     i = 0;
     length_reuna = 0;
@@ -26,19 +30,19 @@ if source_direction_mode == 2
     aux_brain_ind = [];
     aux_dir_mode = [];
     submesh_cell = cell(0);
-    compartment_tags = evalin('base','zef.compartment_tags');
+    compartment_tags = eval('zef.compartment_tags');
     for k = 1 : length(compartment_tags)
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
-        on_val = evalin('base',var_0);
-        sigma_val = evalin('base',var_1);
-        priority_val = evalin('base',var_2);
-        visible_val = evalin('base',var_3);
-        submesh_ind = evalin('base',var_4);
+        color_str = eval(['zef.' compartment_tags{k} '_color']);
+        on_val = eval(var_0);
+        sigma_val = eval(var_1);
+        priority_val = eval(var_2);
+        visible_val = eval(var_3);
+        submesh_ind = eval(var_4);
         if on_val
             i = i + 1;
             sigma_vec(i,1) = sigma_val;
@@ -46,9 +50,9 @@ if source_direction_mode == 2
             color_cell{i} = color_str;
             visible_vec(i,1) = i*visible_val;
             submesh_cell{i} = submesh_ind;
-            if evalin('base',['zef.' compartment_tags{k} '_sources']);
+            if eval(['zef.' compartment_tags{k} '_sources']);
                 aux_brain_ind = [aux_brain_ind i];
-                aux_dir_mode = [aux_dir_mode evalin('base',['zef.' compartment_tags{k} '_sources'])-1];
+                aux_dir_mode = [aux_dir_mode eval(['zef.' compartment_tags{k} '_sources'])-1];
             end
         end
     end
@@ -59,9 +63,9 @@ if source_direction_mode == 2
 
     for ab_ind = 1 : length(aux_brain_ind)
 
-        aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
-        aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
-        a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
+        aux_t = [aux_t ; size(aux_p,1) + eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
+        aux_p = [aux_p ; eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+        a_d_i_vec = [a_d_i_vec ; aux_dir_mode(ab_ind)*ones(size(eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']),1),1)];
 
     end
 
@@ -94,7 +98,7 @@ end
 
 s_ind_1 = s_ind_1(:);
 
-L = evalin('base','zef.L');
+L = eval('zef.L');
 L = L(:,s_ind_1);
 
 if source_direction_mode == 2

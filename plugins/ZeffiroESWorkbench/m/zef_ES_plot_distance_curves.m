@@ -1,5 +1,7 @@
 function zef_ES_plot_distance_curves
 
+zef = evalin('caller','zef');
+
     f = figure('Name','ZEFFIRO Interface: ES distance curves','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
 
@@ -10,13 +12,13 @@ quantile_val = 0.90;
 smooth_range = 50;
 font_size = 14;
 
-rec_vec_aux = zeros(3,size(evalin('base','zef.source_positions'),1));
-rec_vec_aux(1:evalin('base','length(zef.reconstruction(:))')) = evalin('base','zef.reconstruction');
+rec_vec_aux = zeros(3,size(eval('zef.source_positions'),1));
+rec_vec_aux(1:eval('length(zef.reconstruction(:))')) = eval('zef.reconstruction');
 amplitude_vec_aux = rec_vec_aux;
 rec_vec_aux = rec_vec_aux./repmat(sqrt(sum(rec_vec_aux.^2)),3,1);
 amplitude_vec_aux = sqrt(sum(amplitude_vec_aux.^2));
-distance_vec_aux = sqrt(sum((evalin('base','zef.source_positions')-evalin('base','zef.inv_synth_source(ones(size(zef.source_positions,1),1),1:3)')).^2,2));
-dipole_vec_aux = evalin('base','zef.inv_synth_source(1,4:6)');
+distance_vec_aux = sqrt(sum((eval('zef.source_positions')-eval('zef.inv_synth_source(ones(size(zef.source_positions,1),1),1:3)')).^2,2));
+dipole_vec_aux = eval('zef.inv_synth_source(1,4:6)');
 dipole_vec_aux = dipole_vec_aux(:)./norm(dipole_vec_aux,2);
 distance_vec = linspace(0,max_distance,n_distances)';
 amplitude_vec = zeros(size(distance_vec));

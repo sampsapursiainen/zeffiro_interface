@@ -12,7 +12,7 @@ zef = zef_create_fem_mesh(zef);
 zef = zef_postprocess_fem_mesh(zef);
 zef.n_sources_mod = 1;
 zef.source_ind = [];
-zef = zef_update_fig_details(zef);
+zef = zef_update(zef);
 
 if nargout == 0
    assignin('base','zef',zef); 

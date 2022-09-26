@@ -1,5 +1,4 @@
 
-
 set(groot,'defaultFigureVisible','off')
 zef_data = zef_menu_tool_app_exported;
 zef_data.h_zeffiro_menu.Visible = zef.use_display;
@@ -131,7 +130,7 @@ clear  zef_k
 zef = rmfield(zef,'h_temp');
 zef = rmfield(zef,'menu_accelerator_vec');
 
-zef_set_size_change_function(zef.h_zeffiro_menu);
+zef_set_size_change_function(zef.h_zeffiro_menu,1);
 
 if zef.h_segmentation_tool_toggle == 1
     
@@ -177,3 +176,44 @@ if not(ismember('ZefTool',properties(zef.h_zeffiro_menu)))
 addprop(zef.h_zeffiro_menu,'ZefTool');
 end
 zef.h_zeffiro_menu.ZefTool = mfilename;
+
+if not(ismember('ZefVerboseMode',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
+end
+zef.h_zeffiro_menu.ZefVerboseMode = zef.zeffiro_verbose_mode;
+
+if not(ismember('ZefUseWaitbar',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefUseWaitbar');
+end
+zef.h_zeffiro_menu.ZefUseWaitbar = zef.use_waitbar;
+
+if not(ismember('ZefUseLog',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefUseLog');
+end
+zef.h_zeffiro_menu.ZefUseLog = zef.use_log;
+
+if not(ismember('ZefWaitbarSize',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');
+end
+zef.h_zeffiro_menu.ZefWaitbarSize = [0.5*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3) ...
+   0.3*zef.segmentation_tool_default_position(4)/zef_eval_entry(get(groot,'ScreenSize'),4)];
+
+if not(ismember('ZefTaskId',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefTaskId');
+end
+zef.h_zeffiro_menu.ZefTaskId = zef.zeffiro_task_id;
+
+if not(ismember('ZefRestartTime',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefRestartTime');
+end
+zef.h_zeffiro_menu.ZefRestartTime = zef.zeffiro_restart_time;
+
+if not(ismember('ZefProgramPath',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefProgramPath');
+end
+zef.h_zeffiro_menu.ZefProgramPath = zef.program_path;
+
+if not(ismember('ZefFontSize',properties(zef.h_zeffiro_menu)))
+addprop(zef.h_zeffiro_menu,'ZefFontSize');
+end
+zef.h_zeffiro_menu.ZefFontSize = zef.font_size;
