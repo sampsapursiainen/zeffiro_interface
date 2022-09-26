@@ -89,7 +89,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end

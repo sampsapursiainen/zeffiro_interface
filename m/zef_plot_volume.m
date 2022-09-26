@@ -645,7 +645,7 @@ set(eval('zef.h_zeffiro'),'colormap', eval([colormap_cell{eval('zef.inv_colormap
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','reconstruction');
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(eval('zef.h_axes1'), f_ind);
+zef_plot_cone_field(zef, eval('zef.h_axes1'), f_ind);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -766,7 +766,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -901,7 +901,7 @@ end
 %h_surf_2 = trimesh(surface_triangles(I_3_rec,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'CData',reconstruction);
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(eval('zef.h_axes1'), f_ind);
+zef_plot_cone_field(zef,eval('zef.h_axes1'), f_ind);
 end
 
 %set(gca,'CLim',[min_rec max_rec]);
@@ -943,7 +943,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end

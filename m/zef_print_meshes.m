@@ -707,7 +707,7 @@ axes(h_axes_image); set(h_fig_aux,'visible','on');
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','sensor');
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -834,7 +834,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -1020,7 +1020,7 @@ end
 h_surf_2 = trimesh(surface_triangles(I_3,:),nodes(:,1),nodes(:,2),nodes(:,3),reconstruction);
 set(h_surf_2,'Tag','reconstruction');
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -1060,7 +1060,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -1885,7 +1885,7 @@ h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 %marker here
@@ -1977,14 +1977,14 @@ reconstruction = reconstruction(:);
 if ismember(i,aux_active_compartment_ind) && eval('zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
-[h_contour{i},h_contour_text{i}] = zef_plot_contour(eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf2{i},'Tag','reconstruction');
-[h_contour{i},h_contour_text{i}] = zef_plot_contour(eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
 end
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -2306,7 +2306,7 @@ h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}
 set(h_surf_2{ab_ind},'Tag','reconstruction');
 end
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -2357,15 +2357,15 @@ delete(h_surf_2{i});
 if ismember(i,aux_active_compartment_ind) && eval('zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
-[h_contour{i},h_contour_text{i}] = zef_plot_contour(eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});                         
+%[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});                         
 else
 h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
 set(h_surf_2{i},'Tag','reconstruction');
-[h_contour{i},h_contour_text{i}] = zef_plot_contour(eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+%[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
                             
 end
 if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-zef_plot_cone_field(h_axes_image, f_ind, 2);
+zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
