@@ -1,11 +1,11 @@
-function [h_contour,h_text] = zef_plot_contour(rel_val,surf_func,triangles,nodes,varargin)
+function [h_contour,h_text] = zef_plot_contour(zef,rel_val,surf_func,triangles,nodes,varargin)
 
-if not(evalin('base','zef.show_contour_text'))
+if not(eval('zef.show_contour_text'))
 h_text = [];
 end
     
-n_iter = evalin('base','zef.contour_n_smoothing');
-line_width = evalin('base','zef.contour_line_width');
+n_iter = eval('zef.contour_n_smoothing');
+line_width = eval('zef.contour_line_width');
 if not(isempty(varargin))
 n_iter = varargin{1};
 if length(varargin) > 1
@@ -17,9 +17,9 @@ h_axes = findobj(h_fig.Children,'Tag','axes1');
 hold_status = ishold(h_axes);
 
 colormap_size = length(rel_val);
-colortune_param = evalin('base','zef.colortune_param');
-colormap_cell = evalin('base','zef.colormap_cell');
-c_map = evalin('base',[colormap_cell{evalin('base','zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
+colortune_param = eval('zef.colortune_param');
+colormap_cell = eval('zef.colormap_cell');
+c_map = eval([colormap_cell{eval('zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']);
 
 if isequal(size(surf_func(:),1),size(nodes,1))
 surf_func = (1/3)*(surf_func(triangles(:,1),:) + surf_func(triangles(:,2),:) + surf_func(triangles(:,3),:));
@@ -117,7 +117,7 @@ set(h_contour(loop_start,j),'tag','contour')
 
 uistack(h_contour(loop_start,j),'top');
 
-if evalin('base','zef.show_contour_text')
+if eval('zef.show_contour_text')
 h_text(loop_start,j) = text(h_axes,nodes(edges_contour{loop_start}(1,1),1),nodes(edges_contour{loop_start}(1,1),2),nodes(edges_contour{loop_start}(1,1),3),[sprintf('%0.3g',100*rel_val(j)) ' %']);
 set(h_text(loop_start,j),'FontSize',h_axes.FontSize);
 h_text(loop_start,j).Tag = 'contour_text';

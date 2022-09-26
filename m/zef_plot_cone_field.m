@@ -1,6 +1,6 @@
-function [h_cone_field, h_streamlines, h_colorbar] = zef_plot_cone_field(h_axes, varargin)
+function [h_cone_field, h_streamline, h_colorbar] = zef_plot_cone_field(zef, h_axes, varargin)
 
-if evalin('base','zef.cone_draw') || evalin('base','zef.streamline_draw')
+if eval('zef.cone_draw') || eval('zef.streamline_draw')
 
 rec_ind = 1;
 position_case = 1;
@@ -11,20 +11,18 @@ if not(isempty(varargin))
     end
 end
 
-lattice_res = evalin('base','zef.cone_lattice_resolution');
-s_p = evalin('base','zef.source_positions');
+lattice_res = eval('zef.cone_lattice_resolution');
+s_p = eval('zef.source_positions');
 
-cone_field_size = size(s_p,1);
-
-aux_ind_1 = unique(evalin('base','zef.source_interpolation_ind{1}'));
+aux_ind_1 = unique(eval('zef.source_interpolation_ind{1}'));
 
 clipped = 0;
 
-if evalin('base','zef.cp_on')
-cp_a = evalin('base','zef.cp_a');
-cp_b = evalin('base','zef.cp_b');
-cp_c = evalin('base','zef.cp_c');
-cp_d = evalin('base','zef.cp_d');
+if eval('zef.cp_on')
+cp_a = eval('zef.cp_a');
+cp_b = eval('zef.cp_b');
+cp_c = eval('zef.cp_c');
+cp_d = eval('zef.cp_d');
 
 clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 
@@ -36,11 +34,11 @@ end
 clipped = 1;
 end
 
-if evalin('base','zef.cp2_on')
-cp2_a = evalin('base','zef.cp2_a');
-cp2_b = evalin('base','zef.cp2_b');
-cp2_c = evalin('base','zef.cp2_c');
-cp2_d = evalin('base','zef.cp2_d');
+if eval('zef.cp2_on')
+cp2_a = eval('zef.cp2_a');
+cp2_b = eval('zef.cp2_b');
+cp2_c = eval('zef.cp2_c');
+cp2_d = eval('zef.cp2_d');
 
 clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 
@@ -52,11 +50,11 @@ end
 clipped = 1;
 end
 
-if evalin('base','zef.cp3_on')
-cp3_a = evalin('base','zef.cp3_a');
-cp3_b = evalin('base','zef.cp3_b');
-cp3_c = evalin('base','zef.cp3_c');
-cp3_d = evalin('base','zef.cp3_d');
+if eval('zef.cp3_on')
+cp3_a = eval('zef.cp3_a');
+cp3_b = eval('zef.cp3_b');
+cp3_c = eval('zef.cp3_c');
+cp3_d = eval('zef.cp3_d');
 
 clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 
@@ -68,9 +66,13 @@ end
 clipped = 1;
 end
 
+if ismember(zef.cp_mode ,[2 4])
+aux_ind_aux = [1 : size(s_p,1)]';
+aux_ind_1 = setdiff(aux_ind_aux,aux_ind_1);
+end
 s_p = s_p(aux_ind_1,:);
 
-cone_field = evalin('base','zef.reconstruction');
+cone_field = eval('zef.reconstruction');
 
 if iscell(cone_field)
 cone_field = cone_field{rec_ind};
@@ -83,8 +85,8 @@ cone_field = cone_field(aux_ind_1,:)./max(norm_cone_field);
 
 norm_cone_field = norm_cone_field(aux_ind_1);
 
-n_colormap = evalin('base','zef.colormap_size');
-cone_colormap = zef_blue_brain_1_colormap(evalin('base','zef.colortune_param'),n_colormap);
+n_colormap = eval('zef.colormap_size');
+cone_colormap = zef_blue_brain_1_colormap(eval('zef.colortune_param'),n_colormap);
 
 min_x = min(s_p(:,1));
 max_x = max(s_p(:,1));
@@ -129,27 +131,27 @@ C_field(lattice_ind_aux) = norm_cone_field;
 
 axes(h_axes);
 
-s_val = evalin('base','zef.cone_scale');
+s_val = eval('zef.cone_scale');
 
 hold on;
 I = [1:size(s_p,1)];
-I = I(1:round(length(I)/(evalin('base','zef.n_streamline')-1)):end);
+I = I(1:round(length(I)/(eval('zef.n_streamline')-1)):end);
 
-if evalin('base','zef.cone_draw')
+if eval('zef.cone_draw')
 
 h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
 set(h_cone_field,'facecolor','interp');
 set(h_cone_field,'edgecolor','none');
-set(h_cone_field,'facealpha',evalin('base','zef.cone_alpha'));
+set(h_cone_field,'facealpha',eval('zef.cone_alpha'));
 set(h_cone_field,'Tag','cones');
 
 end
 
-if evalin('base','zef.streamline_draw')
+if eval('zef.streamline_draw')
 h_streamline = streamline(stream3(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,s_p(I,1),s_p(I,2),s_p(I,3)));
-set(h_streamline,'linewidth',evalin('base','zef.streamline_linewidth'));
-set(h_streamline,'linestyle',evalin('base','zef.streamline_linestyle'));
-set(h_streamline,'color',evalin('base','zef.streamline_color'));
+set(h_streamline,'linewidth',eval('zef.streamline_linewidth'));
+set(h_streamline,'linestyle',eval('zef.streamline_linestyle'));
+set(h_streamline,'color',eval('zef.streamline_color'));
 end
 
 if position_case == 1
