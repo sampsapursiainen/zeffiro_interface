@@ -53,7 +53,7 @@ zef.h_profile_name.ValueChangedFcn = 'zef.profile_name = zef.h_profile_name.Valu
 zef.h_project_tag.Value = zef.project_tag;
 
 set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
-zef_set_size_change_function(zef.h_zeffiro_window_main);
+zef_set_size_change_function(zef.h_zeffiro_window_main,2);
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
 set(zef.h_zeffiro_window_main,'DeleteFcn','zef_closereq;');

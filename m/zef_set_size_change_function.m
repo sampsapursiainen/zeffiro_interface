@@ -8,8 +8,8 @@ if nargin < 3
     scale_positions = 1;
 end
 
-if isprop('AutoResizeChildren',h_window)
-h_window.AutoResizeChildren = 'off';
+if isprop(h_window,'AutoResizeChildren')
+set(h_window,'AutoResizeChildren','off');
 end
 warning off; 
     

@@ -7,11 +7,19 @@ function [f,t] = zef_getTimeStep(f_data, f_ind, Optional_averaging_bool, object_
 %If a window is specified, averaging can be applied. The behavior is
 %specified in Optional_averaging_bool, with a default of true
 
-if or(nargin < 3,isempty(Optional_averaging_bool))
+if (nargin < 3)
 Optional_averaging_bool=true;
 end
 
-if or(nargin < 4,isempty(object_string))
+if isempty(Optional_averaging_bool)
+    Optional_averaging_bool=true;
+end
+
+if (nargin < 4)
+    object_string = 'inv';
+end
+
+if isempty(object_string)
 object_string = 'inv';
 end
 

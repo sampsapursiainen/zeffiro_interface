@@ -82,7 +82,7 @@ zef.h_mesh_tool.Units = 'normalized';
 zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
 zef.h_mesh_tool.Units = 'pixels';
 set(zef.h_mesh_tool,'AutoResizeChildren','off');
-zef_set_size_change_function(zef.h_mesh_tool)
+zef_set_size_change_function(zef.h_mesh_tool,2)
 
 if zef.h_segmentation_tool_toggle == 1
     

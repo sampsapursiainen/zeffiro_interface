@@ -123,7 +123,7 @@ set(zef.h_mesh_visualization_tool,'AutoResizeChildren','off');
 zef.mesh_visualization_tool_current_size = get(zef.h_mesh_visualization_tool,'Position');
 set(zef.h_mesh_visualization_tool,'SizeChangedFcn','zef.mesh_visualization_tool_current_size = zef_change_size_function(zef.h_mesh_visualization_tool,zef.mesh_visualization_tool_current_size);');
 
-zef_set_size_change_function(zef.h_mesh_visualization_tool);
+zef_set_size_change_function(zef.h_mesh_visualization_tool,2);
 
 clear zef_data;
 

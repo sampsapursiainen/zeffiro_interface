@@ -1,9 +1,12 @@
 %This is the startup script for dipole_app app. One must add this as launch
 %script to zeffiro_plugins file:
 %dipoleScan, inverse_tools, zef_dipole_start
+function zef = zef_dipole_window(zef)
 
 zef.dipole_app = dipole_app;
 appName='dipole_app';
+
+zef.dipole_app.ZEFFIROInterfaceDipoleScanUIFigure.Name = 'ZEFFIRO Interface: Dipole scan tool';
 
 %_ Names of leadfield regularization methods _
 % zef_bf_names = {'Basic'
@@ -69,3 +72,5 @@ zef.dipole_app.CloseButton.ButtonPushedFcn = 'delete(zef.dipole_app);';
 
 %set fonts
 %set(findobj(zef.dipole_app.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);
+
+end

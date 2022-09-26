@@ -130,7 +130,7 @@ clear  zef_k
 zef = rmfield(zef,'h_temp');
 zef = rmfield(zef,'menu_accelerator_vec');
 
-zef_set_size_change_function(zef.h_zeffiro_menu);
+zef_set_size_change_function(zef.h_zeffiro_menu,1);
 
 if zef.h_segmentation_tool_toggle == 1
     

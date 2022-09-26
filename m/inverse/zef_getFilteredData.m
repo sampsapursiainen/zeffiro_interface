@@ -5,15 +5,23 @@ function [f] = zef_getFilteredData(object_string,use_normalization,zef)
 %zef.inv_sampling_frequency.
 % f has the same size as the measurement
 
-if or(nargin == 0,isempty(object_string))
+if (nargin == 0)
 object_string = 'inv';
 end 
 
-if or(nargin<2,isempty(use_normalization))
+if isempty(object_string)
+object_string = 'inv';
+end
+
+if nargin<2
 use_normalization = 0;
 end
 
-if or(nargin<3)
+if isempty(use_normalization)
+    use_normalization = 0;
+end
+
+if nargin<3
     zef = evalin('base','zef');
 end
 

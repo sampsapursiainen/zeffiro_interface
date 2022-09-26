@@ -4,14 +4,14 @@ function [z, reconstruction_information] = zef_dipoleScan(zef)
 
 invMethod=eval( 'zef.dipole_app.InversionmethodDropDown.Value');
 regType=eval( 'zef.dipole_app.regType.Value');
-regValue=eval( 'zef.dipole_app.regValue.Value');
+inv_leadfield_lambda=eval( 'zef.dipole_app.inv_leadfield_lambda.Value');
 
 %super unelegant call for the information
 reconstruction_information.tag =strcat('Dipole', invMethod);
 reconstruction_information.type = 'Dipole';
 reconstruction_information.invMethod=invMethod;
 reconstruction_information.regType=regType;
-reconstruction_information.regValue=regValue;
+reconstruction_information.inv_leadfield_lambda=inv_leadfield_lambda;
 reconstruction_information.inv_time_1 = eval('zef.inv_time_1');
 reconstruction_information.inv_time_2 = eval('zef.inv_time_2');
 reconstruction_information.inv_time_3 = eval('zef.inv_time_3');
@@ -29,10 +29,10 @@ h = zef_waitbar(0,'Dipole scanning');
 number_of_frames = eval('zef.number_of_frames');
 source_direction_mode = eval('zef.source_direction_mode');
 
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef);
 
 z = cell(number_of_frames,1);
-f_data = zef_getFilteredData;
+f_data = zef_getFilteredData('inv',1,zef);
 
 tic;
 for f_ind = 1 : number_of_frames
@@ -44,7 +44,7 @@ for f_ind = 1 : number_of_frames
 
     end
 
-    f=zef_getTimeStep(f_data, f_ind, true);
+    f=zef_getTimeStep(f_data, f_ind, true,'inv',zef);
 
     z_vec = nan(size(L,2),1);
 
@@ -115,7 +115,7 @@ for f_ind = 1 : number_of_frames
 
                 if strcmp('SVD', regType)
                     [~,~,V_reg]=svd(lf, 'econ');
-                    lf=lf*V_reg(:, 1:str2double(regValue)); %columns of V are the right singular vectors
+                    lf=lf*V_reg(:, 1:str2double(inv_leadfield_lambda)); %columns of V are the right singular vectors
 
                 end
 
@@ -142,13 +142,13 @@ for f_ind = 1 : number_of_frames
                      %mom has to be redirected into the old orientation
                      %system
                      momReg=[0 0 0];
-                        for kreg=1:str2double(regValue)
+                        for kreg=1:str2double(inv_leadfield_lambda)
                             momReg(1)=momReg(1)+mom(kreg)*V_reg(1, kreg);
                             momReg(2)=momReg(2)+mom(kreg)*V_reg(2, kreg);
                             momReg(3)=momReg(3)+mom(kreg)*V_reg(3, kreg);
                         end
                         mom=momReg;
-                     %mom=mom*V_reg(:, 1:str2double(regValue))
+                     %mom=mom*V_reg(:, 1:str2double(inv_leadfield_lambda))
                 end
 
                 %relativ residual variance

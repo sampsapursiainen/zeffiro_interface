@@ -17,7 +17,9 @@ h_tool = findall(groot,'ZefTool',tool_script);
 
 if not(isempty(h_tool))
     if zef.use_display
-        uistack(h_tool,'top');
+        for i = 1 : length(h_tool)
+        figure(h_tool(i));
+        end
     end
 
 else
@@ -67,8 +69,8 @@ if not(isempty(zef.zeffiro_variable_data))
 variable_data_ind = [];
 for j = 1 : size(variable_cell,1)
 K = find(ismember(zef.zeffiro_variable_data(:,2),variable_cell(j,2)));
-zef.zeffiro_variable_data(K,2:3) = variable_cell(j,2:3);
 if not(isempty(K))
+zef.zeffiro_variable_data(K,2:3) = variable_cell(j,2:3);
 variable_data_ind(end+1) = j;
 end
 end
@@ -91,13 +93,14 @@ height_aux = relative_size*h_groot_children(i).Position(4)*zef.h_zeffiro_menu.Po
 vertical_aux = zef.h_zeffiro_menu.Position(2)+zef.h_zeffiro_menu.Position(4)-height_aux;
 horizontal_aux = zef.h_zeffiro_menu.Position(1)+zef.h_zeffiro_menu.Position(3)-width_aux;
 
-h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
-
-if isempty(findobj(h_groot_children(i).Children,'Type','uitable'))
+if isempty(findall(h_groot_children(i),'Type','uitable','-or','Type','uipanel'))
     zef_set_size_change_function(h_groot_children(i),1,scale_positions);
 else
     zef_set_size_change_function(h_groot_children(i),2,scale_positions);
 end
+
+h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+
 set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
 set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
 
