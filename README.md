@@ -10,15 +10,16 @@ zeffiro_downloader;
 
 where the URL is a shortcut to the page:
 
-https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_downloader.m
+https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/
+master/zeffiro_downloader.m
 
 With ZI, one can segment a realistic multilayer geometry and generate a
-multi-compartment FE mesh, if triangular ASCII surface grids (in DAT or
-ASC file format) are available. A suitable surface segmentation can be
-produced, for example, with the FreeSurfer software suite (Copyright ©
+multi-compartment FE mesh, if triangular surface grids in STL, DAT or ASC
+(ASCII) file format are available. A suitable surface segmentation can be
+produced, for example, using the FreeSurfer software suite (Copyright ©
 FreeSurfer, 2013). Such a segmentation can be imported at once from a
 folder containing a set of ASCII files. An example folder can be found in
-the repository.  ZI allows also importing a parcellation created with
+the repository. ZI allows also importing a parcellation created with
 FreeSurfer to enable distinguishing different brain regions and, thereby,
 analysing the connectivity of the brain function over a time series.
 Different compartments can be defined as active, allowing the analysis of
@@ -28,8 +29,8 @@ routines of ZI can be accelerated significantly in a computer equipped
 with a graphics computing unit (GPU). It is especially recommendable to
 perform the forward simulation process, i.e., to generate the finite
 element mesh, the lead field matrix and to interpolate between different
-point sets, utilizing a GPU. After the forward simulation phase, the
-model can be processed also without GPU acceleration.
+point sets, utilizing a GPU. After the forward simulation phase, the model
+can be processed also without GPU acceleration.
 
 A brief introduction to the essential features of the interface can be
 found at:
@@ -42,6 +43,28 @@ He, Q., Rezaei, A. & Pursiainen, S. (2019). Zeffiro User Interface for
 Electromagnetic Brain Imaging: a GPU Accelerated FEM Tool for Forward and
 Inverse Computations in Matlab. Neuroinformatics,
 doi:10.1007/s12021-019-09436-9
+
+For recent papers, see:
+
+Galaz Prieto, F., Rezaei, A., Samavaki, M., & Pursiainen, S. (2022).
+L1-norm vs. L2-norm fitting in optimizing focal multi-channel tES
+stimulation: linear and semidefinite programming vs. weighted least
+squares. arXiv e-prints, arXiv-2206.
+
+Lahtinen, J., Koulouri, A., Rezaei, A., & Pursiainen, S. (2022).
+Conditionally Exponential Prior in Focal Near-and Far-Field EEG Source
+Localization via Randomized Multiresolution Scanning (RAMUS). Journal of
+Mathematical Imaging and Vision, 1-22.
+
+Rezaei, A., Lahtinen, J., Neugebauer, F., Antonakakis, M., Piastra, M. C.,
+Koulouri, A., Wolters, C. H., & Pursiainen, S. (2021). Reconstructing
+subcortical and cortical somatosensory activity via the RAMUS inverse
+source analysis technique using median nerve SEP data. NeuroImage, 245,
+118726.
+
+Rezaei, A., Koulouri, A., & Pursiainen, S. (2020). Randomized
+multiresolution scanning in focal and fast E/MEG sensing of brain activity
+with a variable depth. Brain Topography, 33(2), 161-175.
 
 The essential mathematical techniques used in the interface have been
 reviewed and validated in:
