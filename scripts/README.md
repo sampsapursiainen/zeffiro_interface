@@ -1,0 +1,1 @@
+Folder includes self supported examples on how to use ZI without the need to open GUI.  
