@@ -6,13 +6,6 @@ function [f,t] = zef_getTimeStep(f_data, f_ind, Optional_averaging_bool, object_
 %returned.
 %If a window is specified, averaging can be applied. The behavior is
 %specified in Optional_averaging_bool, with a default of true
-if evalin('caller', 'exist("zef", "var")')
-    zef = evalin('caller', 'zef');
-elseif evalin('base', 'exist("zef", "var")')
-    zef = evalin('base', 'zef');
-else
-    error("Cannot find zef.")
-end
 
 if (nargin < 3)
 Optional_averaging_bool=true;
@@ -30,20 +23,20 @@ if isempty(object_string)
 object_string = 'inv';
 end
 
-if eval(['isfield(zef,''' object_string '_time_3'')'])
-    time_step = eval(['zef.' object_string '_time_3']);
+if evalin('base',['isfield(zef,''' object_string '_time_3'')'])
+    time_step = evalin('base',['zef.' object_string '_time_3']);
 else
     time_step = Inf;
 end
 
-sampling_freq = eval(['zef.' object_string '_sampling_frequency']);
+sampling_freq = evalin('base',['zef.' object_string '_sampling_frequency']);
 
 size_Data=size(f_data,2);
 %this part gives wrong values, because it uses the time step length?
 if size_Data>1
-    if eval(['zef.' object_string '_time_2']) >=0 && eval(['zef.' object_string '_time_1']) >= 0 && 1 + sampling_freq*eval(['zef.' object_string '_time_1']) <= size_Data
-        t_ind = max(1, 1 + floor(sampling_freq*eval(['zef.' object_string '_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...
-            min(size_Data, 1 + floor(sampling_freq*(eval(['zef.' object_string '_time_1']) + eval(['zef.' object_string '_time_2']))+sampling_freq*(f_ind - 1)*time_step));
+    if evalin('base',['zef.' object_string '_time_2']) >=0 && evalin('base',['zef.' object_string '_time_1']) >= 0 && 1 + sampling_freq*evalin('base',['zef.' object_string '_time_1']) <= size_Data
+        t_ind = max(1, 1 + floor(sampling_freq*evalin('base',['zef.' object_string '_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...
+            min(size_Data, 1 + floor(sampling_freq*(evalin('base',['zef.' object_string '_time_1']) + evalin('base',['zef.' object_string '_time_2']))+sampling_freq*(f_ind - 1)*time_step));
         f = f_data(:, t_ind);
         t = (double(t_ind)-1)./sampling_freq;
     end
