@@ -23,20 +23,24 @@ if isempty(object_string)
 object_string = 'inv';
 end
 
-if evalin('base',['isfield(zef,''' object_string '_time_3'')'])
-    time_step = evalin('base',['zef.' object_string '_time_3']);
+if nargin < 5
+  zef = evalin('base','zef');
+end
+  
+if eval(['isfield(zef,''' object_string '_time_3'')'])
+    time_step = eval(['zef.' object_string '_time_3']);
 else
     time_step = Inf;
 end
 
-sampling_freq = evalin('base',['zef.' object_string '_sampling_frequency']);
+sampling_freq = eval(['zef.' object_string '_sampling_frequency']);
 
 size_Data=size(f_data,2);
 %this part gives wrong values, because it uses the time step length?
 if size_Data>1
-    if evalin('base',['zef.' object_string '_time_2']) >=0 && evalin('base',['zef.' object_string '_time_1']) >= 0 && 1 + sampling_freq*evalin('base',['zef.' object_string '_time_1']) <= size_Data
-        t_ind = max(1, 1 + floor(sampling_freq*evalin('base',['zef.' object_string '_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...
-            min(size_Data, 1 + floor(sampling_freq*(evalin('base',['zef.' object_string '_time_1']) + evalin('base',['zef.' object_string '_time_2']))+sampling_freq*(f_ind - 1)*time_step));
+    if eval(['zef.' object_string '_time_2']) >=0 && eval(['zef.' object_string '_time_1']) >= 0 && 1 + sampling_freq*eval(['zef.' object_string '_time_1']) <= size_Data
+        t_ind = max(1, 1 + floor(sampling_freq*eval(['zef.' object_string '_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...
+            min(size_Data, 1 + floor(sampling_freq*(eval(['zef.' object_string '_time_1']) + eval(['zef.' object_string '_time_2']))+sampling_freq*(f_ind - 1)*time_step));
         f = f_data(:, t_ind);
         t = (double(t_ind)-1)./sampling_freq;
     end
