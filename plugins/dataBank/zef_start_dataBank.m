@@ -72,10 +72,7 @@ zef.dataBank.app.modifyMenuData.MenuSelectedFcn=strcat('zef.dataBank.selectMulti
             '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);');
 
 set(zef.dataBank.app.DataBank,'AutoResizeChildren','off');
-zef.zeffiro_dataBank_current_size = get(zef.dataBank.app.DataBank,'Position');
-zef.zeffiro_dataBank_relative_size = zef_get_relative_size(zef.dataBank.app.DataBank);
-set(zef.dataBank.app.DataBank,'SizeChangedFcn','zef.zeffiro_dataBank_current_size = zef_change_size_function(zef.dataBank.app.DataBank,zef.zeffiro_dataBank_current_size,zef.zeffiro_dataBank_relative_size);');
-
+zef_set_size_change_function(zef.dataBank.app.DataBank,2);
 % load all data and stuff
 
 if ~isfield(zef.dataBank, 'tree')
