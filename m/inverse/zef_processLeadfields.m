@@ -3,10 +3,14 @@ function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,ze
 %visibility options.
 %L is the leadfield, the procFile has all information needed for the
 %postProcessing step, but should not be needed in the inverse method
-
-if nargin == 1
-    zef = evalin('base','zef');
+if evalin('caller', 'exist("zef", "var")')
+    zef = evalin('caller', 'zef');
+elseif evalin('base', 'exist("zef", "var")')
+    zef = evalin('base', 'zef');
+else
+    error("Cannot find zef.")
 end
+
 
 source_directions = eval('zef.source_directions');
 

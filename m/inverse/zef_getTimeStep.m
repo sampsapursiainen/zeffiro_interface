@@ -6,6 +6,13 @@ function [f,t] = zef_getTimeStep(f_data, f_ind, Optional_averaging_bool, object_
 %returned.
 %If a window is specified, averaging can be applied. The behavior is
 %specified in Optional_averaging_bool, with a default of true
+if evalin('caller', 'exist("zef", "var")')
+    zef = evalin('caller', 'zef');
+elseif evalin('base', 'exist("zef", "var")')
+    zef = evalin('base', 'zef');
+else
+    error("Cannot find zef.")
+end
 
 if (nargin < 3)
 Optional_averaging_bool=true;
@@ -23,10 +30,6 @@ if isempty(object_string)
 object_string = 'inv';
 end
 
-if nargin < 5
-  zef = evalin('base','zef');
-end
-  
 if eval(['isfield(zef,''' object_string '_time_3'')'])
     time_step = eval(['zef.' object_string '_time_3']);
 else
