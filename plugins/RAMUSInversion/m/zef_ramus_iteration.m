@@ -1,55 +1,55 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [z,reconstruction_information] = zef_ramus_iteration(void)
+function [z,reconstruction_information] = zef_ramus_iteration(zef)
 
 h = zef_waitbar([0 0 0],['RAMUS iteration.']);
-[s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
+[s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
-n_multires = evalin('base','zef.ramus_multires_n_levels');
-ramus_hyperprior = evalin('base','zef.ramus_hyperprior');
-sparsity_factor = evalin('base','zef.ramus_multires_sparsity');
-snr_val = evalin('base','zef.ramus_snr');
-pm_val = evalin('base','zef.inv_prior_over_measurement_db');
-amplitude_db = evalin('base','zef.inv_amplitude_db');
+n_multires = eval('zef.ramus_multires_n_levels');
+ramus_hyperprior = eval('zef.ramus_hyperprior');
+sparsity_factor = eval('zef.ramus_multires_sparsity');
+snr_val = eval('zef.ramus_snr');
+pm_val = eval('zef.inv_prior_over_measurement_db');
+amplitude_db = eval('zef.inv_amplitude_db');
 pm_val = pm_val - amplitude_db;
-sampling_freq = evalin('base','zef.ramus_sampling_frequency');
-high_pass = evalin('base','zef.ramus_low_cut_frequency');
-low_pass = evalin('base','zef.ramus_high_cut_frequency');
-number_of_frames = evalin('base','zef.ramus_number_of_frames');
-time_step = evalin('base','zef.ramus_time_3');
-source_direction_mode = evalin('base','zef.source_direction_mode');
-source_directions = evalin('base','zef.source_directions');
-n_decompositions = evalin('base','zef.ramus_multires_n_decompositions');
+sampling_freq = eval('zef.ramus_sampling_frequency');
+high_pass = eval('zef.ramus_low_cut_frequency');
+low_pass = eval('zef.ramus_high_cut_frequency');
+number_of_frames = eval('zef.ramus_number_of_frames');
+time_step = eval('zef.ramus_time_3');
+source_direction_mode = eval('zef.source_direction_mode');
+source_directions = eval('zef.source_directions');
+n_decompositions = eval('zef.ramus_multires_n_decompositions');
 weight_vec_aux = (sparsity_factor.^[0:n_multires-1]');
 
 std_lhood = 10^(-snr_val/20);
 
 reconstruction_information.tag = 'RAMUS';
-reconstruction_information.inv_time_1 = evalin('base','zef.ramus_time_1');
-reconstruction_information.inv_time_2 = evalin('base','zef.ramus_time_2');
-reconstruction_information.inv_time_3 = evalin('base','zef.ramus_time_3');
-reconstruction_information.sampling_freq = evalin('base','zef.ramus_sampling_frequency');
-reconstruction_information.low_pass = evalin('base','zef.ramus_high_cut_frequency');
-reconstruction_information.high_pass = evalin('base','zef.ramus_low_cut_frequency');
-reconstruction_information.number_of_frames = evalin('base','zef.ramus_number_of_frames');
-reconstruction_information.source_direction_mode = evalin('base','zef.source_direction_mode');
-reconstruction_information.source_directions = evalin('base','zef.source_directions');
-reconstruction_information.ias_hyperprior = evalin('base','zef.ramus_hyperprior');
-reconstruction_information.snr_val = evalin('base','zef.ramus_snr');
-reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measurement_db');
+reconstruction_information.inv_time_1 = eval('zef.ramus_time_1');
+reconstruction_information.inv_time_2 = eval('zef.ramus_time_2');
+reconstruction_information.inv_time_3 = eval('zef.ramus_time_3');
+reconstruction_information.sampling_freq = eval('zef.ramus_sampling_frequency');
+reconstruction_information.low_pass = eval('zef.ramus_high_cut_frequency');
+reconstruction_information.high_pass = eval('zef.ramus_low_cut_frequency');
+reconstruction_information.number_of_frames = eval('zef.ramus_number_of_frames');
+reconstruction_information.source_direction_mode = eval('zef.source_direction_mode');
+reconstruction_information.source_directions = eval('zef.source_directions');
+reconstruction_information.ias_hyperprior = eval('zef.ramus_hyperprior');
+reconstruction_information.snr_val = eval('zef.ramus_snr');
+reconstruction_information.pm_val = eval('zef.inv_prior_over_measurement_db');
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 L = gpuArray(L);
 end
 L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
-[f_data] = zef_getFilteredData;
+[f_data] = zef_getFilteredData('ramus',1,zef);
 
 tic;
 
@@ -70,25 +70,25 @@ z_aux = zeros(3*size(L_aux,2),1);
 end
 z_vec = ones(size(L_aux,2),1);
 
-[f] = zef_getTimeStep(f_data, f_ind, true);
+[f] = zef_getTimeStep(f_data, f_ind, true, 'ramus', zef);
 
 if f_ind == 1
 zef_waitbar([0 0 0],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 end
-n_ias_map_iter = evalin('base','zef.ramus_n_map_iterations');
+n_ias_map_iter = eval('zef.ramus_n_map_iterations');
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 f = gpuArray(f);
 end
 
-multires_dec =  evalin('base','zef.ramus_multires_dec');
-multires_ind =  evalin('base','zef.ramus_multires_ind');
-multires_count = evalin('base','zef.ramus_multires_count');
-n_iter = evalin('base','zef.ramus_multires_n_iter');
+multires_dec =  eval('zef.ramus_multires_dec');
+multires_ind =  eval('zef.ramus_multires_ind');
+multires_count = eval('zef.ramus_multires_count');
+n_iter = eval('zef.ramus_multires_n_iter');
 if length(n_iter) < n_multires
     n_iter = n_iter(1)*ones(1,n_multires);
 end
-mr_sparsity = evalin('base','zef.ramus_multires_sparsity');
+mr_sparsity = eval('zef.ramus_multires_sparsity');
 
 z_vec_aux = zeros(size(L_aux,2),1);
 iter_ind = 0;
@@ -122,7 +122,7 @@ if source_count_aux == 0
 source_count = size(L_aux_2,2);
 source_count_aux = 1;
 end
-if evalin('base','zef.ramus_normalize_data')==1;
+if eval('zef.ramus_normalize_data')==1;
     normalize_data = 'maximum';
 else
     normalize_data = 'average';
@@ -133,20 +133,20 @@ if ramus_hyperprior == 1
 else
     balance_spatially = 0;
 end
-if evalin('base','zef.inv_hyperprior') == 1
-[beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,evalin('base','zef.ramus_normalize_data'),balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
-elseif evalin('base','zef.inv_hyperprior') == 2
-[beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,evalin('base','zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,evalin('base','zef.ramus_normalize_data'),balance_spatially,evalin('base','zef.inv_hyperprior_weight'));
+if eval('zef.inv_hyperprior') == 1
+[beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,eval('zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,eval('zef.ramus_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
+elseif eval('zef.inv_hyperprior') == 2
+[beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,eval('zef.inv_hyperprior_tail_length_db'),L_aux_2,source_count,eval('zef.ramus_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
 end
 
-if n_rep == 1 || evalin('base','zef.ramus_init_guess_mode') == 2
-if evalin('base','zef.inv_hyperprior') == 1
+if n_rep == 1 || eval('zef.ramus_init_guess_mode') == 2
+if eval('zef.inv_hyperprior') == 1
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0./(beta-1);
 else
 theta = (theta0./(beta-1))*ones(size(L_aux_2,2),1);
 end
-elseif evalin('base','zef.inv_hyperprior') == 2
+elseif eval('zef.inv_hyperprior') == 2
 if length(theta0) > 1  || length(beta) > 1
 theta = theta0.*beta;
 else
@@ -164,19 +164,19 @@ else
 zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
 d_sqrt = sqrt(theta);
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
 L = L_aux_2.*repmat(d_sqrt',size(L,1),1);
 z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
-if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end
 
-if evalin('base','zef.inv_hyperprior') == 1
+if eval('zef.inv_hyperprior') == 1
 theta = (theta0+0.5*z_vec.^2)./(beta + 1.5);
-elseif evalin('base','zef.inv_hyperprior') == 2
+elseif eval('zef.inv_hyperprior') == 2
 theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2));
 end
 
