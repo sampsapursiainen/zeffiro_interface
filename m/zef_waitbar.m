@@ -82,6 +82,7 @@ function h_waitbar = zef_waitbar(varargin)
                 h_waitbar = init_figure([0.375 0.35 0.2 0.2], 0, -1, h_waitbar);
 
                 addprop(h_waitbar,'ZefWaitbarStartTime');
+                addprop(h_waitbar,'ZefWaitbarCurrentProgress');
 
                 h_waitbar.ZefWaitbarStartTime = now;
 
@@ -166,9 +167,11 @@ function h_waitbar = zef_waitbar(varargin)
             empty_fig = figure('Visible', false);
 
             addprop(empty_fig, 'ZefWaitbarStartTime');
+            addprop(empty_fig,'ZefWaitbarCurrentProgress');
 
             empty_fig.ZefWaitbarStartTime = now;
-
+empty_fig.ZefWaitbarCurrentProgress = [];
+            
             h_waitbar = init_figure(position_vec, visible_value, task_id, empty_fig);
 
             caller_file_name = {dbstack(1).file};
@@ -504,6 +507,7 @@ function fig = init_figure(position, visible, task_id, fig)
             fig.CloseRequestFcn = 'set(gcbo,''Visible'',''off'');';
             fig.DeleteFcn = 'set(gcbo,''Visible'',''off'');';
             fig.ZefWaitbarStartTime = now;
+            fig.ZefWaitbarCurrentProgress = [];
 
         end
 
@@ -537,8 +541,10 @@ function fig = init_figure(position, visible, task_id, fig)
         );
 
         addprop(fig,'ZefWaitbarStartTime');
+         addprop(fig,'ZefWaitbarCurrentProgress');
 
         fig.ZefWaitbarStartTime = now;
+        fig.ZefWaitbarCurrentProgress = [];
         fig.CloseRequestFcn = 'set(gcbo,''Visible'',''off'');';
         fig.DeleteFcn = 'set(gcbo,''Visible'',''off'');';
 
