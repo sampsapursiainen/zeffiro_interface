@@ -1,30 +1,8 @@
 
 function h_waitbar = zef_waitbar(varargin)
 
-    h_zeffiro_menu = findall(groot,'ZefTool','zef_menu_tool');
-
-    if h_zeffiro_menu.ZefUseWaitbar
-
-        if not(exist('h_waitbar','var'))
-
-            h_waitbar = findall(groot,'-property','ZefWaitbarStartTime');
-
-            if not(isempty(h_waitbar))
-
-                if isvalid(h_waitbar)
-
-                    h_waitbar = h_waitbar(1);
-
-                else
-
-                    h_waitbar = [];
-
-                end
-
-            end
-
-        end
-
+progress_threshold = 1/500;
+ 
         % Set our plan of action. Start by setting constants.
 
         INITIALIZING = "{{initializing}}";
@@ -38,12 +16,17 @@ function h_waitbar = zef_waitbar(varargin)
             if isa(second, "matlab.graphics.Graphics")
 
                 if isvalid(second)
-
-                plan_of_action = PROGRESSING;
+                   h_waitbar = varargin{2};
+                   plan_of_action = PROGRESSING;
+                if abs(varargin{1} - varargin{2}.ZefWaitbarCurrentProgress) < progress_threshold
+                    return
+                else 
+                    varargin{2}.ZefWaitbarCurrentProgress = varargin{1} ;
+                end
 
                 else
 
-                    plan_of_action = INITIALIZING;
+                plan_of_action = INITIALIZING;
 
                 end
 
@@ -60,8 +43,15 @@ function h_waitbar = zef_waitbar(varargin)
         elseif nargin == 3 && ( isa(varargin{3}, "string") || isa(varargin{3}, "char") )
 
             if isvalid(varargin{2})
+                h_waitbar = varargin{2};
 
                 plan_of_action = PROGRESSING_WITH_CHANGED_TEXT;
+                if abs(varargin{1} - varargin{2}.ZefWaitbarCurrentProgress) < progress_threshold
+                    return
+                else
+                    varargin{2}.ZefWaitbarCurrentProgress = varargin{1} ;
+                end
+
 
             else
 
@@ -74,16 +64,46 @@ function h_waitbar = zef_waitbar(varargin)
             error("zef_waitbar received more or less arguments than it wants to handle: 2 or 3 needed.")
 
         end
+        
+        
+         h_zeffiro_menu = findall(groot,'ZefTool','zef_menu_tool');
+         
+
+        if not(exist('h_waitbar','var'))
+
+            h_waitbar = h_zeffiro_menu.ZefWaitbarHandle; 
+            
+            if not(isempty(h_waitbar))
+
+                if isvalid(h_waitbar)
+
+                    h_waitbar = h_waitbar(1);
+
+                else
+
+                    h_waitbar = [];
+
+                end
+
+            end
+
+        end
+        
+        
+         if not(h_zeffiro_menu.ZefUseWaitbar)
+            
+             return;
+
+         else
+        
 
         if isempty(h_zeffiro_menu)
 
             if plan_of_action == INITIALIZING
 
                 h_waitbar = init_figure([0.375 0.35 0.2 0.2], 0, -1, h_waitbar);
-
-                addprop(h_waitbar,'ZefWaitbarStartTime');
-                addprop(h_waitbar,'ZefWaitbarCurrentProgress');
-
+                h_zeffiro_menu.ZefWaitbarHandle = h_waitbar;
+                
                 h_waitbar.ZefWaitbarStartTime = now;
 
             elseif plan_of_action == PROGRESSING
@@ -162,18 +182,16 @@ function h_waitbar = zef_waitbar(varargin)
 
             task_id = task_id + 1;
 
-            h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
-
-            empty_fig = figure('Visible', false);
-
-            addprop(empty_fig, 'ZefWaitbarStartTime');
-            addprop(empty_fig,'ZefWaitbarCurrentProgress');
-
-            empty_fig.ZefWaitbarStartTime = now;
-empty_fig.ZefWaitbarCurrentProgress = [];
             
-            h_waitbar = init_figure(position_vec, visible_value, task_id, empty_fig);
+            h_waitbar = init_figure(position_vec, visible_value, task_id, h_waitbar);
 
+             h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;     
+
+            h_waitbar.ZefWaitbarStartTime = now;
+            
+            
+            h_zeffiro_menu.ZefWaitbarHandle = h_waitbar;
+            
             caller_file_name = {dbstack(1).file};
 
             if isempty(caller_file_name)
@@ -405,10 +423,6 @@ empty_fig.ZefWaitbarCurrentProgress = [];
 
         fclose(fid);
 
-    else
-
-        h_waitbar = [];
-
     end % if
 
 end % function
@@ -417,49 +431,11 @@ end % function
 
 function fig = init_figure(position, visible, task_id, fig)
 
-    %
-    % init_figure
-    %
-    % Initializes a figure on the first run of zef_waitbar.
-    %
-    % Inputs:
-    %
-    % - position
-    %
-    %   The position of the figure
-    %
-    % - visible
-    %
-    %   A boolean that indicates whether the figure is to be displayed or not.
-    %
-    % - task_id
-    %
-    %   The integer ID of a task whose progress the waitbar is displaying.
-    %
-    % - fig
-    %
-    %   A figure that is to be modified.
-    %
-    % Output:
-    %
-    % - fig
-    %
-    %   The initialized figure
-    %
-
-    arguments
-
-        position (1,4) double { mustBeReal }
-
-        visible (1,1) logical
-
-        task_id (1,1) double { mustBeInteger }
-
-        fig (1,1) matlab.ui.Figure
-
-    end
-
-    % If task ID is negative, do not print it.
+%Note: here it is difficult to define any class-based argument list, 
+%because it is absolutely necessary to distinguish between two cases (1) when 
+%fig is not a figure (when there is no figure yet) and (2) when it is a figure. 
+%The first incoming figure variable needs to be empty. Otherwise there will 
+%be confusion in deciding, whether there is a figure open or not.
 
     if task_id < 0
 
@@ -507,12 +483,13 @@ function fig = init_figure(position, visible, task_id, fig)
             fig.CloseRequestFcn = 'set(gcbo,''Visible'',''off'');';
             fig.DeleteFcn = 'set(gcbo,''Visible'',''off'');';
             fig.ZefWaitbarStartTime = now;
-            fig.ZefWaitbarCurrentProgress = [];
+            fig.ZefWaitbarCurrentProgress = 0;
 
         end
 
     else
 
+        zef_delete_waitbar;
         fig = figure( ...
             'PaperUnits',get(0,'defaultfigurePaperUnits'),...
             'Units','normalized',...
@@ -542,9 +519,8 @@ function fig = init_figure(position, visible, task_id, fig)
 
         addprop(fig,'ZefWaitbarStartTime');
          addprop(fig,'ZefWaitbarCurrentProgress');
-
         fig.ZefWaitbarStartTime = now;
-        fig.ZefWaitbarCurrentProgress = [];
+        fig.ZefWaitbarCurrentProgress = 0;
         fig.CloseRequestFcn = 'set(gcbo,''Visible'',''off'');';
         fig.DeleteFcn = 'set(gcbo,''Visible'',''off'');';
 
