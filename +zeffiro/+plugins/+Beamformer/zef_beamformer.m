@@ -1,3 +1,3 @@
-function [z,Var_loc,reconstruction_information] = zef_beamformer
-[z,Var_loc,reconstruction_information] = zef_beamformer;
+function [z,Var_loc,reconstruction_information] = zef_beamformer(zef)
+[z,Var_loc,reconstruction_information] = zef_beamformer(zef);
 end
