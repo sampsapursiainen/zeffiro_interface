@@ -23,7 +23,7 @@ for f_ind = 1:number_of_frames
     v = mvnrnd(zeros(size(R,1),1), R, n_ensembles);
     
     % method to calculate resolution D
-    method = '1';
+    method = '3';
     if(method == '1')
         P_sqrtm = sqrtm(C);
         B = L * P_sqrtm;
