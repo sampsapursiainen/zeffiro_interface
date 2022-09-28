@@ -1,4 +1,8 @@
-function [z, info] = zef_mne(zef)
+function [z, info] = zef_mne(zef,data_mode)
+
+if nargin < 2
+    data_mode = 'filtered';
+end
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
@@ -17,7 +21,13 @@ std_lhood = 10^(-snr_val/20);
 sampling_freq = eval('zef.mne_sampling_frequency');
 high_pass = eval('zef.mne_low_cut_frequency');
 low_pass = eval('zef.mne_high_cut_frequency');
+
+if isequal(data_mode,'raw')
+    number_of_frames = size(zef.measurements,2);
+else
 number_of_frames = eval('zef.mne_number_of_frames');
+end
+
 time_step = eval('zef.mne_time_3');
 source_direction_mode = eval('zef.source_direction_mode');
 source_directions = eval('zef.source_directions');
@@ -71,7 +81,11 @@ else
 number_of_frames = 1;
 end
 
+if isequal(data_mode,'raw')
+    f_data = zef.measurements;
+else
 [f_data] = zef_getFilteredData('mne',1,zef);
+end
 
 tic;
 for f_ind = 1 : number_of_frames
@@ -92,9 +106,11 @@ z_vec = ones(size(L,2),1);
 %aux_norm = aux_norm./max(aux_norm(:));
 %theta = theta0*aux_norm;
 
-
+if isequal(data_mode,'raw')
+    f = f_data(:,f_ind);
+else
 [f] = zef_getTimeStep(f_data, f_ind, 1, 'mne', zef);
-
+end
 
 if f_ind == 1
 zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);

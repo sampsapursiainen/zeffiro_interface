@@ -37,7 +37,7 @@ for i = 1 : size(zef.source_positions,1)
    zef.h_zeffiro_menu.ZefUseWaitbar = visible_val;
    
    [~, I] = max(z_norm);
-   rec_vec(i+j) = norm(zef.source_positions(i,:) - zef.source_positions(I,:),2);
+   rec_vec(3*(i-1)+j) = norm(zef.source_positions(i,:) - zef.source_positions(I,:),2);
    
    end
 end
