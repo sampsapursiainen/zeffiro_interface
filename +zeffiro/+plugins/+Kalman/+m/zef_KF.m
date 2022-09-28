@@ -34,7 +34,7 @@ reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
 
 %get ellipse filteres full measurement data. f_data: "sensors" x "time points"
 [f_data] = zef_getFilteredData; 
-timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true), 1:number_of_frames, 'UniformOutput', false);
+timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true, [], zef), 1:number_of_frames, 'UniformOutput', false);
 
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE
@@ -79,7 +79,7 @@ end
 %% RTS SMOOTHING
 
 if (smoothing == 2)
-[~, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
+[~, m_s_store, ~] = zeffiro.plugins.Kalman.m.RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
 z_inverse = m_s_store;
 end
 
