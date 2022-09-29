@@ -25,6 +25,8 @@ if nargin<3
     zef = evalin('base','zef');
 end
 
+if isequal(zef.inv_data_mode,'filtered_temporal')
+
 f = eval('zef.measurements');
 high_pass = eval(['zef.' object_string '_low_cut_frequency']);
 low_pass = eval(['zef.' object_string '_high_cut_frequency']);
@@ -52,6 +54,10 @@ end
 if size(f,2) > 1 && high_pass > 0
     [hp_f_1,hp_f_2] = ellip(filter_order,3,80,high_pass/(sampling_freq/2),'high');
     f = filter(hp_f_1,hp_f_2,f')';
+end
+
+elseif isequal(zef.inv_data_mode, 'raw')
+    f = zef.measurements;
 end
 
 end

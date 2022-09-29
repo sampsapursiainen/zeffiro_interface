@@ -26,6 +26,8 @@ end
 if nargin < 5
   zef = evalin('base','zef');
 end
+
+if isequal(zef.inv_data_mode,'filtered_temporal')
   
 if eval(['isfield(zef,''' object_string '_time_3'')'])
     time_step = eval(['zef.' object_string '_time_3']);
@@ -50,6 +52,12 @@ end
 
 if Optional_averaging_bool && size(f,2) > 1
     f = mean(f,2);
+end
+
+elseif isequal(zef.inv_data_mode,'raw')
+    
+   f = f_data(:,f_ind);
+    
 end
 
 end
