@@ -9,6 +9,7 @@ if nargin == 1
 end
 
 source_directions = eval('zef.source_directions');
+source_direction_mode = zef.source_direction_mode;
 
 s_ind_2=[];
 s_ind_3=[];

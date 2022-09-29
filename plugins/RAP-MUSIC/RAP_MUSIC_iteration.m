@@ -75,7 +75,7 @@ Var_aux = zeros(3*size(L,2),1);
 end
 z_vec = ones(size(L,2),1);
 Var_vec = ones(size(L,2),1);
-f=zef_getTimeStep(f_data, f_ind, true);
+f=zef_getTimeStep(f_data, f_ind);
 
 S_mat = max(f.^2,[],'all')*(std_lhood^2/theta0)*eye(size(L,1));
 if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0

@@ -29,10 +29,10 @@ h = zef_waitbar(0,'Dipole scanning');
 number_of_frames = eval('zef.number_of_frames');
 source_direction_mode = eval('zef.source_direction_mode');
 
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef);
+[L,n_interp, procFile] = zef_processLeadfields(zef);
 
 z = cell(number_of_frames,1);
-f_data = zef_getFilteredData('inv',1,zef);
+f_data = zef_getFilteredData(zef);
 
 tic;
 for f_ind = 1 : number_of_frames
@@ -44,7 +44,7 @@ for f_ind = 1 : number_of_frames
 
     end
 
-    f=zef_getTimeStep(f_data, f_ind, true,'inv',zef);
+    f=zef_getTimeStep(f_data, f_ind, zef);
 
     z_vec = nan(size(L,2),1);
 

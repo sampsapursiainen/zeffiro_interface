@@ -12,10 +12,10 @@ snr_val = eval('zef.ramus_snr');
 pm_val = eval('zef.inv_prior_over_measurement_db');
 amplitude_db = eval('zef.inv_amplitude_db');
 pm_val = pm_val - amplitude_db;
-sampling_freq = eval('zef.ramus_sampling_frequency');
-high_pass = eval('zef.ramus_low_cut_frequency');
-low_pass = eval('zef.ramus_high_cut_frequency');
-number_of_frames = eval('zef.ramus_number_of_frames');
+zef.inv_sampling_frequency = eval('zef.ramus_sampling_frequency');
+zef.inv_low_cut_frequency = eval('zef.ramus_low_cut_frequency');
+zef.inv_high_cut_frequency = eval('zef.ramus_high_cut_frequency');
+zef.number_of_frames = eval('zef.ramus_number_of_frames');
 time_step = eval('zef.ramus_time_3');
 source_direction_mode = eval('zef.source_direction_mode');
 source_directions = eval('zef.source_directions');
@@ -49,17 +49,17 @@ if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
-[f_data] = zef_getFilteredData('ramus',1,zef);
+[f_data] = zef_getFilteredData(zef);
 
 tic;
 
 z_inverse = cell(0);
 
 tic;
-for f_ind = 1 : number_of_frames
+for f_ind = 1 : zef.number_of_frames
 time_val = toc;
 if f_ind > 1;
-date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
+date_str = datestr(datevec(now+(zef.number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
 if source_direction_mode == 1 || source_direction_mode == 2
@@ -70,10 +70,10 @@ z_aux = zeros(3*size(L_aux,2),1);
 end
 z_vec = ones(size(L_aux,2),1);
 
-[f] = zef_getTimeStep(f_data, f_ind, true, 'ramus', zef);
+[f] = zef_getTimeStep(f_data, f_ind, zef);
 
 if f_ind == 1
-zef_waitbar([0 0 0],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar([0 0 0],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
 end
 n_ias_map_iter = eval('zef.ramus_n_map_iterations');
 
@@ -159,9 +159,9 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;
-zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
 else
-zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
 end;
 d_sqrt = sqrt(theta);
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0

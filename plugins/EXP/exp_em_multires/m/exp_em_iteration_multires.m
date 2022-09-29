@@ -81,7 +81,7 @@ for f_ind = 1 : number_of_frames
 
     end
 
-    f=zef_getTimeStep(f_data, f_ind, true);
+    f=zef_getTimeStep(f_data, f_ind);
     z_vec = ones(size(L,2),1);
     theta = zeros(length(z_vec),1)+(beta+1/q)./theta0;
 

@@ -52,7 +52,7 @@ end;
 
 z_vec = ones(size(L, 2),1);
 
-[f] = zef_getTimeStep(f_data, f_ind, true);
+[f] = zef_getTimeStep(f_data, f_ind);
 
 if f_ind == 1
 zef_waitbar(0,h,['Iterative relaxation. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);

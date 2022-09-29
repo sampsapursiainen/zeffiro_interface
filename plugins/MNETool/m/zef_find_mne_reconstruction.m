@@ -18,14 +18,15 @@ snr_val = eval('zef.inv_snr');
 mne_type = eval('zef.mne_type');
 mne_prior = eval('zef.mne_prior');
 std_lhood = 10^(-snr_val/20);
-sampling_freq = eval('zef.mne_sampling_frequency');
-high_pass = eval('zef.mne_low_cut_frequency');
-low_pass = eval('zef.mne_high_cut_frequency');
 
-number_of_frames = eval('zef.mne_number_of_frames');
+zef.inv_sampling_frequency = zef.mne_sampling_frequency;
+zef.inv_high_pass = zef.mne_low_cut_frequency;
+zef.inv_low_pass = zef.mne_high_cut_frequency;
+zef.number_of_frames = zef.mne_number_of_frames;
+zef.inv_time_1 = zef.mne_time_1;
+zef.inv_time_2 = zef.mne_time_2;
+zef.inv_time_3 = zef.mne_time_3;
 
-
-time_step = eval('zef.mne_time_3');
 source_direction_mode = eval('zef.source_direction_mode');
 source_directions = eval('zef.source_directions');
 
@@ -45,8 +46,7 @@ info.time_step = eval('zef.mne_time_3');
 info.source_direction_mode = eval('zef.source_direction_mode');
 info.source_directions = eval('zef.source_directions');
 
- [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef);
-
+ [L,n_interp, procFile] = zef_processLeadfields(zef);
  
 source_count = n_interp;
 if eval('zef.mne_normalize_data')==1;
@@ -72,21 +72,21 @@ if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 S_mat = gpuArray(S_mat);
 end
 
-if number_of_frames > 1
-z = cell(number_of_frames,1);
+if zef.number_of_frames > 1
+z = cell(zef.number_of_frames,1);
 else
-number_of_frames = 1;
+zef.number_of_frames = 1;
 end
 
 
-[f_data] = zef_getFilteredData('mne',1,zef);
+[f_data] = zef_getFilteredData(zef);
 
 
 tic;
-for f_ind = 1 : number_of_frames
+for f_ind = 1 : zef.number_of_frames
 time_val = toc;
 if f_ind > 1;
-date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400));
+date_str = datestr(datevec(now+(zef.number_of_frames/(f_ind-1) - 1)*time_val/86400));
 end;
 
 if ismember(source_direction_mode, [1,2])
@@ -102,11 +102,11 @@ z_vec = ones(size(L,2),1);
 %theta = theta0*aux_norm;
 
 
-[f] = zef_getTimeStep(f_data, f_ind, 1, 'mne', zef);
+[f] = zef_getTimeStep(f_data, f_ind, zef);
 
 
 if f_ind == 1
-zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
 end
 
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
@@ -114,9 +114,9 @@ f = gpuArray(f);
 end
 
 if f_ind > 1;
-zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+zef_waitbar(f_ind/zef.number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
 else
-zef_waitbar(f_ind/number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+zef_waitbar(f_ind/zef.number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
 end;
 m_max = sqrt(size(L,2));
 u = zeros(length(z_vec),1);

@@ -1,4 +1,4 @@
-function [f] = zef_getFilteredData(object_string,use_normalization,zef)
+function [f] = zef_getFilteredData(zef)
 %zef_getFilteredData reads the datafrom zef.measurement and applies the
 %filter that are specified in zef.inv_low_cut_frequency and
 %zef.inv_low_cut_frequency at a sampling frequency of
@@ -6,33 +6,18 @@ function [f] = zef_getFilteredData(object_string,use_normalization,zef)
 % f has the same size as the measurement
 
 if (nargin == 0)
-object_string = 'inv';
+zef = evalin('base','zef');
 end 
-
-if isempty(object_string)
-object_string = 'inv';
-end
-
-if nargin<2
-use_normalization = 0;
-end
-
-if isempty(use_normalization)
-    use_normalization = 0;
-end
-
-if nargin<3
-    zef = evalin('base','zef');
-end
 
 if isequal(zef.inv_data_mode,'filtered_temporal')
 
-f = eval('zef.measurements');
-high_pass = eval(['zef.' object_string '_low_cut_frequency']);
-low_pass = eval(['zef.' object_string '_high_cut_frequency']);
-sampling_freq = eval(['zef.' object_string '_sampling_frequency']);
+    f = eval('zef.measurements');
+    
+high_pass = eval(['zef.inv_low_cut_frequency']);
+low_pass = eval(['zef.inv_high_cut_frequency']);
+sampling_freq = eval(['zef.inv_sampling_frequency']);
 
-if use_normalization
+if isfield(zef,'normalize_data')
 switch eval('zef.normalize_data')
     case 1
         data_norm = max(abs(f(:)));
@@ -56,8 +41,10 @@ if size(f,2) > 1 && high_pass > 0
     f = filter(hp_f_1,hp_f_2,f')';
 end
 
-elseif isequal(zef.inv_data_mode, 'raw')
-    f = zef.measurements;
+elseif isequal(zef.inv_data_mode,'raw')
+    
+    f = eval('zef.measurements');
+
 end
 
 end
