@@ -299,7 +299,7 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
 
             for block_iter = 1 : length(block_iter_ind)
                 block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
-                T(:,block_iter_sub) = x_block_cell{block_iter};
+                T(:,block_ind(block_iter_sub)) = x_block_cell{block_iter};
                 relres_vec(block_iter_sub) = relres_cell{block_iter};
             end
 

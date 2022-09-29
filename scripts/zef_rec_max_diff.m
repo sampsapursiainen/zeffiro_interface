@@ -43,7 +43,7 @@ close(h_waitbar);
    z_norm = sqrt(sum(reshape(z{3*(i-1) + j},3,size(zef.source_positions,1)).^2));
    [~, I] = max(z_norm);
 
-   rec_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2));
+   rec_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2,2));
    
       end
   end

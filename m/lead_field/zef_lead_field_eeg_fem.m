@@ -117,7 +117,7 @@ clear elements;
         end
         impedance_vec = ones(length(electrodes(:, 1)), 1);
     end
-
+    
     n_varargin = length(varargin);
     if n_varargin >= 1
     if not(isstruct(varargin{1}))
@@ -182,6 +182,10 @@ tilavuus = zef_tetra_volume(nodes, tetrahedra, true);
 A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
 
 % Build electrode matrices B and C based on A
+
+if isequal(electrode_model,'CEM')
+   ele_ind = zef_pem2cem(ele_ind,tetrahedra);
+end
 
 [A, B, C] = zef_build_electrodes( ...
     nodes, ...
