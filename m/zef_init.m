@@ -299,6 +299,8 @@ zef_data.mesh_smoothing_repetitions = 1;
 zef_data.mesh_optimization_repetitions = 10;
 zef_data.mesh_optimization_parameter = 1E-5;
 zef_data.mesh_labeling_approach = 1;
+zef_data.current_log_file = '';
+
 
 zef = zef_data;
 
