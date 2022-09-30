@@ -21,7 +21,7 @@ project_struct = zef_create_finite_element_mesh(project_struct);
 
 
 
-project_struct = zef_eeg_lead_field(project_struct);
+%project_struct = zef_eeg_lead_field(project_struct);
 
 % Save project
 zef_save(project_struct,'example_project.mat','data/');
