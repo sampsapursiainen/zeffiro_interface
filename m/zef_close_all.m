@@ -7,17 +7,17 @@ if exist('zef','var')
 if isfield(zef,'zeffiro_restart')
 if isequal(zef.zeffiro_restart,0)
 warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(fileparts(which('zeffiro_interface.m')))
+rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
 warning('on','MATLAB:rmpath:DirNotFound');
 end
 else
 warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(fileparts(which('zeffiro_interface.m')))
+rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
 warning('on','MATLAB:rmpath:DirNotFound');    
 end
 else
 warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(fileparts(which('zeffiro_interface.m')))
+rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
 warning('on','MATLAB:rmpath:DirNotFound');    
 end
 
