@@ -30,7 +30,6 @@ end
 zef.inv_data_mode = 'raw';
 
 close(h_waitbar);
-    
    eval(['z = ' method_name '(zef);']);
    
   for i = 1 : n_sources

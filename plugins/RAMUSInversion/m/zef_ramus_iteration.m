@@ -159,9 +159,9 @@ end
 
 for i = 1 : n_iter(j)
 if f_ind > 1;
-zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
+zef_waitbar([ i/n_iter(j) j/n_multires n_rep/n_decompositions f_ind/zef.number_of_frames],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
 else
-zef_waitbar([i/n_iter(j) j/n_multires n_rep/n_decompositions],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
+zef_waitbar([ i/n_iter(j) j/n_multires n_rep/n_decompositions f_ind/zef.number_of_frames],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
 end;
 d_sqrt = sqrt(theta);
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
