@@ -12,11 +12,11 @@ type,segmentation,name,Cerebellum cortex,merge,1,filename,rh_CerebellumCortex.as
 type,segmentation,name,Cerebellum WM,merge,0,filename,lh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
 type,segmentation,name,Cerebellum WM,merge,1,filename,rh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
 type,segmentation,name,Brainstem,filename,Brainstem.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Cingulate cortex posterior,filename,CC_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate cortex mid-posterior,filename,CC_Mid_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate central,filename,CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate mid-anterior,filename,CC_Mid_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate anterior,filename,CC_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,0,filename,CC_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Mid_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Mid_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,merge,1,CC_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
 type,segmentation,name,Ventral DC,merge,0,filename,LVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Ventral DC,merge,1,filename,RVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Amygdala,merge,0,filename,lh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2

@@ -63,7 +63,7 @@ for f_ind = 1 : number_of_frames
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
         waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
     end
-    f=zef_getTimeStep(f_data, f_ind, false);
+    f=zef_getTimeStep(f_data, f_ind);
     z_vec = nan(size(L,2),1);
     
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0

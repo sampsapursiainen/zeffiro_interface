@@ -42,7 +42,7 @@ zef.source_directions = zef.source_directions(zef.rand_vec_aux,:);
 end
 end
 
-[zef.source_interpolation_ind] = zef_source_interpolation([]);
+zef_source_interpolation;
 
 zef = rmfield(zef,'rand_vec_aux');
 

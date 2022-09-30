@@ -5,7 +5,7 @@ amp = ones(size(dipoles,1),1);
 L = evalin('base','zef.L');
 f = zef_getFilteredData;
 
-f=zef_getTimeStep(f, frame, true);
+f=zef_getTimeStep(f, frame);
 n_interp = length(ind);
 ind = [3*ind-2,3*ind-1,3*ind];
 L = L(:,ind);

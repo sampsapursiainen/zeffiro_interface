@@ -265,7 +265,7 @@ if zef.location_unit == 3
 end
 
 if zef.source_interpolation_on
-    [zef.source_interpolation_ind] = zef_source_interpolation([]);
+    zef_source_interpolation;
 end
 
 if nargout == 0

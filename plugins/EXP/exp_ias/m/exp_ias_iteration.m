@@ -86,7 +86,7 @@ for f_ind = 1 : number_of_frames
 
     end
 
-    f=zef_getTimeStep(f_data, f_ind, true);
+    f=zef_getTimeStep(f_data, f_ind);
 
     z_vec = nan(size(L,2),1);
 

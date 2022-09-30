@@ -102,5 +102,5 @@ zef.location_unit_current = 3;
 end
 
 if zef.source_interpolation_on
-[zef.source_interpolation_ind] = zef_source_interpolation([]);
+zef = zef_source_interpolation(zef);
 end

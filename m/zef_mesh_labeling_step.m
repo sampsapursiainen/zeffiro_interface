@@ -229,6 +229,12 @@ end
 
 %**************************************************************
 
-[priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+if isequal(labeling_flag,1)
+[priority_val priority_ind] = min(priority_vec_aux_segmentation(domain_labels),[],2);
 priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 [domain_labels] = domain_labels(priority_ind);
+elseif ismember(labeling_flag,[2 3])
+    [priority_val priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
+[domain_labels] = domain_labels(priority_ind);
+end

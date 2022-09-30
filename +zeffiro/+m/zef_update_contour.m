@@ -1,3 +1,3 @@
-function zef_update_contour
-zef_update_contour;
+function zef_update_contour(zef)
+zef_update_contour(zef);
 end

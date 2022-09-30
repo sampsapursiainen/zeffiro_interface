@@ -209,8 +209,8 @@ print(gcf,'-dtiff','-r200',[zef.file_path zef.file]);
 end;
 end;
 
-if nargout == 0
-    assignin('base','zef',zef);
-end
+%if nargout == 0
+%    assignin('base','zef',zef);
+%end
 
 end

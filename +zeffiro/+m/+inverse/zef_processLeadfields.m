@@ -1,3 +1,3 @@
-function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode)
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef)
+[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef);
 end

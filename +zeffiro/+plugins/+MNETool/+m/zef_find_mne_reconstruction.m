@@ -1,3 +1,3 @@
-function [z, info] = zef_mne(void)
-[z, info] = zef_mne(void);
+function [z, info] = zef_mne(zef,data_mode)
+[z, info] = zef_mne(zef,data_mode);
 end
