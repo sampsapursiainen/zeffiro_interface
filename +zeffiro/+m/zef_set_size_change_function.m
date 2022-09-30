@@ -1,3 +1,3 @@
-function zef_set_size_change_function(h_window,type)
-zef_set_size_change_function(h_window,type);
+function zef_set_size_change_function(h_window,type,scale_positions,exclude_cell)
+zef_set_size_change_function(h_window,type,scale_positions,exclude_cell);
 end

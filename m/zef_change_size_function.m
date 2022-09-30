@@ -64,11 +64,11 @@ h = setdiff(h,object_handle);
             
             if not(isempty(relative_size))
                 if scale_positions
-            set(h(i),'Position',relative_size{i}.*p_vec_parent([3 4 3 4]));
+            set(h(i),'Position',relative_size{i}.*p_vec_window([3 4 3 4]));
                 end
             else
             if    length(p_vec_object)==4
-            p_vec = [p_vec_object(1).*p_vec_parent(3)./current_size(3) p_vec_object(2).*p_vec_parent(4)./current_size(4) p_vec_object(3).*p_vec_parent(3)./current_size(3) p_vec_object(4).*p_vec_parent(4)./current_size(4)];
+            p_vec = [p_vec_object(1).*p_vec_window(3)./current_size(3) p_vec_object(2).*p_vec_window(4)./current_size(4) p_vec_object(3).*p_vec_window(3)./current_size(3) p_vec_object(4).*p_vec_window(4)./current_size(4)];
             if scale_positions
             h(i).Position = p_vec;
             end

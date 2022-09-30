@@ -1,4 +1,4 @@
-function [T, Schur_complement, A] = zef_transfer_matrix( ...
+function [T, Schur_complement, A] = zef_transfer_matrix(zef, ...
     A                                                    ...
 ,                                                        ...
     B                                                    ...
@@ -145,7 +145,7 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
 
     % GPU START
 
-    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
+    if eval( 'zef.use_gpu') == 1 && eval( 'zef.gpu_count') > 0
 
         precond_vec = gpuArray(1./full(diag(A)));
         A = gpuArray(A);
@@ -239,9 +239,9 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
         % Define block size
 
         delete(gcp('nocreate'))
-        parallel_processes = evalin('base','zef.parallel_processes');
+        parallel_processes = eval( 'zef.parallel_processes');
         parpool(parallel_processes);
-        processes_per_core = evalin('base','zef.processes_per_core');
+        processes_per_core = eval( 'zef.processes_per_core');
         tic;
         block_size =  parallel_processes*processes_per_core;
 
@@ -299,7 +299,7 @@ function [T, Schur_complement, A] = zef_transfer_matrix( ...
 
             for block_iter = 1 : length(block_iter_ind)
                 block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
-                T(:,block_iter_sub) = x_block_cell{block_iter};
+                T(:,block_ind(block_iter_sub)) = x_block_cell{block_iter};
                 relres_vec(block_iter_sub) = relres_cell{block_iter};
             end
 

@@ -98,7 +98,7 @@ theta = (theta0.*beta)*ones(size(L,2),1);
 end
 end
 
-[f] = zef_getTimeStep(f_data, f_ind, true);
+[f] = zef_getTimeStep(f_data, f_ind, zef);
 
 if f_ind == 1
 zef_waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);

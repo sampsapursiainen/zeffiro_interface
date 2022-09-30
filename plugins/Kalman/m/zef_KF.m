@@ -34,7 +34,7 @@ reconstruction_information.pm_val = evalin('base','zef.inv_prior_over_measuremen
 
 %get ellipse filteres full measurement data. f_data: "sensors" x "time points"
 [f_data] = zef_getFilteredData; 
-timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true), 1:number_of_frames, 'UniformOutput', false);
+timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x), 1:number_of_frames, 'UniformOutput', false);
 
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE

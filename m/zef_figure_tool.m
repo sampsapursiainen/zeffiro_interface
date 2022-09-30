@@ -176,7 +176,6 @@ zef.h_zeffiro.GraphicsSmoothing = 'off';
 set(findobj(get(gcf,'Children'),'Tag','loop_count'),'UserData',str2num(get(findobj(get(gcf,'Children'),'Tag','loop_count'),'String')));
 set(findobj(get(gcf,'Children'),'Tag','loop_movie'),'UserData',get(findobj(get(gcf,'Children'),'Tag','loop_count'),'Value'));
 
-
 set(zef.h_zeffiro,'paperposition',[0 0 zef.snapshot_horizontal_resolution/200 zef.snapshot_vertical_resolution/200]);
 set(zef.h_zeffiro,'papersize',[zef.snapshot_vertical_resolution/200 zef.snapshot_horizontal_resolution/200]);
 
@@ -210,6 +209,6 @@ set(findobj(zef.h_zeffiro.Children,'Tag','copyright_text'),'FontSize',0.5*zef.fo
 
 zef.h_zeffiro.SizeChangedFcn = '';
 zef.h_zeffiro.Units = 'normalized';
-zef_set_size_change_function(zef.h_zeffiro,1);
+zef_set_size_change_function(zef.h_zeffiro,1,[],['{''rightColorbar'',''leftColorbar''}']);
 zef = rmfield(zef,'size_temp');
 

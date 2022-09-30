@@ -30,11 +30,11 @@ reconstruction_information.snr_val = zef.inv_snr;
 reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
 
 %%
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+[L,n_interp, procFile] = zef_processLeadfields(zef);
 
 %get ellipse filteres full measurement data. f_data: "sensors" x "time points"
 [f_data] = zef_getFilteredData; 
-timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, true, [], zef), 1:number_of_frames, 'UniformOutput', false);
+timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, zef), 1:number_of_frames, 'UniformOutput', false);
 
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE
