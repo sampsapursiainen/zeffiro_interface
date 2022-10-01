@@ -45,7 +45,7 @@ close(h_waitbar);
   
    dist_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2,2));
    angle_vec(3*(i-1) + j) = acosd(dot(dir_vec_rec,dir_vec_source));
-   mag_vec(3*(i-1) + j) = mag_val;
+   mag_vec(3*(i-1) + j) = (1/sqrt(3))*mag_val;
    
    
       end
