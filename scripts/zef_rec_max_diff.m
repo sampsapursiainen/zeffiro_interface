@@ -1,4 +1,4 @@
-function [dist_vec,angle_vec] = zef_rec_max_diff(zef,method_name)
+function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef,method_name)
 
 dist_vec = zeros(3*size(zef.source_positions,1),1);
 angle_vec = zeros(3*size(zef.source_positions,1),1);
@@ -36,7 +36,7 @@ close(h_waitbar);
       for j = 1 : 3
           
    z_norm = sqrt(sum(reshape(z{3*(i-1) + j},3,size(zef.source_positions,1)).^2));
-   [~, I] = max(z_norm);
+   [mag_val, I] = max(z_norm);
    
    dir_vec_rec = z{3*(i-1) + j}(3*(I-1)+1:3*(I-1)+3);
    dir_vec_rec = dir_vec_rec/norm(dir_vec_rec,2);
@@ -45,6 +45,7 @@ close(h_waitbar);
   
    dist_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2,2));
    angle_vec(3*(i-1) + j) = acosd(dot(dir_vec_rec,dir_vec_source));
+   mag_vec(3*(i-1) + j) = mag_val;
    
    
       end

@@ -1,5 +1,9 @@
 function zef = zef_eeg_lead_field(zef)
 
+if nargin == 0
+zef = evalin('base','zef');
+end
+
 warning('off');
 zef.lead_field_type = 1;
 zef.imaging_method = 1;
@@ -12,5 +16,9 @@ if zef.source_interpolation_on
     zef = zef_source_interpolation(zef);
 end
 warning('on');
+
+if nargout == 0
+assignin('base','zef',zef);
+end
 
 end

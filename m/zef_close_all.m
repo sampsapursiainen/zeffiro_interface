@@ -1,3 +1,11 @@
+function  zef_close_all(zef)
+
+if nargin == 0
+    if evalin('base','exist(''zef'',''var'')')
+    zef = evalin('base','zef');
+    end
+end
+
 zef.h_window_aux = findall(groot,'-regexp','Name','ZEFFIRO Interface*');
 %zef.h_window_aux = findall(groot,'-property','ZefTool','-or','-property','ZefFig');
 set(zef.h_window_aux,'DeleteFcn','');
@@ -21,6 +29,7 @@ rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
 warning('on','MATLAB:rmpath:DirNotFound');    
 end
 
-clear zef zef_data zef_i zef_j zef_k
+evalin('base','clear zef zef_data zef_i zef_j zef_k;');
 
+end
 

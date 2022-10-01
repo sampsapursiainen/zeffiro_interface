@@ -1,7 +1,11 @@
 
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [source_interpolation_ind] = zef_source_interpolation(zef)
+function zef = zef_source_interpolation(zef)
+
+if nargin == 0
+zef = evalin('base','zef');
+end
 
     if evalin('base','isequal(size(zef.L,2),size(zef.source_directions,1))')
     evalin('base','zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L),1)))),:);');
@@ -120,6 +124,8 @@ center_points = (1/3)*(aux_p(aux_t(:,1),:) + aux_p(aux_t(:,2),:) + aux_p(aux_t(:
 
 MdlKDT = KDTreeSearcher(center_points);
 source_interpolation_ind{3} = knnsearch(MdlKDT,source_positions);
+
+zef.source_interpolation_ind = source_interpolation_ind;
 
 if nargout == 0
 assignin('base','zef', zef);
