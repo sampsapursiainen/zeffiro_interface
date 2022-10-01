@@ -4,7 +4,7 @@
 function zef = zef_source_interpolation(zef)
 
 if nargin == 0
-zef = eval('zef');
+zef = evalin('base','zef');
 end
 
     if eval('isequal(size(zef.L,2),size(zef.source_directions,1))')
