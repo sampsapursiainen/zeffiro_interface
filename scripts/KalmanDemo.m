@@ -24,4 +24,6 @@ project_struct = zef_eeg_lead_field(project_struct);
 % Save project
 project_struct = zef_save(project_struct,'example_project.mat','data/');
 
+zef_close_all;
+
 end
