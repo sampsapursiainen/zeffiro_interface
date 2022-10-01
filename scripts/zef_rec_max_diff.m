@@ -1,4 +1,8 @@
-function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef,method_name)
+function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef,method_name,noise_db)
+
+if nargin < 3
+   noise_db = []; 
+end
 
 dist_vec = zeros(3*size(zef.source_positions,1),1);
 angle_vec = zeros(3*size(zef.source_positions,1),1);
@@ -23,6 +27,10 @@ for i = 1 : n_sources
  zef.inv_synth_source(1:6) = [zef.source_positions(i,:)     dir_mat(j,:) ];
    
    zef.measurements(:,3*(i-1)+j) = zef_find_source_legacy(zef);
+   
+   if not(isempty(noise_db))
+   zef.measurements(:,3*(i-1)+j) = 10^(-noise_db/20)*randn(size(zef.measurements,1),1) + zef.measurements(:,3*(i-1)+j);
+   end
    
     end
 end
