@@ -4,37 +4,37 @@
 function zef = zef_source_interpolation(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+zef = eval('zef');
 end
 
-    if evalin('base','isequal(size(zef.L,2),size(zef.source_directions,1))')
-    evalin('base','zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L),1)))),:);');
-    elseif evalin('base','isequal(size(zef.L,2),3*size(zef.source_directions,1))')
-    evalin('base','zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
+    if eval('isequal(size(zef.L,2),size(zef.source_directions,1))')
+    eval('zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L),1)))),:);');
+    elseif eval('isequal(size(zef.L,2),3*size(zef.source_directions,1))')
+    eval('zef.source_directions=zef.source_directions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
     end
-    if evalin('base','isequal(size(zef.L,2),size(zef.source_positions,1))')
-    evalin('base','zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L),1)))),:);');
-        evalin('base','zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))))');
-    elseif evalin('base','isequal(size(zef.L,2),3*size(zef.source_positions,1))')
-          evalin('base','zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
-        evalin('base','zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))));');
+    if eval('isequal(size(zef.L,2),size(zef.source_positions,1))')
+    eval('zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L),1)))),:);');
+        eval('zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))))');
+    elseif eval('isequal(size(zef.L,2),3*size(zef.source_positions,1))')
+          eval('zef.source_positions=zef.source_positions(find(not(isnan(sum(abs(zef.L(:,1:3:end)),1)))),:);');
+        eval('zef.L=zef.L(:,find(not(isnan(sum(abs(zef.L),1)))));');
     end
 
 source_interpolation_ind = [];
-brain_ind = evalin('base','zef.brain_ind');
-source_positions = evalin('base','zef.source_positions');
-nodes = evalin('base','zef.nodes');
-tetra = evalin('base','zef.tetra');
+brain_ind = eval('zef.brain_ind');
+source_positions = eval('zef.source_positions');
+nodes = eval('zef.nodes');
+tetra = eval('zef.tetra');
 
 if not(isempty(brain_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
 
     h = zef_waitbar(0,['Interpolation 1.']);
 
-if evalin('base','zef.location_unit_current') == 2
+if eval('zef.location_unit_current') == 2
 source_positions = 10*source_positions;
 end
 
-if evalin('base','zef.location_unit_current') == 3
+if eval('zef.location_unit_current') == 3
 zef.source_positions = 1000*source_positions;
 end
 
@@ -57,26 +57,26 @@ visible_vec = [];
 color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
-compartment_tags = evalin('base','zef.compartment_tags');
+compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
 
         var_0 = ['zef.' compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
-    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
 
-on_val = evalin('base',var_0);
-sigma_val = evalin('base',var_1);
-priority_val = evalin('base',var_2);
-visible_val = evalin('base',var_3);
+on_val = eval(var_0);
+sigma_val = eval(var_1);
+priority_val = eval(var_2);
+visible_val = eval(var_3);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0
+if eval(['zef.' compartment_tags{k} '_sources'])>0
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -94,14 +94,14 @@ source_positions = source_positions_aux(aux_point_ind,:);
 
 s_ind_1{ab_ind} = aux_point_ind;
 
-center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
+center_points = eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
 
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_aux = knnsearch(MdlKDT,center_points);
 
 source_interpolation_ind{2}{ab_ind} = (s_ind_1{ab_ind}(source_interpolation_aux));
 
-triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
+triangles = eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triangles);
 
 end
@@ -115,8 +115,8 @@ aux_t = [];
 
 for ab_ind = 1 : length(aux_brain_ind)
 
-aux_t = [aux_t ; size(aux_p,1) + evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
-aux_p = [aux_p ; evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_t = [aux_t ; size(aux_p,1) + eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_p = [aux_p ; eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
 
 end
 
