@@ -1,10 +1,10 @@
-function [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode,zef)
+function [L,n_interp, procFile] = zef_processLeadfields(zef)
 %zef_processLeadfields processes the leadfield in zef and applies all
 %visibility options.
 %L is the leadfield, the procFile has all information needed for the
 %postProcessing step, but should not be needed in the inverse method
 
-if nargin == 1
+if nargin == 0
     zef = evalin('base','zef');
 end
 
