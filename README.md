@@ -20,7 +20,7 @@ He, Q., Rezaei, A. & Pursiainen, S. (2019). Zeffiro User Interface for Electroma
 
 For recent papers, see:
 
-Galaz Prieto, F., Rezaei, A., Samavaki, M., & Pursiainen, S. (2022). L1-norm vs. L2-norm fitting in optimizing focal multi-channel tES stimulation: linear and semidefinite programming vs. weighted least squares. arXiv e-prints, arXiv-2206.
+Galaz Prieto, F., Rezaei, A., Samavaki, M., & Pursiainen, S. (2022). L1-norm vs. L2-norm fitting in optimizing focal multi-channel tES stimulation: linear and semidefinite programming vs. weighted least squares. Computer Methods and Programs in Biomedicine, 226, 107084, https://doi.org/10.1016/j.cmpb.2022.107084
 
 Lahtinen, J., Koulouri, A., Rezaei, A., & Pursiainen, S. (2022). Conditionally Exponential Prior in Focal Near-and Far-Field EEG Source Localization via Randomized Multiresolution Scanning (RAMUS). Journal of Mathematical Imaging and Vision, 1-22.
 
