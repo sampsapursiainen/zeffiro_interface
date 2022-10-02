@@ -3,7 +3,7 @@ function hauk_map = zef_hauk_map_mne(project_struct, weighting_type, n_reconstru
   arguments
       project_struct 
         weighting_type = 'sLORETA'
-        n_reconstructions = 1
+        n_reconstructions = 10
         noise_level = [-30]
   end
   
