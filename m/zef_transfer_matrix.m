@@ -238,9 +238,16 @@ function [T, Schur_complement, A] = zef_transfer_matrix(zef, ...
 
         % Define block size
 
-        delete(gcp('nocreate'))
         parallel_processes = eval( 'zef.parallel_processes');
-        parpool(parallel_processes);
+         if isempty(gcp('nocreate'))
+            parpool(n_parallel);
+  else
+      h_pool = gcp;
+      if not(isequal(h_pool.NumWorkers,parallel_processes))
+          delete(h_pool)
+          parpool(parallel_processes);
+      end
+    end
         processes_per_core = eval( 'zef.processes_per_core');
         tic;
         block_size =  parallel_processes*processes_per_core;

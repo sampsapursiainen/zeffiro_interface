@@ -22,6 +22,10 @@ hauk_map.dist_vec_avg = zeros(size(hauk_map.dist_vec{1}));
 hauk_map.angle_vec_avg = zeros(size(hauk_map.angle_vec{1}));
 hauk_map.mag_vec_avg = zeros(size(hauk_map.mag_vec{1}));
 
+hauk_map.dist_vec_std = zeros(size(hauk_map.dist_vec{1}));
+hauk_map.angle_vec_std = zeros(size(hauk_map.angle_vec{1}));
+hauk_map.mag_vec_std = zeros(size(hauk_map.mag_vec{1}));
+
 for i = 1 : n_reconstructions
 hauk_map.dist_vec_avg = hauk_map.dist_vec_avg + hauk_map.dist_vec{i};
 hauk_map.angle_vec_avg = hauk_map.angle_vec_avg + hauk_map.angle_vec{i};
@@ -31,6 +35,16 @@ end
 hauk_map.dist_vec_avg = hauk_map.dist_vec_avg/n_reconstructions;
 hauk_map.angle_vec_avg = hauk_map.angle_vec_avg/n_reconstructions;
 hauk_map.mag_vec_avg = hauk_map.mag_vec_avg/n_reconstructions;
+
+for i = 1 : n_reconstructions
+hauk_map.dist_vec_std = hauk_map.dist_vec_std + (hauk_map.dist_vec{i} - hauk_map.dist_vec_avg).^2;
+hauk_map.angle_vec_std = hauk_map.angle_vec_std + (hauk_map.angle_vec{i} - hauk_map.angle_vec_avg).^2;
+hauk_map.mag_vec_std = hauk_map.mag_vec_std + (hauk_map.mag_vec{i} - hauk_map.mag_vec_avg).^2;
+end
+
+hauk_map.dist_vec_std = sqrt(hauk_map.dist_vec_std/(n_reconstructions-1));
+hauk_map.angle_vec_std = sqrt(hauk_map.angle_vec_std/(n_reconstructions-1));
+hauk_map.mag_vec_std = sqrt(hauk_map.mag_vec_std/(n_reconstructions-1));
 
 
 end

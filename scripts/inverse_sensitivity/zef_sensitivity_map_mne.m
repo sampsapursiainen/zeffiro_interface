@@ -8,7 +8,7 @@ function sensitivity_map = zef_sensitivity_map_mne(project_struct, weighting_typ
   end
   
   weighting_type_cell = {'mne','dspm','sloreta'};
-  weighting_type = find(ismember(weighting_type_cell,weighting_type));
+  weighting_type = find(ismember(weighting_type_cell,lower(weighting_type)));
 
 sensitivity_map = struct;
 sensitivity_map.weighting_type = weighting_type_cell{weighting_type}; 
