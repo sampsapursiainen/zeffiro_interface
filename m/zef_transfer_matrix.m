@@ -240,7 +240,7 @@ function [T, Schur_complement, A] = zef_transfer_matrix(zef, ...
 
         parallel_processes = eval( 'zef.parallel_processes');
          if isempty(gcp('nocreate'))
-            parpool(n_parallel);
+            parpool(parallel_processes);
   else
       h_pool = gcp;
       if not(isequal(h_pool.NumWorkers,parallel_processes))
