@@ -1,5 +1,6 @@
 function zef_meshing_example
 
+project_struct = zeffiro_interface('start_mode','nodisplay','import_to_existing_project','scripts/scripts_for_importing/multicompartment_head_project/import_segmentation.zef');
 
 % Set mesh resolution
 project_struct.mesh_resolution = 4.5;
@@ -15,6 +16,6 @@ project_struct.refinement_surface_on = 1;
 % Create finite element mesh
 project_struct = zef_create_finite_element_mesh(project_struct);
 
-
+zef_save(project_struct,'zef_meshing_example.mat','data/');
 
 end
