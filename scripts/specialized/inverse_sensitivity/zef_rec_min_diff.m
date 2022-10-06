@@ -1,4 +1,4 @@
-function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, noise_db)
+function [dist_vec,angle_vec,mag_vec] = zef_rec_min_diff(zef, inverse_method, noise_db)
 
     arguments
 
@@ -75,12 +75,12 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
             [mag_val, I] = max(z_norm);
 
             dir_vec_rec = z_ij(3*(I-1)+1:3*(I-1)+3);
-            dir_vec_rec = dir_vec_rec/norm(dir_vec_rec,2);
+            dir_vec_rec = dir_vec_rec / norm(dir_vec_rec,2);
 
             dir_vec_source = dir_mat(:,j);
             dir_vec_source = dir_vec_source/norm(dir_vec_source,2);
 
-            dist_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2,2));
+            dist_vec(3*(i-1) + j) = (1/sqrt(3)) * min(abs(zef.source_positions(i,:) - zef.source_positions(I,:)), [], 2);
 
             angle_vec(3*(i-1) + j) = acosd(dot(dir_vec_rec,dir_vec_source));
 
