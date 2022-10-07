@@ -1,8 +1,45 @@
 # Contributing to Zeffiro Interface
 
-These instruction cover how one should proceed, should they wish to partake in developing Zeffiro Interface. Use of Git in a terminal emulator and shell of your choice has to be mastered to some extent, although the basic workflow will be covered here.
+These instructions cover how one should proceed, should they wish to partake in developing Zeffiro Interface. Use of Git in a terminal emulator and shell of your choice has to be mastered to some extent, although the basic workflow will be covered here.
+
+## Programming practises
+
+When submitting code via pull / merge requests, effort should be put towards
+code neatness and best practices recommended by the Matlab documentation.
+Mainly these consist of the following 2 items:
+
+1. prioritize [functions] over scripts *at all costs*, and use [argument
+   validation] to enforce the users of your functions to conform to their
+   signatures. Avoid `varargin` at all costs, as it usually results in
+   unnecessary parsing code being introduced into the function, making it less
+   maintainable and readable. If you need [name–value arguments], introduce
+   them in an `arguments` block as the documentation instructs.
+
+2. [Indent your code properly][indent] and design your algorithms in a way that avoids
+   deep nesting of multiple indented blocks. This makes code more readable and
+   therefore maintainable.
+
+[functions]: https://se.mathworks.com/help/matlab/functions.html
+
+[argument validation]: https://se.mathworks.com/help/matlab/matlab_prog/function-argument-validation-1.html
+
+[name–value arguments]: https://se.mathworks.com/help/matlab/matlab_prog/function-argument-validation-1.html#mw_24e8f864-2dbd-4e9d-9c7a-f1693b7500dc
+
+[indent]: https://blogs.mathworks.com/community/2009/05/11/keep-your-code-readable-with-smart-indenting/
 
 ## Git practices
+
+For those familiar with [Git], the main idea here is to follow a branch–develop–[copy]–squash–merge workflow:
+
+1. You make a branch whenever you want to add a feature like a new function, or when you are fixing a bug.
+
+2. Before merging, the feature or bug fix branch should be squashed into a single commit with an interactive rebase, so as to avoid `main_development_branch` being cluttered with a bunch of commits that only add a single feature at the end, with possible broken states in the middle.
+
+3. If you wish to retain the original feature or bug fix branch, make a copy of it by running the command `git checkout -b <new-branch-name>` from the `HEAD` of the branch that is to be retained, but suffix it with the word `-squashed` and squash *that* before merging it to `main_development_branch`.
+
+That is pretty much it. Slightly more detailed instructions can be found below.
+
+[Git]: https://git-scm.com/docs/gittutorial
 
 ### Forking the project
 
@@ -84,7 +121,3 @@ from the head of `feature_branch` and (4) performing a
 from the head of `squashed_feature_branch` and squashing all commits on the branch into a single commit.
 
 Once these 4 steps are performed, especially the possible conflict fixes during step (2), the update will consist of a single commit on top of `main_development_branch`, which should be automatically mergeable to the main branch without any conflicts arising. The original commits are still available on `fearure_branch` if one performs a `git checkout` on it.
-
-## Programming practises
-
-TODO
