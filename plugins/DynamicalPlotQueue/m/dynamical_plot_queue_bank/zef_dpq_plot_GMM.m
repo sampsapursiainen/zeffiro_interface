@@ -2,7 +2,7 @@ function zef_PlotGMModel
 %This function plots the point clouds created by the GMM tool.
 
  h = evalin('caller','h_axes_image');
- axes(h);
+ %axes(h);
 
 t = evalin('caller','f_ind');
 parameters = evalin('base','zef.GMM.parameters.Values');

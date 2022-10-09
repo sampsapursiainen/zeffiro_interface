@@ -17,7 +17,7 @@ end
 [X,Y,Z] = sphere(100);
 h_axes = evalin('caller','h_axes_image');
 
-axes(h_axes);
+%axes(h_axes);
 
 f_ind = evalin('caller','f_ind');
 delete(findobj(h_axes,'Tag','additional: max sphere'));
