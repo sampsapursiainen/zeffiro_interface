@@ -1,3 +1,9 @@
+function zef = zef_ES_optimizer_properties(zef)
+
+if nargin == 0
+zef = evalin('base','zef');
+end
+
 zef_data = zef_ES_optimizer_properties_app;
 
 zef.h_ES_optimizer_properties_copy_all = zef_data.h_ES_optimizer_properties_copy_all;
@@ -18,3 +24,9 @@ set(zef.h_ES_optimizer_properties,'Name',['ZEFFIRO Interface: ES optimizer prope
 set(zef.h_ES_optimizer_properties,'AutoResizeChildren','off');
 zef.h_ES_optimizer_properties_current_size = get(zef.h_ES_optimizer_properties,'Position');
 set(zef.h_ES_optimizer_properties,'SizeChangedFcn', 'zef.h_ES_optimizer_properties_current_size = zef_change_size_function(zef.h_ES_optimizer_properties, zef.h_ES_optimizer_properties_current_size);');
+
+if nargout == 0 
+assignin('base','zef',zef);
+end
+
+end

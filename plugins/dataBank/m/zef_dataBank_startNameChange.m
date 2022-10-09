@@ -1,3 +1,9 @@
+function zef = zef_dataBank_startNameChange(zef)
+
+if nargin == 0
+zef = evalin('base','zef')
+end
+
 
 zef.dataBank.app.Tree.Enable='off';
 
@@ -16,3 +22,9 @@ zef.dataBank.nameChangeapp.OkButton.ButtonPushedFcn=strcat("zef.dataBank.tree.(z
 
 zef.dataBank.nameChangeapp.CancelButton.ButtonPushedFcn=strcat("zef.dataBank.app.Tree.Enable='on';", ...
     "zef.dataBank.nameChangeapp.delete;" );
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
+end

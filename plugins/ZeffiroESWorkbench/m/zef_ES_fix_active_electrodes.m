@@ -5,7 +5,7 @@ if not(zef.h_ES_fixed_active_electrodes.Value)
     ES_active_electrodes = [];
 else
     try
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
+        [sr, sc] = zef_ES_objective_function(zef);
     catch
         ES_active_electrodes = [];
         return

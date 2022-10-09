@@ -1,25 +1,23 @@
-function zef_ES_plot_error_chart(varargin)
+function zef = zef_ES_plot_error_chart(zef)
+
+if nargin == 0
+    zef = evalin('base','zef');
+end
 
 %% Variables and parameters setup
-h_dial = helpdlg('Plotting data...','ZI: Help');
-switch nargin
-    case 0
-        vec = zef_ES_table;
-    case 1
-        vec = varargin{1};
-    otherwise
-        error('Invalid number of arguments inserted.')
-end
+%h_dial = helpdlg('Plotting data...','ZI: Help');
+
+        vec = zef_ES_table(zef);
+  
 %% Figure and Axes
 n_chart = 1 + length(findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
-f = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart) ', ' vec.Properties.Description], ...
+h_f = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart) ', ' vec.Properties.Description], ...
     'NumberTitle','off', ...
     'ToolBar','none', ...
     'MenuBar','none');
 pos_aux = findall(groot,'Name','ZEFFIRO Interface: ES Workbench').Position;
-set(f,'Position',[pos_aux(1) pos_aux(2) 800 600]);
+set(h_f,'Position',[pos_aux(1) pos_aux(2) 800 600]);
 pbaspect([1 1 1])
-
 
 %% Tab properties
 h = uitabgroup();
@@ -80,7 +78,7 @@ end
         set(cb, 'TickLabels', TL);
         
         %%% Legend
-        [sr, sc] = zef_ES_objective_function(vec);
+        [sr, sc] = zef_ES_objective_function(zef);
         
         hold on;
         plot(ax, sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
@@ -99,5 +97,9 @@ end
         hold off
         title(fieldnames_table);
     end
-close(h_dial)
+%close(h_dial)
+
+h_f.Visible = zef.use_display;
+zef.h_ES_error_chart = h_f;
+
 end

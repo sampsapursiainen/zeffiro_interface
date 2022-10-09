@@ -1,3 +1,8 @@
+function zef = zef_dataBank_addButtonPress(zef)
+
+if nargin == 0
+zef = evalin('base','zef');
+end
 
 dbtype=zef.dataBank.app.Entrytype.Value;
 
@@ -41,3 +46,8 @@ expand(zef.dataBank.app.Tree.SelectedNodes);
 end
 
 clear dbtype dbParentHash newNode;
+
+if nargout == 0 
+assignin('base','zef',zef);
+end
+end

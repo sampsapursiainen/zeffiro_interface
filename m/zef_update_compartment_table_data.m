@@ -28,6 +28,16 @@ end
 
 zef.h_compartment_table.Data = zef.aux_field_1;
 
+if size(zef.h_compartment_table.Data,2) > length(zef.h_compartment_table.ColumnEditable)
+missing_entries = (size(zef.h_compartment_table.Data,2) - length(zef.h_compartment_table.ColumnEditable));
+zef.h_compartment_table.ColumnEditable = [zef.h_compartment_table.ColumnEditable repmat(true,1,missing_entries)];
+end
+
+if size(zef.h_compartment_table.Data,2) > length(zef.h_compartment_table.ColumnWidth)
+missing_entries = (size(zef.h_compartment_table.Data,2) - length(zef.h_compartment_table.ColumnWidth));
+zef.h_compartment_table.ColumnWidth = [zef.h_compartment_table.ColumnWidth repmat({'fit'},1,missing_entries)];
+end
+
 if nargout == 0
 assignin('base','zef',zef);
 end

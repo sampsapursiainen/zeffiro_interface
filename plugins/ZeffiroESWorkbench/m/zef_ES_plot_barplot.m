@@ -1,36 +1,16 @@
-function zef_ES_plot_barplot(varargin)
-zef = eval('caller','zef');
+function zef = zef_ES_plot_barplot(zef)
 
-switch nargin
-    case 0
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
+ [sr, sc] = zef_ES_objective_function(zef);
+                        if isempty(sr)
+                            sr = 1;
+                        end
+                        if isempty(sc)
+                            sc = 1;
+                        end
+
         y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-    case 1
-        if isvector(varargin{1})
-            y_ES = varargin{1};
-        else
-            error('Inserted argument is not a vector.')
-        end
-    case 2
-        [sr, sc] = deal(varargin{1:2});
-        try
-            y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-        catch
-            error('No y_ES data found.')
-        end
-    case 3
-        if isvector(varargin{1})
-            y_ES = varargin{1};
-        else
-            error('Invalid y_ES data inserted. Not a vector.')
-        end
-        [sr, sc] = deal(varargin{2}, varargin{3});
-    otherwise
-        error('Too many input arguments.')
-end
 
-if nargin ~= 3
-    fig_aux = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
+    h_f = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
     try
         win_temp = findobj('type','figure','name','ZEFFIRO Interface: ES error chart');
@@ -38,12 +18,11 @@ if nargin ~= 3
     catch
         win_temp = [10 800 550 150];
     end
-    fig_aux.Position(1) = win_temp(1)+win_temp(3);
-    fig_aux.Position(2) = win_temp(2)+(win_temp(4)-fig_aux.Position(4));
-    fig_aux.Position(3) = 750;
-    fig_aux.Position(4) = 250;
+    h_f.Position(1) = win_temp(1)+win_temp(3);
+    h_f.Position(2) = win_temp(2)+(win_temp(4)-h_f.Position(4));
+    h_f.Position(3) = 750;
+    h_f.Position(4) = 250;
     sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-end
 
 h_barplot_ES = bar(y_ES,0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
@@ -90,6 +69,8 @@ plot(xlim,[-max_current_montage -max_current_montage],'LineWidth',1.0,'Color',[1
 plot(xlim,[-max_current_channel -max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
 hold off;
 
+h_f.Visible = zef.use_display;
 
+zef.h_ES_barplot = h_f;
 %h_barplot_ES = [h_axes; h_barplot_ES];
 end

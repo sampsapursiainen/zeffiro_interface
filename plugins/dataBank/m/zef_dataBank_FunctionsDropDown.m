@@ -1,3 +1,8 @@
+function zef = zef_dataBank_FunctionsDropDown(zef)
+
+if nargin == 0
+zef = evalin('base','zef');
+end
 
 zef.dataBank.app.combinePanel.Visible='Off';
 zef.dataBank.app.importPanel.Visible='Off';
@@ -15,3 +20,10 @@ switch zef.dataBank.app.FunctionsDropDown.Value
     case 'mag2grad'
 
 end
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
+end
+

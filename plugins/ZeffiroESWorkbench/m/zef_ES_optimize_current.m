@@ -157,9 +157,8 @@ switch zef_data.search_method
         flag_val = 1;
         
     case 4
-        
+
          y_ES = L_ES_projection'*x_ES_projection;
-        
         flag_val = 1;
         
     case 5

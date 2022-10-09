@@ -1,6 +1,11 @@
-function vec = zef_ES_error_criteria
+function vec = zef_ES_error_criteria(zef) 
+
+if nargin == 0 
+    zef = evalin('base','zef');
+end
+
 %% Variables and parameters setup
-    load_aux = evalin('base','zef.y_ES_interval');
+    load_aux = eval('zef.y_ES_interval');
 B = cell2mat(load_aux.residual);
 B = B/max(abs(B(:)));
 
@@ -16,7 +21,7 @@ for i = 1:size(load_aux.y_ES,1)
     for j = 1:size(load_aux.y_ES,2)
         A(i,j) =         norm(cell2mat(load_aux.y_ES(i,j)),1);
         C(i,j) =          max(cell2mat(load_aux.y_ES(i,j)));
-        D(i,j) = zef_ES_rwnnz(cell2mat(load_aux.y_ES(i,j)), evalin('base','zef.ES_relative_weight_nnz'));
+        D(i,j) = zef_ES_rwnnz(cell2mat(load_aux.y_ES(i,j)), eval('zef.ES_relative_weight_nnz'));
     end
 end
 

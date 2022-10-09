@@ -1,48 +1,14 @@
-function [sr, sc] = zef_ES_objective_function(varargin)
+function [sr, sc] = zef_ES_objective_function(zef)
  
-[~, ~, metacriteria_list, metacriteria_type] = zef_ES_table([]);
-
-obj1 = [];
-obj2 = [];
-thre_aux = [];
-thre_type = [];
-vec = [];
-
-if not(isempty(varargin))
-    vec = varargin{1};
-        if length(varargin) > 1
-        obj1 = varargin{2};
-        end
-    if length(varargin) > 2
-        obj2 = varargin{3};
-    end
-    if length(varargin) > 3
-        thre_aux = varargin{4};
-    end
-     if length(varargin) > 4
-        thre_type = varargin{5};
-    end
+if nargin == 0
+zef = evalin('base','zef');
 end
 
-if isempty(obj1)
-    vec = zef_ES_table;
-end
-
-if isempty(obj1)
-    obj1 = evalin('base','zef.ES_obj_fun');
-end
-
-if isempty(obj2)
-    obj2 = evalin('base','zef.ES_obj_fun_2');
-end
-
-if isempty(thre_aux)
-thre_aux = evalin('base','zef.ES_acceptable_threshold');
-end
-
-if isempty(thre_type)
-thre_type = evalin('base','zef.ES_threshold_condition');
-end
+[vec, ~, metacriteria_list, metacriteria_type] = zef_ES_table(zef);
+obj1 = eval('zef.ES_obj_fun');
+obj2 = eval('zef.ES_obj_fun_2');
+thre_aux = eval('zef.ES_acceptable_threshold');
+thre_type = eval('zef.ES_threshold_condition');
 
 obj_fun_1 = vec.(metacriteria_list{obj1}){1};
 obj_fun_2 = vec.(metacriteria_list{obj2}){1};

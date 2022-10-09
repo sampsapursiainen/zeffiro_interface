@@ -1,3 +1,8 @@
+function zef = zef_dataBank_importNodeButtonPress(zef)
+
+if nargin == 0
+zef = evalin('base','zef')
+end
 
 if strcmp(zef.dataBank.app.typeDropDown.Value, 'Node')
     [savefile,savepath] = uigetfile('*','Select One or More Node Files','MultiSelect', 'on');
@@ -30,3 +35,5 @@ end
  zef_dataBank_refreshTree;
 
 clear savefile savepath dbParentHash
+
+end

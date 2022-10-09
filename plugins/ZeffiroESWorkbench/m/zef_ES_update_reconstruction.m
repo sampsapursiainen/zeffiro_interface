@@ -1,14 +1,20 @@
-function zef_ES_update_reconstruction(varargin)
+function zef = zef_ES_update_reconstruction(zef,sr,sc)
 switch nargin
     case 0
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
-        evalin('base',['zef.reconstruction = zef.y_ES_interval.volumetric_current_density{' num2str(sr) ',' num2str(sc) '};']);
+        zef = evalin('base','zef');
+        [sr, sc] = zef_ES_objective_function(zef);
+        zef.reconstruction = zef.y_ES_interval.volumetric_current_density{sr,sc};
     case 2
-        evalin('base',['zef.reconstruction = zef.y_ES_interval.volumetric_current_density{' num2str(varargin{1}) ',' num2str(varargin{2}) '};']);
+        zef.reconstruction = zef.y_ES_interval.volumetric_current_density{sc,sr};
     otherwise
         error('Invalid length of input arguments.')
 end
 try %#ok<*TRYNC>
-    delete(findobj(evalin('base','zef.h_zeffiro.Children'),'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
+    delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'));
 end
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
 end

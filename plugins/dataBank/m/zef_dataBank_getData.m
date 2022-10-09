@@ -1,4 +1,4 @@
-function [data] =  zef_dataBank_getData(zef, type)
+function [data] = zef_dataBank_getData(zef, type)
 
 data=[];
 data.type=type;

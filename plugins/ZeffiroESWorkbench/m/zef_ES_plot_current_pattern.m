@@ -1,5 +1,9 @@
-function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
-zef = evalin('caller','zef');
+function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(zef)
+
+
+if nargin == 0 
+zef = evalin('base','zef');
+end
 
 %% clear Axes handle && ES_Colorbar
 if isfield(eval('zef'),'h_current_ES')
@@ -15,26 +19,10 @@ try %#ok<*TRYNC>
     delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
 end
 %% Variables and parameter setup
-switch nargin
-    case 0
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
+
+        [sr, sc] = zef_ES_objective_function(zef);
         y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-    case 1
-        if isvector(varargin{1})
-            y_ES = varargin{1};
-        else
-            error('Inserted argument is not a vector.')
-        end
-    case 2
-        [sr, sc] = deal(varargin{1:2});
-        try
-            y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-        catch
-            error('No y_ES data found.')
-        end
-    otherwise
-        error('Number of function input argument must be 0 or 1')
-end
+
 zef = zef_process_meshes(zef,zef.explode_everything);
 %% Sensors attachment
 if eval('zef.attach_electrodes')

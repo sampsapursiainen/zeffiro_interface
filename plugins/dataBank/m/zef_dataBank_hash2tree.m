@@ -1,3 +1,8 @@
+function [zef] = zef_dataBank_hash2tree(zef)
+
+if nargin == 0
+zef = evalin('base','zef')
+end
 
 %this builds a uiTree in the databank.app from the databank.tree node
 %hashcodes
@@ -33,3 +38,9 @@ end
 expand(zef.dataBank.app.Tree, 'all');
 
 clear dbparent newNode
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
+end
