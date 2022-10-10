@@ -73,15 +73,15 @@ if not(isempty(load_aux))
     ES_angle_error     = cell2mat(load_aux.field_source.angle')';
        end
        
-       isfield(load_aux.field_source,'relative_norm_error')
+    if   isfield(load_aux.field_source,'relative_norm_error')
    ES_mag       = 100*cell2mat(load_aux.field_source.relative_norm_error')';
    end
    
-   isfield(load_aux.field_source,'relative_error')
+   if isfield(load_aux.field_source,'relative_error')
    ES_rdm      = 100*cell2mat(load_aux.field_source.relative_error')';
 end
 
-isfield(load_aux.field_source,'avg_off_field')
+if isfield(load_aux.field_source,'avg_off_field')
    ES_off_field       = cell2mat(load_aux.field_source.avg_off_field')';
 end
 
