@@ -1,3 +1,3 @@
-function zef_ES_update_reconstruction(varargin)
-zef_ES_update_reconstruction(varargin);
+function zef = zef_ES_update_reconstruction(zef,sr,sc)
+zef = zef_ES_update_reconstruction(zef,sr,sc);
 end

@@ -26,7 +26,7 @@ c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrah
  FB = freeBoundary(D);
 
  h = evalin('caller','h_axes_image');
- %axes(h);
+ axes(h);
  hold(h,'on');
  h_resection = trimesh(FB,nodes(:,1),nodes(:,2),nodes(:,3));
  set(h_resection,'facecolor',resection_color);

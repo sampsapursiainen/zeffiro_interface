@@ -1,7 +1,7 @@
 function zef_plot_dpq(type,zef)
 
 if nargin == 1
-    zef = evalin('calle','zef');
+    zef = evalin('caller','zef');
 end
 
 dpq_table = eval('zef.dynamical_plot_queue_table');

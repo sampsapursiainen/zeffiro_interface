@@ -1,7 +1,7 @@
 function data_table = zef_dpq_delete(zef)
 
 if nargin == 0
-zef = eval('base','zef');
+zef = evalin('base','zef');
 end
 
 data_table = eval('zef.h_dynamical_plot_queue_table.Data');
