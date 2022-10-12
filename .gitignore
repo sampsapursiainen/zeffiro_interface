@@ -5,6 +5,7 @@
 # Allow specific files
 
 !.gitignore
+!.gitmodules
 !.gitattributes
 !LICENSE
 !CONTRIBUTING.md

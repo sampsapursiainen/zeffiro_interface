@@ -1,0 +1,12 @@
+[submodule "external/CVX"]
+	path = external/CVX
+	url = https://github.com/cvxr/CVX.git
+[submodule "external/SDPT3"]
+	path = external/SDPT3
+	url = https://github.com/sqlp/sdpt3.git
+[submodule "external/SeDuMi"]
+	path = external/SeDuMi
+	url = https://github.com/sqlp/sedumi.git
+[submodule "external/SESAME"]
+	path = external/SESAME
+	url = https://github.com/i-am-sorri/SESAME_core.git
