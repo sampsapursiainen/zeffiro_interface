@@ -74,6 +74,13 @@ elseif filter_type == 2
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
     [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+elseif filter_type == 4 
+    [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+    P_old = eye(size(L,2)) * theta0;
+    H = L * sqrtm(P_old);
+    W = inv(sqrtm(diag(diag(H'*inv(H*H' + R)*H))));
+    z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
+    
 end
 
 %% RTS SMOOTHING
