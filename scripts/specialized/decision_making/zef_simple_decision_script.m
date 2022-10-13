@@ -1,7 +1,7 @@
 % Calculates the mean of the 50 rec of the project file
 frame_number = 1; 
 n_max_iter = 10000;
-tol_val = 1e-12;
+tol_val = 1e-3;
 
 z_inverse_results = cell(0);
 z_inverse_info = cell(0);
@@ -33,7 +33,6 @@ for k = 1 : length(z_inverse_results)
     
 end
 
-
 z_concentration = zeros(length(z_inverse_results),1);
 for k = 1 : length(z_inverse_results)
 
@@ -45,10 +44,8 @@ end
 
 z_mean_point = mean(z_max_points);
 
-z_max_concentration = zef_cluster_mean(z_max_points);%zef_newton_concentration(z_max_points(I_s,:),z_mean_point,tol_val,n_max_iter);
-
+z_max_concentration = zef_newton_concentration(z_max_points(I_s,:),z_mean_point,tol_val,n_max_iter);
 z_avg = zeros(length(z_inverse_results{1}),1);
-
 aux_vec = sqrt(sum((z_max_points - z_max_concentration).^2,2)); 
 
 for k = 1 : length(z_inverse_results)
