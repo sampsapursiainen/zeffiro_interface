@@ -45,7 +45,7 @@ end
 z_mean_point = mean(z_max_points);
 
 
-I_aux = zef_find_clusters(3,z_max_points,1E-12,0.68);
+I_aux = zef_find_clusters(size(z_max_points,1),z_max_points,1E-12,0.68);
 [~,max_ind] = max(accumarray(I_aux,ones(size(index_vec))));
 z_max_concentration = mean(z_max_points(find(I_aux==max_ind),:),1);
 %z_max_concentration = zef_newton_concentration(z_max_points(I_s,:),z_mean_point,tol_val,n_max_iter);
