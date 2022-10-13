@@ -1,7 +1,7 @@
 % Calculates the mean of the 50 rec of the project file
 frame_number = 1; 
 n_max_iter = 10000;
-tol_val = 1e-15;
+tol_val = 1e-12;
 
 z_inverse_results = cell(0);
 z_inverse_info = cell(0);
@@ -33,13 +33,21 @@ for k = 1 : length(z_inverse_results)
     
 end
 
+
+z_concentration = zeros(length(z_inverse_results),1);
+for k = 1 : length(z_inverse_results)
+
+aux_vec = sqrt(sum((z_max_points - z_max_points(k,:)).^2,2)); 
+J = setdiff([1:length(z_inverse_results)],k);
+z_concentration(k) = sum(1./(aux_vec(J).^3));
+
+end
+
 z_mean_point = mean(z_max_points);
 
-z_max_concentration = zef_newton_concentration(z_max_points,z_mean_point,tol_val,n_max_iter);
+z_max_concentration = zef_cluster_mean(z_max_points);%zef_newton_concentration(z_max_points(I_s,:),z_mean_point,tol_val,n_max_iter);
 
-z_concentration= zeros(length(z_inverse_results),1);
-
-z_avg = zeros(size(z_inverse_results{1}));
+z_avg = zeros(length(z_inverse_results{1}),1);
 
 aux_vec = sqrt(sum((z_max_points - z_max_concentration).^2,2)); 
 
@@ -50,13 +58,9 @@ z_avg = z_avg + z_inverse_results{k}.*(1./(aux_vec(k).^3));
 end
 
 total_concentration = sum(1./(aux_vec.^3));
-
 z_avg = z_avg./total_concentration;
-
 zef.reconstruction = z_avg;
-
 z_avg_max_point = zef_rec_maximizer(z_avg,zef.source_positions);
-
 dist_vec = sqrt(sum((z_max_points - z_avg_max_point).^2,2)); 
 [~,I] = sort(dist_vec); 
 avg_concentration = sum(1./(dist_vec.^3));
@@ -65,15 +69,6 @@ avg_radius = (length(z_inverse_results)./avg_concentration).^(1/3);
 A=alphaShape(zef.resection_points(:,1), zef.resection_points(:,2), zef.resection_points(:,3),3.4);
 [AF, AP]=alphaTriangulation(A);
 dist_resection = zef_distance_to_resection(z_max_points,AP,AF);
-
-z_concentration = zeros(length(z_inverse_results),1);
-for k = 1 : length(z_inverse_results)
-
-aux_vec = sqrt(sum((z_max_points - z_max_points(k,:)).^2,2)); 
-J = setdiff([1:length(z_inverse_results)],k);
-z_concentration(k) = sum(1./(aux_vec(J).^3));
-
-end
 
 z_concentration = ((length(z_inverse_results)-1)./z_concentration).^(1/3);
 
