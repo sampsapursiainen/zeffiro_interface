@@ -94,10 +94,16 @@ for i = 1 : length(p_points)
                 end
             end
             end
-            p_compartment = [p_compartment ; p_colortable_aux];
+     p_compartment = [p_compartment ; p_colortable_aux];
         else
+      
+          if size(p_compartment,2) > size(p_colortable{i}{5},2)
+            p_compartment = [zeros(size(p_compartment,1),length(cortex_surface_ind_aux)+1-size(p_compartment,2)) p_compartment];
+          p_compartment = [p_compartment ; zeros(size(p_colortable{i}{5},1),size(p_compartment,2)-size(p_colortable{i}{5},2)) p_colortable{i}{5}];
+          else
      p_compartment = [p_compartment ; p_colortable{i}{5}];
-        end
+          end
+     end
     if length(p_colortable{i}) > 5
         p_cortex = [p_cortex ; p_colortable{i}{6}];
     else
