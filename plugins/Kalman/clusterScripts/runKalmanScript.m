@@ -160,7 +160,7 @@ zef.h_parcellation_list.Value = [23, 77, 110];
 zef.parcellation_selected = get(zef.h_parcellation_list,'value');
 
 
-[zef.parcellation_interp_ind] = zef_parcellation_interpolation([]); zef_update_parcellation; set(zef.h_parcellation_interpolation,'foregroundcolor',[0 0 0]);
+[zef.parcellation_interp_ind] = zef_parcellation_interpolation(zef); zef_update_parcellation; set(zef.h_parcellation_interpolation,'foregroundcolor',[0 0 0]);
 
 zef.parcellation_time_series = zef_parcellation_time_series([]);
 zef_plot_parcellation_time_series([]);

@@ -1,16 +1,16 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
+function [parcellation_interpolation_ind] = zef_parcellation_interpolation(zef)
 
-domain_labels = evalin('base','zef.domain_labels(zef.brain_ind)');
-submesh_ind_vec = evalin('base','zef.submesh_ind');
-parcellation_compartment = evalin('base','zef.parcellation_compartment');
+domain_labels = eval('zef.domain_labels(zef.brain_ind)');
+submesh_ind_vec = eval('zef.submesh_ind');
+parcellation_compartment = eval('zef.parcellation_compartment');
 
 if isempty(parcellation_compartment) || isequal(parcellation_compartment,{'g'})
-    compartment_tags = evalin('base','zef.compartment_tags');
+    compartment_tags = eval('zef.compartment_tags');
     parcellation_compartment = [];
     for i = 1 : length(compartment_tags)
-    activity = evalin('base',['zef.' compartment_tags{i} '_sources']);
+    activity = eval(['zef.' compartment_tags{i} '_sources']);
     if ismember(activity,[1 2])
         parcellation_compartment = [parcellation_compartment compartment_tags{i}];
     end
@@ -27,7 +27,7 @@ color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
-compartment_tags = evalin('base','zef.compartment_tags');
+compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
 
         var_0 = ['zef.' compartment_tags{k} '_on'];
@@ -35,20 +35,20 @@ for k = 1 : length(compartment_tags)
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    color_str = evalin('base',['zef.' compartment_tags{k} '_color']);
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
 
-on_val = evalin('base',var_0);
-sigma_val = evalin('base',var_1);
-priority_val = evalin('base',var_2);
-visible_val = evalin('base',var_3);
+on_val = eval(var_0);
+sigma_val = eval(var_1);
+priority_val = eval(var_2);
+visible_val = eval(var_3);
 if on_val
 i = i + 1;
 sigma_vec(i,1) = sigma_val;
 priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
-submesh_cell{i} = evalin('base',var_4);
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0;
+submesh_cell{i} = eval(var_4);
+if eval(['zef.' compartment_tags{k} '_sources'])>0;
     aux_brain_ind = [aux_brain_ind i];
 end
 
@@ -60,10 +60,10 @@ end
 end
 end
 
-p_colortable = evalin('base','zef.parcellation_colortable');
-p_points = evalin('base','zef.parcellation_points');
-p_tolerance = evalin('base','zef.parcellation_tolerance');
-p_selected = evalin('base','zef.parcellation_selected');
+p_colortable = eval('zef.parcellation_colortable');
+p_points = eval('zef.parcellation_points');
+p_tolerance = eval('zef.parcellation_tolerance');
+p_selected = eval('zef.parcellation_selected');
 
 p_length = 0;
 c_length = 1;
@@ -109,15 +109,15 @@ for i = 1 : length(p_points)
     end
 end
 
-brain_ind = evalin('base','zef.brain_ind');
-nodes = evalin('base','zef.nodes');
-tetra = evalin('base','zef.tetra');
+brain_ind = eval('zef.brain_ind');
+nodes = eval('zef.nodes');
+tetra = eval('zef.tetra');
 
-if evalin('base','zef.location_unit_current') == 2
+if eval('zef.location_unit_current') == 2
 parcellation_p = 10*parcellation_p;
 end
 
-if evalin('base','zef.location_unit_current') == 3
+if eval('zef.location_unit_current') == 3
 zef.parcellation_p = 1000*parcellation_p;
 end
 
@@ -128,7 +128,7 @@ for p_ind = p_selected + 1
 p_counter = p_counter + 1;
 
     
-I_compartment = find(ismember(evalin('base','zef.domain_labels'),p_compartment(p_ind-1,1:end-1)));
+I_compartment = find(ismember(eval('zef.domain_labels'),p_compartment(p_ind-1,1:end-1)));
 brain_cortex_ind = find(ismember(brain_ind,I_compartment) & ismember(submesh_ind_vec,p_compartment(p_ind-1,end)));
 cortex_ind = brain_ind(brain_cortex_ind);
 
@@ -183,7 +183,7 @@ zef_waitbar([ab_ind/length(aux_brain_ind) p_counter/length(p_selected)],h,['Inte
 
 
 parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [];
-triangles = evalin('base',['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
+triangles = eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
 if not(p_cortex(p_ind-1) == 1)
     if ismember(aux_brain_ind(ab_ind), p_compartment(p_ind-1,1:end-1))
     if isempty(submesh_cell{aux_brain_ind(ab_ind)})
@@ -212,7 +212,7 @@ if not(isempty(source_positions))
 
 %s_ind_1{ab_ind} = aux_point_ind;
 
-center_points = evalin('base',['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
+center_points = eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
 
 size_center_points = size(center_points,2);
 
