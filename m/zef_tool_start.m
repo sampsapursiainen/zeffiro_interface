@@ -12,7 +12,6 @@ if nargin < 4
     scale_positions = 1;
 end
 
-
 h_tool = findall(groot,'ZefTool',tool_script);
 
 if not(isempty(h_tool))

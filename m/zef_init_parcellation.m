@@ -32,9 +32,7 @@ if not(isfield(zef,'use_parcellation'));
     zef.use_parcellation = 0;
 end;
 
-zef.time_series_tools_dir = which('zef_init_parcellation.m');
-zef.time_series_tools_dir = [fileparts(zef.time_series_tools_dir) '/' 'time_series_tools/*.m'];
-
+zef.time_series_tools_dir = fileparts(which('zef_time_series_plot.m'));
 zef.time_series_tools_name_list = cell(0);
 zef.time_series_tools_file_list = cell(0);
 
@@ -42,16 +40,17 @@ zef.aux_field = dir(zef.time_series_tools_dir);
 for zef_i = 1 : length(zef.aux_field)
 [~, zef.time_series_tools_file_list{zef_i}] = fileparts(zef.aux_field(zef_i).name);
 end
+zef.time_series_tools_file_list = setdiff(zef.time_series_tools_file_list,[{'.'} {''}]);
 for zef_i = 1 : length(zef.time_series_tools_file_list)
 zef.aux_field = help(zef.time_series_tools_file_list{zef_i});
 zef.aux_field = zef.aux_field(strfind(zef.aux_field,'Description:'):end);
 zef.time_series_tools_name_list{zef_i} = strtrim(zef.aux_field(13:end-1));
 end
-[zef.time_series_tools_name_list zef.aux_field] = sort(zef.time_series_tools_name_list);
+[zef.time_series_tools_name_list, zef.aux_field] = sort(zef.time_series_tools_name_list);
 zef.time_series_tools_file_list = zef.time_series_tools_file_list(zef.aux_field);
 
 if not(isempty(zef.time_series_tools_name_list))
 set(zef.h_time_series_tools_list,'string',zef.time_series_tools_name_list,'Value',1);
 end
 
-zef_update_parcellation;
+zef = zef_update_parcellation(zef);
