@@ -1,14 +1,14 @@
 function zef = zef_dataBank_startNameChange(zef)
 
 if nargin == 0
-zef = evalin('base','zef')
+zef = evalin('base','zef');
 end
 
 
 zef.dataBank.app.Tree.Enable='off';
 
 zef.dataBank.selectMultiple=false;
-zef_dataBank_getHashForMenu;
+zef = zef_dataBank_getHashForMenu(zef);
 
 zef.dataBank.nameChangeapp=zef_dataBank_nameChange_app;
 

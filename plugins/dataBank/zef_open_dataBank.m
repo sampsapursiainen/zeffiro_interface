@@ -20,6 +20,7 @@ end
 %zef.dataBank.workingHashes=cell(0,0);
 %set button functions
 
+zef.dataBank.app.Tree.SelectionChangedFcn = 'zef_dataBank_getHashForMenu;';
 zef.dataBank.app.addButton.ButtonPushedFcn='zef_dataBank_addButtonPress;';
 zef.dataBank.app.combineButton.ButtonPushedFcn='[zef.L, zef.measurements] = zef_dataBank_combineLeadFields(zef.dataBank.tree, zef.dataBank.workingHashes,zef.dataBank.app.combineMenu.Value,zef.dataBank.var_starttime,zef.dataBank.var_endtime,zef.dataBank.var_sampling_frequency);';
 zef.dataBank.app.StarttimeSpinner.ValueChangedFcn = 'zef_dataBank_update;';
@@ -56,7 +57,7 @@ zef.dataBank.app.showinformationMenu.MenuSelectedFcn="disp('sorry, this is not i
 zef.dataBank.app.modifyMenu.MenuSelectedFcn=strcat('zef.dataBank.selectMultiple=true;', 'zef_dataBank_getHashForMenu;', ...
             'zef.dataBank.workingHashes=zef_dataBank_hashToWorkingSpace(zef.dataBank.hash, zef.dataBank.workingHashes);', ...
             '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);');
-zef.dataBank.app.changeNameMenu.MenuSelectedFcn='zef_dataBank_startNameChange';
+zef.dataBank.app.changeNameMenu.MenuSelectedFcn='zef_dataBank_startNameChange;';
 zef.dataBank.app.showinformationMenu.MenuSelectedFcn='zef_dataBank_getHashForMenu; disp(zef.dataBank.tree.(zef.dataBank.hash)); disp(zef.dataBank.tree.(zef.dataBank.hash).data);';
 
 zef.dataBank.app.showworkingHashes.ButtonPushedFcn = '[zef.dataBank.app.currentTable.Data, zef.dataBank.app.currentTable.ColumnName]=zef_dataBank_WorkingSpaceInfo(zef.dataBank.tree, zef.dataBank.workingHashes);';
