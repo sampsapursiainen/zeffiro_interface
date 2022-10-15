@@ -1,7 +1,7 @@
 % Calculates the mean of the 50 rec of the project file
 frame_number = 1; 
 tol_val = 1e-12;
-cred_val = 0.7;
+cred_val = 0.9;
 max_iter = 1000;
 
 z_inverse_results = cell(0);
@@ -34,8 +34,6 @@ for k = 1 : length(z_inverse_results)
     
 end
 
-
-
 z_mean_point = mean(z_max_points);
 
 I_aux = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
@@ -45,15 +43,6 @@ z_cluster_mean = mean(z_max_points(J_aux,:),1);
 z_inverse_results = z_inverse_results(J_aux);
 z_inverse_info = z_inverse_info(J_aux,:);
 z_max_points = z_max_points(J_aux,:);
-
-z_concentration = zeros(length(z_inverse_results),1);
-for k = 1 : length(z_inverse_results)
-
-aux_vec = sqrt(sum((z_max_points - z_max_points(k,:)).^2,2)); 
-J = setdiff(1:length(z_inverse_results),k);
-z_concentration(k) = sum(1./aux_vec(J).^3);
-
-end
 
 z_avg = zeros(length(z_inverse_results{1}),1);
 aux_vec = sqrt(sum((z_max_points - z_cluster_mean).^2,2)); 
@@ -69,8 +58,10 @@ zef.reconstruction = z_avg;
 z_avg_max_point = zef_rec_maximizer(z_avg,zef.source_positions);
 dist_vec = sqrt(sum((z_max_points - z_avg_max_point).^2,2)); 
 [~,I] = sort(dist_vec); 
-avg_concentration = sum(1./(dist_vec.^3));
-avg_radius = (length(z_inverse_results)./avg_concentration).^(1/3);
+I_concentration = find(dist_vec > 0);
+avg_concentration = sum(1./(dist_vec(I_concentration).^3));
+n_concentration = length(I_concentration);
+avg_radius = (n_concentration./avg_concentration).^(1/3);
 
 if size(zef.resection_points,1) > 1
 A=alphaShape(zef.resection_points(:,1), zef.resection_points(:,2), zef.resection_points(:,3),3.4);
@@ -82,17 +73,27 @@ dist_resection = zef_distance_to_resection(z_max_points,zef.resection_points);
 dist_avg_resection = zef_distance_to_resection(z_avg_max_point,zef.resection_points);
 end
 
-z_concentration = ((length(z_inverse_results)-1)./z_concentration).^(1/3);
+z_concentration = zeros(length(z_inverse_results),1);
+for k = 1 : length(z_inverse_results)
+
+aux_vec = sqrt(sum((z_max_points - z_max_points(k,:)).^2,2)); 
+I_concentration = find(aux_vec > 0);
+z_concentration(k) = sum(1./aux_vec(I_concentration).^3);
+n_concentration = length(I_concentration);
+z_concentration(k) = (n_concentration./z_concentration(k)).^(1/3);
+
+end
+
 
 result_cell = [z_inverse_info(I,:) mat2cell(dist_vec(I),ones(length(z_inverse_results),1))  mat2cell(dist_resection(I),ones(length(z_inverse_results),1))  mat2cell(z_concentration(I),ones(length(z_inverse_results),1))];
 
-result_cell = [{'none'} {'max. concentration'} {0} {dist_avg_resection} {avg_radius}; result_cell];
+result_cell = [{'none'} {'Cluster Centre'} {0} {dist_avg_resection} {avg_radius}; result_cell];
 
 h_f = uifigure('Visible',zef.use_display); 
 clf;
 h_f.Name = 'ZEFFIRO Interface: Clustering results';
 h_f.Units = 'normalized';
-h_t = uitable; 
+h_t = uitable('Parent',h_f); 
 h_t.Units = 'normalized';
 h_t.Position = [0.05 0.05 0.9 0.9];
 h_t.Units = 'pixels';

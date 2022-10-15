@@ -144,7 +144,7 @@ zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position
 end
 
 
-set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 set(zef.h_mesh_visualization_tool,'DeleteFcn','zef_closereq;');
 
