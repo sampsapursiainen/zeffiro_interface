@@ -30,6 +30,10 @@ if not(isfield(zef,'ias_normalize_data'));
     zef.ias_normalize_data = 1;
 end;
 
+if not(isfield(zef,'ias_type'));
+    zef.ias_type = 1;
+end;
+
 
     zef.ias_time_1 = zef.inv_time_1;
     zef.ias_time_2 = zef.inv_time_2;
@@ -43,6 +47,7 @@ end;
 zef.ias_snr = zef.inv_snr;
 
 set(zef.h_ias_hyperprior ,'value',zef.ias_hyperprior);
+set(zef.h_ias_type ,'value',zef.ias_type);
 set(zef.h_ias_snr ,'string',num2str(zef.ias_snr));
 set(zef.h_ias_n_map_iterations ,'string',num2str(zef.ias_n_map_iterations));
 set(zef.h_ias_sampling_frequency ,'string',num2str(zef.ias_sampling_frequency));

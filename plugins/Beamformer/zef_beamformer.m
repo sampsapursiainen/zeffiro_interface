@@ -192,7 +192,7 @@ if method_type == 1
         if f_ind > 1;
          zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
-            zef_waitbar(n_iter/nn,h,['LCMV iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+            zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
         end;
         end
     end
@@ -444,7 +444,7 @@ elseif method_type == 3
         if f_ind > 1;
          zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
-            zef_waitbar(n_iter/nn,h,['LCMV iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+            zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
         end;
         end
     end
@@ -544,7 +544,7 @@ elseif method_type==4
             if f_ind > 1;
                 zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             elseif number_of_frames == 1
-                zef_waitbar(n_iter/nn,h,['LCMV iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
             end;
         end
     end

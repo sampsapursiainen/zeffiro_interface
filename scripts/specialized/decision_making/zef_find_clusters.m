@@ -1,4 +1,4 @@
-function [index_vec,MahalanobisD] = zef_find_clusters(n_clusters,rec_points,reg_val,cred_val)
+function [index_vec,MahalanobisD] = zef_find_clusters(n_clusters,rec_points,reg_val,cred_val,max_iter)
 
 index_vec = ones(size(rec_points,1),1);
 if isequal(length(cred_val),1)
@@ -11,7 +11,7 @@ k = 0;
 
 while  and(k < n_clusters, isequal(length(unique(index_vec)),k+1))
     k = k+1;
-    GMModel_aux = fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec);
+    GMModel_aux = fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec,'MaxIter',max_iter);
     
     [index_vec, ~,~, ~, MahalanobisD]=cluster(GMModel_aux, rec_points);
     ind = [1:size(MahalanobisD,1)]';

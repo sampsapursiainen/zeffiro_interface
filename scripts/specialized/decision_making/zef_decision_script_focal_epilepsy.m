@@ -1,7 +1,8 @@
 % Calculates the mean of the 50 rec of the project file
 frame_number = 1; 
 tol_val = 1e-12;
-cred_val = 0.8;
+cred_val = 0.7;
+max_iter = 1000;
 
 z_inverse_results = cell(0);
 z_inverse_info = cell(0);
@@ -37,8 +38,8 @@ end
 
 z_mean_point = mean(z_max_points);
 
-I_aux = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val);
-[~,max_ind] = max(accumarray(I_aux,ones(size(index_vec))));
+I_aux = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
+[~,max_ind] = max(accumarray(I_aux,ones(size(I_aux))));
 J_aux = find(I_aux==max_ind);
 z_cluster_mean = mean(z_max_points(J_aux,:),1);
 z_inverse_results = z_inverse_results(J_aux);
@@ -87,7 +88,9 @@ result_cell = [z_inverse_info(I,:) mat2cell(dist_vec(I),ones(length(z_inverse_re
 
 result_cell = [{'none'} {'max. concentration'} {0} {dist_avg_resection} {avg_radius}; result_cell];
 
-h_f = figure(1); clf;
+h_f = uifigure('Visible',zef.use_display); 
+clf;
+h_f.Name = 'ZEFFIRO Interface: Clustering results';
 h_f.Units = 'normalized';
 h_t = uitable; 
 h_t.Units = 'normalized';

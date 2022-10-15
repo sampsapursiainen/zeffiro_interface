@@ -10,6 +10,7 @@ n_interp = length(s_ind_1);
 
 ias_hyperprior = eval('zef.ias_hyperprior');
 snr_val = eval('zef.ias_snr');
+ias_type = eval('zef.ias_type');
 pm_val = eval('zef.inv_prior_over_measurement_db');
 amplitude_db = eval('zef.inv_amplitude_db');
 pm_val = pm_val - amplitude_db;
@@ -115,15 +116,32 @@ zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_
 else
 zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
 end;
-m_max = sqrt(size(L,2));
+m_max = sqrt(size(L_aux,2));
 u = zeros(length(z_vec),1);
 z_vec = zeros(length(z_vec),1);
 d_sqrt = sqrt(theta);
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
-L = L_aux.*repmat(d_sqrt',size(L,1),1);
-z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
+L = L_aux.*repmat(d_sqrt',size(L_aux,1),1);
+L = d_sqrt.*(L'*inv(L*L' + S_mat));
+
+if isequal(ias_type,2)
+% dSPM
+    aux_vec = sum(L.^2, 2);
+    aux_vec = sqrt(aux_vec);
+    L = L./aux_vec(:,ones(size(L,2),1));
+
+elseif isequal(ias_type, 3)
+%'sLORETA'
+
+aux_vec = sqrt(sum(L.*L_aux', 2));
+L = L./aux_vec(:,ones(size(L,2),1));
+
+end
+
+z_vec = L*f;
+
 
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 z_vec = gather(z_vec);
