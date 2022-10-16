@@ -121,7 +121,7 @@ zef.sensors = zef.dataBank.tree.node_2_1.data.sensors;
 zef.imaging_method = zef.dataBank.tree.node_2_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_2_1.data.source_interpolation_ind;
 
-zef.measurements = zef.L(:,3*(rand_data_point-1)+rand_data_dir);
+zef.measurements = rand_data_dir(1)*zef.L(:,3*(rand_data_point-1)+1)+rand_data_dir(2)*zef.L(:,3*(rand_data_point-1)+2)+rand_data_dir(3)*zef.L(:,3*(rand_data_point-1)+3);
 zef.measurements = zef.measurements + 10.^(-snr_vec(snr_ind)/20)*max(abs(zef.measurements))*randn(size(zef.measurements));
 zef.measurements = zef.measurements.*blackmanharris(zef.inv_sampling_frequency)';
 zef.resection_points = zef.source_positions(rand_data_point,:);
@@ -207,7 +207,7 @@ zef.sensors = zef.dataBank.tree.node_3_1.data.sensors;
 zef.imaging_method = zef.dataBank.tree.node_3_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_3_1.data.source_interpolation_ind;
 
-zef.measurements = zef.L(:,3*(rand_data_point-1)+rand_data_dir);
+zef.measurements = rand_data_dir(1)*zef.L(:,3*(rand_data_point-1)+1)+rand_data_dir(2)*zef.L(:,3*(rand_data_point-1)+2)+rand_data_dir(3)*zef.L(:,3*(rand_data_point-1)+3);
 zef.measurements = zef.measurements + 10.^(-snr_vec(snr_ind)/20)*max(abs(zef.measurements))*randn(size(zef.measurements));
 zef.measurements = zef.measurements.*blackmanharris(zef.inv_sampling_frequency)';
 zef.resection_points = zef.source_positions(rand_data_point,:);
