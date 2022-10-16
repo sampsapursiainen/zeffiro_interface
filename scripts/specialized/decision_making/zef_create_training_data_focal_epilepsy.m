@@ -284,7 +284,7 @@ eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;
 
-zef_decision_script_perpepi_example;
+zef_decision_script_focal_epilepsy;
 
 training_data.data_points{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:);
 training_data.max_points{data_ind}{snr_ind} = z_max_points;
