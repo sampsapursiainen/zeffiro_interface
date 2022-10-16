@@ -405,7 +405,7 @@ progress_threshold = 1/500;
 
             h_caller_file_name.String = ['File: ' caller_file_name];
 
-            output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Ready; ' progress_bar_ready_text '; Total time; ' sprintf('%15.20f',restart_time) ';'];
+            output_line = ['Task ID; ' num2str(task_id) '; Progress; ' num2str(round(100*progress_value(:)')) '; File; ' caller_file_name '; Message; ' progress_bar_text '; Workspace size; ' num2str(var_1) '; Task time; ' num2str(var_2) '; CPU usage; ' num2str(var_3) '; Ready; ' progress_bar_ready_text '; Total time; ' sprintf('%g',86400*(now-restart_time)) ';'];
 
             if use_log
 
