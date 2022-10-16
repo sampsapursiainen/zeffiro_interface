@@ -2,6 +2,9 @@
 frame_number = 1; 
 tol_val = 1e-6;
 cred_val = 0.9;
+cred_val = 0.9*ones(27,1); 
+cred_val([9 18 27]) = 0.01;
+
 max_iter = 1000;
 
 z_inverse_results = cell(0);

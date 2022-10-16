@@ -25,6 +25,4 @@ while  and(k < n_clusters, isequal(length(unique(index_vec)),k+1))
 
 end
 
-GMModel = fitgmdist(rec_points,max(index_vec),'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec,'MaxIter',max_iter);
-
 end
