@@ -11,9 +11,9 @@ k = 0;
 
 while  and(k < n_clusters, isequal(length(unique(index_vec)),k+1))
     k = k+1;
-    GMModel_aux = fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec,'MaxIter',max_iter);
+    GMModel= fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec,'MaxIter',max_iter);
     
-    [index_vec, ~,~, ~, MahalanobisD]=cluster(GMModel_aux, rec_points);
+    [index_vec, ~,~, ~, MahalanobisD]=cluster(GMModel, rec_points);
     ind = [1:size(MahalanobisD,1)]';
                 for kk = 1:k
                     aux_vec = MahalanobisD(:,kk);
