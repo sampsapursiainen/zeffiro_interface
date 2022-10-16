@@ -36,7 +36,7 @@ end
 
 z_mean_point = mean(z_max_points);
 
-I_aux = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
+[I_aux,~,GMModel] = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
 [~,max_ind] = max(accumarray(I_aux,ones(size(I_aux))));
 J_aux = find(I_aux==max_ind);
 z_cluster_mean = mean(z_max_points(J_aux,:),1);
