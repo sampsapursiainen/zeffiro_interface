@@ -1,9 +1,4 @@
-project_file_name = 'p1_scaled_normal.mat';
-folder_name = [fileparts(mfilename('fullpath')) filesep 'data'];
-training_data_size = 50; 
 snr_val = 10; 
-
-project_file_name_full = [folder_name filesep project_file_name];
 
 zef_start_dataBank;
        
@@ -15,8 +10,6 @@ zef.imaging_method = zef.dataBank.tree.node_1_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_1_1.data.source_interpolation_ind;
 
 zef.measurements = zef.dataBank.tree.node_1_2.data.measurements;
-
-zef.resection_points = zef.source_positions(rand_data_point,:);
 
 zef.inv_snr = snr_vec(snr_ind);
 
@@ -75,13 +68,22 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_val);
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_1_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_8.data.reconstruction_information = zef.reconstruction_information;
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_1_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_1_2_8.data.reconstruction_information = zef.reconstruction_information;
+zef.dataBank.tree.node_1_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_9.data.reconstruction_information = zef.reconstruction_information;
 
 %**************************************
 
@@ -93,8 +95,6 @@ zef.imaging_method = zef.dataBank.tree.node_2_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_2_1.data.source_interpolation_ind;
 
 zef.measurements = zef.dataBank.tree.node_2_2.data.measurements;
-
-zef.resection_points = zef.source_positions(rand_data_point,:);
 
 %MNE
 zef_minimum_norm_estimation;
@@ -151,13 +151,23 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_val);
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_2_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_8.data.reconstruction_information = zef.reconstruction_information;
+
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_2_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_2_2_8.data.reconstruction_information = zef.reconstruction_information;
+zef.dataBank.tree.node_2_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_9.data.reconstruction_information = zef.reconstruction_information;
 
 %**************************************
 
@@ -169,8 +179,6 @@ zef.imaging_method = zef.dataBank.tree.node_3_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_3_1.data.source_interpolation_ind;
 
 zef.measurements = zef.dataBank.tree.node_3_2.data.measurements;
-
-zef.resection_points = zef.source_positions(rand_data_point,:);
 
 %MNE
 zef_minimum_norm_estimation;
@@ -227,13 +235,19 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_val);
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_3_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_8.data.reconstruction_information = zef.reconstruction_information;
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_3_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_3_2_8.data.reconstruction_information = zef.reconstruction_information;
-
-
-
+zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;

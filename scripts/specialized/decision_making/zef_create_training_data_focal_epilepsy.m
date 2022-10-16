@@ -19,7 +19,13 @@ for snr_ind = 1 : length(snr_vec)
     
 waitbar_counter = waitbar_counter + 1; 
 zef_waitbar(waitbar_counter/(training_data_size*length(snr_vec)),h_waitbar,'Creating training dataset.');
-    
+ 
+rand_data_point = randperm(size(zef.source_positions,2)); 
+rand_data_point = rand_data_point(1);
+rand_data_dir = randn(3,1);
+rand_data_dir = rand_data_dir/norm(rand_data_dir,2);
+
+
 %EEG
 zef.L =  zef.dataBank.tree.node_1_1.data.L;
 zef.source_positions = zef.dataBank.tree.node_1_1.data.source_positions;
@@ -27,10 +33,6 @@ zef.sensors = zef.dataBank.tree.node_1_1.data.sensors;
 zef.imaging_method = zef.dataBank.tree.node_1_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_1_1.data.source_interpolation_ind;
 
-rand_data_point = randperm(size(zef.source_positions,2)); 
-rand_data_point = rand_data_point(1);
-rand_data_dir = randn(3,1);
-rand_data_dir = rand_data_dir/norm(rand_data_dir,2);
 zef.measurements = rand_data_dir(1)*zef.L(:,3*(rand_data_point-1)+1)+rand_data_dir(2)*zef.L(:,3*(rand_data_point-1)+2)+rand_data_dir(3)*zef.L(:,3*(rand_data_point-1)+3);
 zef.measurements = zef.measurements + 10.^(-snr_vec(snr_ind)/20)*max(abs(zef.measurements))*randn(size(zef.measurements));
 zef.measurements = zef.measurements.*blackmanharris(zef.inv_sampling_frequency)';
@@ -93,13 +95,22 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_1_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_8.data.reconstruction_information = zef.reconstruction_information;
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_1_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_1_2_8.data.reconstruction_information = zef.reconstruction_information;
+zef.dataBank.tree.node_1_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_9.data.reconstruction_information = zef.reconstruction_information;
 
 %**************************************
 
@@ -110,10 +121,6 @@ zef.sensors = zef.dataBank.tree.node_2_1.data.sensors;
 zef.imaging_method = zef.dataBank.tree.node_2_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_2_1.data.source_interpolation_ind;
 
-rand_data_point = randperm(size(zef.source_positions,2)); 
-rand_data_point = rand_data_point(1);
-rand_data_dir = randperm(3); 
-rand_data_dir = rand_data_dir(1); 
 zef.measurements = zef.L(:,3*(rand_data_point-1)+rand_data_dir);
 zef.measurements = zef.measurements + 10.^(-snr_vec(snr_ind)/20)*max(abs(zef.measurements))*randn(size(zef.measurements));
 zef.measurements = zef.measurements.*blackmanharris(zef.inv_sampling_frequency)';
@@ -174,13 +181,22 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_2_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_8.data.reconstruction_information = zef.reconstruction_information;
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_2_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_2_2_8.data.reconstruction_information = zef.reconstruction_information;
+zef.dataBank.tree.node_2_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_9.data.reconstruction_information = zef.reconstruction_information;
 
 %**************************************
 
@@ -191,10 +207,6 @@ zef.sensors = zef.dataBank.tree.node_3_1.data.sensors;
 zef.imaging_method = zef.dataBank.tree.node_3_1.data.imaging_method;
 zef.source_interpolation_ind = zef.dataBank.tree.node_3_1.data.source_interpolation_ind;
 
-rand_data_point = randperm(size(zef.source_positions,2)); 
-rand_data_point = rand_data_point(1);
-rand_data_dir = randperm(3); 
-rand_data_dir = rand_data_dir(1); 
 zef.measurements = zef.L(:,3*(rand_data_point-1)+rand_data_dir);
 zef.measurements = zef.measurements + 10.^(-snr_vec(snr_ind)/20)*max(abs(zef.measurements))*randn(size(zef.measurements));
 zef.measurements = zef.measurements.*blackmanharris(zef.inv_sampling_frequency)';
@@ -255,16 +267,27 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_7.data.reconstruction_information = zef.reconstruction_information;
 
+%IAS-dSPM
+ias_map_estimation;
+zef.h_ias_type.Value = 2;
+zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
+zef.h_ias_n_map_iterations.String = '5';
+eval(zef.h_ias_start.Callback);
+zef.dataBank.tree.node_3_2_8.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_8.data.reconstruction_information = zef.reconstruction_information;
+
 %dSPM
 zef_minimum_norm_estimation;
 zef.h_mne_prior.Value = 2;
 zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
-zef.dataBank.tree.node_3_2_8.data.reconstruction = zef.reconstruction;
-zef.dataBank.tree.node_3_2_8.data.reconstruction_information = zef.reconstruction_information;
+zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;
 
 zef_decision_script_perpepi_example;
 
+training_data.data_points{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:);
+training_data.max_points{data_ind}{snr_ind} = z_max_points;
 training_data.table_data{data_ind}{snr_ind} = h_t.Data;
 training_data.cluster_index_data{data_ind}{snr_ind} = J_aux;
 

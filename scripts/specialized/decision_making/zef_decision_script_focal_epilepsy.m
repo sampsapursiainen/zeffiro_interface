@@ -1,6 +1,6 @@
 % Calculates the mean of the 50 rec of the project file
 frame_number = 1; 
-tol_val = 1e-12;
+tol_val = 1e-6;
 cred_val = 0.9;
 max_iter = 1000;
 
@@ -90,7 +90,6 @@ result_cell = [z_inverse_info(I,:) mat2cell(dist_vec(I),ones(length(z_inverse_re
 result_cell = [{'none'} {'Cluster Centre'} {0} {dist_avg_resection} {avg_radius}; result_cell];
 
 h_f = uifigure('Visible',zef.use_display); 
-clf;
 h_f.Name = 'ZEFFIRO Interface: Clustering results';
 h_f.Units = 'normalized';
 h_t = uitable('Parent',h_f); 
