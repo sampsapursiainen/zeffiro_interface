@@ -4,8 +4,8 @@ index_vec = ones(size(rec_points,1),1);
 if isequal(length(cred_val),1)
 cred_val = cred_val*ones(size(index_vec));
 end
-    r_squared = chi2inv(cred_val,5);
 
+    r_squared = chi2inv(cred_val,5);
 
 k = 0;
 

@@ -1,9 +1,17 @@
 % Calculates the mean of the 50 rec of the project file
+training_data_file_name = 'training_dataset_p1_10dB.mat';
+training_data = [];
+load([fileparts(mfilename('fullpath')) filesep 'data' filesep training_data_file_name]);
+if not(isempty(training_data))
+   zef_credibility_focal_epilepsy; 
+  %cred_val = 0.7.*credibility_vec(:);
+   cred_val = 0.7*ones(27,1);
+else
+    cred_val = 0.9; 
+end
 frame_number = 1; 
 tol_val = 1e-6;
-cred_val = 0.9;
-cred_val = 0.9*ones(27,1); 
-cred_val([9 18 27]) = 0.01;
+
 
 max_iter = 1000;
 
@@ -29,6 +37,7 @@ for k=1:numel(fn)
     end
 end
 
+
 z_max_points = zeros(length(z_inverse_results),3);
 
 for k = 1 : length(z_inverse_results)
@@ -39,7 +48,7 @@ end
 
 z_mean_point = mean(z_max_points);
 
-[I_aux,~,GMModel] = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
+[I_aux,MahalanobisD,GMModel] = zef_find_clusters(size(z_max_points,1),z_max_points,tol_val,cred_val,max_iter);
 [~,max_ind] = max(accumarray(I_aux,ones(size(I_aux))));
 J_aux = find(I_aux==max_ind);
 z_cluster_mean = mean(z_max_points(J_aux,:),1);
