@@ -1,14 +1,16 @@
 file_name = 'training_dataset_p1_10dB.mat';
-project_file_name = 'p1_scaled_normal.mat';
 folder_name = [fileparts(mfilename('fullpath')) filesep 'data'];
-training_data_size = 50; 
-snr_vec = [10]; 
+training_data_size = 1; 
+snr_vec = [10];
+frame_number = 1;
 
 training_data = struct;
 file_name = [folder_name filesep file_name];
-project_file_name = [folder_name filesep project_file_name];
 
+if not(exist('zef','var'))
+project_file_name = [folder_name filesep project_file_name];
 zef = zeffiro_interface('start_mode','nodisplay','open_project',project_file_name);
+end
 zef_start_dataBank;
 
 waitbar_counter = 0; 
@@ -24,7 +26,6 @@ rand_data_point = randperm(size(zef.source_positions,2));
 rand_data_point = rand_data_point(1);
 rand_data_dir = randn(3,1);
 rand_data_dir = rand_data_dir/norm(rand_data_dir,2);
-
 
 %EEG
 zef.L =  zef.dataBank.tree.node_1_1.data.L;
@@ -284,12 +285,33 @@ eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;
 
-zef_decision_script_focal_epilepsy;
+z_inverse_results = cell(0);
+z_inverse_info = cell(0);
 
-training_data.data_points{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:);
-training_data.max_points{data_ind}{snr_ind} = z_max_points;
-training_data.table_data{data_ind}{snr_ind} = h_t.Data;
-training_data.cluster_index_data{data_ind}{snr_ind} = J_aux;
+data_tree = zef.dataBank.tree;
+rec_ind = 1;
+
+fn = fieldnames(data_tree);
+for k=1:numel(fn)
+    node = data_tree.(fn{k});
+    if (strcmp(node.type, 'custom'))
+        data_type = node.name;
+    end
+    if (strcmp(node.type, 'reconstruction'))
+        rec_name = node.name;
+        rec = node.data.reconstruction;
+        number_of_frames = size(rec,2);
+        z_inverse_results{rec_ind} = rec{frame_number};
+        z_inverse_info(rec_ind,:) = [{data_type}  {rec_name}];
+        rec_ind = rec_ind + 1;
+    end
+end
+
+training_data.z_inverse_results{data_ind}{snr_ind} = z_inverse_results;
+training_data.z_inverse_info{data_ind}{snr_ind} = z_inverse_info;
+training_data.dipole_positions{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:); 
+training_data.dipole_moments{data_ind}{snr_ind} = rand_data_dir; 
+
 
 end
 end
@@ -297,5 +319,5 @@ end
 training_data.snr_vec = snr_vec;
 
 save(file_name,'training_data','-v7.3');
-zef_close_all
+%zef_close_all
 
