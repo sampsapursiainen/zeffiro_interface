@@ -123,8 +123,8 @@ d_sqrt = sqrt(theta);
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 d_sqrt = gpuArray(d_sqrt);
 end
-L = L_aux.*repmat(d_sqrt',size(L_aux,1),1);
-L = (L'*inv(L*L' + S_mat));
+L = L_aux .* repmat( d_sqrt' , size(L_aux,1), 1);
+L = d_sqrt.*( L' * inv( L * L' + S_mat ) );
 
 if isequal(ias_type,2)
 % MNE
@@ -133,16 +133,20 @@ L = d_sqrt.*L;
 
 elseif isequal(ias_type,2)
 % dSPM
-    aux_vec = sum(L.^2, 2);
-    aux_vec = sqrt(aux_vec);
-    L = d_sqrt.*L./aux_vec(:,ones(size(L,2),1));
+if i == 1
+    dspm_vec = sum(L.^2, 2);
+    dspm_vec = sqrt(dspm_vec);
+end
+    L = L./dspm_vec(:,ones(size(L,2),1));
 
 elseif isequal(ias_type, 3)
 %'sLORETA'
 
-aux_vec = sqrt(sum(L.*L_aux', 2));
-L = d_sqrt.*L./aux_vec(:,ones(size(L,2),1));
+if i == 1 
+sloreta_vec = sqrt(sum(L.*L_aux', 2));
+end
 
+L = L./sloreta_vec(:,ones(size(L,2),1));
 end
 
 z_vec = L*f;
