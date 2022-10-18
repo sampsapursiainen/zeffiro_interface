@@ -17,9 +17,11 @@ end
 
 [index_vec,MahalanobisD,GMModel] = zef_find_clusters(n_clusters,cluster_data,reg_val,cred_val,max_iter,tol_val);
 
-aux_array =  accumarray(index_vec,ones(size(index_vec)));
+aux_array_1 =  accumarray(index_vec,rec_aux(index_vec,1));
+aux_array_2 =  accumarray(index_vec,rec_aux(index_vec,1));
+aux_array_3 =  accumarray(index_vec,rec_aux(index_vec,1));
 
-dipole_moments = repmat(aux_array(1:size(GMModel.mu,1)),1,3).*GMModel.mu(:,4:6);%[aux_array_1 aux_array_2 aux_array_3];
+dipole_moments = [aux_array_1 aux_array_2 aux_array_3];
 
 cluster_centres = GMModel.mu(:,1:3);
 
