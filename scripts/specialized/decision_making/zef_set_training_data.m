@@ -19,10 +19,7 @@ for k=1:numel(fn)
         data_type = node.name;
     end
     if (strcmp(node.type, 'reconstruction'))
-        rec_name = node.name;
-        rec = node.data.reconstruction;
-        number_of_frames = size(rec,2);
-        rec{frame_number} = training_data.z_inverse_results{data_ind}{snr_ind}{rec_ind};
+        zef.dataBank.tree.(fn{k}).data.reconstruction{frame_number} = training_data.z_inverse_results{data_ind}{snr_ind}{rec_ind};
         rec_ind = rec_ind + 1;
     end
 end
