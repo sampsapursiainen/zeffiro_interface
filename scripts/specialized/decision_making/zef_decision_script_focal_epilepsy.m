@@ -145,4 +145,4 @@ plot(h_a,1:length(I),cell2mat(h_t.Data(I,5)),'rs-');
 set(h_a,'ylim',[0 1.05*max(cell2mat(h_t.Data(I,4))+2*deviation_data)])
 set(h_a,'xlim',[1 length(I)])
 pbaspect(h_a,[1 1 1])
-h_legend = legend(h_a,'Distance from centre','68 % credibility','90 % credibility','Distance from resection','Location','NorthWest');
+h_legend = legend(h_a,'Distance to centre','68 % credibility','90 % credibility','Distance to resection','Location','NorthWest');
