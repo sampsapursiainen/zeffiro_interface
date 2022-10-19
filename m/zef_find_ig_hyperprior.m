@@ -55,7 +55,7 @@ if balance_snr
    d_sqrt = sqrt(theta0)*ones(size(L,2),1);
    L_inv = L.*repmat(d_sqrt',size(L,1),1);
    L_inv = d_sqrt.*(L_inv'*(inv(L_inv*L_inv' + S_mat)));
-   sloreta_vec = sqrt(sum(L_inv.*L', 2));
+   sloreta_vec = sqrt(max(0,sum(L_inv.*L', 2)));
    L = L./sloreta_vec';
 if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
