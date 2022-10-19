@@ -148,7 +148,6 @@ end
 
 z_vec = L*f;
 
-
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 z_vec = gather(z_vec);
 end

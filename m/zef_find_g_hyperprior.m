@@ -11,6 +11,7 @@ delta_val = 0.1;
 balance_snr = 1;
 snr_val = snr_val;
 w_param = 0.5;
+balance_param = 0;
 tail_length_db = max(1,tail_length_db);
 
 if length(varargin) > 0
@@ -32,7 +33,7 @@ end
 
 if length(varargin) > 4
     if balance_snr
-w_param = 0.5 - 0.05*(varargin{5}-1);
+balance_param = varargin{5};
     end
 end
 
@@ -41,6 +42,14 @@ if isempty(L)
     snr_vec_limited = snr_vec;
     source_strength = 1e-2;
 else
+    
+    theta0 = zef_find_gaussian_prior(snr_val+balance_param);
+   std_lhood = 10^(-snr_val/20);
+   S_mat = std_lhood^2*eye(size(L,1));
+   d_sqrt = sqrt(theta0)*ones(size(L,2),1);
+   L_inv = L.*repmat(d_sqrt',size(L,1),1);
+   L_inv = d_sqrt.*(L_inv'*(inv(L_inv*L_inv' + S_mat)));
+   sloreta_vec = sqrt(sum(L_inv.*L', 2));
 
      if isequal(normalize_data,'maximum')
 
@@ -48,6 +57,8 @@ else
 else
    source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
      end
+     
+     L = L./sloreta_vec';
 
 if balance_snr
       if isequal(normalize_data,'maximum')

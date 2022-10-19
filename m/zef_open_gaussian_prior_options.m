@@ -15,8 +15,7 @@ zef = rmfield(zef,'fieldnames');
 clear zef_data;
 
 zef.h_plot_hyperprior.ButtonPushedFcn = 'zef_plot_hyperprior';
-zef.h_inv_hyperprior_weight.ItemsData = [1:length(zef.h_inv_hyperprior_weight.Items)];
-zef.h_inv_hyperprior_weight.Value = zef.inv_hyperprior_weight;
+zef.h_inv_hyperprior_weight.Value = num2str(zef.inv_hyperprior_weight);
 zef.h_inv_hyperprior.ItemsData = [1:length(zef.h_inv_hyperprior.Items)];
 zef.h_inv_hyperprior.Value = zef.inv_hyperprior;
 zef.h_inv_hyperprior_tail_length_db.Value = num2str(zef.inv_hyperprior_tail_length_db);

@@ -18,7 +18,7 @@ if not(isfield(zef,'inv_amplitude_db'));
 end;
 
 if not(isfield(zef,'inv_hyperprior_weight'));
-    zef.inv_hyperprior_weight = 1;
+    zef.inv_hyperprior_weight = 0;
 end;
 
 if not(isfield(zef,'inv_evolution_prior'));

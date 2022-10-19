@@ -78,9 +78,7 @@ else
 zef.number_of_frames = 1;
 end
 
-
 [f_data] = zef_getFilteredData(zef);
-
 
 tic;
 for f_ind = 1 : zef.number_of_frames
@@ -136,13 +134,13 @@ if isequal(mne_type,2)
 % dSPM
     aux_vec = sum(L_inv.^2, 2);
     aux_vec = sqrt(aux_vec);
-    L_inv = L_inv./aux_vec(:,ones(size(L_inv,2),1));
+    L_inv = L_inv./aux_vec;
 
 elseif isequal(mne_type, 3)
 %'sLORETA'
 
 aux_vec = sqrt(sum(L_inv.*L', 2));
-L_inv = L_inv./aux_vec(:,ones(size(L_inv,2),1));
+L_inv = L_inv./aux_vec;
 
 end
 
