@@ -11,6 +11,7 @@ options = statset('TolFun',tol_val,'MaxIter',max_iter);
 
 k = 0;
 
+h_waitbar = zef_waitbar(0,'Clustering');
 while  and(k < n_clusters, isequal(length(unique(index_vec)),k+1))
     k = k+1;
     GMModel= fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',reg_val,'Start',index_vec,'Options',options);
@@ -27,6 +28,14 @@ while  and(k < n_clusters, isequal(length(unique(index_vec)),k+1))
                 end
     end
 
+    zef_waitbar(k/n_clusters,h_waitbar,'Clustering.');
+    
 end
+
+if k < n_clusters
+zef_waitbar(1,h_waitbar,'Clustering.');
+end
+
+close(h_waitbar);
 
 end

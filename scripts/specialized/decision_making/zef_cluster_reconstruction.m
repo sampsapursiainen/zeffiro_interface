@@ -1,4 +1,17 @@
-function [cluster_centres, dipole_moments, index_vec, GMModel, MahalanobisD] = zef_cluster_reconstruction(n_clusters, rec_vec, pos_data, cred_val, n_dynamic_levels, reg_val, max_iter,tol_val)
+function [cluster_centres, dipole_moments, index_vec, GMModel, MahalanobisD] = zef_cluster_reconstruction(zef)
+
+n_clusters = zef.GMModel.max_n_clusters; 
+if iscell(zef.reconstruction)
+rec_vec = zef.reconstruction{zef.GMModel.frame_number};
+else 
+rec_vec = zef.reconstruction;
+end
+pos_data = zef.source_positions; 
+cred_val = zef.GMModel.credibility; 
+n_dynamic_levels = zef.GMModel.n_dynamic_levels;
+reg_val =  zef.GMModel.reg_param; 
+max_iter = zef.GMModel.max_n_iter; 
+tol_val = zef.GMModel.tol_val;
 
 cluster_data = [];
 rec_aux = reshape(rec_vec,3,numel(rec_vec)/3)';

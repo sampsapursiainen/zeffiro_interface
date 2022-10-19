@@ -38,8 +38,15 @@ if isempty(L)
     snr_vec_limited = snr_vec;
     source_strength = 1e-2;
     
+else
+   
+   if isequal(normalize_data,'maximum')
+   source_strength = mean(1./((max(abs(L))').^w_param));
    else
-    
+   source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
+   end
+
+   if balance_snr
    theta0 = zef_find_gaussian_prior(snr_val+balance_param);
    std_lhood = 10^(-snr_val/20);
    S_mat = std_lhood^2*eye(size(L,1));
@@ -47,16 +54,7 @@ if isempty(L)
    L_inv = L.*repmat(d_sqrt',size(L,1),1);
    L_inv = d_sqrt.*(L_inv'*(inv(L_inv*L_inv' + S_mat)));
    sloreta_vec = sqrt(sum(L_inv.*L', 2));
-   
-   if isequal(normalize_data,'maximum')
-   source_strength = mean(1./((max(abs(L))').^w_param));
-   else
-   source_strength = mean(1./(sqrt(sum(L.^2)').^w_param));
-   end
-   
    L = L./sloreta_vec';
-
-   if balance_snr
    if isequal(normalize_data,'maximum')
    signal_strength = (size(L,2)*(max(abs(L))')./sum(max(abs(L))')).^(w_param);
    else
@@ -69,7 +67,7 @@ if isempty(L)
 
    snr_vec_limited = max(1,snr_vec);
 
-   end
+end
 
    relative_noise_std = 10.^(-snr_vec_limited/20);
    scale_param = source_strength.^2 .* relative_noise_std.^2 ./ (source_space_size);

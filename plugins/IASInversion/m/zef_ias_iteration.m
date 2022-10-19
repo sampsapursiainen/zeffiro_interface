@@ -127,23 +127,20 @@ L = L_aux .* repmat( d_sqrt' , size(L_aux,1), 1);
 L = d_sqrt.*( L' * inv( L * L' + S_mat ) );
 
 if isequal(ias_type,2)
-% MNE
-
-L = d_sqrt.*L;
-
-elseif isequal(ias_type,2)
-% dSPM
-
-    dspm_vec = sum(L.^2, 2);
-    dspm_vec = sqrt(dspm_vec);
-    
-    L = L./dspm_vec(:,ones(size(L,2),1));
-
-elseif isequal(ias_type, 3)
-%'sLORETA'
+% Standardization each step
 
 sloreta_vec = sqrt(sum(L.*L_aux', 2));
 L = L./sloreta_vec(:,ones(size(L,2),1));
+
+
+elseif isequal(ias_type, 3)
+% Standardization last step
+
+if isequal(i,n_ias_map_iter)
+sloreta_vec = sqrt(sum(L.*L_aux', 2));
+L = L./sloreta_vec(:,ones(size(L,2),1));
+end
+
 end
 
 z_vec = L*f;

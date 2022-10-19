@@ -1,4 +1,4 @@
-function [z, info] = zef_mne(zef,data_mode)
+function [z, info] = zef_find_mne_reconstruction(zef,data_mode)
 
 if nargin < 2
     data_mode = 'filtered';
@@ -61,7 +61,7 @@ else
     balance_spatially = 0;
 end
 
-[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.mne_normalize_data'),0);
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.mne_normalize_data'),balance_spatially);
 
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 L = gpuArray(L);
