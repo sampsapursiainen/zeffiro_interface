@@ -3,7 +3,38 @@ training_data_file_name = 'training_dataset_p1_10dB.mat';
 training_data = [];
 load([fileparts(mfilename('fullpath')) filesep 'data' filesep training_data_file_name]);
 
-cred_val = 0.6827;
+%cred_val = 0.6827;
+
+cred_val = [         0.9600
+    0.9400
+    0.9400
+    1.0000
+    1.0000
+    1.0000
+    0.9800
+    0.8600
+    1.0000
+    0.9200
+    1.0000
+    1.0000
+    1.0000
+    0.9000
+    1.0000
+    1.0000
+    0.8400
+    1.0000
+    1.0000
+    0.9800
+    0.9000
+    1.0000
+    1.0000
+    1.0000
+    0.9800
+    0.7200
+    0.8200];
+
+cred_val = [cred_val ;  cred_val];
+
 clustering_mode = 'ClusterCentres';%'MaxPoints'
 frame_number = 1; 
 tol_val = 1e-6;

@@ -133,19 +133,16 @@ L = d_sqrt.*L;
 
 elseif isequal(ias_type,2)
 % dSPM
-if i == 1
+
     dspm_vec = sum(L.^2, 2);
     dspm_vec = sqrt(dspm_vec);
-end
+    
     L = L./dspm_vec(:,ones(size(L,2),1));
 
 elseif isequal(ias_type, 3)
 %'sLORETA'
 
-if i == 1 
 sloreta_vec = sqrt(sum(L.*L_aux', 2));
-end
-
 L = L./sloreta_vec(:,ones(size(L,2),1));
 end
 
