@@ -45,7 +45,7 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
             if not(noise_db == 0)
 
-                zef.measurements(:,3*(i-1)+j) = 10^(-noise_db/20)*randn(size(zef.measurements,1),1) + zef.measurements(:,3*(i-1)+j);
+                zef.measurements(:,3*(i-1)+j) = 10^(noise_db/20)*randn(size(zef.measurements,1),1) + zef.measurements(:,3*(i-1)+j);
 
             end
 
