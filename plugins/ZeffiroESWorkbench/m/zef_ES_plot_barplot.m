@@ -1,33 +1,38 @@
-function zef = zef_ES_plot_barplot(zef)
+function zef_ES_plot_barplot(zef, varargin)
+switch nargin
+    case 0
+        zef = evalin('base','zef');
+    case 1
+        [sr, sc] = zef_ES_objective_function(zef);
+        y_ES = zef.y_ES_interval.y_ES{sr,sc};
+    case 3
+        if nargin >= 3
+            vec = zef_ES_table(zef);
+            y_ES = vec.("ES Channels"){varargin{2}, varargin{3}};
+        end
+    otherwise
+        error('Too many input arguments.')
+end
+%% figure declaration and positioning
+h_fig = figure('Name','ZEFFIRO Interface: ES electrode potentials', 'NumberTitle','off', ...
+    'ToolBar','figure','MenuBar','none');
+try
+    win_temp = findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*');
+    win_temp = get(win_temp(1),'Position');
+    h_fig.Position(1) = win_temp(1)+win_temp(3);
+    h_fig.Position(2) = win_temp(2)+(win_temp(4)-h_fig.Position(4));
+    h_fig.Position(3) = 750;
+    h_fig.Position(4) = 250;
+catch
+    movegui(h_fig,'center')
+end
 
- [sr, sc] = zef_ES_objective_function(zef);
-                        if isempty(sr)
-                            sr = 1;
-                        end
-                        if isempty(sc)
-                            sc = 1;
-                        end
 
-        y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-
-    h_f = figure('Name','ZEFFIRO Interface: ES electrode potentials','NumberTitle','off', ...
-        'ToolBar','figure','MenuBar','none');
-    try
-        win_temp = findobj('type','figure','name','ZEFFIRO Interface: ES error chart');
-        win_temp = get(win_temp(1),'Position');
-    catch
-        win_temp = [10 800 550 150];
-    end
-    h_f.Position(1) = win_temp(1)+win_temp(3);
-    h_f.Position(2) = win_temp(2)+(win_temp(4)-h_f.Position(4));
-    h_f.Position(3) = 750;
-    h_f.Position(4) = 250;
-    sgtitle(['[' num2str(sr) ',' num2str(sc) ']']);
-
+%%
 h_barplot_ES = bar(y_ES,0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
 h_barplot_ES.LineWidth = 0.1;
-pbaspect([4 1 1]);
+pbaspect([2 1 1]);
 
 h_axes = gca;
 h_axes.XLabel.String = 'Electrode channel';
@@ -41,11 +46,11 @@ h_axes.YLabel.FontWeight = 'bold';
 h_axes.XGrid = 'off';
 h_axes.YGrid = 'on';
 
-max_current_montage = eval('zef.ES_total_max_current');
-max_current_channel = eval('zef.ES_max_current_channel');
+max_current_montage = zef.ES_total_max_current;
+max_current_channel = zef.ES_max_current_channel;
 
 h_axes.XLim = [0 length(y_ES)];
-% h_axes.YLim = [-max_current max_current]*1.05;
+h_axes.YLim = [-max_current_channel max_current_channel]*1.05;
 
 if max(abs(y_ES)) == 0
     p_max = 1;
@@ -69,8 +74,8 @@ plot(xlim,[-max_current_montage -max_current_montage],'LineWidth',1.0,'Color',[1
 plot(xlim,[-max_current_channel -max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
 hold off;
 
-h_f.Visible = zef.use_display;
+h_fig.Visible = zef.use_display;
 
-zef.h_ES_barplot = h_f;
+zef.h_ES_barplot = h_fig;
 %h_barplot_ES = [h_axes; h_barplot_ES];
 end

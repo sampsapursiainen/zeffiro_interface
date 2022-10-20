@@ -1,8 +1,8 @@
-function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(zef)
-
-
-if nargin == 0 
-zef = evalin('base','zef');
+function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
+if nargin == 0
+    zef = evalin('base','zef');
+else
+    zef = varargin{1};
 end
 
 %% clear Axes handle && ES_Colorbar
@@ -20,8 +20,8 @@ try %#ok<*TRYNC>
 end
 %% Variables and parameter setup
 
-        [sr, sc] = zef_ES_objective_function(zef);
-        y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+[sr, sc] = zef_ES_objective_function(zef);
+y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
 
 zef = zef_process_meshes(zef,zef.explode_everything);
 %% Sensors attachment
@@ -171,7 +171,7 @@ ES_colormap_vec(index_aux,:);
 h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
-    
+
     if not(eval('zef.h_ES_2D_electrode_map.Value'))
         h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
     else
@@ -180,7 +180,7 @@ for i = 1:size(sensors,1)
         h_current_ES(i) = surf(sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*(max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3))))) + X_s, sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*((max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3)))))) + Y_s, max(sensors(:,3)) + Z_s);
         view(0,90)
     end
-    
+
     set(h_current_ES(i),'Tag','sensor');
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');

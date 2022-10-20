@@ -4,15 +4,15 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-zef_data.L_aux                      = eval('zef.L');
-zef_data.L_aux                      = zef_data.L_aux';
-zef_data.source_positions           = eval('zef.inv_synth_source(:,1:3)');
-zef_data.source_directions          = eval('zef.inv_synth_source(:,4:6)');
-zef_data.total_max_current          = eval('zef.ES_total_max_current');
-zef_data.max_current_channel        = eval('zef.ES_max_current_channel');
-zef_data.search_method              = eval('zef.ES_search_method');
-zef_data.active_electrodes          = eval('zef.ES_active_electrodes');
-zef_data.source_positions_aux       = eval('zef.source_positions');
+zef_data.L_aux                       = eval('zef.L');
+zef_data.L_aux = zef_data.L_aux';
+zef_data.source_positions            = eval('zef.inv_synth_source(:,1:3)');
+zef_data.source_directions           = eval('zef.inv_synth_source(:,4:6)');
+zef_data.total_max_current = eval('zef.ES_total_max_current');
+zef_data.max_current_channel = eval('zef.ES_max_current_channel');
+zef_data.search_method = eval('zef.ES_search_method');
+zef_data.active_electrodes = eval('zef.ES_active_electrodes');
+zef_data.source_positions_aux = eval('zef.source_positions');
 zef_data.source_density = eval('zef.ES_source_density');
 zef_data.inv_synth_source = eval('zef.inv_synth_source');
 zef_data.relative_weight_nnz = eval('zef.ES_relative_weight_nnz');
@@ -117,9 +117,9 @@ else
     lattice_size = 1;
 end
 for i = 1 : lattice_size
-    j= 0;
+    j = 0;
     while  j <  lattice_size
-        p_ind_max = min(lattice_size-j,n_parallel);
+        p_ind_max = min(lattice_size-j, n_parallel);
         parfor parallel_ind = 1 : p_ind_max %parfor
 
             if getappdata(wait_bar_temp,'canceling')

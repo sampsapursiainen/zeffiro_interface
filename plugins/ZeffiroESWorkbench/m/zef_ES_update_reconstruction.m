@@ -1,4 +1,4 @@
-function zef = zef_ES_update_reconstruction(zef,sr,sc)
+function zef = zef_ES_update_reconstruction
 switch nargin
     case 0
         zef = evalin('base','zef');
@@ -14,7 +14,7 @@ try %#ok<*TRYNC>
 end
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end
