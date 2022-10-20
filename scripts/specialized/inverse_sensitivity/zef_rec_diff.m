@@ -1,4 +1,4 @@
-function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, noise_db)
+function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_db, diff_type)
 
     arguments
 
@@ -7,6 +7,8 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
         inverse_method (1,1) function_handle
 
         noise_db (1,1) double { mustBeNonpositive } = 0
+
+        diff_type (1,1) string { mustBeMember(diff_type, ["L2", "minabs"]) } = "L2"
 
     end
 
@@ -43,7 +45,7 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
 
             if not(noise_db == 0)
 
-                zef.measurements(:,3*(i-1)+j) = 10^(-noise_db/20)*randn(size(zef.measurements,1),1) + zef.measurements(:,3*(i-1)+j);
+                zef.measurements(:,3*(i-1)+j) = 10^(noise_db/20)*randn(size(zef.measurements,1),1) + zef.measurements(:,3*(i-1)+j);
 
             end
 
@@ -80,7 +82,21 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
             dir_vec_source = dir_mat(:,j);
             dir_vec_source = dir_vec_source/norm(dir_vec_source,2);
 
-            dist_vec(3*(i-1) + j) = (1/sqrt(3))*sqrt(sum((zef.source_positions(i,:) - zef.source_positions(I,:)).^2,2));
+            pos_diffs = zef.source_positions(i,:) - zef.source_positions(I,:);
+
+            if diff_type == "L2"
+
+                dist_vec(3*(i-1) + j) = (1/sqrt(3)) * sqrt(sum(pos_diffs.^2,2));
+
+            elseif diff_type == "minabs"
+
+                dist_vec(3*(i-1) + j) = (1/sqrt(3)) * min(abs(pos_diffs), [], 2);
+
+            else
+
+                error("Unknown comparison type in zef_rec_diff. Aborting...")
+
+            end
 
             angle_vec(3*(i-1) + j) = acosd(dot(dir_vec_rec,dir_vec_source));
 
