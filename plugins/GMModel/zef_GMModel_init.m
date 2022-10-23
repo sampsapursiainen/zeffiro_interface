@@ -21,7 +21,7 @@ zef.GMModel.n_dynamic_levels = 4;
 end
 
 if not(isfield(zef.GMModel,'reg_param'))
-zef.GMModel.reg_param = 1e-5;
+zef.GMModel.reg_param = 1e-4;
 end
 
 if not(isfield(zef.GMModel,'max_n_iter'))
@@ -29,7 +29,7 @@ zef.GMModel.max_n_iter = 1000;
 end
 
 if not(isfield(zef.GMModel,'tol_val'))
-zef.GMModel.tol_val = 1E-3;
+zef.GMModel.tol_val = 1E-5;
 end
 
 zef.GMModel.h_max_n_clusters.String = num2str(zef.GMModel.max_n_clusters);

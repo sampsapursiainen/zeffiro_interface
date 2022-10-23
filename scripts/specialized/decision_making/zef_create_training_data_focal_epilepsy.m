@@ -1,14 +1,9 @@
-file_name = 'training_dataset_p1_10dB.mat';
-folder_name = [fileparts(mfilename('fullpath')) filesep 'data'];
-training_data_size = 1; 
-snr_vec = [10];
-frame_number = 1;
+%file_name = 'training_dataset_p1_10dB.mat';
+zef_parameters_focal_epilepsy;
 
 training_data = struct;
-file_name = [folder_name filesep file_name];
 
 if not(exist('zef','var'))
-project_file_name = [folder_name filesep project_file_name];
 zef = zeffiro_interface('start_mode','nodisplay','open_project',project_file_name);
 end
 zef_start_dataBank;
@@ -78,7 +73,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_1_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -87,7 +82,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -96,7 +91,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -164,7 +159,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_1_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -173,7 +168,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -182,7 +177,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -250,7 +245,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_3_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -259,7 +254,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -268,7 +263,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_vec(snr_ind));
@@ -285,27 +280,7 @@ eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;
 
-z_inverse_results = cell(0);
-z_inverse_info = cell(0);
-
-data_tree = zef.dataBank.tree;
-rec_ind = 1;
-
-fn = fieldnames(data_tree);
-for k=1:numel(fn)
-    node = data_tree.(fn{k});
-    if (strcmp(node.type, 'custom'))
-        data_type = node.name;
-    end
-    if (strcmp(node.type, 'reconstruction'))
-        rec_name = node.name;
-        rec = node.data.reconstruction;
-        number_of_frames = size(rec,2);
-        z_inverse_results{rec_ind} = rec{frame_number};
-        z_inverse_info(rec_ind,:) = [{data_type}  {rec_name}];
-        rec_ind = rec_ind + 1;
-    end
-end
+[z_inverse_results,z_inverse_info] = zef_dataBank_get_reconstructions(zef,frame_number);
 
 training_data.z_inverse_results{data_ind}{snr_ind} = z_inverse_results;
 training_data.z_inverse_info{data_ind}{snr_ind} = z_inverse_info;
@@ -318,6 +293,6 @@ end
 
 training_data.snr_vec = snr_vec;
 
-save(file_name,'training_data','-v7.3');
+save(training_data_file_name,'training_data','-v7.3');
 %zef_close_all
 

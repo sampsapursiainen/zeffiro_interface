@@ -1,4 +1,4 @@
-snr_val = 10; 
+zef_parameters_focal_epilepsy;
 
 zef_start_dataBank;
        
@@ -50,7 +50,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_1_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -59,7 +59,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -68,7 +68,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_1_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -133,7 +133,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_1_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -142,7 +142,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -151,7 +151,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_2_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -217,7 +217,7 @@ eval(zef.beamformer.StartButton.ButtonPushedFcn);
 zef.dataBank.tree.node_3_2_5.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_5.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-MNE
+%IAS
 ias_map_estimation;
 zef.h_ias_type.Value = 1;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -226,7 +226,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_6.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_6.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-sLORETA
+%Standardized IAS (Last step)
 ias_map_estimation;
 zef.h_ias_type.Value = 3;
 zef.h_ias_snr.String = num2str(snr_val);
@@ -235,7 +235,7 @@ eval(zef.h_ias_start.Callback);
 zef.dataBank.tree.node_3_2_7.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_7.data.reconstruction_information = zef.reconstruction_information;
 
-%IAS-dSPM
+%Standardized IAS (Each step)
 ias_map_estimation;
 zef.h_ias_type.Value = 2;
 zef.h_ias_snr.String = num2str(snr_val);

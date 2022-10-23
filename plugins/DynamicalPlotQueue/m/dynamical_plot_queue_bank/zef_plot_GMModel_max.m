@@ -25,7 +25,7 @@ Aux_arr = sqrtm(GMModel.Param.Sigma(1:3,1:3,i))*[X_0(:) Y_0(:) Z_0(:)]';
 X = reshape(Aux_arr(1,:),size(X_0));
 Y = reshape(Aux_arr(2,:),size(Y_0));
 Z = reshape(Aux_arr(3,:),size(Z_0));
-p = GMModel.Param.mu(i,1:3);
+p = GMModel.cluster_centres(i,1:3);
 h_surf = surf(h_axes,X+p(1),Y+p(2),Z+p(3));
 set(h_surf,'edgecolor','none','facecolor',color_val);
 set(h_surf,'Tag','additional: Gaussian mixture model');    
