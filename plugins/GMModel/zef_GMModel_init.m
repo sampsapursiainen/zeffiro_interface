@@ -13,7 +13,7 @@ zef.GMModel.max_n_clusters = 20;
 end
 
 if not(isfield(zef.GMModel,'credibility'))
-zef.GMModel.credibility = 0.91;
+zef.GMModel.credibility = 0.90;
 end
 
 if not(isfield(zef.GMModel,'n_dynamic_levels'))
