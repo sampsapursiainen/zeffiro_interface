@@ -132,14 +132,30 @@ if isequal(ias_type,2)
 sloreta_vec = sqrt(sum(L.*L_aux', 2));
 L = L./sloreta_vec(:,ones(size(L,2),1));
 
+elseif isequal(ias_type,2)
+% sLORETA
 
-elseif isequal(ias_type, 3)
+if i == n_ias_map_iter
+sloreta_vec = sqrt(sum(L.*L_aux', 2));
+L = L./sloreta_vec(:,ones(size(L,2),1));
+end
+
+elseif isequal(ias_type, 4)
 % dSPM
 
     dspm_vec = sum(L.^2, 2);
     dspm_vec = sqrt(dspm_vec);
     L = L./dspm_vec;
 
+elseif isequal(ias_type, 5)
+% dSPM
+
+if i == n_ias_map_iter
+    dspm_vec = sum(L.^2, 2);
+    dspm_vec = sqrt(dspm_vec);
+    L = L./dspm_vec;
+end
+    
 end
 
 z_vec = L*f;
