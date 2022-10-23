@@ -16,7 +16,7 @@ n_data = size(training_data.z_inverse_results,2);
 n_snr = size(training_data.z_inverse_results{1},2);
 n_rec = size(training_data.z_inverse_results{1}{1},2);
 
-credibility_data = zeros(2*n_rec,n_snr);
+credibility_data_aux = zeros(2*n_rec,n_snr);
 
 for data_ind = 1 : n_data
 for snr_ind = 1 : n_snr
@@ -30,12 +30,14 @@ zef.resection_points = training_data.dipole_positions{data_ind}{snr_ind};
 zef = zef_dataBank_set_reconstructions(zef,z_inverse_results,frame_number); 
 zef_cluster_reconstructions_focal_epilepsy;
 
-credibility_data(J_aux,snr_ind) = credibility_data(J_aux,snr_ind) + 1;
+credibility_data_aux(J_aux,snr_ind) = credibility_data_aux(J_aux,snr_ind) + 1;
+
+credibility_data_aux/((data_ind-1)*n_snr + snr_ind)
 
 end
 end
 
-credibility_data = credibility_data./(n_data*n_snr);
+credibility_data = credibility_data_aux./(n_data*n_snr);
 
 save(credibility_data_file_name,'credibility_data','-v7.3');
 %zef_close_all

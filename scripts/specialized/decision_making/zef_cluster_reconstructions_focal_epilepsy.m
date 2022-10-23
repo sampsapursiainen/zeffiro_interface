@@ -11,7 +11,7 @@ z_max_points(k,:) = zef_rec_maximizer(z_inverse_results{k},zef.source_positions)
     
 zef.GMModel.max_n_clusters = max_n_clusters;
 zef.GMModel.frame_number = frame_number;
-zef.GMModel.credibility = cred_val;
+zef.GMModel.credibility = cred_val_rec;
 zef.GMModel.n_dynamic_levels = n_dynamic_levels;
 zef.GMModel.reg_param = reg_param_rec; 
 zef.GMModel.max_n_iter = max_iter; 
@@ -27,8 +27,10 @@ z_mean_deviations(k,:) = (mean(sqrt(eigs(GMModel.Sigma(:,:,max_ind)))));
 end
 
 z_ref_points = [z_max_points; z_cluster_centres];
-if or(not(exist('credibility_data','var')),isequal(numel(credibility_data),1))
-credibility_data = credibility_data*ones(size(z_ref_points,1),1);
+if isequal(supervised_clustering,'on')
+load(credibility_data_file_name)
+else
+credibility_data = cred_val_points*ones(size(z_ref_points,1),1);
 end
     
 [I_aux,MahalanobisD,GMModel] = zef_find_clusters(size(z_ref_points,1),z_ref_points,reg_param_points,credibility_data,max_iter,tol_val_points);
