@@ -1,8 +1,12 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
+function zef = zef_update_fss(zef)
+if nargin == 0
+    zef = evalin('base','zef');
+end
 if ~zef.synth_source_updated_true
-if str2num(evalin('base','zef.find_synth_source.h_plot_switch.Value')) == 1
-selected_source_ind = evalin('base','zef.find_synth_source.selected_source');
+if str2num(zef.find_synth_source.h_plot_switch.Value) == 1
+selected_source_ind = zef.find_synth_source.selected_source;
 zef.inv_synth_source = zeros(length(selected_source_ind),10);
 zef.inv_synth_sampling_frequency = cell(length(selected_source_ind),1);
 zef.inv_pulse_peak_time = cell(length(selected_source_ind),1);
@@ -67,3 +71,7 @@ zef.synth_source_updated_true = true;
 end
 end
 clear zef_n;
+if nargout == 0
+    assignin('base', 'zef', zef);
+end
+end
