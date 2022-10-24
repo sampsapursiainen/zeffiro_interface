@@ -1,15 +1,23 @@
 
 
 %%
-project_struct = zef_KalmanDemo_open_and_create_measurement();
+zef = zef_KalmanDemo_open_and_create_measurement();
 %%
-project_struct = zef_KalmanDemo_runKalman(project_struct);
+zef = zef_KalmanDemo_runKalman(zef);
 %%
-project_struct = zef_KalmanDemo_visualize(project_struct);
-%%
-project_struct = zef_KalmanDemo_save(project_struct);
-%%
+%project_struct = zef_KalmanDemo_save(project_struct);
+%% Visualization
 
+zef_figure_tool
+zef.h_zeffiro.Visible = 1;
+zef.use_display = 1;
+zef.visualization_type = 3;
+zef.cp2_on = 0;
+zef.cp_on = 0;
+zef.cp3_on = 0;
+zef_visualize_surfaces
+%%
+%project_struct = zef_KalmanDemo_save(project_struct);
 
 function project_struct = zef_KalmanDemo_runKalman(project_struct)
 % How to use kalman without GUI
@@ -81,15 +89,10 @@ project_struct = zef_update_fss(project_struct);
 end
 
 function project_struct = zef_KalmanDemo_visualize(project_struct)
-zef.h_zeffiro.Visible = 'on';
+zef.h_zeffiro.Visible = 1;
 zef.use_display = 1;
-
-project_struct.use_display = 1;
 project_struct.visualization_type = 3;
-zef = project_struct;
-zef_visualize_surfaces;
-
-
+zef_visualize_surfaces(project_struct)
 end
 
 
