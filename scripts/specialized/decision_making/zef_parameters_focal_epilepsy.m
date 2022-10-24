@@ -1,15 +1,15 @@
-training_data_file_name = '';
-credibility_data_file_name = 'credibility_dataset_p1_10dB.mat';
-project_file_name = '';
+%training_data_file_name = '';
+credibility_data_file_name = 'credibility_dataset_p2_10dB.mat';
+%project_file_name = '';
 
-supervised_clustering = 'off';
+supervised_clustering = 'on';
 frame_number = 1; 
 max_iter = 10000;
 training_data_size = 50; 
 snr_vec = [10];
 frame_number = 1;
-cred_val_rec = 0.90;
-cred_val_points = 0.90;
+cred_val_rec = 0.95;
+cred_val_points = 0.9;
 max_n_clusters = 100;
 n_dynamic_levels = 4;
 tol_val_rec = 1e-3;

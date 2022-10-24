@@ -34,22 +34,22 @@ h_f_2 = uifigure('Visible',zef.use_display);
 h_f_2.Name = 'ZEFFIRO Interface: Clustering plot';
 h_a = axes(h_f_2);
 I = [2:size(h_t.Data,1)];
-plot(h_a,1:length(I),cell2mat(h_t.Data(I,4)));
+plot(h_a,I,cell2mat(h_t.Data(I,4)));
 deviation_data = cell2mat(h_t.Data(I,7));
 for i = 2 : length(deviation_data)
 deviation_data(i) = max(deviation_data(i-1),deviation_data(i));
 end
 hold(h_a,'on');
-h_fill = fill(h_a,[1:length(I) length(I):-1:1]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))+deviation_data)],'b');
+h_fill = fill(h_a,[I fliplr(I)]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))+deviation_data)],'b');
 h_fill.FaceAlpha = 0.2;
 h_fill.EdgeColor = 'none';
-h_fill = fill(h_a,[1:length(I) length(I):-1:1]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))-deviation_data)],'b','HandleVisibility','off');
+h_fill = fill(h_a,[I fliplr(I)]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))-deviation_data)],'b','HandleVisibility','off');
 h_fill.FaceAlpha = 0.2;
 h_fill.EdgeColor = 'none';
-h_fill = fill(h_a,[1:length(I) length(I):-1:1]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))+2*deviation_data)],'m');
+h_fill = fill(h_a,[I fliplr(I)]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))+2*deviation_data)],'m');
 h_fill.FaceAlpha = 0.1;
 h_fill.EdgeColor = 'none';
-h_fill = fill(h_a,[1:length(I) length(I):-1:1]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))-2*deviation_data)],'m','HandleVisibility','off');
+h_fill = fill(h_a,[I fliplr(I)]',[cell2mat(h_t.Data(I,4)) ;flipud(cell2mat(h_t.Data(I,4))-2*deviation_data)],'m','HandleVisibility','off');
 h_fill.FaceAlpha = 0.1;
 h_fill.EdgeColor = 'none';
 J = find(ismember(h_t.Data(:,3),'Cluster centre'));
@@ -57,6 +57,8 @@ plot(h_a,J,cell2mat(h_t.Data(J,5)),'rs-');
 J = setdiff(I,J);
 plot(h_a,J,cell2mat(h_t.Data(J,5)),'kd--');
 set(h_a,'ylim',[0 1.05*max(cell2mat(h_t.Data(I,4))+2*deviation_data)]);
-set(h_a,'xlim',[1 length(I)]);
+set(h_a,'xlim',[2 length(I)]);
 pbaspect(h_a,[1 1 1]);
+h_a.XGrid = 'on'
+h_a.YGrid = 'on'
 h_legend = legend(h_a,'Distance to centre','68 % credibility','90 % credibility','Distance to resection (cluster)','Distance to resection (maximum point)','Location','NorthWest');
