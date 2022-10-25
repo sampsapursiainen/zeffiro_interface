@@ -54,10 +54,83 @@ classdef GeneralInverter
 
     end % properties
 
+    methods
+
+        function self = GeneralInverter(args)
+
+            %
+            % GeneralInverter
+            %
+            % The constructor for this class.
+            %
+
+            % Argument validation is not needed here, as the class itself
+            % enforces what its fields are allowed to contain. We simply list
+            % the possible inputs as name–value arguments here.
+
+            arguments
+
+                args.data_normalization_method
+
+                args.high_cut_frequency
+
+                args.inv_amplitude_db
+
+                args.inv_prior_over_measurement_db
+
+                args.low_cut_frequency
+
+                args.number_of_frames
+
+                args.prior
+
+                args.sampling_frequency
+
+                args.signal_to_noise_ratio
+
+                args.time_start
+
+                args.time_window
+
+                args.time_step
+
+            end
+
+            self.data_normalization_method     = args.data_normalization_method;
+
+            self.high_cut_frequency            = args.high_cut_frequency;
+
+            self.inv_amplitude_db              = args.inv_amplitude_db;
+
+            self.inv_prior_over_measurement_db = args.inv_prior_over_measurement_db;
+
+            self.low_cut_frequency             = args.low_cut_frequency;
+
+            self.number_of_frames              = args.number_of_frames;
+
+            self.prior                         = args.prior;
+
+            self.sampling_frequency            = args.sampling_frequency;
+
+            self.signal_to_noise_ratio         = args.signal_to_noise_ratio;
+
+            self.time_start                    = args.time_start;
+
+            self.time_window                   = args.time_window;
+
+            self.time_step                     = args.time_step;
+
+        end
+
+    end % methods
+
+    % NOTE: this might not work if the class itself is not defined as
+    % abstract.
+
     methods (Abstract)
 
         reconstruction = invert(self)
 
-    end
+    end % methods (Abstract)
 
 end % classdef
