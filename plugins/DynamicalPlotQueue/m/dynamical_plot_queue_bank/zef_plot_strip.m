@@ -1,8 +1,8 @@
 function zef_plot_strip(strip_struct)
 
 hold on
-if nargin == 0; 
-    strip_struct = evalin('caller','zef.strip_struct'); 
+if nargin == 0;
+    strip_struct = evalin('caller','zef.strip_struct');
 end
 
 [x y z] = sphere(20);
@@ -31,7 +31,7 @@ y = strip_struct.vertices(:,2);
 z = strip_struct.vertices(:,3);
 
 
-h_t = trisurf(tri,x,y,z); 
+h_t = trisurf(tri,x,y,z);
 h_t.EdgeColor = 'none';
 h_t.Tag = 'additional: electrode strip';
 h_t.FaceColor = [0.6 0.6 0.6];
