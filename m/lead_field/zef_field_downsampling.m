@@ -30,16 +30,16 @@ zef.rand_vec_aux = randperm(size(zef.source_positions,1));
 zef.rand_vec_aux = zef.rand_vec_aux(1:zef.n_sources);
 zef.source_positions = zef.source_positions(zef.rand_vec_aux,:);
 
-if ismember(zef.source_direction_mode,2)
+if ismember(zef.source_direction_mode,[1 2])
 zef.rand_vec_aux = 3*(zef.rand_vec_aux(:)'-1);
 zef.rand_vec_aux = [zef.rand_vec_aux + 1; zef.rand_vec_aux + 2; zef.rand_vec_aux + 3];
 zef.rand_vec_aux = zef.rand_vec_aux(:);
 zef.L = zef.L(:,zef.rand_vec_aux);
-elseif ismember(zef.source_direction_mode,[1 3])
+elseif ismember(zef.source_direction_mode,[3])
 zef.L = zef.L(:,zef.rand_vec_aux);
+end
 if not(isempty(zef.source_directions))
 zef.source_directions = zef.source_directions(zef.rand_vec_aux,:);
-end
 end
 
 zef_source_interpolation;

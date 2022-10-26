@@ -10,7 +10,7 @@ n_interp = length(s_ind_1);
 
 ias_hyperprior = eval('zef.inv_hyperprior');
 snr_val = eval('zef.inv_snr');
-burn_in = eval('zef.inv_n_burn_in');
+n_burn_in = eval('zef.inv_n_burn_in');
 pm_val = eval('zef.inv_prior_over_measurement_db');
 amplitude_db = eval('zef.inv_amplitude_db');
 pm_val = pm_val - amplitude_db;
@@ -112,7 +112,60 @@ if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
 f = gpuArray(f);
 end
 
-gibbs_sampler
+if zef.inv_hyperprior == 1
+hypermodel = 'InverseGamma';
+elseif zef.inv_hyperprior == 2
+hypermodel = 'Gamma';    
+end
+
+decay_val_hyperprior = 7; 
+nbins_hyperprior = 20;
+source_direction_mode = zef.source_direction_mode;
+
+parallel_processes = zef.parallel_processes;
+n_iter_process = ceil(n_iter/parallel_processes);
+
+x = cell(0);
+theta = cell(0);
+for j = 1 : parallel_processes
+x{j} = zeros(size(L,2),1);
+theta{j} = theta0.*ones(size(L,2),1);
+end
+
+z_vec = zeros(size(L,2),1);
+
+
+h = zef_waitbar(0,'Gibbs sampler.');
+
+   if isempty(gcp('nocreate'))
+        parpool(parallel_processes);
+    else
+        h_pool = gcp;
+        if not(isequal(h_pool.NumWorkers,parallel_processes))
+            delete(h_pool)
+            parpool(parallel_processes);
+        end
+    end
+
+for i =  1 : n_iter_process
+
+    if mod(i,ceil(n_iter_process/100))==0
+zef_waitbar(i/n_iter_process,h,['Gibbs sampler: ' num2str(parallel_processes) ' parallel chains.']);
+    end
+    parfor j = 1 : parallel_processes
+[x{j}, theta{j}] = zef_gibbs_sampler_step(L, f, x{j}, theta{j}, theta0, beta, std_lhood, hypermodel, decay_val_hyperprior, nbins_hyperprior, source_direction_mode);
+    end
+    
+if i > n_burn_in
+    for j = 1 : parallel_processes
+z_vec = z_vec + x{j};
+    end
+end
+end
+
+z_vec = z_vec/(n_iter_process*parallel_processes - n_burn_in);
+
+close(h)
 
 z_inverse{f_ind} = z_vec;
 
@@ -122,3 +175,5 @@ end
 [z] = zef_normalizeInverseReconstruction(z);
 
 close(h);
+
+end

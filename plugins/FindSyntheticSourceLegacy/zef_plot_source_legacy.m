@@ -38,7 +38,7 @@ arrow_scale = 3*sqrt(s_length);
 for i = 1 : size(s_p,1)
 %h_synth_source(i) = quiver3(h_axes1,s_p(i,1),s_p(i,2),s_p(i,3),s_length*s_o(i,1),s_length*s_o(i,2),s_length*s_o(i,3), 0, 'linewidth',s_width,'color',source_color,'marker','o');
 h_synth_source(i) = zef_plot_3D_arrow(s_p(i,1),s_p(i,2),s_p(i,3),s_o(i,1),s_o(i,2),s_o(i,3),arrow_scale,arrow_type,source_color,arrow_shape,arrow_length,arrow_head_size,arrow_n_polygons);
-
+set(h_synth_source(i),'Tag','additional: synthetic source');
 end
 hold(h_axes1,'off');
 h_source = h_synth_source;
