@@ -7,7 +7,7 @@ zef.source_directions_original_field = zef.source_directions;
 zef.L_original_field = zef.L;
 zef.source_interpolation_ind_original_field = zef.source_interpolation_ind;
 
-else 
+else  
 
 zef.source_positions = zef.source_positions_original_field;
 zef.source_directions = zef.source_directions_original_field;
