@@ -8,6 +8,8 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+zef.brain_ind = zef_find_active_compartment_ind(zef);
+zef.active_compartment_ind = zef.brain_ind; 
 
 [zef.lead_field_id, zef.lead_field_id_max]  = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'create');
 
