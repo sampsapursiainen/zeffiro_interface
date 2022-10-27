@@ -136,4 +136,10 @@ classdef GeneralInverter
 
     end % methods (Abstract)
 
+    methods (Static)
+
+        [f,t] = get_time_step()
+
+    end % methods (Static)
+
 end % classdef
