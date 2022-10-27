@@ -37,11 +37,6 @@ classdef GeneralInverter
 
         number_of_frames (1,1) double { mustBeInteger, mustBePositive } = 1;
 
-        prior (1,1) string { mustBeMember( ...
-            prior, ...
-            [ "balanced", "constant" ] ...
-        ) } = "balanced";
-
         sampling_frequency (1,1) double { mustBeReal, mustBePositive } = 1025;
 
         signal_to_noise_ratio (1,1) double { mustBeReal, mustBePositive } = 30;
@@ -53,6 +48,16 @@ classdef GeneralInverter
         time_step (1,1) double { mustBeReal, mustBePositive } = 1;
 
     end % properties
+
+    properties (Abstract)
+
+        % This defines the type of prior distribution used in the
+        % computations. Could be "gamma", "inverse gamma" or "gaussian", for
+        % example.
+
+        prior_distribution (1,1) string
+
+    end % properties (Abstract)
 
     methods
 
