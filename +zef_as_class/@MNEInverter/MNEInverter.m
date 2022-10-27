@@ -73,7 +73,7 @@ classdef MNEInverter < zef_as_class.GeneralInverter
 
             self.mne_flavour = args.mne_flavour;
 
-            self.prior_distribution = "None"
+            self.prior_distribution = "None";
 
         end
 
