@@ -87,8 +87,6 @@ classdef GeneralInverter
 
                 args.number_of_frames
 
-                args.prior
-
                 args.sampling_frequency
 
                 args.signal_to_noise_ratio
@@ -112,8 +110,6 @@ classdef GeneralInverter
             self.low_cut_frequency             = args.low_cut_frequency;
 
             self.number_of_frames              = args.number_of_frames;
-
-            self.prior                         = args.prior;
 
             self.sampling_frequency            = args.sampling_frequency;
 
