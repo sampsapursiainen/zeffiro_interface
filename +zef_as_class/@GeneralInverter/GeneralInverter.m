@@ -180,6 +180,10 @@ classdef GeneralInverter
 
         [scale_param, snr_vec] = find_gaussian_prior(snr_val, L, opts)
 
+        prior_val = gamma_fn(x, shape, scale)
+
+        prior_val = inverse_gamma_fn(x, shape, scale)
+
     end % methods (Static)
 
 end % classdef
