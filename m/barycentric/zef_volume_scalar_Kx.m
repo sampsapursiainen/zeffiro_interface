@@ -1,28 +1,27 @@
-function M = zef_volume_scalar_Kx(nodes, tetra, h, x, u_field, volume, b_coord)
+function [y, b_coord, volume] = zef_volume_scalar_Kx(nodes, tetra, h, x, u_field, b_coord, volume)
 
 if nargin < 6
-    for i = 1:4
-        [b_coord,det] = zef_volume_barycentric(nodes,tetra,h);
-         volume = abs(det)/6;
-         b_coord_h{i} = b_coord(:,h);
-
-        if h > 1
-        [b_coord,~] = zef_volume_barycentric(nodes,tetra,h,det);
-         volume = abs(det)/6;
-         b_coord_h{i} = b_coord(:,h);
+        [b_coord{1},det] = zef_volume_barycentric(nodes,tetra,1);
+        for i = 2 : 4
+            [b_coord{i}] = zef_volume_barycentric(nodes,tetra,i,det);
         end
-    end
+         volume = abs(det)/6;    
 end
 
 weight_param = zef_barycentric_weighting('FF');
-b_coord_h = b_coord(:,h);
+y = zeros(size(nodes,1),1);
 
 for i = 1 : 4     
     for j = 1 : 4  
-        if i == j
-        entry_vec = b_cood_h{i}.*volume*weight_param(1).*x(tetra(:,j));
+        for k = 1 : 4
+        if i == k
+        entry_vec = weight_param(1).*x(tetra(:,j)).*u_field(tetra(:,k)).*b_coord{j}(:,h).*volume;
         else
-        entry_vec = b_cood_h{i}.*volume*weight_param(2).*x(tetra(:,j));
+        entry_vec = weight_param(2).*x(tetra(:,j)).*u_field(tetra(:,k)).*b_coord{j}(:,h).*volume;
+        end
+        
+        y = y + accumarray(tetra(:,i),entry_vec,size(y));
+        
         end
     end
 end
