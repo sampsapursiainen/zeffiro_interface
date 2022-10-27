@@ -69,7 +69,7 @@ size_x = size(x,1);
     aux_1 = full(aux_1(aux_ind_2));
     y_aux = y_2(aux_ind_2) - aux_0(aux_ind_2) + aux_1*x_old;
     t_max = sum(y_aux.*aux_1)/sum(aux_1.*aux_1);
-    t_int = std_lhood*sqrt(2*t_tol/sum(aux_1.^2));
+    t_int = std_lhood*sqrt(2*decay_val_hyperprior/sum(aux_1.^2));
     if t_max >= 0
     d_1 = max(0,t_max - t_int);
     d_2 = t_max + t_int;
@@ -77,13 +77,13 @@ size_x = size(x,1);
     aux_2 = (1/(2*std_lhood.^2))*sum(aux_2.*aux_2);
     else
     d_1 = 0;
-    d_2 = t_max + sqrt(t_max^2 + 2*std_lhood^2*t_tol/sum(aux_1.^2));
+    d_2 = t_max + sqrt(t_max^2 + 2*std_lhood^2*decay_val_hyperprior/sum(aux_1.^2));
     aux_2 = y_aux;
     aux_2 = (1/(2*std_lhood.^2))*sum(aux_2.*aux_2);
     end
-    t = [d_1 : (d_2 - d_1)/(t_res-1) : d_2];
-    y_aux = y_aux(:,ones(1,t_res));
-    aux_3 = y_aux - aux_1(:,ones(t_res,1)).*t(ones(size(aux_ind_2)),:);
+    t = [d_1 : (d_2 - d_1)/(nbins_hyperprior-1) : d_2];
+    y_aux = y_aux(:,ones(1,nbins_hyperprior));
+    aux_3 = y_aux - aux_1(:,ones(nbins_hyperprior,1)).*t(ones(size(aux_ind_2)),:);
     p = exp(aux_2 -(1/(2*std_lhood^2))*sum(aux_3.*aux_3));
     Phi = cumsum(p);
     tau = Phi(end)*rand;
