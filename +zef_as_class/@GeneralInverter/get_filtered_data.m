@@ -1,16 +1,16 @@
-function [f] = get_filtered_data(zef, use_normalization, normalize_data, data_mode, opts)
+function measurements = get_filtered_data(measurements, use_normalization, normalize_data, data_mode, opts)
 
 % get_filtered_data
 %
 % Reads the datafrom zef.measurement and applies the filter that are specified
 % in zef.inv_low_cut_frequency and zef.inv_low_cut_frequency at a sampling
-% frequency of zef.inv_sampling_frequency. f has the same size as the
+% frequency of zef.inv_sampling_frequency. measurements has the same size as the
 % measurement.
 %
 
     arguments
 
-        zef (1,1) struct
+        measurements double
 
         use_normalization (1,1) logical = false;
 
@@ -29,8 +29,6 @@ function [f] = get_filtered_data(zef, use_normalization, normalize_data, data_mo
 
     end
 
-    f = zef.measurements;
-
     if data_mode == "raw"
 
         return
@@ -48,34 +46,34 @@ function [f] = get_filtered_data(zef, use_normalization, normalize_data, data_mo
         switch normalize_data
 
             case "maximum entry"
-                data_norm = max(abs(f(:)));
+                data_norm = max(abs(measurements(:)));
             case "maximum column norm"
-                data_norm = max(sqrt(sum(abs(f).^2)));
+                data_norm = max(sqrt(sum(abs(measurements).^2)));
             case "average column norm"
-                data_norm = sum(sqrt(sum(abs(f).^2)))/size(f,2);
+                data_norm = sum(sqrt(sum(abs(measurements).^2)))/size(measurements,2);
             otherwise
                 data_norm = 1;
         end
 
-        f = f / data_norm;
+        measurements = measurements / data_norm;
 
     end
 
     filter_order = 3;
 
-    if size(f,2) > 1 && low_pass > 0
+    if size(measurements,2) > 1 && low_pass > 0
 
         [lp_f_1,lp_f_2] = ellip(filter_order,3,80,low_pass/(sampling_freq/2));
 
-        f = filter(lp_f_1,lp_f_2,f')';
+        measurements = filter(lp_f_1,lp_f_2,measurements')';
 
     end
 
-    if size(f,2) > 1 && high_pass > 0
+    if size(measurements,2) > 1 && high_pass > 0
 
         [hp_f_1,hp_f_2] = ellip(filter_order,3,80,high_pass/(sampling_freq/2),'high');
 
-        f = filter(hp_f_1,hp_f_2,f')';
+        measurements = filter(hp_f_1,hp_f_2,measurements')';
 
     end
 
