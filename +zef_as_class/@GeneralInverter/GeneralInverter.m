@@ -51,9 +51,11 @@ classdef GeneralInverter
 
     properties (Abstract)
 
-        % This defines the type of prior distribution used in the
-        % computations. Could be "gamma", "inverse gamma" or "gaussian", for
-        % example.
+        % This defines the type of prior distribution used in case of
+        % distributed inverse methods. Could be "gamma", "inverse gamma" or
+        % "gaussian", for example. If an inverter does not need a prior
+        % distribution, this can be set as anything, but preferrably as
+        % something like "None".
 
         prior_distribution (1,1) string
 
