@@ -1,4 +1,4 @@
-function reconstruction = invert(self, mne_type, params, opts)
+function reconstruction = invert(self, measurements, mne_type, params, opts)
 
     %
     % invert (MNE)
