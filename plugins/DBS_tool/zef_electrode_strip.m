@@ -5,9 +5,9 @@ center_point = position + 4*orientation;
 
 dir_vec = 1/norm(orientation)*orientation;
 strip_struct = struct;
-strip_struct.center_point = center_point; 
+strip_struct.center_point = center_point;
 strip_struct.radius = 0.635;
-strip_struct.dir_vec = dir_vec; 
+strip_struct.dir_vec = dir_vec;
 strip_struct.type = 'point';
 strip_struct.ele_sep = 45;
 strip_struct.ele_dist = 1.5;
@@ -34,7 +34,7 @@ for k = 1 : 8
         R = [cosd(k*strip_struct.ele_sep)+rotation_axis(1)^2*(1-cosd(k*strip_struct.ele_sep)) rotation_axis(1)*rotation_axis(2)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(3)*sind(k*strip_struct.ele_sep) rotation_axis(1)*rotation_axis(3)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(2)*sind(k*strip_struct.ele_sep); rotation_axis(2)*rotation_axis(1)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(3)*sind(k*strip_struct.ele_sep) cosd(k*strip_struct.ele_sep)+rotation_axis(2)^2*(1-cosd(k*strip_struct.ele_sep)) rotation_axis(2)*rotation_axis(3)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(1)*sind(k*strip_struct.ele_sep); rotation_axis(3)*rotation_axis(1)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(2)*sind(k*strip_struct.ele_sep) rotation_axis(3)*rotation_axis(2)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(1)*sind(k*strip_struct.ele_sep) -1*cosd(k*strip_struct.ele_sep)+rotation_axis(3)^2*(1-cosd(k*strip_struct.ele_sep))];
 
         strip_struct.electrode(j,:) = strip_struct.center_point+3.375*strip_dir-i*strip_struct.ele_dist*strip_dir+(R*(strip_struct.radius*n_strip_dir_1)')';
-        
+
         j = j + 1;
         end
 
@@ -45,11 +45,11 @@ for k = 1 : 8
         R = [cosd(k*strip_struct.ele_sep)+rotation_axis(1)^2*(1-cosd(k*strip_struct.ele_sep)) rotation_axis(1)*rotation_axis(2)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(3)*sind(k*strip_struct.ele_sep) rotation_axis(1)*rotation_axis(3)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(2)*sind(k*strip_struct.ele_sep); rotation_axis(2)*rotation_axis(1)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(3)*sind(k*strip_struct.ele_sep) cosd(k*strip_struct.ele_sep)+rotation_axis(2)^2*(1-cosd(k*strip_struct.ele_sep)) rotation_axis(2)*rotation_axis(3)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(1)*sind(k*strip_struct.ele_sep); rotation_axis(3)*rotation_axis(1)*(1-cosd(k*strip_struct.ele_sep))-rotation_axis(2)*sind(k*strip_struct.ele_sep) rotation_axis(3)*rotation_axis(2)*(1-cosd(k*strip_struct.ele_sep))+rotation_axis(1)*sind(k*strip_struct.ele_sep) -1*cosd(k*strip_struct.ele_sep)+rotation_axis(3)^2*(1-cosd(k*strip_struct.ele_sep))];
 
         strip_struct.electrode(j,:) = strip_struct.center_point+2.625*strip_dir-i*strip_struct.ele_dist*strip_dir+(R*(strip_struct.radius*n_strip_dir_1)')';
-        
+
         j = j + 1;
 
         end
-    end    
+    end
 
 end
 
@@ -110,7 +110,6 @@ for i = 1:size(p.vertices(:,1))
 end
 
 for i = 1:size(p.vertices(:,1))
-    
     p.vertices(i,:) = position + p.vertices(i,:);
 end
 
