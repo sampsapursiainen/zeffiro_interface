@@ -78,10 +78,6 @@ function reconstruction = invert(self, measurements, mne_type, params, opts)
 
     end
 
-    inverse_gamma_ind = [1:4];
-
-    gamma_ind = [5:10];
-
     h = zef_waitbar(0,['MNE Reconstruction.']);
 
     cleanup_fn = @(graphics) close(graphics);
