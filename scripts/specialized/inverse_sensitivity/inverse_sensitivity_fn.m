@@ -26,16 +26,6 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %   The name of an inverse method as a string. Valid names are "sLORETA",
     %   "dSPM", "MNE" and "Dipole Scan".
     %
-    % - mesh_resolution
-    %
-    %   The resolution of the mesh that will be constructed based on the
-    %   project_path.
-    %
-    % - n_of_sources
-    %
-    %   The number of sources that are to be injected into the active brain
-    %   compartments, and according to which the lead field will be computed.
-    %
     % - n_of_runs
     %
     %   The number of reconstructions that will be constructed for statistical
@@ -60,6 +50,11 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %
     %   A boolean for deciding whether to rebuild the FEM mesh.
     %
+    % - args.mesh_resolution
+    %
+    %   The resolution of the mesh that will be constructed based on the
+    %   project_path.
+    %
     % - args.build_lead_field
     %
     %   A boolean for deciding whether to build the lead field matrix.
@@ -70,6 +65,11 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %
     %   NOTE: a depth of 0 still peels the top layer off the active regions to
     %   enforce the positioning of dipole ends inside the active region.
+    %
+    % - args.n_of_sources
+    %
+    %   The number of sources that are to be placed into the mesh during lead
+    %   field construction.
     %
     % - args.optimization_system_type
     %
