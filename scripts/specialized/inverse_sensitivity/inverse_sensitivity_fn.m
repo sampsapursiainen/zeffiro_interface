@@ -142,7 +142,7 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     % Set the number of (dipolar) sources to be reconstructed and build the
     % EEG lead field.
 
-    if args.build_lead_field
+    if args.build_mesh || args.build_lead_field
 
         project_struct.n_sources = args.n_of_sources;
 
