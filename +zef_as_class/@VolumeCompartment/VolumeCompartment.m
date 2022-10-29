@@ -367,7 +367,16 @@ classdef VolumeCompartment < zef_as_class.AffinelyTransformable
             %
             %   A struct that contains the necessary compartment info:
             %
-            %   - TODO
+            %   - compartment_tags
+            %
+            %   - The fields names listed in VolumeCompartment.VOLUME_COMPARTMENT_FIELD_NAMES,
+            %     prefixed with the tags in compartment_tags.
+            %
+            % Output
+            %
+            % - compartments
+            %
+            %   An array of VolumeCompartment objects.
             %
 
             arguments
@@ -410,8 +419,8 @@ classdef VolumeCompartment < zef_as_class.AffinelyTransformable
 
                 if contains(field_name, "_")
 
-                    % Strip the compartment tag prefix from the compartment
-                    % field.
+                    % Strip the compartment tag prefix from the possible
+                    % compartment field.
 
                     split_fi_name = string(strsplit(field_name, "_"));
 
