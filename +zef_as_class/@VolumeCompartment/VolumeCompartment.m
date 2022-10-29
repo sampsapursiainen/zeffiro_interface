@@ -164,6 +164,49 @@ classdef VolumeCompartment < zef_as_class.AffinelyTransformable
 
     end % properties
 
+    properties (Constant)
+
+        % The names of the volumentric compartments that can be found in some
+        % older Zeffiro project files. The point of this is to help with
+        % backwards-compatibility.
+
+        VOLUME_COMPARTMENT_FIELD_NAMES = [
+            "affine_transform",
+            "color",
+            "condition_number",
+            "delta",
+            "epsilon",
+            "invert",
+            "merge",
+            "mu",
+            "name",
+            "on",
+            "points",
+            "points_original_surface_mesh",
+            "points_inf",
+            "priority",
+            "rho",
+            "scaling",
+            "sigma",
+            "sources",
+            "sources_old",
+            "submesh_ind",
+            "submesh_ind_original_surface_mesh",
+            "tetra",
+            "transform_name",
+            "triangles",
+            "triangles_original_surface_mesh",
+            "visible",
+            "x_correction",
+            "xy_rotation",
+            "y_correction",
+            "yz_rotation",
+            "z_correction",
+            "zx_rotation"
+        ];
+
+    end % properties (Constant)
+
     methods
 
         function self = VolumeCompartment(args)
@@ -307,5 +350,144 @@ classdef VolumeCompartment < zef_as_class.AffinelyTransformable
         end % function
 
     end % methods
+
+    methods (Static)
+
+        function compartments = from_legacy_zef(zef)
+
+            %
+            % from_legacy_zef
+            %
+            % Builds an instace of VolumeCompartment from a legacy version of
+            % the zef struct.
+            %
+            % Input:
+            %
+            % - zef
+            %
+            %   A struct that contains the necessary compartment info:
+            %
+            %   - TODO
+            %
+
+            arguments
+
+                zef (1,1) struct
+
+            end
+
+            % Check for missing fields and other errors.
+
+            if ~ isfield(zef, "compartment_tags")
+
+                error("A legacy zef struct needs to contain a field compartment_tags. Aborting construction of VolumeCompartment...")
+
+            end
+
+            if isempty(zef.compartment_tags)
+
+                error("Cannot construct VolumeCompartments from an empty zef.compartment_tags field.")
+
+            end
+
+            % Loop over the fields to construct the compartment tables, after
+            % compartment tags are known.
+
+            field_names = fieldnames(zef);
+
+            compartment_table = cell(0,2);
+
+            for fi = 1 : length(field_names)
+
+                field_name = field_names{fi};
+
+                field_value = zef.(field_name);
+
+                % Parse the field name to see if it is a known compartment
+                % property, and store them in a set of compartment properties.
+
+                compartment_table_len = size(compartment_table, 1);
+
+                if contains(field_name, "_")
+
+                    % Strip the compartment tag prefix from the compartment
+                    % field.
+
+                    split_fi_name = string(strsplit(field_name, "_"));
+
+                    prefix = split_fi_name(1);
+
+                    suffix_parts = split_fi_name(2:end);
+
+                    suffix = string(join(suffix_parts, "_"));
+
+                    if ismember(prefix, zef.compartment_tags) ...
+                    && ismember(suffix, zef_as_class.VolumeCompartment.VOLUME_COMPARTMENT_FIELD_NAMES)
+
+                        % Check if compartment name is already in the
+                        % compartment table.
+
+                        name_col = [compartment_table{:,1}];
+
+                        if isempty(name_col)
+
+                            compartment_ind = compartment_table_len + 1;
+
+                            compartment_exists = false;
+
+                        else
+
+                            compartment_ind = find(ismember(name_col, prefix));
+
+                            compartment_exists = any(compartment_ind);
+
+                            if ~ compartment_exists
+
+                                compartment_ind = compartment_table_len + 1;
+
+                            end
+
+                        end
+
+                        if compartment_exists
+
+                            compartment_table{compartment_ind, 2}.(suffix) = field_value;
+
+                        else
+
+                            compartment_table{compartment_ind, 1} = prefix;
+
+                            compartment_table{compartment_ind, 2}.(suffix) = struct;
+
+                        end
+
+                    end % if
+
+                end % if
+
+            end % for
+
+            % Then iterate over the accumulated compartment info to generate
+            % the compartment objects.
+
+            n_of_compartment_structs = size(compartment_table, 1);
+
+            compartment_cells = cell(0);
+
+            for ii = 1 : n_of_compartment_structs
+
+                a_struct = compartment_table{ii,2};
+
+                compartment_cells{ii} = zef_as_class.VolumeCompartment(a_struct);
+
+            end
+
+            % Turn cell array into vector.
+
+            compartments = [compartment_cells{:}];
+
+        end % function
+
+    end % methods (Static)
 
 end % classdef
