@@ -14,6 +14,12 @@ classdef TetraMesh < zef_as_class.FEMesh
 
     end
 
+    properties (Constant)
+
+        element_size = 4;
+
+    end
+
     methods
 
         function self = TetraMesh(nodes, tetra)
@@ -60,7 +66,7 @@ classdef TetraMesh < zef_as_class.FEMesh
 
             if size(tetra, 2) ~= 4
 
-                error("Tetrahedra have 4 node indices. Got " + element_size + " instead.")
+                error("Tetrahedra have " + zef_as_class.TetraMesh.element_size + " node indices. Got " + element_size + " instead.")
 
             end
 
