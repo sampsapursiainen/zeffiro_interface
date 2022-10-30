@@ -27,4 +27,10 @@ classdef (Abstract) FEMesh
 
     end
 
+    properties (Abstract, Constant)
+
+        element_size (1,1) double { mustBeInteger, mustBePositive }
+
+    end
+
 end % classdef
