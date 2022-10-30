@@ -1,9 +1,10 @@
 classdef TetraMesh < zef_as_class.FEMesh
 
     %
-    % TetraMesh
+    % TetraMesh < FEMesh
     %
-    % Descibes a finite element mesh, whose elements are tetrahedral.
+    % Describes a finite element mesh, whose elements are tetrahedral.
+    %
 
     properties
 
@@ -46,6 +47,14 @@ classdef TetraMesh < zef_as_class.FEMesh
         end
 
         function self = set.elements(self, tetra)
+
+            %
+            % set.elements(self, tetra)
+            %
+            % A setter method to enforce that the elements of this class are
+            % indeed tetrahedral, that is their rows contain exactly 4 node
+            % indices.
+            %
 
             element_size = size(tetra, 2);
 
