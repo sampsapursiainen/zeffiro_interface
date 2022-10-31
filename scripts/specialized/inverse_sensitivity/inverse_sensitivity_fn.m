@@ -1,8 +1,6 @@
 function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     project_path, ...
     inverse_method, ...
-    mesh_resolution, ...
-    n_of_sources, ...
     n_of_runs, ...
     noise_level_db, ...
     diff_type, ...
@@ -28,16 +26,6 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %   The name of an inverse method as a string. Valid names are "sLORETA",
     %   "dSPM", "MNE" and "Dipole Scan".
     %
-    % - mesh_resolution
-    %
-    %   The resolution of the mesh that will be constructed based on the
-    %   project_path.
-    %
-    % - n_of_sources
-    %
-    %   The number of sources that are to be injected into the active brain
-    %   compartments, and according to which the lead field will be computed.
-    %
     % - n_of_runs
     %
     %   The number of reconstructions that will be constructed for statistical
@@ -58,6 +46,39 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %   A name–value argument which determines whether a GPU will be used to
     %   perform the relevant computations (if available).
     %
+    % - args.build_mesh
+    %
+    %   A boolean for deciding whether to rebuild the FEM mesh.
+    %
+    % - args.mesh_resolution
+    %
+    %   The resolution of the mesh that will be constructed based on the
+    %   project_path.
+    %
+    % - args.build_lead_field
+    %
+    %   A boolean for deciding whether to build the lead field matrix.
+    %
+    % - args.acceptable_source_depth
+    %
+    %   The depth at which tetra are accepted as valid source positions.
+    %
+    %   NOTE: a depth of 0 still peels the top layer off the active regions to
+    %   enforce the positioning of dipole ends inside the active region.
+    %
+    % - args.n_of_sources
+    %
+    %   The number of sources that are to be placed into the mesh during lead
+    %   field construction.
+    %
+    % - args.optimization_system_type
+    %
+    %   "PBO" or "MPO".
+    %
+    % - args.source_model
+    %
+    %   The interpolation model used by the lead field construction routine.
+    %
     % Output:
     %
     % - sensitivities_with_statistics
@@ -72,10 +93,6 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
 
         inverse_method (1,:) char { mustBeMember(inverse_method, ["sLORETA", "dSPM", "MNE", "Dipole Scan"]) }
 
-        mesh_resolution (1,1) double { mustBeReal, mustBePositive }
-
-        n_of_sources (1,1) double { mustBeInteger, mustBePositive }
-
         n_of_runs (1,1) double { mustBeInteger, mustBePositive }
 
         noise_level_db (1,1) double { mustBeNonpositive } = -30
@@ -83,6 +100,23 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
         diff_type (1,1) string { mustBeMember(diff_type, ["L2", "minabs"]) } = "L2"
 
         args.use_gpu (1,1) logical = false;
+
+        args.build_mesh (1,1) logical = false;
+
+        args.mesh_resolution (1,1) double { mustBePositive } = 3
+
+        args.build_lead_field (1,1) logical = true;
+
+        args.n_of_sources (1,1) double { mustBeInteger, mustBePositive } = 10000
+
+        args.acceptable_source_depth (1,1) double { mustBeReal, mustBeNonnegative } = 0
+
+        args.optimization_system_type (1,1) string { mustBeMember( ...
+            args.optimization_system_type, ...
+            ["pbo", "mpo", "none"] ...
+        ) } = "pbo"
+
+        args.source_model (1,1) ZefSourceModel = ZefSourceModel.Hdiv
 
     end
 
@@ -97,18 +131,30 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
 
     % Set mesh resolution and generate a finite element mesh.
 
-    project_struct.mesh_resolution = mesh_resolution;
+    if args.build_mesh
 
-    % This is disabled for now, so that the pre-existing mesh stored on Puhti
-    % is used as-is.
-    %
-    % project_struct = zef_create_finite_element_mesh(project_struct);
+        project_struct.mesh_resolution = args.mesh_resolution;
 
-    % Set the number of (dipolar) sources to be reconstructed.
+        project_struct = zef_create_finite_element_mesh(project_struct);
 
-    project_struct.n_sources = n_of_sources;
+    end
 
-    project_struct = zef_eeg_lead_field(project_struct);
+    % Set the number of (dipolar) sources to be reconstructed and build the
+    % EEG lead field.
+
+    if args.build_mesh || args.build_lead_field
+
+        project_struct.n_sources = args.n_of_sources;
+
+        project_struct.acceptable_source_depth = args.acceptable_source_depth;
+
+        project_struct.optimization_system_type = args.optimization_system_type;
+
+        project_struct.source_model = args.source_model;
+
+        project_struct = zef_eeg_lead_field(project_struct);
+
+    end
 
     % Start the MNE tool and calculate reconstruction sensitivities for the
     % given MNE type.
