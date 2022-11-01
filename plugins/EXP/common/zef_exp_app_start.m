@@ -1,4 +1,9 @@
 function zef = zef_exp_app_start(zef)
+if isfield(zef,'EXP')
+    if isfield(zef.EXP,'app')
+        return;
+    end
+end
     zef.EXP.app = exp_app;
     if ~isfield(zef.EXP,'parameters')
         zef.EXP.parameters = [];
