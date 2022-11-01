@@ -85,6 +85,32 @@ eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_1_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_1_2_9.data.reconstruction_information = zef.reconstruction_information;
 
+%EXP-L1
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 1;
+zef.EXP.parameters.exp_hypermode = 3;
+zef.EXP.parameters.exp_theta0 = 1e-8;
+zef.EXP.parameters.exp_beta = 3;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 10;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_1_2_10.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_10.data.reconstruction_information = zef.reconstruction_information;
+
+%EXP-L1-sLORETA
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 3;
+zef.EXP.parameters.exp_hypermode = 2;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 10;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_1_2_11.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_1_2_11.data.reconstruction_information = zef.reconstruction_information;
+
 %**************************************
 
 %MEG
@@ -169,6 +195,32 @@ eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_2_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_2_2_9.data.reconstruction_information = zef.reconstruction_information;
 
+%EXP-L1
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 1;
+zef.EXP.parameters.exp_hypermode = 3;
+zef.EXP.parameters.exp_theta0 = 1e-8;
+zef.EXP.parameters.exp_beta = 3;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 1;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_2_2_10.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_10.data.reconstruction_information = zef.reconstruction_information;
+
+%EXP-L1-sLORETA
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 3;
+zef.EXP.parameters.exp_hypermode = 2;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 5;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_2_2_11.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_2_2_11.data.reconstruction_information = zef.reconstruction_information;
+
 %**************************************
 
 %MEEG
@@ -251,3 +303,29 @@ zef.h_mne_type.Value = 2;
 eval(zef.h_mne_start.Callback);
 zef.dataBank.tree.node_3_2_9.data.reconstruction = zef.reconstruction;
 zef.dataBank.tree.node_3_2_9.data.reconstruction_information = zef.reconstruction_information;
+
+%EXP-L1
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 1;
+zef.EXP.parameters.exp_hypermode = 3;
+zef.EXP.parameters.exp_theta0 = 5e-3;
+zef.EXP.parameters.exp_beta = 3;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 1;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_3_2_10.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_10.data.reconstruction_information = zef.reconstruction_information;
+
+%EXP-L1-sLORETA
+zef = zef_exp_app_start(zef);
+zef.EXP.app.inv_snr.Value = snr_vec(1);
+zef.EXP.parameters.exp_estimation_type = 3;
+zef.EXP.parameters.exp_hypermode = 2;
+zef.EXP.parameters.exp_q = 1;
+zef.EXP.parameters.exp_n_map_iterations = 5;
+zef.EXP.parameters.exp_n_L1_iterations = 5;
+eval(zef.EXP.app.StartButton.ButtonPushedFcn);
+zef.dataBank.tree.node_3_2_11.data.reconstruction = zef.reconstruction;
+zef.dataBank.tree.node_3_2_11.data.reconstruction_information = zef.reconstruction_information;
