@@ -49,7 +49,7 @@ reconstruction_information.source_directions = zef.source_directions;
 reconstruction_information.inv_snr = zef.inv_snr;
 reconstruction_information.exp_q = q;
 reconstruction_information.exp_n_L1_iterations = n_L1_iterations;
-reconstruction_information.exp_n_iter = n_map_iterations;
+reconstruction_information.exp_n_map_iterations = n_map_iterations;
 
 if ismember(hypermode,[1,2])
     reconstruction_information.inv_hyperprior = zef.inv_hyperprior;
@@ -141,7 +141,6 @@ for j = 1 : multires_n_levels
         end
     else
         L_aux = L;
-        clear L
     end
     source_count = size(L_aux,2);
 
@@ -208,12 +207,12 @@ else
     for i = 1 : n_map_iterations(j)
         if estimation_type == 3
             P = 1./gamma;
-            L = L_aux.*P';
-            R = L'/(L*L_aux'+S_mat);
+            L_aux2 = L_aux.*P';
+            R = L_aux2'/(L_aux2*L_aux'+S_mat);
             R = sum(R.'.*L,1);
             %T_scale_inv = P_sqrt.*sqrt(R)';    %strictly Pascual-Marqui
             T_scale = 1./sqrt(R)';             %losely Pascual-Marqui
-            clear R P L
+            clear R P L_aux2
         else
             T_scale = 1;
         end
