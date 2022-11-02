@@ -1,5 +1,5 @@
 zef.ES_search_method_list = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
-zef.ES_search_type_list = {'Matlab','SDPT3 (CVX)','SeDuMi (CVX)','MOSEK','Gurobi'};
+zef.ES_search_type_list = {'Matlab','SDPT3','SeDuMi','MOSEK','Gurobi'};
 zef.ES_algorithm_list = {'interior-point','interior-point-legacy','dual-simplex','primal-simplex'};
 
 if not(isfield(zef,'ES_absolute_tolerance'))
