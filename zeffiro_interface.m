@@ -289,7 +289,6 @@ function zef = zeffiro_interface(args)
     addpath(genpath(fullfile(zef.program_path, "fig")));
     addpath(genpath(fullfile(zef.program_path, "plugins")));
     addpath(genpath(fullfile(zef.program_path, "profile")));
-    addpath(genpath(fullfile(zef.program_path, "scripts")));
 
     addpath(zef.external_path);
 
