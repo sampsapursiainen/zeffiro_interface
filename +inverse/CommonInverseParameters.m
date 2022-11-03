@@ -109,7 +109,7 @@ classdef CommonInverseParameters
             %
             % The constructor of this class.
             %
-            % ────────────────────┤  Inputs  ├────────────────────
+            % ---------------------  Inputs  ---------------------
             %
             % - args
             %
@@ -146,7 +146,7 @@ classdef CommonInverseParameters
             %
             %   - inv_prior_over_measurement_db
             %
-            % ────────────────────┤  Outputs ├────────────────────
+            % ---------------------  Outputs  ---------------------
             %
             % - self
             %
