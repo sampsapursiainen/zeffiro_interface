@@ -24,7 +24,7 @@ classdef MNEInverter < inverse.CommonInverseParameters
         function self = MNEInverter(args)
 
             %
-            % CommonInverseParameters.CommonInverseParameters
+            % MNEInverter.MNEInverter
             %
             % The constructor of this class.
             %
@@ -127,17 +127,39 @@ classdef MNEInverter < inverse.CommonInverseParameters
 
         end % function
 
-        function [reconstruction, resolution_matrix] = invert(self)
+        function [reconstruction, resolution_matrix] = invert(self, L, source_directions)
 
             %
             % MNEInverter.invert
             %
-            % The inversion method of MNEInverter. Performs
+            % The inversion method of MNEInverter. Forms a minimum norm
+            % estimate based on the given inputs.
+            %
+            % Inputs:
+            %
+            % - self
+            %
+            %   An intance of this inverter type.
+            %
+            % - L
+            %
+            %   A lead field matrix that will be used to create a resolution
+            %   matrix.
+            %
+            % - source_directions
+            %
+            %   An M × 3 matrix of the xyz-directions of synthetic sources.
+            %
+            % TODO: more input arguments needed?
             %
 
             arguments
 
                 self (1,1) inversion.MNEInverter
+
+                L (:,:) double
+
+                source_directions (:,3) double
 
             end
 
