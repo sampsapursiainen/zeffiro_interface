@@ -1,3 +1,3 @@
-function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
-x = L1_optimization(L,sigma,y,gamma,x0,maxiter);
+function x = L1_optimization(A,sigma,y,gamma,x,maxiter,estimation_type)
+x = L1_optimization(A,sigma,y,gamma,x,maxiter,estimation_type);
 end

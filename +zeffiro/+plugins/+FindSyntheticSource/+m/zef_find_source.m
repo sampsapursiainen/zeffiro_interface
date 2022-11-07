@@ -1,3 +1,3 @@
-function [meas_data] = zef_find_source
-[meas_data] = zef_find_source;
+function [meas_data] = zef_find_source(zef)
+[meas_data] = zef_find_source(zef);
 end

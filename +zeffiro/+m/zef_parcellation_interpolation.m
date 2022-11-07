@@ -1,3 +1,3 @@
-function [parcellation_interpolation_ind] = zef_parcellation_interpolation(void)
-[parcellation_interpolation_ind] = zef_parcellation_interpolation(void);
+function [parcellation_interpolation_ind] = zef_parcellation_interpolation(zef)
+[parcellation_interpolation_ind] = zef_parcellation_interpolation(zef);
 end

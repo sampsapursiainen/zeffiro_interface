@@ -1,3 +1,3 @@
-function [z, reconstruction_information] = zef_KF(q_value)
-[z, reconstruction_information] = zef_KF(q_value);
+function [zef] = zef_KF(zef, q_value)
+[zef] = zef_KF(zef, q_value);
 end
