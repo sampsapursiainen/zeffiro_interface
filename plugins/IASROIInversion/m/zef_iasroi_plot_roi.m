@@ -1,10 +1,15 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [iasroi_roi_sphere,h_roi_sphere] = zef_iasroi_plot_roi
-h_iasroi_roi_sphere_1 = evalin('base','zef.h_iasroi_roi_sphere_1');
-h_iasroi_roi_sphere_2 = evalin('base','zef.h_iasroi_roi_sphere_2');
-h_iasroi_roi_sphere_3 = evalin('base','zef.h_iasroi_roi_sphere_3');
-h_iasroi_roi_sphere_4 = evalin('base','zef.h_iasroi_roi_sphere_4');
+function [iasroi_roi_sphere,h_roi_sphere] = zef_iasroi_plot_roi(zef)
+
+if nargin == 0
+    zef = eval('base','zef');
+end
+
+h_iasroi_roi_sphere_1 = eval('zef.h_iasroi_roi_sphere_1');
+h_iasroi_roi_sphere_2 = eval('zef.h_iasroi_roi_sphere_2');
+h_iasroi_roi_sphere_3 = eval('zef.h_iasroi_roi_sphere_3');
+h_iasroi_roi_sphere_4 = eval('zef.h_iasroi_roi_sphere_4');
 iasroi_roi_sphere = str2num(get(h_iasroi_roi_sphere_1 ,'string'));
 iasroi_roi_sphere = iasroi_roi_sphere(:);
 iasroi_roi_sphere = [ iasroi_roi_sphere ...
@@ -14,10 +19,10 @@ reshape(str2num(get(h_iasroi_roi_sphere_4 ,'string')),size(iasroi_roi_sphere,1),
 ];
 
 [s_x,s_y,s_z] = sphere(100);
-h_axes1 = evalin('base','zef.h_axes1');
+h_axes1 = eval('zef.h_axes1');
 hold(h_axes1,'on');
-if isfield(evalin('base','zef'),'h_roi_sphere')
-h_roi_sphere = evalin('base','zef.h_roi_sphere');
+if isfield(eval('zef'),'h_roi_sphere')
+h_roi_sphere = eval('zef.h_roi_sphere');
 if ishandle(h_roi_sphere)
 delete(h_roi_sphere);
 end

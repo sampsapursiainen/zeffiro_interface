@@ -277,7 +277,7 @@ if not(isempty(sensors_visible))
     sensors_color_table = sensors_color_table(sensors_visible,:);
 end
 %April 2021
-[X_s, Y_s, Z_s] = sphere(50);
+[X_s, Y_s, Z_s] = sphere(20);
 sphere_scale = aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;

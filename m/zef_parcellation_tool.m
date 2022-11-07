@@ -1,8 +1,13 @@
-%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
-zef.h_parcellation_tool = open('zeffiro_interface_parcellation_tool.fig');
-set(zef.h_parcellation_tool,'Name','ZEFFIRO Interface: Parcellation tool');
-set(findobj(zef.h_parcellation_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
-set(findobj(zef.h_parcellation_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+function zef = zef_parcellation_tool(zef)
 
-zef_init_parcellation;
+if nargin == 0
+zef = evalin('base','zef');
+end    
+
+zef = zef_tool_start(zef,'zef_parcellation_tool_open',1/4,0);
+
+if nargout == 0
+    assignin('base','zef',zef)
+end
+
+end

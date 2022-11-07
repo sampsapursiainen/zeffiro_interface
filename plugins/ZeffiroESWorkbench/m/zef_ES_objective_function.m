@@ -1,86 +1,58 @@
 function [sr, sc] = zef_ES_objective_function(varargin)
- 
-[~, ~, metacriteria_list, metacriteria_type] = zef_ES_table([]);
+%% Check for zef
+if nargin == 0
+    zef = evalin('base','zef');
+end
+if nargin == 1
+    zef = varargin{1};
+end
+%% pre-allocation of the objective functions and threshold parameters
+vec     = zef_ES_table(zef);
+obj1    = zef.ES_obj_fun;
+obj2    = zef.ES_obj_fun_2;
+AT      = zef.ES_acceptable_threshold;
+TT      = zef.ES_threshold_condition;
 
-obj1 = [];
-obj2 = [];
-thre_aux = [];
-thre_type = [];
-vec = [];
+metacriteria_names  = vec.Properties.VariableNames;
+metacriteria_minmax = vec.Properties.VariableDescriptions;
+metacriteria_objfun = metacriteria_names(~strcmpi(metacriteria_minmax, 'none'));
 
-if not(isempty(varargin))
-    vec = varargin{1};
-        if length(varargin) > 1
-        obj1 = varargin{2};
-        end
-    if length(varargin) > 2
-        obj2 = varargin{3};
+obj_fun_1 = vec.(metacriteria_objfun{obj1}){1};
+obj_fun_2 = vec.(metacriteria_objfun{obj2}){1};
+if isempty(obj_fun_1) || isempty(obj_fun_2)
+    error('ZI error: No data has been calculated yet.')
+end
+%% 'sweet spot' indexing based on objective
+if isequal(obj1, obj2)
+    if     strcmpi(metacriteria_minmax(obj1), 'minimum')
+        [~, Idx] = min(abs(obj_fun_1),[],'all');
+    elseif strcmpi(metacriteria_minmax(obj1), 'maximum')
+        [~, Idx] = max(abs(obj_fun_1),[],'all');
     end
-    if length(varargin) > 3
-        thre_aux = varargin{4};
-    end
-     if length(varargin) > 4
-        thre_type = varargin{5};
-    end
-end
-
-if isempty(obj1)
-    vec = zef_ES_table;
-end
-
-if isempty(obj1)
-    obj1 = evalin('base','zef.ES_obj_fun');
-end
-
-if isempty(obj2)
-    obj2 = evalin('base','zef.ES_obj_fun_2');
-end
-
-if isempty(thre_aux)
-thre_aux = evalin('base','zef.ES_acceptable_threshold');
-end
-
-if isempty(thre_type)
-thre_type = evalin('base','zef.ES_threshold_condition');
-end
-
-obj_fun_1 = vec.(metacriteria_list{obj1}){1};
-obj_fun_2 = vec.(metacriteria_list{obj2}){1};
-
-if isequal(obj1,obj2)
-    
-if   isequal(metacriteria_type{obj1}, 'minimum')
-[~, Idx] = min(abs(obj_fun_1(:)));
-elseif isequal(metacriteria_type{obj1}, 'maximum')
- [~, Idx] = max(abs(obj_fun_1(:)));
-end
-
-[sr, sc] = ind2sub(size(obj_fun_1),Idx);
+    [sr, sc] = ind2sub(size(obj_fun_1), Idx);
 
 else
-    
-if isequal(thre_type,1)
-  thre_aux = thre_aux*max((obj_fun_1(:)));
-end
 
-if   isequal(metacriteria_type{obj1}, 'minimum')
-    [Idx] = find(abs(obj_fun_1(:)) <= thre_aux);
-if isempty(Idx)
-[~,Idx] = min(abs(obj_fun_1(:)));
-end
-elseif isequal(metacriteria_type{obj1}, 'maximum')
-     [Idx] = find(abs(obj_fun_1(:)) >= thre_aux);
-if isempty(Idx)
-[~,Idx] = max(abs(obj_fun_1(:)));
-end
-end
+    if isequal(TT, 1)
+        AT = AT*max((obj_fun_1(:)));
+    end
 
-if   isequal(metacriteria_type{obj2}, 'minimum')
-    [~, Idx_2] = min(abs(obj_fun_2(Idx)));
-elseif isequal(metacriteria_type{obj2}, 'maximum')
-    [~, Idx_2] = max(abs(obj_fun_2(Idx)));
-end
+    if     strcmpi(metacriteria_minmax(obj1), 'minimum')
+        [Idx] = find(abs(obj_fun_1(:)) <= AT);
+        if isempty(Idx)
+            [~, Idx] = min(abs(obj_fun_1(:)));
+        end
+    elseif strcmpi(metacriteria_minmax(obj1), 'maximum')
+        [Idx] = find(abs(obj_fun_1(:)) >= AT);
+        if isempty(Idx)
+            [~, Idx] = max(abs(obj_fun_1(:)));
+        end
+    end
 
-[sr, sc] = ind2sub(size(obj_fun_2),Idx(Idx_2));
-
+    if     strcmpi(metacriteria_minmax(obj2), 'minimum')
+        [~, Idx_2] = min(abs(obj_fun_2(Idx)));
+    elseif strcmpi(metacriteria_minmax(obj2), 'maximum')
+        [~, Idx_2] = max(abs(obj_fun_2(Idx)));
+    end
+    [sr, sc] = ind2sub(size(obj_fun_2), Idx(Idx_2));
 end

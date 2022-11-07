@@ -27,7 +27,6 @@ if not(isfield(zef,'inv_time_2'))
 zef.inv_time_2 = 0;
 end
 
-%this part gives wrong values, because it uses the time step length?
 if size_Data>1
     if eval(['zef.inv_time_2']) >=0 && eval(['zef.inv_time_1']) >= 0 && 1 + sampling_freq*eval(['zef.inv_time_1']) <= size_Data
         t_ind = max(1, 1 + floor(sampling_freq*eval(['zef.inv_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...

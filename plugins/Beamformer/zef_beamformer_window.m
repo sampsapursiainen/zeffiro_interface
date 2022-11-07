@@ -3,7 +3,7 @@
 %Beamformer, inverse_tools, zef_beamformer_start
 function zef = zef_beamformer_window(zef)
 
-zef.beamformer = beamformer_app;
+zef.beamformer = zef_beamformer_app;
 
 %_ Names of methods that are included in app _
 zef_bf_names = {'Linearly constraint minimum variance (LCMV)'

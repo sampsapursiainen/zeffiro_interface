@@ -27,7 +27,7 @@ for rec = z_inverse_results
     zef.parcellation_selected = get(zef.h_parcellation_list,'value');
 
 
-    [zef.parcellation_interp_ind] = zef_parcellation_interpolation([]); zef_update_parcellation; set(zef.h_parcellation_interpolation,'foregroundcolor',[0 0 0]);
+    [zef.parcellation_interp_ind] = zef_parcellation_interpolation(zef); zef_update_parcellation; set(zef.h_parcellation_interpolation,'foregroundcolor',[0 0 0]);
 
     zef.h_parcellation_plot_type.Value = 20;
     zef.h_time_series_tools_list.Value = 21;

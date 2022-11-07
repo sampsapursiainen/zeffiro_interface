@@ -1,4 +1,4 @@
-function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
+function x = L1_optimization(A,sigma,y,gamma,x,maxiter,estimation_type)
 
 %MAP estimate using EM algorithm
 %L1 norm minimization problem (LASSO):
@@ -19,14 +19,26 @@ function x = L1_optimization(L,sigma,y,gamma,x0,maxiter)
 %modified 28.4.2020
 %modified to be stable (icreased accuracy) 04.12.2021
 
-[m,~]=size(L);
-A = 1/sigma*L;
+[m,~]=size(A);
+A = 1/sigma*A;
 b = 1/sigma*y;
+reg = sqrt(0.5*pi/m)*norm(A,'fro');
 
-reg = sqrt(0.5*pi/m)*norm(L,'fro');
  for iter = 1 : maxiter
-    D = spdiags(abs(x)./(gamma),0,size(A,2),size(A,2));
-    ADA_T = A*(D*A');
-    x = D*(A'*((ADA_T + reg*trace(D)*eye(size(ADA_T)))\b));
+    if estimation_type == 3
+        P_sqrt = abs(x)./gamma;   %Fixed-point/FOCUSS
+        L_aux = A.*P_sqrt';
+        R = L_aux'/(L_aux*A'+eye(m));
+        R = abs(sum(R.'.*L_aux,1));
+        T_scale = 1./sqrt(R)';
+        D = spdiags(abs(x)./gamma,0,size(A,2),size(A,2));
+        ADA_T = A*(D*A');
+        
+        x = T_scale.*(D*(A'*((ADA_T + reg*trace(D)*eye(size(ADA_T)))\b)));
+    else
+        D = spdiags(abs(x)./gamma,0,size(A,2),size(A,2));
+        ADA_T = A*(D*A');
+        x = D*(A'*((ADA_T + reg*trace(D)*eye(size(ADA_T)))\b));
+    end
 end
 end

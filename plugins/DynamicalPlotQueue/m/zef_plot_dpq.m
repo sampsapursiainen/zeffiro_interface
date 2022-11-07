@@ -1,6 +1,10 @@
-function zef_plot_dpq(type)
+function zef_plot_dpq(type,zef)
 
-dpq_table = evalin('base','zef.dynamical_plot_queue_table');
+if nargin == 1
+    zef = evalin('caller','zef');
+end
+
+dpq_table = eval('zef.dynamical_plot_queue_table');
 
 for dpq_ind = 1 : size(dpq_table,1)
 

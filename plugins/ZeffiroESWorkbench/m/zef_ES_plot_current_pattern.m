@@ -1,5 +1,9 @@
 function [h_current_ES, h_current_coords] = zef_ES_plot_current_pattern(varargin)
-zef = evalin('caller','zef');
+if nargin == 0
+    zef = evalin('base','zef');
+else
+    zef = varargin{1};
+end
 
 %% clear Axes handle && ES_Colorbar
 if isfield(eval('zef'),'h_current_ES')
@@ -15,26 +19,10 @@ try %#ok<*TRYNC>
     delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
 end
 %% Variables and parameter setup
-switch nargin
-    case 0
-        [sr, sc] = zef_ES_objective_function(zef_ES_table);
-        y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-    case 1
-        if isvector(varargin{1})
-            y_ES = varargin{1};
-        else
-            error('Inserted argument is not a vector.')
-        end
-    case 2
-        [sr, sc] = deal(varargin{1:2});
-        try
-            y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
-        catch
-            error('No y_ES data found.')
-        end
-    otherwise
-        error('Number of function input argument must be 0 or 1')
-end
+
+[sr, sc] = zef_ES_objective_function(zef);
+y_ES = eval(['zef.y_ES_interval.y_ES{' num2str(sr) ',' num2str(sc) '}']);
+
 zef = zef_process_meshes(zef,zef.explode_everything);
 %% Sensors attachment
 if eval('zef.attach_electrodes')
@@ -183,7 +171,7 @@ ES_colormap_vec(index_aux,:);
 h_current_ES     = zeros(size(sensors,1),1);
 h_current_coords = zeros(size(sensors,1),1);
 for i = 1:size(sensors,1)
-    
+
     if not(eval('zef.h_ES_2D_electrode_map.Value'))
         h_current_ES(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
     else
@@ -192,7 +180,7 @@ for i = 1:size(sensors,1)
         h_current_ES(i) = surf(sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*(max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3))))) + X_s, sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*((max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3)))))) + Y_s, max(sensors(:,3)) + Z_s);
         view(0,90)
     end
-    
+
     set(h_current_ES(i),'Tag','sensor');
     h_current_coords(i) = h_current_ES(i);
     set(h_current_ES(i),'edgecolor','none');

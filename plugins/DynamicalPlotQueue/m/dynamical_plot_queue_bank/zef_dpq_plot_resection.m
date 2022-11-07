@@ -26,8 +26,9 @@ c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrah
  FB = freeBoundary(D);
 
  h = evalin('caller','h_axes_image');
- axes(h);
- hold(h,'on');
+ h_f = gcf; 
+ h_f.CurrentAxes = h;
+ %axes(h);
  h_resection = trimesh(FB,nodes(:,1),nodes(:,2),nodes(:,3));
  set(h_resection,'facecolor',resection_color);
  set(h_resection,'edgecolor','none');
@@ -37,6 +38,5 @@ c_points = 0.25*(nodes(tetrahedra(:,1),:)+ nodes(tetrahedra(:,2),:)+nodes(tetrah
  set(h_resection,'facealpha',alpha_value);
  end
  set(h_resection,'facelighting','phong');
- %hold(h,'off');
 
 end

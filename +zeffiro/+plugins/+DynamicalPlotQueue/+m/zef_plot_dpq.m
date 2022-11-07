@@ -1,3 +1,3 @@
-function zef_plot_dpq(type)
-zef_plot_dpq(type);
+function zef_plot_dpq(type,zef)
+zef_plot_dpq(type,zef);
 end

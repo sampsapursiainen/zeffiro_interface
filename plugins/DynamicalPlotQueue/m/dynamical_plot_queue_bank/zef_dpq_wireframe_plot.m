@@ -5,7 +5,7 @@ w_n = evalin('base','zef.wireframe_nodes');
 
 h_a = evalin('base','zef.h_axes1');
 hold on;
-axes(h_a);
+%axes(h_a);
 
 h_t = trimesh(w_t,w_n(:,1),w_n(:,2),w_n(:,3));
 h_t.EdgeColor = 'none';

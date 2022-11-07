@@ -2,6 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
     zef.ias_hyperprior = get(zef.h_ias_hyperprior ,'value');
     zef.ias_snr = str2num(get(zef.h_ias_snr,'string'));
+    zef.ias_type = get(zef.h_ias_type,'value');
     zef.ias_n_map_iterations = str2num(get(zef.h_ias_n_map_iterations,'string'));
     zef.ias_sampling_frequency = str2num(get(zef.h_ias_sampling_frequency,'string'));
     zef.ias_low_cut_frequency = str2num(get(zef.h_ias_low_cut_frequency,'string'));

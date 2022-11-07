@@ -9,7 +9,7 @@ if zef.use_log
 log_dir = dir([zef.program_path filesep 'data' filesep 'log']);
 n_files = length(log_dir)-2;
 if n_files > zef.max_n_log_files
-date_info_cell = {log_dir(3:end).date}';
+date_info_cell = {log_dir(3:end).datenum}';
 date_info_array = zeros(n_files,6);
 for i = 1 : n_files
 date_info_array(i,:) = datevec(date_info_cell{i});

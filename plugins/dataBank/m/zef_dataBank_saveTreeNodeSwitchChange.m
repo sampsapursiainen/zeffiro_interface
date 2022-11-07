@@ -1,3 +1,8 @@
+function zef = zef_dataBank_saveTreeNodeSwitchChange(zef)
+
+if nargin == 0
+zef = evalin('base','zef')
+end
 
 zef.dataBank.save2disk=zef.dataBank.app.savetodiskSwitch.Value;
 
@@ -15,3 +20,9 @@ if strcmp(zef.dataBank.save2disk, 'On') %saving the files
 end
 
 clear fwait
+
+if nargout == 0
+assignin('base','zef',zef);
+end
+
+end

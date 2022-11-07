@@ -1,1 +1,3 @@
-zef_dataBank_saveTreeNodeSwitchChange;
+function zef = zef_dataBank_saveTreeNodeSwitchChange(zef)
+zef = zef_dataBank_saveTreeNodeSwitchChange(zef);
+end

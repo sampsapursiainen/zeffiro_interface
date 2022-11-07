@@ -1,3 +1,3 @@
-function zef_ES_find_currents
-zef_ES_find_currents;
+function zef = zef_ES_find_currents(zef)
+zef = zef_ES_find_currents(zef);
 end

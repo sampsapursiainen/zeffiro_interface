@@ -209,6 +209,6 @@ set(findobj(zef.h_zeffiro.Children,'Tag','copyright_text'),'FontSize',0.5*zef.fo
 
 zef.h_zeffiro.SizeChangedFcn = '';
 zef.h_zeffiro.Units = 'normalized';
-zef_set_size_change_function(zef.h_zeffiro,1,[],['{''rightColorbar'',''leftColorbar''}']);
+zef_set_size_change_function(zef.h_zeffiro,1,[],['{''rightColorbar'',''leftColorbar'',''legend''}']);
 zef = rmfield(zef,'size_temp');
 

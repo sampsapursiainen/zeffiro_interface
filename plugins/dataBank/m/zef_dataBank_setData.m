@@ -1,3 +1,8 @@
+function zef = zef_dataBank_setData(zef)
+
+if nargin == 0
+zef = evalin('base','zef')
+end
 
 dbFieldNames=fieldnames(zef.dataBank.tree.(zef.dataBank.hash).data);
 
@@ -26,5 +31,11 @@ if zef.dataBank.loadParents
         if ~strcmp(zef.dataBank.hash, 'node')
             zef_dataBank_setData;
         end
+
+end
+
+if nargout == 0
+assignin('base','zef',zef);
+end
 
 end

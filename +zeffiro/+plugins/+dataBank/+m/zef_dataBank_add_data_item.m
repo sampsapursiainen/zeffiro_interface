@@ -1,3 +1,3 @@
-function zef_dataBank_add_data_item(data_type,parent_node_name,node_name)
-zef_dataBank_add_data_item(data_type,parent_node_name,node_name);
+function zef_dataBank_add_data_item(zef,data_type,parent_node_name,node_name)
+zef_dataBank_add_data_item(zef,data_type,parent_node_name,node_name);
 end

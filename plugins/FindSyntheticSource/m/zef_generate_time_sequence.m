@@ -1,18 +1,20 @@
-function [time_serie,time_var] = zef_generate_time_sequence
+function [time_serie,time_var] = zef_generate_time_sequence(zef)
 h = zef_waitbar(0,['Generate time sequence.']);
-
+if nargin == 0
+    zef = evalin('base','zef');
+end
 %Sample rate as the number of samples per second
-sampling_freq = evalin('base','max(cell2mat(zef.inv_synth_sampling_frequency))');
+sampling_freq = eval( 'max(cell2mat(zef.inv_synth_sampling_frequency))');
 %The time when peak of pulse occurs
-peak_time = evalin('base','zef.inv_pulse_peak_time');
+peak_time = eval( 'zef.inv_pulse_peak_time');
 %Amplitude of the pulse between 0 and 1
-pulse_amp = evalin('base','zef.inv_pulse_amplitude');
+pulse_amp = eval( 'zef.inv_pulse_amplitude');
 %Length of the Gaussian envelope on seconds
-pulse_length = evalin('base','zef.inv_pulse_length');
+pulse_length = eval( 'zef.inv_pulse_length');
 %Oscillation frequency
-oscillation_freq = evalin('base','zef.inv_oscillation_frequency');
+oscillation_freq = eval( 'zef.inv_oscillation_frequency');
 %Oscillation phase
-oscillation_phase = evalin('base','zef.inv_oscillation_phase');
+oscillation_phase = eval( 'zef.inv_oscillation_phase');
 
 signal_duration = 0;
 for n = 1:length(peak_time)
@@ -41,4 +43,5 @@ for n = 1:length(peak_time)
 end
 
 close(h);
+
 end

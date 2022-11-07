@@ -5,8 +5,10 @@
 # Allow specific files
 
 !.gitignore
+!.gitmodules
 !.gitattributes
 !LICENSE
+!CONTRIBUTING.md
 
 # Allow file types (in subfolders) with a !
 

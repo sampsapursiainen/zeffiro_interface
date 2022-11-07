@@ -1,8 +1,10 @@
-function zef_ES_plot_distance_curves
+function zef = zef_ES_plot_distance_curves(zef)
 
-zef = evalin('caller','zef');
+if nargin == 0
+zef = evalin('base','zef');
+end
 
-    f = figure('Name','ZEFFIRO Interface: ES distance curves','NumberTitle','off', ...
+    h_f = figure('Name','ZEFFIRO Interface: ES distance curves','NumberTitle','off', ...
         'ToolBar','figure','MenuBar','none');
 
 distance_window = 10;
@@ -134,5 +136,8 @@ xlabel('Distance (mm)')
 title('Distance vs. angle difference')
 
 hold off
+
+h_f.Visible = zef.use_display;
+zef.h_ES_distance_curves = h_f;
 
 end
