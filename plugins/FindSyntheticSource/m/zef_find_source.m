@@ -1,27 +1,30 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [meas_data] = zef_find_source
-source_positions = evalin('base','zef.source_positions');
-noise_level = 10^(evalin('base','zef.inv_synth_source(1,8)')/20);       %dipole noise
-if noise_level > 1
-    warning(['Noise level ',num2str(evalin('base','zef.inv_synth_source(1,8)')),' corresponds to ',num2str(round(100*noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
+function [meas_data] = zef_find_source(zef)
+if nargin == 0
+    zef = evalin('base', 'zef');
 end
-if ~isempty(evalin('base','zef.fss_bg_noise'))
-bg_noise_level = 10^(evalin('base','zef.fss_bg_noise')/20);    %background noise
+source_positions = eval( 'zef.source_positions');
+noise_level = 10^(eval( 'zef.inv_synth_source(1,8)')/20);       %dipole noise
+if noise_level > 1
+    warning(['Noise level ',num2str(eval( 'zef.inv_synth_source(1,8)')),' corresponds to ',num2str(round(100*noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
+end
+if ~isempty(eval( 'zef.fss_bg_noise'))
+bg_noise_level = 10^(eval( 'zef.fss_bg_noise')/20);    %background noise
 else
 bg_noise_level = 0;
 end
 if bg_noise_level > 1
-    warning(['Background noise level ',num2str(evalin('base','zef.fss_bg_noise')),' corresponds to ',num2str(round(100*bg_noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
+    warning(['Background noise level ',num2str(eval( 'zef.fss_bg_noise')),' corresponds to ',num2str(round(100*bg_noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
 end
 
-s_p = evalin('base','zef.inv_synth_source(:,1:3)');
-s_o = evalin('base','zef.inv_synth_source(:,4:6)');
+s_p = eval( 'zef.inv_synth_source(:,1:3)');
+s_o = eval( 'zef.inv_synth_source(:,4:6)');
 s_o = s_o./repmat(sqrt(sum(s_o.^2,2)),1,3);
-if ~evalin('base','isfield(zef,''time_sequence'')')
-    s_a = evalin('base','zef.inv_synth_source(:,7)');
+if ~eval( 'isfield(zef,''time_sequence'')')
+    s_a = eval( 'zef.inv_synth_source(:,7)');
     s_f = 1e-3*repmat(s_a,1,3).*s_o;
-    L = evalin('base','zef.L');
+    L = eval( 'zef.L');
     meas_data = zeros(size(L(:,1),1),1);
     for i = 1 : size(s_p,1)
     [s_min,s_ind] = min(sqrt(sum((source_positions - repmat(s_p(i,:),size(source_positions,1),1)).^2,2)));
@@ -31,20 +34,20 @@ if ~evalin('base','isfield(zef,''time_sequence'')')
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level + max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;
 else
     h = zef_waitbar(0,['Create time sequence data.']);
-    if isempty(evalin('base','zef.fss_time_val'))
-        if evalin('base','str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
-            time_seq = evalin('base','zef.time_sequence(1:length(zef.find_synth_source.selected_source),:)');
+    if isempty(eval( 'zef.fss_time_val'))
+        if eval( 'str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
+            time_seq = eval( 'zef.time_sequence(1:length(zef.find_synth_source.selected_source),:)');
         else
-            time_seq = evalin('base','zef.time_sequence');
+            time_seq = eval( 'zef.time_sequence');
         end
     else
-        if evalin('base','str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
-            time_seq = evalin('base','zef.time_sequence(1:length(zef.find_synth_source.selected_source),length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
+        if eval( 'str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
+            time_seq = eval( 'zef.time_sequence(1:length(zef.find_synth_source.selected_source),length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
         else
-            time_seq = evalin('base','zef.time_sequence(:,length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
+            time_seq = eval( 'zef.time_sequence(:,length(zef.time_variable(zef.time_variable<=zef.fss_time_val)))');
         end
     end
-    s_a = evalin('base','zef.inv_synth_source(:,7)');
+    s_a = eval( 'zef.inv_synth_source(:,7)');
     s_f = 1e-3*repmat(s_a,1,3).*s_o;
     s_f = repmat(s_f,1,1,size(time_seq,2));
     for zef_i = 1:size(time_seq,2)
@@ -52,7 +55,7 @@ else
             s_f(zef_n,:,zef_i) = s_f(zef_n,:,zef_i)*time_seq(zef_n,zef_i);
         end
     end
-    L = evalin('base','zef.L');
+    L = eval( 'zef.L');
     meas_data = zeros(size(L(:,1),1),size(time_seq,2));
     for i = 1 : size(s_p,1)
         [s_min,s_ind] = min(sqrt(sum((source_positions - repmat(s_p(i,:),size(source_positions,1),1)).^2,2)));
@@ -64,6 +67,9 @@ else
     n_val = max(abs(meas_data));
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level+max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;
     close(h);
+end
+if nargout == 0
+    assignin('base', 'zef', zef);
 end
 
 end

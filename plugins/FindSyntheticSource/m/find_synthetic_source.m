@@ -1,4 +1,7 @@
-
+function zef = find_synthetic_source(zef)
+if nargin == 0
+    zef = evalin('base', 'zef');
+end
 zef.find_synth_source = find_synthetic_source_app;
 
 zef.synth_source_init = cell(16,2);
@@ -70,17 +73,17 @@ elseif isfield(zef,'inv_synth_source')
         zef.synth_source_data{zef_n}.parameters = zef.synth_source_init;
         zef.synth_source_data{zef_n}.name = zef.find_synth_source.h_source_list.Data{end,1};
         for zef_i = 1:7
-            zef.synth_source_data{zef_n}.parameters{zef_i,2} = num2str(evalin('base',['zef.inv_synth_source(',num2str(zef_n),',',num2str(zef_i),')']));
+            zef.synth_source_data{zef_n}.parameters{zef_i,2} = num2str(eval( ['zef.inv_synth_source(',num2str(zef_n),',',num2str(zef_i),')']));
         end
-        zef.synth_source_data{zef_n}.parameters{8,2} = num2str(evalin('base',['db(zef.inv_synth_source(',num2str(zef_n),',8))']));
-        zef.synth_source_data{zef_n}.parameters{15,2} = num2str(evalin('base',['zef.inv_synth_source(',num2str(zef_n),',9)']));
-        zef.synth_source_data{zef_n}.parameters{16,2} = num2str(evalin('base',['zef.inv_synth_source(',num2str(zef_n),',10)']));
+        zef.synth_source_data{zef_n}.parameters{8,2} = num2str(eval( ['db(zef.inv_synth_source(',num2str(zef_n),',8))']));
+        zef.synth_source_data{zef_n}.parameters{15,2} = num2str(eval( ['zef.inv_synth_source(',num2str(zef_n),',9)']));
+        zef.synth_source_data{zef_n}.parameters{16,2} = num2str(eval( ['zef.inv_synth_source(',num2str(zef_n),',10)']));
     end
 
     zef.find_synth_source.selected_source=1;
     zef.synth_source_updated_true = false;
     zef.fss_time_val = [];
-    zef_update_fss;
+    zef = zef_update_fss(zef);
 else
     zef.synth_source_updated_true = false;
     zef.fss_time_val = [];
@@ -112,3 +115,8 @@ zef.find_synth_source_relative_size = zef_get_relative_size(zef.find_synth_sourc
 set(zef.find_synth_source.h_find_synth_source,'SizeChangedFcn', 'zef.find_synth_source_current_size = zef_change_size_function(zef.find_synth_source.h_find_synth_source,zef.find_synth_source_current_size,zef.find_synth_source_relative_size);');
 
 clear zef_i zef_j zef_n zef_N
+zef.find_synth_source.h_find_synth_source.Visible = zef.use_display;
+if nargout == 0
+    assignin('base', 'zef', zef);
+end
+end
