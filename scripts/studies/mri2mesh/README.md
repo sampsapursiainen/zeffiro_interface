@@ -29,8 +29,10 @@ FreeSurfer under `$HOME/freesurfer`:
 
 	export PATH="$FREESURFER_BIN:$PATH"
 
+	export SUBJECTS_DIR="/path/to/folder/with/freesurfer/input/files"
+
 Then either `source $HOME/.bashrc` before running the script, or log out and
-then back in to have the changes in `.basrc` to take effect.
+then back in to have the changes in `.bashrc` to take effect.
 
 ## [import\_segmentation.zef](./import_segmentation.zef) documentation
 
