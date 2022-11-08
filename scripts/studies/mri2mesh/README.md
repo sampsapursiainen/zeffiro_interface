@@ -18,6 +18,20 @@ the process is closed and the final `&` runs the routine as a background
 process. Doing it this way is rather important, as with many MRI subjects the
 routine could take days to complete.
 
+## Needed Bash Environment Variables
+
+Place the following lines in your `$HOME/.bashrc` file if you are installing
+FreeSurfer under `$HOME/freesurfer`:
+
+	export FREESURFER_HOME="$HOME/freesurfer"
+
+	export FREESURFER_BIN="$FREESURFER_HOME/bin"
+
+	export PATH="$FREESURFER_BIN:$PATH"
+
+Then either `source $HOME/.bashrc` before running the script, or log out and
+then back in to have the changes in `.basrc` to take effect.
+
 ## [import\_segmentation.zef](./import_segmentation.zef) documentation
 
 The below string used to be located in the file `import_segmentation.zef` of
