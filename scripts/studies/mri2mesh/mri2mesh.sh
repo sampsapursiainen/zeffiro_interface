@@ -87,7 +87,7 @@ FREESURFER_INFOLDER="${1%/}"
 FREESURFER_OUTFOLDER="${2%/}"
 ZEF_INFOLDER="${FREESURFER_OUTFOLDER}"
 ZEF_OUTFOLDER="${3%/}"
-ZEF_INPUT_SCRIPT="multicompartment_head_settings; zef_create_finite_element_mesh;"
+ZEF_INPUT_SCRIPT="zef = import_segmentation_legacy(zef,'${ZEF_IMPORT_SCRIPT_NAME}', '${MRI2ZEF_DIR}');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
 
 titleline 'Checking that given directories and scripts exist...'
 
@@ -187,7 +187,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 		mkdir ${ZEF_OUTDIR}
 	fi
 
-	ZEF_IMPORT_SCRIPT="${FS_OUTDIR}/${ZEF_IMPORT_SCRIPT_NAME}"
+	ZEF_IMPORT_SCRIPT="${MRI2ZEF_DIR}/${ZEF_IMPORT_SCRIPT_NAME}"
 
 	if [ ! -f ${ZEF_IMPORT_SCRIPT} ]; then
 		echo "Import script ${ZEF_IMPORT_SCRIPT} does not exist. Skipping mesh generation for ${subname}..."
@@ -206,7 +206,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 	# It prevents Matlab from infinitely waiting for input and complaining
 	# about invalid file descriptors.
 
-	nohup matlab -nodisplay -nosplash -r "${ADD2PATH}; zeffiro_interface('start_mode', 'nodisplay', 'import_segmentation_legacy', '${ZEF_IMPORT_SCRIPT}', 'run_script', '${ZEF_INPUT_SCRIPT}', 'save_project', '${OUTFILE}')" 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
+	nohup matlab -nodisplay -nosplash -r "${ADD2PATH}; zef = zeffiro_interface('start_mode', 'nodisplay', 'run_script', '${ZEF_INPUT_SCRIPT}', 'save_project', '${OUTFILE}'); " 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
 
 done
 
