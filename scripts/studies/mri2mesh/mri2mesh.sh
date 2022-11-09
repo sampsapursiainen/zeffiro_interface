@@ -4,7 +4,7 @@
 # subjects in a given folder, for which the FreeSurfer mesh generation routine
 # has generated a surface segmentation. Usage:
 #
-#     nohup zef_create_head_model.sh \
+#     nohup mri2mesh.sh \
 #     <folder with subjects> \
 #     <freesurfer output folder> \
 #     <ZI output folder> &
