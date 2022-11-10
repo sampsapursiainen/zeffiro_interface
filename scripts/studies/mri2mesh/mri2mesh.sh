@@ -206,7 +206,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 	# It prevents Matlab from infinitely waiting for input and complaining
 	# about invalid file descriptors.
 
-	nohup matlab -nodisplay -nosplash -r "${ADD2PATH}; zef = zeffiro_interface('start_mode', 'nodisplay', 'run_script', '${ZEF_INPUT_SCRIPT}', 'save_project', '${OUTFILE}'); " 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
+	nohup matlab -nodisplay -nosplash -r "${ADD2PATH}; zef = zeffiro_interface('start_mode', 'nodisplay', 'import_to_new_project', 'scripts/studies/mri2mesh/import_segmentation.zef', 'run_script', '${ZEF_INPUT_SCRIPT}', 'save_project', '${OUTFILE}');" 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
 
 done
 
