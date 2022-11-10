@@ -29,7 +29,7 @@ fi
 
 # Zeffiro Interface folder is the parent folder of this script.
 
-ZI_DIR="${MRI2ZEF_DIR}/.."
+ZI_DIR="${MRI2ZEF_DIR}/../../.."
 ZI_DIR="${ZI_DIR%/}"
 
 if [ ! -d ${ZI_DIR} ]; then
