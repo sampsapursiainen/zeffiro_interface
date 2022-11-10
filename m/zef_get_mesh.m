@@ -2,6 +2,8 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [mesh_data_1,mesh_data_2,submesh_data] = zef_get_mesh(zef,file_str,field_id,file_type,varargin)
 
+    file_str = fullfile(file_str);
+
 output_mode = 1;
 if not(isempty(varargin))
    output_mode = varargin{1};
