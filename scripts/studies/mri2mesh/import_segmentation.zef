@@ -1,35 +1,37 @@
-lh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum cortex, 0, ASC,0,0,0
-rh_CerebellumCortex, detail_1, 1, 0.33, 0, 2, Cerebellum cortex, 0, ASC,0,0,0
-lh_CerebellumWM, detail_2, 1, 0.33, 0, 0, Cerebellum WM, 0, ASC,0,0,0
-rh_CerebellumWM, detail_2, 1, 0.33, 0, 0, Cerebellum WM, 0, ASC,0,0,0
-lh.Amygdala, detail_3, 1, 0.33, 0, 2, Amygdala, 0, ASC,0,0,0
-rh.Amygdala, detail_3, 1, 0.33, 0, 2, Amygdala, 0, ASC,0,0,0
-lh.thalamus, detail_4, 1, 0.33, 0, 2, Thalamus, 0, ASC,0,0,0
-rh.thalamus, detail_4, 1, 0.33, 0, 2, Thalamus, 0, ASC,0,0,0
-lh.caudate, detail_5, 1, 0.33, 0, 2, Caudate, 0, ASC,0,0,0
-rh.caudate, detail_5, 1, 0.33, 0, 2, Caudate, 0, ASC,0,0,0
-lh.Accumbens, detail_6, 1, 0.33, 0, 2, Acumbens, 0, ASC,0,0,0
-rh.Accumbens, detail_6, 1, 0.33, 0, 2, Acumbens, 0, ASC,0,0,0
-lh.putamen, detail_7, 1, 0.33, 0, 2, Putamen, 0, ASC,0,0,0
-rh.putamen, detail_7, 1, 0.33, 0, 2, Putamen, 0, ASC,0,0,0
-lh.Hippocampus, detail_8, 1, 0.33, 0, 1, Hippocampus, 0, ASC,0,0,0
-rh.Hippocampus, detail_8, 1, 0.33, 0, 1, Hippocampus, 0, ASC,0,0,0
-lh.pallidum, detail_9, 1, 0.33, 0, 2, Pallidum, 0, ASC,0,0,0
-rh.pallidum, detail_9, 1, 0.33, 0, 2, Pallidum, 0, ASC,0,0,0
-lh_Lateral-Ventricle, detail_10, 1, 1.79, 0, 0, Ventricles, 0, ASC,0,0,0
-rh_Lateral-Ventricle, detail_10, 1, 1.79, 0, 0, Ventricles, 0, ASC,0,0,0
-outer_skin, scalp, 1, 0.33, 0, 0, Scalp, 0, ASC,0,0,0
-outer_skull, skull, 1, 0.0064, 0, 0, Skull, 0, ASC,0,0,0
-inner_skull, csf, 1, 1.79, 0, 0, Cerebrospinal fluid, 0, ASC,0,0,0
-Brainstem, detail_11, 1, 0.33, 0, 2, Brain stem, 0, ASC,0,0,0
-CC_posterior, detail_12, 1, 0.14, 0, 0, Cingulate cortex, 0, ASC,0,0,0
-CC_Mid_posterior, detail_12, 1, 0.14, 0, 0, Cingulate cortex, 0, ASC,0,0,0
-CC_Central, detail_12, 1, 0.14, 0, 0, Cingulate cortex, 0, ASC,0,0,0
-CC_Mid_Anterior, detail_12, 1, 0.14, 0, 0, Cingulate cortex, 0, ASC,0,0,0
-CC_Anterior, detail_12, 1, 0.14, 0, 0, Cingulate cortex, 0, ASC,0,0,0
-LVentral_DC, detail_13, 1, 0.33, 0, 2, Ventral DC, 0, ASC,0,0,0
-RVentral_DC, detail_13, 1, 0.33, 0, 2, Ventral DC, 0, ASC,0,0,0
-lh.wm, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC,0,0,0
-rh.wm, white_matter, 1, 0.14, 0, 3, White matter, 0, ASC,0,0,0
-lh.pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC,0,0,0
-rh.pial, grey_matter, 1, 0.33, 0, 1, Grey matter, 0, ASC,0,0,0
+type,sensors,name,Electrodes,filename,electrodes.dat,filetype,points,modality,EEG
+type,box,name,Box
+type,segmentation,name,Skin,filename,outer_skin.asc,parameter_name,sigma,parameter_value,0.33,activity,0
+type,segmentation,name,Skull,filename,outer_skull.asc,parameter_name,sigma,parameter_value,0.0064,activity,0
+type,segmentation,name,CSF,filename,inner_skull.asc,parameter_name,sigma,parameter_value,1.79,activity,0
+type,segmentation,name,Grey matter,merge,0,filename,lh.pial.asc,parameter_name,sigma,parameter_value,0.33,activity,1,atlas_colortable_filename,color_table_lh_36.mat,atlas_points_filename,lh_labels_36.asc
+type,segmentation,name,Grey matter,merge,1,filename,rh.pial.asc,parameter_name,sigma,parameter_value,0.33,activity,1,atlas_colortable_filename,color_table_rh_36.mat,atlas_points_filename,rh_labels_36.asc
+type,segmentation,name,White matter,merge,0,filename,lh.wm.asc,parameter_name,sigma,parameter_value,0.14,activity,3
+type,segmentation,name,White matter,merge,1,filename,rh.wm.asc,parameter_name,sigma,parameter_value,0.14,activity,3
+type,segmentation,name,Cerebellum cortex,merge,0,filename,lh_CerebellumCortex.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Cerebellum cortex,merge,1,filename,rh_CerebellumCortex.asc,parameter_name,sigma,parameter_value, 0.33, activity,2
+type,segmentation,name,Cerebellum WM,merge,0,filename,lh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
+type,segmentation,name,Cerebellum WM,merge,1,filename,rh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
+type,segmentation,name,Brainstem,filename,Brainstem.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Cingulate cortex,merge,0,filename,CC_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Mid_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Mid_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Cingulate cortex,merge,1,filename,merge,1,CC_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
+type,segmentation,name,Ventral DC,merge,0,filename,LVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Ventral DC,merge,1,filename,RVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Amygdala,merge,0,filename,lh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Amygdala,merge,1,filename,rh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Thalamus,merge,0,filename,lh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Thalamus,merge,1,filename,rh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Caudate,merge,0,filename,lh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Caudate,merge,1,filename,rh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Accumbens,merge,0,filename,lh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Accumbens,merge,1,filename,rh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Putamen,merge,0,filename,lh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Putamen,merge,1,filename,rh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Hippocampus,merge,0,filename,lh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1
+type,segmentation,name,Hippocampus,merge,1,filename,rh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1
+type,segmentation,name,Pallidum,merge,0,filename,lh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Pallidum,merge,1,filename,rh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Ventricle,merge,0,filename,lh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0
+type,segmentation,name,Ventricle,merge,1,filename,rh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0
