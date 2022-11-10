@@ -172,9 +172,9 @@ function [ sensitivities_with_statistics, L ] = inverse_sensitivity_fn( ...
     % Get lead field from within zef or set a funky return value, if L could
     % not be located.
 
-    if isfield(zef, "L")
+    if isfield(project_struct, "L")
 
-        L = zef.L;
+        L = project_struct.L;
 
     else
 
