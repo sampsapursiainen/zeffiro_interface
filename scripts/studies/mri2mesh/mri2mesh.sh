@@ -87,7 +87,7 @@ FREESURFER_INFOLDER="${1%/}"
 FREESURFER_OUTFOLDER="${2%/}"
 ZEF_INFOLDER="${FREESURFER_OUTFOLDER}"
 ZEF_OUTFOLDER="${3%/}"
-ZEF_INPUT_SCRIPT="zef = zef_import_segmentation_legacy(zef,''${ZEF_IMPORT_SCRIPT_NAME}'', ''${MRI2ZEF_DIR}'');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
+ZEF_INPUT_SCRIPT="zef = zef_import_segmentation(zef,''${ZEF_IMPORT_SCRIPT_NAME}'', ''${MRI2ZEF_DIR}'');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
 
 titleline 'Checking that given directories and scripts exist...'
 
