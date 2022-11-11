@@ -40,14 +40,14 @@ classdef CommonInverseParameters
         number_of_frames (1,1) double { mustBeInteger, mustBePositive } = 1;
 
         %
-        % prior
+        % prior_mode
         %
         % TODO: description.
         %
-        prior (1,1) string { mustBeMember( ...
-            prior, ...
+        prior_mode (1,1) string { mustBeMember( ...
+            prior_mode, ...
             [ "balanced", "constant" ] ...
-        ) } = "balanced";
+        ) } = "constant";
 
         %
         % sampling_frequency
@@ -130,7 +130,7 @@ classdef CommonInverseParameters
             %
             %   - number_of_frames
             %
-            %   - prior
+            %   - prior_mode
             %
             %   - sampling_frequency
             %
@@ -163,7 +163,7 @@ classdef CommonInverseParameters
 
                 args.number_of_frames = 1;
 
-                args.prior = "constant";
+                args.prior_mode = "constant";
 
                 args.sampling_frequency = 1025;
 
@@ -189,11 +189,9 @@ classdef CommonInverseParameters
 
             self.number_of_frames = args.number_of_frames;
 
-            self.prior = args.prior;
+            self.prior_mode = args.prior_mode;
 
             self.sampling_frequency = args.sampling_frequency;
-
-            self.time_start = args.time_start;
 
             self.time_start = args.time_start;
 

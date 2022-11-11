@@ -49,7 +49,7 @@ classdef MNEInverter < inverse.CommonInverseParameters
             %
             %   - number_of_frames
             %
-            %   - prior
+            %   - prior_mode
             %
             %   - sampling_frequency
             %
@@ -84,7 +84,7 @@ classdef MNEInverter < inverse.CommonInverseParameters
 
                 args.number_of_frames = 1;
 
-                args.prior = "balanced";
+                args.prior_mode = "constant";
 
                 args.sampling_frequency = 1025;
 
@@ -111,7 +111,7 @@ classdef MNEInverter < inverse.CommonInverseParameters
                 "high_cut_frequency", args.high_cut_frequency, ...
                 "data_normalization_method", args.data_normalization_method, ...
                 "number_of_frames", args.number_of_frames, ...
-                "prior", args.prior, ...
+                "prior mode", args.prior_mode, ...
                 "sampling_frequency", args.sampling_frequency, ...
                 "time_start", args.time_start, ...
                 "time_window", args.time_window, ...
