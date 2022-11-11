@@ -163,7 +163,7 @@ classdef CommonInverseParameters
 
                 args.number_of_frames = 1;
 
-                args.prior = "balanced";
+                args.prior = "constant";
 
                 args.sampling_frequency = 1025;
 
