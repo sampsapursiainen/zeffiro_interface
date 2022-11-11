@@ -13,7 +13,7 @@ classdef IASInverter < inverse.CommonInverseParameters
         %of Gaussian likelihood, Gaussian prior and inverse gamma or gamma
         %hyperprior where the hyperparameter are updated via IAS algorithm
         %
-        ias_type (1,1) char { mustBeMember(ias_type, ['None'; 'sLORETA each step'; 'sLORETA last step';'dSPM each step';'dSPM last step']) } = 'None'
+        ias_type (1,:) char { mustBeMember(ias_type, ['None', 'sLORETA each step', 'sLORETA last step', 'dSPM each step', 'dSPM last step']) } = 'None'
 
         %
         %Defines the used hyperprior model; either gamma or inverse gamma
@@ -24,7 +24,7 @@ classdef IASInverter < inverse.CommonInverseParameters
         %
         %Number of IAS iterations
         %
-        n_map_iterations (1,1) double {mustBeInteger, mustBePositive} = 20
+        n_map_iterations (1,1) double {mustBeInteger, mustBePositive} = 25
 
         %consider adding these three to CommonInverseParameters since the prior_mode is there too:
         hyperprior_mode (1,1) string { mustBeMember(hyperprior_mode, ...
@@ -59,9 +59,9 @@ classdef IASInverter < inverse.CommonInverseParameters
 
                 args.data_normalization_method = "maximum entry"
 
-                args.inv_amplitude_db = 1
+                args.inv_amplitude_db = 20
 
-                args.inv_prior_over_measurement_db = 1
+                args.inv_prior_over_measurement_db = 20
 
                 args.inv_hyperprior_tail_length_db = 10
 
@@ -92,7 +92,6 @@ classdef IASInverter < inverse.CommonInverseParameters
                 "high_cut_frequency", args.high_cut_frequency, ...
                 "data_normalization_method", args.data_normalization_method, ...
                 "number_of_frames", args.number_of_frames, ...
-                "hyperprior mode", args.hyperprior_mode, ...
                 "sampling_frequency", args.sampling_frequency, ...
                 "time_start", args.time_start, ...
                 "time_window", args.time_window, ...
@@ -105,11 +104,16 @@ classdef IASInverter < inverse.CommonInverseParameters
             % Initialize own fields.
 
             self.ias_type = args.ias_type;
+
             self.n_map_iterations = args.n_map_iterations;
+            
             self.hyperprior = args.hyperprior;
+            
             %consider adding these three to CommonInverseParameters since the prior mode is there too:
             self.hyperprior_mode = args.hyperprior_mode;
+            
             self.inv_hyperprior_tail_length_db = args.inv_hyperprior_tail_length_db;
+            
             self.inv_hyperprior_weight = args.inv_hyperprior_weight;
 
         end
