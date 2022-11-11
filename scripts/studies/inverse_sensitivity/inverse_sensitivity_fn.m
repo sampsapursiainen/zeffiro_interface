@@ -84,6 +84,12 @@ function [ sensitivities_with_statistics, L ] = inverse_sensitivity_fn( ...
     %   A Boolean flag for choosing whether the reconstructions will be
     %   computed.
     %
+    % - args.lead_field_filter_quantile
+    %
+    %   A quantile q ∈ [0, 1], based on which the lead field columns are
+    %   filtered based on their norms. With this set to 1, no columns are
+    %   filtered and with a value of 0, all columns are filtered.
+    %
     % Output:
     %
     % - sensitivities_with_statistics
@@ -131,6 +137,11 @@ function [ sensitivities_with_statistics, L ] = inverse_sensitivity_fn( ...
 
         args.build_reconstructions (1,1) logical = true
 
+        args.lead_field_filter_quantile (1,1) double { ...
+            mustBeGreaterThanOrEqual(args.lead_field_filter_quantile, 0), ...
+            mustBeLessThanOrEqual(args.lead_field_filter_quantile, 1) ...
+        } = 1
+
     end % arguments
 
     % Load an initial project struct from the given path.
@@ -164,6 +175,8 @@ function [ sensitivities_with_statistics, L ] = inverse_sensitivity_fn( ...
         project_struct.optimization_system_type = args.optimization_system_type;
 
         project_struct.source_model = args.source_model;
+
+        project_struct.lead_field_filter_quantile = args.lead_field_filter_quantile;
 
         project_struct = zef_eeg_lead_field(project_struct);
 
