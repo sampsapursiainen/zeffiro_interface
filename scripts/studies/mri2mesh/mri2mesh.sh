@@ -206,7 +206,23 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 	ZEF_STDOUT="${ZEF_OUTFOLDER}/${subname}/meshgen.out"
 	ZEF_STDERR="${ZEF_OUTFOLDER}/${subname}/meshgen.err"
 
-	ZEF_INPUT_SCRIPT="zef = zef_import_segmentation(zef,''${ZEF_IMPORT_SCRIPT_NAME}'', ''${FS_OUTDIR}'');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
+	ZEF_INPUT_SCRIPT="strcat( \
+		'zef = zef_import_segmentation(zef,''${ZEF_IMPORT_SCRIPT_NAME}'',''${FS_OUTDIR}'');', \
+		'zef.h_refinement_on.Value = 1;', \
+		'zef.h_checkbox_mesh_smoothing_on.Value = 1;', \
+		'zef.h_edit65.Value = 2;', \
+		'zef.exclude_box = 1;', \
+		'zef.pml_max_size = 1.2;', \
+		'zef.refinement_surface_on = 1;', \
+		'zef = zef_update(zef);', \
+		'zef = zef_add_compartment(zef);', \
+		'zef.compartment_tags = zef.compartment_tags([2:end 1]);', \
+		'eval([''zef.'' zef.compartment_tags{end} ''_name = ''''Box'''';'']);', \
+		'eval([''zef.'' zef.compartment_tags{end} ''_sources = -1;'']);', \
+		'zef.refinement_surface_compartments = [18 -1 17];', \
+		'zef = zef_build_compartment_table(zef);', \
+		'zef = zef_create_finite_element_mesh(zef);' \
+	)"
 
 	echo
 	echo "Attempting mesh generation into ${OUTFILE}."
@@ -216,7 +232,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 	# It prevents Matlab from infinitely waiting for input and complaining
 	# about invalid file descriptors.
 
-	nohup matlab -nodisplay -nosplash -r "${ADD2PATH}; zef = zeffiro_interface('start_mode', 'nodisplay', 'import_to_new_project', '${FS_OUTDIR}/import_segmentation.zef', 'run_script', '${ZEF_INPUT_SCRIPT}', 'save_project', '${OUTFILE}');" 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
+	nohup matlab -nodisplay -nosplash -r "${ADD2PATH} zef = zeffiro_interface('start_mode', 'nodisplay', 'import_to_new_project', '${FS_OUTDIR}/import_segmentation.zef', 'run_script', ${ZEF_INPUT_SCRIPT}, 'save_project', '${OUTFILE}');" 1>"${ZEF_STDOUT}" 2>"${ZEF_STDERR}" </dev/null
 
 done
 
