@@ -125,16 +125,25 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 
 	# Subject folder sanity check
 
+	folder_is_valid=true
+
 	for dd in ${REQUIRED_SUBFOLDERS[@]}; do
 
 		subfolder="${d%/}/${dd%/}"
 
 		if [ ! -d "${subfolder}" ]; then
 			echo
-			echo "Warning: expected folder ${subfolder} does not exist inside the subject folder ${d}."
-			continue
+			echo "Warning: expected folder ${subfolder} does not exist inside the subject folder ${d}. Skipping..."
+			folder_is_valid=false
+			break
 		fi
 	done
+
+	if [ ! "$folder_is_valid" = true ]; then
+
+		continue
+
+	fi
 
 	# Check that FreeSurfer input exists and define required variables.
 
