@@ -87,7 +87,6 @@ FREESURFER_INFOLDER="${1%/}"
 FREESURFER_OUTFOLDER="${2%/}"
 ZEF_INFOLDER="${FREESURFER_OUTFOLDER}"
 ZEF_OUTFOLDER="${3%/}"
-ZEF_INPUT_SCRIPT="zef = zef_import_segmentation(zef,''${ZEF_IMPORT_SCRIPT_NAME}'', ''${MRI2ZEF_DIR}'');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
 
 titleline 'Checking that given directories and scripts exist...'
 
@@ -206,6 +205,8 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 	OUTFILE="${ZEF_OUTFOLDER}/${subname}.mat"
 	ZEF_STDOUT="${ZEF_OUTFOLDER}/${subname}/meshgen.out"
 	ZEF_STDERR="${ZEF_OUTFOLDER}/${subname}/meshgen.err"
+
+	ZEF_INPUT_SCRIPT="zef = zef_import_segmentation(zef,''${ZEF_IMPORT_SCRIPT_NAME}'', ''${FS_OUTDIR}'');multicompartment_head_settings; zef = zef_create_finite_element_mesh(zef);"
 
 	echo
 	echo "Attempting mesh generation into ${OUTFILE}."
