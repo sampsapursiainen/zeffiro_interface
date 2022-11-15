@@ -104,7 +104,7 @@ cdata_info.frame_step = frame_step;
 cdata_info.frame_stop = frame_stop;
 
         for f_ind = frame_start : frame_step : frame_stop
-            reconstruction = single(volumetric_distribution{f_ind});
+            reconstruction = (volumetric_distribution{f_ind});
             reconstruction = reconstruction(:);
             reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
             if ismember(eval('zef.reconstruction_type'), 6)
@@ -190,7 +190,7 @@ cdata_info.frame_step = frame_step;
 cdata_info.frame_stop = frame_stop;
 
         for f_ind = frame_start : frame_step : frame_stop
-            reconstruction = single(eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
+            reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
             reconstruction = reconstruction(:);
             max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
             min_rec = min([min_rec ; (reconstruction(:))]);
@@ -632,7 +632,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                         elseif ismember(eval('zef.visualization_type'),[3])
 
                             if iscell(volumetric_distribution)
-                                reconstruction = single(eval(['zef.reconstruction{' int2str(frame_start) '}']));
+                                reconstruction = (eval(['zef.reconstruction{' int2str(frame_start) '}']));
                             else
                                 reconstruction = volumetric_distribution;
                             end
@@ -793,7 +793,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             set(eval('zef.h_zeffiro'),'colormap', eval([colormap_cell{eval('zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
 
                             if iscell(eval('zef.top_reconstruction'))
-                                reconstruction = single(eval(['zef.top_reconstruction{' int2str(frame_start) '}']));
+                                reconstruction = (eval(['zef.top_reconstruction{' int2str(frame_start) '}']));
                             else
                                 reconstruction = eval('zef.top_reconstruction');
                             end
@@ -940,7 +940,7 @@ zef_update_contour(zef);
                 if ismember(eval('zef.visualization_type'),[3])
                     for i = intersect(aux_active_compartment_ind,aux_brain_visible_ind)
                         ab_ind = find(aux_active_compartment_ind == i);
-                        reconstruction = single(volumetric_distribution{f_ind});
+                        reconstruction = (volumetric_distribution{f_ind});
                         reconstruction = reconstruction(:);
                         reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
@@ -1065,7 +1065,7 @@ zef_update_contour(zef);
                 elseif ismember(eval('zef.visualization_type'),[5])
                     %Topography reconstruction.
 
-                    reconstruction = single(eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
+                    reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
                     reconstruction = reconstruction(:);
 
                     axes(eval('zef.h_axes1'));

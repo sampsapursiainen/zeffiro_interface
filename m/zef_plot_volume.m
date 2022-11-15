@@ -403,7 +403,7 @@ cdata_info.frame_step = frame_step;
 cdata_info.frame_stop = frame_stop;
 
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(eval('zef.reconstruction_type'), 6)
@@ -521,7 +521,7 @@ end
 
 if ismember(eval('zef.visualization_type'),[2])
 if iscell(volumetric_distribution)
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 else
 reconstruction = volumetric_distribution;
 end
@@ -802,7 +802,7 @@ axes(eval('zef.h_axes1'));
 hold on;
 
 if iscell(volumetric_distribution)
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 else
 reconstruction = volumetric_distribution;
 end
