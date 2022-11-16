@@ -23,7 +23,7 @@ REQUIRED_SUBFOLDERS=( 'label' 'mri' 'scripts' 'stats' 'surf' 'tmp' 'touch')
 MRI2ZEF_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 if [ ! -d ${MRI2ZEF_DIR} ]; then
-	echo "The supposed directory mri2zef is located in (${MRI2ZEF_DIR}) does not seem to exist. Aborting..."
+	echo "The supposed directory mri2mesh is located in (${MRI2ZEF_DIR}) does not seem to exist. Aborting..."
 	exit -1
 fi
 
@@ -167,7 +167,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 
 		cp "${ZEF_IMPORT_SCRIPT_PATH}" "${FS_OUTDIR}"
 
-		sensors="${MRI2MESH_DIR}/electrodes.dat"
+		sensors="${MRI2ZEF_DIR}/electrodes.dat"
 
 		if [ -f "${sensors}" ]; then
 
