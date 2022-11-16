@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [void] = zef_print_meshes(void);
+function [void] = zef_print_meshes(~);
 
 zef = evalin('base','zef');
 f_ind = 1;
@@ -711,6 +711,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(h_axes_image,'CLim',[min_rec max_rec]);
 %set(h_surf_2,'specularstrength',0.2);
 %set(h_surf_2,'specularexponent',0.8);
@@ -1024,6 +1027,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2,'specularstrength',0.2);
 %set(h_surf_2,'specularexponent',0.8);
@@ -1890,6 +1896,9 @@ end
 
 %marker here
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{ab_ind},'specularstrength',0.2);
 %set(h_surf_2{ab_ind},'specularexponent',0.8);
@@ -1988,6 +1997,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',gather([min_rec max_rec]));
 %set(h_surf_2{i},'specularstrength',0.2);
 %set(h_surf_2{i},'specularexponent',0.8);
@@ -2094,7 +2106,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -2310,6 +2322,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{ab_ind},'specularstrength',0.2);
 %set(h_surf_2{ab_ind},'specularexponent',0.8);
@@ -2369,6 +2384,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{i},'specularstrength',0.2);
 %set(h_surf_2{i},'specularexponent',0.8);
@@ -2407,12 +2425,12 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
 zef_set_sliders_print(1,h_axes_image);
-camorbit(frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
+camorbit(h_axes_image,frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
 lighting phong;
 
 delete(h_text);
@@ -2519,7 +2537,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end

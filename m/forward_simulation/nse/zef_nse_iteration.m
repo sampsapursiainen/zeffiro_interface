@@ -3,15 +3,32 @@ function zef = zef_nse_iteration(zef)
 
 [zef.nse_field.nodes, zef.nse_field.tetra] = zef_get_submesh(zef.nodes,zef.tetra,zef.active_compartment_ind);
 
+signal_pulse.dir = zeros(size(zef.inv_synth_source,1),3);
+node_ind_aux = [];
+
+for i = 1 : size(zef.inv_synth_source,1)
+
+    dir_vec = zef.inv_synth_source(i,4:6);
+    dir_vec = dir_vec/norm(dir_vec,2);
+    [~, node_ind] = min(sum((zef.inv_synth_source(i*ones(size(zef.nse_field.nodes,1),1),1:3) - zef.nse_field.nodes).^2,2));
+    %node_ind = find(sqrt(sum((zef.nse_field.nodes(node_ind*ones(size(zef.nse_field.nodes,1),1),:) - zef.nse_field.nodes).^2,2))<zef.nse_field.artery_diameter/2);
+    node_ind_aux = [node_ind_aux ; node_ind(:)];
+    
+    signal_pulse.dir(i,:) = dir_vec;
+    signal_pulse.node_ind(i).data = node_ind;
+    
+end
+
 hgmm_conversion = 101325/760;
-zef.nse_field.nodes = 1000*zef.nse_field.nodes;
+zef.nse_field.nodes = zef.nse_field.nodes/1000;
 
 zef.nse_field.rho = zef.nse_field.density.*ones(size(zef.nse_field.tetra,1),1);
 zef.nse_field.mu = zef.nse_field.viscosity.*ones(size(zef.nse_field.tetra,1),1);
 
 zef.nse_field.t_data = 0:zef.nse_field.time_step_length:zef.nse_field.time_length;
 
-signal_pulse.data = 0.25e-6.*pi.*zef.nse_field.artery_diameter.^2.*hgmm_conversion.*zef_nse_signal_pulse(zef.nse_field.t_data,zef.nse_field,256);
+signal_pulse.data = hgmm_conversion.*zef_nse_signal_pulse(zef.nse_field.t_data,zef.nse_field,256);
+zef.nse_field.signal_pulse = signal_pulse;
 
 h_waitbar = zef_waitbar(0,'NSE iteration.');
 
@@ -30,22 +47,6 @@ zef.nse_field.u_3_field = zeros(size(zef.nse_field.nodes,1),zef.nse_field.number
 f_1_aux = zeros(size(u_1));
 f_2_aux = zeros(size(u_2));
 f_3_aux = zeros(size(u_3));
-
-signal_pulse.node_ind = zeros(size(zef.inv_synth_source,1),1);
-signal_pulse.dir = zeros(size(zef.inv_synth_source,1),3);
-
-aux_data = zeros(size(zef.inv_synth_source,1),length(zef.nse_field.t_data));
-for i = 1 : size(zef.inv_synth_source,1)
-
-    dir_vec = zef.inv_synth_source(i,4:6);
-    dir_vec = dir_vec/norm(dir_vec,2);
-    [~, node_ind] = min(sum((zef.inv_synth_source(i*ones(size(zef.nse_field.nodes,1),1),1:3) - zef.nse_field.nodes).^2,2));
-    signal_pulse.dir(i,:) = dir_vec;
-    signal_pulse.node_ind(i) = node_ind;
-    
-end
-
-zef.nse_field.signal_pulse = signal_pulse;
 
 aux_vec_init_1 = zeros(size(u_1));
 aux_vec_init_2 = zeros(size(u_2));
@@ -67,6 +68,11 @@ if zef.nse_field.use_gpu
     f_1_aux = gpuArray(f_1_aux);
     f_2_aux = gpuArray(f_2_aux);
     f_3_aux = gpuArray(f_3_aux);  
+    node_ind_aux = gpuArray(node_ind_aux);
+    for i = 1 : size(zef.inv_synth_source,1)
+      signal_pulse.node_ind(i).data = gpuArray(signal_pulse.node_ind(i).data);
+    end
+   
 end
 
 if zef.nse_field.use_gpu 
@@ -85,9 +91,9 @@ for t_ind = 1 : length(zef.nse_field.t_data)
 zef_waitbar(t_ind/length(zef.nse_field.t_data),h_waitbar,'NSE iteration.');
 
 for i = 1 : length(signal_pulse.node_ind)
-f_1_aux(signal_pulse.node_ind(i)) = signal_pulse.dir(i,1).*signal_pulse.data(t_ind);
-f_2_aux(signal_pulse.node_ind(i)) = signal_pulse.dir(i,2).*signal_pulse.data(t_ind);
-f_3_aux(signal_pulse.node_ind(i)) = signal_pulse.dir(i,3).*signal_pulse.data(t_ind);
+f_1_aux(signal_pulse.node_ind(i).data) = signal_pulse.dir(i,1).*signal_pulse.data(t_ind);
+f_2_aux(signal_pulse.node_ind(i).data) = signal_pulse.dir(i,2).*signal_pulse.data(t_ind);
+f_3_aux(signal_pulse.node_ind(i).data) = signal_pulse.dir(i,3).*signal_pulse.data(t_ind);
 end
 
 f_1 = F*f_1_aux;
@@ -136,6 +142,8 @@ else
 p = pcg_iteration(QinvMQ,aux_vec_2,zef.nse_field.pcg_tol,zef.nse_field.pcg_maxit,[],p);    
 end
 
+%p(node_ind_aux) = zeros(length(node_ind_aux),1);
+
 aux_vec_1 =  f_1 - Cuu_1 - L*u_1 + Q_1*p;
 if zef.nse_field.use_gpu 
 [aux_vec_init_1] = pcg_iteration_gpu(M,aux_vec_1,zef.nse_field.pcg_tol,zef.nse_field.pcg_maxit,DM,aux_vec_init_1);
@@ -167,6 +175,8 @@ zef.nse_field.u_1_field(:,field_store_counter) = gather(u_1);
 zef.nse_field.u_2_field(:,field_store_counter) = gather(u_2);
 zef.nse_field.u_3_field(:,field_store_counter) = gather(u_3);
 zef.nse_field.p_field(:,field_store_counter) = gather(p);
+    zef.nse_field.nodes = gather(zef.nse_field.nodes);
+    zef.nse_field.tetra = gather(zef.nse_field.tetra);
 end
 
 end

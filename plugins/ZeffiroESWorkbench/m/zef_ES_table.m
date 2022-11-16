@@ -1,3 +1,4 @@
+
 function vec = zef_ES_table(varargin)
 %% Pre-allocate table and properties
 

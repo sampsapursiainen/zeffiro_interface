@@ -649,6 +649,9 @@ zef_plot_cone_field(zef, eval('zef.h_axes1'), f_ind);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 
 %set(h_surf_2,'specularstrength',0.2);

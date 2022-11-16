@@ -731,6 +731,10 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
 
                             %**********************************************
                             set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+                            
+                            if isequal(min_rec,max_rec)
+                            min_rec = min_rec - 1e-15;
+                            end
                             set(gca,'CLim',[min_rec max_rec]);
                             %set(h_surf_2{ab_ind},'specularstrength',0.2);
                             %set(h_surf_2{ab_ind},'specularexponent',0.8);
@@ -813,6 +817,9 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
                            end
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+                            if isequal(min_rec,max_rec)
+                            min_rec = min_rec - 1e-15;
+                            end
                             set(gca,'CLim',gather([min_rec max_rec]));
                             %set(h_surf_2{i},'specularstrength',0.2);
                             %set(h_surf_2{i},'specularexponent',0.8);
@@ -1124,7 +1131,7 @@ zef_update_contour(zef);
             warning('Contour plot not successful.')
         end
                 zef_set_sliders_plot(2);
-                camorbit(frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
+                camorbit(zef.h_axes1,frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
 
                 %delete(h_text);
                 %delete(h_axes_text);
