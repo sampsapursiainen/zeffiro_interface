@@ -163,9 +163,23 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 			mkdir "${FS_OUTDIR}"
 		fi
 
-		# Copy import script to target location
+		# Copy import script and sensor positions to target folder.
 
 		cp "${ZEF_IMPORT_SCRIPT_PATH}" "${FS_OUTDIR}"
+
+		sensors="${MRI2MESH_DIR}/electrodes.dat"
+
+		if [ -f "${sensors}" ]
+
+			cp "${sensors}" "${FS_OUTDIR}"
+
+		else
+
+			echo
+			echo "Could not find sensor position file ${sensors}. Aborting..."
+			break
+
+		fi
 
 		# Log file definition
 
