@@ -169,7 +169,7 @@ for d in ${FREESURFER_INFOLDER}/[^.]*/; do
 
 		sensors="${MRI2MESH_DIR}/electrodes.dat"
 
-		if [ -f "${sensors}" ]
+		if [ -f "${sensors}" ]; then
 
 			cp "${sensors}" "${FS_OUTDIR}"
 
