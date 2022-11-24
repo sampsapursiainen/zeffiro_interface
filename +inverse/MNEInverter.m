@@ -127,7 +127,15 @@ classdef MNEInverter < inverse.CommonInverseParameters
 
         end % function
 
-        function [reconstruction, resolution_matrix] = invert(self, L, source_directions)
+        function [reconstruction, resolution_matrix] = invert( ...
+            self, ...
+            waitbar_handle, ...
+            frame, ...
+            lead_field, ...
+            procFile, ...
+            source_direction_mode, ...
+            source_positions ...
+        )
 
             %
             % MNEInverter.invert
@@ -157,9 +165,17 @@ classdef MNEInverter < inverse.CommonInverseParameters
 
                 self (1,1) inversion.MNEInverter
 
-                L (:,:) double
+                waitbar_handle
 
-                source_directions (:,3) double
+                frame
+
+                lead_field
+
+                procFile
+
+                source_direction_mode
+
+                source_positions
 
             end
 
