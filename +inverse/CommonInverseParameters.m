@@ -100,6 +100,24 @@ classdef CommonInverseParameters
 
     end % properties
 
+    properties (Constant)
+
+        %
+        % REQUIRED_METHODS
+        %
+        % This constant property lists the methods that a subclass of this
+        % class must contain to be an inverter. This is referenced by the
+        % isAnInverter static validator function namespaced under this class.
+        %
+        % This approach is taken instead of making this class abstract to
+        % allow for argument validation in functions that take inverters as
+        % arguments. Abstract methods do not allow for function argument
+        % validation.
+        %
+        REQUIRED_METHODS = [ "invert" ]
+
+    end
+
     methods
 
         function self = CommonInverseParameters(args)
@@ -208,5 +226,80 @@ classdef CommonInverseParameters
         end % function
 
     end % methods
+
+    methods (Static)
+
+        function isAnInverter(inverter_candidate)
+
+            %
+            % isAnInverter
+            %
+            % A static validator method for checking whether the given
+            % argument inverter_candidate is a subclass of this class. Throws
+            % and exception of this is not the case.
+            %
+
+            % This argument validation is here just to enforce exactly one
+            % input argument.
+
+            arguments
+
+                inverter_candidate
+
+            end
+
+            % Import this class here to shorten code later.
+
+            import inverse.CommonInverseParameters
+
+            % First check that we have the correct type.
+
+            if ~ isa(inverter_candidate, "CommonInverseParameters")
+
+                eidType = "isAnInverter:notAnInverter";
+
+                msgType = "Input must be a subclass of CommonInverseParameters.";
+
+                throwAsCaller(MException(eidType,msgType))
+
+            end
+
+            % Then check that it has the required methods and properties.
+
+            meta_class = metaclass(inverter_candidate);
+
+            method_list = meta_class.MethodList;
+
+            method_name_cells = arrayfun(@(m) m.Name, method_list, 'UniformOutput', false);
+
+            method_name_list = string(method_name_cells);
+
+            for ind = 1 : numel(CommonInverseParameters.REQUIRED_METHODS)
+
+                required_method = CommonInverseParameters.REQUIRED_METHODS(ind);
+
+                if ~ ismember(required_method, method_name_list)
+
+                    eidType = "isAnInverter:missingMethod";
+
+                    msgType = "The input class does not contain all necessary methods to be an inverter." ...
+                        + " These are as follows:" + newline;
+
+                    for mind = 1 : numel(CommonInverseParameters.REQUIRED_METHODS)
+
+                        msgType = msgType + newline + "  - " ...
+                            + CommonInverseParameters.REQUIRED_METHODS(mind);
+
+                    end
+
+                    throwAsCaller(MException(eidType, msgType))
+
+                end % if
+
+            end % for
+
+        end % function
+
+    end % methods (Static)
 
 end % classdef
