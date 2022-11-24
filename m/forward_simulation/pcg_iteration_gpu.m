@@ -2,14 +2,14 @@
 %See: https://github.com/sampsapursiainen/GPU-Torre-3D
 
 
-function [x,conv_val,n_iter] = pcg_iteration_gpu(A,b,tol_val,max_it,M,x,gpu_extended_memory);
+function [x,conv_val,n_iter] = pcg_iteration_gpu(A,b,tol_val,max_it,M,x,gpu_extended_memory)
  
 if nargin < 5 
     M = [];
 end
 
 if nargin < 6
-    x = zeros(size(A,1),1);
+    x = zeros(size(b,1),1);
 end
 
 if nargin < 7
@@ -26,9 +26,8 @@ if isequal(class(M),'function_handle')
 M = gpuArray(M);
 end
 
-
 if isequal(class(A),'function_handle')
-    r = - ( -b + A(x));
+r = - ( -b + A(x));
 else
 r = - ( -b + A*x );
 end

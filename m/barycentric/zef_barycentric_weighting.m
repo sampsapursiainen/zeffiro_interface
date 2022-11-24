@@ -10,6 +10,10 @@ switch weighting_type
         weighting = [1/6];
     case 'uFG'
         weighting = [1/10 1/20];
+    case 'surface_FF'
+        weighting = [1/6 1/12];
+    case 'surface_FG'
+        weighting = [1/3];
 end
 
 end
