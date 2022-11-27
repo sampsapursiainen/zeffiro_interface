@@ -75,7 +75,7 @@ nse_mat.B3_23 = nse_mat.B3_23(i_node_ind,i_node_ind);
 nse_mat.B3_33 = nse_mat.B3_33(i_node_ind,i_node_ind);
 nse_mat.F = nse_mat.F(i_node_ind,i_node_ind);
 nse_mat.N = nse_mat.N(i_node_ind,i_node_ind);
-
+ 
 p = zeros(size(nse_mat.M,1),1);
 u_1 = zeros(size(nse_mat.M,1),1);
 u_2 = zeros(size(nse_mat.M,1),1);
