@@ -1,14 +1,41 @@
-function [y_1, y_2, y_3, b_coord, volume] = zef_volume_scalar_uFG(nodes, tetra, h, x_1, x_2, x_3, u_field, scalar_field, b_coord, volume)
+function [y_1, y_2, y_3, b_coord, volume] = zef_volume_scalar_uFG(nodes, tetra, h, x_1, x_2, x_3, u_field, scalar_field, i_node_ind, b_coord, volume)
 
-if nargin < 9
-         b_coord = zeros(size(tetra,1),size(tetra,2),4);
-        [b_coord(:,:,1),det] = zef_volume_barycentric(nodes,tetra,1);
-        for i = 2 : 4
-        [b_coord(:,:,i)] = zef_volume_barycentric(nodes,tetra,i,det);
-        end
-         volume = abs(det)/6;    
+if nargin < 10
+b_coord = zeros(size(tetra,1),size(tetra,2),4);
+[b_coord(:,:,1),det] = zef_volume_barycentric(nodes,tetra,1);
+for i = 2 : 4
+[b_coord(:,:,i)] = zef_volume_barycentric(nodes,tetra,i,det);
+end
+volume = abs(det)/6;    
 end
 
+if nargin >= 9 
+if not(isempty(i_node_ind))
+x_1_aux = zeros(size(nodes,1),1);
+x_2_aux = zeros(size(nodes,1),1);
+x_3_aux = zeros(size(nodes,1),1);
+u_field_aux = zeros(size(nodes,1),1);
+
+if isgpuarray(x_1)
+x_1_aux = gpuArray(x_1_aux);
+x_2_aux = gpuArray(x_2_aux);
+x_3_aux = gpuArray(x_3_aux);
+u_field_aux = gpuArray(u_field_aux);
+end
+
+x_1_aux(i_node_ind) = x_1;
+x_2_aux(i_node_ind) = x_2;
+x_3_aux(i_node_ind) = x_3;
+u_field_aux(i_node_ind) = u_field;
+
+x_1 = x_1_aux;
+x_2 = x_2_aux;
+x_3 = x_3_aux;
+u_field = u_field_aux; 
+
+end
+end
+    
 weight_param = zef_barycentric_weighting('uFG');
 y_1 = zeros(size(nodes,1),1);
 y_2 = zeros(size(nodes,1),1);
@@ -36,5 +63,16 @@ for i = 1 : 4
         end
     end
 end
+
+if nargin >= 9
+    
+    if not(isempty(i_node_ind))
+   y_1 = y_1(i_node_ind);
+   y_2 = y_2(i_node_ind);
+   y_3 = y_3(i_node_ind);
+    end
+   
+end
+
 
 end
