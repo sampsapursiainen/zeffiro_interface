@@ -151,13 +151,13 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
             switch num_inputs
 
                 case 4
-                    z_vec = MethodClassObj.invert(waitbar_handle,f,L);
+                    z_vec = MethodClassObj.invert(f,L);
                 case 5
-                    z_vec = MethodClassObj.invert(waitbar_handle,f,L,procFile);
+                    z_vec = MethodClassObj.invert(f,L,procFile);
                 case 6
-                    z_vec = MethodClassObj.invert(waitbar_handle,f,L,procFile,source_direction_mode);
+                    z_vec = MethodClassObj.invert(f,L,procFile,source_direction_mode);
                 case 7
-                    z_vec = MethodClassObj.invert(waitbar_handle,f,L,procFile,source_direction_mode,source_positions);
+                    z_vec = MethodClassObj.invert(f,L,procFile,source_direction_mode,source_positions);
             end
 
         else % multiple outputs
@@ -166,13 +166,13 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
 
             switch num_inputs
                 case 3
-                    [outputs{:}] = MethodClassObj.invert(waitbar_handle,f,L);
+                    [outputs{:}] = MethodClassObj.invert(f,L);
                 case 4
-                    [outputs{:}] = MethodClassObj.invert(waitbar_handle,f,L,procFile);
+                    [outputs{:}] = MethodClassObj.invert(f,L,procFile);
                 case 5
-                    [outputs{:}] = MethodClassObj.invert(waitbar_handle,f,L,procFile,source_direction_mode);
+                    [outputs{:}] = MethodClassObj.invert(f,L,procFile,source_direction_mode);
                 case 6
-                    [outputs{:}] = MethodClassObj.invert(waitbar_handle,f,L,procFile,source_direction_mode,source_positions);
+                    [outputs{:}] = MethodClassObj.invert(f,L,procFile,source_direction_mode,source_positions);
             end
 
             z_vec = outputs{1};     %first one must be the reconstruction itself

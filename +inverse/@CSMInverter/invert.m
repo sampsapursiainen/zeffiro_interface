@@ -1,7 +1,19 @@
-function [z_vec] = invert(self,h,f,L,procFile,source_direction_mode)
+function [z_vec] = invert(self, f, L, procFile, source_direction_mode)
 
     %INVERT Summary of this function goes here
     %   Detailed explanation goes here
+
+    % Initialize waitbar with a cleanup object that automatically closes the
+    % waitbar, if there is an interruption with Ctrl + C or when this function
+    % exits.
+
+    h = zef_waitbar(0,'CSM Reconstruction.');
+
+    cleanup_fn = @(wb) close(wb);
+
+    cleanup_obj = onCleanup(@() cleanup_fn(h));
+
+    % Get needed parameters from self and others.
 
     number_of_frames = self.number_of_frames;
     snr_val = self.signal_to_noise_ratio;
@@ -10,6 +22,8 @@ function [z_vec] = invert(self,h,f,L,procFile,source_direction_mode)
     amplitude_db = self.inv_amplitude_db;
     pm_val = pm_val - amplitude_db;
     n_interp = length(procFile.s_ind_0);
+
+    % Then start inverting.
 
     [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),self.data_normalization_method,0);
 

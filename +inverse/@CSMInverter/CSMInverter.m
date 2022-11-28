@@ -89,7 +89,7 @@ classdef CSMInverter < inverse.CommonInverseParameters
         % Declare the inverse method defined in the file invert, in this same
         % folder.
 
-        reconstruction = invert(self,h,f,L,procFile,source_direction_mode)
+        reconstruction = invert(self, f, L, procFile, source_direction_mode)
 
     end % methods
 
