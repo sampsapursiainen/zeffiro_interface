@@ -21,13 +21,13 @@ end
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),self.data_normalization_method,0);
 
 if method_type == 1 || method_type == 2 || method_type == 3
-        
+
             S_mat = (std_lhood^2/theta0)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
 
         S_mat = gpuArray(S_mat);
     end
-        
+
     %__ dSPM __
     %Source covariance
     P = L'/(L*L'+S_mat);
@@ -85,9 +85,9 @@ if method_type == 1 || method_type == 2 || method_type == 3
             z_vec = z_vec/sqrt(theta0);
         end
     end
-    
+
 elseif method_type == 4
-    
+
         S_mat = (std_lhood^2)*eye(size(L,1));
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
         S_mat = gpuArray(S_mat);
@@ -105,7 +105,7 @@ elseif method_type == 4
         const = gather(const);
         L = gather(L);
     end
-    
+
     for i = 1:size(L,2)
         const(i) = 1/(rank(L(:,i)*L(:,i)')*size(f,2));
     end
@@ -114,7 +114,7 @@ elseif method_type == 4
         gamma = gpuArray(gamma);
         L = gpuArray(L);
     end
-   
+
     for i = 1:n_iter
         f_aux = inv_sqrt_C*f;
         L_aux = inv_sqrt_C*L;

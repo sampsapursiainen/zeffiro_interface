@@ -14,7 +14,7 @@ classdef CSMInverter < inverse.CommonInverseParameters
         %sLORETA's 3D implementation and Sparse Bayesian learning
         %
         method_type (1,1) string { mustBeMember(method_type, ["dSPM", "sLORETA", "sLORETA 3D", "SBL"]) } = "dSPM"
-    
+
         %
         %Iteration number for sparse Bayesian learning
         %
