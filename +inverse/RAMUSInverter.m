@@ -17,12 +17,12 @@ classdef RAMUSInverter < inverse.CommonInverseParameters
         %multiresolution level.
         %
         multiresolution_dec = [];
-        
+
         %
         %Interpolation indices from a decomposition to the full source space
         %
         multiresolution_ind = [];
-        
+
         %
         %Number of source locations where a source point in a decomposition
         %is interpolated to.
@@ -88,9 +88,9 @@ classdef RAMUSInverter < inverse.CommonInverseParameters
             arguments
 
                 args.multiresolution_dec = [];
-        
+
                 args.multiresolution_ind = [];
-        
+
                 args.multiresolution_count = [];
 
                 args.number_of_multiresolution_levels = 3  %Will replace 'ramus_multires_n_levels'
