@@ -16,6 +16,14 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     % - source_positions
     %
 
+    arguments
+
+        zef (1,1) struct
+
+        MethodClassObj (1,1) { inverse.CommonInverseParameters.isAnInverter }
+
+    end
+
     % Initialize the waiting bar
 
     if isprop(MethodClassObj,'tag')
