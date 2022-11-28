@@ -19,7 +19,7 @@ if not(isequal(file_name,0))
     
     [~,~,extension] = fileparts(file_name);
     if isequal(extension,'.mat')
-        zef_import_mat_struct(fullfile(folder_name,file_name));
+       zef = zef_import_mat_struct(zef,fullfile(folder_name,file_name));
         
     else
 
@@ -459,7 +459,7 @@ eval(['zef.' sensor_tag '_points = aux_field;']);
 eval(['zef.' sensor_tag '_directions = aux_field;']);
              end
             if isequal(filetype,'mat')
-           zef_import_mat_struct(filename,[sensor_tag '_']);
+           zef = zef_import_mat_struct(zef, filename,[sensor_tag '_']);
             end
         end   
         
@@ -492,7 +492,7 @@ eval(['zef.' sensor_tag '_directions = aux_field;']);
           if not(isempty(filename))
         filename = [folder_name filesep foldername filesep filename];
           end
-        zef_import_mat_struct(filename);
+       zef = zef_import_mat_struct(zef,filename);
         end
           
     elseif isequal(type,'script')

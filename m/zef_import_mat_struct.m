@@ -46,8 +46,15 @@ end
 mat_struct = mat_struct_aux;
 end
 
-    assignin('base','zef_data', mat_struct);
-    zef_assign_data;
+fieldnames_cell = fieldnames(mat_struct);
+
+for i = 1 : length(fieldnames_cell)
+    zef.(fieldnames_cell{i}) = mat_struct.(fieldnames_cell{i});
+end
+
+if nargout == 0
+    assignin('base','zef', zef);
+end
 
 
 
