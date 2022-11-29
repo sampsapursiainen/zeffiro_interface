@@ -1,4 +1,4 @@
-function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_positions)
+function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_positions, opts)
 
     %
     % invert
@@ -28,6 +28,11 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
     %
     %   The way the orientations of the sources should be interpreted.
     %
+    % - opts.use_gpu = false
+    %
+    %   A logical flag for choosing whether a GPU will be used in
+    %   computations, if available.
+    %
     % Outputs:
     %
     % - reconstruction
@@ -48,6 +53,8 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
         source_direction_mode
 
         source_positions
+
+        opts.use_gpu (1,1) logical = false
 
     end
 
@@ -79,7 +86,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
         S_mat = (std_lhood^2/theta0)*eye(size(L,1));
 
-        if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+        if opts.use_gpu && gpuDeviceCount > 0
 
             S_mat = gpuArray(S_mat);
 
@@ -112,7 +119,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
             z_vec = P * f;
 
-            if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+            if opts.use_gpu && gpuDeviceCount > 0
                 P = gather(P);
                 L = gather(L);
                 z_vec = gather(z_vec);
@@ -171,7 +178,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
         S_mat = (std_lhood^2)*eye(size(L,1));
 
-        if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+        if opts.use_gpu && gpuDeviceCount > 0
             S_mat = gpuArray(S_mat);
         end
 
@@ -187,7 +194,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
         gamma = ones(size(L,2),1);
         const = zeros(size(L,2),1);
 
-        if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+        if opts.use_gpu & gpuDeviceCount > 0
             const = gather(const);
             L = gather(L);
         end
@@ -196,7 +203,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
             const(i) = 1/(rank(L(:,i)*L(:,i)')*size(f,2));
         end
 
-        if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+        if opts.use_gpu && gpuDeviceCount > 0
             const = gpuArray(const);
             gamma = gpuArray(gamma);
             L = gpuArray(L);
@@ -214,7 +221,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
     end
 
-    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+    if opts.use_gpu && gpuDeviceCount > 0
         z_vec = gather(z_vec);
     end
 
