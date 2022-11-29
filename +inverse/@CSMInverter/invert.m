@@ -1,7 +1,39 @@
 function [z_vec] = invert(self, f, L, procFile, source_direction_mode)
 
-    %INVERT Summary of this function goes here
-    %   Detailed explanation goes here
+    %
+    % invert
+    %
+    % Builds a reconstruction of source dipoles from a given lead field with
+    % the CSM method.
+    %
+    % Inputs:
+    %
+    % - self
+    %
+    %   An instance of CSMInverter with the method-specific parameters.
+    %
+    % - f
+    %
+    %   Some vector.
+    %
+    % - L
+    %
+    %   The lead field that is being inverted.
+    %
+    % - procFile
+    %
+    %   A struct with source space indices.
+    %
+    % - source_direction_mode
+    %
+    %   The way the orientations of the sources should be interpreted.
+    %
+    % Outputs:
+    %
+    % - reconstruction
+    %
+    %   The reconstrution of the dipoles.
+    %
 
     % Initialize waitbar with a cleanup object that automatically closes the
     % waitbar, if there is an interruption with Ctrl + C or when this function
