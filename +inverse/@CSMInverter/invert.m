@@ -1,4 +1,4 @@
-function [z_vec] = invert(self, f, L, procFile, source_direction_mode)
+function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_positions)
 
     %
     % invert
@@ -34,6 +34,22 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode)
     %
     %   The reconstrution of the dipoles.
     %
+
+    arguments
+
+        self (1,1) inverse.CSMInverter
+
+        f (:,1) double
+
+        L (:,:) double
+
+        procFile (1,1) struct
+
+        source_direction_mode
+
+        source_positions
+
+    end
 
     % Initialize waitbar with a cleanup object that automatically closes the
     % waitbar, if there is an interruption with Ctrl + C or when this function
