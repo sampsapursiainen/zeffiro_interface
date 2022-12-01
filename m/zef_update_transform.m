@@ -41,7 +41,9 @@ eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = repmat({eye(4)},1,le
 eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
 end
 else
-eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
+    ['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']
+
+    eval(['zef.' zef.current_tag '_' zef.aux_field_4{zef_i} ' = zef.' zef.current_tag '_' zef.aux_field_4{zef_i} '([' num2str(zef.aux_field_3) ']);']);
 end
 end
 

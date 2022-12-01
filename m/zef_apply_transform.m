@@ -1,3 +1,6 @@
+zef = zef_update_transform(zef);
+
+
 for zef_i = 1 : length(zef.compartment_tags)
 if eval(['zef.' zef.compartment_tags{zef_i} '_on'])
     if eval(['isfield(zef,''' zef.compartment_tags{zef_i} '_points_original_surface_mesh'')'])
@@ -32,6 +35,9 @@ eval(['zef.' eval('zef.current_sensors') '_yz_rotation = 0;']);
 eval(['zef.' eval('zef.current_sensors') '_zx_rotation = 0;']);
 eval(['zef.' eval('zef.current_sensors') '_affine_transform = {[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]};']);
 
+
+eval(['zef.' eval('zef.current_sensors') '_transform_name =  {''Transform 1''};']);
+
 zef.apply_transform_compartment_tags = eval('zef.compartment_tags');
 zef_k = 0;
 for zef_i = 1 : length(zef.apply_transform_compartment_tags)
@@ -49,9 +55,10 @@ for zef_i = 1 : length(zef.apply_transform_compartment_tags)
         eval(['zef.'  zef.apply_transform_compartment_tags{zef_k} '_yz_rotation = 0;']);
         eval(['zef.'  zef.apply_transform_compartment_tags{zef_k} '_zx_rotation = 0;']);
         eval(['zef.'  zef.apply_transform_compartment_tags{zef_k} '_affine_transform = {[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]};']);
+ eval(['zef.' zef.apply_transform_compartment_tags{zef_k} '_transform_name =  {''Transform 1''};']);
 
     end
-
+    
 end
 
 for zef_i = 1 : length(zef.compartment_tags)
@@ -65,6 +72,5 @@ end
 end
 
 zef = rmfield(zef,{'apply_transform_sensors','apply_transform_reuna_p','apply_transform_reuna_t','apply_transform_compartment_tags'});
-zef_update;
-zef_update_transform;
+zef = zef_update(zef);
 clear zef_i zef_k;
