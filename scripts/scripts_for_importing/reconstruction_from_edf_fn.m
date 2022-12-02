@@ -1,4 +1,4 @@
-function reconstruction = reconstruction_from_edf_fn(path_to_file)
+function [reconstruction, sample_rate, time_step] = reconstruction_from_edf_fn(path_to_file)
 
     %
     % reconstruction_from_edf_fn
@@ -7,6 +7,28 @@ function reconstruction = reconstruction_from_edf_fn(path_to_file)
     % compatible with Zeffiro Interface. Supposes that the sampling rate of
     % each measurement has been constant, meaning each cell in the EDF table
     % contains the same number of samples.
+    %
+    % Input:
+    %
+    % - path_to_file
+    %
+    %   A textual path to the file. Must point to an existing file.
+    %
+    % Output:
+    %
+    % - reconstruction
+    %
+    %   The reconstruction matrix. Contains as its rows the electrode-specific
+    %   time series.
+    %
+    % - sample_rate
+    %
+    %   The number of samples in each cell of the given time table.
+    %
+    % - time_step
+    %
+    %   The time step of each row in the timetable contained in the given
+    %   file.
     %
 
     arguments
@@ -47,5 +69,11 @@ function reconstruction = reconstruction_from_edf_fn(path_to_file)
         reconstruction(col,:) = matrix_as_vector;
 
     end % for
+
+    % Set other return values.
+
+    time_step = seconds(timetable.Properties.TimeStep);
+
+    sample_rate = cell_size / time_step;
 
 end % function
