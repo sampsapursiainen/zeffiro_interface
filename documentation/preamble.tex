@@ -3,12 +3,19 @@
 \usepackage{mathtools}
 \usepackage[english]{babel}
 \usepackage{hyperref}
+\usepackage{xparse}
+\usepackage{siunitx}
 
 %%% Titles and such.
 
 \title{\mytitle}
 \author{\myauthors}
 \date{2022/12/02}
+
+%%% Commands.
+
+\NewDocumentCommand\code{m}{\texttt{#1}}
+\NewDocumentCommand\coderubric{m}{\paragraph{\code{#1}}}
 
 %%% Generate archivable PDF/A file
 

@@ -1,3 +1,18 @@
 \section{Lead field construction}\label{sec:lead-field-construction}
 
-TODO
+\subsection{Lead field -related zef fields}\label{ssec:meshing-fields}
+
+\coderubric{zef.acceptable\_source\_depth} Determines how much of the active
+layers are peeled off before sources are placed into them. The depth of
+\SI{0}{\milli\meter} means that only the surfacemost layer is peeled off, as
+the peeling algorithm requires that all nodes in a tetrahedron are further
+than the given value for the terra to be considered as a valid source
+position.
+
+\coderubric{zef.optimization\_system\_type} Deteremines what optimization
+method is used in source space interpolation. Options are \code{'pbo'} or
+\code{'mpo'}.
+
+\coderubric{zef.source\_model} Deteremines which source model is to be used
+when positioning the sources. Options include \code{ZefSourceModel.\{Hdiv,
+Whitney, StVenant\}}.
