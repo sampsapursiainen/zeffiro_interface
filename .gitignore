@@ -23,6 +23,11 @@
 !*.zef
 !README
 
+# Allow TeΧ files under documentation folder.
+
+!documentation/**.tex
+!documentation/documentation.pdf
+
 # These are apparently not a part of the app itself, so keep ignoring them
 
 profile
