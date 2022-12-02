@@ -1,4 +1,4 @@
-function [reconstruction, sample_rate, time_step] = reconstruction_from_edf_fn(path_to_file)
+function [reconstruction, sample_rate, time_step, column_title_vec] = reconstruction_from_edf_fn(path_to_file)
 
     %
     % reconstruction_from_edf_fn
@@ -29,6 +29,11 @@ function [reconstruction, sample_rate, time_step] = reconstruction_from_edf_fn(p
     %
     %   The time step of each row in the timetable contained in the given
     %   file.
+    %
+    % - column_title_vec
+    %
+    %   The titles of the columns from the time table as a column vector of
+    %   strings.
     %
 
     arguments
@@ -75,5 +80,9 @@ function [reconstruction, sample_rate, time_step] = reconstruction_from_edf_fn(p
     time_step = seconds(timetable.Properties.TimeStep);
 
     sample_rate = cell_size / time_step;
+
+    column_title_cells = timetable.Properties.VariableNames';
+
+    column_title_vec = string(column_title_cells);
 
 end % function
