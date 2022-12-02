@@ -27,8 +27,8 @@ function [reconstruction, sample_rate, time_step, column_title_vec] = reconstruc
     %
     % - time_step
     %
-    %   The time step of each row in the timetable contained in the given
-    %   file.
+    %   The time step (seconds) of each row in the timetable contained in the
+    %   given file.
     %
     % - column_title_vec
     %
