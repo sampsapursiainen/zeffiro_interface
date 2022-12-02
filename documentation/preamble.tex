@@ -1,0 +1,24 @@
+%%% Needed packages
+
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+
+%%% Titles and such.
+
+\title{\mytitle}
+\author{\myauthors}
+\date{2022/12/02}
+
+%%% Generate archivable PDF/A file
+
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+\Title{\mytitle}
+\Author{\myauthors}
+\Language{en-GB}
+\Subject{\mysubject}
+\Keywords{\mykeywords}
+\end{filecontents*}
+
+\RequirePackage[a-2b,mathxmp]{pdfx}[2021/12/31]
+\RequirePackage{url}
