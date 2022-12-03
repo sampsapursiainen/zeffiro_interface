@@ -44,7 +44,6 @@ fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 
 %%% Install SPM12 BEGIN %%%
 eval(['!git clone https://github.com/spm/spm12 ' fileparts(mfilename('fullpath')) filesep 'external/spm12'])
-run([fileparts(mfilename('fullpath')) filesep '/external/spm12/ft_defaults.m']);
 zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/spm12/'']); end';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install SPM12 BEGIN %%%
