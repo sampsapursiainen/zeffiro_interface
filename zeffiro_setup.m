@@ -26,12 +26,21 @@ fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 
 %%% Install CVX BEGIN %%%
 %eval(['!git clone https://github.com/cvxr/CVX ' fileparts(mfilename('fullpath')) filesep 'external/CVX'])
-run([fileparts(mfilename('fullpath')) filesep '/external/CVX/cvx_setup.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/CVX/'']); end';
+run([fileparts(mfilename('fullpath')) filesep '/external/fieldtrip/ft_defaults.m']);
+zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/fieldtrip/'']); end';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), evalc(''cvx_startup''); end';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 %%% Install CVX BEGIN %%%
+
+%%% Install FieldTrip BEGIN %%%
+%eval(['!git clone https://github.com/fieldtrip/fieldtrip ' fileparts(mfilename('fullpath')) filesep 'external/fieldtrip'])
+run([fileparts(mfilename('fullpath')) filesep '/external/fieldtrip/cvx_setup.m']);
+zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/CVX/'']); end';
+fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
+zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), evalc(''ft_defaults''); end';
+fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
+%%% Install FieldTrip BEGIN %%%
 
 %%% Install SESAME BEGIN %%%
 %eval(['!git clone https://github.com/i-am-sorri/SESAME_core ' fileparts(mfilename('fullpath')) filesep 'external/SESAME'])
