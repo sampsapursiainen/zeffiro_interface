@@ -35,8 +35,8 @@ fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 
 %%% Install FieldTrip BEGIN %%%
 %eval(['!git clone https://github.com/fieldtrip/fieldtrip ' fileparts(mfilename('fullpath')) filesep 'external/fieldtrip'])
-run([fileparts(mfilename('fullpath')) filesep '/external/fieldtrip/cvx_setup.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/CVX/'']); end';
+run([fileparts(mfilename('fullpath')) filesep '/external/fieldtrip/ft_defaults.m']);
+zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/fieldtrip/'']); end';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
 zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), evalc(''ft_defaults''); end';
 fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
