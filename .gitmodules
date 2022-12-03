@@ -12,5 +12,5 @@
 	url = https://github.com/i-am-sorri/SESAME_core.git
 [submodule "external/fieldtrip"]
 	path = external/fieldtrip
-	url = https://github.com/fieldtrip/fieldtrip
+	url = https://github.com/fieldtrip/fieldtrip.git
 	
