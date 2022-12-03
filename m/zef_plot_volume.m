@@ -756,6 +756,7 @@ hold off;
 
 end
 
+hold on
         sensor_patches = findobj(eval('zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
         try
@@ -777,7 +778,8 @@ zef_update_contour(zef);
 
           zef_store_cdata(cdata_counter,cdata_info);
         cdata_counter = cdata_counter + 1;
-
+hold off
+        
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
