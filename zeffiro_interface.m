@@ -294,13 +294,7 @@ function zef = zeffiro_interface(args)
 
     if not(zef.zeffiro_restart)
 
-        addpath(fullfile(zef.external_path, "SDPT3"));
-        addpath(fullfile(zef.external_path, "SeDuMi"));
-        addpath(fullfile(zef.external_path, "CVX"));
-
-        % TODO: does not work.
-        %
-        % evalc("cvx_startup");
+  zef_start_config;
 
     end
 

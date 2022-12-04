@@ -1,12 +1,14 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function zef_make_butterfly_plot(zef,h_axes_image,position)
+function zef_make_butterfly_plot(zef,h_axes_image)
 
- 
-if evalin('caller','exist(h_axis_image)')
-    h_axes_image = evalin('caller','h_axes_image');
+ if nargin < 2
+if evalin('caller','exist(''h_axes_image'',''var'')')
      h_axes_image = evalin('caller','h_axes_image');
-
+else
+    h_axes_image = zef.h_axes1;
+end
+end
 
     zef.inv_sampling_frequency = zef.bf_sampling_frequency;
     zef.inv_low_cut_frequency = zef.bf_low_cut_frequency;
