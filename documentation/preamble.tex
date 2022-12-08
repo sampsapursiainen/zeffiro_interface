@@ -6,6 +6,31 @@
 \usepackage{xparse}
 \usepackage{siunitx}
 
+%%% Font settings.
+
+\usepackage{fourier}
+
+\usepackage{fontspec}
+
+\setmainfont[
+	Path           = ./fonts/,
+	Extension      = .otf,
+	Ligatures      = TeX,
+	BoldFont       = Erewhon-Bold,
+	ItalicFont     = Erewhon-Italic,
+	BoldItalicFont = Erewhon-BoldItalic,
+]{Erewhon-Regular}
+
+\setmonofont[
+	Path           = ./fonts/,
+	Extension      = .ttf,
+	Ligatures      = TeX,
+	BoldFont       = JuliaMono-Bold,
+	ItalicFont     = JuliaMono-MediumItalic,
+	BoldItalicFont = JuliaMono-BoldItalic,
+	SizeFeatures   = {Size=10},
+]{JuliaMono-Regular}
+
 %%% Titles and such.
 
 \title{\mytitle}
@@ -26,6 +51,10 @@
 \Subject{\mysubject}
 \Keywords{\mykeywords}
 \end{filecontents*}
+
+% Needed for pdfx + lualatex compatibility.
+
+\usepackage{luatex85}
 
 \RequirePackage[a-2b,mathxmp]{pdfx}[2021/12/31]
 \RequirePackage{url}
