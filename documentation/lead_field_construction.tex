@@ -2,20 +2,23 @@
 
 \subsection{Lead field -related zef fields}\label{ssec:meshing-fields}
 
-\coderubric{zef.nodes} The nodes of the curently existing finite element mesh.
-This will be constructed alogside with \code{zef.tetra} when the mesh
-generation routine is run.
+\zeffield{zef.nodes}{:,3}{double}{}{The nodes of the currently existing finite
+element mesh. This will be constructed alongside with \code{zef.tetra} when the
+mesh generation routine is run.}
 
-\coderubric{zef.tetra} The tetrahedra in the current finite element mesh. This
-will be constructed alogside with \code{zef.nodes} when the mesh generation
-routine is run.
 
-\coderubric{zef.acceptable\_source\_depth} Determines how much of the active
-layers are peeled off before sources are placed into them. The depth of
-\SI{0}{\milli\meter} means that only the surfacemost layer is peeled off, as
-the peeling algorithm requires that all nodes in a tetrahedron are further
-than the given value for the terra to be considered as a valid source
-position.
+
+\zeffield{zef.tetra}{:,4}{int32}{ mustBePositive }{The tetrahedra in the
+current finite element mesh. This will be constructed alongside with
+\code{zef.nodes} when the mesh generation routine is run. }
+
+
+\zeffield{zef.acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
+how much of the active layers are peeled off before sources are placed into
+them. The depth of \SI{0}{\milli\meter} means that only the surfacemost layer
+is peeled off, as the peeling algorithm requires that all nodes in a
+tetrahedron are further than the given value for the terra to be considered as
+a valid source position.}
 
 \coderubric{zef.optimization\_system\_type} Determines what optimization
 method is used in source space interpolation. Options are \code{'pbo'} for
