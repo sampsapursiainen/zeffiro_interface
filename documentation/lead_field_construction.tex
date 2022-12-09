@@ -20,10 +20,10 @@ is peeled off, as the peeling algorithm requires that all nodes in a
 tetrahedron are further than the given value for the terra to be considered as
 a valid source position.}
 
-\coderubric{zef.optimization\_system\_type} Determines what optimization
-method is used in source space interpolation. Options are \code{'pbo'} for
-position-based optimization, or \code{'mpo'} for mean position and
-orientation.
+\zeffield{zef.optimization\_system\_type}{1,:}{char}{mustBeMember(['pbo',
+'mpo'])}{Determines what optimization method is used in source space
+interpolation. Options are \code{'pbo'} for position-based optimization, or
+\code{'mpo'} for mean position and orientation.}
 
 \coderubric{zef.source\_model} Deteremines which source model is to be used
 when positioning the sources. Options include \code{ZefSourceModel.\{Hdiv,
