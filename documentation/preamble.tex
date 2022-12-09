@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{hyperref}
 \usepackage{xparse}
+\usepackage{tabularx}
 \usepackage{siunitx}
 
 %%% Font settings.
@@ -41,6 +42,20 @@
 
 \NewDocumentCommand\code{m}{\texttt{#1}}
 \NewDocumentCommand\coderubric{m}{\paragraph{\code{#1}}}
+
+\NewDocumentCommand\zeffield{mmmmm}{%
+	\vspace{1em}
+	\noindent
+	\begin{minipage}{\textwidth}
+		\begin{tabularx}{\linewidth}{>{\bfseries}rX}
+			name:        & \code{#1} \\
+			size:        & \code{(#2)} \\
+			type:        & \code{#3} \\
+			validators:  & \code{\{ #4 \}} \\
+			description: & #5
+		\end{tabularx}
+	\end{minipage}
+}
 
 %%% Generate archivable PDF/A file
 
