@@ -2,49 +2,49 @@
 
 \subsection{Lead field -related zef fields}\label{ssec:meshing-fields}
 
-\zeffield{zef.nodes}{:,3}{double}{}{The nodes of the currently existing finite
-element mesh. This will be constructed alongside with \code{zef.tetra} when the
+\zeffield{nodes}{:,3}{double}{}{The nodes of the currently existing finite
+element mesh. This will be constructed alongside with \code{tetra} when the
 mesh generation routine is run.}
 
 
 
-\zeffield{zef.tetra}{:,4}{uint32}{ mustBePositive }{The tetrahedra in the
+\zeffield{tetra}{:,4}{uint32}{ mustBePositive }{The tetrahedra in the
 current finite element mesh. This will be constructed alongside with
-\code{zef.nodes} when the mesh generation routine is run. }
+\code{nodes} when the mesh generation routine is run. }
 
 
-\zeffield{zef.acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
+\zeffield{acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
 how much of the active layers are peeled off before sources are placed into
 them. The depth of \SI{0}{\milli\meter} means that only the surfacemost layer
 is peeled off, as the peeling algorithm requires that all nodes in a
 tetrahedron are further than the given value for the terra to be considered as
 a valid source position.}
 
-\zeffield{zef.optimization\_system\_type}{1,:}{char}{mustBeMember(['pbo',
+\zeffield{optimization\_system\_type}{1,:}{char}{mustBeMember(['pbo',
 'mpo'])}{Determines what optimization method is used in source space
 interpolation. Options are \code{'pbo'} for position-based optimization, or
 \code{'mpo'} for mean position and orientation.}
 
-\coderubric{zef.source\_model} Deteremines which source model is to be used
+\coderubric{source\_model} Deteremines which source model is to be used
 when positioning the sources. Options include \code{ZefSourceModel.\{Hdiv,
 Whitney, StVenant\}}.
 
-\coderubric{zef.source\_direction\_mode} TODO.
+\coderubric{source\_direction\_mode} TODO.
 
-\coderubric{zef.preconditioner} TODO.
+\coderubric{preconditioner} TODO.
 
-\coderubric{zef.preconditioner\_tolerance} TODO.
+\coderubric{preconditioner\_tolerance} TODO.
 
-\coderubric{zef.solver\_tolerance} TODO.
+\coderubric{solver\_tolerance} TODO.
 
-\coderubric{zef.n\_sources} The number of sources whose even placement is
+\coderubric{n\_sources} The number of sources whose even placement is
 attempted into the the currently existing mesh. If the mesh is not fine
 enough, the number of actually placed sources might not be as high as
 requested.
 
-\coderubric{zef.sigma} The conductivities of the tetrahedra.
+\coderubric{sigma} The conductivities of the tetrahedra.
 
-\coderubric{zef.sensors} A set of sensors. If point electrode model (PEM) is
+\coderubric{sensors} A set of sensors. If point electrode model (PEM) is
 used, this will be a \code{(:,3)} array of electrode positions, whereas if
 complete eletrode model is used, this should be a \code{(:,6)} array of 3D
 positions, inner and outer radii and finally impedances.
