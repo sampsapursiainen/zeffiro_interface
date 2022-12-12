@@ -3,6 +3,16 @@
 \subsection{Fields of \code{zef} needed by the lead field construction routines}%
 \label{ssec:meshing-fields}
 
+This section lists the fields of central struct \code{zef} of Zeffiro
+Interface, that a user needs to set with the syntax
+\begin{lstlisting}[style=unnumberedlines, language=Matlab]
+zef.field_name = field_value;
+\end{lstlisting}
+in order to successfully generate a lead field via Zeffiro Interface's lead
+field routines. The names, sizes, types, validators and descriptions are
+specified, in the spirit of Matlab's class property and function argument
+validation, even if no validation is actually performed for these fields.
+
 \zeffield{nodes}{:,3}{double}{}{The nodes of the currently existing finite
 element mesh. This will be constructed alongside with \code{tetra} when the
 mesh generation routine is run.}
