@@ -28,6 +28,11 @@ for i = 2 : n_dynamic_levels+1
 
 end
 
+if size(cluster_data,1) < size(cluster_data,2)
+cluster_data = repmat(cluster_data,ceil(size(cluster_data,2)/size(cluster_data,1))+1,1);
+end
+
+
 [index_vec,MahalanobisD,GMModel] = zef_find_clusters(n_clusters,cluster_data,reg_val,cred_val,max_iter,tol_val);
 
 aux_array_1 =  accumarray(index_vec,cluster_data(:,4));

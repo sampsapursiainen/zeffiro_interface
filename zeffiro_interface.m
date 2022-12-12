@@ -276,7 +276,7 @@ function zef = zeffiro_interface(args)
 
     zef.zeffiro_task_id = 0;
 
-    zef.zeffiro_restart_time = now;
+    zef.zeffiro_restart_time = cputime;
 
     zef.cluster_path =  fullfile(zef.program_path, "cluster");
 

@@ -294,7 +294,7 @@ for i = 1 : size(ini_cell,1)
         if not(isempty(filename))
         if not(ismember(filetype,{'mat',''}))
          [aux_points,aux_triangles] = zef_get_mesh(zef,filename, compartment_tag, filetype,'full');
- zef = zef_merge_surface_mesh(zef, compartment_tag,aux_triangles,aux_points,merge);
+        zef = zef_merge_surface_mesh(zef, compartment_tag,aux_triangles,aux_points,merge);
         elseif isequal(filetype,'mat')
          zef = zef_import_mat_struct(zef, filename,[compartment_tag '_']);
         end
@@ -413,14 +413,14 @@ for i = 1 : size(ini_cell,1)
             visible = '1';
          end
         if find(ismember(ini_cell(i,:),'affine_transform'))
-            ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'affine_transform'),1)];
-                ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+        ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'affine_transform'),1)];
+        ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         affine_transform = ini_cell{i,find(ismember(ini_cell(i,:),'affine_transform'),1)+1};
         else
             affine_transform = mat2str(eye(4));
         end
 
-             if find(ismember(ini_cell(i,:),'tag'))
+        if find(ismember(ini_cell(i,:),'tag'))
         ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
         tag = (ini_cell{i,find(ismember(ini_cell(i,:),'tag'),1)+1});
@@ -441,19 +441,14 @@ for i = 1 : size(ini_cell,1)
             find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
             ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
             sensor_taglist_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)+1});
-        else
-            sensor_taglist_filename = '';
-        end
-
-        if not(isempty(sensor_taglist_filename))
             sensor_taglist_filename = fullfile(folder_name, foldername, sensor_taglist_filename);
+            sensor_taglist_cell = readcell(sensor_taglist_filename)';
+        else
+            sensor_taglist_cell = [];
         end
-
-                                                             % ↓
-        sensor_taglist_cell = readcell(sensor_taglist_filename)';
 
         %eval(['zef_data.sensora_selected = ' num2str(sensors_ind) ';']);
-         eval(['zef.current_sensors = ''' sensor_tag  ''';']);
+        eval(['zef.current_sensors = ''' sensor_tag  ''';']);
         eval(['zef.' sensor_tag '_name = ''' name ''';']);
         eval(['zef.' sensor_tag '_on = ' on  ';']);
         eval(['zef.' sensor_tag '_visible = ' visible ';']);

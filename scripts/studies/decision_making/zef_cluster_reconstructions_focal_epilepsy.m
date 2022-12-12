@@ -17,7 +17,7 @@ zef.GMModel.reg_param = reg_param_rec;
 zef.GMModel.max_n_iter = max_iter; 
 zef.GMModel.tol_val = tol_val_rec;
 zef.reconstruction{1} = z_inverse_results{k};
-    
+
 [z_cluster_centres_aux,z_dipole_moments_aux,~,GMModel] = zef_cluster_reconstruction(zef);
 [~, max_ind] = max(sqrt(sum(z_dipole_moments_aux.^2,2)));
 z_cluster_centres(k,:) = z_cluster_centres_aux(max_ind,:);
