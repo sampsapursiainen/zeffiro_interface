@@ -14,15 +14,12 @@ specified, in the spirit of Matlab's class property and function argument
 validation, even if no validation is actually performed for these fields.
 
 \zeffield{nodes}{:,3}{double}{}{The nodes of the currently existing finite
-element mesh. This will be constructed alongside with \ccode{tetra} when the
-mesh generation routine is run.}
+element mesh. This will be constructed alongside with \ccode{zef.tetra} when
+the mesh generation routine is run.}
 
-
-
-\zeffield{tetra}{:,4}{uint32}{ mustBePositive }{The tetrahedra in the
-current finite element mesh. This will be constructed alongside with
-\ccode{nodes} when the mesh generation routine is run. }
-
+\zeffield{tetra}{:,4}{uint32}{ mustBePositive }{The tetrahedra in the current
+finite element mesh. This will be constructed alongside with \ccode{zef.nodes}
+when the mesh generation routine is run. }
 
 \zeffield{acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
 how much of the active layers are peeled off before sources are placed
