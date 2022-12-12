@@ -14,11 +14,11 @@ current finite element mesh. This will be constructed alongside with
 
 
 \zeffield{acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
-how much of the active layers are peeled off before sources are placed into
-them. The depth of \SI{0}{\milli\meter} means that only the surfacemost layer
-is peeled off, as the peeling algorithm requires that all nodes in a
-tetrahedron are further than the given value for the terra to be considered as
-a valid source position.}
+how much of the active layers are peeled off before sources are placed
+into them. The depth of \SI{0}{\milli\meter} means that only the
+surfacemost layer is peeled off, as the peeling algorithm requires that
+all nodes in a tetrahedron are further than the given value for the tetra
+to be considered as a valid source position.}
 
 \zeffield{optimization\_system\_type}{1,:}{char}{mustBeMember(['pbo',
 'mpo'])}{Determines what optimization method is used in source space
