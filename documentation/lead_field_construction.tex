@@ -3,7 +3,7 @@
 \subsection{Fields of \code{zef} needed by the lead field construction routines}%
 \label{ssec:meshing-fields}
 
-This section lists the fields of central struct \code{zef} of Zeffiro
+This section lists the fields of central struct \ccode{zef} of Zeffiro
 Interface, that a user needs to set with the syntax
 \begin{lstlisting}[style=unnumberedlines, language=Matlab]
 zef.field_name = field_value;
@@ -14,14 +14,14 @@ specified, in the spirit of Matlab's class property and function argument
 validation, even if no validation is actually performed for these fields.
 
 \zeffield{nodes}{:,3}{double}{}{The nodes of the currently existing finite
-element mesh. This will be constructed alongside with \code{tetra} when the
+element mesh. This will be constructed alongside with \ccode{tetra} when the
 mesh generation routine is run.}
 
 
 
 \zeffield{tetra}{:,4}{uint32}{ mustBePositive }{The tetrahedra in the
 current finite element mesh. This will be constructed alongside with
-\code{nodes} when the mesh generation routine is run. }
+\ccode{nodes} when the mesh generation routine is run. }
 
 
 \zeffield{acceptable\_source\_depth}{1,1}{double}{mustBeNonnegative}{Determines
@@ -33,12 +33,12 @@ to be considered as a valid source position.}
 
 \zeffield{optimization\_system\_type}{1,:}{char}{mustBeMember(['pbo',
 'mpo'])}{Determines what optimization method is used in source space
-interpolation. Options are \code{'pbo'} for position-based optimization, or
-\code{'mpo'} for mean position and orientation.}
+interpolation. Options are \ccode{'pbo'} for position-based optimization, or
+\ccode{'mpo'} for mean position and orientation.}
 
 \zeffield{source\_model}{1,1}{ZefSourceModel}{}{Determines which source model
 is to be used when positioning the sources. Options include
-\code{ZefSourceModel.\{Hdiv, Whitney, StVenant\}}.}
+\ccode{ZefSourceModel.\{Hdiv, Whitney, StVenant\}}.}
 
 \zeffield{source\_direction\_mode}{1,1}{int32}{}{Determines how the columns of
 a lead field \(L\) are interpreted. the options are (1) cartesian, (2) normal
