@@ -26,26 +26,28 @@ to be considered as a valid source position.}
 interpolation. Options are \code{'pbo'} for position-based optimization, or
 \code{'mpo'} for mean position and orientation.}
 
-\coderubric{source\_model} Deteremines which source model is to be used
-when positioning the sources. Options include \code{ZefSourceModel.\{Hdiv,
-Whitney, StVenant\}}.
+\zeffield{source\_model}{1,1}{ZefSourceModel}{}{Determines which source model
+is to be used when positioning the sources. Options include
+\code{ZefSourceModel.\{Hdiv, Whitney, StVenant\}}.}
 
-\coderubric{source\_direction\_mode} TODO.
+\zeffield{source\_direction\_mode}{1,1}{int32}{}{Determines how the columns of
+a lead field \(L\) are interpreted. the options are (1) cartesian, (2) normal
+(3) face-based.}
 
-\coderubric{preconditioner} TODO.
+\zeffield{preconditioner}{1,:}{char}{mustBeMember([TODO])}{TODO.}
 
-\coderubric{preconditioner\_tolerance} TODO.
+\zeffield{preconditioner\_tolerance}{1,1}{double}{mustBePositive}{TODO.}
 
-\coderubric{solver\_tolerance} TODO.
+\zeffield{solver\_tolerance}{1,1}{double}{mustBePositive}{TODO.}
 
-\coderubric{n\_sources} The number of sources whose even placement is
-attempted into the the currently existing mesh. If the mesh is not fine
-enough, the number of actually placed sources might not be as high as
-requested.
+\zeffield{n\_sources}{1,1}{uint32}{mustBePositive}{The number of sources whose
+even placement is attempted into the the currently existing mesh. If the
+mesh is not fine enough, the number of actually placed sources might not
+be as high as requested.}
 
-\coderubric{sigma} The conductivities of the tetrahedra.
+\zeffield{sigma}{size(tetra,1),1}{double}{}{The conductivities of the tetrahedra.}
 
-\coderubric{sensors} A set of sensors. If point electrode model (PEM) is
+\zeffield{sensors}{:,6}{double}{}{A set of sensors. If point electrode model (PEM) is
 used, this will be a \code{(:,3)} array of electrode positions, whereas if
 complete eletrode model is used, this should be a \code{(:,6)} array of 3D
-positions, inner and outer radii and finally impedances.
+positions, inner and outer radii and finally impedances.}
