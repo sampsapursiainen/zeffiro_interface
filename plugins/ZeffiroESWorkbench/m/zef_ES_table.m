@@ -1,4 +1,3 @@
-
 function vec = zef_ES_table(varargin)
 %% Pre-allocate table and properties
 
@@ -58,7 +57,7 @@ if nargin == 0
     channels     = [];
 else
     zef = varargin{1};
-    load_aux = zef.y_ES_interval;
+    %load_aux = zef.y_ES_interval;
 
     y_ES         = zeros(size(zef.y_ES_interval.y_ES));
     residual     = 100*cell2mat(zef.y_ES_interval.residual);
@@ -73,7 +72,7 @@ else
     nnz          = cell2mat(zef.y_ES_interval.nnz);
     run_time     = cell2mat(zef.y_ES_interval.run_time);
     alpha        = db(zef.y_ES_interval.alpha);
-    beta         = db(zef.y_ES_interval.beta);
+    beta      = db(zef.y_ES_interval.beta);
     flag_value   = cell2mat(zef.y_ES_interval.flag);
     channels     = zef.y_ES_interval.y_ES;
 

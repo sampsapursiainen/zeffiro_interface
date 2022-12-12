@@ -153,8 +153,7 @@ for i = 1:lattice_size
             zef.y_ES_interval.flag{i,j}                         = flag{parallel_ind};
             zef.y_ES_interval.source_amplitude{i,j}             = source_amplitude{parallel_ind};
             zef.y_ES_interval.nnz{i,j}                          = zef_ES_rwnnz(y_ES{parallel_ind}, zef_data.relative_weight_nnz, zef_data.score_dose);
-            
-            %% Field source
+
             if ismember(flag{parallel_ind}, [1, 3]) && norm(y_ES{parallel_ind}, 2) > 0
                 for running_index = 1:length(source_position_index{parallel_ind})
                     vec_1 = source_amplitude{parallel_ind}(running_index)*source_directions{parallel_ind}(running_index,:);

@@ -6,6 +6,7 @@ else
 end
 %% Variables and parameters setup
 vec = zef_ES_table(zef);
+[sr, sc] = zef_ES_objective_function(zef);
 %% Figure & Axes
 n_chart = 1 + length(findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
 h_fig = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart)], ...
@@ -34,11 +35,11 @@ for i_idx = 1:3
 
     for w = 1:length(fieldnames_table{i_idx})
         subplot(2,2,w);
-        printing_imagesc(vec, fieldnames_table{i_idx}{w});
+        printing_imagesc(vec, fieldnames_table{i_idx}{w}, sr, sc);
     end
 end
 %% Wrapping up, functions and return of variables
-    function printing_imagesc(vec, fieldnames_table)
+    function printing_imagesc(vec, fieldnames_table, sr, sc)
         % This function prepares the image with scaled color
 
         imagesc(vec.(fieldnames_table){:});
@@ -81,8 +82,6 @@ end
         set(cb, 'TickLabels', TL);
 
         %%% Legend
-        [sr, sc] = zef_ES_objective_function(zef);
-
         hold on;
         plot(ax, sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
         plot(ax, sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
