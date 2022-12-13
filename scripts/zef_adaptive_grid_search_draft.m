@@ -69,7 +69,7 @@ for stage_idx = 2:adapt_search+1
 
     % Re-calculate using new alpha/beta
     zef_ES_find_currents(zef, alpha_2, beta_2)
-    adapted_y_ES{stage_idx} = zef.y_ES_interval; %#ok<AGROW> 
+    adapted_y_ES{stage_idx} = zef.y_ES_interval; %#ok<AGROW>
 
     zef_ES_plot_error_chart(zef)
     pause(1);
