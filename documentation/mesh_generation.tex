@@ -17,6 +17,48 @@ descriptions are specified, in the spirit of Matlab's class property and
 function argument validation, even if no validation is actually performed for
 these fields.
 
+\zeffield{compartment\_tags}{1,:}{cell}{}{%
+	Contains the textual tags of the different brain compartments built during
+	segmentation. Zeffiro builds variable names out of these tags at runtime,
+	to access various properties of the different compartments. In the below
+	field descriptions, the string \ccomptag\ refers to a compartment tag
+	found in this container.
+}
+
+\zeffield{\comptag\_on}{}{}{}{TODO}
+
+\zeffield{\comptag\_scaling}{}{}{}{TODO}
+
+\zeffield{\comptag\_x\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_y\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_z\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_xy\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_yz\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_zx\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_points\_inf}{}{}{}{TODO}
+
+\zeffield{\comptag\_points}{}{}{}{TODO}
+
+\zeffield{\comptag\_triangles}{}{}{}{TODO}
+
+\zeffield{\comptag\_submesh\_ind}{}{}{}{TODO}
+
+\zeffield{\comptag\_sources}{}{}{}{TODO}
+
+\zeffield{\comptag\_affine\_transform}{1,:}{cell}{}{%
+	A sequence (cell array) of affine transforms, that can be used to
+	translate and rotate a given compartment. The transforms are in the form
+	of \(4\times 4\) matrices.
+}
+
+
+
 \zeffield{mesh\_resolution}{1,1}{double}{mustBePositive}{This field defines
 the starting resolution (in \si{\milli\meter}) of the generated mesh,
 before any operations such as refinement or smoothing have been applied to
