@@ -1,15 +1,20 @@
 function zef_ES_plot_barplot(zef, varargin)
 switch nargin
-    case 0
+    case {0,1}
+        if nargin == 0
         zef = evalin('base','zef');
-    case 1
+        else
+            zef = varargin{1};
+        end
         [sr, sc] = zef_ES_objective_function(zef);
         y_ES = zef.y_ES_interval.y_ES{sr,sc};
     case 3
-        if nargin >= 3
-            vec = zef_ES_table(zef);
-            y_ES = vec.("ES Channels"){varargin{2}, varargin{3}};
+        if isstruct(varargin{1})
+            vec = zef_ES_table(varargin{1});
+        else
+            vec = varargin{1};
         end
+        y_ES = vec.("ES Channels"){varargin{2}, varargin{3}};
     otherwise
         error('Too many input arguments.')
 end
@@ -26,8 +31,6 @@ try
 catch
     movegui(h_fig,'center')
 end
-
-
 %%
 h_barplot_ES = bar(y_ES,0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
