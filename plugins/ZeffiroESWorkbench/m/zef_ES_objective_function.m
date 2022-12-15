@@ -1,18 +1,26 @@
 function [sr, sc] = zef_ES_objective_function(varargin)
 %% Check for zef
 switch nargin
-    case {0,1}
+    case {0,1,2}
         if nargin == 0
             zef = evalin('base','zef');
             warning('ZI: No zef were called as an input argument.')
         else
             zef = varargin{1};
         end
-        vec     = zef_ES_table(zef);
         obj1    = zef.ES_obj_fun;
         obj2    = zef.ES_obj_fun_2;
         AT      = zef.ES_acceptable_threshold;
         TT      = zef.ES_threshold_condition;
+        if nargin == 2 
+            if istable(varargin{2})
+                vec = varargin{2};
+            else
+                vec = zef_ES_table(varargin{2});
+            end
+        else
+            vec = zef_ES_table(zef.y_ES_interval);
+        end
     case{5}
         [vec, obj1, obj2, AT, TT] = deal(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
     otherwise

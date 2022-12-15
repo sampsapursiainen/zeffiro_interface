@@ -5,7 +5,7 @@ end
 
 zef = zef_ES_optimizer_properties(zef);
 
-vec = zef_ES_table(zef);
+vec = zef_ES_table(zef.y_ES_interval);
 [sr, sc] = zef_ES_objective_function(zef);
 
 for i_aux = 1 : size(vec, 2)-1 % Last one are the ES channels.

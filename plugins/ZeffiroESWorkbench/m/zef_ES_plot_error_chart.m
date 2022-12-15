@@ -6,13 +6,35 @@ switch nargin
         if nargin == 0
             zef = evalin('base','zef');
             warning('ZI: No zef were called as an input argument.')
+            vec = zef_ES_table(zef.y_ES_interval);
+            [sr, sc] = zef_ES_objective_function(zef);
         else
-            zef = varargin{1};
+            if isstruct(varargin{1})
+                zef = varargin{1};
+                try
+                    vec = zef_ES_table(zef.y_ES_interval);
+                catch
+                    error('ZI: Invalid input argument.')
+                end
+                [sr, sc] = zef_ES_objective_function(zef);
+            elseif istable(varargin{1})
+                vec = varargin{1};
+                zef = evalin('base','zef');
+                warning('ZI: No zef were called as an input argument.')
+                [sr, sc] = zef_ES_objective_function(zef, vec);
+            end
         end
-        vec = zef_ES_table(zef);
-        [sr, sc] = zef_ES_objective_function(zef);
+
+    case {2}
+        [zef, arg_aux] = deal(varargin{1}, varargin{2});
+        if ~(istable(varargin{2}))
+            vec = zef_ES_table(arg_aux);
+        end
+        [sr, sc] = zef_ES_objective_function(zef, vec);
     case {3}
-        [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{3});
+        [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{2});
+    otherwise
+        error('ZI: Invalid number of arguments.')
 end
 %% Figure & Axes
 n_chart = 1 + length(findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
