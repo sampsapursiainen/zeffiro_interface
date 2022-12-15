@@ -1,6 +1,5 @@
 function vec = zef_ES_table(varargin)
 %% Pre-allocate table and properties
-
     var_names = {...
         'Total dose', ...
         'Residual', ...
@@ -56,31 +55,31 @@ if nargin == 0
     flag_value   = [];
     channels     = [];
 else
-    zef = varargin{1};
-    %load_aux = zef.y_ES_interval;
+    data_aux = varargin{1};
 
-    y_ES         = zeros(size(zef.y_ES_interval.y_ES));
-    residual     = 100*cell2mat(zef.y_ES_interval.residual);
-    max_current  = zeros(size(zef.y_ES_interval.y_ES));
-    sparsity     = zeros(size(zef.y_ES_interval.y_ES));
-    source_amp   = cell2mat(zef.y_ES_interval.field_source.amplitude);
-    off_field    = cell2mat(zef.y_ES_interval.field_source.avg_off_field);
-    angle_error  = cell2mat(zef.y_ES_interval.field_source.angle);
-    mag          = 100*cell2mat(zef.y_ES_interval.field_source.relative_norm_error);
-    rdm          = 100*cell2mat(zef.y_ES_interval.field_source.relative_error);
+    y_ES         = zeros(size(data_aux.y_ES_interval.y_ES));
+    residual     = 100*cell2mat(data_aux.y_ES_interval.residual);
+    max_current  = zeros(size(data_aux.y_ES_interval.y_ES));
+    sparsity     = zeros(size(data_aux.y_ES_interval.y_ES));
+    source_amp   = cell2mat(data_aux.y_ES_interval.field_source.amplitude);
+    off_field    = cell2mat(data_aux.y_ES_interval.field_source.avg_off_field);
+    angle_error  = cell2mat(data_aux.y_ES_interval.field_source.angle);
+    mag          = 100*cell2mat(data_aux.y_ES_interval.field_source.relative_norm_error);
+    rdm          = 100*cell2mat(data_aux.y_ES_interval.field_source.relative_error);
     field_ratio  = max(0, source_amp./off_field);
-    nnz          = cell2mat(zef.y_ES_interval.nnz);
-    run_time     = cell2mat(zef.y_ES_interval.run_time);
-    alpha        = db(zef.y_ES_interval.alpha);
-    beta      = db(zef.y_ES_interval.beta);
-    flag_value   = cell2mat(zef.y_ES_interval.flag);
-    channels     = zef.y_ES_interval.y_ES;
+    nnz          = cell2mat(data_aux.y_ES_interval.nnz);
+    run_time     = cell2mat(data_aux.y_ES_interval.run_time);
+    flag_value   = cell2mat(data_aux.y_ES_interval.flag);
+    
+    alpha        = db(data_aux.y_ES_interval.alpha);
+    beta         = db(data_aux.y_ES_interval.beta);
+    channels     = data_aux.y_ES_interval.y_ES;
 
-    for i_aux = 1:size(zef.y_ES_interval.y_ES, 1)
-        for j_aux = 1:size(zef.y_ES_interval.y_ES, 2)
-            y_ES(i_aux,j_aux)        = 1000*norm(cell2mat(zef.y_ES_interval.y_ES(i_aux, j_aux)), 1);
-            max_current(i_aux,j_aux) = 1000*max(abs(cell2mat(zef.y_ES_interval.y_ES(i_aux, j_aux))));
-            sparsity(i_aux,j_aux)    = 100*sqrt(2)*norm(cell2mat(zef.y_ES_interval.y_ES(i_aux, j_aux)), 2)/norm(cell2mat(zef.y_ES_interval.y_ES(i_aux, j_aux)), 1);
+    for i_aux = 1:size(data_aux.y_ES_interval.y_ES, 1)
+        for j_aux = 1:size(data_aux.y_ES_interval.y_ES, 2)
+            y_ES(i_aux,j_aux)        = 1000*norm(cell2mat(data_aux.y_ES_interval.y_ES(i_aux, j_aux)), 1);
+            max_current(i_aux,j_aux) = 1000*max(abs(cell2mat(data_aux.y_ES_interval.y_ES(i_aux, j_aux))));
+            sparsity(i_aux,j_aux)    = 100*sqrt(2)*norm(cell2mat(data_aux.y_ES_interval.y_ES(i_aux, j_aux)), 2)/norm(cell2mat(data_aux.y_ES_interval.y_ES(i_aux, j_aux)), 1);
         end
     end
 end

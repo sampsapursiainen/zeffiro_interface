@@ -1,12 +1,19 @@
 function zef_ES_plot_error_chart(varargin)
-if nargin == 0
-    zef = evalin('base','zef');
-else
-    zef = varargin{1};
+
+
+switch nargin
+    case {0,1}
+        if nargin == 0
+            zef = evalin('base','zef');
+            warning('ZI: No zef were called as an input argument.')
+        else
+            zef = varargin{1};
+        end
+        vec = zef_ES_table(zef);
+        [sr, sc] = zef_ES_objective_function(zef);
+    case {3}
+        [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{3});
 end
-%% Variables and parameters setup
-vec = zef_ES_table(zef);
-[sr, sc] = zef_ES_objective_function(zef);
 %% Figure & Axes
 n_chart = 1 + length(findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
 h_fig = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart)], ...
@@ -33,9 +40,9 @@ for i_idx = 1:3
     tabs_aux = uitab(h, 'title', tab_titles{i_idx});
     axes('parent', tabs_aux);
 
-    for w = 1:length(fieldnames_table{i_idx})
-        subplot(2,2,w);
-        printing_imagesc(vec, fieldnames_table{i_idx}{w}, sr, sc);
+    for w_aux = 1:length(fieldnames_table{i_idx})
+        subplot(2,2,w_aux);
+        printing_imagesc(vec, fieldnames_table{i_idx}{w_aux}, sr, sc);
     end
 end
 %% Wrapping up, functions and return of variables
@@ -65,9 +72,12 @@ end
         %%% Colorbar TickLabels
         cb = colorbar;
         colormap(cb, turbo(2048))
-        cb_num_ticks = 5;           % numbers of ticks in the colorbar
+
+        %%% Numbers of ticks in the colorbar
+        cb_num_ticks = 5;
         T = linspace(cb.Limits(1), cb.Limits(2), cb_num_ticks);
         cb.Ticks = T;
+
         if     contains(fieldnames_table, 'Total dose')
             TL = arrayfun(@(x) sprintf('%1.3e', x), T, 'un', 0);
         elseif contains(fieldnames_table, 'Maximum current')
@@ -100,7 +110,10 @@ end
         title(fieldnames_table);
     end
 
-h_fig.Visible = zef.use_display;
-zef.h_ES_error_chart = h_fig;
+if nargin == 0
+    h_fig.Visible = zef.use_display;
+    zef.h_ES_error_chart = h_fig;
+    assignin('caller','zef',zef);
+end
 
 end

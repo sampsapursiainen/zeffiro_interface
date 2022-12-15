@@ -1,18 +1,25 @@
 function [sr, sc] = zef_ES_objective_function(varargin)
 %% Check for zef
-if nargin == 0
-    zef = evalin('base','zef');
+switch nargin
+    case {0,1}
+        if nargin == 0
+            zef = evalin('base','zef');
+            warning('ZI: No zef were called as an input argument.')
+        else
+            zef = varargin{1};
+        end
+        vec     = zef_ES_table(zef);
+        obj1    = zef.ES_obj_fun;
+        obj2    = zef.ES_obj_fun_2;
+        AT      = zef.ES_acceptable_threshold;
+        TT      = zef.ES_threshold_condition;
+    case{5}
+        [vec, obj1, obj2, AT, TT] = deal(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
+    otherwise
+        error('ZI: Invalid number of arguments.')
 end
-if nargin == 1
-    zef = varargin{1};
-end
-%% pre-allocation of the objective functions and threshold parameters
-vec     = zef_ES_table(zef);
-obj1    = zef.ES_obj_fun;
-obj2    = zef.ES_obj_fun_2;
-AT      = zef.ES_acceptable_threshold;
-TT      = zef.ES_threshold_condition;
 
+%% pre-allocation of the objective functions and threshold parameters
 metacriteria_names  = vec.Properties.VariableNames;
 metacriteria_minmax = vec.Properties.VariableDescriptions;
 metacriteria_objfun = metacriteria_names(~strcmpi(metacriteria_minmax, 'none'));
@@ -30,9 +37,7 @@ if isequal(obj1, obj2)
         [~, Idx] = max(abs(obj_fun_1),[],'all');
     end
     [sr, sc] = ind2sub(size(obj_fun_1), Idx);
-
 else
-
     if isequal(TT, 1)
         AT = AT*max((obj_fun_1(:)));
     end

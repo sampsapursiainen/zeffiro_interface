@@ -8,7 +8,7 @@ switch nargin
             zef = varargin{1};
         end
         [alpha, beta] = zef_ES_find_parameters(zef);
-    case {3}
+    case {3,4}
         [zef, alpha, beta] = deal(varargin{1}, varargin{2}, varargin{3});
     otherwise
         error('ZI: Too many input arguments.')
@@ -123,15 +123,20 @@ if ismember(zef.ES_search_method, [1 2])
 end
 
 if not(isequal(zef_data.search_method, 4))
-    lattice_size = zef.ES_step_size;
+    if nargin ~= 4
+        step_size = zef.ES_step_size;
+    else
+        step_size = varargin{4};
+    end
+
 else
-    lattice_size = 1;
+    step_size = 1;
 end
 
-for i = 1:lattice_size
+for i = 1:step_size
     j = 0;
-    while j < lattice_size
-        p_ind_max = min(lattice_size - j, n_parallel);
+    while j < step_size
+        p_ind_max = min(step_size - j, n_parallel);
         parfor parallel_ind = 1:p_ind_max %parfor
             run_time{parallel_ind} = now;
             [y_ES{parallel_ind}, ...
@@ -175,9 +180,9 @@ for i = 1:lattice_size
                     vec_index = setdiff(1:length(volumetric_current_density{parallel_ind}), source_running_ind);
                     zef.y_ES_interval.field_source(running_index).field_source{i,j}         = (volumetric_current_density{parallel_ind}(:,source_running_ind));
                     zef.y_ES_interval.field_source(running_index).amplitude{i,j}            = mean(sum(volumetric_current_density{parallel_ind}(:,source_running_ind).*repmat(vec_1',1,length(source_running_ind))./norm_vec_1));
-                    zef.y_ES_interval.field_source(running_index).angle{i,j}                = 180/pi*acos(dot(vec_1',vec_2)/(norm_vec_1'*norm_vec_2));
-                    zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = abs(1 - norm(vec_2)/norm_vec_1);
-                    zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = norm(vec_1'/norm(vec_1)-vec_2/norm(vec_2));
+                    zef.y_ES_interval.field_source(running_index).angle{i,j}                = 180/pi*acos(dot(vec_1',vec_2) / (norm_vec_1'*norm_vec_2));
+                    zef.y_ES_interval.field_source(running_index).relative_norm_error{i,j}  = abs(1 - norm(vec_2) / norm_vec_1);
+                    zef.y_ES_interval.field_source(running_index).relative_error{i,j}       = norm(vec_1'/norm(vec_1) - vec_2/norm(vec_2));
                     zef.y_ES_interval.field_source(running_index).avg_off_field{i,j}        = mean(sqrt(sum(volumetric_current_density{parallel_ind}(:, vec_index).^2)));
                 end
             else
@@ -209,7 +214,8 @@ if exist('wait_bar_temp') %#ok<EXIST>
 end
 
 if nargout == 0
-    assignin('base','zef',zef);
+    %assignin('base','zef',zef);
+    assignin('caller','zef',zef);
 end
 
 end
