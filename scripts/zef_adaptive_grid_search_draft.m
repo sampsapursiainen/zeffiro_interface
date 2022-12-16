@@ -2,7 +2,7 @@ function adapted_y_ES = zef_adaptive_grid_search_draft(varargin)
 %   adapted_y_ES returns an N-by-1 cell array of shrinking y_ES values
 %   using a finer grid search using a narrow hyperparameter range based on
 %   the initial exhaustive search produced by zef_ES_optimization.
-% 
+%
 %   The shrinkage begins at the optimal solution along with its M-by-M
 %   hyperparameters neighbors (if the optimal solution is located at the
 %   limits, the center of the window will be adjusted to match the grid).
@@ -15,7 +15,7 @@ function adapted_y_ES = zef_adaptive_grid_search_draft(varargin)
 %       evaluate the struct 'zef' which includes the hyperparameter values.
 %       The M size of the window and the N number of adaptive instances
 %       will automatically set by default. By default, if no zef struct is
-%       provided, it will be evaluated in the workspace. 
+%       provided, it will be evaluated in the workspace.
 %
 %   ----------------------
 %   Using [2] argument(s):
@@ -24,7 +24,7 @@ function adapted_y_ES = zef_adaptive_grid_search_draft(varargin)
 %       uses M as the size of the window, and N as the
 %       number of refined adaptive instances.
 %       The struct 'zef' will be evaluated in the workspace.
-% 
+%
 %   ----------------------
 %   Using [3] argument(s):
 %   ----------------------
