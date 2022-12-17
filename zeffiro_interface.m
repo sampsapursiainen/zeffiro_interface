@@ -547,8 +547,6 @@ function zef = zeffiro_interface(args)
             fsuffix = ".mat";
 
         end
-        
-        file_path = [file_path filesep];
 
         zef.file_path = char(file_path);
 
@@ -556,7 +554,7 @@ function zef = zeffiro_interface(args)
 
         zef.save_switch = 1;
 
-        zef = zef_save(zef);
+        zef = zef_save(zef, zef.file, zef.file_path);
 
     end
 
