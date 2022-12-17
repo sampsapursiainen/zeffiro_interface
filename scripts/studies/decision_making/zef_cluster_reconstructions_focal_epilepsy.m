@@ -22,7 +22,7 @@ zef.reconstruction{1} = z_inverse_results{k};
 [~, max_ind] = max(sqrt(sum(z_dipole_moments_aux.^2,2)));
 z_cluster_centres(k,:) = z_cluster_centres_aux(max_ind,:);
 z_max_deviations(k,:) = max(sqrt(eigs(GMModel.Sigma(:,:,max_ind))));
-z_mean_deviations(k,:) = (mean(sqrt(eigs(GMModel.Sigma(:,:,max_ind)))));
+z_mean_deviations(k,:) = mean(sqrt(eigs(GMModel.Sigma(:,:,max_ind))));
     
 end
 

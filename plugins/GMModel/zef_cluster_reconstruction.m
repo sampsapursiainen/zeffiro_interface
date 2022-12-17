@@ -28,8 +28,8 @@ for i = 2 : n_dynamic_levels+1
 
 end
 
-if size(cluster_data,1) < size(cluster_data,2)
-cluster_data = repmat(cluster_data,ceil(size(cluster_data,2)/size(cluster_data,1))+1,1);
+if size(cluster_data,1) <= size(cluster_data,2)
+cluster_data = repmat(cluster_data,floor(size(cluster_data,2)/size(cluster_data,1))+1,1);
 end
 
 

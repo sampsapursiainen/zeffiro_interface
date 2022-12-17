@@ -552,7 +552,7 @@ function zef = zeffiro_interface(args)
 
         if file_path == ""
 
-            file_path = fullfile(zef.program_path, "data");
+            file_path = fullfile(zef.program_path, ['data' filesep]);
 
         end
 
@@ -561,6 +561,8 @@ function zef = zeffiro_interface(args)
             fsuffix = ".mat";
 
         end
+        
+        file_path = [file_path filesep];
 
         zef.file_path = char(file_path);
 
