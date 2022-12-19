@@ -83,7 +83,7 @@ adapted_y_ES = {};
 zef_ES_find_currents(zef, alpha, beta, step_size);
 adapted_y_ES{1} = zef.y_ES_interval;
 
-zef_ES_plot_error_chart(zef); pause(1)
+%zef_ES_plot_error_chart(zef); pause(1)
 %%
 for stage_idx = 2:adapt_instances+1
     [sr, sc] = zef_ES_objective_function(zef);
@@ -95,7 +95,7 @@ for stage_idx = 2:adapt_instances+1
     zef_ES_find_currents(zef, alpha_2, beta_2, step_size)
     adapted_y_ES{stage_idx} = zef.y_ES_interval; %#ok<AGROW>
 
-    zef_ES_plot_error_chart(zef); pause(1)
+    %zef_ES_plot_error_chart(zef); pause(1)
 
     % Update initial alpha/beta (slide)
     alpha = alpha_2;
