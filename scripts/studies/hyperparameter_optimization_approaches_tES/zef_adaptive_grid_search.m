@@ -1,4 +1,4 @@
-function adapted_y_ES = zef_adaptive_grid_search_draft(varargin)
+function adapted_y_ES = zef_adaptive_grid_search(varargin)
 %   adapted_y_ES returns an N-by-1 cell array of shrinking y_ES values
 %   using a finer grid search using a narrow hyperparameter range based on
 %   the initial exhaustive search produced by zef_ES_optimization.
