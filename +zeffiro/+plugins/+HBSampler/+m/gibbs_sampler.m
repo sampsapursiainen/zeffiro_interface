@@ -1,1 +1,0 @@
-gibbs_sampler;

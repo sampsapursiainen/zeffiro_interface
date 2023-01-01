@@ -403,7 +403,7 @@ cdata_info.frame_step = frame_step;
 cdata_info.frame_stop = frame_stop;
 
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(eval('zef.reconstruction_type'), 6)
@@ -521,7 +521,7 @@ end
 
 if ismember(eval('zef.visualization_type'),[2])
 if iscell(volumetric_distribution)
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 else
 reconstruction = volumetric_distribution;
 end
@@ -649,6 +649,9 @@ zef_plot_cone_field(zef, eval('zef.h_axes1'), f_ind);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 
 %set(h_surf_2,'specularstrength',0.2);
@@ -753,6 +756,7 @@ hold off;
 
 end
 
+hold on
         sensor_patches = findobj(eval('zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
         try
@@ -774,7 +778,8 @@ zef_update_contour(zef);
 
           zef_store_cdata(cdata_counter,cdata_info);
         cdata_counter = cdata_counter + 1;
-
+hold off
+        
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 %&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
@@ -802,7 +807,7 @@ axes(eval('zef.h_axes1'));
 hold on;
 
 if iscell(volumetric_distribution)
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 else
 reconstruction = volumetric_distribution;
 end

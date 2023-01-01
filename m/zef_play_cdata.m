@@ -1,6 +1,11 @@
 function zef_play_cdata(varargin)
 
 warning('off');
+ if evalin('base','exist(''zef'',''var'');') 
+      zef = evalin('base','zef');
+  else
+      zef = [];
+  end
 
 show_frame_number = 0;
 loop_count = 1;
@@ -11,7 +16,7 @@ if not(isempty(varargin))
     end
 end
 
-movie_fps = evalin('base','zef.movie_fps');
+movie_fps = zef.movie_fps;
 h_fig = gcf;
 h_axes = findobj(h_fig.Children,'Tag','axes1');
 h_time_text = findobj(h_fig.Children,'Tag','time_text');
@@ -36,7 +41,7 @@ for i = 1 : length(h_c)
 
          number_of_frames = h_c(i).UserData(f_ind).number_of_frames;
          if not(isequal(show_frame_number,0))
-            f_ind = min(max(1,round(show_frame_number*number_of_frames)),10);
+            f_ind = min(max(1,round(show_frame_number*number_of_frames)),number_of_frames);
          end
         frame_step = h_c(i).UserData(f_ind).frame_step;
         frame_stop = h_c(i).UserData(f_ind).frame_stop;
@@ -49,16 +54,16 @@ for i = 1 : length(h_c)
         if not(details_set)
         set(h_time_text,'String',h_c(i).UserData(f_ind).time_string);
         if isequal(show_frame_number,0)
-        evalin('base',['zef.h_slider.Value=' num2str(min(max(0,f_ind/number_of_frames),1)) ';']);
+        eval(['zef.h_slider.Value=' num2str(min(max(0,f_ind/number_of_frames),1)) ';']);
         end
         details_set = 1;
         end
         pause(0.01)
-        stop_movie = evalin('base','zef.stop_movie');
+        stop_movie = eval('zef.stop_movie');
                 pause(0.01);
                 if stop_movie
-                    if get(evalin('base','zef.h_pause_movie'),'value') == 1
-                        waitfor(evalin('base','zef.h_pause_movie'),'value');
+                    if get(eval('zef.h_pause_movie'),'value') == 1
+                        waitfor(eval('zef.h_pause_movie'),'value');
                     else
                         return;
                     end
@@ -77,23 +82,24 @@ if isequal(last_frame,0)
 end
 
 if isequal(f_ind,1)
-        try
+try
 zef_plot_dpq('static');
-        catch
-            warning('Dynamical Plot Queue not successful.')
-        end
+catch
+warning('Dynamical Plot Queue not successful.')
+end
 end
         try
 zef_plot_dpq('dynamical');
         catch 
             warning('Dynamical Plot Queue not successful.')
         end
+        if not(isempty(zef))
         try
 zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
-
+        end
 end
 
 end

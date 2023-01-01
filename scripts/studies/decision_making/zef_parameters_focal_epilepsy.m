@@ -1,6 +1,6 @@
-%training_data_file_name = '';
-credibility_data_file_name = 'credibility_dataset_p2_10dB.mat';
-%project_file_name = '';
+training_data_file_name = '';
+credibility_data_file_name = 'credibility_dataset_p0857_10dB';
+project_file_name = '~/Dropbox/ResearchData/PerEpi_material/Patients/p0803.mat';
 
 supervised_clustering = 'on';
 frame_number = 1; 

@@ -1,3 +1,1 @@
-function KalmanDemo()
-KalmanDemo();
-end
+zef_KalmanDemo;

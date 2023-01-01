@@ -1,6 +1,5 @@
 function [aux_compartment_ind, aux_brain_ind, property_compartment, property_brain] = zef_get_active_compartments(zef,varargin)
 
-
 property_name = cell(0);
 property_compartment = cell(0);
 property_brain = [];

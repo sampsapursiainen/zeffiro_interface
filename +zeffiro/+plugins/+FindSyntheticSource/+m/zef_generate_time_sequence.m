@@ -1,3 +1,3 @@
-function [time_serie,time_var] = zef_generate_time_sequence
-[time_serie,time_var] = zef_generate_time_sequence;
+function [time_serie,time_var] = zef_generate_time_sequence(zef)
+[time_serie,time_var] = zef_generate_time_sequence(zef);
 end

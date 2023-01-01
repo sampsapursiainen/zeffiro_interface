@@ -8,6 +8,7 @@ if not(exist('zef','var'))
 zef = zeffiro_interface('start_mode','nodisplay','open_project',project_file_name);
 end
 zef_start_dataBank;
+addpath(genpath([zef.program_path filesep 'scripts']));
 
 waitbar_counter = 0; 
 h_waitbar = zef_waitbar(waitbar_counter/(training_data_size*length(snr_vec)),'Creating training dataset.');

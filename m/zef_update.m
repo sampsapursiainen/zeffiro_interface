@@ -90,11 +90,11 @@ zef.aux_field_3{zef_i,8} = eval(['not(isempty(zef.' zef.sensor_tags{zef_i} '_dir
 end
 zef.h_sensors_table.Data = zef.aux_field_3;
 for zef_i = 1 : length(zef.sensor_tags)
-    eval(['zef.' zef.sensor_tags{zef_i} '_name = zef.aux_field_3{zef_i,2};']);
-     eval(['zef.' zef.sensor_tags{zef_i} '_imaging_method_name = zef.aux_field_3{zef_i,3};']);
-    eval(['zef.' zef.sensor_tags{zef_i} '_on = zef.aux_field_3{zef_i,4};']);
-    eval(['zef.' zef.sensor_tags{zef_i} '_visible = zef.aux_field_3{zef_i,5};']);
-   eval(['zef.' zef.sensor_tags{zef_i} '_names_visible = zef.aux_field_3{zef_i,6};']);
+eval(['zef.' zef.sensor_tags{zef_i} '_name = zef.aux_field_3{zef_i,2};']);
+eval(['zef.' zef.sensor_tags{zef_i} '_imaging_method_name = zef.aux_field_3{zef_i,3};']);
+eval(['zef.' zef.sensor_tags{zef_i} '_on = zef.aux_field_3{zef_i,4};']);
+eval(['zef.' zef.sensor_tags{zef_i} '_visible = zef.aux_field_3{zef_i,5};']);
+eval(['zef.' zef.sensor_tags{zef_i} '_names_visible = zef.aux_field_3{zef_i,6};']);
 end
 else
     zef.aux_field_1 = cell(0);
@@ -104,7 +104,7 @@ else
     zef.aux_field_1{zef_i,3} = eval(['zef.' zef.sensor_tags{zef_i} '_imaging_method_name']);
     zef.aux_field_1{zef_i,4} = eval(['zef.' zef.sensor_tags{zef_i} '_on']);
     zef.aux_field_1{zef_i,5} = eval(['zef.' zef.sensor_tags{zef_i} '_visible']);
-        zef.aux_field_1{zef_i,6} = eval(['zef.' zef.sensor_tags{zef_i} '_names_visible']);
+    zef.aux_field_1{zef_i,6} = eval(['zef.' zef.sensor_tags{zef_i} '_names_visible']);
     zef.aux_field_1{zef_i,7} = eval(['not(isempty(zef.' zef.sensor_tags{zef_i} '_points))']);
     zef.aux_field_1{zef_i,8} = eval(['not(isempty(zef.' zef.sensor_tags{zef_i} '_directions))']);
     end

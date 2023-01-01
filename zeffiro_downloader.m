@@ -54,9 +54,9 @@ if not(isempty(folder_name))
 end
 
 if not(isequal(branch_name,'master'))
-eval(['!git clone -b ' branch_name ' https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
+eval(['!git clone --depth=1 -b ' branch_name ' https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
 else
-eval(['!git clone https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
+eval(['!git clone --depth=1 https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
 end
 
 ini_cell = readcell([program_path filesep 'profile' filesep 'zeffiro_interface.ini'],'FileType','text');

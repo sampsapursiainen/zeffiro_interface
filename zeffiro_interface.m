@@ -183,28 +183,28 @@ function zef = zeffiro_interface(args)
 
         args.quit_matlab (1,1) logical = false;
 
-        args.use_github (1,1) logical = false;
+        args.use_github (1,1) logical;
 
-        args.use_gpu (1,1) logical = false;
+        args.use_gpu (1,1) logical;
 
-        args.use_gpu_graphic (1,1) logical = false;
+        args.use_gpu_graphic (1,1) logical;
 
-        args.gpu_num (1,1) double { mustBeInteger, mustBeNonnegative } = 0;
+        args.gpu_num (1,1) double { mustBeInteger, mustBeNonnegative };
 
-        args.use_display (1,1) logical = false;
+        args.use_display (1,1) logical;
 
-        args.parallel_processes (1,1) double {mustBePositive, mustBeInteger} = 1;
+        args.parallel_processes (1,1) double {mustBePositive, mustBeInteger};
 
-        args.verbose_mode (1,1) logical = false;
+        args.verbose_mode (1,1) logical;
 
-        args.use_waitbar (1,1) logical = false;
+        args.use_waitbar (1,1) logical;
 
-        args.use_log (1,1) logical = false;
+        args.use_log (1,1) logical;
 
-        args.log_file_name (1,1) string = "";
+        args.log_file_name (1,1) string;
 
     end
-
+    
     % Prevent starting of Zeffiro, if there is an existing value of zef.
 
     if not(args.restart) && evalin("base","exist('zef', 'var');")
@@ -230,27 +230,13 @@ function zef = zeffiro_interface(args)
 
     zef.zeffiro_restart = args.restart;
 
-    zef.start_mode = args.start_mode;
-
-    zef.use_github = args.use_github;
-
-    zef.use_gpu = args.use_gpu;
-
-    zef.use_gpu_graphic = args.use_gpu_graphic;
-
-    zef.gpu_num = args.gpu_num;
-
-    zef.use_display = args.use_display;
-
-    zef.parallel_processes = args.parallel_processes;
-
-    zef.verbose_mode = args.verbose_mode;
-
-    zef.use_waitbar = args.use_waitbar;
-
-    zef.use_log = args.use_log;
-
-    zef.log_file_name = args.log_file_name;
+    args = rmfield(args,'restart');
+    
+    fieldnames_aux = fieldnames(args);
+    for i = 1 : length(fieldnames_aux)
+    zef.(fieldnames_aux{i}) = args.(fieldnames_aux{i});
+    end
+    clear fieldnames_aux;
 
     %% Then do initial preparations like path building and additions.
 
@@ -276,7 +262,7 @@ function zef = zeffiro_interface(args)
 
     zef.zeffiro_task_id = 0;
 
-    zef.zeffiro_restart_time = now;
+    zef.zeffiro_restart_time = cputime;
 
     zef.cluster_path =  fullfile(zef.program_path, "cluster");
 
@@ -294,13 +280,7 @@ function zef = zeffiro_interface(args)
 
     if not(zef.zeffiro_restart)
 
-        addpath(fullfile(zef.external_path, "SDPT3"));
-        addpath(fullfile(zef.external_path, "SeDuMi"));
-        addpath(fullfile(zef.external_path, "CVX"));
-
-        % TODO: does not work.
-        %
-        % evalc("cvx_startup");
+  zef_start_config;
 
     end
 
@@ -558,7 +538,7 @@ function zef = zeffiro_interface(args)
 
         if file_path == ""
 
-            file_path = fullfile(zef.program_path, "data");
+            file_path = fullfile(zef.program_path, ['data' filesep]);
 
         end
 
@@ -574,7 +554,7 @@ function zef = zeffiro_interface(args)
 
         zef.save_switch = 1;
 
-        zef = zef_save(zef);
+        zef = zef_save(zef, zef.file, zef.file_path);
 
     end
 

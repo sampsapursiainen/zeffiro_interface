@@ -1,4 +1,4 @@
-function sensitivities_with_statistics = inverse_sensitivity_fn( ...
+function [ sensitivities_with_statistics, L ] = inverse_sensitivity_fn( ...
     project_path, ...
     inverse_method, ...
     n_of_runs, ...
@@ -79,12 +79,29 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
     %
     %   The interpolation model used by the lead field construction routine.
     %
+    % - args.build_reconstructions
+    %
+    %   A Boolean flag for choosing whether the reconstructions will be
+    %   computed.
+    %
+    % - args.lead_field_filter_quantile
+    %
+    %   A quantile q ∈ [0, 1], based on which the lead field columns are
+    %   filtered based on their norms. With this set to 1, no columns are
+    %   filtered and with a value of 0, all columns are filtered.
+    %
     % Output:
     %
     % - sensitivities_with_statistics
     %
     %   The computed sensitivities or differences between positions,
     %   orientations and magnitudes of the source and inverted dipoles.
+    %
+    % - L
+    %
+    %   The lead field matrix store in zef wither before this routine started
+    %   or computed here. NOTE: if a lead field cannot be located within zef
+    %   at a crucial moment, this will be set to [NaN].
     %
 
     arguments
@@ -118,7 +135,14 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
 
         args.source_model (1,1) ZefSourceModel = ZefSourceModel.Hdiv
 
-    end
+        args.build_reconstructions (1,1) logical = true
+
+        args.lead_field_filter_quantile (1,1) double { ...
+            mustBeGreaterThanOrEqual(args.lead_field_filter_quantile, 0), ...
+            mustBeLessThanOrEqual(args.lead_field_filter_quantile, 1) ...
+        } = 1
+
+    end % arguments
 
     % Load an initial project struct from the given path.
 
@@ -152,7 +176,22 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
 
         project_struct.source_model = args.source_model;
 
+        project_struct.lead_field_filter_quantile = args.lead_field_filter_quantile;
+
         project_struct = zef_eeg_lead_field(project_struct);
+
+    end
+
+    % Get lead field from within zef or set a funky return value, if L could
+    % not be located.
+
+    if isfield(project_struct, "L")
+
+        L = project_struct.L;
+
+    else
+
+        L = [NaN];
 
     end
 
@@ -161,23 +200,29 @@ function sensitivities_with_statistics = inverse_sensitivity_fn( ...
 
     project_struct = zef_minimum_norm_estimation(project_struct);
 
-    if inverse_method == "sLORETA" ...
-    || inverse_method == "dSPM" ...
-    || inverse_method == "MNE" ...
+    sensitivities_with_statistics = struct;
 
-        sensitivities = zef_sensitivity_map_mne(project_struct, inverse_method, n_of_runs, noise_level_db, diff_type);
+    if args.build_reconstructions
 
-    elseif inverse_method == "Dipole Scan"
+        if inverse_method == "sLORETA" ...
+        || inverse_method == "dSPM" ...
+        || inverse_method == "MNE" ...
 
-        sensitivities = zef_sensitivity_map_dipoleScan(project_struct, n_of_runs, noise_level_db, diff_type);
+            sensitivities = zef_sensitivity_map_mne(project_struct, inverse_method, n_of_runs, noise_level_db, diff_type);
 
-    else
+        elseif inverse_method == "Dipole Scan"
 
-        error("Unknown inverse method.")
+            sensitivities = zef_sensitivity_map_dipoleScan(project_struct, n_of_runs, noise_level_db, diff_type);
 
-    end
+        else
 
-    sensitivities_with_statistics = add_statistics_to_struct(sensitivities, n_of_runs);
+            error("Unknown inverse method.")
+
+        end
+
+        sensitivities_with_statistics = add_statistics_to_struct(sensitivities, n_of_runs);
+
+    end % if
 
 end % function
 

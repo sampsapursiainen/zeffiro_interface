@@ -1,11 +1,41 @@
 function zef_ES_plot_error_chart(varargin)
-if nargin == 0
-    zef = evalin('base','zef');
-else
-    zef = varargin{1};
+
+
+switch nargin
+    case {0,1}
+        if nargin == 0
+            zef = evalin('base','zef');
+            warning('ZI: No zef were called as an input argument.')
+            vec = zef_ES_table(zef.y_ES_interval);
+            [sr, sc] = zef_ES_objective_function(zef);
+        else
+            if isstruct(varargin{1})
+                zef = varargin{1};
+                try
+                    vec = zef_ES_table(zef.y_ES_interval);
+                catch
+                    error('ZI: Invalid input argument.')
+                end
+                [sr, sc] = zef_ES_objective_function(zef);
+            elseif istable(varargin{1})
+                vec = varargin{1};
+                zef = evalin('base','zef');
+                warning('ZI: No zef were called as an input argument.')
+                [sr, sc] = zef_ES_objective_function(zef, vec);
+            end
+        end
+
+    case {2}
+        [zef, arg_aux] = deal(varargin{1}, varargin{2});
+        if ~(istable(varargin{2}))
+            vec = zef_ES_table(arg_aux);
+        end
+        [sr, sc] = zef_ES_objective_function(zef, vec);
+    case {3}
+        [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{2});
+    otherwise
+        error('ZI: Invalid number of arguments.')
 end
-%% Variables and parameters setup
-vec = zef_ES_table(zef);
 %% Figure & Axes
 n_chart = 1 + length(findall(groot,'-regexp','Name','ZEFFIRO Interface: Error chart*'));
 h_fig = figure('Name',['ZEFFIRO Interface: Error chart ' num2str(n_chart)], ...
@@ -32,13 +62,13 @@ for i_idx = 1:3
     tabs_aux = uitab(h, 'title', tab_titles{i_idx});
     axes('parent', tabs_aux);
 
-    for w = 1:length(fieldnames_table{i_idx})
-        subplot(2,2,w);
-        printing_imagesc(vec, fieldnames_table{i_idx}{w});
+    for w_aux = 1:length(fieldnames_table{i_idx})
+        subplot(2,2,w_aux);
+        printing_imagesc(vec, fieldnames_table{i_idx}{w_aux}, sr, sc);
     end
 end
 %% Wrapping up, functions and return of variables
-    function printing_imagesc(vec, fieldnames_table)
+    function printing_imagesc(vec, fieldnames_table, sr, sc)
         % This function prepares the image with scaled color
 
         imagesc(vec.(fieldnames_table){:});
@@ -64,9 +94,12 @@ end
         %%% Colorbar TickLabels
         cb = colorbar;
         colormap(cb, turbo(2048))
-        cb_num_ticks = 5;           % numbers of ticks in the colorbar
+
+        %%% Numbers of ticks in the colorbar
+        cb_num_ticks = 5;
         T = linspace(cb.Limits(1), cb.Limits(2), cb_num_ticks);
         cb.Ticks = T;
+
         if     contains(fieldnames_table, 'Total dose')
             TL = arrayfun(@(x) sprintf('%1.3e', x), T, 'un', 0);
         elseif contains(fieldnames_table, 'Maximum current')
@@ -81,8 +114,6 @@ end
         set(cb, 'TickLabels', TL);
 
         %%% Legend
-        [sr, sc] = zef_ES_objective_function(zef);
-
         hold on;
         plot(ax, sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
         plot(ax, sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
@@ -101,7 +132,10 @@ end
         title(fieldnames_table);
     end
 
-h_fig.Visible = zef.use_display;
-zef.h_ES_error_chart = h_fig;
+if nargin == 0
+    h_fig.Visible = zef.use_display;
+    zef.h_ES_error_chart = h_fig;
+    assignin('caller','zef',zef);
+end
 
 end

@@ -9,8 +9,8 @@ end
 %% Source properties
 source_position_index = zeros(size(zef_data.source_positions,1),1);
 
-for i = 1:size(zef_data.source_positions,1)
-    [~,aux_index] = min(sqrt(sum((zef_data.source_positions_aux - zef_data.source_positions(i,:)).^2,2)));
+for i = 1:size(zef_data.source_positions, 1)
+    [~, aux_index] = min(sqrt(sum((zef_data.source_positions_aux - zef_data.source_positions(i,:)).^2,2)));
     source_position_index(i) = aux_index;
 end
 

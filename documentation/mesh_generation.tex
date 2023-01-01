@@ -1,0 +1,79 @@
+\section{Mesh generation}\label{sec:mesh-generation}
+
+TODO
+
+
+\subsection{Fields of \code{zef} needed by mesh generation}%
+\label{ssec:meshing-fields}
+
+This section lists the fields of central struct \ccode{zef} of Zeffiro
+Interface, that a user needs to set with the syntax
+\begin{lstlisting}[style=unnumberedlines, language=Matlab]
+zef.field_name = field_value;
+\end{lstlisting}
+in order to successfully generate a finite element mesh via Zeffiro
+Interface's lead field routines. The names, sizes, types, validators and
+descriptions are specified, in the spirit of Matlab's class property and
+function argument validation, even if no validation is actually performed for
+these fields.
+
+\zeffield{compartment\_tags}{1,:}{cell}{}{%
+	Contains the textual tags of the different brain compartments built during
+	segmentation. Zeffiro builds variable names out of these tags at runtime,
+	to access various properties of the different compartments. In the below
+	field descriptions, the string \ccomptag\ refers to a compartment tag
+	found in this container.
+}
+
+\zeffield{\comptag\_on}{}{}{}{TODO}
+
+\zeffield{\comptag\_scaling}{}{}{}{TODO}
+
+\zeffield{\comptag\_x\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_y\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_z\_correction}{}{}{}{TODO}
+
+\zeffield{\comptag\_xy\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_yz\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_zx\_rotation}{}{}{}{TODO}
+
+\zeffield{\comptag\_points\_inf}{}{}{}{TODO}
+
+\zeffield{\comptag\_points}{:,3}{double}{}{%
+	The coordinates of the surface nodes of this compartment.
+}
+
+\zeffield{\comptag\_triangles}{:,3}{uint32}{mustBePositive}{%
+	The surface triangles (triples of indices) of this compartment.
+}
+
+\zeffield{\comptag\_submesh\_ind}{}{}{}{TODO}
+
+\zeffield{\comptag\_sources}{}{}{}{TODO}
+
+\zeffield{\comptag\_affine\_transform}{1,:}{cell}{}{%
+	A sequence (cell array) of affine transforms, that can be used to
+	translate and rotate a given compartment. The transforms are in the form
+	of \(4\times 4\) matrices.
+}
+
+
+
+\zeffield{mesh\_resolution}{1,1}{double}{mustBePositive}{%
+	This field defines the starting resolution (in \si{\milli\meter}) of the
+	generated mesh, before any operations such as refinement or smoothing have
+	been applied to it. Effectively, this describes the vertex length of an
+	unrefined tetrahedron in the finite element mesh.
+}
+
+\zeffield{mesh\_smoothing\_repetitions}{1,1}{uint32}{}{TODO.}
+
+\zeffield{mesh\_optimization\_repetitions}{1,1}{uint32}{}{TODO.}
+
+\zeffield{mesh\_optimization\_parameter}{1,1}{?}{}{TODO.}
+
+\zeffield{mesh\_labeling\_approach}{1,1}{?}{}{TODO.}

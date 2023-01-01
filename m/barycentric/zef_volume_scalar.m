@@ -30,7 +30,7 @@ for i = 1 : 4
         else
         entry_vec = volume*weight_param(2);
         end
-        M_part =  sparse(tetra(:,i),tetra(:,j),scalar_field.*entry_vec,N,N);
+        M_part = sparse(tetra(:,i),tetra(:,j),scalar_field.*entry_vec,N,N);
         
         if i == j
         M = M + M_part;

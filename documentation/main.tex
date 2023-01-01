@@ -1,1 +1,37 @@
-This is a work in progress.
+%%% Document metadata
+
+\def\myauthors{The Zeffiro Interface development team}
+
+\def\mytitle{Zeffiro Interface Documentation}
+
+\def\mysubject{Documentation on Zeffiro Interface.}
+
+\def\mykeywords{Zeffiro Interface, Matlab, finite element method, inverse problems}
+
+%%% Document type and preamble.
+
+\documentclass[12pt]{article}
+
+\pagenumbering{gobble}
+
+\input{preamble.tex}
+
+%%% Document start.
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\pagebreak
+
+\pagenumbering{arabic}
+
+\input{mesh_generation.tex}
+
+\input{lead_field_construction.tex}
+
+\input{inverse_methods.tex}
+
+\end{document}

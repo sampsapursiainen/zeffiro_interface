@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [void] = zef_print_meshes(void);
+function [void] = zef_print_meshes(~);
 
 zef = evalin('base','zef');
 f_ind = 1;
@@ -711,6 +711,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(h_axes_image,'CLim',[min_rec max_rec]);
 %set(h_surf_2,'specularstrength',0.2);
 %set(h_surf_2,'specularexponent',0.8);
@@ -1024,6 +1027,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2,'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2,'specularstrength',0.2);
 %set(h_surf_2,'specularexponent',0.8);
@@ -1246,7 +1252,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 if ismember(eval('zef.reconstruction_type'), 6)
@@ -1326,7 +1332,7 @@ frame_stop = max(frame_stop,1);
 frame_stop = min(length_reconstruction_cell,frame_stop);
 number_of_frames = length([frame_start : frame_step : frame_stop]);
 for f_ind = frame_start : frame_step : frame_stop
-reconstruction = single(eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
+reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);
 max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
 min_rec = min([min_rec ; (reconstruction(:))]);
@@ -1790,7 +1796,7 @@ length_reconstruction = length(reconstruction);
 %******************************************************
 
 if iscell(volumetric_distribution)
-reconstruction = single(eval(['zef.reconstruction{' int2str(frame_start) '}']));
+reconstruction = (eval(['zef.reconstruction{' int2str(frame_start) '}']));
 else
 reconstruction = volumetric_distribution;
 end
@@ -1890,6 +1896,9 @@ end
 
 %marker here
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{ab_ind},'specularstrength',0.2);
 %set(h_surf_2{ab_ind},'specularexponent',0.8);
@@ -1968,7 +1977,7 @@ colormap_cell = eval('zef.colormap_cell');
 set(h_fig_aux,'colormap', eval([colormap_cell{eval('zef.inv_colormap')} '(' num2str(colortune_param) ',' num2str(colormap_size) ')']));
 
 if iscell(eval('zef.top_reconstruction'))
-reconstruction = single(eval(['zef.top_reconstruction{' int2str(frame_start) '}']));
+reconstruction = (eval(['zef.top_reconstruction{' int2str(frame_start) '}']));
 else
 reconstruction = eval('zef.top_reconstruction');
 end
@@ -1988,6 +1997,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',gather([min_rec max_rec]));
 %set(h_surf_2{i},'specularstrength',0.2);
 %set(h_surf_2{i},'specularexponent',0.8);
@@ -2094,7 +2106,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -2213,7 +2225,7 @@ length_reconstruction = length(reconstruction);
 
 for i = intersect(aux_active_compartment_ind, aux_brain_visible_ind)
 ab_ind = find(aux_active_compartment_ind == i);
-reconstruction = single(volumetric_distribution{f_ind});
+reconstruction = (volumetric_distribution{f_ind});
 reconstruction = reconstruction(:);
 reconstruction = reshape(reconstruction,3,length(reconstruction)/3);
 
@@ -2310,6 +2322,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{ab_ind},'specularstrength',0.2);
 %set(h_surf_2{ab_ind},'specularexponent',0.8);
@@ -2347,7 +2362,7 @@ elseif ismember(eval('zef.visualization_type'),[5])
 
     %Topography reconstruction.
 
-reconstruction = single(eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
+reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
 reconstruction = reconstruction(:);
 
 axes(h_axes_image);
@@ -2369,6 +2384,9 @@ zef_plot_cone_field(zef,h_axes_image, f_ind, 2);
 end
 
 set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
+if isequal(min_rec,max_rec)
+    min_rec = min_rec - 1e-15;
+end
 set(gca,'CLim',[min_rec max_rec]);
 %set(h_surf_2{i},'specularstrength',0.2);
 %set(h_surf_2{i},'specularexponent',0.8);
@@ -2407,12 +2425,12 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
 zef_set_sliders_print(1,h_axes_image);
-camorbit(frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
+camorbit(h_axes_image,frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
 lighting phong;
 
 delete(h_text);
@@ -2519,7 +2537,7 @@ zef_plot_dpq('dynamical');
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour;
+zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end

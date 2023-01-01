@@ -5,8 +5,8 @@ function [ ...
     tetra_ind_global, ...
     tetra_ind_diff, ...
     node_ind, ...
-    node_pair ...
-] = zef_surface_mesh(tetra, nodes, I, gpu_mode)
+    node_pair, ...
+face_ind] = zef_surface_mesh(tetra, nodes, I, gpu_mode)
 
     % TODO Documentation
     %
@@ -42,10 +42,17 @@ function [ ...
     % - node_pair: TODO: pairs of neigbouring nodes on different sides of the
     %   triangular surface.
 
+    surface_triangles = [];
+    surface_nodes = [];
+    tetra_ind = [];
+    tetra_ind_global = [];
+    tetra_ind_diff = [];
+    node_ind = [];
+    node_pair = [];
+    face_ind = [];
 
 tetra = uint32(tetra);
 
-surface_nodes = [];
 
 % Get nodes and indices from varargin.
 
@@ -131,8 +138,9 @@ surface_triangles = tetra(tetra_ind);
 surface_triangles = uint32(surface_triangles(:,[1 3 2]));
 
 tetra_ind = tetra_sort_2(I,2);
+face_ind = tetra_sort_2(I,1);
 
-if nargout > 4
+if and(nargout > 4, nargin > 1)
     surface_triangles_aux = surface_triangles;
 end
 
@@ -147,7 +155,7 @@ surface_triangles = gather(surface_triangles);
     surface_triangles = reshape(u_ind,size(surface_triangles));
 end
 
-if nargout > 3
+if and(nargout > 3, nargin > 1)
     tetra_ind_global = I_global(tetra_ind);
 end
 
@@ -155,7 +163,9 @@ if nargout > 4
     tetra_ind_diff = [];
 end
 
-if nargout > 4 && nargin > 2
+if and(nargout > 4, nargin > 2)
+
+
 
 if use_gpu
 surface_triangles_aux = gpuArray(surface_triangles_aux);
@@ -221,7 +231,7 @@ end
 
 clear surface_triangles_aux
 
-    if nargout > 5 && nargin > 2
+    if and(nargout > 5, nargin > 2)
 
         node_ind = zeros(size(tetra_ind_diff,1),1);
         tetra_aux = tetra_diff(tetra_ind_diff,:);

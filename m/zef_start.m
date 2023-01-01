@@ -4,8 +4,13 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+zef_aux = zef;
 zef = zef_apply_system_settings(zef);
-
+fieldnames_aux = fieldnames(zef_aux);
+for i = 1 : length(fieldnames_aux)
+zef.(fieldnames_aux{i}) = zef_aux.(fieldnames_aux{i});
+end
+clear zef_aux fieldnames_aux;
 
 if isequal(zef.zeffiro_restart,0)
     

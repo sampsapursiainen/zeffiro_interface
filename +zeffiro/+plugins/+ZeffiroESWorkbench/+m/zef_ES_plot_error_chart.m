@@ -1,3 +1,3 @@
-function zef = zef_ES_plot_error_chart(zef)
-zef = zef_ES_plot_error_chart(zef);
+function zef_ES_plot_error_chart(varargin)
+zef_ES_plot_error_chart(varargin);
 end
