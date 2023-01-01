@@ -1,0 +1,133 @@
+%%% Needed packages
+
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{xparse}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{listings}
+
+%%% Code listing style.
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{numberedlines}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=4,
+	frame=single,
+	framesep=5pt
+}
+
+\lstdefinestyle{unnumberedlines}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=none,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=4,
+	frame=single,
+	framesep=5pt
+}
+
+%%% Font settings.
+
+\usepackage{fourier}
+
+\usepackage{fontspec}
+
+\setmainfont[
+	Path           = ./fonts/,
+	Extension      = .otf,
+	Ligatures      = TeX,
+	BoldFont       = Erewhon-Bold,
+	ItalicFont     = Erewhon-Italic,
+	BoldItalicFont = Erewhon-BoldItalic,
+]{Erewhon-Regular}
+
+\setmonofont[
+	Path           = ./fonts/,
+	Extension      = .ttf,
+	Ligatures      = TeX,
+	BoldFont       = JuliaMono-Bold,
+	ItalicFont     = JuliaMono-MediumItalic,
+	BoldItalicFont = JuliaMono-BoldItalic,
+	SizeFeatures   = {Size=10},
+]{JuliaMono-Regular}
+
+%%% Titles and such.
+
+\title{\mytitle}
+\author{\myauthors}
+\date{2022/12/02}
+
+%%% Commands.
+
+\NewDocumentCommand\code{m}{\texttt{#1}}
+\NewDocumentCommand\ccode{m}{\colorbox{gray!30}{\texttt{#1}}}
+\NewDocumentCommand\coderubric{m}{\paragraph{\code{#1}}}
+
+\NewDocumentCommand\zeffield{mmmmm}{%
+	\vspace{1em}
+	\noindent
+	\begin{minipage}{\textwidth}
+		\begin{tabularx}{\linewidth}{>{\bfseries}rX}
+			name:        & \code{zef.#1} \\
+			size:        & \code{(#2)} \\
+			type:        & \code{#3} \\
+			validators:  & \code{\{ #4 \}} \\
+			description: & #5
+		\end{tabularx}
+	\end{minipage}
+}
+
+% Placeholders for zef compartment tags.
+
+\NewDocumentCommand\comptag{}{\code{(tag)}}
+\NewDocumentCommand\ccomptag{}{\ccode{(tag)}}
+
+
+%%% Generate archivable PDF/A file
+
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+\Title{\mytitle}
+\Author{\myauthors}
+\Language{en-GB}
+\Subject{\mysubject}
+\Keywords{\mykeywords}
+\end{filecontents*}
+
+% Needed for pdfx + lualatex compatibility.
+
+\usepackage{luatex85}
+
+\RequirePackage[a-2b,mathxmp]{pdfx}[2021/12/31]
+\RequirePackage{url}

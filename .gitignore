@@ -24,6 +24,14 @@
 !*.zef
 !README
 
+# Allow TeΧ and font files under documentation folder.
+
+!documentation/**.tex
+!documentation/documentation.pdf
+
+!documentation/fonts/JuliaMono*.ttf
+!documentation/fonts/Erewhon*.otf
+
 # These are apparently not a part of the app itself, so keep ignoring them
 
 profile
