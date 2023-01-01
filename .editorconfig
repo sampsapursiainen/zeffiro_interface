@@ -1,0 +1,26 @@
+## .editorconfig
+#
+# This file instructs certain editors who know about its existence to always
+# perform certain actions like adding newlines of a certain style.
+#
+
+# Prevent looking for other .editorconfig files in the parent directories of
+# this project.
+
+root = true
+
+# Settings used by code and text files in this project.
+
+[*.{m,md,txt}]
+
+charset = utf-8
+
+indent_size = 4
+
+indent_style = space
+
+end_of_line = lf
+
+insert_final_newline = true
+
+trim_trailing_whitespace = true
