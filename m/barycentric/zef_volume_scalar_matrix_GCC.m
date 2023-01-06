@@ -1,4 +1,4 @@
-function M = zef_volume_scalar_GCC(nodes, tetra, g_i_ind, scalar_field, weighting)
+function M = zef_volume_scalar_matrix_GCC(nodes, tetra, g_i_ind, scalar_field, weighting)
 
 N = size(nodes,1);
 K = size(tetra,1);

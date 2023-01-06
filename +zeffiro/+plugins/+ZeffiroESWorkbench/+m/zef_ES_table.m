@@ -1,3 +1,3 @@
-function vec = zef_ES_table(varargin)
-vec = zef_ES_table(varargin);
+function vec = zef_ES_table(data_aux)
+vec = zef_ES_table(data_aux);
 end
