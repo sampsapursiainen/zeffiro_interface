@@ -36,7 +36,7 @@ install_directory = pwd;
 branch_name = 'main_development_branch';
 profile_name = 'multicompartment_head';
 folder_name = [];
-run_setup = 'no';
+run_setup = 'yes';
 
 if not(isempty(varargin))
 zef_i = 1;
