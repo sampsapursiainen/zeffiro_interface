@@ -594,7 +594,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'),[6]))
@@ -863,7 +863,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'), [6]))

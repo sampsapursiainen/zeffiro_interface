@@ -14,7 +14,8 @@ scalar_field = ones(size(tetra,1),1);
 end
 
 [~,det] = zef_volume_barycentric(nodes,tetra);
-volume = abs(det)/6;
+[b_vec,det] = zef_volume_barycentric(nodes,tetra(t_ind,:),f_ind);
+area = (abs(det)/2)./sqrt(sum(b_vec.^2,2));
 
 v = zeros(N,1);
 weight_param = 3;
@@ -22,7 +23,7 @@ weight_param = 3;
 for i = 1 : 3
 
         I = sub2ind(size(tetra),t_ind,ind_m(f_ind,i));
-        v_part = sparse(tetra(I),ones(size(I)),weight_param.*scalar_field(t_ind).*volume(t_ind),N,1);     
+        v_part = sparse(tetra(I),ones(size(I)),weight_param.*scalar_field(t_ind).*area,N,1);     
         v = v + full(v_part);
 
 end

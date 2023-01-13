@@ -15,8 +15,8 @@ v = zeros(N,1);
 
 for i = 1 : 4
 
-        v_part = sparse(tetra(:,i),ones(size(tetra,1),1),weight_param.*scalar_field.*volume,N,z);
-        v = v + v_part;
+        v_part = sparse(tetra(:,i),ones(size(tetra,1),1),weight_param.*scalar_field.*volume,N,1);
+        v = v + full(v_part);
         
 end
 

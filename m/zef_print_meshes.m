@@ -653,7 +653,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'),[6]))
@@ -980,7 +980,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'), [6]))
@@ -1521,16 +1521,20 @@ sensors = sensors(aux_ind_1,:);
 if not(isempty(sensors_visible))
 sensors_visible = sensors_visible(aux_ind_1,:);
 end
+if not(isempty(sensors_color_table))
 sensors_color_table = sensors_color_table(aux_ind_1,:);
 sensors_name = sensors_name(aux_ind_1);
+end
 elseif eval('zef.cp_mode') == 2
 aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
 sensors = sensors(aux_ind_1,:);
 if not(isempty(sensors_visible))
 sensors_visible = sensors_visible(aux_ind_1,:);
 end
+if not(isempty(sensors_color_table))
 sensors_color_table = sensors_color_table(aux_ind_1,:);
 sensors_name = sensors_name(aux_ind_1);
+end
 end
 for i = 1 : length(reuna_t)
 if eval('zef.cp_mode') == 1
@@ -1847,7 +1851,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'), [6]))
@@ -2273,7 +2277,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'), [6]))

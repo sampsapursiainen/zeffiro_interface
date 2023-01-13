@@ -21,12 +21,12 @@ end
     end
 
 source_interpolation_ind = [];
-brain_ind = eval('zef.brain_ind');
+active_compartment_ind = eval('zef.active_compartment_ind');
 source_positions = eval('zef.source_positions');
 nodes = eval('zef.nodes');
 tetra = eval('zef.tetra');
 
-if not(isempty(brain_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
+if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
 
     h = zef_waitbar(0,['Interpolation 1.']);
 
@@ -38,14 +38,14 @@ if eval('zef.location_unit_current') == 3
 zef.source_positions = 1000*source_positions;
 end
 
-[center_points I center_points_ind] = unique(tetra(brain_ind,:));
+[center_points I center_points_ind] = unique(tetra(active_compartment_ind,:));
 source_interpolation_ind{1} = zeros(length(center_points),1);
 source_interpolation_aux = source_interpolation_ind{1};
 center_points = nodes(center_points,:);
 
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_ind{1} = knnsearch(MdlKDT,center_points);
-source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_ind), length(brain_ind), 4);
+source_interpolation_ind{1} = reshape(source_interpolation_ind{1}(center_points_ind), length(active_compartment_ind), 4);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -55,7 +55,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 aux_dir_mode = [];
 compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
@@ -77,7 +77,7 @@ priority_vec(i,1) = priority_val;
 color_cell{i} = color_str;
 visible_vec(i,1) = i*visible_val;
 if eval(['zef.' compartment_tags{k} '_sources'])>0
-    aux_brain_ind = [aux_brain_ind i];
+    aux_active_compartment_ind = [aux_active_compartment_ind i];
 end
 
 end
@@ -85,23 +85,23 @@ end
 
 source_positions_aux = source_positions;
 
-for ab_ind = 1 : length(aux_brain_ind)
+for ab_ind = 1 : length(aux_active_compartment_ind)
 
-zef_waitbar((ab_ind+1)/(length(aux_brain_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.' ]);
+zef_waitbar((ab_ind+1)/(length(aux_active_compartment_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_active_compartment_ind)) '.' ]);
 
 aux_point_ind = unique(gather(source_interpolation_ind{1}));
 source_positions = source_positions_aux(aux_point_ind,:);
 
 s_ind_1{ab_ind} = aux_point_ind;
 
-center_points = eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}']);
+center_points = eval(['zef.reuna_p{' int2str(aux_active_compartment_ind(ab_ind)) '}']);
 
 MdlKDT = KDTreeSearcher(source_positions);
 source_interpolation_aux = knnsearch(MdlKDT,center_points);
 
 source_interpolation_ind{2}{ab_ind} = (s_ind_1{ab_ind}(source_interpolation_aux));
 
-triangles = eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}']);
+triangles = eval(['zef.reuna_t{' int2str(aux_active_compartment_ind(ab_ind)) '}']);
 source_interpolation_ind{2}{ab_ind} = source_interpolation_ind{2}{ab_ind}(triangles);
 
 end
@@ -113,10 +113,10 @@ zef_waitbar(1,h,['Interpolation 3.']);
 aux_p = [];
 aux_t = [];
 
-for ab_ind = 1 : length(aux_brain_ind)
+for ab_ind = 1 : length(aux_active_compartment_ind)
 
-aux_t = [aux_t ; size(aux_p,1) + eval(['zef.reuna_t{' int2str(aux_brain_ind(ab_ind)) '}'])];
-aux_p = [aux_p ; eval(['zef.reuna_p{' int2str(aux_brain_ind(ab_ind)) '}'])];
+aux_t = [aux_t ; size(aux_p,1) + eval(['zef.reuna_t{' int2str(aux_active_compartment_ind(ab_ind)) '}'])];
+aux_p = [aux_p ; eval(['zef.reuna_p{' int2str(aux_active_compartment_ind(ab_ind)) '}'])];
 
 end
 

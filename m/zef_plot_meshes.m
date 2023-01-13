@@ -381,17 +381,21 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
         if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
         end
+        if not(isempty(sensors_color_table))
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
-    elseif eval('zef.cp_mode') == 2
+        end
+        elseif eval('zef.cp_mode') == 2
         aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
         sensors = sensors(aux_ind_1,:);
         if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
         end
+        if not(isempty(sensors_color_table))
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
-    end
+        end
+        end
     for i = 1 : length(reuna_t)
         if eval('zef.cp_mode') == 1
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
@@ -683,7 +687,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             end
 
                             if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-                                reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+                                reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                             end
 
                             if not(ismember(eval('zef.reconstruction_type'), [6]))
@@ -995,7 +999,7 @@ zef_update_contour(zef);
                         end
 
                         if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-                            reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+                            reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                         end
 
                         if not(ismember(eval('zef.reconstruction_type'), [6]))
