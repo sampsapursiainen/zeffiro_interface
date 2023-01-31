@@ -24,8 +24,8 @@ else
 weight_param = weighting;
 end
 
-[~,det] = zef_volume_barycentric(nodes,tetra);
-volume = abs(det)/6;
+[b_vec,det] = zef_volume_barycentric(nodes,tetra(t_ind,:),f_ind);
+area = (abs(det)/2).*sqrt(sum(b_vec.^2,2));
 
 M = spalloc(N,N,0);
 
@@ -40,9 +40,9 @@ for i = 1 : 3
        J = sub2ind(size(tetra),t_ind,ind_m(f_ind,j));
 
         if i == j
-        entry_vec = volume(t_ind)*weight_param(1);
+        entry_vec = area*weight_param(1);
         else
-        entry_vec = volume(t_ind)*weight_param(2);
+        entry_vec = area*weight_param(2);
         end
         M_part =  sparse(tetra(I),tetra(J),scalar_field(t_ind).*g_i(t_ind,g_i_ind).*entry_vec,N,N);       
         if i == j

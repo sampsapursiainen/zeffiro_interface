@@ -8,20 +8,32 @@ if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
 end
 
-if not(isfield(zef.nse_field,'vessel_resistance'))
-zef.nse_field.vessel_resistance = 3E-6;
+if not(isfield(zef.nse_field,'arteriole_diameter'))
+zef.nse_field.arteriole_diameter = 2e-5;
+end
+
+if not(isfield(zef.nse_field,'capillary_diameter'))
+zef.nse_field.capillary_diameter = 7e-6;
+end
+
+if not(isfield(zef.nse_field,'venule_diameter'))
+zef.nse_field.venule_diameter = 2e-5;
 end
 
 if not(isfield(zef.nse_field,'diffusion_parameter'))
-zef.nse_field.diffusion_parameter = 1E-15;
+zef.nse_field.diffusion_parameter = 1E-9;
+end
+
+if not(isfield(zef.nse_field,'pressure_decay_in_arterioles'))
+zef.nse_field.pressure_decay_in_arterioles = 0.70;
 end
 
 if not(isfield(zef.nse_field,'blood_conductivity'))
 zef.nse_field.blood_conductivity = 1.59;
 end
 
-if not(isfield(zef.nse_field,'pulse_frequency'))
-zef.nse_field.pulse_frequency = 1;
+if not(isfield(zef.nse_field,'capillary_arteriole_total_area_ratio'))
+zef.nse_field.capillary_arteriole_total_area_ratio = 2;
 end
 
 if not(isfield(zef.nse_field,'total_flow'))

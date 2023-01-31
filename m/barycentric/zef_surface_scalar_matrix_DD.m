@@ -1,4 +1,4 @@
-function M = zef_volume_scalar_matrix_DD(nodes, tetra, g_i_ind, g_j_ind, scalar_field, weighting)
+function M = zef_surface_scalar_matrix_DD(nodes, tetra, g_i_ind, g_j_ind, scalar_field, weighting)
 
 N = size(nodes,1);
 K = size(tetra,1);
@@ -17,8 +17,8 @@ else
 weight_param = weighting;
 end
 
-[~,det] = zef_volume_barycentric(nodes,tetra);
-volume = abs(det)/6;
+[b_vec,det] = zef_volume_barycentric(nodes,tetra(t_ind,:),f_ind);
+area = (abs(det)/2).*sqrt(sum(b_vec.^2,2));
 
 M = spalloc(N,N,0);
 
@@ -29,9 +29,9 @@ for i = 1 : 4
         [g_j] = zef_volume_barycentric(nodes,tetra,j,det);
         
         if i == j
-        entry_vec = volume*weight_param(1);
+        entry_vec = area*weight_param(1);
         else
-        entry_vec = volume*weight_param(2);
+        entry_vec = area*weight_param(2);
         end
         M_part =  sparse(tetra(:,i),tetra(:,j),scalar_field.*g_i(:,g_i_ind).*g_j(:,g_j_ind).*entry_vec,N,N);
         

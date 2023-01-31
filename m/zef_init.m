@@ -70,6 +70,8 @@ zef_data.zeffiro_verbose_mode = 1;
 zef_data.use_waitbar= 1;
 
 %%% Here begins initialization variables
+zef_data.sensor_explosion_parameter_1 = 3; 
+zef_data.sensor_explosion_parameter_2 = 0;
 zef_data.smooth_field_steps = 3;
 zef_data.lead_field_filter_quantile = 1.000;
 zef_data.inv_data_mode = 'filtered_temporal';

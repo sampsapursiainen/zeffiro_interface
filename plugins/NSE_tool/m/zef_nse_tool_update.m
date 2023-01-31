@@ -12,6 +12,10 @@ zef.nse_field.min_pressure_quantile = zef.nse_field.h_min_pressure_quantile.Valu
 zef.nse_field.max_flow_quantile = zef.nse_field.h_max_flow_quantile.Value;
 zef.nse_field.min_flow_quantile = zef.nse_field.h_min_flow_quantile.Value;
 
+zef.nse_field.pressure_decay_in_arterioles = zef.nse_field.h_pressure_decay_in_arterioles.Value;
+
+zef.nse_field.capillary_diameter = zef.nse_field.h_capillary_diameter.Value;
+
 zef.nse_field.pressure = zef.nse_field.h_pressure.Value; 
 
 zef.nse_field.blood_conductivity = zef.nse_field.h_blood_conductivity.Value; 
@@ -24,10 +28,12 @@ zef.nse_field.conductivity_model = zef.nse_field.h_conductivity_model.Value;
 zef.nse_field.conductivity_exponent = zef.nse_field.h_conductivity_exponent.Value;
 
 
-zef.nse_field.vessel_resistance = zef.nse_field.h_vessel_resistance.Value;
+zef.nse_field.arteriole_diameter = zef.nse_field.h_arteriole_diameter.Value;
+zef.nse_field.venule_diameter = zef.nse_field.h_venule_diameter.Value;
+
 
 zef.nse_field.total_flow = zef.nse_field.h_total_flow.Value; 
-zef.nse_field.pulse_frequency = zef.nse_field.h_pulse_frequency.Value; 
+zef.nse_field.capillary_arteriole_total_area_ratio = zef.nse_field.h_capillary_arteriole_total_area_ratio.Value; 
 
 zef.nse_field.capillary_domain_ind = zef.nse_field.h_capillary_domain_ind.Value; 
 zef.nse_field.artery_domain_ind = zef.nse_field.h_artery_domain_ind.Value; 

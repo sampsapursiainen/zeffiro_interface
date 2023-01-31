@@ -13,19 +13,19 @@ if nargin < 6
 end
 
 if isequal(class(A),'function_handle')
-    r = - ( -b + A(x));
+    r = - ( -b + A(x) );
 else
 r = - ( -b + A*x );
 end
     if isequal(class(M),'function_handle')
     z = M(r);
     elseif isempty(M)
-        z = r;
+    z = r;
     else
     z = M\r;
     end
-p = z;
-j = 1;
+    p = z;
+    j = 1;
 
 conv_val = sqrt(max(sum(r.^2)'./sum(b.^2)'));
 
