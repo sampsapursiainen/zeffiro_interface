@@ -87,7 +87,7 @@ sensors = eval('zef.sensors');
         sensor_explosion_parameter_1 = zef.sensor_explosion_parameter_1;
         sensor_explosion_parameter_2 = zef.sensor_explosion_parameter_2; 
         sensors(:,1) = sensors(:,1).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*(max(sensors(:,3))-sensors(:,3))./(max(sensors(:,3))-min(sensors(:,3)))));
-        sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3)))))); 
+        sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(:,3))/(max(sensors(:,3))-min(sensors(:,3)))))); 
         sensors(:,3) = sensors(:,3)+sign(sensor_explosion_parameter_2).*(max(sensors(:,3))-sensors(:,3));
 %January 2023       
 sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));

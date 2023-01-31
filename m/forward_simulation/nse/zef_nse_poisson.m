@@ -32,7 +32,7 @@ venule_scale = 1./( arteriole_fraction*nse_field.venule_diameter.^2./(venule_fra
 
 mvd_length = 1E6.*mvd_length(:,1);
 
-diffusion_coefficient = hgmm_conversion.*nse_field.pressure_decay_in_arterioles.*nse_field.pressure*((pi/4).*nse_field.arteriole_diameter.^2)/(8*pi*nse_field.mu);
+diffusion_coefficient = hgmm_conversion.*nse_field.pressure*((pi/4).*nse_field.arteriole_diameter.^2)/(8*pi*nse_field.mu);
 
 %diffusion_coefficient*240e6
 %keyboard
