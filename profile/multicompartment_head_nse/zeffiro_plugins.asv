@@ -1,0 +1,26 @@
+Multi lead field tool,multi_tools,zef_lf_bank_tool
+Filter tool,forward_tools,zef_filter_tool
+Topography tool,forward_tools,zef_topography
+RAMUS Inversion,inverse_tools,zef_ramus_inversion_tool
+IAS Inversion,inverse_tools,ias_map_estimation
+IAS ROI Inversion,inverse_tools,ias_map_estimation_roi
+Hierarchical Bayesian Sampler,inverse_tools,hb_sampler
+Minimum norm estimation tool,inverse_tools,zef_minimum_norm_estimation
+ES Workbench,inverse_tools,zef_ES_optimization
+EXP IAS RAMUS,inverse_tools,exp_ias_map_estimation_multires
+Beamformer,inverse_tools,zef_beamformer_start
+Classical Sparse Methods,inverse_tools,CSM_app_start
+MUSIC,inverse_tools,MUSIC_app_start
+Gaussian Mixture Model (SP),inverse_tools,zef_GMModel_start
+Gaussian Mixture Model (JL),inverse_tools,GMModelApp_start
+Test plugin item,inverse_tools,this_is_the_start_script_name
+LeadFieldProcessingTool,multi_tools,LeadFieldProcessingTool_start
+ReconstructionTool,multi_tools,zef_reconstructionTool_start
+Dipole Scan,inverse_tools,zef_dipole_start
+Data Bank,multi_tools,zef_start_dataBank
+Dynamical plot queue,multi_tools,zeffiro_interface_dynamical_plot_queue
+Preconditioned relaxation tool,inverse_tools,zef_relax_inversion_tool
+Find synthetic source legacy,forward_tools,zef_find_synthetic_source_legacy
+Github pusher,settings,zef_github_updater_start
+Kalman,inverse_tools,zef_kf_start
+NSE tool,multi_tools,zef__start
