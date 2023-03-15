@@ -25,9 +25,11 @@ weight_param = weighting;
 end
 
 [n_vec,det] = zef_volume_barycentric(nodes,tetra(t_ind,:),f_ind);
-area = (abs(det)/2).*sqrt(sum(n_vec.^2,2));
+area = (abs(det)/2).*sqrt(sum(n_vec(:,1:3).^2,2));
 n_vec = n_vec(:,1:3);
 n_vec = -n_vec./repmat(sqrt(sum(n_vec.^2,2)),1,3);
+
+[~,det] = zef_volume_barycentric(nodes,tetra);
 
 M = spalloc(N,N,0);
 

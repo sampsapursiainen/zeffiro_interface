@@ -15,7 +15,7 @@ end
 
 [~,det] = zef_volume_barycentric(nodes,tetra);
 [b_vec,det] = zef_volume_barycentric(nodes,tetra(t_ind,:),f_ind);
-area = (abs(det)/2).*sqrt(sum(b_vec.^2,2));
+area = (abs(det)/2).*sqrt(sum(b_vec(:,1:3).^2,2));
 
 v = zeros(N,1);
 weight_param = 1/3;

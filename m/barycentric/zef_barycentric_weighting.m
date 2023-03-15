@@ -7,7 +7,7 @@ switch weighting_type
     case 'GG'
         weighting = [1];
     case 'FG'
-        weighting = [1/6];
+        weighting = [1/4];
     case 'uFG'
         weighting = [1/10 1/20];
     case 'surface_FF'

@@ -23,10 +23,10 @@ volume = abs(det)/6;
 M = spalloc(N,N,0);
 
 for i = 1 : 4
-        [g_i] = zef_volume_barycentric(nodes,tetra,i,det);
+        [g_i] = zef_volume_barycentric(nodes,tetra,i);
         
     for j = i : 4
-        [g_j] = zef_volume_barycentric(nodes,tetra,j,det);
+        [g_j] = zef_volume_barycentric(nodes,tetra,j);
         
         if i == j
         entry_vec = volume*weight_param(1);
