@@ -83,6 +83,13 @@ cp3_d = eval('zef.cp3_d');
 
 %April 2021
 sensors = eval('zef.sensors');
+%January 2023
+        sensor_explosion_parameter_1 = zef.sensor_explosion_parameter_1;
+        sensor_explosion_parameter_2 = zef.sensor_explosion_parameter_2; 
+        sensors(:,1) = sensors(:,1).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*(max(sensors(:,3))-sensors(:,3))./(max(sensors(:,3))-min(sensors(:,3)))));
+        sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(:,3))/(max(sensors(:,3))-min(sensors(:,3)))))); 
+        sensors(:,3) = sensors(:,3)+sign(sensor_explosion_parameter_2).*(max(sensors(:,3))-sensors(:,3));
+%January 2023       
 sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));
 sensors_color_table = eval(['zef.' sensor_tag '_color_table']);
 sensors_name = eval(['zef.' sensor_tag '_name_list']);
@@ -594,7 +601,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'),[6]))
@@ -863,7 +870,7 @@ reconstruction(I_aux_rec) = 0;
 end
 
 if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),3);
+reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
 end
 
 if not(ismember(eval('zef.reconstruction_type'), [6]))

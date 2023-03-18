@@ -9,6 +9,7 @@ color_default = [ 0.3984    0.7615    0.4435 ;
                      0.8000    0.8000    0.8000];
                           
 
+rng('default');
 rng(n_compartments);
 rand_aux = randperm(500);
 rng(rand_aux(1));

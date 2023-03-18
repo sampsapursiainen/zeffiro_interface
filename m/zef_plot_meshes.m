@@ -267,7 +267,14 @@ light('Position',[0 0 1],'Style','infinite');
 light('Position',[0 0 -1],'Style','infinite');
 %April 2021
 sensors = eval('zef.sensors');
-sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));
+%January 2023
+       sensor_explosion_parameter_1 = zef.sensor_explosion_parameter_1;
+       sensor_explosion_parameter_2 = zef.sensor_explosion_parameter_2; 
+       sensors(:,1) = sensors(:,1).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*(max(sensors(:,3))-sensors(:,3))./(max(sensors(:,3))-min(sensors(:,3)))));
+       sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(:,3))/(max(sensors(:,3))-min(sensors(:,3)))))); 
+       sensors(:,3) = sensors(:,3)+sign(sensor_explosion_parameter_2).*(max(sensors(:,3))-sensors(:,3));
+%January 2023
+        sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));
 sensors_color_table = eval(['zef.' sensor_tag '_color_table']);
 sensors_name = eval(['zef.' sensor_tag '_name_list']);
 aux_scale_val = eval('zef.sensors_visual_size');
@@ -381,17 +388,21 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
         if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
         end
+        if not(isempty(sensors_color_table))
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
-    elseif eval('zef.cp_mode') == 2
+        end
+        elseif eval('zef.cp_mode') == 2
         aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
         sensors = sensors(aux_ind_1,:);
         if not(isempty(sensors_visible))
         sensors_visible = sensors_visible(aux_ind_1,:);
         end
+        if not(isempty(sensors_color_table))
         sensors_color_table = sensors_color_table(aux_ind_1,:);
         sensors_name = sensors_name(aux_ind_1);
-    end
+        end
+        end
     for i = 1 : length(reuna_t)
         if eval('zef.cp_mode') == 1
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
@@ -683,7 +694,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             end
 
                             if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-                                reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+                                reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                             end
 
                             if not(ismember(eval('zef.reconstruction_type'), [6]))
@@ -995,7 +1006,7 @@ zef_update_contour(zef);
                         end
 
                         if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
-                            reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
+                            reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                         end
 
                         if not(ismember(eval('zef.reconstruction_type'), [6]))

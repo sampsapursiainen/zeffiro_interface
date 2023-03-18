@@ -1,99 +1,117 @@
 function zef = zef_nse_tool_init(zef)
 
 if not(isfield(zef,'nse_field'))
-    zef.nse_field = struct;
-end
-
-if not(isfield(zef.nse_field,'number_of_frames'))
-zef.nse_field.number_of_frames = 20;
+zef.nse_field = struct;
 end
 
 if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
 end
 
-if not(isfield(zef.nse_field,'time_length'))
-zef.nse_field.time_length = 1;
+if not(isfield(zef.nse_field,'arteriole_diameter'))
+zef.nse_field.arteriole_diameter = 2e-5;
 end
 
-if not(isfield(zef.nse_field,'cycle_length'))
-zef.nse_field.cycle_length = 1;
+if not(isfield(zef.nse_field,'capillary_diameter'))
+zef.nse_field.capillary_diameter = 7e-6;
 end
 
-if not(isfield(zef.nse_field,'systolic_pressure'))
-zef.nse_field.systolic_pressure = 180;
+if not(isfield(zef.nse_field,'venule_diameter'))
+zef.nse_field.venule_diameter = 2e-5;
 end
 
-if not(isfield(zef.nse_field,'diastolic_pressure'))
-zef.nse_field.diastolic_pressure = 110;
+if not(isfield(zef.nse_field,'diffusion_parameter'))
+zef.nse_field.diffusion_parameter = 1E-9;
 end
 
-if not(isfield(zef.nse_field,'density'))
-zef.nse_field.density = 1043;
+if not(isfield(zef.nse_field,'pressure_decay_in_arterioles'))
+zef.nse_field.pressure_decay_in_arterioles = 0.70;
 end
 
-if not(isfield(zef.nse_field,'viscosity'))
-zef.nse_field.viscosity = 3E-3;
+if not(isfield(zef.nse_field,'blood_conductivity'))
+zef.nse_field.blood_conductivity = 1.59;
 end
 
-if not(isfield(zef.nse_field,'artery_diameter'))
-zef.nse_field.artery_diameter = 3.448;
+if not(isfield(zef.nse_field,'capillary_arteriole_total_area_ratio'))
+zef.nse_field.capillary_arteriole_total_area_ratio = 2;
 end
 
-if not(isfield(zef.nse_field,'p_wave_start'))
-zef.nse_field.p_wave_start = 0;
+if not(isfield(zef.nse_field,'total_flow'))
+zef.nse_field.total_flow = 1;
 end
 
-if not(isfield(zef.nse_field,'p_wave_length'))
-zef.nse_field.p_wave_length = 0.55;
+if not(isfield(zef.nse_field,'max_pressure_quantile'))
+zef.nse_field.max_pressure_quantile = 0.75;
 end
 
-if not(isfield(zef.nse_field,'p_wave_weight'))
-zef.nse_field.p_wave_weight = 0.53;
+if not(isfield(zef.nse_field,'min_pressure_quantile'))
+zef.nse_field.min_pressure_quantile = 0.25;
 end
 
-if not(isfield(zef.nse_field,'t_wave_start'))
-zef.nse_field.t_wave_start = 0.21;
+if not(isfield(zef.nse_field,'max_flow_quantile'))
+zef.nse_field.max_flow_quantile = 0.75;
 end
 
-if not(isfield(zef.nse_field,'t_wave_length'))
-zef.nse_field.t_wave_length = 0.55;
+if not(isfield(zef.nse_field,'conductivity_model'))
+zef.nse_field.conductivity_model = 1;
 end
 
-if not(isfield(zef.nse_field,'t_wave_weight'))
-zef.nse_field.t_wave_weight = 0.37;
+if not(isfield(zef.nse_field,'conductivity_exponent'))
+zef.nse_field.conductivity_exponent = 2;
 end
 
-if not(isfield(zef.nse_field,'d_wave_start'))
-zef.nse_field.d_wave_start = 0.43;
+
+if not(isfield(zef.nse_field,'min_flow_quantile'))
+zef.nse_field.min_flow_quantile = 0.25;
 end
 
-if not(isfield(zef.nse_field,'d_wave_length'))
-zef.nse_field.d_wave_length = 0.55;
+if not(isfield(zef.nse_field,'pressure'))
+zef.nse_field.pressure = 110;
 end
 
-if not(isfield(zef.nse_field,'d_wave_weight'))
-zef.nse_field.d_wave_weight = 0.1;
+if not(isfield(zef.nse_field,'rho'))
+zef.nse_field.rho = 1043;
+end
+
+if not(isfield(zef.nse_field,'capillary_domain_ind'))
+zef.nse_field.capillary_domain_ind = 1;
+end
+
+if not(isfield(zef.nse_field,'artery_domain_ind'))
+zef.nse_field.artery_domain_ind = 1;
+end
+
+if not(isfield(zef.nse_field,'mu'))
+zef.nse_field.mu = 3E-3;
 end
 
 if not(isfield(zef.nse_field,'pcg_tol'))
-zef.nse_field.pcg_tol = 1e-5;
+zef.nse_field.pcg_tol = 1e-05;
 end
 
 if not(isfield(zef.nse_field,'pcg_maxit'))
 zef.nse_field.pcg_maxit = 10000;
 end
 
-if not(isfield(zef.nse_field,'time_step_length'))
-zef.nse_field.time_step_length = 1;
+if not(isfield(zef.nse_field,'reconstruction_type'))
+zef.nse_field.reconstruction_type = 1;
 end
 
-if not(isfield(zef.nse_field,'pulse_mode'))
-zef.nse_field.pulse_mode = 1;
+if not(isfield(zef.nse_field,'solver_type'))
+zef.nse_field.solver_type = 1;
 end
 
-if not(isfield(zef.nse_field,'nse_reconstruction_type'))
-zef.nse_field.nse_reconstruction_type = 1;
+if not(isfield(zef.nse_field,'gravity_x'))
+zef.nse_field.gravity_x = 0;
 end
+
+if not(isfield(zef.nse_field,'gravity_y'))
+zef.nse_field.gravity_y = 0;
+end
+
+if not(isfield(zef.nse_field,'gravity_z'))
+zef.nse_field.gravity_z = 9.81;
+end
+
 
 end

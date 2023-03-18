@@ -17,7 +17,7 @@ if zef.save_switch == 1
 if nargin < 3    
 if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
-[zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
+[zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path filesep zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
@@ -149,7 +149,7 @@ zef_update;
 else
 if zef.use_display
 if not(isempty(zef.save_file_path)) & not(zef.save_file_path==0)
-[zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path zef.save_file]);
+[zef.file zef.file_path] = uiputfile('*.mat','Save as...',[zef.save_file_path filesep zef.save_file]);
 else
 [zef.file zef.file_path] = uiputfile('*.mat','Save as...');
 end
