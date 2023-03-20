@@ -1,8 +1,6 @@
 function zef_ES_plot_error_chart(varargin)
-
-
 switch nargin
-    case {0,1}
+    case {0, 1}
         if nargin == 0
             zef = evalin('base','zef');
             warning('ZI: No zef were called as an input argument.')
@@ -31,8 +29,10 @@ switch nargin
             vec = zef_ES_table(arg_aux);
         end
         [sr, sc] = zef_ES_objective_function(zef, vec);
+        
     case {3}
         [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{2});
+        
     otherwise
         error('ZI: Invalid number of arguments.')
 end
@@ -53,9 +53,9 @@ pbaspect([1 1 1])
 h = uitabgroup();
 tab_titles = [{'Current pattern'}; {'Volume current'}; {'Algorithm'}];
 fieldnames_table    = {};
-fieldnames_table{1} = fieldnames(vec(:, [ 3  2  4  10]));
-fieldnames_table{2} = fieldnames(vec(:, [ 5  7  9  6]));
-fieldnames_table{3} = fieldnames(vec(:, [11 14]));
+fieldnames_table{1} = fieldnames(vec(:, [ 2  1  4  5]));
+fieldnames_table{2} = fieldnames(vec(:, [ 3  6  7  9]));
+fieldnames_table{3} = fieldnames(vec(:, [12 15]));
 
 for i_idx = 1:3
     fieldnames_table{i_idx} = fieldnames_table{i_idx}(1:end-3);
