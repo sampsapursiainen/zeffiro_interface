@@ -1,35 +1,16 @@
-function y = zef_nse_signal_pulse(t,nse_field,n_oversampling)
+function y = zef_nse_signal_pulse(t,nse_field)
 
-if nse_field.pulse_mode == 1
-   pulse_function = @(n) blackmanharris(n)';
-end
+    function bh_val = bh_fun(t, cycle_length)
+        bh_val = 0.35875 - 0.48829*cos(2*pi*t/cycle_length) + 0.14128*cos(4*pi*t/cycle_length) - 0.01168*cos(6*pi*t/cycle_length);
+        bh_val(t <= 0) = 0;
+        bh_val(t > cycle_length) = 0;
+    end
 
-if nargin < 3
-n_oversampling = 256;
-end
+    function w_val = wave_fun(t, w, l, s, cycle_length)
+        t_aux = mod(t, cycle_length) - s;
+        w_val = w * bh_fun(t_aux, l);
+    end
 
-t_aux = [0:n_oversampling*(nse_field.cycle_length/nse_field.time_step_length)];
-d_t_aux = nse_field.cycle_length/t_aux(end);
-t_aux = d_t_aux*t_aux;
-t = t - nse_field.cycle_length*floor(t/nse_field.cycle_length);
-t_ind = floor(t/d_t_aux) + 1;
-
-y_aux = zeros(size(t_aux));
-p_wave = nse_field.p_wave_weight*pulse_function(ceil(nse_field.p_wave_length*(length(t_aux)-1)));
-ind_aux = floor(nse_field.p_wave_start*(length(t_aux)-1))+1;
-y_aux(ind_aux:ind_aux + length(p_wave)-1) = p_wave;
-
-t_wave = nse_field.t_wave_weight*pulse_function(ceil(nse_field.t_wave_length*(length(t_aux)-1)));
-ind_aux = floor(nse_field.t_wave_start*(length(t_aux)-1))+1;
-y_aux(ind_aux:ind_aux + length(t_wave)-1) = y_aux(ind_aux:ind_aux + length(t_wave)-1) + t_wave;
-
-d_wave = nse_field.d_wave_weight*pulse_function(ceil(nse_field.d_wave_length*(length(t_aux)-1)));
-ind_aux = floor(nse_field.d_wave_start*(length(t_aux)-1))+1;
-y_aux(ind_aux:ind_aux + length(d_wave)-1) = y_aux(ind_aux:ind_aux + length(d_wave)-1) + d_wave;
-
-y = y_aux(t_ind);
-y = y./max(abs(y));
-
-y = y*(nse_field.systolic_pressure - nse_field.diastolic_pressure) + nse_field.diastolic_pressure;
+    y = wave_fun(t, nse_field.p_wave_weight, nse_field.p_wave_length, nse_field.p_wave_start, nse_field.cycle_length) + wave_fun(t, nse_field.t_wave_weight, nse_field.t_wave_length, nse_field.t_wave_start, nse_field.cycle_length)+wave_fun(t, nse_field.d_wave_weight, nse_field.d_wave_length, nse_field.d_wave_start, nse_field.cycle_length);
 
 end

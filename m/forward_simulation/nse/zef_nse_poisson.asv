@@ -143,50 +143,50 @@ nse_field.bv_vessels_3 = zef_nse_threshold_distribution(nse_field.bv_vessels_3,n
 
 nse_field.bp_vessels = nse_field.bp_vessels/hgmm_conversion;
 
-zef_waitbar(0.67,h_waitbar,'NSE solver: concentration');
-
-bp_vessels_aux = zeros(size(nodes,1),1);
-bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p(end)  + p(1:end-1);
-
-K_2 = zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 1, 1, mvd_length(c_ind_2_domain)) + ... 
-     zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 2, 2, mvd_length(c_ind_2_domain)) + ... 
-     zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 3, 3, mvd_length(c_ind_2_domain));
-
-w_2 = zef_surface_scalar_vector_F(v_2_nodes, v_2_tetra, ones(size(v_2_tetra,1),1));
- 
-bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
-u = ml_min_conversion*nse_field.total_flow*bf_vessels_to_capillaries./sum(bf_vessels_to_capillaries.*w_2);
-
-M_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, mvd_length(c_ind_2_domain));
-%S = spdiags(s_vec,0,size(K_2,1),size(K_2,1));
-
-%K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + (diffusion_coefficient./(mvd_volume_mean.*arteriole_length))*M_2;
-K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + (diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*(1.5/3)*max(volume).^(1/3)))*M_2;
-
-%u = [ bf_vessels_to_capillaries; ml_min_conversion*nse_field.total_flow.*sum(w_2) ];
-%K_2 = [ -nse_field.diffusion_parameter*K_2 w_2; w_2' g ];
- 
-
- if nse_field.use_gpu
- DM = 1./diag(K_2); 
- nse_field.bf_capillaries = pcg_iteration_gpu(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
- else
- DM = spdiags(diag(K_2),0,size(K_2,1),size(K_2,1)); 
- nse_field.bf_capillaries  = pcg_iteration(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
- end
- 
- nse_field.bf_capillaries = min(1,abs(nse_field.bf_capillaries));
- nse_field.bp_vessels = abs(nse_field.bp_vessels);
- 
- zef_waitbar(1,h_waitbar,'NSE solver');
- 
- %nse_field.bf_capillaries = nse_field.bf_capillaries(1:end-1) + nse_field.bf_capillaries(end);
- nse_field.bf_capillaries = zef_nse_threshold_distribution(nse_field.bf_capillaries,nse_field.min_flow_quantile,nse_field.max_flow_quantile); 
- %nse_field.bf_capillaries = ml_min_conversion*nse_field.total_flow*nse_field.bf_capillaries./sum(nse_field.bf_capillaries.*w_2);
-
-%microcirculation_volume_bg = (pi/4).*mvd_volume_mean*volume_sum.*(arteriole_scale*nse_field.arteriole_diameter.^2+capillary_scale*nse_field.capillary_diameter.^2+venule_scale*nse_field.venule_diameter.^2)
-%microcirculation_volume_bf = (pi/4).*sum(nse_field.bf_capillaries.*w_2)
-  
+% zef_waitbar(0.67,h_waitbar,'NSE solver: concentration');
+% 
+% bp_vessels_aux = zeros(size(nodes,1),1);
+% bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p(end)  + p(1:end-1);
+% 
+% K_2 = zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 1, 1, mvd_length(c_ind_2_domain)) + ... 
+%      zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 2, 2, mvd_length(c_ind_2_domain)) + ... 
+%      zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 3, 3, mvd_length(c_ind_2_domain));
+% 
+% w_2 = zef_surface_scalar_vector_F(v_2_nodes, v_2_tetra, ones(size(v_2_tetra,1),1));
+%  
+% bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
+% u = ml_min_conversion*nse_field.total_flow*bf_vessels_to_capillaries./sum(bf_vessels_to_capillaries.*w_2);
+% 
+% M_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, mvd_length(c_ind_2_domain));
+% %S = spdiags(s_vec,0,size(K_2,1),size(K_2,1));
+% 
+% %K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + (diffusion_coefficient./(mvd_volume_mean.*arteriole_length))*M_2;
+% K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + ((4*pi).^(1/3).*3.^(2/3).*diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*max(volume).^(1/3)))*M_2;
+% 
+% %u = [ bf_vessels_to_capillaries; ml_min_conversion*nse_field.total_flow.*sum(w_2) ];
+% %K_2 = [ -nse_field.diffusion_parameter*K_2 w_2; w_2' g ];
+%  
+% 
+%  if nse_field.use_gpu
+%  DM = 1./diag(K_2); 
+%  nse_field.bf_capillaries = pcg_iteration_gpu(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+%  else
+%  DM = spdiags(diag(K_2),0,size(K_2,1),size(K_2,1)); 
+%  nse_field.bf_capillaries  = pcg_iteration(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+%  end
+%  
+%  nse_field.bf_capillaries = min(1,abs(nse_field.bf_capillaries));
+%  nse_field.bp_vessels = abs(nse_field.bp_vessels);
+%  
+%  zef_waitbar(1,h_waitbar,'NSE solver');
+%  
+%  %nse_field.bf_capillaries = nse_field.bf_capillaries(1:end-1) + nse_field.bf_capillaries(end);
+%  nse_field.bf_capillaries = zef_nse_threshold_distribution(nse_field.bf_capillaries,nse_field.min_flow_quantile,nse_field.max_flow_quantile); 
+%  %nse_field.bf_capillaries = ml_min_conversion*nse_field.total_flow*nse_field.bf_capillaries./sum(nse_field.bf_capillaries.*w_2);
+% 
+% %microcirculation_volume_bg = (pi/4).*mvd_volume_mean*volume_sum.*(arteriole_scale*nse_field.arteriole_diameter.^2+capillary_scale*nse_field.capillary_diameter.^2+venule_scale*nse_field.venule_diameter.^2)
+% %microcirculation_volume_bf = (pi/4).*sum(nse_field.bf_capillaries.*w_2)
+%   
 
 close(h_waitbar)
  

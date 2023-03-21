@@ -20,10 +20,6 @@ if not(isfield(zef.nse_field,'venule_diameter'))
 zef.nse_field.venule_diameter = 2e-5;
 end
 
-if not(isfield(zef.nse_field,'diffusion_parameter'))
-zef.nse_field.diffusion_parameter = 1E-9;
-end
-
 if not(isfield(zef.nse_field,'pressure_decay_in_arterioles'))
 zef.nse_field.pressure_decay_in_arterioles = 0.70;
 end
@@ -40,29 +36,12 @@ if not(isfield(zef.nse_field,'total_flow'))
 zef.nse_field.total_flow = 1;
 end
 
-if not(isfield(zef.nse_field,'max_pressure_quantile'))
-zef.nse_field.max_pressure_quantile = 0.75;
-end
-
-if not(isfield(zef.nse_field,'min_pressure_quantile'))
-zef.nse_field.min_pressure_quantile = 0.25;
-end
-
-if not(isfield(zef.nse_field,'max_flow_quantile'))
-zef.nse_field.max_flow_quantile = 0.75;
-end
-
 if not(isfield(zef.nse_field,'conductivity_model'))
 zef.nse_field.conductivity_model = 1;
 end
 
 if not(isfield(zef.nse_field,'conductivity_exponent'))
 zef.nse_field.conductivity_exponent = 2;
-end
-
-
-if not(isfield(zef.nse_field,'min_flow_quantile'))
-zef.nse_field.min_flow_quantile = 0.25;
 end
 
 if not(isfield(zef.nse_field,'pressure'))

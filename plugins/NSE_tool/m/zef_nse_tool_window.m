@@ -58,22 +58,6 @@ zef.nse_field.h_mu.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_artery_domain_ind = zef_data.h_artery_domain_ind;
 zef.nse_field.h_artery_domain_ind.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
-zef.nse_field.h_max_pressure_quantile = zef_data.h_max_pressure_quantile;
-zef.nse_field.h_max_pressure_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
-zef.nse_field.h_min_pressure_quantile = zef_data.h_min_pressure_quantile;
-zef.nse_field.h_min_pressure_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
-zef.nse_field.h_max_flow_quantile = zef_data.h_max_flow_quantile;
-zef.nse_field.h_max_flow_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
-zef.nse_field.h_min_flow_quantile = zef_data.h_min_flow_quantile;
-zef.nse_field.h_min_flow_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
-
-zef.nse_field.h_diffusion_parameter = zef_data.h_diffusion_parameter;
-zef.nse_field.h_diffusion_parameter.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
 zef.nse_field.h_capillary_domain_ind = zef_data.h_capillary_domain_ind;
 zef.nse_field.h_capillary_domain_ind.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
@@ -103,12 +87,6 @@ zef.nse_field.h_venule_diameter.Value = zef.nse_field.venule_diameter;
 zef.nse_field.h_gravity_x.Value = zef.nse_field.gravity_x;
 zef.nse_field.h_gravity_y.Value = zef.nse_field.gravity_y;
 zef.nse_field.h_gravity_z.Value = zef.nse_field.gravity_z;
-
-zef.nse_field.h_max_pressure_quantile.Value = zef.nse_field.max_pressure_quantile;
-zef.nse_field.h_min_pressure_quantile.Value = zef.nse_field.min_pressure_quantile;
-zef.nse_field.h_max_flow_quantile.Value = zef.nse_field.max_flow_quantile;
-zef.nse_field.h_min_flow_quantile.Value = zef.nse_field.min_flow_quantile;
-zef.nse_field.h_diffusion_parameter.Value = zef.nse_field.diffusion_parameter;
 
 zef.nse_field.h_blood_conductivity.Value = zef.nse_field.blood_conductivity;
 

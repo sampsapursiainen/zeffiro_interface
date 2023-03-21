@@ -6,12 +6,6 @@ zef.nse_field.pcg_maxit = zef.nse_field.h_pcg_maxit.Value;
 zef.nse_field.rho = zef.nse_field.h_rho.Value;
 zef.nse_field.mu = zef.nse_field.h_mu.Value;
 
-zef.nse_field.diffusion_parameter = zef.nse_field.h_diffusion_parameter.Value;
-zef.nse_field.max_pressure_quantile = zef.nse_field.h_max_pressure_quantile.Value;
-zef.nse_field.min_pressure_quantile = zef.nse_field.h_min_pressure_quantile.Value;
-zef.nse_field.max_flow_quantile = zef.nse_field.h_max_flow_quantile.Value;
-zef.nse_field.min_flow_quantile = zef.nse_field.h_min_flow_quantile.Value;
-
 zef.nse_field.pressure_decay_in_arterioles = zef.nse_field.h_pressure_decay_in_arterioles.Value;
 
 zef.nse_field.capillary_diameter = zef.nse_field.h_capillary_diameter.Value;

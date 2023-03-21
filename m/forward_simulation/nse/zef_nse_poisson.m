@@ -94,8 +94,6 @@ end
 
 nse_field.bp_vessels =  p(end) + 2*p_hydrostatic + p(1:end-1);
 
-nse_field.bp_vessels = zef_nse_threshold_distribution(nse_field.bp_vessels,nse_field.min_pressure_quantile,nse_field.max_pressure_quantile); 
-
 zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
 
 nse_field.mu_vec = nse_field.mu*ones(size(v_1_tetra,1),1); 
@@ -137,10 +135,6 @@ nse_field.bv_vessels_2(i_node_ind) = pcg_iteration(K_1_interior,g_2 - n_p_2,nse_
 nse_field.bv_vessels_3(i_node_ind) = pcg_iteration(K_1_interior,g_3 - n_p_3,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
 end
 
-nse_field.bv_vessels_1 = zef_nse_threshold_distribution(nse_field.bv_vessels_1,nse_field.min_pressure_quantile,nse_field.max_pressure_quantile); 
-nse_field.bv_vessels_2 = zef_nse_threshold_distribution(nse_field.bv_vessels_2,nse_field.min_pressure_quantile,nse_field.max_pressure_quantile); 
-nse_field.bv_vessels_3 = zef_nse_threshold_distribution(nse_field.bv_vessels_3,nse_field.min_pressure_quantile,nse_field.max_pressure_quantile); 
-
 nse_field.bp_vessels = nse_field.bp_vessels/hgmm_conversion;
 
 zef_waitbar(0.67,h_waitbar,'NSE solver: concentration');
@@ -181,7 +175,6 @@ K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + ((4*pi).^(1/3).*3.^(2/3).*di
  zef_waitbar(1,h_waitbar,'NSE solver');
  
  %nse_field.bf_capillaries = nse_field.bf_capillaries(1:end-1) + nse_field.bf_capillaries(end);
- nse_field.bf_capillaries = zef_nse_threshold_distribution(nse_field.bf_capillaries,nse_field.min_flow_quantile,nse_field.max_flow_quantile); 
  %nse_field.bf_capillaries = ml_min_conversion*nse_field.total_flow*nse_field.bf_capillaries./sum(nse_field.bf_capillaries.*w_2);
 
 %microcirculation_volume_bg = (pi/4).*mvd_volume_mean*volume_sum.*(arteriole_scale*nse_field.arteriole_diameter.^2+capillary_scale*nse_field.capillary_diameter.^2+venule_scale*nse_field.venule_diameter.^2)

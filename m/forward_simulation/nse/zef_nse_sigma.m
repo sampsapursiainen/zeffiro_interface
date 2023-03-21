@@ -17,12 +17,12 @@ sigma_aux = sigma_in(active_compartment_ind,1);
 
      for i = 1 : length(nse_field.capillary_domain_ind)
      I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
-     I_aux = find(abs(bf_interp(I))> 1e-6);
+     I_aux = find(abs(bf_interp(I))> 1e-15);
      I = I(I_aux);
-     I_aux = find(abs(bf_interp(I)) > 1-1e-6);
+     I_aux = find(abs(bf_interp(I)) > 1-1e-15);
      sigma_out(I_aux,1) = nse_field.blood_conductivity;
-     I_aux = find(abs(bf_interp(I)) > 1-1e-6);
-     bf_interp(I(I_aux)) = 1-1e-6;
+     I_aux = find(abs(bf_interp(I)) > 1-1e-15);
+     bf_interp(I(I_aux)) = 1-1e-15;
      I_aux = find(abs(bf_interp(I)) <= 1);
      I = I(I_aux);
      volume_aux = sum(volume(I));
@@ -46,11 +46,13 @@ sigma_aux = sigma_in(active_compartment_ind,1);
          
      for i = 1 : length(nse_field.capillary_domain_ind)
      I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
-     I_aux = find(abs(bf_interp(I))> 1e-6);
+     I_aux = find(abs(bf_interp(I))> 1e-15);
      I = I(I_aux);
-     I_aux = find(abs(bf_interp(I)) > 1-1e-6);
+     I_aux = find(abs(bf_interp(I)) > 1-1e-15);
      sigma_out(I_aux,1) = nse_field.blood_conductivity;
-     I_aux = find(abs(bf_interp(I)) <= 1-1e-6);
+        I_aux = find(abs(bf_interp(I)) > 1-1e-15);
+     bf_interp(I(I_aux)) = 1-1e-15;
+     I_aux = find(abs(bf_interp(I)) <= 1);
      I = I(I_aux);
      volume_aux = sum(volume(I));
      background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
