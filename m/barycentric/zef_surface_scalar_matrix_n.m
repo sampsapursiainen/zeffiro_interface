@@ -35,7 +35,7 @@ for i = 1 : 3
 
         I = sub2ind(size(tetra),t_ind,ind_m(f_ind,i));
 
-for j = i : 3
+for j = 1 : 3
         
         J = sub2ind(size(tetra),t_ind,ind_m(f_ind,j));
         
@@ -47,14 +47,9 @@ for j = i : 3
 
         M_part = sparse(tetra(I),tetra(J),scalar_field(t_ind).*entry_vec.*n_vec(:,n_ind),N,N);
         
-        if i == j
         M = M + M_part;
-        else
-        M = M + M_part;
-        M = M + M_part';
+
         end
         
 end
-end
-
 end
