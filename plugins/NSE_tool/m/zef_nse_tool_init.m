@@ -8,8 +8,60 @@ if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
 end
 
-if not(isfield(zef.nse_field,'arteriole_diameter'))
-zef.nse_field.arteriole_diameter = 2e-5;
+if not(isfield(zef.nse_field,'gravity_amplitude'))
+zef.nse_field.gravity_amplitude = -9.81;
+end
+
+if not(isfield(zef.nse_field,'time_length'))
+zef.nse_field.time_length = 1;
+end
+
+if not(isfield(zef.nse_field,'time_step_length'))
+zef.nse_field.time_step_length = 0.1;
+end
+
+if not(isfield(zef.nse_field,'pulse_amplitude'))
+zef.nse_field.pulse_amplitude = 50;
+end
+
+if not(isfield(zef.nse_field,'cycle_length'))
+zef.nse_field.cycle_length = 1;
+end
+
+if not(isfield(zef.nse_field,'p_wave_start'))
+zef.nse_field.p_wave_start = 0.05;
+end
+
+if not(isfield(zef.nse_field,'t_wave_start'))
+zef.nse_field.t_wave_start = 0.2;
+end
+
+if not(isfield(zef.nse_field,'d_wave_start'))
+zef.nse_field.d_wave_start = 0.35;
+end
+
+if not(isfield(zef.nse_field,'p_wave_length'))
+zef.nse_field.p_wave_length = 0.5;
+end
+
+if not(isfield(zef.nse_field,'t_wave_length'))
+zef.nse_field.t_wave_length = 0.5;
+end
+
+if not(isfield(zef.nse_field,'d_wave_length'))
+zef.nse_field.d_wave_length = 0.5;
+end
+
+if not(isfield(zef.nse_field,'p_wave_weight'))
+zef.nse_field.p_wave_weight = 0.5;
+end
+
+if not(isfield(zef.nse_field,'t_wave_weight'))
+zef.nse_field.t_wave_weight = 0.2;
+end
+
+if not(isfield(zef.nse_field,'d_wave_weight'))
+zef.nse_field.d_wave_weight = 0.05;
 end
 
 if not(isfield(zef.nse_field,'capillary_diameter'))

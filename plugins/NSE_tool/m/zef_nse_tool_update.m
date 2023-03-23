@@ -35,6 +35,21 @@ zef.nse_field.artery_domain_ind = zef.nse_field.h_artery_domain_ind.Value;
 zef.nse_field.reconstruction_type = zef.nse_field.h_reconstruction_type.Value; 
 zef.nse_field.solver_type = zef.nse_field.h_solver_type.Value; 
 
+zef.nse_field.gravity_amplitude = zef.nse_field.h_gravity_amplitude.Value;
+zef.nse_field.time_length = zef.nse_field.h_time_length.Value;
+zef.nse_field.time_step_length = zef.nse_field.h_time_step_length.Value;
+zef.nse_field.pulse_amplitude = zef.nse_field.h_pulse_amplitude.Value;
+zef.nse_field.cycle_length = zef.nse_field.h_cycle_length.Value;
+zef.nse_field.p_wave_start = zef.nse_field.h_p_wave_start.Value;
+zef.nse_field.t_wave_start = zef.nse_field.h_t_wave_start.Value;
+zef.nse_field.d_wave_start = zef.nse_field.h_d_wave_start.Value;
+zef.nse_field.p_wave_length = zef.nse_field.h_p_wave_length.Value ;
+zef.nse_field.t_wave_length = zef.nse_field.h_t_wave_length.Value;
+zef.nse_field.d_wave_length = zef.nse_field.h_d_wave_length.Value;
+zef.nse_field.p_wave_weight = zef.nse_field.h_p_wave_weight.Value;
+zef.nse_field.t_wave_weight = zef.nse_field.h_t_wave_weight.Value;
+zef.nse_field.d_wave_weight = zef.nse_field.h_d_wave_weight.Value;
+
 
 end
 

@@ -26,6 +26,36 @@ zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
+zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_time_length = zef_data.h_time_length;
+zef.nse_field.h_time_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_time_step_length = zef_data.h_time_step_length;
+zef.nse_field.h_time_step_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_pulse_amplitude = zef_data.h_pulse_amplitude;
+zef.nse_field.h_pulse_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_cycle_length = zef_data.h_cycle_length;
+zef.nse_field.h_cycle_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_p_wave_start = zef_data.h_p_wave_start;
+zef.nse_field.h_p_wave_start.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_t_wave_start = zef_data.h_t_wave_start;
+zef.nse_field.h_t_wave_start.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_d_wave_start = zef_data.h_d_wave_start;
+zef.nse_field.h_d_wave_start.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_p_wave_length = zef_data.h_p_wave_length;
+zef.nse_field.h_p_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_t_wave_length = zef_data.h_t_wave_length;
+zef.nse_field.h_t_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_d_wave_length = zef_data.h_d_wave_length;
+zef.nse_field.h_d_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_p_wave_weight = zef_data.h_p_wave_weight;
+zef.nse_field.h_p_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_t_wave_weight = zef_data.h_t_wave_weight;
+zef.nse_field.h_t_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_d_wave_weight = zef_data.h_d_wave_weight;
+zef.nse_field.h_d_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
 zef.nse_field.h_conductivity_model = zef_data.h_conductivity_model;
 zef.nse_field.h_conductivity_model.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_conductivity_exponent = zef_data.h_conductivity_exponent;
@@ -50,7 +80,6 @@ zef.nse_field.h_arteriole_diameter.ValueChangedFcn = 'zef = zef_nse_tool_update(
 
 zef.nse_field.h_venule_diameter = zef_data.h_venule_diameter;
 zef.nse_field.h_venule_diameter.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-
 
 zef.nse_field.h_mu = zef_data.h_mu;
 zef.nse_field.h_mu.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -88,6 +117,21 @@ zef.nse_field.h_gravity_x.Value = zef.nse_field.gravity_x;
 zef.nse_field.h_gravity_y.Value = zef.nse_field.gravity_y;
 zef.nse_field.h_gravity_z.Value = zef.nse_field.gravity_z;
 
+zef.nse_field.h_gravity_amplitude.Value = zef.nse_field.gravity_amplitude;
+zef.nse_field.h_time_length.Value = zef.nse_field.time_length;
+zef.nse_field.h_time_step_length.Value = zef.nse_field.time_step_length;
+zef.nse_field.h_pulse_amplitude.Value = zef.nse_field.pulse_amplitude;
+zef.nse_field.h_cycle_length.Value = zef.nse_field.cycle_length;
+zef.nse_field.h_p_wave_start.Value = zef.nse_field.p_wave_start;
+zef.nse_field.h_t_wave_start.Value = zef.nse_field.t_wave_start;
+zef.nse_field.h_d_wave_start.Value = zef.nse_field.d_wave_start;
+zef.nse_field.h_p_wave_length.Value = zef.nse_field.p_wave_length;
+zef.nse_field.h_t_wave_length.Value = zef.nse_field.t_wave_length;
+zef.nse_field.h_d_wave_length.Value = zef.nse_field.d_wave_length;
+zef.nse_field.h_p_wave_weight.Value = zef.nse_field.p_wave_weight;
+zef.nse_field.h_t_wave_weight.Value = zef.nse_field.t_wave_weight;
+zef.nse_field.h_d_wave_weight.Value = zef.nse_field.d_wave_weight;
+
 zef.nse_field.h_blood_conductivity.Value = zef.nse_field.blood_conductivity;
 
 zef.nse_field.h_conductivity_exponent.Value = zef.nse_field.conductivity_exponent;
@@ -106,11 +150,11 @@ zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Concentratio
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
-zef.nse_field.h_solver_type.Items = {'Poisson'};
+zef.nse_field.h_solver_type.Items = {'Poisson static & conductivity','Poisson dynamic'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 
-zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef = zef_nse_tool_update(zef); zef.nse_field = zef_nse_poisson(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.mvd_length);';
+zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef_nse_run_solver';
 zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = '[zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_interpolate.ButtonPushedFcn = 'zef = zef_nse_interpolate(zef,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_nse_sigma.ButtonPushedFcn = 'zef.nse_sigma = zef_nse_sigma(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.sigma,zef.source_interpolation_ind);';
