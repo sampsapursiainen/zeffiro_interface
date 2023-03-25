@@ -50,6 +50,12 @@ zef.nse_field.p_wave_weight = zef.nse_field.h_p_wave_weight.Value;
 zef.nse_field.t_wave_weight = zef.nse_field.h_t_wave_weight.Value;
 zef.nse_field.d_wave_weight = zef.nse_field.h_d_wave_weight.Value;
 
+zef.nse_field.sphere_radius = zef.nse_field.h_sphere_radius.Value;
+zef.nse_field.sphere_x = zef.nse_field.h_sphere_x.Value;
+zef.nse_field.sphere_y = zef.nse_field.h_sphere_y.Value;
+zef.nse_field.sphere_z = zef.nse_field.h_sphere_z.Value;
+
+zef.nse_field.n_frames = zef.nse_field.h_n_frames.Value;
 
 end
 

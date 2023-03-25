@@ -4,6 +4,9 @@ zef_data = zef_nse_app;
 
 zef = zef_nse_tool_init(zef);
 
+zef.nse_field.h_plot_sphere = zef_data.h_plot_sphere;
+zef.nse_field.h_plot_pulse = zef_data.h_plot_pulse;
+
 zef.nse_field.h_nse_tool = zef_data.h_nse_tool;
 zef.nse_field.h_nse_tool.Name = 'ZEFFIRO Interface: NSE tool';
 zef.nse_field.h_solve_system = zef_data.h_solve_system;
@@ -26,6 +29,18 @@ zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_n_frames = zef_data.h_n_frames;
+zef.nse_field.h_n_frames.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_sphere_radius = zef_data.h_sphere_radius;
+zef.nse_field.h_sphere_radius.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_sphere_x = zef_data.h_sphere_x;
+zef.nse_field.h_sphere_x.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_sphere_y = zef_data.h_sphere_y;
+zef.nse_field.h_sphere_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_sphere_z = zef_data.h_sphere_z;
+zef.nse_field.h_sphere_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
 
 zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
 zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -117,6 +132,11 @@ zef.nse_field.h_gravity_x.Value = zef.nse_field.gravity_x;
 zef.nse_field.h_gravity_y.Value = zef.nse_field.gravity_y;
 zef.nse_field.h_gravity_z.Value = zef.nse_field.gravity_z;
 
+zef.nse_field.h_sphere_radius.Value = zef.nse_field.sphere_radius;
+zef.nse_field.h_sphere_x.Value = zef.nse_field.sphere_x;
+zef.nse_field.h_sphere_y.Value = zef.nse_field.sphere_y;
+zef.nse_field.h_sphere_z.Value = zef.nse_field.sphere_z;
+
 zef.nse_field.h_gravity_amplitude.Value = zef.nse_field.gravity_amplitude;
 zef.nse_field.h_time_length.Value = zef.nse_field.time_length;
 zef.nse_field.h_time_step_length.Value = zef.nse_field.time_step_length;
@@ -132,14 +152,12 @@ zef.nse_field.h_p_wave_weight.Value = zef.nse_field.p_wave_weight;
 zef.nse_field.h_t_wave_weight.Value = zef.nse_field.t_wave_weight;
 zef.nse_field.h_d_wave_weight.Value = zef.nse_field.d_wave_weight;
 
+zef.nse_field.h_n_frames.Value = zef.nse_field.n_frames;
+
 zef.nse_field.h_blood_conductivity.Value = zef.nse_field.blood_conductivity;
-
 zef.nse_field.h_conductivity_exponent.Value = zef.nse_field.conductivity_exponent;
-
 zef.nse_field.h_pressure_decay_in_arterioles.Value = zef.nse_field.pressure_decay_in_arterioles;
-
 zef.nse_field.h_capillary_diameter.Value = zef.nse_field.capillary_diameter;
-
 zef.nse_field.h_pressure.Value = zef.nse_field.pressure;
 
 zef.nse_field.h_conductivity_model.Items = {'Modified Archie''s model','Hashin-Shtrikman upper bound','Hashin-Shtrikman lower bound'};
@@ -155,9 +173,11 @@ zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 
 zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef_nse_run_solver';
-zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = '[zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
+zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = 'zef.inv_time_1 = zef.nse_field.inv_time_1; zef.inv_time_2 = zef.nse_field.inv_time_2; zef.inv_time_3 = zef.nse_field.inv_time_3; [zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_interpolate.ButtonPushedFcn = 'zef = zef_nse_interpolate(zef,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_nse_sigma.ButtonPushedFcn = 'zef.nse_sigma = zef_nse_sigma(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.sigma,zef.source_interpolation_ind);';
+zef.nse_field.h_plot_sphere.ButtonPushedFcn = 'zef_nse_plot_sphere(zef.h_axes1, zef.nse_field);';
+zef.nse_field.h_plot_pulse.ButtonPushedFcn = '';
 
 zef.nse_field.h_artery_domain_ind.Items = cell(0);
 for i = 1 : length(zef.compartment_tags)

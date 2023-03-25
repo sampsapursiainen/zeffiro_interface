@@ -89,7 +89,7 @@ K_1 = zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 1, 1, ones(size(v_1_tetr
     zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 3, 3, ones(size(v_1_tetra,1),1));
 M_1 = zef_surface_scalar_matrix_FF(v_1_nodes, v_1_tetra, beta.*param_aux);  
 A = K_1 + M_1;
-b =  M_1 * (nse_field.pressure.*hgmm_conversion);
+b =  M_1 * (p_hydrostatic + nse_field.pressure.*hgmm_conversion);
 
 if nse_field.use_gpu
 DM = 1./diag(A); 
@@ -99,7 +99,7 @@ DM = spdiags(diag(A),0,size(A,1),size(A,1));
 p = pcg_iteration(A,b,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
 end
 
-nse_field.bp_vessels = p + 3*p_hydrostatic;
+nse_field.bp_vessels = p + 2*p_hydrostatic;
 
 zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
 
@@ -171,10 +171,10 @@ n_p(2*n_i_nodes + [1:n_i_nodes]) = n_p_3(i_node_ind);
 
 if nse_field.use_gpu
 DM = 1./diag(L); 
-aux_vec = pcg_iteration_gpu(L, g - n_p, nse_field.pcg_tol, nse_field.pcg_maxit, DM);
+aux_vec = pcg_iteration_gpu(L, n_p - g, nse_field.pcg_tol, nse_field.pcg_maxit, DM);
 else
 DM = spdiags(diag(L), 0, size(L,1), size(L,1)); 
-aux_vec = pcg_iteration(L, g - n_p, nse_field.pcg_tol, nse_field.pcg_maxit, DM);
+aux_vec = pcg_iteration(L, n_p - g, nse_field.pcg_tol, nse_field.pcg_maxit, DM);
 end
 
 nse_field.bv_vessels_1(i_node_ind) = aux_vec([1:n_i_nodes]);

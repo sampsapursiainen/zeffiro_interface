@@ -4,9 +4,26 @@ if not(isfield(zef,'nse_field'))
 zef.nse_field = struct;
 end
 
+if not(isfield(zef,'inv_time_1'))
+zef.nse_field.inv_time_1 = 0;
+end
+
+if not(isfield(zef,'inv_time_2'))
+zef.nse_field.inv_time_2 = 0;
+end 
+ 
+if not(isfield(zef,'inv_time_3'))
+zef.nse_field.inv_time_3 = 0;
+end
+
 if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
 end
+
+if not(isfield(zef.nse_field,'n_frames'))
+zef.nse_field.n_frames = 1;
+end
+
 
 if not(isfield(zef.nse_field,'gravity_amplitude'))
 zef.nse_field.gravity_amplitude = -9.81;
@@ -22,6 +39,23 @@ end
 
 if not(isfield(zef.nse_field,'pulse_amplitude'))
 zef.nse_field.pulse_amplitude = 50;
+end
+
+
+if not(isfield(zef.nse_field,'sphere_radius'))
+zef.nse_field.sphere_radius = 30;
+end
+
+if not(isfield(zef.nse_field,'sphere_x'))
+zef.nse_field.sphere_x = 0;
+end
+
+if not(isfield(zef.nse_field,'sphere_y'))
+zef.nse_field.sphere_y = 0;
+end
+
+if not(isfield(zef.nse_field,'sphere_z'))
+zef.nse_field.sphere_z = 0;
 end
 
 if not(isfield(zef.nse_field,'cycle_length'))
