@@ -90,8 +90,20 @@ zef.nse_field.h_pressure.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_rho = zef_data.h_rho;
 zef.nse_field.h_rho.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_viscosity_relaxation_time = zef_data.h_viscosity_relaxation_time;
+zef.nse_field.h_viscosity_relaxation_time.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_viscosity_n_smoothing = zef_data.h_viscosity_n_smoothing;
+zef.nse_field.h_viscosity_n_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_viscosity_transition = zef_data.h_viscosity_transition;
+zef.nse_field.h_viscosity_transition.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
 zef.nse_field.h_arteriole_diameter = zef_data.h_arteriole_diameter;
 zef.nse_field.h_arteriole_diameter.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_artery_diameter_change = zef_data.h_artery_diameter_change;
+zef.nse_field.h_artery_diameter_change.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_venule_diameter = zef_data.h_venule_diameter;
 zef.nse_field.h_venule_diameter.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -107,6 +119,21 @@ zef.nse_field.h_capillary_domain_ind.ValueChangedFcn = 'zef = zef_nse_tool_updat
 
 zef.nse_field.h_reconstruction_type = zef_data.h_reconstruction_type;
 zef.nse_field.h_reconstruction_type.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_viscosity_model = zef_data.h_viscosity_model;
+zef.nse_field.h_viscosity_model.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_viscosity_exponent = zef_data.h_viscosity_exponent;
+zef.nse_field.h_viscosity_exponent.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_max_reconstruction_quantile = zef_data.h_max_reconstruction_quantile;
+zef.nse_field.h_max_reconstruction_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_min_reconstruction_quantile = zef_data.h_min_reconstruction_quantile;
+zef.nse_field.h_min_reconstruction_quantile.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_viscosity_delta = zef_data.h_viscosity_delta;
+zef.nse_field.h_viscosity_delta.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_blood_conductivity = zef_data.h_blood_conductivity;
 zef.nse_field.h_blood_conductivity.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -128,6 +155,11 @@ zef.nse_field.h_mu.Value = zef.nse_field.mu;
 zef.nse_field.h_arteriole_diameter.Value = zef.nse_field.arteriole_diameter;
 zef.nse_field.h_venule_diameter.Value = zef.nse_field.venule_diameter;
 
+zef.nse_field.h_max_reconstruction_quantile.Value = zef.nse_field.max_reconstruction_quantile;
+zef.nse_field.h_min_reconstruction_quantile.Value = zef.nse_field.min_reconstruction_quantile;
+
+zef.nse_field.h_artery_diameter_change.Value = zef.nse_field.artery_diameter_change;
+
 zef.nse_field.h_gravity_x.Value = zef.nse_field.gravity_x;
 zef.nse_field.h_gravity_y.Value = zef.nse_field.gravity_y;
 zef.nse_field.h_gravity_z.Value = zef.nse_field.gravity_z;
@@ -136,6 +168,8 @@ zef.nse_field.h_sphere_radius.Value = zef.nse_field.sphere_radius;
 zef.nse_field.h_sphere_x.Value = zef.nse_field.sphere_x;
 zef.nse_field.h_sphere_y.Value = zef.nse_field.sphere_y;
 zef.nse_field.h_sphere_z.Value = zef.nse_field.sphere_z;
+
+zef.nse_field.h_viscosity_n_smoothing.Value = zef.nse_field.viscosity_n_smoothing;
 
 zef.nse_field.h_gravity_amplitude.Value = zef.nse_field.gravity_amplitude;
 zef.nse_field.h_time_length.Value = zef.nse_field.time_length;
@@ -154,17 +188,27 @@ zef.nse_field.h_d_wave_weight.Value = zef.nse_field.d_wave_weight;
 
 zef.nse_field.h_n_frames.Value = zef.nse_field.n_frames;
 
+zef.nse_field.h_viscosity_relaxation_time.Value = zef.nse_field.viscosity_relaxation_time;
+zef.nse_field.h_viscosity_transition.Value = zef.nse_field.viscosity_transition;
+
+zef.nse_field.h_viscosity_exponent.Value = zef.nse_field.viscosity_exponent;
+zef.nse_field.h_viscosity_delta.Value = zef.nse_field.viscosity_delta;
+
 zef.nse_field.h_blood_conductivity.Value = zef.nse_field.blood_conductivity;
 zef.nse_field.h_conductivity_exponent.Value = zef.nse_field.conductivity_exponent;
 zef.nse_field.h_pressure_decay_in_arterioles.Value = zef.nse_field.pressure_decay_in_arterioles;
 zef.nse_field.h_capillary_diameter.Value = zef.nse_field.capillary_diameter;
 zef.nse_field.h_pressure.Value = zef.nse_field.pressure;
 
-zef.nse_field.h_conductivity_model.Items = {'Modified Archie''s model','Hashin-Shtrikman upper bound','Hashin-Shtrikman lower bound'};
+zef.nse_field.h_viscosity_model.Items = {'Constant','Power law','Carreau-Yasuda'};
+zef.nse_field.h_viscosity_model.ItemsData = [1 : length(zef.nse_field.h_viscosity_model.Items)];
+zef.nse_field.h_viscosity_model.Value = zef.nse_field.viscosity_model;
+
+zef.nse_field.h_conductivity_model.Items = {'Archie''s law','Hashin-Shtrikman upper bound','Hashin-Shtrikman lower bound'};
 zef.nse_field.h_conductivity_model.ItemsData = [1 : length(zef.nse_field.h_conductivity_model.Items)];
 zef.nse_field.h_conductivity_model.Value = zef.nse_field.conductivity_model;
 
-zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Concentration (Capillaries)'};
+zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Arteries)','Viscosity (Arteries)','Concentration (Microcirculation)'};
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 

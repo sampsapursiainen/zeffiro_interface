@@ -1,6 +1,6 @@
 function zef = zef_nse_interpolate(zef,type)
 
-if isequal(type,1)
+if ismember(type,[1 2 3])
     
         for i = 1 : length(zef.compartment_tags)
         eval(['zef.' zef.compartment_tags{i} '_sources = 0;'])
@@ -16,7 +16,7 @@ if isequal(type,1)
    zef.active_compartment_ind = find(ismember(zef.domain_labels,zef.nse_field.artery_domain_ind));
     zef.source_positions = zef.nodes(zef.nse_field.bp_vessel_node_ind,:);
     
-elseif isequal(type,2)
+elseif ismember(type,4)
 
     for i = 1 : length(zef.compartment_tags)
         eval(['zef.' zef.compartment_tags{i} '_sources = 0;'])

@@ -16,6 +16,22 @@ if not(isfield(zef,'inv_time_3'))
 zef.nse_field.inv_time_3 = 0;
 end
 
+if not(isfield(zef.nse_field,'viscosity_model'))
+zef.nse_field.viscosity_model = 1;
+end
+
+if not(isfield(zef.nse_field,'viscosity_n_smoothing'))
+zef.nse_field.viscosity_n_smoothing = 3;
+end
+
+if not(isfield(zef.nse_field,'viscosity_exponent'))
+zef.nse_field.viscosity_exponent = 0.6;
+end 
+
+if not(isfield(zef.nse_field,'viscosity_delta'))
+zef.nse_field.viscosity_delta = 0.001;
+end 
+
 if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
 end
@@ -110,8 +126,28 @@ if not(isfield(zef.nse_field,'pressure_decay_in_arterioles'))
 zef.nse_field.pressure_decay_in_arterioles = 0.70;
 end
 
+if not(isfield(zef.nse_field,'max_reconstruction_quantile'))
+zef.nse_field.max_reconstruction_quantile = 1;
+end
+
+if not(isfield(zef.nse_field,'min_reconstruction_quantile'))
+zef.nse_field.min_reconstruction_quantile = 0;
+end
+
 if not(isfield(zef.nse_field,'blood_conductivity'))
 zef.nse_field.blood_conductivity = 1.59;
+end
+
+if not(isfield(zef.nse_field,'viscosity_relaxation_time'))
+zef.nse_field.viscosity_relaxation_time = 1.902;
+end
+
+if not(isfield(zef.nse_field,'viscosity_transition'))
+zef.nse_field.viscosity_transition = 1.25;
+end
+
+if not(isfield(zef.nse_field,'artery_diameter_change'))
+zef.nse_field.artery_diameter_change = 0.1;
 end
 
 if not(isfield(zef.nse_field,'capillary_arteriole_total_area_ratio'))

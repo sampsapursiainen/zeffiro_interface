@@ -1,4 +1,4 @@
-function v = zef_volume_scalar_vector_F(nodes, tetra, scalar_field)
+function v = zef_volume_scalar_vector(nodes, tetra, scalar_field, weighting)
 
 N = size(nodes,1);
 
@@ -6,7 +6,11 @@ if nargin < 3
 scalar_field = ones(size(tetra,1),1);
 end
 
-weight_param = 1/4;
+if nargin < 4
+weight_param = 1;
+else 
+weight_param = weighting;
+end
 
 [~,det] = zef_volume_barycentric(nodes,tetra);
 volume = abs(det)/6;
