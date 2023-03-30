@@ -1,4 +1,10 @@
-function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_db, diff_type)
+function [dist_vec, angle_vec, mag_vec, dispersion_vec] = zef_rec_diff( ...
+    zef, ...
+    inverse_method, ...
+    noise_db, ...
+    diff_type, ...
+    dispersion_radius ...
+)
 
     arguments
 
@@ -10,12 +16,25 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
         diff_type (1,1) string { mustBeMember(diff_type, ["L2", "minabs"]) } = "L2"
 
+        dispersion_radius (1,1) double { mustBePositive } = 1.5
+
     end
 
+    % Pre-allocate result vectors.
+
     dist_vec = zeros(3*size(zef.source_positions,1),1);
+
     angle_vec = zeros(3*size(zef.source_positions,1),1);
 
-    h_waitbar = zef_waitbar(0,1,'Creating synthetic measurements');
+    mag_vec = zeros(3*size(zef.source_positions,1),1);
+
+    dispersion_vec = zeros(3*size(zef.source_positions,1),1);
+
+    max_ind_vec = zeros(3*size(zef.source_positions,1),1);
+
+    % Other setup operations.
+
+    h_waitbar = zef_waitbar(0,'Creating synthetic measurements');
 
     cleanup_fn = @(wb) close(wb);
 
@@ -33,7 +52,7 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
         if mod(i,floor(n_sources/10))==0
 
-            h_waitbar = zef_waitbar(i,n_sources,h_waitbar,'Creating synthetic measurements');
+            h_waitbar = zef_waitbar(i/n_sources,h_waitbar,'Creating synthetic measurements');
 
         end
 
@@ -76,6 +95,8 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
             [mag_val, I] = max(z_norm);
 
+            max_ind_vec ( rec_component_ind ) = I ;
+
             dir_vec_rec = z_ij(3*(I-1)+1:3*(I-1)+3);
             dir_vec_rec = dir_vec_rec/norm(dir_vec_rec,2);
 
@@ -86,11 +107,11 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
             if diff_type == "L2"
 
-                dist_vec(3*(i-1) + j) = (1/sqrt(3)) * sqrt(sum(pos_diffs.^2,2));
+                dist_vec(rec_component_ind) = (1/sqrt(3)) * sqrt(sum(pos_diffs.^2,2));
 
             elseif diff_type == "minabs"
 
-                dist_vec(3*(i-1) + j) = (1/sqrt(3)) * min(abs(pos_diffs), [], 2);
+                dist_vec(rec_component_ind) = (1/sqrt(3)) * min(abs(pos_diffs), [], 2);
 
             else
 
@@ -98,12 +119,89 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_diff(zef, inverse_method, noise_
 
             end
 
-            angle_vec(3*(i-1) + j) = acosd(dot(dir_vec_rec,dir_vec_source));
+            angle_vec (rec_component_ind) = acosd(dot(dir_vec_rec, dir_vec_source));
 
-            mag_vec(3*(i-1) + j) = (1/sqrt(3))*mag_val;
+            mag_vec (rec_component_ind) = (1/sqrt(3)) * mag_val;
 
         end % for
 
     end % for
+
+    % Finally, compute dispersions for each reconstructed source.
+
+    for ind = numel ( max_ind_vec )
+
+        dispersion_vec ( rec_component_ind ) = dispersion_fn( ...
+            zef.source_positions , ...
+            max_ind_vec ( ind ) , ...
+            dispersion_radius , ...
+            mag_vec , ...
+            dist_vec ...
+        ) ;
+
+    end % for
+
+end % function
+
+function the_dispersion = dispersion_fn( ...
+    source_positions, ...
+    max_magnitude_ind, ...
+    dispersion_radius, ...
+    reconstructed_dipole_magnitudes, ...
+    localisation_errors ...
+)
+
+    %
+    % dispersion_fn
+    %
+    % Computes the dispersion for each dipolar reconstruction, in a ROI
+    % defined by a central dipole and a radius around it.
+    %
+
+    arguments
+
+        source_positions (:,3) double
+
+        max_magnitude_ind (1,1) uint32 { mustBePositive }
+
+        dispersion_radius (1,1) double { mustBePositive }
+
+        reconstructed_dipole_magnitudes (1,:) double
+
+        localisation_errors (1,:) double { mustBeNonnegative }
+
+    end
+
+    % More pre-condition checks.
+
+    assert ( ...
+        numel ( source_positions ) == numel ( reconstructed_dipole_magnitudes ), ...
+        "The number of elements in source positions must match that of reconstructed dipole moments." ...
+    ) ;
+
+    assert ( ...
+        numel ( source_positions ) == numel ( localisation_errors ), ...
+        "The number of elements in source positions must match that of localisation errors." ...
+    ) ;
+
+    % Determine the position of the reconstructed source.
+
+    reconstruction_position = source_positions ( max_magnitude_ind, : ) ;
+
+    % Find source positions within the given radius around it.
+
+    within_roi_inds = rangesearch ( source_positions, reconstruction_position, dispersion_radius ) ;
+
+    within_roi_magnitudes = reconstructed_dipole_magnitudes ( within_roi_inds ) ;
+
+    within_roi_localisation_errors = localisation_errors ( within_roi_inds ) ;
+
+    % Compute the dispersion.
+
+    dispersion_numerator = sum ( ( within_roi_localisation_errors .* within_roi_magnitudes ) .^ 2 ) ;
+
+    dispersion_denominator = sum ( within_roi_magnitudes .^ 2 ) ;
+
+    the_dispersion = sqrt ( dispersion_numerator / dispersion_denominator ) ;
 
 end % function
