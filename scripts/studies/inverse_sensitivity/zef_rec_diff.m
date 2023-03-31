@@ -190,7 +190,7 @@ function the_dispersion = dispersion_fn( ...
 
     % Find source positions within the given radius around it.
 
-    within_roi_inds = rangesearch ( source_positions, reconstruction_position, dispersion_radius ) ;
+    within_roi_inds{ 1 } = rangesearch ( source_positions, reconstruction_position, dispersion_radius ) ;
 
     within_roi_magnitudes = reconstructed_dipole_magnitudes ( within_roi_inds ) ;
 
