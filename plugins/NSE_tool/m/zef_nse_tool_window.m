@@ -30,6 +30,10 @@ zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_velocity_n_smoothing = zef_data.h_velocity_n_smoothing;
+zef.nse_field.h_velocity_n_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+
 zef.nse_field.h_n_frames = zef_data.h_n_frames;
 zef.nse_field.h_n_frames.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
@@ -194,6 +198,8 @@ zef.nse_field.h_viscosity_transition.Value = zef.nse_field.viscosity_transition;
 zef.nse_field.h_viscosity_exponent.Value = zef.nse_field.viscosity_exponent;
 zef.nse_field.h_viscosity_delta.Value = zef.nse_field.viscosity_delta;
 
+zef.nse_field.h_velocity_n_smoothing.Value = zef.nse_field.velocity_n_smoothing;
+
 zef.nse_field.h_blood_conductivity.Value = zef.nse_field.blood_conductivity;
 zef.nse_field.h_conductivity_exponent.Value = zef.nse_field.conductivity_exponent;
 zef.nse_field.h_pressure_decay_in_arterioles.Value = zef.nse_field.pressure_decay_in_arterioles;
@@ -212,7 +218,7 @@ zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Ar
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
-zef.nse_field.h_solver_type.Items = {'Poisson static & conductivity','Poisson dynamic'};
+zef.nse_field.h_solver_type.Items = {'Poisson & conductivity','Dynamic Stokes','Dynamic Navier-Stokes'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 

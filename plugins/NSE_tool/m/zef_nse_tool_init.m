@@ -20,6 +20,10 @@ if not(isfield(zef.nse_field,'viscosity_model'))
 zef.nse_field.viscosity_model = 1;
 end
 
+if not(isfield(zef.nse_field,'velocity_n_smoothing'))
+zef.nse_field.velocity_n_smoothing = 75;
+end
+
 if not(isfield(zef.nse_field,'viscosity_n_smoothing'))
 zef.nse_field.viscosity_n_smoothing = 3;
 end
