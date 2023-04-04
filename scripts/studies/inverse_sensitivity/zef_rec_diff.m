@@ -204,17 +204,18 @@ function the_dispersion = dispersion_fn( ...
 
     n_of_within_roi_positions = numel ( within_roi_inds ) ;
 
-    within_roi_distances = sqrt ( sum ( ...
-        ( within_roi_positions - repmat ( reconstruction_position, n_of_within_roi_positions, 1 ) ) .^2 , 2 ...
-    ) ) ;
+    within_roi_squared_distances = sum ( ...
+        ( within_roi_positions - repmat ( reconstruction_position, n_of_within_roi_positions, 1 ) ) .^2 , ...
+        2 ...
+    ) ;
 
-    within_roi_magnitudes = reconstructed_dipole_magnitudes ( within_roi_inds ) ;
+    within_roi_squared_magnitudes = ( reconstructed_dipole_magnitudes ( within_roi_inds ) ) .^ 2 ;
 
     % Compute the dispersion.
 
-    dispersion_numerator = sum ( ( within_roi_distances .* within_roi_magnitudes ) .^ 2 ) ;
+    dispersion_numerator = sum ( within_roi_squared_distances .* within_roi_squared_magnitudes ) ;
 
-    dispersion_denominator = sum ( within_roi_magnitudes .^ 2 ) ;
+    dispersion_denominator = sum ( within_roi_squared_magnitudes ) ;
 
     the_dispersion = sqrt ( dispersion_numerator / dispersion_denominator ) ;
 
