@@ -131,13 +131,14 @@ function [dist_vec, angle_vec, mag_vec, dispersion_vec] = zef_rec_diff( ...
 
     for ind = 1 : numel ( max_ind_vec )
 
-        dispersion_vec ( ind ) = dispersion_fn( ...
+        dispersion = dispersion_fn( ...
             zef.source_positions , ...
             max_ind_vec ( ind ) , ...
             dispersion_radius , ...
-            mag_vec , ...
-            dist_vec ...
+            mag_vec ...
         ) ;
+
+        dispersion_vec ( ind ) = dispersion;
 
     end % for
 
@@ -147,8 +148,7 @@ function the_dispersion = dispersion_fn( ...
     source_positions, ...
     max_magnitude_ind, ...
     dispersion_radius, ...
-    reconstructed_dipole_magnitudes, ...
-    localisation_errors ...
+    reconstructed_dipole_magnitudes ...
 )
 
     %
@@ -166,9 +166,7 @@ function the_dispersion = dispersion_fn( ...
 
         dispersion_radius (1,1) double { mustBePositive }
 
-        reconstructed_dipole_magnitudes (1,:) double
-
-        localisation_errors (1,:) double { mustBeNonnegative }
+        reconstructed_dipole_magnitudes (:,1) double
 
     end
 
@@ -179,28 +177,35 @@ function the_dispersion = dispersion_fn( ...
         "The number of elements in source positions must match that of reconstructed dipole moments." ...
     ) ;
 
-    assert ( ...
-        numel ( source_positions ) == numel ( localisation_errors ), ...
-        "The number of elements in source positions must match that of localisation errors." ...
-    ) ;
-
     % Determine the position of the reconstructed source.
 
     reconstruction_position = source_positions ( max_magnitude_ind, : ) ;
 
-    % Find source positions within the given radius around it.
+    n_of_source_positions = size ( source_positions, 1 ) ;
 
-    within_roi_inds = rangesearch ( source_positions, reconstruction_position, dispersion_radius ) ;
+    % Find source positions within the given radius around it and compute the
+    % distances between them and the center. Also select the magnitudes of the
+    % sources that were localised into the ROI.
 
-    within_roi_inds = within_roi_inds{ 1 } ;
+    repeated_positions = repelem ( source_positions, 3, 1 ) ;
+
+    within_roi_inds = rangesearch ( repeated_positions, reconstruction_position, dispersion_radius ) ;
+
+    within_roi_inds = within_roi_inds { 1 } ;
+
+    within_roi_positions = repeated_positions ( within_roi_inds, : ) ;
+
+    n_of_within_roi_positions = numel ( within_roi_inds ) ;
+
+    within_roi_distances = sqrt ( sum ( ...
+        ( within_roi_positions - repmat ( reconstruction_position, n_of_within_roi_positions, 1 ) ) .^2 , 2 ...
+    ) ) ;
 
     within_roi_magnitudes = reconstructed_dipole_magnitudes ( within_roi_inds ) ;
 
-    within_roi_localisation_errors = localisation_errors ( within_roi_inds ) ;
-
     % Compute the dispersion.
 
-    dispersion_numerator = sum ( ( within_roi_localisation_errors .* within_roi_magnitudes ) .^ 2 ) ;
+    dispersion_numerator = sum ( ( within_roi_distances .* within_roi_magnitudes ) .^ 2 ) ;
 
     dispersion_denominator = sum ( within_roi_magnitudes .^ 2 ) ;
 
