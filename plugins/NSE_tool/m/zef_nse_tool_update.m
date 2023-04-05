@@ -12,9 +12,9 @@ zef.nse_field.viscosity_delta = zef.nse_field.h_viscosity_delta.Value;
 
 zef.nse_field.pressure_decay_in_arterioles = zef.nse_field.h_pressure_decay_in_arterioles.Value;
 
-zef.nse_field.velocity_n_smoothing = zef.nse_field.h_velocity_n_smoothing.Value;
+zef.nse_field.velocity_smoothing = zef.nse_field.h_velocity_smoothing.Value;
 
-zef.nse_field.viscosity_n_smoothing = zef.nse_field.h_viscosity_n_smoothing.Value;
+zef.nse_field.viscosity_smoothing = zef.nse_field.h_viscosity_smoothing.Value;
 
 zef.nse_field.capillary_diameter = zef.nse_field.h_capillary_diameter.Value;
 
