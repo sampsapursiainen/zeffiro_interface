@@ -21,6 +21,8 @@ y = zef_nse_signal_pulse(time_vec,nse_field);
 source_radius = nse_field.sphere_radius;
 c_ind_1_domain = find(ismember(domain_labels,nse_field.artery_domain_ind));
 
+delta_t = nse_field.time_step_length;
+
 hgmm_conversion = 101325/760;
 mm_conversion = 0.001;
 mvd_length = 1E6.*mvd_length(:,1);
@@ -172,6 +174,7 @@ if nse_field.use_gpu
     i_aux = gpuArray(i_aux);
     i_node_ind = gpuArray(i_node_ind);
     mu_vec = gpuArray(mu_vec);
+    delta_t = gpuArray(delta_t);
      
 end
 
@@ -312,16 +315,16 @@ slope_field_stage_1_3 = aux_vec_3;
 u_stage_1_1 = u_1;
 u_stage_1_2 = u_2;
 u_stage_1_3 = u_3;
-u_1 = u_1 + nse_field.time_step_length.*slope_field_stage_1_1; 
-u_2 = u_2 + nse_field.time_step_length.*slope_field_stage_1_2; 
-u_3 = u_3 + nse_field.time_step_length.*slope_field_stage_1_3; 
+u_1 = u_1 + delta_t.*slope_field_stage_1_1; 
+u_2 = u_2 + delta_t.*slope_field_stage_1_2; 
+u_3 = u_3 + delta_t.*slope_field_stage_1_3; 
 elseif quadrature_step_ind == 2
 slope_field_stage_2_1 = aux_vec_1;
 slope_field_stage_2_2 = aux_vec_2;
 slope_field_stage_2_3 = aux_vec_3;
-u_1 = u_stage_1_1 + nse_field.time_step_length.*0.5.*(slope_field_stage_1_1 + slope_field_stage_2_1);   
-u_2 = u_stage_1_2 + nse_field.time_step_length.*0.5.*(slope_field_stage_1_2 + slope_field_stage_2_2);   
-u_3 = u_stage_1_3 + nse_field.time_step_length.*0.5.*(slope_field_stage_1_3 + slope_field_stage_2_3);   
+u_1 = u_stage_1_1 + delta_t.*0.5.*(slope_field_stage_1_1 + slope_field_stage_2_1);   
+u_2 = u_stage_1_2 + delta_t.*0.5.*(slope_field_stage_1_2 + slope_field_stage_2_2);   
+u_3 = u_stage_1_3 + delta_t.*0.5.*(slope_field_stage_1_3 + slope_field_stage_2_3);   
 end
 
 end
