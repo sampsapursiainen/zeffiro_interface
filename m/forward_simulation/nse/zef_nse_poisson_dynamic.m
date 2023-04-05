@@ -6,7 +6,11 @@ if not(isfield(nse_field,'nse_type'))
 nse_field.nse_type = 1;
 end
 
-
+if nse_field.time_integration == 1
+    n_q_steps = 1; 
+elseif nse_field.time_integration == 2
+    n_q_steps = 2;
+end
 
 n_frames = nse_field.n_frames;
 time_vec = [0:nse_field.time_step_length:nse_field.time_length]';
@@ -191,7 +195,7 @@ L_u_1 = L*u_1;
 L_u_2 = L*u_2;
 L_u_3 = L*u_3;
 
-for quadrature_step_ind = 1 : 1
+for quadrature_step_ind = 1 : n_q_steps
 
 if nse_field.nse_type == 2
 

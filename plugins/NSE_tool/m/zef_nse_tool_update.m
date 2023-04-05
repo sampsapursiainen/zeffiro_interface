@@ -16,6 +16,8 @@ zef.nse_field.velocity_smoothing = zef.nse_field.h_velocity_smoothing.Value;
 
 zef.nse_field.viscosity_smoothing = zef.nse_field.h_viscosity_smoothing.Value;
 
+zef.nse_field.time_integration = zef.nse_field.h_time_integration.Value;
+
 zef.nse_field.capillary_diameter = zef.nse_field.h_capillary_diameter.Value;
 
 zef.nse_field.pressure = zef.nse_field.h_pressure.Value; 

@@ -145,6 +145,9 @@ zef.nse_field.h_blood_conductivity.ValueChangedFcn = 'zef = zef_nse_tool_update(
 zef.nse_field.h_solver_type = zef_data.h_solver_type;
 zef.nse_field.h_solver_type.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_time_integration = zef_data.h_time_integration;
+zef.nse_field.h_time_integration.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
 zef.nse_field.h_use_gpu.Value = zef.nse_field.use_gpu;
 
 zef.nse_field.h_pcg_tol.Value = zef.nse_field.pcg_tol;
@@ -221,6 +224,10 @@ zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 zef.nse_field.h_solver_type.Items = {'Poisson & conductivity','Dynamic Stokes','Dynamic Navier-Stokes'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
+
+zef.nse_field.h_time_integration.Items = {'Euler','Trapezoid'};
+zef.nse_field.h_time_integration.ItemsData = [1 : length(zef.nse_field.h_time_integration.Items)];
+zef.nse_field.h_time_integration.Value = zef.nse_field.time_integration;
 
 zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef_nse_run_solver';
 zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = 'zef.inv_time_1 = zef.nse_field.inv_time_1; zef.inv_time_2 = zef.nse_field.inv_time_2; zef.inv_time_3 = zef.nse_field.inv_time_3; [zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
