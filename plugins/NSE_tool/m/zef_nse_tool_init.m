@@ -28,6 +28,10 @@ if not(isfield(zef.nse_field,'viscosity_smoothing'))
 zef.nse_field.viscosity_smoothing = 0.001;
 end
 
+if not(isfield(zef.nse_field,'start_time'))
+zef.nse_field.start_time = 0;
+end
+
 if not(isfield(zef.nse_field,'time_integration'))
 zef.nse_field.time_integration = 2;
 end

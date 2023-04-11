@@ -30,6 +30,9 @@ zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_start_time = zef_data.h_start_time;
+zef.nse_field.h_start_time.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
 zef.nse_field.h_velocity_smoothing = zef_data.h_velocity_smoothing;
 zef.nse_field.h_velocity_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
@@ -158,6 +161,7 @@ zef.nse_field.h_total_flow.Value = zef.nse_field.total_flow;
 
 zef.nse_field.h_rho.Value = zef.nse_field.rho;
 zef.nse_field.h_mu.Value = zef.nse_field.mu;
+zef.nse_field.h_start_time.Value = zef.nse_field.start_time;
 
 zef.nse_field.h_arteriole_diameter.Value = zef.nse_field.arteriole_diameter;
 zef.nse_field.h_venule_diameter.Value = zef.nse_field.venule_diameter;
@@ -171,10 +175,10 @@ zef.nse_field.h_gravity_x.Value = zef.nse_field.gravity_x;
 zef.nse_field.h_gravity_y.Value = zef.nse_field.gravity_y;
 zef.nse_field.h_gravity_z.Value = zef.nse_field.gravity_z;
 
-zef.nse_field.h_sphere_radius.Value = zef.nse_field.sphere_radius;
-zef.nse_field.h_sphere_x.Value = zef.nse_field.sphere_x;
-zef.nse_field.h_sphere_y.Value = zef.nse_field.sphere_y;
-zef.nse_field.h_sphere_z.Value = zef.nse_field.sphere_z;
+zef.nse_field.h_sphere_radius.Value = num2str(zef.nse_field.sphere_radius);
+zef.nse_field.h_sphere_x.Value = num2str(zef.nse_field.sphere_x);
+zef.nse_field.h_sphere_y.Value = num2str(zef.nse_field.sphere_y);
+zef.nse_field.h_sphere_z.Value = num2str(zef.nse_field.sphere_z);
 
 zef.nse_field.h_viscosity_smoothing.Value = zef.nse_field.viscosity_smoothing;
 
@@ -221,11 +225,11 @@ zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Ar
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
-zef.nse_field.h_solver_type.Items = {'Poisson & conductivity','Dynamic Stokes','Dynamic Navier-Stokes'};
+zef.nse_field.h_solver_type.Items = {'Poisson','Poisson & conductivity','Dynamic Stokes','Dynamic Stokes & conductivity', 'Dynamic Navier-Stokes','Dynamic Navier-Stokes & conductivity'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 
-zef.nse_field.h_time_integration.Items = {'Euler','Trapezoid'};
+zef.nse_field.h_time_integration.Items = {'Euler','Trapezoid','Runge-Kutta'};
 zef.nse_field.h_time_integration.ItemsData = [1 : length(zef.nse_field.h_time_integration.Items)];
 zef.nse_field.h_time_integration.Value = zef.nse_field.time_integration;
 

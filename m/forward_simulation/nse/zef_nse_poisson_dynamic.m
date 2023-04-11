@@ -10,22 +10,37 @@ if nse_field.time_integration == 1
     n_q_steps = 1; 
 elseif nse_field.time_integration == 2
     n_q_steps = 2;
+    elseif nse_field.time_integration == 3
+    n_q_steps = 4;
 end
 
 n_frames = nse_field.n_frames;
 time_vec = [0:nse_field.time_step_length:nse_field.time_length]';
-time_frame_ind = [1:ceil(length(time_vec)/n_frames):length(time_vec)];
+n_time = length(time_vec);
+start_ind = find(time_vec>nse_field.start_time,1,'first');
+time_frame_ind = [start_ind:ceil((n_time-start_ind)/n_frames):n_time];
 nse_field.inv_time_1 = time_vec(time_frame_ind(1));
 nse_field.inv_time_3 = time_vec(time_frame_ind(2)) - time_vec(time_frame_ind(1));
 y = zef_nse_signal_pulse(time_vec,nse_field);
 source_radius = nse_field.sphere_radius;
 c_ind_1_domain = find(ismember(domain_labels,nse_field.artery_domain_ind));
+if nse_field.microcirculation_model
+c_ind_2_domain = find(ismember(domain_labels,nse_field.capillary_domain_ind));
+end
+pressure_reference = nse_field.pressure;
 
-delta_t = nse_field.time_step_length;
+delta_t = nse_field.time_step_length/2;
 
 hgmm_conversion = 101325/760;
 mm_conversion = 0.001;
 mvd_length = 1E6.*mvd_length(:,1);
+ml_min_conversion = 1e-6/60;
+capillary_fraction = nse_field.capillary_arteriole_total_area_ratio;
+arteriole_fraction = (1-nse_field.capillary_arteriole_total_area_ratio)/2;
+venule_fraction = (1-nse_field.capillary_arteriole_total_area_ratio)/2;
+arteriole_scale = 1./( arteriole_fraction*nse_field.arteriole_diameter.^2./(arteriole_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.arteriole_diameter.^2./(arteriole_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.arteriole_diameter.^2./(arteriole_fraction.*nse_field.venule_diameter.^2));
+capillary_scale = 1./( arteriole_fraction*nse_field.capillary_diameter.^2./(capillary_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.capillary_diameter.^2./(capillary_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.capillary_diameter.^2./(capillary_fraction.*nse_field.venule_diameter.^2));
+venule_scale = 1./( arteriole_fraction*nse_field.venule_diameter.^2./(venule_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.venule_diameter.^2./(venule_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.venule_diameter.^2./(venule_fraction.*nse_field.venule_diameter.^2));
 
 [v_1_nodes, v_1_tetra, nse_field.bp_vessel_node_ind] = zef_get_submesh(nodes, tetra, c_ind_1_domain);
 v_1_nodes = mm_conversion*v_1_nodes;
@@ -39,7 +54,11 @@ b_node_ind = unique(b_node_ind);
 i_node_ind = [1:n_nodes]';
 i_node_ind = setdiff(i_node_ind,b_node_ind);
 
-source_node_ind = find(sqrt(sum((v_1_nodes(b_node_ind,:) - mm_conversion*ones(length(b_node_ind),1)*[nse_field.sphere_x nse_field.sphere_y nse_field.sphere_z]).^2,2)) <= mm_conversion*source_radius);
+source_node_ind = [];
+for i  = 1 : length(nse_field.sphere_radius)
+source_node_ind_aux = find(sqrt(sum((v_1_nodes(b_node_ind,:) - mm_conversion*ones(length(b_node_ind),1)*[nse_field.sphere_x(i) nse_field.sphere_y(i) nse_field.sphere_z(i)]).^2,2)) <= mm_conversion*source_radius(i));
+source_node_ind = [source_node_ind ; source_node_ind_aux];
+end
 source_vec = zeros(size(v_1_nodes,1),1);
 source_vec(b_node_ind(source_node_ind)) = 1;
 
@@ -77,6 +96,8 @@ zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 2, 2, ones(size(v_1_tetra,1),1
 zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 3, 3, ones(size(v_1_tetra,1),1));
 M_1 = zef_surface_scalar_matrix_FF(v_1_nodes, v_1_tetra, param_aux.^2./(nse_field.time_step_length.^2.*nu_0.^2.*param_aux_integral_mean.^2));
 D_1 = spdiags(sqrt(mu_vec),0,size(M_1,1),size(M_1,2));
+w_1 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, ones(size(v_1_tetra,1),1));
+w_1 = w_1(i_node_ind);
 
 zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
 
@@ -90,17 +111,13 @@ Q_1_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_1;
 Q_2_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_2;
 Q_3_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_3;
 
+Q_1_v2 = Q_1_v1(:,i_node_ind);
+Q_2_v2 = Q_2_v1(:,i_node_ind);
+Q_3_v2 = Q_3_v1(:,i_node_ind);
+
 Q_1_v1 = Q_1_v1(i_node_ind,i_node_ind);
 Q_2_v1 = Q_2_v1(i_node_ind,i_node_ind);
 Q_3_v1 = Q_3_v1(i_node_ind,i_node_ind);
-
-Q_1_v2 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_1;
-Q_2_v2 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_2;
-Q_3_v2 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_3;
-
-Q_1_v2 = Q_1_v2(:,i_node_ind);
-Q_2_v2 = Q_2_v2(:,i_node_ind);
-Q_3_v2 = Q_3_v2(:,i_node_ind);
 
 Q_1 = Q_1(i_node_ind,:);
 Q_2 = Q_2(i_node_ind,:);
@@ -111,16 +128,20 @@ I_u = I_mu(i_node_ind,i_node_ind);
 S_mu = I_mu + nse_field.viscosity_smoothing.^2*K_1;
 S_u = I_u + nse_field.velocity_smoothing.^2*K_1(i_node_ind,i_node_ind);
 
+F = zef_surface_scalar_matrix_FGn(v_1_nodes,v_1_tetra,1,1,ones(size(v_1_tetra,1),1));
+F = F + zef_surface_scalar_matrix_FGn(v_1_nodes,v_1_tetra,2,2,ones(size(v_1_tetra,1),1));
+F = F + zef_surface_scalar_matrix_FGn(v_1_nodes,v_1_tetra,3,3,ones(size(v_1_tetra,1),1));
+F = F(i_node_ind, i_node_ind);
+
 C = zef_volume_scalar_matrix_FF(v_1_nodes, v_1_tetra, nse_field.rho*ones(size(v_1_tetra,1),1));
 C = C(i_node_ind,i_node_ind);
 
-L_11 = zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,1,1,ones(size(v_1_tetra,1),1));
-L_22 = zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,2,2,ones(size(v_1_tetra,1),1));
-L_33 = zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,3,3,ones(size(v_1_tetra,1),1));
-L_11 = L_11(i_node_ind, i_node_ind);
-L_22 = L_22(i_node_ind, i_node_ind);
-L_33 = L_33(i_node_ind, i_node_ind);
-L = L_11 + L_22 + L_33; 
+L = zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,1,1,ones(size(v_1_tetra,1),1));
+L = L + zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,2,2,ones(size(v_1_tetra,1),1));
+L = L + zef_volume_scalar_matrix_GG(v_1_nodes,v_1_tetra,3,3,ones(size(v_1_tetra,1),1));
+L = L(i_node_ind, i_node_ind);
+
+c_vec = c_vec(i_node_ind);
 
 p = zeros(size(K_1,1),1);
 
@@ -129,14 +150,41 @@ nse_field.bv_vessels_1 = cell(0);
 nse_field.bv_vessels_2 = cell(0);
 nse_field.bv_vessels_3 = cell(0);
 nse_field.mu_vessels = cell(0);
+nse_field.bf_capillaries = cell(0);
+
+if nse_field.microcirculation_model
+     
+beta = 8*pi*nse_field.mu*ml_min_conversion*nse_field.total_flow/((pi*(nse_field.arteriole_diameter/2)).^2*nse_field.pressure*hgmm_conversion*area_arteries*param_aux_integral_mean);
+arteriole_length = nse_field.pressure_decay_in_arterioles*pi*(nse_field.arteriole_diameter/2).^2*arteriole_scale/beta;
+
+[v_2_nodes, v_2_tetra, nse_field.bf_capillary_node_ind] = zef_get_submesh(nodes, tetra, c_ind_2_domain);
+v_2_nodes = mm_conversion*v_2_nodes;
+[~, det] = zef_volume_barycentric(v_2_nodes,v_2_tetra);
+volume = abs(det)/6;
+volume_sum = sum(volume(:));
+mvd_volume_mean = sum(mvd_length(c_ind_2_domain).*volume(:))./volume_sum;
+diffusion_coefficient = hgmm_conversion.*nse_field.pressure*((pi/4).*nse_field.arteriole_diameter.^2)/(8*pi*nse_field.mu);
+bp_vessels_aux = zeros(size(nodes,1),1);
+
+K_2 = zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 1, 1, mvd_length(c_ind_2_domain)) + ... 
+     zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 2, 2, mvd_length(c_ind_2_domain)) + ... 
+     zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 3, 3, mvd_length(c_ind_2_domain));
+w_2 = zef_surface_scalar_vector_F(v_2_nodes, v_2_tetra, ones(size(v_2_tetra,1),1));
+C_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, ones(size(v_2_tetra,1),1));
+M_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, mvd_length(c_ind_2_domain));
+K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + ((4*pi).^(1/3).*3.^(2/3).*diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*max(volume).^(1/3)))*M_2;
+K_2 = delta_t*K_2 + C_2; 
+
+end
 
 h_waitbar = zef_waitbar(0,'NSE solver: compute' );
 
-c_vec = c_vec(i_node_ind);
-
-u_1 = zeros(size(L,1),1);
-u_2 = zeros(size(L,1),1);
-u_3 = zeros(size(L,1),1);
+u_1 = zeros(length(i_node_ind),1);
+u_2 = zeros(length(i_node_ind),1);
+u_3 = zeros(length(i_node_ind),1);
+if nse_field.microcirculation_model
+mc_vec = zeros(size(v_2_nodes,1),1);
+end
 p_1 = p;
 p_2 = p;
 y_1 = 0;
@@ -149,6 +197,12 @@ if nse_field.use_gpu
     u_1 = gpuArray(u_1);
     u_2 = gpuArray(u_2);
     u_3 = gpuArray(u_3);
+    u_1 = gpuArray(u_1);
+    if nse_field.microcirculation_model
+    mc_vec = gpuArray(mc_vec);
+    bp_vessels_aux = gpuArray(bp_vessels_aux); 
+    K_2 = gpuArray(K_2);
+    end
     S_u = gpuArray(S_u);
     S_mu = gpuArray(S_mu);
     I_mu = gpuArray(I_mu); 
@@ -175,6 +229,7 @@ if nse_field.use_gpu
     i_node_ind = gpuArray(i_node_ind);
     mu_vec = gpuArray(mu_vec);
     delta_t = gpuArray(delta_t);
+    pressure_reference = gpuArray(pressure_reference);
      
 end
 
@@ -182,21 +237,33 @@ if nse_field.use_gpu
 DM_C = gpuArray(1./full(diag(C))); 
 DM_S_u = gpuArray(1./(full(diag(S_u))));
 DM_S_mu = gpuArray(1./(full(diag(S_mu))));
+if nse_field.microcirculation_model
+DM_K_2 = gpuArray(1./(full(diag(K_2))));
+end
 else
 DM_C = spdiags(diag(C), 0, size(C,1), size(C,1));
 DM_S_u = spdiags(diag(S_u), 0, size(S_u,1), size(S_u,1));
 DM_S_mu = spdiags(diag(S_mu), 0, size(S_mu,1), size(S_mu,1));
+DM_C_2 = spdiags(diag(C_2), 0, size(C_2,1), size(C_2,1));
+if nse_field.microcirculation_model
+DM_K_2 = spdiags(diag(K_2), 0, size(K_2,1), size(K_2,1));
+end
 end
 
 KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
 
-for i = 1 : length(time_vec)
-    
-zef_waitbar(i/length(time_vec),h_waitbar,['NSE solver: compute, velocity norm: ' sprintf('%0.3g',sqrt(sum(u_1.^2)+sum(u_2.^2)+sum(u_3.^2)))]);
+for i = 1 : n_time
 
+zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, velocity norm: ' sprintf('%0.3g',sqrt(sum(u_1.^2)+sum(u_2.^2)+sum(u_3.^2)))]);
+ 
 L_u_1 = L*u_1;
 L_u_2 = L*u_2;
 L_u_3 = L*u_3;
+F_u_1 = F*u_1; 
+F_u_2 = F*u_2;
+F_u_3 = F*u_3;
+
+y_0 = y(i);
 
 for quadrature_step_ind = 1 : n_q_steps
 
@@ -214,15 +281,20 @@ end
 
 end
 
+if quadrature_step_ind == 1
 if i == 1
-    b = D_1 * (M_1 * (D_1 * (p_1  + source_vec * (y(i) - 2*y_1))));
+    b = D_1 * (M_1 * (D_1 * (p_1  + source_vec * (y_0 - 2*y_1))));
 else
-    b = D_1 * (M_1 * (D_1 * (2*p_1 - p_2  + source_vec * (y(i) - 2*y_1 + y_2))));
+    b = D_1 * (M_1 * (D_1 * (2*p_1 - p_2  + source_vec * (y_0 - 2*y_1 + y_2))));
 end
 
-friction_vec =  L_u_1.*(Q_1_v1*mu_vec(i_node_ind))  + L_u_2.*(Q_2_v1*mu_vec(i_node_ind)) + L_u_3.*(Q_3_v1*mu_vec(i_node_ind));
+g_mu_1 = Q_1_v1*mu_vec(i_node_ind);
+g_mu_2 = Q_2_v1*mu_vec(i_node_ind);
+g_mu_3 = Q_3_v1*mu_vec(i_node_ind);
 
-b(i_node_ind) = b(i_node_ind) + friction_vec;
+b(i_node_ind) = b(i_node_ind) + (L_u_1 - F_u_1).*g_mu_1  + (L_u_2 - F_u_2).*g_mu_2 + (L_u_3 - F_u_3).*g_mu_3;
+
+end
 
 if nse_field.nse_type == 2
         
@@ -238,9 +310,9 @@ q_3_u_1 = Q_3_v1*u_1;
 q_3_u_2 = Q_3_v1*u_2;
 q_3_u_3 = Q_3_v1*u_3;
 
-Q_1_v1_1 = Q_1_v1*v_1; 
-Q_1_v1_2 = Q_1_v1*v_2;
-Q_1_v1_3 = Q_1_v1*v_3;
+q_1_v_1 = Q_1_v1*v_1; 
+q_1_v_2 = Q_1_v1*v_2;
+q_1_v_3 = Q_1_v1*v_3;
 
 q_2_v_1 = Q_2_v1*v_1;
 q_2_v_2 = Q_2_v1*v_2;
@@ -250,16 +322,20 @@ q_3_v_1 = Q_3_v1*v_1;
 q_3_v_2 = Q_3_v1*v_2;
 q_3_v_3 = Q_3_v1*v_3;
 
-tr_vec = Q_1_v1_1.*q_1_u_1 + q_2_v_1.*q_1_u_2 + q_3_v_1.*q_1_u_3 + ... 
-Q_1_v1_2.*q_2_u_1 + q_2_v_2.*q_2_u_2 + q_3_v_2.*q_2_u_3 + ...
-Q_1_v1_3.*q_3_u_1 + q_2_v_3.*q_3_u_2 + q_3_v_3.*q_3_u_3 ;
+tr_vec = q_1_v_1.*q_1_u_1 + q_2_v_1.*q_1_u_2 + q_3_v_1.*q_1_u_3 + ... 
+q_1_v_2.*q_2_u_1 + q_2_v_2.*q_2_u_2 + q_3_v_2.*q_2_u_3 + ...
+q_1_v_3.*q_3_u_1 + q_2_v_3.*q_3_u_2 + q_3_v_3.*q_3_u_3 ;
 
-%   norm(tr_vec)
+if quadrature_step_ind == 1
 
 b(i_node_ind) = b(i_node_ind) + nse_field.rho.*tr_vec.*c_vec;
 
 end
 
+end
+
+
+if quadrature_step_ind == 1
 if nse_field.use_gpu
 b = gpuArray(b);  
 DM_K = gpuArray(1./(full(diag(K_1)) + full(diag(D_1)).*full(diag(M_1)).*full(diag(D_1)))); 
@@ -271,13 +347,20 @@ end
 
 p_2 = p_1;
 p_1 = p; 
-
 y_2 = y_1;
-y_1 = y(i);
+y_1 = y_0;
 
-n_p_1 = - Q_1*p;
-n_p_2 = - Q_2*p;
-n_p_3 = - Q_3*p;
+end
+
+if quadrature_step_ind == 1
+n_p_1_0 = - Q_1*p;
+n_p_2_0 = - Q_2*p;
+n_p_3_0 = - Q_3*p;
+end
+
+n_p_1 = n_p_1_0;
+n_p_2 = n_p_2_0;
+n_p_3 = n_p_3_0;
 
 if nse_field.nse_type == 2
 
@@ -291,9 +374,9 @@ n_p_3 = n_p_3 - nse_field.rho.*u_gu_vec_3.*c_vec;
 
 end
 
-n_p_1 = n_p_1 - mu_vec(i_node_ind).*(L_u_1);
-n_p_2 = n_p_2 - mu_vec(i_node_ind).*(L_u_2);
-n_p_3 = n_p_3 - mu_vec(i_node_ind).*(L_u_3);
+n_p_1 = n_p_1 - mu_vec(i_node_ind).*L_u_1;
+n_p_2 = n_p_2 - mu_vec(i_node_ind).*L_u_2;
+n_p_3 = n_p_3 - mu_vec(i_node_ind).*L_u_3;
 
 if nse_field.use_gpu
 n_p_1 = gpuArray(n_p_1);
@@ -309,24 +392,83 @@ aux_vec_3 = pcg_iteration(C, n_p_3, nse_field.pcg_tol, nse_field.pcg_maxit, DM_C
 end
 
 if quadrature_step_ind == 1
-slope_field_stage_1_1 = aux_vec_1;
-slope_field_stage_1_2 = aux_vec_2;
-slope_field_stage_1_3 = aux_vec_3;
+if nse_field.microcirculation_model
+
+bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p + pressure_reference;
+bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
+total_flow_estimate= sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1);
+r = total_flow_estimate*bf_vessels_to_capillaries./sum(pressure_reference.*w_2);
+
+if nse_field.use_gpu
+mc_vec = pcg_iteration_gpu(K_2, C_2*mc_vec + delta_t*r, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
+else
+mc_vec = pcg_iteration(K_2, C_2*mc_vec + delta_t*r, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
+end
+
+end
+end
+
+if quadrature_step_ind == 1
+if ismember(nse_field.time_integration,[1])
+u_1 = u_1 + delta_t.*aux_vec_1; 
+u_2 = u_2 + delta_t.*aux_vec_2; 
+u_3 = u_3 + delta_t.*aux_vec_3; 
+elseif ismember(nse_field.time_integration,[2]) 
 u_stage_1_1 = u_1;
 u_stage_1_2 = u_2;
 u_stage_1_3 = u_3;
+slope_field_stage_1_1 = aux_vec_1;
+slope_field_stage_1_2 = aux_vec_2;
+slope_field_stage_1_3 = aux_vec_3;
 u_1 = u_1 + delta_t.*slope_field_stage_1_1; 
 u_2 = u_2 + delta_t.*slope_field_stage_1_2; 
 u_3 = u_3 + delta_t.*slope_field_stage_1_3; 
+elseif ismember(nse_field.time_integration,[3])
+u_stage_1_1 = u_1; 
+u_stage_1_2 = u_2; 
+u_stage_1_3 = u_3; 
+slope_field_stage_1_1 = aux_vec_1;
+slope_field_stage_1_2 = aux_vec_2;
+slope_field_stage_1_3 = aux_vec_3;
+u_1 = u_1 + 0.5*delta_t.*slope_field_stage_1_1; 
+u_2 = u_2 + 0.5*delta_t.*slope_field_stage_1_2; 
+u_3 = u_3 + 0.5*delta_t.*slope_field_stage_1_3; 
+end
 elseif quadrature_step_ind == 2
+if ismember(nse_field.time_integration,[2])
 slope_field_stage_2_1 = aux_vec_1;
 slope_field_stage_2_2 = aux_vec_2;
 slope_field_stage_2_3 = aux_vec_3;
-u_1 = u_stage_1_1 + delta_t.*0.5.*(slope_field_stage_1_1 + slope_field_stage_2_1);   
-u_2 = u_stage_1_2 + delta_t.*0.5.*(slope_field_stage_1_2 + slope_field_stage_2_2);   
-u_3 = u_stage_1_3 + delta_t.*0.5.*(slope_field_stage_1_3 + slope_field_stage_2_3);   
+u_1 = u_stage_1_1 + 0.5*delta_t.*(slope_field_stage_1_1 + slope_field_stage_2_1);   
+u_2 = u_stage_1_2 + 0.5*delta_t.*(slope_field_stage_1_2 + slope_field_stage_2_2);   
+u_3 = u_stage_1_3 + 0.5*delta_t.*(slope_field_stage_1_3 + slope_field_stage_2_3);
+elseif ismember(nse_field.time_integration,[3])
+slope_field_stage_2_1 = aux_vec_1;
+slope_field_stage_2_2 = aux_vec_2;
+slope_field_stage_2_3 = aux_vec_3;
+u_1 = u_stage_1_1 + 0.5*delta_t.*slope_field_stage_2_1; 
+u_2 = u_stage_1_2 + 0.5*delta_t.*slope_field_stage_2_2; 
+u_3 = u_stage_1_3 + 0.5*delta_t.*slope_field_stage_2_3; 
 end
-
+elseif quadrature_step_ind == 3
+if ismember(nse_field.time_integration,[3])
+slope_field_stage_3_1 = aux_vec_1;
+slope_field_stage_3_2 = aux_vec_2;
+slope_field_stage_3_3 = aux_vec_3;
+u_1 = u_stage_1_1 + delta_t.*slope_field_stage_3_1; 
+u_2 = u_stage_1_2 + delta_t.*slope_field_stage_3_2; 
+u_3 = u_stage_1_3 + delta_t.*slope_field_stage_3_3; 
+end
+elseif quadrature_step_ind == 4
+if ismember(nse_field.time_integration,[3])
+slope_field_stage_4_1 = aux_vec_1;
+slope_field_stage_4_2 = aux_vec_2;
+slope_field_stage_4_3 = aux_vec_3;
+u_1 = u_stage_1_1 + (1/6)*delta_t.*(slope_field_stage_1_1 + 2*slope_field_stage_2_1 + 2*slope_field_stage_3_1 + slope_field_stage_4_1); 
+u_2 = u_stage_1_2 + (1/6)*delta_t.*(slope_field_stage_1_2 + 2*slope_field_stage_2_2 + 2*slope_field_stage_3_2 + slope_field_stage_4_2); 
+u_3 = u_stage_1_3 + (1/6)*delta_t.*(slope_field_stage_1_3 + 2*slope_field_stage_2_3 + 2*slope_field_stage_3_3 + slope_field_stage_4_3); 
+end
+end
 end
 
 if nse_field.viscosity_model == 2
@@ -351,7 +493,6 @@ end
 D_1 = spdiags(sqrt(mu_vec),0,size(M_1,1),size(M_1,2));
 KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
 
-
 end
 
 if ismember(i,time_frame_ind)
@@ -368,6 +509,9 @@ nse_field.bv_vessels_2{i_aux}(i_node_ind) = gather(u_2);
 nse_field.bv_vessels_3{i_aux}(i_node_ind) = gather(u_3);
 nse_field.bp_vessels{i_aux} = gather(p/hgmm_conversion) + gather(p_hydrostatic/hgmm_conversion) + gather(nse_field.pressure);
 nse_field.mu_vessels{i_aux} = gather(mu_vec);
+if nse_field.microcirculation_model 
+nse_field.bf_capillaries{i_aux} = gather(mc_vec);
+end
 
 end
 end

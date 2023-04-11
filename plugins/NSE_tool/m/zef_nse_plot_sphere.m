@@ -9,13 +9,17 @@ end
 h_sphere = findobj(h_axes.Children,'Tag','nse_sphere');
 delete(h_sphere);
 
-[X,Y,Z]  = sphere(20);
-h_surf = surf(nse_field.sphere_radius*X + nse_field.sphere_x, nse_field.sphere_radius*Y + nse_field.sphere_y, nse_field.sphere_radius*Z + nse_field.sphere_z); 
+[X,Y,Z]  = sphere(100);
+
+for i = 1 : length(nse_field.sphere_radius)
+h_surf = surf(nse_field.sphere_radius(i)*X + nse_field.sphere_x(i), nse_field.sphere_radius(i)*Y + nse_field.sphere_y(i), nse_field.sphere_radius(i)*Z + nse_field.sphere_z(i)); 
 
 set(h_surf,'FaceColor',[0.5 0.5 0.5]);
 set(h_surf,'EdgeColor','none');
 set(h_surf,'FaceAlpha',0.5);
 set(h_surf,'Tag','nse_sphere');
+
+end
 
 if not(hold_val)
 hold(h_axes,'off');

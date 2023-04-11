@@ -22,6 +22,8 @@ zef.nse_field.capillary_diameter = zef.nse_field.h_capillary_diameter.Value;
 
 zef.nse_field.pressure = zef.nse_field.h_pressure.Value; 
 
+zef.nse_field.start_time = zef.nse_field.h_start_time.Value; 
+
 zef.nse_field.blood_conductivity = zef.nse_field.h_blood_conductivity.Value; 
 
 zef.nse_field.gravity_x = zef.nse_field.h_gravity_x.Value; 
@@ -66,10 +68,10 @@ zef.nse_field.p_wave_weight = zef.nse_field.h_p_wave_weight.Value;
 zef.nse_field.t_wave_weight = zef.nse_field.h_t_wave_weight.Value;
 zef.nse_field.d_wave_weight = zef.nse_field.h_d_wave_weight.Value;
 
-zef.nse_field.sphere_radius = zef.nse_field.h_sphere_radius.Value;
-zef.nse_field.sphere_x = zef.nse_field.h_sphere_x.Value;
-zef.nse_field.sphere_y = zef.nse_field.h_sphere_y.Value;
-zef.nse_field.sphere_z = zef.nse_field.h_sphere_z.Value;
+zef.nse_field.sphere_radius = str2num(zef.nse_field.h_sphere_radius.Value);
+zef.nse_field.sphere_x = str2num(zef.nse_field.h_sphere_x.Value);
+zef.nse_field.sphere_y = str2num(zef.nse_field.h_sphere_y.Value);
+zef.nse_field.sphere_z = str2num(zef.nse_field.h_sphere_z.Value);
 
 zef.nse_field.n_frames = zef.nse_field.h_n_frames.Value;
 
