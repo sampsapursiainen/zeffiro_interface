@@ -225,7 +225,7 @@ zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Ar
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
-zef.nse_field.h_solver_type.Items = {'Poisson','Poisson & conductivity','Dynamic Stokes','Dynamic Stokes & conductivity', 'Dynamic Navier-Stokes','Dynamic Navier-Stokes & conductivity'};
+zef.nse_field.h_solver_type.Items = {'Poisson','Poisson & microcirculation','Dynamic Stokes','Dynamic Stokes & microcirculation', 'Dynamic Navier-Stokes','Dynamic Navier-Stokes & microcirculation'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 
