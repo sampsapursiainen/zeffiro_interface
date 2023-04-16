@@ -296,8 +296,6 @@ v_3 = pcg_iteration(S_u,I_u*u_3,nse_field.pcg_tol,nse_field.pcg_maxit,DM_S_u);
 end
 
 end
-
-if or(quadrature_step_ind == 1, nse_field.nse_type == 2)
         
 q_1_u_1 = Q_1_v1*u_1; 
 q_1_u_2 = Q_1_v1*u_2;
@@ -311,8 +309,17 @@ q_3_u_1 = Q_3_v1*u_1;
 q_3_u_2 = Q_3_v1*u_2;
 q_3_u_3 = Q_3_v1*u_3;
 
+g_mu_1 = Q_1_v1*mu_vec(i_node_ind);
+g_mu_2 = Q_2_v1*mu_vec(i_node_ind);
+g_mu_3 = Q_3_v1*mu_vec(i_node_ind);
 
-end
+g_u_g_mu_1 = q_1_u_1.*g_mu_1 + q_2_u_1.*g_mu_2 + q_3_u_1.*g_mu_3; 
+g_u_g_mu_2 = q_1_u_2.*g_mu_1 + q_2_u_2.*g_mu_2 + q_3_u_2.*g_mu_3; 
+g_u_g_mu_3 = q_1_u_3.*g_mu_1 + q_2_u_3.*g_mu_2 + q_3_u_3.*g_mu_3;
+
+g_u_T_g_mu_1 = q_1_u_1.*g_mu_1 + q_1_u_2.*g_mu_2 + q_1_u_3.*g_mu_3; 
+g_u_T_g_mu_2 = q_2_u_1.*g_mu_1 + q_2_u_2.*g_mu_2 + q_2_u_3.*g_mu_3; 
+g_u_T_g_mu_3 = q_3_u_1.*g_mu_1 + q_3_u_2.*g_mu_2 + q_3_u_3.*g_mu_3;
 
 if quadrature_step_ind == 1
 if i == 1
@@ -321,15 +328,7 @@ else
     b = D_1 * (M_1 * (D_1 * (2*p_1 - p_2  + source_vec * (y_0 - 2*y_1 + y_2))));
 end
 
-g_mu_1 = Q_1_v1*mu_vec(i_node_ind);
-g_mu_2 = Q_2_v1*mu_vec(i_node_ind);
-g_mu_3 = Q_3_v1*mu_vec(i_node_ind);
-
-aux_vec_1 = q_1_u_1.*g_mu_1 + q_1_u_2.*g_mu_2 + q_1_u_3.*g_mu_3; 
-aux_vec_2 = q_2_u_1.*g_mu_1 + q_2_u_2.*g_mu_2 + q_2_u_3.*g_mu_3; 
-aux_vec_3 = q_3_u_1.*g_mu_1 + q_3_u_2.*g_mu_2 + q_3_u_3.*g_mu_3;
-
-friction_vec = 2*Q_1'*aux_vec_1 + 2*Q_2'*aux_vec_2 + 2*Q_3'*aux_vec_3;
+friction_vec = 2*Q_1'*g_u_T_g_mu_1 + 2*Q_2'*g_u_T_g_mu_2 + 2*Q_3'*g_u_T_g_mu_3;
 
 b(i_node_ind) = b(i_node_ind) + friction_vec(i_node_ind);
 
@@ -392,9 +391,9 @@ end
 %n_p_3 = n_p_3 - mu_vec(i_node_ind).*(L_13*u_1 + L_23*u_2 + L_11*u_3 + L_22*u_3 + 2*L_33*u_3);
 
 sqrt_mu = sqrt(mu_vec(i_node_ind));
-n_p_1 = n_p_1 - sqrt_mu.*(L*(sqrt_mu.*u_1));
-n_p_2 = n_p_2 - sqrt_mu.*(L*(sqrt_mu.*u_2));
-n_p_3 = n_p_3 - sqrt_mu.*(L*(sqrt_mu.*u_3));
+n_p_1 = n_p_1 - sqrt_mu.*(L*(sqrt_mu.*u_1)) + g_u_g_mu_1.*c_vec + g_u_T_g_mu_1.*c_vec;
+n_p_2 = n_p_2 - sqrt_mu.*(L*(sqrt_mu.*u_2)) + g_u_g_mu_2.*c_vec + g_u_T_g_mu_2.*c_vec;
+n_p_3 = n_p_3 - sqrt_mu.*(L*(sqrt_mu.*u_3)) + g_u_g_mu_3.*c_vec + g_u_T_g_mu_3.*c_vec;
 
 if nse_field.use_gpu
 n_p_1 = gpuArray(n_p_1);
