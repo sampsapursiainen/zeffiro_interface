@@ -41,11 +41,30 @@ is to be used when positioning the sources. Options include
 how the columns of a lead field \ccode{zef.L} are interpreted. The options are
 \ccode{1} (Cartesian), \ccode{2} (normal) and \ccode{3} (face-based).}
 
-\zeffield{preconditioner}{1,:}{char}{mustBeMember([TODO])}{TODO.}
+\zeffield{lead\_field\_type}{1,1}{uint32}{mustBeMember([1,2,3,4,5])}{Determines which
+type of lead field is to be constructed. The options are \ccode{1} (EEG),
+\ccode{2} (MMEG), \ccode{3} (GMEG), \ccode{4} (EIT) and \ccode{5} (tES).}
 
-\zeffield{preconditioner\_tolerance}{1,1}{double}{mustBePositive}{TODO.}
+\zeffield{location\_unit}{1,1}{uint32}{mustBeMember([1,2,3])}{Determines the
+units of \code{zef.source\_positions}, before conversion to millimeters at the
+end of the lead field routine: \ccode{1} (m), \ccode{2} (cm) and \ccode{3}
+(mm). Effectively translates to the conversion coefficient, as
+source positions are converted to mm, before performing interpolation.}
 
-\zeffield{solver\_tolerance}{1,1}{double}{mustBePositive}{TODO.}
+\zeffield{location\_unit\_current}{1,1}{uint32}{mustBeMember([1,2,3])}{Works
+together with \code{zef.location\_unit} during source interpolation, in
+determining the coefficient of unit conversion of
+\code{zef.source\_positions}.}
+
+\zeffield{preconditioner}{1,:}{uint32}{mustBeMember([1,2])}{Sets the type of
+preconditioner used during the preconditioned conjugate gradient optimization
+routine: \ccode 1 (Cholinc) and \ccode 2 (SSOR).}
+
+\zeffield{preconditioner\_tolerance}{1,1}{double}{mustBePositive}{Sets an
+acceptable accuracy for the preconditioner.}
+
+\zeffield{solver\_tolerance}{1,1}{double}{mustBePositive}{Sets an accuracy for
+the PCG transfer matrix solver itself.}
 
 \zeffield{n\_sources}{1,1}{uint32}{mustBePositive}{The number of sources whose
 even placement is attempted into the the currently existing mesh. If the
