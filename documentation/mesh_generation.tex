@@ -70,6 +70,10 @@ these fields.
 	unrefined tetrahedron in the finite element mesh.
 }
 
+
+\zeffield{mesh\_smoothing\_on}{1,1}{logical}{}{A switch for determining
+whether mesh smoothing will be attempted during mesh generation.}
+
 \zeffield{mesh\_smoothing\_repetitions}{1,1}{uint32}{}{TODO.}
 
 \zeffield{mesh\_optimization\_repetitions}{1,1}{uint32}{}{TODO.}
@@ -77,3 +81,7 @@ these fields.
 \zeffield{mesh\_optimization\_parameter}{1,1}{?}{}{TODO.}
 
 \zeffield{mesh\_labeling\_approach}{1,1}{?}{}{TODO.}
+
+\zeffield{refinement\_surface\_compartments}{1,:}{uint32}{}{Has something to
+do with which compartment surfaces will be refined during mesh refinement.
+What exactly, though, Santtu has no idea. TODO.}
