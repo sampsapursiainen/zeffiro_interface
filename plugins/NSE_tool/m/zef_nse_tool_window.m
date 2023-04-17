@@ -36,6 +36,8 @@ zef.nse_field.h_start_time.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_velocity_smoothing = zef_data.h_velocity_smoothing;
 zef.nse_field.h_velocity_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_concentration_smoothing = zef_data.h_concentration_smoothing;
+zef.nse_field.h_concentration_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_n_frames = zef_data.h_n_frames;
 zef.nse_field.h_n_frames.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -181,6 +183,8 @@ zef.nse_field.h_sphere_y.Value = num2str(zef.nse_field.sphere_y);
 zef.nse_field.h_sphere_z.Value = num2str(zef.nse_field.sphere_z);
 
 zef.nse_field.h_viscosity_smoothing.Value = zef.nse_field.viscosity_smoothing;
+
+zef.nse_field.h_concentration_smoothing.Value = zef.nse_field.concentration_smoothing;
 
 zef.nse_field.h_gravity_amplitude.Value = zef.nse_field.gravity_amplitude;
 zef.nse_field.h_time_length.Value = zef.nse_field.time_length;

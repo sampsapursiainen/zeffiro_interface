@@ -14,6 +14,8 @@ zef.nse_field.pressure_decay_in_arterioles = zef.nse_field.h_pressure_decay_in_a
 
 zef.nse_field.velocity_smoothing = zef.nse_field.h_velocity_smoothing.Value;
 
+zef.nse_field.concentration_smoothing = zef.nse_field.h_concentration_smoothing.Value;
+
 zef.nse_field.viscosity_smoothing = zef.nse_field.h_viscosity_smoothing.Value;
 
 zef.nse_field.time_integration = zef.nse_field.h_time_integration.Value;
