@@ -77,3 +77,10 @@ be as high as requested.}
 used, this will be a \code{(:,3)} array of electrode positions, whereas if
 complete eletrode model is used, this should be a \code{(:,6)} array of 3D
 positions, inner and outer radii and finally impedances.}
+
+\zeffield{lead\_field\_filter\_quantile}{1,1}{double}{mustBeInRange(0,1)}{A
+quantile above which the \(2\)-norm of a column of \ccode{zef.L} is considered
+to be too high to be maintained in the solution. Is used by
+\ccode{zef\_lead\_field\_filter} to determine which columns are to be removed.
+A value of \ccode{0} means that all columns are removed, whereas a value of
+\ccode{1} means that no columns are removed.}
