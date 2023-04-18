@@ -239,12 +239,6 @@ if nse_field.use_gpu
     Q_3_v2 = gpuArray(Q_3_v2);
     L = gpuArray(L);
     C = gpuArray(C);
-    %L_11 = gpuArray(L_11);
-    %L_22 = gpuArray(L_22);
-    %L_33 = gpuArray(L_33);
-    %L_12 = gpuArray(L_12);
-    %L_13 = gpuArray(L_13);
-    %L_23 = gpuArray(L_23);
     y = gpuArray(y);
     c_vec = gpuArray(c_vec);
     source_vec = gpuArray(source_vec);
@@ -278,7 +272,9 @@ KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
 
 for i = 1 : n_time
 
-zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(3*ml_min_conversion)) ', maximum pressure (Hgmm): ' sprintf('%0.3g',max(p + pressure_reference + p_hydrostatic)/hgmm_conversion)]);
+pressure_aux = (p + pressure_reference + p_hydrostatic)/hgmm_conversion;
+total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(3*ml_min_conversion);
+zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', maximum pressure (Hgmm): ' sprintf('%0.3g',max(pressure_aux)) ', minimum pressure (Hgmm): ' sprintf('%0.3g',min(pressure_aux))]);
  
 y_0 = y(i);
 
@@ -323,10 +319,6 @@ end
 g_mu_1 = Q_1_v1*mu_vec(i_node_ind);
 g_mu_2 = Q_2_v1*mu_vec(i_node_ind);
 g_mu_3 = Q_3_v1*mu_vec(i_node_ind);
-
-% g_u_g_mu_1 = q_1_u_1.*g_mu_1 + q_2_u_1.*g_mu_2 + q_3_u_1.*g_mu_3; 
-% g_u_g_mu_2 = q_1_u_2.*g_mu_1 + q_2_u_2.*g_mu_2 + q_3_u_2.*g_mu_3; 
-% g_u_g_mu_3 = q_1_u_3.*g_mu_1 + q_2_u_3.*g_mu_2 + q_3_u_3.*g_mu_3;
 
 g_u_T_g_mu_1 = q_1_u_1.*g_mu_1 + q_1_u_2.*g_mu_2 + q_1_u_3.*g_mu_3; 
 g_u_T_g_mu_2 = q_2_u_1.*g_mu_1 + q_2_u_2.*g_mu_2 + q_2_u_3.*g_mu_3; 
@@ -389,14 +381,10 @@ n_p_3 = n_p_3 - nse_field.rho.*(u_gu_vec_3.*c_vec);
 
 end
 
-%n_p_1 = n_p_1 - mu_vec(i_node_ind).*(2*L_11*u_1 + L_22*u_1 + L_33*u_1 + L_12*u_2 + L_13*u_3);
-%n_p_2 = n_p_2 - mu_vec(i_node_ind).*(L_12*u_1 + L_11*u_2 + 2*L_22*u_2 + L_33*u_2 + L_23*u_3);
-%n_p_3 = n_p_3 - mu_vec(i_node_ind).*(L_13*u_1 + L_23*u_2 + L_11*u_3 + L_22*u_3 + 2*L_33*u_3);
-
 sqrt_mu = sqrt(mu_vec(i_node_ind));
-n_p_1 = n_p_1 - sqrt_mu.*(L*(sqrt_mu.*u_1));% + g_u_g_mu_1.*c_vec + g_u_T_g_mu_1.*c_vec;
-n_p_2 = n_p_2 - sqrt_mu.*(L*(sqrt_mu.*u_2));% + g_u_g_mu_2.*c_vec + g_u_T_g_mu_2.*c_vec;
-n_p_3 = n_p_3 - sqrt_mu.*(L*(sqrt_mu.*u_3));% + g_u_g_mu_3.*c_vec + g_u_T_g_mu_3.*c_vec;
+n_p_1 = n_p_1 - sqrt_mu.*(L*(sqrt_mu.*u_1));
+n_p_2 = n_p_2 - sqrt_mu.*(L*(sqrt_mu.*u_2));
+n_p_3 = n_p_3 - sqrt_mu.*(L*(sqrt_mu.*u_3));
 
 if nse_field.use_gpu
 n_p_1 = gpuArray(n_p_1);
