@@ -1,0 +1,3 @@
+This is the startup script for GMMclustering app. One must add this as launch
+script to zeffiro_plugins file:
+GMMclustering, inverse_tools, GMMclustering_start

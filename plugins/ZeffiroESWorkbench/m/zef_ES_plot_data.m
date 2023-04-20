@@ -7,7 +7,7 @@ end
 
 switch zef.ES_plot_type
     case 1
-        zef_ES_plot_current_pattern;
+        [zef.h_current_ES, zef.h_current_coords] = zef_ES_plot_current_pattern;
     case 2
         zef_ES_plot_barplot(zef);
     case 3
