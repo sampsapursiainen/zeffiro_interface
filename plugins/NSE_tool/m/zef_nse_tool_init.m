@@ -126,7 +126,6 @@ if not(isfield(zef.nse_field,'d_wave_weight'))
 zef.nse_field.d_wave_weight = 0.05;
 end
 
-
 if not(isfield(zef.nse_field,'arteriole_diameter'))
 zef.nse_field.arteriole_diameter = 1e-5;
 end
