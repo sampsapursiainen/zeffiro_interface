@@ -130,6 +130,14 @@ if not(isfield(zef.nse_field,'arteriole_diameter'))
 zef.nse_field.arteriole_diameter = 1e-5;
 end
 
+if not(isfield(zef.nse_field,'artery_domain_ind'))
+zef.nse_field.artery_domain_ind = [];
+end
+
+if not(isfield(zef.nse_field,'capillary_domain_ind'))
+zef.nse_field.capillary_domain_ind = [];
+end
+
 if not(isfield(zef.nse_field,'capillary_diameter'))
 zef.nse_field.capillary_diameter = 7e-6;
 end
