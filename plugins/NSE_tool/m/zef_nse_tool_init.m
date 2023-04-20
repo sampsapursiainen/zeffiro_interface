@@ -131,11 +131,11 @@ zef.nse_field.arteriole_diameter = 1e-5;
 end
 
 if not(isfield(zef.nse_field,'artery_domain_ind'))
-zef.nse_field.artery_domain_ind = [];
+zef.nse_field.artery_domain_ind = cell(0);
 end
 
 if not(isfield(zef.nse_field,'capillary_domain_ind'))
-zef.nse_field.capillary_domain_ind = [];
+zef.nse_field.capillary_domain_ind = cell(0);
 end
 
 if not(isfield(zef.nse_field,'capillary_diameter'))
