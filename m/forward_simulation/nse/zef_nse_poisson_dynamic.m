@@ -274,7 +274,7 @@ for i = 1 : n_time
 
 pressure_aux = (p + pressure_reference + p_hydrostatic)/hgmm_conversion;
 total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(3*ml_min_conversion);
-zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', maximum pressure (Hgmm): ' sprintf('%0.3g',max(pressure_aux)) '.']);
+zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', 90 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.9)) ', 10 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.1)) '.']);
  
 y_0 = y(i);
 
