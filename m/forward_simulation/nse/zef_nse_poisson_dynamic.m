@@ -273,7 +273,7 @@ KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
 for i = 1 : n_time
 
 pressure_aux = (p + pressure_reference + p_hydrostatic)/hgmm_conversion;
-total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(3*ml_min_conversion);
+total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(ml_min_conversion);
 zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', 90 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.9)) ', 10 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.1)) '.']);
  
 y_0 = y(i);
@@ -405,7 +405,7 @@ if nse_field.microcirculation_model
 bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p + pressure_reference;
 bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
 I_boundary = find(bf_vessels_to_capillaries);
-total_flow_estimate= sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/3;
+total_flow_estimate= sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1);
 r = total_flow_estimate*bf_vessels_to_capillaries./sum(pressure_reference.*w_2(I_boundary));
 
 if nse_field.use_gpu
