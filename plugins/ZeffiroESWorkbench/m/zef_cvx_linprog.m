@@ -23,8 +23,8 @@ end
 flag_val = -2;
 n = size(A,2);
 
-if isfield(opts,'Solver')
-    solver_package = opts.Solver;
+if isfield(opts,'solver')
+    solver_package = opts.solver;
 end
 
 try

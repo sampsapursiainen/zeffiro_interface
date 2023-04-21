@@ -1,13 +1,13 @@
 zef.h_ES_parameter_table.Data = cell(0);
 
-if ismember(zef.ES_search_type, 1)
+if ismember(zef.ES_opt_solver, 1)
 
-    zef.h_ES_search_method.Items = zef.ES_search_method_list([1 3 4]);
-    zef.h_ES_search_method.ItemsData = [1 3 4];
-    zef.h_ES_algorithm.Items = zef.ES_algorithm_list([2 3]);
-    zef.h_ES_algorithm.ItemsData = [2 3];
+    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 3 4]);
+    zef.h_ES_opt_method.ItemsData    = [1 3 4];
+    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([2 3]);
+    zef.h_ES_opt_algorithm.ItemsData = [2 3];
 
-    if not(isequal(zef.ES_search_method,4))
+    if not(isequal(zef.ES_opt_method, 4))
         zef = assign_common_parameters(zef);
         zef.h_ES_parameter_table.Data{18,1} = 'Step tolerance';
         zef.h_ES_parameter_table.Data{18,2} = num2str(zef.ES_step_tolerance);
@@ -31,39 +31,39 @@ if ismember(zef.ES_search_type, 1)
 
 end
 
-if ismember(zef.ES_search_type, 2)
-    zef.h_ES_search_method.Items = zef.ES_search_method_list([1 2]);
-    zef.h_ES_search_method.ItemsData = [1 2];
-    zef.h_ES_algorithm.Items = zef.ES_algorithm_list(1);
-    zef.h_ES_algorithm.ItemsData = 1;
+if ismember(zef.ES_opt_solver, 2)
+    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 2]);
+    zef.h_ES_opt_method.ItemsData    = [1 2];
+    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list(1);
+    zef.h_ES_opt_algorithm.ItemsData = 1;
 
     zef = assign_common_parameters(zef);
 end
 
-if ismember(zef.ES_search_type, 3)
-    zef.h_ES_search_method.Items =zef.ES_search_method_list([1 2]);
-    zef.h_ES_search_method.ItemsData = [1 2];
-    zef.h_ES_algorithm.Items = zef.ES_algorithm_list(1);
-    zef.h_ES_algorithm.ItemsData = 1;
+if ismember(zef.ES_opt_solver, 3)
+    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 2]);
+    zef.h_ES_opt_method.ItemsData    = [1 2];
+    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list(1);
+    zef.h_ES_opt_algorithm.ItemsData = 1;
 
     zef = assign_common_parameters(zef);
 end
 
-if ismember(zef.ES_search_type, 4)
-    zef.h_ES_search_method.Items = zef.ES_search_method_list(1);
-    zef.h_ES_search_method.ItemsData = 1;
-    zef.h_ES_algorithm.Items = zef.ES_algorithm_list([1 3 4]);
-    zef.h_ES_algorithm.ItemsData = [1 3 4];
+if ismember(zef.ES_opt_solver, 4)
+    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list(1);
+    zef.h_ES_opt_method.ItemsData    = 1;
+    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([1 3 4]);
+    zef.h_ES_opt_algorithm.ItemsData = [1 3 4];
 
     zef = assign_common_parameters(zef);
 end
 
-if ismember(zef.ES_search_type, 5)
+if ismember(zef.ES_opt_solver, 5)
 
-    zef.h_ES_search_method.Items = zef.ES_search_method_list(1);
-    zef.h_ES_search_method.ItemsData = 1;
-    zef.h_ES_algorithm.Items = zef.ES_algorithm_list([1 3 4]);
-    zef.h_ES_algorithm.ItemsData = [1 3 4];
+    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list(1);
+    zef.h_ES_opt_method.ItemsData    = 1;
+    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([1 3 4]);
+    zef.h_ES_opt_algorithm.ItemsData = [1 3 4];
 
     zef = assign_common_parameters(zef);
 end
@@ -73,9 +73,9 @@ zef.h_ES_parameter_table.Data{1,1} = 'Alpha minimum (dB)';
 zef.h_ES_parameter_table.Data{1,2} = num2str(db(zef.ES_alpha));
 zef.h_ES_parameter_table.Data{2,1} = 'Alpha maximum (dB)';
 zef.h_ES_parameter_table.Data{2,2} = num2str(db(zef.ES_alpha_max));
-zef.h_ES_parameter_table.Data{3,1}  = 'Nuisance field weight minimum (dB)';
-zef.h_ES_parameter_table.Data{3,2}  = num2str(db(zef.ES_beta_min));
-zef.h_ES_parameter_table.Data{4,1}  = 'Nuisance field weight maximum (dB)';
+zef.h_ES_parameter_table.Data{3,1} = 'Nuisance field weight minimum (dB)';
+zef.h_ES_parameter_table.Data{3,2} = num2str(db(zef.ES_beta_min));
+zef.h_ES_parameter_table.Data{4,1} = 'Nuisance field weight maximum (dB)';
 zef.h_ES_parameter_table.Data{4,2}  = num2str(db(zef.ES_beta));
 zef.h_ES_parameter_table.Data{5,1} = 'Total current in montage';
 zef.h_ES_parameter_table.Data{5,2} = num2str(zef.ES_total_max_current);
@@ -100,7 +100,7 @@ zef.h_ES_parameter_table.Data{14,2} = num2str(zef.ES_solver_tolerance);
 zef.h_ES_parameter_table.Data{15,1} = 'Display';
 zef.h_ES_parameter_table.Data{15,2} = num2str(zef.ES_display);
 
-if ismember(zef.ES_search_type, [1 4 5])
+if ismember(zef.ES_opt_solver, [1 4 5])
     zef.h_ES_parameter_table.Data{16,1} = 'Maximum number of iterations';
     zef.h_ES_parameter_table.Data{16,2} = num2str(zef.ES_max_n_iterations);
     zef.h_ES_parameter_table.Data{17,1} = 'Maximum time (s)';

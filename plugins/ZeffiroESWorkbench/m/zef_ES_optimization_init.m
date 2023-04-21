@@ -1,6 +1,7 @@
-zef.ES_search_method_list = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
-zef.ES_search_type_list = {'Matlab','SDPT3','SeDuMi','MOSEK','Gurobi'};
-zef.ES_algorithm_list = {'interior-point','interior-point-legacy','dual-simplex','primal-simplex'};
+zef.ES_opt_solver_list        = {'Matlab','SDPT3','SeDuMi','MOSEK','Gurobi'};
+zef.ES_opt_method_list        = {'L1L1 optimization','L1L2 optimization','Least squares optimization','Backpropagation','L2L2 optimization'};
+zef.ES_opt_algorithm_list     = {'interior-point','interior-point-legacy','dual-simplex','primal-simplex'};
+zef.ES_HPO_search_method_list = {'grid-search','recursive-search'};
 
 if not(isfield(zef,'ES_absolute_tolerance'))
     zef.ES_absolute_tolerance = 1E-03;
@@ -8,11 +9,8 @@ end
 if not(isfield(zef,'ES_relative_tolerance'))
     zef.ES_relative_tolerance = 1E-03;
 end
-if not(isfield(zef,'ES_simplex'))
-    zef.ES_simplex = 'none';
-end
-if not(isfield(zef,'ES_algorithm'))
-    zef.ES_algorithm = 'interior-point';
+if not(isfield(zef,'ES_opt_algorithm'))
+    zef.ES_opt_algorithm = 'interior-point';
 end
 if not(isfield(zef,'ES_threshold_condition'))
     zef.ES_threshold_condition = 1;
@@ -26,11 +24,11 @@ end
 if not(isfield(zef,'gurobi_path'))
     zef.gurobi_path = '';
 end
-if not(isfield(zef,'ES_separation_angle'))
-    zef.ES_separation_angle = 45;
-end
-if not(isfield(zef,'ES_effective_nnz'))
+if not(isfield(zef,'ES_effective_nnz')) %???
     zef.ES_effective_nnz = 20;
+end
+if not(isfield(zef,'ES_score_dose')) %% number of electrodes???
+    zef.ES_score_dose = 20;
 end
 if not(isfield(zef,'ES_obj_fun'))
     zef.ES_obj_fun = 2;
@@ -65,11 +63,11 @@ end
 if not(isfield(zef,'ES_plot_type'))
     zef.ES_plot_type = 1;
 end
-if not(isfield(zef,'ES_search_type'))
-    zef.ES_search_type = 2;
+if not(isfield(zef,'ES_opt_solver'))
+    zef.ES_opt_solver = 2;
 end
-if not(isfield(zef,'ES_search_method'))
-    zef.ES_search_method = 1;
+if not(isfield(zef,'ES_opt_method'))
+    zef.ES_opt_method = 1;
 end
 if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
@@ -113,9 +111,6 @@ end
 if not(isfield(zef,'ES_step_size'))
     zef.ES_step_size = 15;
 end
-if not(isfield(zef,'ES_score_dose'))
-    zef.ES_score_dose = 20;
-end
 if not(isfield(zef,'ES_update_plot_data'))
     zef.ES_update_plot_data = 0;
 end
@@ -127,4 +122,10 @@ if not(isfield(zef,'ES_boundary_color_limit'))
 end
 if not(isfield(zef,'ES_roi_range'))
     zef.ES_roi_range = 15;
+end
+if not(isfield(zef,'ES_HPO_search_method'))
+    zef.ES_HPO_search_method = 2;
+end
+if not(isfield(zef,'ES_HPO_recursive_instances'))
+    zef.ES_HPO_recursive_instances = 3;
 end

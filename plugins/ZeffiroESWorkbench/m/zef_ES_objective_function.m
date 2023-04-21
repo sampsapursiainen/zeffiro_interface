@@ -1,7 +1,7 @@
 function [sr, sc] = zef_ES_objective_function(varargin)
 %% Check for zef
 switch nargin
-    case {0,1,2}
+    case {0, 1, 2}
         if nargin == 0
             zef = evalin('base','zef');
             warning('ZI: No zef were called as an input argument.')
@@ -22,7 +22,12 @@ switch nargin
             vec = zef_ES_table(zef.y_ES_interval);
         end
     case{5}
-        [vec, obj1, obj2, AT, TT] = deal(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
+        if isstruct(varargin{1})
+            vec = zef_ES_table(varargin{1}.y_ES_interval);
+            [obj1, obj2, AT, TT] = deal(varargin{2}, varargin{3}, varargin{4}, varargin{5});
+        else
+            [vec, obj1, obj2, AT, TT] = deal(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
+        end
     otherwise
         error('ZI: Invalid number of arguments.')
 end
@@ -40,9 +45,9 @@ end
 %% 'sweet spot' indexing based on objective
 if isequal(obj1, obj2)
     if     strcmpi(metacriteria_minmax(obj1), 'minimum')
-        [~, Idx] = min(abs(obj_fun_1),[],'all');
+        [~, Idx] = min(abs(obj_fun_1),[],'all','linear');
     elseif strcmpi(metacriteria_minmax(obj1), 'maximum')
-        [~, Idx] = max(abs(obj_fun_1),[],'all');
+        [~, Idx] = max(abs(obj_fun_1),[],'all','linear');
     end
     [sr, sc] = ind2sub(size(obj_fun_1), Idx);
 else

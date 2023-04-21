@@ -1,11 +1,11 @@
-function zef = zef_ES_update_reconstruction(zef,sc,sr)
+function zef = zef_ES_update_reconstruction(zef, varargin)
 switch nargin
     case 0
         zef = evalin('base','zef');
         [sr, sc] = zef_ES_objective_function(zef);
         zef.reconstruction = zef.y_ES_interval.volumetric_current_density{sr,sc};
     case 3
-        zef.reconstruction = zef.y_ES_interval.volumetric_current_density{sr,sc};
+        zef.reconstruction = zef.y_ES_interval.volumetric_current_density{varargin{1}, varargin{2}};
     otherwise
         error('Invalid length of input arguments.')
 end

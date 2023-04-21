@@ -27,33 +27,26 @@ switch nargin
     otherwise
         error('ZI: Invalid number of arguments.')
 end
-%% clear Axes handle && ES_Colorbar
-% if isfield(zef, 'h_ES_current')
-%     if not(isempty(zef.h_ES_current))
-%         if isvalid(zef.h_ES_current(1))
-%             if isequal(zef.h_zeffiro, zef.h_ES_current(1).Parent)
-%                 delete(zef.h_ES_current)
-%             end
-%         end
-%     end
-% end
 
 try %#ok<*TRYNC>
     delete(findobj(zef.h_zeffiro.Children,'-class','matlab.graphics.illustration.ColorBar', '-and', 'tag', 'ES_colorbar'))
     delete(findobj(zef.h_zeffiro.Children, 'tag', 'ES_sensor'))
 end
 %% Sensors attachment
-if zef.attach_electrodes
-    sensors = zef_attach_sensors_volume([], zef.sensors);
-end
+% if zef.attach_electrodes
+%     sensors = zef_attach_sensors_volume([], zef.sensors);
+% end
+sensors = zef.sensors;
 zef = zef_process_meshes(zef, zef.explode_everything);
 %% Sphere generation and allocation of color indexes
-aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)),size(sensors,1),1)).^2,2)));
+aux_scale_val = 100/max(sqrt(sum((sensors(:,1:3) - repmat(mean(sensors(:,1:3)), size(sensors,1),1)).^2,2)));
 [X_s, Y_s, Z_s] = sphere(20);
+
 sphere_scale = zef.sensors_visual_size * aux_scale_val;
-X_s = sphere_scale*X_s;
-Y_s = sphere_scale*Y_s;
-Z_s = sphere_scale*Z_s;
+
+X_s = sphere_scale * X_s;
+Y_s = sphere_scale * Y_s;
+Z_s = sphere_scale * Z_s;
 
 colormap_size = 4096;
 colortune_param = zef.colortune_param;
@@ -187,34 +180,34 @@ min_colorbar_value = -(max_colorbar_value);
 index_aux = floor( (colormap_size-1)*(min(max_colorbar_value,max(min_colorbar_value,y_ES(:)))-min_colorbar_value) / (max_colorbar_value-min_colorbar_value) )+1;
 ES_colormap_vec(index_aux,:);
 %% Printing color and their properties
-h_ES_current     = zeros(size(sensors,1),1);
+h_ES_current        = zeros(size(sensors,1),1);
 h_ES_current_coords = zeros(size(sensors,1),1);
-zef.h_ES_2D_electrode_map.Value = 0;
 
 for i = 1:size(sensors,1)
-
     if not(zef.h_ES_2D_electrode_map.Value)
         h_ES_current(i) = surf(sensors(i,1) + X_s, sensors(i,2) + Y_s, sensors(i,3) + Z_s);
     else
-        sensor_explosion_parameter_1 = 3;
-        sensor_explosion_parameter_2 = 0.05;
-        h_ES_current(i) = surf(sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*(max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3))))) + X_s, sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1*((max(sensors(:,3))-sensors(i,3))/(max(sensors(:,3))-min(sensors(:,3)))))) + Y_s, max(sensors(:,3)) + Z_s);
+        sensor_explosion_parameter_1 = 3.25;
+        sensor_explosion_parameter_2 = 0.1;
+        h_ES_current(i) = surf( sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1 * ( (max(sensors(:,3)) - sensors(i,3)) / (max(sensors(:,3)) - min(sensors(:,3)))) )) + X_s, ...
+                                sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1 * ( (max(sensors(:,3)) - sensors(i,3)) / (max(sensors(:,3)) - min(sensors(:,3)))) )) + Y_s, ...
+                                max(sensors(:,3)) + Z_s );
         view(0,90)
     end
 
-    set(h_ES_current(i),'Tag','ES_sensor');
+    set(h_ES_current(i), 'Tag', 'ES_sensor');
     h_ES_current_coords(i) = h_ES_current(i);
-    set(h_ES_current(i),'edgecolor','none');
+    set(h_ES_current(i), 'edgecolor', 'none');
     if not(y_ES(i)) == 0
-        set(h_ES_current(i),'facecolor',ES_colormap_vec(index_aux(i),:));
-        set(h_ES_current(i),'specularstrength',0.9);
-        set(h_ES_current(i),'diffusestrength',0.7);
-        set(h_ES_current(i),'ambientstrength',0.7);
+        set(h_ES_current(i), 'facecolor',ES_colormap_vec(index_aux(i),:));
+        set(h_ES_current(i), 'specularstrength', 0.9);
+        set(h_ES_current(i), 'diffusestrength',  0.5);
+        set(h_ES_current(i), 'ambientstrength',  0.5);
     else
-        set(h_ES_current(i),'facecolor',[1 1 1]);
-        set(h_ES_current(i),'facealpha',0.1);
-        set(h_ES_current(i),'meshstyle','both');
-        set(h_ES_current(i),'linestyle',':');
+        set(h_ES_current(i), 'facecolor',    [1 1 1]);
+        set(h_ES_current(i), 'facealpha',    0.35);
+        set(h_ES_current(i), 'meshstyle',    'both');
+        set(h_ES_current(i), 'linestyle',    ':');
     end
 end
 hold off;

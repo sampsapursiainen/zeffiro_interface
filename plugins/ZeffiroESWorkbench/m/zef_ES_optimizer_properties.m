@@ -9,8 +9,8 @@ zef.h_ES_optimizer_properties_copy_all  = zef_data.h_ES_optimizer_properties_cop
 zef.h_ES_optimizer_properties           = zef_data.h_ES_optimizer_properties;
 zef.h_ES_optimizer_properties_table     = zef_data.h_ES_optimizer_properties_table;
 
-zef.h_ES_optimizer_properties.Position(3)       = 1.5*zef.h_ES_optimizer_properties.Position(3);
-zef.h_ES_optimizer_properties_table.Position(3) = 1.54*zef.h_ES_optimizer_properties_table.Position(3);
+zef.h_ES_optimizer_properties.Position(3)       = 1.5 * zef.h_ES_optimizer_properties.Position(3);
+zef.h_ES_optimizer_properties_table.Position(3) = 1.54* zef.h_ES_optimizer_properties_table.Position(3);
 zef.h_ES_optimizer_properties_table.ColumnName  = {'Parameter name','Value','Average deviation','Maximum deviation'};
 
 set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontUnits'),'FontUnits','pixels');
@@ -26,5 +26,4 @@ set(zef.h_ES_optimizer_properties,'SizeChangedFcn', 'zef.h_ES_optimizer_properti
 if nargout == 0
     assignin('base','zef',zef);
 end
-
 end
