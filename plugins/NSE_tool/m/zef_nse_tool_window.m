@@ -220,7 +220,7 @@ zef.nse_field.h_conductivity_model.Items = {'Archie''s law','Hashin-Shtrikman up
 zef.nse_field.h_conductivity_model.ItemsData = [1 : length(zef.nse_field.h_conductivity_model.Items)];
 zef.nse_field.h_conductivity_model.Value = zef.nse_field.conductivity_model;
 
-zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Arteries)','Viscosity (Arteries)','Concentration (Microcirculation)'};
+zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Arteries)','Viscosity (Arteries)','Concentration (Microcirculation)','Mean pressure (Arteries)','STD pressure (Arteries)','Mean velocity (Arteries)','STD velocity (Arteries)','Mean viscosity (Arteries)','STD viscosity (Arteries)','Mean concentration (Microcirculation)','STD concentration (Microcirculation)'};
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
