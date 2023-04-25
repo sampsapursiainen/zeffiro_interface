@@ -1,4 +1,49 @@
 function [x,y,z,D] = zef_3by3_solver(a,b,c,d,D)
+%
+% zef_3by3_solver
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - a
+%
+%   TODO: explanation.
+%
+% - b
+%
+%   TODO: explanation.
+%
+% - c
+%
+%   TODO: explanation.
+%
+% - d
+%
+%   TODO: explanation.
+%
+% - D
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - x
+%
+%   TODO: explanation.
+%
+% - y
+%
+%   TODO: explanation.
+%
+% - z
+%
+%   TODO: explanation.
+%
+% - D
+%
+%   TODO: explanation.
+%
 
 x = [];
 y = [];

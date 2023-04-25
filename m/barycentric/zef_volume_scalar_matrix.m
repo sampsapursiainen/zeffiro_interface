@@ -1,10 +1,39 @@
 function M = zef_volume_scalar_matrix(nodes, tetra, scalar_field, weighting)
+%
+% zef_volume_scalar_matrix
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - scalar_field
+%
+%   TODO: explanation.
+%
+% - weighting
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - M
+%
+%   TODO: explanation.
+%
 
 N = size(nodes,1);
 K = size(tetra,1);
 
 if nargin < 4
-weighting = 1;    
+weighting = 1;
 end
 
 if nargin < 3
@@ -24,21 +53,21 @@ M = spalloc(N,N,0);
 
 for i = 1 : 4
     for j = i : 4
-        
+
         if i == j
         entry_vec = volume*weight_param(1);
         else
         entry_vec = volume*weight_param(2);
         end
         M_part = sparse(tetra(:,i),tetra(:,j),scalar_field.*entry_vec,N,N);
-        
+
         if i == j
         M = M + M_part;
         else
         M = M + M_part;
         M = M + M_part';
         end
-        
+
     end
 end
 

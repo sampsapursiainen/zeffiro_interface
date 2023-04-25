@@ -1,4 +1,29 @@
 function M = zef_volume_scalar_matrix_CC(nodes, tetra, scalar_field)
+%
+% zef_volume_scalar_matrix_CC
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - scalar_field
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - M
+%
+%   TODO: explanation.
+%
 
 K = size(tetra,1);
 
