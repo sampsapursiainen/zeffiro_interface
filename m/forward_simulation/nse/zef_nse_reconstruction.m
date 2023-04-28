@@ -92,7 +92,7 @@ elseif isequal(type,5)
   
   aux_vec = zef_nse_threshold_distribution(nse_field.bp_vessels{i}(:),nse_field.min_reconstruction_quantile,nse_field.max_reconstruction_quantile);
    reconstruction{1}  =  reconstruction{1} + ((1/sqrt(3))*aux_vec(:,[1 1 1])' - mean_data).^2;
-   
+ 
     end
     
     reconstruction{1} = sqrt(reconstruction{1}(:)/size(nse_field.bp_vessels,2));

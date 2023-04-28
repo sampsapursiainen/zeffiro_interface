@@ -183,7 +183,7 @@ function zef = zeffiro_interface(args)
 
         args.quit_matlab (1,1) logical = false;
 
-        args.use_github (1,1) logical;
+        args.use_github (1,1) logical = false;
 
         args.use_gpu (1,1) logical;
 
