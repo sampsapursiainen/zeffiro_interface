@@ -182,7 +182,6 @@ bp_vessels_aux = zeros(size(nodes,1),1);
 K_2 = zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 1, 1, mvd_length(c_ind_2_domain)) + ... 
      zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 2, 2, mvd_length(c_ind_2_domain)) + ... 
      zef_volume_scalar_matrix_GG(v_2_nodes, v_2_tetra, 3, 3, mvd_length(c_ind_2_domain));
-
 C_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, ones(size(v_2_tetra,1),1));
 M_2 = zef_volume_scalar_matrix_FF(v_2_nodes, v_2_tetra, mvd_length(c_ind_2_domain)); 
 eps_var = ((4*pi).^(1/3).*3.^(2/3).*diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*max(volume).^(1/3)));
@@ -409,7 +408,7 @@ end
 if quadrature_step_ind == 1
 if nse_field.microcirculation_model
     
-bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p + pressure_reference;
+bp_vessels_aux(nse_field.bp_vessel_node_ind) =  abs(p + pressure_reference);
 bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
 I_boundary = find(bf_vessels_to_capillaries);
 total_flow_estimate= sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1);
