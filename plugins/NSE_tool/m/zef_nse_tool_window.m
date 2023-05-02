@@ -27,8 +27,8 @@ zef.nse_field.h_gravity_z = zef_data.h_gravity_z;
 zef.nse_field.h_gravity_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-zef.nse_field.h_total_flow = zef_data.h_total_flow;
-zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_conductivity_statistic = zef_data.h_conductivity_statistic;
+zef.nse_field.h_conductivity_statistic.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_start_time = zef_data.h_start_time;
 zef.nse_field.h_start_time.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -46,7 +46,7 @@ zef.nse_field.h_sphere_x.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_sphere_y = zef_data.h_sphere_y;
 zef.nse_field.h_sphere_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_sphere_z = zef_data.h_sphere_z;
-zef.nse_field.h_sphere_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_sphere_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
 zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -55,7 +55,7 @@ zef.nse_field.h_time_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_time_step_length = zef_data.h_time_step_length;
 zef.nse_field.h_time_step_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_pulse_amplitude = zef_data.h_pulse_amplitude;
-zef.nse_field.h_pulse_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_pulse_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_cycle_length = zef_data.h_cycle_length;
 zef.nse_field.h_cycle_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_p_wave_start = zef_data.h_p_wave_start;
@@ -71,7 +71,7 @@ zef.nse_field.h_t_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);
 zef.nse_field.h_d_wave_length = zef_data.h_d_wave_length;
 zef.nse_field.h_d_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_p_wave_weight = zef_data.h_p_wave_weight;
-zef.nse_field.h_p_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_p_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_t_wave_weight = zef_data.h_t_wave_weight;
 zef.nse_field.h_t_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_d_wave_weight = zef_data.h_d_wave_weight;
@@ -158,6 +158,10 @@ zef.nse_field.h_pcg_maxit.Value = zef.nse_field.pcg_maxit;
 zef.nse_field.h_capillary_arteriole_total_area_ratio.Value = zef.nse_field.capillary_arteriole_total_area_ratio;
 zef.nse_field.h_total_flow.Value = zef.nse_field.total_flow;
 
+zef.nse_field.h_conductivity_statistic.Items = {'All','Mean', 'STD','Maximum','Minimum'};
+zef.nse_field.h_conductivity_statistic.ItemsData = [1 : length(zef.nse_field.h_conductivity_statistic.Items)];
+zef.nse_field.h_conductivity_statistic.Value = zef.nse_field.conductivity_statistic;
+
 zef.nse_field.h_rho.Value = zef.nse_field.rho;
 zef.nse_field.h_mu.Value = zef.nse_field.mu;
 zef.nse_field.h_start_time.Value = zef.nse_field.start_time;
@@ -235,7 +239,7 @@ zef.nse_field.h_time_integration.Value = zef.nse_field.time_integration;
 zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef_nse_run_solver';
 zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = 'zef.inv_time_1 = zef.nse_field.inv_time_1; zef.inv_time_2 = zef.nse_field.inv_time_2; zef.inv_time_3 = zef.nse_field.inv_time_3; [zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_interpolate.ButtonPushedFcn = 'zef = zef_nse_interpolate(zef,zef.nse_field.h_reconstruction_type.Value);';
-zef.nse_field.h_nse_sigma.ButtonPushedFcn = 'zef.nse_sigma = zef_nse_sigma(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.sigma,zef.source_interpolation_ind);';
+zef.nse_field.h_nse_sigma.ButtonPushedFcn = 'zef.nse_sigma = zef_nse_sigma(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.sigma,zef.source_interpolation_ind{1});';
 zef.nse_field.h_plot_sphere.ButtonPushedFcn = 'zef_nse_plot_sphere(zef.h_axes1, zef.nse_field);';
 zef.nse_field.h_plot_pulse.ButtonPushedFcn = '';
 
