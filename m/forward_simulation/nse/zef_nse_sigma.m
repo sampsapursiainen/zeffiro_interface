@@ -12,7 +12,7 @@ arguments
 
     sigma_in (:,2) double
 
-    s_interp_ind (:,1) uint64 { mustBePositive }
+    s_interp_ind (:,4) uint64 { mustBePositive }
 
 end
 
@@ -33,7 +33,7 @@ for tfi = 1 : nse_field.n_frames
 
     disp("  σ-frame " + tfi + "...")
 
-    bf_interp = mean(abs(nse_field.bf_capillaries{tfi}(s_interp_ind{1})),2);
+    bf_interp = mean(abs(nse_field.bf_capillaries{tfi}(s_interp_ind)),2);
 
     active_compartment_ind = find(ismember(domain_labels,nse_field.capillary_domain_ind));
 
