@@ -59,7 +59,7 @@ arguments
 
     nodes (:,3) double
 
-    tetra (:,4) double
+    tetra (:,4) uint64 { mustBePositive }
 
     domain_labels (:,1) int64
 
