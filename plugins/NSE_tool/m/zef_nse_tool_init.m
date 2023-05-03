@@ -10,11 +10,11 @@ end
 
 if not(isfield(zef,'inv_time_2'))
 zef.nse_field.inv_time_2 = 0;
-end 
- 
+end
+
 if not(isfield(zef,'inv_time_3'))
 zef.nse_field.inv_time_3 = 0;
-end 
+end
 
 if not(isfield(zef.nse_field,'viscosity_model'))
 zef.nse_field.viscosity_model = 1;
@@ -38,11 +38,11 @@ end
 
 if not(isfield(zef.nse_field,'viscosity_exponent'))
 zef.nse_field.viscosity_exponent = 0.6;
-end 
+end
 
 if not(isfield(zef.nse_field,'viscosity_delta'))
 zef.nse_field.viscosity_delta = 0.001;
-end 
+end
 
 if not(isfield(zef.nse_field,'use_gpu'))
 zef.nse_field.use_gpu = 1;
@@ -236,6 +236,10 @@ end
 
 if not(isfield(zef.nse_field,'gravity_z'))
 zef.nse_field.gravity_z = 9.81;
+end
+
+if not(isfield(zef.nse_field,'conductivity_mode'))
+zef.nse_field.conductivity_mode = 1;
 end
 
 

@@ -27,8 +27,8 @@ zef.nse_field.h_gravity_z = zef_data.h_gravity_z;
 zef.nse_field.h_gravity_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_total_flow = zef_data.h_total_flow;
 zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
-zef.nse_field.h_total_flow = zef_data.h_total_flow;
-zef.nse_field.h_total_flow.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_conductivity_mode = zef_data.h_conductivity_mode;
+zef.nse_field.h_conductivity_mode.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_start_time = zef_data.h_start_time;
 zef.nse_field.h_start_time.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -157,6 +157,10 @@ zef.nse_field.h_pcg_maxit.Value = zef.nse_field.pcg_maxit;
 
 zef.nse_field.h_capillary_arteriole_total_area_ratio.Value = zef.nse_field.capillary_arteriole_total_area_ratio;
 zef.nse_field.h_total_flow.Value = zef.nse_field.total_flow;
+
+zef.nse_field.h_conductivity_mode.Items = {'All','Mean', 'STD','Maximum','Minimum'};
+zef.nse_field.h_conductivity_mode.ItemsData = [1 : length(zef.nse_field.h_conductivity_mode.Items)];
+zef.nse_field.h_conductivity_mode.Value = zef.nse_field.conductivity_mode;
 
 zef.nse_field.h_rho.Value = zef.nse_field.rho;
 zef.nse_field.h_mu.Value = zef.nse_field.mu;
