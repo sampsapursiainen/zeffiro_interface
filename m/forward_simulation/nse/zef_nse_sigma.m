@@ -35,7 +35,7 @@ for tfi = 1 : nse_field.n_frames
 
     disp("  σ-frame " + tfi + "...")
 
-    bf_interp = mean(abs(nse_field.bf_capillaries{tfi}(s_interp_ind)),2);
+    bf_interp = mean ( min ( 1, max ( 0, abs ( nse_field.bf_capillaries{tfi}( s_interp_ind ) ) ) ), 2 );
 
     active_compartment_ind = find(ismember(domain_labels,nse_field.capillary_domain_ind));
 
