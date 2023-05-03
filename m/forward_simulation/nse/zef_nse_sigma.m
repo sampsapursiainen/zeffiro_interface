@@ -148,7 +148,7 @@ for tfi = 1 : nse_field.n_frames
 
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
 
-            sigma_out(active_compartment_ind(I),1) = background_conductivity.*(1-bf_interp(I)) + nse_field.blood_conductivity.*(bf_interp(I));
+            sigma_out(active_compartment_ind(I),tfi) = background_conductivity.*(1-bf_interp(I)) + nse_field.blood_conductivity.*(bf_interp(I));
 
         end
 
@@ -178,7 +178,7 @@ for tfi = 1 : nse_field.n_frames
 
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
 
-            sigma_out(active_compartment_ind(I),1) = background_conductivity.*(1 + (3.*bf_interp(I).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - bf_interp(I)).*(nse_field.blood_conductivity-background_conductivity)));
+            sigma_out(active_compartment_ind(I),tfi) = background_conductivity.*(1 + (3.*bf_interp(I).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - bf_interp(I)).*(nse_field.blood_conductivity-background_conductivity)));
 
             %sigma_out(active_compartment_ind(I),1) = 1./(background_conductivity./(1-bf_interp(I)) + nse_field.blood_conductivity./bf_interp(I));
 
@@ -194,7 +194,7 @@ for tfi = 1 : nse_field.n_frames
 
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
 
-            sigma_out(active_compartment_ind(I),1) = (nse_field.blood_conductivity + (background_conductivity - nse_field.blood_conductivity).*(1-(2.*bf_interp(I)./3)))./(1 + (bf_interp(I)./3).*(background_conductivity./nse_field.blood_conductivity-1));
+            sigma_out(active_compartment_ind(I),tfi) = (nse_field.blood_conductivity + (background_conductivity - nse_field.blood_conductivity).*(1-(2.*bf_interp(I)./3)))./(1 + (bf_interp(I)./3).*(background_conductivity./nse_field.blood_conductivity-1));
 
         end
 
