@@ -1,4 +1,4 @@
-function sigma_out = zef_nse_sigma(nse_field,nodes,tetra,domain_labels,sigma_in,s_interp_ind)
+function sigma_out = zef_nse_sigma(nse_field,nodes,tetra,domain_labels,sigma_in,s_interp_ind, singular_threshold)
 
 arguments
 
@@ -13,6 +13,8 @@ arguments
     sigma_in (:,2) double
 
     s_interp_ind (:,4) uint64 { mustBePositive }
+
+    singular_threshold (1,1) double { mustBePositive, mustBeLessThan ( singular_threshold, 1e-2 ) } = eps(1)
 
 end
 
@@ -55,17 +57,17 @@ for tfi = 1 : nse_field.n_frames
 
             I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
 
-            I_aux = find(abs(bf_interp(I))> 1e-15);
+            I_aux = find(abs(bf_interp(I))> singular_threshold);
 
             I = I(I_aux);
 
-            I_aux = find(abs(bf_interp(I)) > 1-1e-15);
+            I_aux = find(abs(bf_interp(I)) > 1-singular_threshold);
 
             sigma_out(I_aux, tfi) = nse_field.blood_conductivity;
 
-            I_aux = find(abs(bf_interp(I)) > 1-1e-15);
+            I_aux = find(abs(bf_interp(I)) > 1-singular_threshold);
 
-            bf_interp(I(I_aux)) = 1-1e-15;
+            bf_interp(I(I_aux)) = 1-singular_threshold;
 
             I_aux = find(abs(bf_interp(I)) <= 1);
 
@@ -86,38 +88,61 @@ for tfi = 1 : nse_field.n_frames
     elseif isequal(nse_field.conductivity_model,2)
 
         for i = 1 : length(nse_field.capillary_domain_ind)
+
             I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
+
             volume_aux = sum(volume(I));
+
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
-            %sigma_out(active_compartment_ind(I),1) = nse_field.blood_conductivity.*(1  - 3.*(1-bf_interp(I)).*(nse_field.blood_conductivity-background_conductivity)./(3.*nse_field.blood_conductivity - bf_interp(I).*(nse_field.blood_conductivity-background_conductivity)));
+
             sigma_out(active_compartment_ind(I),1) = background_conductivity.*(1-bf_interp(I)) + nse_field.blood_conductivity.*(bf_interp(I));
+
         end
 
     elseif isequal(nse_field.conductivity_model,3)
 
         for i = 1 : length(nse_field.capillary_domain_ind)
+
             I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
-            I_aux = find(abs(bf_interp(I))> 1e-15);
+
+            I_aux = find(abs(bf_interp(I))> singular_threshold);
+
             I = I(I_aux);
-            I_aux = find(abs(bf_interp(I)) > 1-1e-15);
+
+            I_aux = find(abs(bf_interp(I)) > 1-singular_threshold);
+
             sigma_out(I_aux,1) = nse_field.blood_conductivity;
-            I_aux = find(abs(bf_interp(I)) > 1-1e-15);
-            bf_interp(I(I_aux)) = 1-1e-15;
+
+            I_aux = find(abs(bf_interp(I)) > 1-singular_threshold);
+
+            bf_interp(I(I_aux)) = 1-singular_threshold;
+
             I_aux = find(abs(bf_interp(I)) <= 1);
+
             I = I(I_aux);
+
             volume_aux = sum(volume(I));
+
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
+
             sigma_out(active_compartment_ind(I),1) = background_conductivity.*(1 + (3.*bf_interp(I).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - bf_interp(I)).*(nse_field.blood_conductivity-background_conductivity)));
+
             %sigma_out(active_compartment_ind(I),1) = 1./(background_conductivity./(1-bf_interp(I)) + nse_field.blood_conductivity./bf_interp(I));
+
         end
 
     elseif isequal(nse_field.conductivity_model,4)
 
         for i = 1 : length(nse_field.capillary_domain_ind)
+
             I = find(domain_labels_aux == nse_field.capillary_domain_ind(i));
+
             volume_aux = sum(volume(I));
+
             background_conductivity = sum(sigma_aux(I).*volume(I))./volume_aux;
+
             sigma_out(active_compartment_ind(I),1) = (nse_field.blood_conductivity + (background_conductivity - nse_field.blood_conductivity).*(1-(2.*bf_interp(I)./3)))./(1 + (bf_interp(I)./3).*(background_conductivity./nse_field.blood_conductivity-1));
+
         end
 
     else
