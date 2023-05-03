@@ -1,4 +1,57 @@
 function sigma_out = zef_nse_sigma(nse_field,nodes,tetra,domain_labels,sigma_in,s_interp_ind, singular_threshold)
+%
+% zef_nse_sigma
+%
+% Computes conductivities for the different brain compartments or tetrahedra
+% in the finite element mesh, based on the capillary blood flow in those
+% compartments.
+%
+% NOTE: this requires that the correct settings have been applied in the NSE
+% tool, and the system has been solved with those settings. If capillaries are
+% not computed, then of course this function will not work.
+%
+% Inputs:
+%
+% - nse_field (1,1) struct
+%
+%   The central struct of the NSE tool. Contains the settings specified in the
+%   NSE tool window.
+%
+% - nodes (:,3) double
+%
+%   The nodes in the finite element mesh.
+%
+% - tetra (:,4) uint64 { mustBePositive }
+%
+%   The tetrahedral elements in the finite element mesh.
+%
+% - domain_labels (:,1) int64
+%
+%   Numerical labels of each tetrahedra. Tells which brain compartment each
+%   tetrahedron belongs to.
+%
+% - sigma_in (:,1) double
+%
+%   The conductivities of the tetra in the mesh, before blood flow has been
+%   taken into account.
+%
+% - s_interp_ind (:,4) uint64 { mustBePositive }
+%
+%   Some interpolation matrix.
+%
+% - singular_threshold (1,1) double { mustBePositive, mustBeLessThan ( singular_threshold, 1e-2 ) } = eps(1)
+%
+%   This is used in pruning problematic relative concentrations out of the
+%   interpolated relative concentrations of blood in the tissues.
+%
+% Outputs:
+%
+% - sigma_out
+%
+%   An M-by-N matrix of conductivities, where M is the number of tetrahedra in
+%   the mesh and N is the number of time frames in the simulation.
+%
+
 
 arguments
 
