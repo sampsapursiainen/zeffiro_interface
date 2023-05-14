@@ -1,7 +1,7 @@
 # GitHub Workflows
 
 This folder contains [YAML] files, which tell GitHub to run specific workflows
-when certain things such as pushes or pull requestrs are done in the
+when certain things such as pushes or pull requests are done in the
 repository. See [Understanding GitHub Actions][uga] for more details.
 
 [YAML]: https://yaml.org/
