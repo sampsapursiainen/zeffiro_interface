@@ -1,7 +1,7 @@
 if isfield(zef,'h_mesh_tool')
-if isvalid(zef.h_mesh_tool)
-    delete(zef.h_mesh_tool)
-end
+    if isvalid(zef.h_mesh_tool)
+        delete(zef.h_mesh_tool)
+    end
 end
 
 zef_data = zef_mesh_tool_app_exported;
@@ -57,7 +57,7 @@ set(zef.h_forward_simulation_script,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'DisplayDataChangedFcn','zef_update_mesh_tool;');
 set(zef.h_forward_simulation_table,'CellSelectionCallback',@zef_forward_simulation_table_selection);
 if isempty(zef.forward_simulation_table)
-zef.forward_simulation_table = readcell([zef.program_path  filesep 'profile' filesep zef.profile_name filesep 'zeffiro_forward_simulation.ini'],'filetype','tex','delimiter',',');
+    zef.forward_simulation_table = readcell([zef.program_path  filesep 'profile' filesep zef.profile_name filesep 'zeffiro_forward_simulation.ini'],'filetype','tex','delimiter',',');
 end
 zef.h_forward_simulation_table.Data = zef.forward_simulation_table;
 set(zef.h_checkbox_mesh_smoothing_on,'ValueChangedFcn','zef_update_mesh_tool;');
@@ -85,25 +85,25 @@ set(zef.h_mesh_tool,'AutoResizeChildren','off');
 zef_set_size_change_function(zef.h_mesh_tool,2)
 
 if zef.h_segmentation_tool_toggle == 1
-    
-zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1)+ 0.505*zef.segmentation_tool_default_position(3) , ...
-                          zef.segmentation_tool_default_position(2)+0.75*zef.segmentation_tool_default_position(4),...
-                          0.75*0.505*zef.segmentation_tool_default_position(3),...
-                          0.4*zef.segmentation_tool_default_position(4)];
-                          
+
+    zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1)+ 0.505*zef.segmentation_tool_default_position(3) , ...
+        zef.segmentation_tool_default_position(2)+0.75*zef.segmentation_tool_default_position(4),...
+        0.75*0.505*zef.segmentation_tool_default_position(3),...
+        0.4*zef.segmentation_tool_default_position(4)];
+
 else
 
-zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
-                          zef.segmentation_tool_default_position(2)+0.6*zef.segmentation_tool_default_position(4),...
-                          0.75*zef.segmentation_tool_default_position(3),...
-                          0.4*zef.segmentation_tool_default_position(4)]; 
+    zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
+        zef.segmentation_tool_default_position(2)+0.6*zef.segmentation_tool_default_position(4),...
+        0.75*zef.segmentation_tool_default_position(3),...
+        0.4*zef.segmentation_tool_default_position(4)];
 
 end
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 if not(ismember('ZefTool',properties(zef.h_mesh_tool)))
-addprop(zef.h_mesh_tool,'ZefTool');
+    addprop(zef.h_mesh_tool,'ZefTool');
 end
 zef.h_mesh_tool.ZefTool = mfilename;
 

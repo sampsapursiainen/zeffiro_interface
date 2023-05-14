@@ -9,7 +9,7 @@ sensor_sets_selected = eval('zef.sensor_sets_selected');
 
 for i = 1 : length(sensor_sets_selected)
     if not(table_data{sensor_sets_selected(i),4})
-    eval(['zef.h_sensors_table.Data{' num2str(table_data{sensor_sets_selected(i),1}) '} = NaN;'])
+        eval(['zef.h_sensors_table.Data{' num2str(table_data{sensor_sets_selected(i),1}) '} = NaN;'])
     end
 end
 

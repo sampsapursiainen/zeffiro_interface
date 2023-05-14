@@ -3,11 +3,11 @@
 function zef = zef_postprocess_fem_mesh(zef)
 
 if nargin==0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 if isempty(zef)
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 h = zef_waitbar(0,'Mesh post-processing');
@@ -15,9 +15,9 @@ h = zef_waitbar(0,'Mesh post-processing');
 parameter_profile = eval('zef.parameter_profile');
 
 for zef_j = 1 : size(parameter_profile,1)
-if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
-eval([parameter_profile{zef_j,2} '_vec = [];']);
-end
+    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+        eval([parameter_profile{zef_j,2} '_vec = [];']);
+    end
 end
 
 tetra = [];
@@ -41,38 +41,38 @@ submesh_cell = cell(0);
 
 for k = 1 : length(compartment_tags)
 
-        var_0 = ['zef.'  compartment_tags{k} '_on'];
-        var_1 = ['zef.' compartment_tags{k} '_sigma'];
-        var_2 = ['zef.' compartment_tags{k} '_priority'];
-        var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        var_4 = ['zef.' compartment_tags{k} '_sources'];
+    var_0 = ['zef.'  compartment_tags{k} '_on'];
+    var_1 = ['zef.' compartment_tags{k} '_sigma'];
+    var_2 = ['zef.' compartment_tags{k} '_priority'];
+    var_3 = ['zef.' compartment_tags{k} '_submesh_ind'];
+    var_4 = ['zef.' compartment_tags{k} '_sources'];
 
-on_val = eval(var_0);
-sigma_val = eval(var_1);
-priority_val = eval(var_2);
-if on_val
-i = i + 1;
+    on_val = eval(var_0);
+    sigma_val = eval(var_1);
+    priority_val = eval(var_2);
+    if on_val
+        i = i + 1;
 
-for zef_j = 1 : size(parameter_profile,1)
-    if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
-        eval([parameter_profile{zef_j,2} '_vec(' num2str(i) ',1) =' num2str(eval(['zef.' compartment_tags{k} '_' parameter_profile{zef_j,2}])) ';']);
+        for zef_j = 1 : size(parameter_profile,1)
+            if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
+                eval([parameter_profile{zef_j,2} '_vec(' num2str(i) ',1) =' num2str(eval(['zef.' compartment_tags{k} '_' parameter_profile{zef_j,2}])) ';']);
+            end
+        end
+
+        sigma_vec(i,1) = sigma_val;
+        priority_vec(i,1) = priority_val;
+        submesh_cell{i} = eval(var_3);
+        aux_compartment_ind(k) = i;
+        if not(isequal(eval(var_4),-1))
+            pml_vec(i,1) = 0 ;
+        else
+            pml_vec(i,1) = 1;
+        end
+        if ismember(eval(var_4),[1 2])
+            aux_active_compartment_ind(i,1) = 1 ;
+        end
+
     end
-end
-
-sigma_vec(i,1) = sigma_val;
-priority_vec(i,1) = priority_val;
-submesh_cell{i} = eval(var_3);
-aux_compartment_ind(k) = i;
-if not(isequal(eval(var_4),-1))
-pml_vec(i,1) = 0 ;
-else
-    pml_vec(i,1) = 1;
-end
-if ismember(eval(var_4),[1 2])
-aux_active_compartment_ind(i,1) = 1 ;
-end
-
-end
 end
 
 pml_ind_aux = find(pml_vec,1);
@@ -82,7 +82,7 @@ reuna_t = eval('zef.reuna_t');
 
 n_compartments = 0;
 for k = 1 : eval('length(zef.reuna_p)')
-n_compartments = n_compartments + max(1,length(submesh_cell{k}));
+    n_compartments = n_compartments + max(1,length(submesh_cell{k}));
 end
 
 priority_vec_aux = zeros(n_compartments,1);
@@ -91,14 +91,14 @@ submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
 for i = 1 :  eval('length(zef.reuna_p)')
-for k = 1 : max(1,length(submesh_cell{i}))
+    for k = 1 : max(1,length(submesh_cell{i}))
 
-compartment_counter = compartment_counter + 1;
-priority_vec_aux(compartment_counter) = priority_vec(i);
-submesh_ind_1(compartment_counter) = i;
-submesh_ind_2(compartment_counter) = k;
+        compartment_counter = compartment_counter + 1;
+        priority_vec_aux(compartment_counter) = priority_vec(i);
+        submesh_ind_1(compartment_counter) = i;
+        submesh_ind_2(compartment_counter) = k;
 
-end
+    end
 end
 
 domain_labels = double(zef.domain_labels_with_subdomains);
@@ -121,63 +121,63 @@ if surface_refinement_on
 
     if length(n_surface_refinement) == 1
 
-for i_surface_refinement = 1 : n_surface_refinement
+        for i_surface_refinement = 1 : n_surface_refinement
 
-zef_refinement_step;
+            zef_refinement_step;
 
-end
+        end
 
     else
 
- for j_surface_refinement = 1 : length(n_surface_refinement)
- for i_surface_refinement = 1 : n_surface_refinement(j_surface_refinement)
+        for j_surface_refinement = 1 : length(n_surface_refinement)
+            for i_surface_refinement = 1 : n_surface_refinement(j_surface_refinement)
 
-zef_refinement_step;
+                zef_refinement_step;
 
 
- end
-end
+            end
+        end
 
     end
 end
 
 
 if eval('zef.refinement_volume_on_2');
-zef_waitbar(0,h,'Volume refinement.');
-n_refinement = eval('zef.refinement_volume_number_2');
-refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
+    zef_waitbar(0,h,'Volume refinement.');
+    n_refinement = eval('zef.refinement_volume_number_2');
+    refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
 
-refinement_compartments = [];
-if ismember(-1,refinement_compartments_aux)
-   [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
-end
+    refinement_compartments = [];
+    if ismember(-1,refinement_compartments_aux)
+        [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
+    end
 
-refinement_compartments_aux = zef_compartment_to_subcompartment(zef,setdiff(refinement_compartments_aux,-1));
-refinement_compartments = [refinement_compartments ; refinement_compartments_aux(:)];
+    refinement_compartments_aux = zef_compartment_to_subcompartment(zef,setdiff(refinement_compartments_aux,-1));
+    refinement_compartments = [refinement_compartments ; refinement_compartments_aux(:)];
 
-for i = 1 : n_refinement
+    for i = 1 : n_refinement
 
-[nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments);
-zef_waitbar(i/n_refinement,h,'Volume refinement.');
+        [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments);
+        zef_waitbar(i/n_refinement,h,'Volume refinement.');
 
-end
+    end
 
-max_domain_labels = max(domain_labels);
-I_5 = 0;
-while not(isempty(I_5))
-I_3 = find(domain_labels<max_domain_labels);
-[~,~,I_4] = zef_surface_mesh(tetra(I_3,:));
-I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
-I_4 = find(I_4 < 3);
-I_5 = setdiff([1:size(I_3,1)]',I_4);
-domain_labels(I_3(I_5)) = max_domain_labels;
-end
+    max_domain_labels = max(domain_labels);
+    I_5 = 0;
+    while not(isempty(I_5))
+        I_3 = find(domain_labels<max_domain_labels);
+        [~,~,I_4] = zef_surface_mesh(tetra(I_3,:));
+        I_4 = accumarray(I_4,ones(size(I_4)),[size(I_3,1) 1]);
+        I_4 = find(I_4 < 3);
+        I_5 = setdiff([1:size(I_3,1)]',I_4);
+        domain_labels(I_3(I_5)) = max_domain_labels;
+    end
 
 end
 
 [nodes,optimizer_flag] = zef_fix_negatives(zef,nodes, tetra);
 if optimizer_flag == 1
-[tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
+    [tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
 end
 
 domain_labels_with_subdomains = domain_labels;
@@ -190,16 +190,16 @@ submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
 
-I = find(not(ismember(domain_labels,find(pml_vec,1))));
-I_2 = zeros(size(tetra,1),1);
-I_2(I) = [1:length(I)];
-active_compartment_ind = I_2(active_compartment_ind);
-active_compartment_ind = active_compartment_ind(find(active_compartment_ind));
-domain_labels = domain_labels(I,:);
-domain_labels_with_subdomains = domain_labels_with_subdomains(I,:);
-[unique_vec_1, ~, unique_vec_3] = unique(tetra(I,:));
-tetra = reshape(unique_vec_3,length(I),4);
-nodes = nodes(unique_vec_1,:);
+    I = find(not(ismember(domain_labels,find(pml_vec,1))));
+    I_2 = zeros(size(tetra,1),1);
+    I_2(I) = [1:length(I)];
+    active_compartment_ind = I_2(active_compartment_ind);
+    active_compartment_ind = active_compartment_ind(find(active_compartment_ind));
+    domain_labels = domain_labels(I,:);
+    domain_labels_with_subdomains = domain_labels_with_subdomains(I,:);
+    [unique_vec_1, ~, unique_vec_3] = unique(tetra(I,:));
+    tetra = reshape(unique_vec_3,length(I),4);
+    nodes = nodes(unique_vec_1,:);
 end
 
 I_aux = find(not(ismember(domain_labels,find(pml_vec,1))));
@@ -207,7 +207,7 @@ surface_triangles = zef_surface_mesh(tetra(I_aux,:));
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
-eval([parameter_profile{zef_j,2} '=[' parameter_profile{zef_j,2} '_vec(domain_labels) domain_labels];']);
+        eval([parameter_profile{zef_j,2} '=[' parameter_profile{zef_j,2} '_vec(domain_labels) domain_labels];']);
     end
 end
 
@@ -222,9 +222,9 @@ close(h);
 
 zef.domain_labels_with_subdomains = double(domain_labels_with_subdomains);
 zef.domain_labels = double(domain_labels);
-zef.brain_ind = double(active_compartment_ind); 
+zef.brain_ind = double(active_compartment_ind);
 zef.active_compartment_ind = double(active_compartment_ind);
-zef.non_source_ind = double(non_source_ind); 
+zef.non_source_ind = double(non_source_ind);
 zef.nodes = nodes;
 zef.tetra = double(tetra);
 zef.surface_triangles = double(surface_triangles);
@@ -233,12 +233,12 @@ zef.condition_number = condition_number;
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
-eval(['zef.' parameter_profile{zef_j,2} '=' parameter_profile{zef_j,2} ';']);
+        eval(['zef.' parameter_profile{zef_j,2} '=' parameter_profile{zef_j,2} ';']);
     end
 end
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

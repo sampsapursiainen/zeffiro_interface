@@ -1,13 +1,13 @@
 function [pos, label] = getElectrodePositions(data, OptionalNameforElectrodeFile, OptionalNameForLabelFile, OptionalSaveToFile0or1)
 
 if nargin==3
-        OptionalSaveToFile0or1=1;
+    OptionalSaveToFile0or1=1;
 
 end
 
 if nargin==2
     OptionalNameForLabelFile='./electrodesLabel.dat';
-        OptionalSaveToFile0or1=1;
+    OptionalSaveToFile0or1=1;
 
 end
 

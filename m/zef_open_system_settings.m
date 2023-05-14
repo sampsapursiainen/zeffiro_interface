@@ -1,7 +1,7 @@
 zef_data = zef_system_settings;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 
 set(zef.h_system_settings_table,'CellSelectionCallback',@zef_system_settings_table_selection);

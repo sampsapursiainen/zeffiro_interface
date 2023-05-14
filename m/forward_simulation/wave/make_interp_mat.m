@@ -3,7 +3,7 @@
 
 parameters;
 
-load([torre_dir '/system_data/mesh_' int2str(system_setting_index) '.mat']) 
+load([torre_dir '/system_data/mesh_' int2str(system_setting_index) '.mat'])
 interpolation_radius = 1.15*s_radius;
 lattice_resolution = round(4*lattice_oversampling_rate*(signal_highest_frequency)*interpolation_radius);
 I_aux = find(abs(nodes(:,1))<interpolation_radius & abs(nodes(:,2))<interpolation_radius & abs(nodes(:,3))<interpolation_radius);

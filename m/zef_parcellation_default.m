@@ -12,10 +12,10 @@ if isempty(submesh_ind)
 end
 
 if evalin('base','zef.parcellation_merge')
-c_table = evalin('base','zef.parcellation_colortable');
-c_points = evalin('base','zef.parcellation_points');
+    c_table = evalin('base','zef.parcellation_colortable');
+    c_points = evalin('base','zef.parcellation_points');
 else
-evalin('base','zef.parcellation_selected = [];');
+    evalin('base','zef.parcellation_selected = [];');
 end
 
 s_interp_ind = evalin('base','zef.source_interpolation_ind{1}');
@@ -38,40 +38,40 @@ color_cell = cell(0);
 aux_brain_ind = [];
 compartment_tags = evalin('base','zef.compartment_tags');
 for k = 1 : length(compartment_tags)
-        var_0 = ['zef.' compartment_tags{k} '_on'];
-        var_1 = ['zef.' compartment_tags{k} '_sigma'];
-        var_2 = ['zef.' compartment_tags{k} '_priority'];
-        var_3 = ['zef.' compartment_tags{k} '_visible'];
-        color_str = evalin('base',['zef.'  compartment_tags{k}  '_color']);
-on_val = evalin('base',var_0);
-if on_val
-i = i + 1;
+    var_0 = ['zef.' compartment_tags{k} '_on'];
+    var_1 = ['zef.' compartment_tags{k} '_sigma'];
+    var_2 = ['zef.' compartment_tags{k} '_priority'];
+    var_3 = ['zef.' compartment_tags{k} '_visible'];
+    color_str = evalin('base',['zef.'  compartment_tags{k}  '_color']);
+    on_val = evalin('base',var_0);
+    if on_val
+        i = i + 1;
 
-c_str = compartment_tags{k};
+        c_str = compartment_tags{k};
 
-if ismember(evalin('base',['zef.' c_str '_sources']),[1 2])
-I = find(evalin('base','zef.domain_labels(zef.brain_ind)')==i);
-submesh_ind_aux = unique(submesh_ind(I));
-if isempty(submesh_ind_aux)
-    submesh_ind_aux = 1;
-end
+        if ismember(evalin('base',['zef.' c_str '_sources']),[1 2])
+            I = find(evalin('base','zef.domain_labels(zef.brain_ind)')==i);
+            submesh_ind_aux = unique(submesh_ind(I));
+            if isempty(submesh_ind_aux)
+                submesh_ind_aux = 1;
+            end
 
-for ell_ind = 1 : length(submesh_ind_aux)
-c_ind = c_ind + 1;
-I_aux = find(submesh_ind(I)==submesh_ind_aux(ell_ind));
-J = unique(s_interp_ind(I(I_aux),:));
-if length(submesh_ind_aux) > 1
-c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name']) ' ' num2str(submesh_ind_aux(ell_ind))];
-else
-c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name'])];
-end
-c_table{t_ind}{3}(c_ind,1:3) = evalin('base',['zef.' c_str '_color']);
-c_table{t_ind}{3}(c_ind,5) =  c_ind;
-c_table{t_ind}{5}(c_ind,:) = [i submesh_ind_aux(ell_ind)];
-c_table{t_ind}{4}(J) = c_ind;
-end
-end
-end
+            for ell_ind = 1 : length(submesh_ind_aux)
+                c_ind = c_ind + 1;
+                I_aux = find(submesh_ind(I)==submesh_ind_aux(ell_ind));
+                J = unique(s_interp_ind(I(I_aux),:));
+                if length(submesh_ind_aux) > 1
+                    c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name']) ' ' num2str(submesh_ind_aux(ell_ind))];
+                else
+                    c_table{t_ind}{2}{c_ind,1} = [evalin('base',['zef.' c_str '_name'])];
+                end
+                c_table{t_ind}{3}(c_ind,1:3) = evalin('base',['zef.' c_str '_color']);
+                c_table{t_ind}{3}(c_ind,5) =  c_ind;
+                c_table{t_ind}{5}(c_ind,:) = [i submesh_ind_aux(ell_ind)];
+                c_table{t_ind}{4}(J) = c_ind;
+            end
+        end
+    end
 
 end
 

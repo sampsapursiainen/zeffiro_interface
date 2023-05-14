@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 zef_switch_color('s_on','pushbutton16','s_points');
 if zef.imaging_method==2
-zef_switch_color('s_on','pushbutton17','s_directions');
+    zef_switch_color('s_on','pushbutton17','s_directions');
 end
 
 zef_switch_color('w_on','pushbutton1','w_points');
@@ -104,33 +104,33 @@ zef_color_label('d22');
 
 if not(isequal(zef.mlapp,1))
 
-zef_switch_color('w_on','pushbutton2','w_triangles');
-zef_switch_color('g_on','pushbutton4','g_triangles');
-zef_switch_color('c_on','pushbutton6','c_triangles');
-zef_switch_color('sk_on','pushbutton8','sk_triangles');
-zef_switch_color('sc_on','pushbutton10','sc_triangles');
-zef_switch_color('d1_on','pushbutton102','d1_triangles');
-zef_switch_color('d2_on','pushbutton202','d2_triangles');
-zef_switch_color('d3_on','pushbutton302','d3_triangles');
-zef_switch_color('d4_on','pushbutton402','d4_triangles');
-zef_switch_color('d5_on','d5_button_2','d5_triangles');
-zef_switch_color('d6_on','d6_button_2','d6_triangles');
-zef_switch_color('d7_on','d7_button_2','d7_triangles');
-zef_switch_color('d8_on','d8_button_2','d8_triangles');
-zef_switch_color('d9_on','d9_button_2','d9_triangles');
-zef_switch_color('d10_on','d10_button_2','d10_triangles');
-zef_switch_color('d11_on','d11_button_2','d11_triangles');
-zef_switch_color('d12_on','d12_button_2','d12_triangles');
-zef_switch_color('d13_on','d13_button_2','d13_triangles');
-zef_switch_color('d14_on','d14_button_2','d14_triangles');
-zef_switch_color('d15_on','d15_button_2','d15_triangles');
-zef_switch_color('d16_on','d16_button_2','d16_triangles');
-zef_switch_color('d17_on','d17_button_2','d17_triangles');
-zef_switch_color('d18_on','d18_button_2','d18_triangles');
-zef_switch_color('d19_on','d19_button_2','d19_triangles');
-zef_switch_color('d20_on','d20_button_2','d20_triangles');
-zef_switch_color('d21_on','d21_button_2','d21_triangles');
-zef_switch_color('d22_on','d22_button_2','d22_triangles');
+    zef_switch_color('w_on','pushbutton2','w_triangles');
+    zef_switch_color('g_on','pushbutton4','g_triangles');
+    zef_switch_color('c_on','pushbutton6','c_triangles');
+    zef_switch_color('sk_on','pushbutton8','sk_triangles');
+    zef_switch_color('sc_on','pushbutton10','sc_triangles');
+    zef_switch_color('d1_on','pushbutton102','d1_triangles');
+    zef_switch_color('d2_on','pushbutton202','d2_triangles');
+    zef_switch_color('d3_on','pushbutton302','d3_triangles');
+    zef_switch_color('d4_on','pushbutton402','d4_triangles');
+    zef_switch_color('d5_on','d5_button_2','d5_triangles');
+    zef_switch_color('d6_on','d6_button_2','d6_triangles');
+    zef_switch_color('d7_on','d7_button_2','d7_triangles');
+    zef_switch_color('d8_on','d8_button_2','d8_triangles');
+    zef_switch_color('d9_on','d9_button_2','d9_triangles');
+    zef_switch_color('d10_on','d10_button_2','d10_triangles');
+    zef_switch_color('d11_on','d11_button_2','d11_triangles');
+    zef_switch_color('d12_on','d12_button_2','d12_triangles');
+    zef_switch_color('d13_on','d13_button_2','d13_triangles');
+    zef_switch_color('d14_on','d14_button_2','d14_triangles');
+    zef_switch_color('d15_on','d15_button_2','d15_triangles');
+    zef_switch_color('d16_on','d16_button_2','d16_triangles');
+    zef_switch_color('d17_on','d17_button_2','d17_triangles');
+    zef_switch_color('d18_on','d18_button_2','d18_triangles');
+    zef_switch_color('d19_on','d19_button_2','d19_triangles');
+    zef_switch_color('d20_on','d20_button_2','d20_triangles');
+    zef_switch_color('d21_on','d21_button_2','d21_triangles');
+    zef_switch_color('d22_on','d22_button_2','d22_triangles');
 
 end
 

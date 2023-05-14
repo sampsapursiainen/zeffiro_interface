@@ -1,8 +1,8 @@
 if zef.current_version <= 2.2
-     for zef_i = 1 : 22
- eval(['zef.d' num2str(zef_i) '_priority =' num2str(28-zef_i) ';']);
-     end
- end
+    for zef_i = 1 : 22
+        eval(['zef.d' num2str(zef_i) '_priority =' num2str(28-zef_i) ';']);
+    end
+end
 clear zef_i
 
 if zef.current_version < 4
@@ -12,21 +12,21 @@ if zef.current_version < 4
     end
 
     if isfield(zef,'sigma_ind') && isempty(zef.domain_labels_raw)
-    zef.domain_labels_raw = zef.sigma_ind;
+        zef.domain_labels_raw = zef.sigma_ind;
     end
 
     if isfield(zef,'sigma') && isempty(zef.domain_labels)
         if not(isempty(zef.sigma))
-    zef.domain_labels= zef.sigma(:,2);
+            zef.domain_labels= zef.sigma(:,2);
         end
     end
 
     if isfield(zef,'nodes_b')
-    zef = rmfield(zef,'nodes_b');
+        zef = rmfield(zef,'nodes_b');
     end
 
-    if isfield(zef,'tetra_aux') 
-    zef = rmfield(zef,'tetra_aux');
+    if isfield(zef,'tetra_aux')
+        zef = rmfield(zef,'tetra_aux');
     end
 
 end

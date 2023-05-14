@@ -1,12 +1,12 @@
 zef_data = zef_plugin_settings;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 
 set(zef.h_plugin_settings_table,'CellSelectionCallback',@zef_plugin_settings_table_selection);
 if isempty(zef.plugin_cell)
-zef.plugin_cell = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_plugins.ini'],'FileType','text','Delimiter',',');
+    zef.plugin_cell = readcell([zef.program_path '/profile/' zef.profile_name '/zeffiro_plugins.ini'],'FileType','text','Delimiter',',');
 end
 
 zef.h_plugin_settings_table.Data = zef.plugin_cell;

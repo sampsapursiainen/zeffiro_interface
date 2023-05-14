@@ -2,83 +2,83 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if not(isfield(zef,'smoothing_steps_ele'));
-zef.smoothing_steps_ele = 100;
+    zef.smoothing_steps_ele = 100;
 end
 
 if not(isfield(zef,'lead_field_filter_quantile'));
-zef.lead_field_filter_quantile = 0.995;
+    zef.lead_field_filter_quantile = 0.995;
 end
 
 if not(isfield(zef,'use_fem_mesh_inflation'));
-zef.use_fem_mesh_inflation = 1;
+    zef.use_fem_mesh_inflation = 1;
 end
 
 if not(isfield(zef,'reduce_labeling_outliers'));
-zef.reduce_labeling_outliers = 1;
+    zef.reduce_labeling_outliers = 1;
 end
 
 if not(isfield(zef,'fem_mesh_inflation_strength'));
-zef.fem_mesh_inflation_strength = 0.3;
+    zef.fem_mesh_inflation_strength = 0.3;
 end
 
 if not(isfield(zef,'adaptive_refinement_on'));
-zef.adaptive_refinement_on = 0;
+    zef.adaptive_refinement_on = 0;
 end
 
 if not(isfield(zef,'adaptive_refinement_thresh_val'));
-zef.adaptive_refinement_thresh_val = 2;
+    zef.adaptive_refinement_thresh_val = 2;
 end
 
 if not(isfield(zef,'adaptive_refinement_k_param'));
-zef.adaptive_refinement_k_param = 5;
+    zef.adaptive_refinement_k_param = 5;
 end
 
 if not(isfield(zef,'source_space_creation_iterations'));
-zef.source_space_creation_iterations = 2;
+    zef.source_space_creation_iterations = 2;
 end
 
 if not(isfield(zef,'streamline_linewidth'));
-zef.streamline_linewidth = 1;
+    zef.streamline_linewidth = 1;
 end
 
 if not(isfield(zef,'pml_outer_radius_unit'));
-zef.pml_outer_radius_unit = 1;
+    zef.pml_outer_radius_unit = 1;
 end
 
 if not(isfield(zef,'exclude_box'));
-zef.exclude_box = 0;
+    zef.exclude_box = 0;
 end
 
 if not(isfield(zef,'fix_outer_surface'));
-zef.fix_outer_surface = 0;
+    zef.fix_outer_surface = 0;
 end
 
 if not(isfield(zef,'pml_outer_radius'));
-zef.pml_outer_radius = 2;
+    zef.pml_outer_radius = 2;
 end
 
 if not(isfield(zef,'pml_max_size_unit'));
-zef.pml_max_size_unit = 1;
+    zef.pml_max_size_unit = 1;
 end
 
 if not(isfield(zef,'pml_max_size'));
-zef.pml_max_size = 5;
+    zef.pml_max_size = 5;
 end
 
 if not(isfield(zef,'mesh_relabeling'));
-zef.mesh_relabeling = 1;
+    zef.mesh_relabeling = 1;
 end
 
 if not(isfield(zef,'normalize_lead_field'));
-zef.normalize_lead_field = 4;
+    zef.normalize_lead_field = 4;
 end
 
 if not(isfield(zef,'streamline_color'));
-zef.streamline_color = 'blue';
+    zef.streamline_color = 'blue';
 end
 
 if not(isfield(zef,'n_streamline'));
-zef.n_streamline = 100;
+    zef.n_streamline = 100;
 end
 
 if not(isfield(zef,'use_depth_electrodes'));

@@ -1,9 +1,9 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if zef.w_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9001, 'enable', zef.enable_str);
@@ -15,13 +15,13 @@ set(zef.h_w_merge,'enable', zef.enable_str);
 set(zef.h_w_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton2,'enable', zef.enable_str);
+    set(zef.h_pushbutton2,'enable', zef.enable_str);
 end
 
 if zef.g_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9002, 'enable', zef.enable_str);
@@ -33,13 +33,13 @@ set(zef.h_g_merge,'enable', zef.enable_str);
 set(zef.h_g_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton3,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton4,'enable', zef.enable_str);
+    set(zef.h_pushbutton4,'enable', zef.enable_str);
 end
 
 if zef.c_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9003, 'enable', zef.enable_str);
@@ -51,13 +51,13 @@ set(zef.h_c_merge,'enable', zef.enable_str);
 set(zef.h_c_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton5,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton6,'enable', zef.enable_str);
+    set(zef.h_pushbutton6,'enable', zef.enable_str);
 end
 
 if zef.sk_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9004, 'enable', zef.enable_str);
@@ -69,13 +69,13 @@ set(zef.h_sk_merge,'enable', zef.enable_str);
 set(zef.h_sk_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton7,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton8,'enable', zef.enable_str);
+    set(zef.h_pushbutton8,'enable', zef.enable_str);
 end
 
 if zef.sc_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9005, 'enable', zef.enable_str);
@@ -88,13 +88,13 @@ set(zef.h_sc_merge,'enable', zef.enable_str);
 set(zef.h_sc_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton9,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton10,'enable', zef.enable_str);
+    set(zef.h_pushbutton10,'enable', zef.enable_str);
 end
 
 if zef.d1_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9006, 'enable', zef.enable_str);
@@ -110,13 +110,13 @@ set(zef.h_d1_merge,'enable', zef.enable_str);
 set(zef.h_d1_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton101,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton102,'enable', zef.enable_str);
+    set(zef.h_pushbutton102,'enable', zef.enable_str);
 end
 
 if zef.d2_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9007, 'enable', zef.enable_str);
@@ -132,13 +132,13 @@ set(zef.h_d2_merge,'enable', zef.enable_str);
 set(zef.h_d2_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton201,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton202,'enable', zef.enable_str);
+    set(zef.h_pushbutton202,'enable', zef.enable_str);
 end
 
 if zef.d3_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9008, 'enable', zef.enable_str);
@@ -154,13 +154,13 @@ set(zef.h_d3_merge,'enable', zef.enable_str);
 set(zef.h_d3_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton301,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton302,'enable', zef.enable_str);
+    set(zef.h_pushbutton302,'enable', zef.enable_str);
 end
 
 if zef.d4_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_edit9009, 'enable', zef.enable_str);
@@ -176,13 +176,13 @@ set(zef.h_d4_merge,'enable', zef.enable_str);
 set(zef.h_d4_invert,'enable', zef.enable_str);
 set(zef.h_pushbutton401,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_pushbutton402,'enable', zef.enable_str);
+    set(zef.h_pushbutton402,'enable', zef.enable_str);
 end
 
 if zef.d5_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d5_scaling, 'enable', zef.enable_str);
@@ -198,13 +198,13 @@ set(zef.h_d5_merge,'enable', zef.enable_str);
 set(zef.h_d5_invert,'enable', zef.enable_str);
 set(zef.h_d5_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d5_button_2,'enable', zef.enable_str);
+    set(zef.h_d5_button_2,'enable', zef.enable_str);
 end
 
 if zef.d6_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d6_scaling, 'enable', zef.enable_str);
@@ -220,13 +220,13 @@ set(zef.h_d6_merge,'enable', zef.enable_str);
 set(zef.h_d6_invert,'enable', zef.enable_str);
 set(zef.h_d6_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d6_button_2,'enable', zef.enable_str);
+    set(zef.h_d6_button_2,'enable', zef.enable_str);
 end
 
 if zef.d7_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d7_scaling, 'enable', zef.enable_str);
@@ -242,13 +242,13 @@ set(zef.h_d7_merge,'enable', zef.enable_str);
 set(zef.h_d7_invert,'enable', zef.enable_str);
 set(zef.h_d7_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d7_button_2,'enable', zef.enable_str);
+    set(zef.h_d7_button_2,'enable', zef.enable_str);
 end
 
 if zef.d8_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d8_scaling, 'enable', zef.enable_str);
@@ -264,13 +264,13 @@ set(zef.h_d8_merge,'enable', zef.enable_str);
 set(zef.h_d8_invert,'enable', zef.enable_str);
 set(zef.h_d8_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d8_button_2,'enable', zef.enable_str);
+    set(zef.h_d8_button_2,'enable', zef.enable_str);
 end
 
 if zef.d9_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d9_scaling, 'enable', zef.enable_str);
@@ -286,13 +286,13 @@ set(zef.h_d9_merge,'enable', zef.enable_str);
 set(zef.h_d9_invert,'enable', zef.enable_str);
 set(zef.h_d9_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d9_button_2,'enable', zef.enable_str);
+    set(zef.h_d9_button_2,'enable', zef.enable_str);
 end
 
 if zef.d10_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d10_scaling, 'enable', zef.enable_str);
@@ -308,13 +308,13 @@ set(zef.h_d10_merge,'enable', zef.enable_str);
 set(zef.h_d10_invert,'enable', zef.enable_str);
 set(zef.h_d10_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d10_button_2,'enable', zef.enable_str);
+    set(zef.h_d10_button_2,'enable', zef.enable_str);
 end
 
 if zef.d11_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d11_scaling, 'enable', zef.enable_str);
@@ -330,13 +330,13 @@ set(zef.h_d11_merge,'enable', zef.enable_str);
 set(zef.h_d11_invert,'enable', zef.enable_str);
 set(zef.h_d11_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d11_button_2,'enable', zef.enable_str);
- end
+    set(zef.h_d11_button_2,'enable', zef.enable_str);
+end
 
 if zef.d12_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d12_scaling, 'enable', zef.enable_str);
@@ -352,13 +352,13 @@ set(zef.h_d12_merge,'enable', zef.enable_str);
 set(zef.h_d12_invert,'enable', zef.enable_str);
 set(zef.h_d12_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d12_button_2,'enable', zef.enable_str);
+    set(zef.h_d12_button_2,'enable', zef.enable_str);
 end
 
 if zef.d13_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d13_scaling, 'enable', zef.enable_str);
@@ -374,13 +374,13 @@ set(zef.h_d13_merge,'enable', zef.enable_str);
 set(zef.h_d13_invert,'enable', zef.enable_str);
 set(zef.h_d13_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d13_button_2,'enable', zef.enable_str);
+    set(zef.h_d13_button_2,'enable', zef.enable_str);
 end
 
 if zef.d14_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d14_scaling, 'enable', zef.enable_str);
@@ -396,13 +396,13 @@ set(zef.h_d14_merge,'enable', zef.enable_str);
 set(zef.h_d14_invert,'enable', zef.enable_str);
 set(zef.h_d14_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d14_button_2,'enable', zef.enable_str);
+    set(zef.h_d14_button_2,'enable', zef.enable_str);
 end
 
 if zef.d15_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d15_scaling, 'enable', zef.enable_str);
@@ -418,13 +418,13 @@ set(zef.h_d15_merge,'enable', zef.enable_str);
 set(zef.h_d15_invert,'enable', zef.enable_str);
 set(zef.h_d15_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d15_button_2,'enable', zef.enable_str);
+    set(zef.h_d15_button_2,'enable', zef.enable_str);
 end
 
 if zef.d16_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d16_scaling, 'enable', zef.enable_str);
@@ -440,13 +440,13 @@ set(zef.h_d16_merge,'enable', zef.enable_str);
 set(zef.h_d16_invert,'enable', zef.enable_str);
 set(zef.h_d16_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d16_button_2,'enable', zef.enable_str);
+    set(zef.h_d16_button_2,'enable', zef.enable_str);
 end
 
 if zef.d17_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d17_scaling, 'enable', zef.enable_str);
@@ -462,13 +462,13 @@ set(zef.h_d17_merge,'enable', zef.enable_str);
 set(zef.h_d17_invert,'enable', zef.enable_str);
 set(zef.h_d17_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d17_button_2,'enable', zef.enable_str);
+    set(zef.h_d17_button_2,'enable', zef.enable_str);
 end
 
 if zef.d18_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d18_scaling, 'enable', zef.enable_str);
@@ -484,13 +484,13 @@ set(zef.h_d18_merge,'enable', zef.enable_str);
 set(zef.h_d18_invert,'enable', zef.enable_str);
 set(zef.h_d18_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d18_button_2,'enable', zef.enable_str);
+    set(zef.h_d18_button_2,'enable', zef.enable_str);
 end
 
 if zef.d19_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d19_scaling, 'enable', zef.enable_str);
@@ -506,13 +506,13 @@ set(zef.h_d19_merge,'enable', zef.enable_str);
 set(zef.h_d19_invert,'enable', zef.enable_str);
 set(zef.h_d19_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d19_button_2,'enable', zef.enable_str);
+    set(zef.h_d19_button_2,'enable', zef.enable_str);
 end
 
 if zef.d20_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d20_scaling, 'enable', zef.enable_str);
@@ -528,13 +528,13 @@ set(zef.h_d20_merge,'enable', zef.enable_str);
 set(zef.h_d20_invert,'enable', zef.enable_str);
 set(zef.h_d20_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d20_button_2,'enable', zef.enable_str);
+    set(zef.h_d20_button_2,'enable', zef.enable_str);
 end
 
 if zef.d21_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d21_scaling, 'enable', zef.enable_str);
@@ -550,13 +550,13 @@ set(zef.h_d21_merge,'enable', zef.enable_str);
 set(zef.h_d21_invert,'enable', zef.enable_str);
 set(zef.h_d21_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d21_button_2,'enable', zef.enable_str);
+    set(zef.h_d21_button_2,'enable', zef.enable_str);
 end
 
 if zef.d22_on
-zef.enable_str = 'on';
+    zef.enable_str = 'on';
 else
-zef.enable_str = 'off';
+    zef.enable_str = 'off';
 end;
 
 set(zef.h_d22_scaling, 'enable', zef.enable_str);
@@ -572,5 +572,5 @@ set(zef.h_d22_merge,'enable', zef.enable_str);
 set(zef.h_d22_invert,'enable', zef.enable_str);
 set(zef.h_d22_button_1,'enable', zef.enable_str);
 if not(isequal(zef.mlapp,1))
-set(zef.h_d22_button_2,'enable', zef.enable_str);
+    set(zef.h_d22_button_2,'enable', zef.enable_str);
 end

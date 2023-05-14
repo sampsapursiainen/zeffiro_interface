@@ -6,13 +6,13 @@ convergence_value = Inf;
 
 while convergence_value > 1e-5
 
-extra_layers = round(log(((outer_radius-inner_radius)*(growth_param - 1))/(lattice_size*growth_param) + 1)/log(growth_param));
+    extra_layers = round(log(((outer_radius-inner_radius)*(growth_param - 1))/(lattice_size*growth_param) + 1)/log(growth_param));
 
-growth_param_new = exp(log(max_size/lattice_size)/extra_layers);
+    growth_param_new = exp(log(max_size/lattice_size)/extra_layers);
 
-convergence_value = abs(max_size - lattice_size*growth_param^extra_layers)/max_size;
+    convergence_value = abs(max_size - lattice_size*growth_param^extra_layers)/max_size;
 
-growth_param = growth_param_new;
+    growth_param = growth_param_new;
 
 end
 
