@@ -57,19 +57,23 @@ try
 catch
     movegui(h_fig,'center')
 end
+
+h_fig.Position = [530         265        1458         420];
 %%
 h_barplot_ES = bar(y_ES, 0.3);
 h_barplot_ES.FaceColor = [0.3 0.3 0.3];
 h_barplot_ES.LineWidth = 0.1;
-pbaspect([2 1 1]);
+pbaspect([3 1 1]);
+
+FontSize_aux = 16;
 
 h_axes = gca;
 h_axes.XLabel.String = 'Electrode channel';
-h_axes.XLabel.FontSize = 10;
+h_axes.XLabel.FontSize = FontSize_aux;
 h_axes.XLabel.FontWeight = 'bold';
 
 h_axes.YLabel.String = 'Amplitude (mA)';
-h_axes.YLabel.FontSize = 10;
+h_axes.YLabel.FontSize = FontSize_aux;
 h_axes.YLabel.FontWeight = 'bold';
 
 h_axes.XGrid = 'off';
@@ -97,16 +101,19 @@ end
 if p_max > max_current_montage
     h_axes.YLim = [p_min p_max]*1.05;
 else
-    h_axes.YLim = [-max_current_montage max_current_montage]*1.05;
+    %h_axes.YLim = [-max_current_montage max_current_montage]*1.05;
+    h_axes.YLim = [-max_current_channel max_current_channel]*1.05;
 end
 
 hold on;
-plot(xlim,[ max_current_montage  max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
-plot(xlim,[ max_current_channel  max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
-legend('Channel','Total Max','Channel Max','location','eastoutside','AutoUpdate','off');
-plot(xlim,[-max_current_montage -max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
-plot(xlim,[-max_current_channel -max_current_channel],'LineWidth',0.3,'Color',[1 0.3 0],'LineStyle','-.');
+%plot(xlim,[ max_current_montage  max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
+plot(xlim,[ max_current_channel  max_current_channel],'LineWidth',0.3,'Color',[1 0 0],'LineStyle','--');
+legend('Channel','Channel Max','location','eastoutside','AutoUpdate','off');
+%plot(xlim,[-max_current_montage -max_current_montage],'LineWidth',1.0,'Color',[1 0 0],'LineStyle','--');
+plot(xlim,[-max_current_channel -max_current_channel],'LineWidth',0.3,'Color',[1 0 0],'LineStyle','--');
 hold off;
+
+grid on;
 
 if exist('zef','var')
 h_fig.Visible = zef.use_display;

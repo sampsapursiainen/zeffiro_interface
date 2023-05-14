@@ -22,6 +22,7 @@
 !*.txt
 !*.sh
 !*.zef
+!*.dat
 !README
 
 # Allow TeΧ and font files under documentation folder.

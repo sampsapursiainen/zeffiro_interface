@@ -1,5 +1,5 @@
-if ismember(zef.ES_search_type, 1)
-    if zef.ES_search_method ~= 4
+if ismember(zef.ES_opt_solver, 1)
+    if zef.ES_opt_method ~= 4
         zef = assign_common_parameters(zef);
         zef.ES_step_tolerance       = str2double(zef.h_ES_parameter_table.Data{18,2});
         zef.ES_constraint_tolerance = str2double(zef.h_ES_parameter_table.Data{19,2});
@@ -13,7 +13,7 @@ if ismember(zef.ES_search_type, 1)
     end
 end
 
-if ismember(zef.ES_search_type, 2:5)
+if ismember(zef.ES_opt_solver, 2:5)
     zef = assign_common_parameters(zef);
 end
 
@@ -34,8 +34,9 @@ zef.ES_roi_range            = str2double(zef.h_ES_parameter_table.Data{13,2});
 zef.ES_solver_tolerance     = str2double(zef.h_ES_parameter_table.Data{14,2});
 zef.ES_display              = (zef.h_ES_parameter_table.Data{15,2});
 
-if ismember(zef.ES_search_type, [1 4 5])
+if ismember(zef.ES_opt_solver, [1 4 5])
     zef.ES_max_n_iterations     = str2double(zef.h_ES_parameter_table.Data{16,2});
     zef.ES_max_time             = str2double(zef.h_ES_parameter_table.Data{17,2});
 end
+
 end

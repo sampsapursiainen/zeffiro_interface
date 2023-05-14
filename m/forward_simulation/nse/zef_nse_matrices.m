@@ -5,9 +5,9 @@ nse_mat.M = zef_volume_scalar_matrix_FF(nodes,tetra,rho);
 nse_mat.L_11 = zef_volume_scalar_matrix_GG(nodes,tetra,1,1,mu);
 nse_mat.L_22 = zef_volume_scalar_matrix_GG(nodes,tetra,2,2,mu);
 nse_mat.L_33 = zef_volume_scalar_matrix_GG(nodes,tetra,3,3,mu);
-nse_mat.L_12 = zef_volume_scalar_matrix_GG(nodes,tetra,1,1,mu);
-nse_mat.L_13 = zef_volume_scalar_matrix_GG(nodes,tetra,3,3,mu);
-nse_mat.L_23 = zef_volume_scalar_matrix_GG(nodes,tetra,2,2,mu);
+nse_mat.L_12 = zef_volume_scalar_matrix_GG(nodes,tetra,1,2,mu);
+nse_mat.L_13 = zef_volume_scalar_matrix_GG(nodes,tetra,1,3,mu);
+nse_mat.L_23 = zef_volume_scalar_matrix_GG(nodes,tetra,2,3,mu);
 
 nse_mat.Q_1 = zef_volume_scalar_matrix_FG(nodes,tetra,1,ones(size(rho)));
 nse_mat.Q_2 = zef_volume_scalar_matrix_FG(nodes,tetra,2,ones(size(rho)));

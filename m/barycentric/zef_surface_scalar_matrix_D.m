@@ -1,4 +1,37 @@
 function M = zef_surface_scalar_matrix_D(nodes, tetra, g_i_ind, scalar_field, weighting)
+%
+% zef_surface_scalar_matrix_D
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - g_i_ind
+%
+%   TODO: explanation.
+%
+% - scalar_field
+%
+%   TODO: explanation.
+%
+% - weighting
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - M
+%
+%   TODO: explanation.
+%
 
 N = size(nodes,1);
 K = size(tetra,1);
@@ -11,7 +44,7 @@ ind_m = [ 2 4 3 ;
 [~,~,t_ind,~,~,~,~,f_ind] = zef_surface_mesh(tetra);
 
 if nargin < 5
-weighting = 1;    
+weighting = 1;
 end
 
 if nargin < 4
@@ -34,9 +67,9 @@ for i = 1 : 3
     [g_i] = zef_volume_barycentric(nodes,tetra,i,det);
 
        I = sub2ind(size(tetra),t_ind,ind_m(f_ind,i));
-    
-    for j = i : 3    
-   
+
+    for j = i : 3
+
        J = sub2ind(size(tetra),t_ind,ind_m(f_ind,j));
 
         if i == j
@@ -44,15 +77,15 @@ for i = 1 : 3
         else
         entry_vec = area*weight_param(2);
         end
-        M_part =  sparse(tetra(I),tetra(J),scalar_field(t_ind).*g_i(t_ind,g_i_ind).*entry_vec,N,N);       
+        M_part =  sparse(tetra(I),tetra(J),scalar_field(t_ind).*g_i(t_ind,g_i_ind).*entry_vec,N,N);
         if i == j
         M = M + M_part;
         else
         M = M + M_part;
         M = M + M_part';
-        end 
-        
+        end
+
     end
-    
+
 end
 end

@@ -1,9 +1,42 @@
 function M = zef_volume_scalar_matrix_D(nodes, tetra, g_i_ind, scalar_field, weighting)
+%
+% zef_volume_scalar_matrix_D
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - g_i_ind
+%
+%   TODO: explanation.
+%
+% - scalar_field
+%
+%   TODO: explanation.
+%
+% - weighting
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - M
+%
+%   TODO: explanation.
+%
 
 N = size(nodes,1);
 
 if nargin < 5
-weighting = 1;    
+weighting = 1;
 end
 
 if nargin < 4
@@ -22,14 +55,14 @@ entry_vec = volume*weight_param;
     for i = 1 : 4
 
     [g_i] = zef_volume_barycentric(nodes,tetra,i);
-    
-        for j = 1 : 4       
 
-        M_part = sparse(tetra(:,j),tetra(:,i),scalar_field.*g_i(:,g_i_ind).*entry_vec,N,N);       
+        for j = 1 : 4
+
+        M_part = sparse(tetra(:,j),tetra(:,i),scalar_field.*g_i(:,g_i_ind).*entry_vec,N,N);
         M = M + M_part;
-        
-        end 
-        
+
+        end
+
     end
-    
+
 end

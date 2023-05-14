@@ -9,7 +9,7 @@ if nargin < 5
 end
 
 if nargin < 6
-    x = zeros(size(A,1),1);
+    x = zeros(size(b,1),1);
 end
 
 if isequal(class(A),'function_handle')

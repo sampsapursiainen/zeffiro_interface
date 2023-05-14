@@ -1,4 +1,37 @@
 function [b_coord, det] = zef_volume_barycentric(nodes,tetra,p_ind,det)
+%
+% zef_volume_barycentric
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - p_ind
+%
+%   TODO: explanation.
+%
+% - det
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - b_coord
+%
+%   TODO: explanation.
+%
+% - det
+%
+%   TODO: explanation.
+%
 
 b_coord = [];
 det_1 = [];
@@ -6,10 +39,10 @@ det_2 = [];
 I = [1 2 3 4];
 
 if nargin == 2
-    p_ind = []; 
+    p_ind = [];
 [~,~,~,det] = zef_3by3_solver(reshape(nodes(tetra(:,I(1:3)),1)-nodes(tetra(:,I([4 4 4])),1),size(tetra,1),3),...
                            reshape(nodes(tetra(:,I(1:3)),2)-nodes(tetra(:,I([4 4 4])),2),size(tetra,1),3),...
-                           reshape(nodes(tetra(:,I(1:3)),3)-nodes(tetra(:,I([4 4 4])),3),size(tetra,1),3));    
+                           reshape(nodes(tetra(:,I(1:3)),3)-nodes(tetra(:,I([4 4 4])),3),size(tetra,1),3));
 else
 
 if nargin > 2
@@ -39,7 +72,7 @@ end
 
 if isempty(J_2)
 
-if isempty(det)  
+if isempty(det)
 [x,y,z,det] = zef_3by3_solver(reshape(nodes(tetra(:,I(1:3)),1)-nodes(tetra(:,I([4 4 4])),1),size(tetra,1),3),...
                            reshape(nodes(tetra(:,I(1:3)),2)-nodes(tetra(:,I([4 4 4])),2),size(tetra,1),3),...
                            reshape(nodes(tetra(:,I(1:3)),3)-nodes(tetra(:,I([4 4 4])),3),size(tetra,1),3),...
@@ -49,14 +82,14 @@ else
                            reshape(nodes(tetra(:,I(1:3)),2)-nodes(tetra(:,I([4 4 4])),2),size(tetra,1),3),...
                            reshape(nodes(tetra(:,I(1:3)),3)-nodes(tetra(:,I([4 4 4])),3),size(tetra,1),3),...
                            p_val(:,I(1:3)),det);
-end 
+end
 
 b_coord = [x y z p_val(:,I(4))-x.*nodes(tetra(:,I(4)),1)-y.*nodes(tetra(:,I(4)),2)-z.*nodes(tetra(:,I(4)),3)];
 
 
 else
-    
-if isempty(det)  
+
+if isempty(det)
 [x,y,z,det_1] = zef_3by3_solver(reshape(nodes(tetra(J_1,I(1:3)),1)-nodes(tetra(J_1,I([4 4 4])),1),length(J_1),3),...
                            reshape(nodes(tetra(J_1,I(1:3)),2)-nodes(tetra(J_1,I([4 4 4])),2),length(J_1),3),...
                            reshape(nodes(tetra(J_1,I(1:3)),3)-nodes(tetra(J_1,I([4 4 4])),3),length(J_1),3),...
@@ -66,14 +99,14 @@ else
                            reshape(nodes(tetra(J_1,I(1:3)),2)-nodes(tetra(J_1,I([4 4 4])),2),length(J_1),3),...
                            reshape(nodes(tetra(J_1,I(1:3)),3)-nodes(tetra(J_1,I([4 4 4])),3),length(J_1),3),...
                            p_val(J_1,I(1:3)),det(J_1));
-end 
+end
 
 b_coord = zeros(size(tetra));
 b_coord(J_1,:) = [x y z p_val(J_1,I(4))-x.*nodes(tetra(J_1,I(4)),1)-y.*nodes(tetra(J_1,I(4)),2)-z.*nodes(tetra(J_1,I(4)),3)];
 
 I = [4 1 2 3];
 
-if isempty(det)  
+if isempty(det)
 [x,y,z,det_2] = zef_3by3_solver(reshape(nodes(tetra(J_2,I(1:3)),1)-nodes(tetra(J_2,I([4 4 4])),1),length(J_2),3),...
                            reshape(nodes(tetra(J_2,I(1:3)),2)-nodes(tetra(J_2,I([4 4 4])),2),length(J_2),3),...
                            reshape(nodes(tetra(J_2,I(1:3)),3)-nodes(tetra(J_2,I([4 4 4])),3),length(J_2),3),...
@@ -84,7 +117,7 @@ else
                            reshape(nodes(tetra(J_2,I(1:3)),2)-nodes(tetra(J_2,I([4 4 4])),2),length(J_2),3),...
                            reshape(nodes(tetra(J_2,I(1:3)),3)-nodes(tetra(J_2,I([4 4 4])),3),length(J_2),3),...
                            p_val(J_2,I(1:3)),det(J_2));
-end 
+end
 
 b_coord(J_2,:) = [x y z p_val(J_2,I(4))-x.*nodes(tetra(J_2,I(4)),1)-y.*nodes(tetra(J_2,I(4)),2)-z.*nodes(tetra(J_2,I(4)),3)];
 

@@ -1,10 +1,43 @@
 function M = zef_volume_scalar_matrix_GCC(nodes, tetra, g_i_ind, scalar_field, weighting)
+%
+% zef_volume_scalar_GCC
+%
+% TODO: Sampsa should document this.
+%
+% Inputs:
+%
+% - nodes
+%
+%   TODO: explanation.
+%
+% - tetra
+%
+%   TODO: explanation.
+%
+% - g_i_ind
+%
+%   TODO: explanation.
+%
+% - scalar_field
+%
+%   TODO: explanation.
+%
+% - weighting
+%
+%   TODO: explanation.
+%
+% Outputs:
+%
+% - M
+%
+%   TODO: explanation.
+%
 
 N = size(nodes,1);
 K = size(tetra,1);
 
 if nargin < 5
-weighting = 1;    
+weighting = 1;
 end
 
 if nargin < 4
