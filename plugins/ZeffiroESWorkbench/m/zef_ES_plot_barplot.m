@@ -31,15 +31,15 @@ switch nargin
         end
         y_ES = vec.("ES Channels"){1,1}{sr, sc};
     case {3}
-       try
-           vec = zef_ES_table(varargin{1});
-           zef = evalin('base','zef');
-           warning('ZI: No zef were called as an input argument.')
-           [sr, sc] = zef_ES_objective_function(zef, vec);
-       catch
-           vec = zef_ES_table(varargin{1}.y_ES_interval);
-           [sr, sc] = zef_ES_objective_function(varargin{1}, zef_ES_table(varargin{1}.y_ES_interval));
-       end
+        try
+            vec = zef_ES_table(varargin{1});
+            zef = evalin('base','zef');
+            warning('ZI: No zef were called as an input argument.')
+            [sr, sc] = zef_ES_objective_function(zef, vec);
+        catch
+            vec = zef_ES_table(varargin{1}.y_ES_interval);
+            [sr, sc] = zef_ES_objective_function(varargin{1}, zef_ES_table(varargin{1}.y_ES_interval));
+        end
         y_ES = vec.("ES Channels"){1,1}{sr, sc};
     otherwise
         error('Too many input arguments.')
@@ -116,9 +116,9 @@ hold off;
 grid on;
 
 if exist('zef','var')
-h_fig.Visible = zef.use_display;
-zef.h_ES_barplot = h_fig;
-%h_barplot_ES = [h_axes; h_barplot_ES];
+    h_fig.Visible = zef.use_display;
+    zef.h_ES_barplot = h_fig;
+    %h_barplot_ES = [h_axes; h_barplot_ES];
 end
 
 end

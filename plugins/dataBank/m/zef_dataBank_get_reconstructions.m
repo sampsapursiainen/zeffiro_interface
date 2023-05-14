@@ -1,7 +1,7 @@
 function [rec_cell, rec_info] = zef_dataBank_get_reconstructions(zef,frame_number)
 
 if nargin < 2
-    frame_number = 1; 
+    frame_number = 1;
 end
 
 rec_cell = cell(0);

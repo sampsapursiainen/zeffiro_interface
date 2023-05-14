@@ -6,8 +6,8 @@ zef.MUSIC = MUSIC_app;
 
 %_ Names of methods that are included in app _
 zef_MUSIC_names = {'Source projection',
-                   'Noise out-projection'
-                   };
+    'Noise out-projection'
+    };
 
 zef.MUSIC.MUSIC_type.Items = zef_MUSIC_names;
 zef.MUSIC.MUSIC_type.ItemsData = strsplit(num2str(1:length(zef_MUSIC_names)));
@@ -18,7 +18,7 @@ end
 
 %_ Names of leadfield regularization methods _
 zef_MUSIC_names = {'Basic',
-                'Pseudoinverse'};
+    'Pseudoinverse'};
 
 zef.MUSIC.MUSIC_L_reg_type.Items = zef_MUSIC_names;
 zef.MUSIC.MUSIC_L_reg_type.ItemsData = strsplit(num2str(1:length(zef_MUSIC_names)));

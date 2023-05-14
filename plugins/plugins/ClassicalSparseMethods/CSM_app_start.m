@@ -6,11 +6,11 @@ zef.CSM = CSM_app;
 
 %_ Names of methods that are included in app _
 zef_csm_names = {'dSPM',
-                 'sLORETA',
-                 '3D sLORETA',
-                 'Sparse Bayesian Learning'
-                };
-            
+    'sLORETA',
+    '3D sLORETA',
+    'Sparse Bayesian Learning'
+    };
+
 zef.CSM.csm_type.Items = zef_csm_names;
 zef.CSM.csm_type.ItemsData = strsplit(num2str(1:length(zef_csm_names)));
 zef.CSM.csm_type.Value = '1';
@@ -35,7 +35,7 @@ if ~isfield(zef,'cms_n_iter')
     zef.csm_n_iter = 10;
 end
 
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.CSM."field" = zef."field")
 zef_props = properties(zef.CSM);
 for zef_i = 1:length(zef_props)

@@ -12,7 +12,7 @@ switch nargin
         obj2    = zef.ES_obj_fun_2;
         AT      = zef.ES_acceptable_threshold;
         TT      = zef.ES_threshold_condition;
-        if nargin == 2 
+        if nargin == 2
             if istable(varargin{2})
                 vec = varargin{2};
             else

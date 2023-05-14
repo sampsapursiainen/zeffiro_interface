@@ -10,7 +10,7 @@ sampling_freq = zef.inv_sampling_frequency;
 high_pass = zef.inv_low_cut_frequency;
 low_pass = zef.inv_high_cut_frequency;
 number_of_frames = zef.number_of_frames;
-source_direction_mode = zef.source_direction_mode; 
+source_direction_mode = zef.source_direction_mode;
 source_directions = zef.source_directions;
 source_positions = zef.source_positions;
 time_step = zef.inv_time_3;
@@ -33,16 +33,16 @@ reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
 [L,n_interp, procFile] = zef_processLeadfields(zef);
 
 %get ellipse filteres full measurement data. f_data: "sensors" x "time points"
-[f_data] = zef_getFilteredData(zef); 
+[f_data] = zef_getFilteredData(zef);
 timeSteps = arrayfun(@(x) zef_getTimeStep(f_data, x, zef), 1:number_of_frames, 'UniformOutput', false);
 
 z_inverse_results = cell(0);
 %% CALCULATION STARTS HERE
 % m_0 = prior mean
 m = zeros(size(L,2), 1);
-    
+
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),zef.normalize_data,0);
-    
+
 % Transition matrix is Identity matrix
 P = eye(size(L,2)) * theta0;
 
@@ -74,20 +74,20 @@ elseif filter_type == 2
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
     [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
-elseif filter_type == 4 
+elseif filter_type == 4
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
     H = L * sqrtm(P_old);
     W = inv(sqrtm(diag(diag(H'*inv(H*H' + R)*H))));
     z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
-    
+
 end
 
 %% RTS SMOOTHING
 
 if (smoothing == 2)
-[~, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
-z_inverse = m_s_store;
+    [~, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
+    z_inverse = m_s_store;
 end
 
 %% POSTPROCESSING

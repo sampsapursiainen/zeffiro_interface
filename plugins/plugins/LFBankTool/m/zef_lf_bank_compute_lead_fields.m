@@ -10,13 +10,13 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef.imaging_method = find(ismember(zef.imaging_method_cell, zef.lf_bank_storage{zef_i}.imaging_method),1);
         zef.sensors = zef.lf_bank_storage{zef_i}.sensors;
         if isvalid(zef.h_mesh_tool)
-        zef_update_mesh_tool;
+            zef_update_mesh_tool;
         end
         if size(zef.sensors,2) >= 3
-        zef.s_points = zef.sensors(:,1:3);
+            zef.s_points = zef.sensors(:,1:3);
         end
         if size(zef.sensors,2) > 3
-        zef.s_directions = zef.sensors(:,4:end);
+            zef.s_directions = zef.sensors(:,4:end);
         end
         zef.s_scaling = 1;
         zef.s_x_correction = 0;
@@ -28,18 +28,18 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef.s_affine_transform = {eye(4)};
 
         if zef.source_interpolation_on == 1 && zef_i > 1
-        zef.source_interpolation_on = 0;
-        if isfield(zef,'h_source_interpolation_on')
-        if isvalid('zef.h_source_interpolation_on')
-        set(zef.h_source_interpolation_on,'value',0);
-        end
-        end
+            zef.source_interpolation_on = 0;
+            if isfield(zef,'h_source_interpolation_on')
+                if isvalid('zef.h_source_interpolation_on')
+                    set(zef.h_source_interpolation_on,'value',0);
+                end
+            end
         end
 
         if isfield(zef,'h_mesh_tool')
-        if isvalid('zef.h_mesh_tool')
-        zef_update_mesh_tool;
-        end
+            if isvalid('zef.h_mesh_tool')
+                zef_update_mesh_tool;
+            end
         end
         zef_update;
 
@@ -56,22 +56,22 @@ for zef_i = 1:length(zef.lf_bank_storage)
         zef_update_lf_bank_tool;
         zef_update;
 
-        end
+    end
 
-        end
+end
 
-        zef.source_interpolation_on = zef.aux_field;
-        if isfield(zef,'h_source_interpolation_on')
-        if isvalid('zef.h_source_interpolation_on')
+zef.source_interpolation_on = zef.aux_field;
+if isfield(zef,'h_source_interpolation_on')
+    if isvalid('zef.h_source_interpolation_on')
         set(zef.h_source_interpolation_on,'value',zef.source_interpolation_on);
-        end
-        end
+    end
+end
 
-        if isfield(zef,'h_mesh_tool')
-        if isvalid('zef.h_mesh_tool')
+if isfield(zef,'h_mesh_tool')
+    if isvalid('zef.h_mesh_tool')
         zef_update_mesh_tool;
-        end
-        end
+    end
+end
 
 clear zef_i;
 

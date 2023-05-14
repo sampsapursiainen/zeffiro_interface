@@ -17,7 +17,7 @@ zef.KF.filter_type.Value = '1';
 zef.KF.number_of_ensembles.Value = '100';
 
 
-%set parameters if saved in ZI: 
+%set parameters if saved in ZI:
 %(Naming concept: zef.KF."field" = zef."field")
 zef_props = properties(zef.KF);
 for zef_i = 1:length(zef_props)

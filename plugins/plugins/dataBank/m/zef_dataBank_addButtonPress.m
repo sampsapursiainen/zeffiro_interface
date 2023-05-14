@@ -1,7 +1,7 @@
 function zef = zef_dataBank_addButtonPress(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 dbtype=zef.dataBank.app.Entrytype.Value;
@@ -40,14 +40,14 @@ end
 newNode.ContextMenu=zef.dataBank.app.treeMenu;
 
 if isempty(zef.dataBank.app.Tree.SelectedNodes)
-expand(zef.dataBank.app.Tree, 'all');
+    expand(zef.dataBank.app.Tree, 'all');
 else
-expand(zef.dataBank.app.Tree.SelectedNodes);
+    expand(zef.dataBank.app.Tree.SelectedNodes);
 end
 
 clear dbtype dbParentHash newNode;
 
-if nargout == 0 
-assignin('base','zef',zef);
+if nargout == 0
+    assignin('base','zef',zef);
 end
 end

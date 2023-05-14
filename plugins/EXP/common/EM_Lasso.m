@@ -33,15 +33,15 @@ log_prob_lap = @(x,gamma) -(m*log(sigma)+ 0.5 * (A*x-b)'*(A*x-b)+ 0.5* sum(gamma
 
 %log_prob_lap = @(x,gamma) -(0.5 * (A*x-b)'*(A*x-b)+ 0.5* sum(gamma.*abs(x)));
 
-  x = x0; %initialization...
+x = x0; %initialization...
 
-  log_old = log_prob_lap(x,gamma);
+log_old = log_prob_lap(x,gamma);
 
-  iter_ind = 0;
+iter_ind = 0;
 
 while (converged==0)
 
-  iter_ind = iter_ind + 1;
+    iter_ind = iter_ind + 1;
 
     invD = 0.5*abs(x)/gamma;
     ADA = A*(invD.*A');
@@ -60,16 +60,16 @@ while (converged==0)
     if (delta_log/avg_neg_log)<conv_thres
         converged=1;
     end
-%     if  (log_new-log_old)<-2*eps
-%           warning('convergenceTest:neglog_Decrease', 'objective decreased!');
-%     end
+    %     if  (log_new-log_old)<-2*eps
+    %           warning('convergenceTest:neglog_Decrease', 'objective decreased!');
+    %     end
 
     log_old = log_new;
 
-     if iter == maxiter
+    if iter == maxiter
         break;
-     end
-        iter=iter+1;
+    end
+    iter=iter+1;
 
 end
 end

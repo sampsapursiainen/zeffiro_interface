@@ -1,7 +1,7 @@
 function zef = zef_dataBank_exportButtonPress(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 zef_dataBank_getHashForMenu;
@@ -22,7 +22,7 @@ end
 clear data savefile savepath tree
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

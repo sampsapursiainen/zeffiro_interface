@@ -3,7 +3,7 @@
 zef_data= zeffiro_interface_filter_tool;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 set(zef.h_zef_filter_tool,'Name','ZEFFIRO Interface: Filter tool');
 set(findobj(zef.h_zef_filter_tool.Children,'-property','FontUnits'),'FontUnits','pixels')

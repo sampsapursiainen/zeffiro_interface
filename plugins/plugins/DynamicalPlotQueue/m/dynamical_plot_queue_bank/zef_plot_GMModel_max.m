@@ -3,9 +3,9 @@ function zef_plot_GMModel_max(varargin)
 %The optional argument is the scale of the radius. This
 %function can be either static or dynamical.
 if not(isempty(varargin))
-color_val = varargin{1};
+    color_val = varargin{1};
 else
-color_val = 0.7*[0 1 1];
+    color_val = 0.7*[0 1 1];
 end
 
 
@@ -28,7 +28,7 @@ Z = reshape(Aux_arr(3,:),size(Z_0));
 p = GMModel.cluster_centres(i,1:3);
 h_surf = surf(h_axes,X+p(1),Y+p(2),Z+p(3));
 set(h_surf,'edgecolor','none','facecolor',color_val);
-set(h_surf,'Tag','additional: Gaussian mixture model');    
+set(h_surf,'Tag','additional: Gaussian mixture model');
 %end
 
 

@@ -138,17 +138,17 @@ for f_ind = 1 : number_of_frames
                 % pot = lf*mom{i}';
                 pot = lf*mom;
 
-                 if strcmp('SVD', regType)
-                     %mom has to be redirected into the old orientation
-                     %system
-                     momReg=[0 0 0];
-                        for kreg=1:str2double(inv_leadfield_lambda)
-                            momReg(1)=momReg(1)+mom(kreg)*V_reg(1, kreg);
-                            momReg(2)=momReg(2)+mom(kreg)*V_reg(2, kreg);
-                            momReg(3)=momReg(3)+mom(kreg)*V_reg(3, kreg);
-                        end
-                        mom=momReg;
-                     %mom=mom*V_reg(:, 1:str2double(inv_leadfield_lambda))
+                if strcmp('SVD', regType)
+                    %mom has to be redirected into the old orientation
+                    %system
+                    momReg=[0 0 0];
+                    for kreg=1:str2double(inv_leadfield_lambda)
+                        momReg(1)=momReg(1)+mom(kreg)*V_reg(1, kreg);
+                        momReg(2)=momReg(2)+mom(kreg)*V_reg(2, kreg);
+                        momReg(3)=momReg(3)+mom(kreg)*V_reg(3, kreg);
+                    end
+                    mom=momReg;
+                    %mom=mom*V_reg(:, 1:str2double(inv_leadfield_lambda))
                 end
 
                 %relativ residual variance

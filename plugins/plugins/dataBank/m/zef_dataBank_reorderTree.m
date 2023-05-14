@@ -59,9 +59,9 @@ while listIndex<=N
                 newtree.( zef_dataBank_number2hash(arrayToGive))=tree.(zef_dataBank_number2hash( [array, min(numbers)]));
                 newtree.( zef_dataBank_number2hash(arrayToGive)).hash=zef_dataBank_number2hash(arrayToGive);
 
-              if isstruct(tree)
-              tree=rmfield(tree, zef_dataBank_number2hash( [array, min(numbers)]));
-              end
+                if isstruct(tree)
+                    tree=rmfield(tree, zef_dataBank_number2hash( [array, min(numbers)]));
+                end
 
                 listOld{listIndex}=zef_dataBank_number2hash( [array, min(numbers)]);
                 listNew{listIndex}=zef_dataBank_number2hash(arrayToGive);

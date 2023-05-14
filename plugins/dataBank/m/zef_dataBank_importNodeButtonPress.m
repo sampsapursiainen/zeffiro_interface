@@ -1,7 +1,7 @@
 function zef = zef_dataBank_importNodeButtonPress(zef)
 
 if nargin == 0
-zef = evalin('base','zef')
+    zef = evalin('base','zef')
 end
 
 if strcmp(zef.dataBank.app.typeDropDown.Value, 'Node')
@@ -27,12 +27,12 @@ else
 end
 
 if strcmp(zef.dataBank.app.typeDropDown.Value, 'Node')
-     zef.dataBank.tree=zef_dataBank_importNode(zef.dataBank.tree, savepath, savefile, dbParentHash, zef.dataBank);
+    zef.dataBank.tree=zef_dataBank_importNode(zef.dataBank.tree, savepath, savefile, dbParentHash, zef.dataBank);
 else
     zef.dataBank.tree=zef_dataBank_importDataBank(zef.dataBank.tree, savepath, savefile, dbParentHash, zef.dataBank);
 end
 
- zef_dataBank_refreshTree;
+zef_dataBank_refreshTree;
 
 clear savefile savepath dbParentHash
 

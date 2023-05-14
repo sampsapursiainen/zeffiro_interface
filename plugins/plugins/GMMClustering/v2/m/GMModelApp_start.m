@@ -5,138 +5,138 @@
 %don't allow to open multiple app window because it cause ether App
 %Designer or app's functionalities to crash or both of them
 if isfield(zef,'GMM.apps')
-if isfield(zef.GMM.apps,'main')
-    if isvalid(zef.GMM.apps.main)
-        eval(zef.GMM.apps.main.UIFigure.CloseRequestFcn);
+    if isfield(zef.GMM.apps,'main')
+        if isvalid(zef.GMM.apps.main)
+            eval(zef.GMM.apps.main.UIFigure.CloseRequestFcn);
+        end
     end
-end
 end
 zef.GMM.apps.main = GMModelApp;
 
 if ~isfield(zef.GMM,'parameters')
-%_ Initial values _
-zef_GMM_values = cell(2,1);
+    %_ Initial values _
+    zef_GMM_values = cell(2,1);
 
-%maximum number of components
-zef_GMM_values{1} = '3';
-%regularization value
-zef_GMM_values{15} = '0.01';
-%reconstruction threshold
-zef_GMM_values{5} = '0.25';
-%maximum iterations
-zef_GMM_values{2} = '1000';
-%confidence level
-zef_GMM_values{6} = '90';
-%identity of covariance
-zef_GMM_values{4} = '1';
-%covariance type
-zef_GMM_values{3} = '1';
-%target domain
-zef_GMM_values{19} = '1';
-%centroid marker (color)
-zef_GMM_values{7} = zef.GMM.apps.main.GMM_markercolor.ItemsData{1};
-%centroid marker size
-zef_GMM_values{8} = '8';
-%centroid marker line width
-zef_GMM_values{9} = '4';
-%visual dipole vector length
-zef_GMM_values{16} = '3';
-%head model transparency
-zef_GMM_values{10} = '0.4';
-%plot confidence ellipsoids
-zef_GMM_values{11} = '1';
-%ellipsoid transparency
-zef_GMM_values{12} = '0.3';
-%start frame
-zef_GMM_values{13} = '1';
-%stop frame
-if iscell(zef.reconstruction)
-    zef_GMM_values{14} = num2str(length(zef.reconstruction));
-else
-    zef_GMM_values{14} = '1';
-end
-%start frame for calculation
-zef_GMM_values{17} = '1';
-%stop frame for calculation
-if iscell(zef.reconstruction)
-    zef_GMM_values{18} = num2str(length(zef.reconstruction));
-else
-    zef_GMM_values{18} = '1';
-end
-%time point for amplitude bar plot
-zef_GMM_values{20} = '';
-%amplitude estimation type
-zef_GMM_values{21} = '1';
-%Parameters to estimate via GMM
-zef_GMM_values{22} = '1';
-
-zef_i = length(zef_GMM_values);
-zef.GMM.meta{1} = zef_i;
-
-%_ Advanced modeling options initial values _
-%model fitness criterion
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '2';
-%initialization approach
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '1';
-%number of replicates for k++
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '1';
-%log-posterior threshold
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '6';    %log-post = 10^(-db/20)
-%Mixture component probability for Mahalanobis distance approach
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '0.95';
-%reconstruction smoothing std
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '0';
-
-zef.GMM.meta{2} = zef_i;
-
-%_ Advanced plot options initial values _
-%component plotting order
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '1';
-%number of dipoles
-zef_i = zef_i+1;
-if isfield(zef.GMM,'model')
-    if iscell(zef.GMM.model)
-        zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+    %maximum number of components
+    zef_GMM_values{1} = '3';
+    %regularization value
+    zef_GMM_values{15} = '0.01';
+    %reconstruction threshold
+    zef_GMM_values{5} = '0.25';
+    %maximum iterations
+    zef_GMM_values{2} = '1000';
+    %confidence level
+    zef_GMM_values{6} = '90';
+    %identity of covariance
+    zef_GMM_values{4} = '1';
+    %covariance type
+    zef_GMM_values{3} = '1';
+    %target domain
+    zef_GMM_values{19} = '1';
+    %centroid marker (color)
+    zef_GMM_values{7} = zef.GMM.apps.main.GMM_markercolor.ItemsData{1};
+    %centroid marker size
+    zef_GMM_values{8} = '8';
+    %centroid marker line width
+    zef_GMM_values{9} = '4';
+    %visual dipole vector length
+    zef_GMM_values{16} = '3';
+    %head model transparency
+    zef_GMM_values{10} = '0.4';
+    %plot confidence ellipsoids
+    zef_GMM_values{11} = '1';
+    %ellipsoid transparency
+    zef_GMM_values{12} = '0.3';
+    %start frame
+    zef_GMM_values{13} = '1';
+    %stop frame
+    if iscell(zef.reconstruction)
+        zef_GMM_values{14} = num2str(length(zef.reconstruction));
     else
-        zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
+        zef_GMM_values{14} = '1';
     end
-else
-    zef_GMM_values{zef_i} = '3';
-end
-%number of ellipsoids
-zef_i = zef_i+1;
-if isfield(zef.GMM,'model')
-    if iscell(zef.GMM.model)
-        zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+    %start frame for calculation
+    zef_GMM_values{17} = '1';
+    %stop frame for calculation
+    if iscell(zef.reconstruction)
+        zef_GMM_values{18} = num2str(length(zef.reconstruction));
     else
-        zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
+        zef_GMM_values{18} = '1';
     end
-else
-    zef_GMM_values{zef_i} = '3';
-end
-%manually seleced dipole components
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '';
-%manually selected ellipsoids
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '';
-%type of ellipsoid coloring
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '1';
-%manually setted colors
-zef_i = zef_i+1;
-zef_GMM_values{zef_i} = '';
+    %time point for amplitude bar plot
+    zef_GMM_values{20} = '';
+    %amplitude estimation type
+    zef_GMM_values{21} = '1';
+    %Parameters to estimate via GMM
+    zef_GMM_values{22} = '1';
 
-zef.GMM.meta{3} = zef_i;
+    zef_i = length(zef_GMM_values);
+    zef.GMM.meta{1} = zef_i;
 
-zef_GMM_label_names = repmat({''},length(zef_GMM_values),1);
+    %_ Advanced modeling options initial values _
+    %model fitness criterion
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '2';
+    %initialization approach
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '1';
+    %number of replicates for k++
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '1';
+    %log-posterior threshold
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '6';    %log-post = 10^(-db/20)
+    %Mixture component probability for Mahalanobis distance approach
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '0.95';
+    %reconstruction smoothing std
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '0';
+
+    zef.GMM.meta{2} = zef_i;
+
+    %_ Advanced plot options initial values _
+    %component plotting order
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '1';
+    %number of dipoles
+    zef_i = zef_i+1;
+    if isfield(zef.GMM,'model')
+        if iscell(zef.GMM.model)
+            zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+        else
+            zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
+        end
+    else
+        zef_GMM_values{zef_i} = '3';
+    end
+    %number of ellipsoids
+    zef_i = zef_i+1;
+    if isfield(zef.GMM,'model')
+        if iscell(zef.GMM.model)
+            zef_GMM_values{zef_i} = num2str(zef.GMM.model{find(~cellfun(@isempty,zef.GMM.model),1)}.NumComponents);
+        else
+            zef_GMM_values{zef_i} = num2str(zef.GMM.model.NumComponents);
+        end
+    else
+        zef_GMM_values{zef_i} = '3';
+    end
+    %manually seleced dipole components
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '';
+    %manually selected ellipsoids
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '';
+    %type of ellipsoid coloring
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '1';
+    %manually setted colors
+    zef_i = zef_i+1;
+    zef_GMM_values{zef_i} = '';
+
+    zef.GMM.meta{3} = zef_i;
+
+    zef_GMM_label_names = repmat({''},length(zef_GMM_values),1);
 else
     zef_load_GMM(zef.GMM);
     zef_GMM_update;
@@ -153,19 +153,19 @@ for zef_i = 2:length(zef_props)
         zef_n=zef_n+1;
         zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
         if ~isempty(zef_GMM_values{zef_n}) || ~strcmp(zef.GMM.apps.main.(zef_props{zef_i}).Type,'uidropdown')
-        zef.GMM.apps.main.(zef_props{zef_i}).Value = zef_GMM_values{zef_n};
+            zef.GMM.apps.main.(zef_props{zef_i}).Value = zef_GMM_values{zef_n};
         end
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i}))
-            zef.GMM.apps.main.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
-            %zef = rmfield(zef,zef_props{zef_i});
-            zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
-            zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
+                zef.GMM.apps.main.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
+                %zef = rmfield(zef,zef_props{zef_i});
+                zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
+                zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
             else
-            zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
-            %zef = rmfield(zef,zef_props{zef_i});
-            zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
-            zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
+                zef.GMM.apps.main.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
+                %zef = rmfield(zef,zef_props{zef_i});
+                zef_GMM_label_names{zef_n}=zef.GMM.apps.main.(zef_props{zef_i-1}).Text;
+                zef_GMM_values{zef_n}=zef.GMM.apps.main.(zef_props{zef_i}).Value;
             end
         end
     end

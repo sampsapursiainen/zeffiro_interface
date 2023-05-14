@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 if not(isfield(zef,'relax_preconditioner'));
-zef.relax_multires_precondtioner = [];
+    zef.relax_multires_precondtioner = [];
 end;
 if not(isfield(zef,'relax_multires_n_decompositions'));
     zef.relax_multires_n_decompositions = 1;
@@ -19,18 +19,18 @@ if not(isfield(zef,'relax_tolerance'));
     zef.relax_pcg_tol = 1e-8;
 end;
 
-    zef.relax_sampling_frequency = zef.inv_sampling_frequency;
-    zef.relax_low_cut_frequency = zef.inv_low_cut_frequency;
-    zef.relax_high_cut_frequency = zef.inv_high_cut_frequency;
+zef.relax_sampling_frequency = zef.inv_sampling_frequency;
+zef.relax_low_cut_frequency = zef.inv_low_cut_frequency;
+zef.relax_high_cut_frequency = zef.inv_high_cut_frequency;
 
 if not(isfield(zef,'relax_normalize_data'));
     zef.relax_normalize_data = 1;
 end;
 
-    zef.relax_time_1 = zef.inv_time_1;
-    zef.relax_time_2 = zef.inv_time_2;
-    zef.relax_time_3 = zef.inv_time_3;
-    zef.relax_number_of_frames = zef.number_of_frames;
+zef.relax_time_1 = zef.inv_time_1;
+zef.relax_time_2 = zef.inv_time_2;
+zef.relax_time_3 = zef.inv_time_3;
+zef.relax_number_of_frames = zef.number_of_frames;
 
 if not(isfield(zef,'relax_iteration_type'));
     zef.relax_iteration_type = 1;

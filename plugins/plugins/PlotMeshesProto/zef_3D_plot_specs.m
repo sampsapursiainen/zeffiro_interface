@@ -9,23 +9,23 @@ compartment_tags = {'d1','d2','d3','d4','d5','d6','d7','d8','d9','d10','d11','d1
 i = 0;
 aux_brain_ind = [];
 for k = 1 : length(compartment_tags)
-        var_0 = ['zef.'  compartment_tags{k} '_on'];
-        var_3 = ['zef.' compartment_tags{k} '_visible'];
-on_val = evalin('base',var_0);
-visible_val = evalin('base',var_3);
-if on_val
-i = i + 1;
-if evalin('base',['zef.' compartment_tags{k} '_sources'])>0  && visible_val;
-    aux_brain_ind = [aux_brain_ind i];
-end
-end
+    var_0 = ['zef.'  compartment_tags{k} '_on'];
+    var_3 = ['zef.' compartment_tags{k} '_visible'];
+    on_val = evalin('base',var_0);
+    visible_val = evalin('base',var_3);
+    if on_val
+        i = i + 1;
+        if evalin('base',['zef.' compartment_tags{k} '_sources'])>0  && visible_val;
+            aux_brain_ind = [aux_brain_ind i];
+        end
+    end
 end
 
 reuna_p = evalin('base','zef.reuna_p');
 source_positions = [];
 
 for k = aux_brain_ind
-source_positions = [source_positions;reuna_p{k}];
+    source_positions = [source_positions;reuna_p{k}];
 end
 %Set axe limits ans tick intervals
 h.XAxis.Limits=head2axes_ratio*[min(source_positions(:,1)),max(source_positions(:,1))];
@@ -106,15 +106,15 @@ view(evalin('base','zef.azimuth'),evalin('base','zef.elevation'));
 axis('image');
 set(h,'CameraViewAngle',evalin('base','zef.cam_va'));
 if evalin('base','zef.axes_visible')
-set(h,'visible','on');
-set(h,'xGrid','on');
-set(h,'yGrid','on');
-set(h,'zGrid','on');
+    set(h,'visible','on');
+    set(h,'xGrid','on');
+    set(h,'yGrid','on');
+    set(h,'zGrid','on');
 else
-set(h,'visible','off');
-set(h,'xGrid','off');
-set(h,'yGrid','off');
-set(h,'zGrid','off');
+    set(h,'visible','off');
+    set(h,'xGrid','off');
+    set(h,'yGrid','off');
+    set(h,'zGrid','off');
 end
 
 end

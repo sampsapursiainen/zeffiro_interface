@@ -51,11 +51,11 @@ set(zef.h_eit_sensitivity_tool,'SizeChangedFcn', 'zef.eit_sensitivity_tool_curre
 zef.h_eit_sensitivity_tool.Name = 'ZEFFIRO Interface: EIT Sensitivity Tool';
 
 if zef.eit_sensitivity_tool_active == 0
-set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]);
-set(zef.h_eit_sensitivity_tool_activate,'text','Inactive');
+    set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[0 0 0]);
+    set(zef.h_eit_sensitivity_tool_activate,'text','Inactive');
 else
-set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[1 0 0]);
-set(zef.h_eit_sensitivity_tool_activate,'text','Active');
+    set(zef.h_eit_sensitivity_tool_activate,'fontcolor',[1 0 0]);
+    set(zef.h_eit_sensitivity_tool_activate,'text','Active');
 end
 zef.h_eit_sensitivity_tool_file.Value = zef.eit_sensitivity_tool_file;
 zef.h_eit_sensitivity_tool_file_2.Value = zef.eit_sensitivity_tool_file_2;

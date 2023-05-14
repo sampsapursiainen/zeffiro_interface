@@ -42,8 +42,8 @@ if zef.ES_opt_solver == 4
     else
         error('ZI: unable to find relevant mosek folder. Are you initializing your calculations outside the main-branch working directory?')
     end
-    
-    
+
+
 end
 
 if isequal(lower(zef_data.solver_package),'mosek')
@@ -147,7 +147,7 @@ for i = 1:step_size
         p_ind_max = min(step_size - j, n_parallel);
         parfor parallel_ind = 1:p_ind_max %parfor
             run_time{parallel_ind} = now;
-            
+
             [y_ES{parallel_ind}, ...
                 volumetric_current_density{parallel_ind}, ...
                 residual{parallel_ind}, ...
@@ -155,10 +155,10 @@ for i = 1:step_size
                 source_amplitude{parallel_ind}, ...
                 source_position_index{parallel_ind}, ...
                 source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data, alpha(parallel_ind + j), beta(i)); %#ok<PFBNS>
-            
+
             run_time{parallel_ind} = 86400*(now - run_time{parallel_ind});
         end
-        
+
         for parallel_ind = 1:p_ind_max
             j = j + 1;
             zef.y_ES_interval.run_time{i,j}                     = run_time{parallel_ind};
@@ -173,7 +173,7 @@ for i = 1:step_size
                 for running_index = 1:length(source_position_index{parallel_ind})
                     vec_1 = source_amplitude{parallel_ind}(running_index)*source_directions{parallel_ind}(running_index,:);
                     norm_vec_1 = norm(vec_1, 2);
-                    
+
                     if isequal(zef.ES_roi_range, 0)
                         source_running_ind = source_position_index{parallel_ind}(running_index);
                     else
@@ -182,7 +182,7 @@ for i = 1:step_size
                             zef.ES_roi_range);
                         source_running_ind = source_running_ind{1};
                     end
-                    
+
                     vec_2 = mean(volumetric_current_density{parallel_ind}(:,source_running_ind),2);
                     norm_vec_2 = norm(vec_2,2);
                     if isequal(norm_vec_2,0)
@@ -207,7 +207,7 @@ for i = 1:step_size
                 end
             end
         end
-        
+
         if zef.use_waitbar
             zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
         end

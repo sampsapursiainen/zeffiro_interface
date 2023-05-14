@@ -16,7 +16,7 @@ switch nargin
             step_size   = zef.ES_step_size;
         else
             step_size = varargin{2};
-        end        
+        end
     case {3}
         [aux1, aux2, step_size] = deal(varargin{1}, varargin{2}, varargin{3});
         alpha       = aux1(1);

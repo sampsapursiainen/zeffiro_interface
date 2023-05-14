@@ -12,25 +12,25 @@ function [processed_data] = zef_ellip_high_pass_filter(f, filter_order, ripple, 
 
 %Conversion between string and numeric data types.
 if isstr(filter_order)
-filter_order = str2num(filter_order);
+    filter_order = str2num(filter_order);
 end
 if isstr(ripple)
-ripple = str2num(ripple);
+    ripple = str2num(ripple);
 end
 if isstr(attenuation)
-attenuation = str2num(attenuation);
+    attenuation = str2num(attenuation);
 end
 if isstr(edge_frequency)
-edge_frequency = str2num(edge_frequency);
+    edge_frequency = str2num(edge_frequency);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 
 if size(f,2) > 1 && edge_frequency > 0
-[hp_f_1,hp_f_2] = ellip(filter_order,ripple,attenuation,edge_frequency/(sampling_frequency/2),'high');
-f = filter(hp_f_1,hp_f_2,f')';
+    [hp_f_1,hp_f_2] = ellip(filter_order,ripple,attenuation,edge_frequency/(sampling_frequency/2),'high');
+    f = filter(hp_f_1,hp_f_2,f')';
 end
 
 processed_data = f;
