@@ -1,4 +1,4 @@
-function lint_mfiles(folder)
+function lint_mfiles(folder, UNACCEPTABLE_MESSAGES)
 %
 % lint_mfiles
 %
@@ -11,13 +11,13 @@ arguments
 
     folder (1,1) string { mustBeFolder }
 
+    UNACCEPTABLE_MESSAGES (:,1) string = [ "NODEF" ; "EVLDOT" ]
+
 end
 
     disp( newline + "Linting m-files in " + folder + "..." ) ;
 
     mfile_paths = utilities.get_mfile_paths ( folder ) ;
-
-    UNACCEPTABLE_MESSAGES = [ "NODEF" ; "EVLDOT" ] ;
 
     unacceptable_message_count = uint64( 0 ) ;
 
