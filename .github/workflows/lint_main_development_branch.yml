@@ -1,11 +1,11 @@
-name: Lint Zeffiro Interface source files on push to main_development_branch
+name: Lint Matlab source files on main_development_branch
 on:
   push:
     branches:
       - 217-code-style-and-indentations
 jobs:
-  lint-project:
-    name: Run MATLAB linter
+  lint-m-folder:
+    name: Run MATLAB linter on m/
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -16,3 +16,15 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: 'utilities.lint_mfiles("m")'
+  lint-plugins-folder:
+    name: Run MATLAB linter on plugins/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+      - name: Run lint_mfiles on plugins/
+        uses: matlab-actions/run-command@v1
+        with:
+          command: 'utilities.lint_mfiles("plugins")'
