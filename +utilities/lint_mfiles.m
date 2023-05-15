@@ -50,6 +50,10 @@ end
 
     matlab_release = version("-release");
 
+    release_year = double ( string ( matlab_release(1:4) ) ) ;
+
+    release_letter = matlab_release(5) ;
+
     mfile_paths = utilities.get_mfile_paths ( folder ) ;
 
     n_of_issues = uint64( 0 ) ;
@@ -62,7 +66,9 @@ end
 
             n_of_issues = n_of_issues + lint_with_legacy_linter( fpath, kwargs.UNACCEPTABLE_MESSAGES ) ;
 
-        elseif kwargs.linter_fn_name == "codeIssues" && all ( matlab_release >= '2022b' )
+        elseif kwargs.linter_fn_name == "codeIssues" ...
+        && release_year >= 2023 ...
+        || ( release_year >= 2022 && release_letter == 'b' )
 
             n_of_issues = n_of_issues + lint_with_codeIssues( fpath, kwargs.UNACCEPTABLE_MESSAGES ) ;
 
@@ -143,6 +149,8 @@ function n_of_issues = lint_with_codeIssues(fpath, UNACCEPTABLE_MESSAGES)
 
         issue_severity = string ( issue_table_row.Severity ) ;
 
+        issue_line = issue_table_row.LineStart ;
+
         issue_description = issue_table_row.Description ;
 
         if ismember ( issue_id, UNACCEPTABLE_MESSAGES, "rows" ) ...
@@ -157,6 +165,8 @@ function n_of_issues = lint_with_codeIssues(fpath, UNACCEPTABLE_MESSAGES)
             disp ( "  ID: " + issue_id ) ;
 
             disp ( "  Severity: " + issue_severity ) ;
+
+            disp ( "  On line: " + issue_line ) ;
 
             disp ( "  Description: " + issue_description ) ;
 
