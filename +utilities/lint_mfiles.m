@@ -35,7 +35,7 @@ end
 
                 disp ( "Found unacceptable linter message in " + fpath + ":" ) ;
 
-                disp ( newline ) ;
+                disp ( " " ) ; % This is needed for exactly one newline between the previous display and the next.
 
                 disp ( message ) ;
 
