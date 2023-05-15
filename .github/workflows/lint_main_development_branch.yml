@@ -2,7 +2,7 @@ name: Lint Matlab source files on main_development_branch
 on:
   push:
     branches:
-      - main_development_branch
+      - 217-code-style-and-indentations
 jobs:
   lint-m-folder:
     name: Run MATLAB linter on m/
