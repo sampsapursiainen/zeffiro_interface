@@ -13,11 +13,15 @@ arguments
 
 end
 
+    disp( newline + "Linting m-files in " + folder + "..." ) ;
+
     mfile_paths = utilities.get_mfile_paths ( folder ) ;
 
     unacceptable_message_found = false ;
 
     UNACCEPTABLE_MESSAGES = [ "NODEF" ; "EVLDOT" ] ;
+
+    unacceptable_message_count = uint64( 0 ) ;
 
     for fpi = 1 : numel ( mfile_paths )
 
@@ -30,6 +34,8 @@ end
             message = linter_message_structs ( lmi ) ;
 
             if ismember ( message.id, UNACCEPTABLE_MESSAGES )
+
+                unacceptable_message_count = unacceptable_message_count + 1 ;
 
                 unacceptable_message_found = true ;
 
@@ -47,7 +53,7 @@ end
 
     if unacceptable_message_found
 
-        error( newline + "During linting, unacceptable code style violations were found. See the above messages for details." ) ;
+        error( newline + "During linting, unacceptable code style violations were found. See the above " + unacceptable_message_count + " messages for details." ) ;
 
     end
 
