@@ -35,7 +35,9 @@ end
 
                 disp ( "Found unacceptable linter message in " + fpath + ":" ) ;
 
-                disp ( newline + message ) ;
+                disp ( newline ) ;
+
+                disp ( message ) ;
 
             end % if
 
