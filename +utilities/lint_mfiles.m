@@ -6,6 +6,29 @@ function lint_mfiles(folder, UNACCEPTABLE_MESSAGES)
 % Throws and error at the end, if unacceptable linter messages were discovered
 % in the process.
 %
+% Inputs:
+%
+% - folder (1,1) string { mustBeFolder }
+%
+%   The folder whose .m files will be linted.
+%
+% - UNACCEPTABLE_MESSAGES (1,1) string = [ "NODEF" ; "EVLDOT" ]
+%
+%   This optional second argument can be used to adjust which linter message
+%   IDs are undesirable. To see a full list of possible values, check out the
+%   [linter message index].
+%
+% Outputs:
+%
+% - None.
+%
+%   The function throws an error at the end, if undesirable messages were
+%   found.
+%
+% Links:
+%
+% [linter message index]: https://se.mathworks.com/help/matlab/matlab_env/index-of-code-analyzer-checks.html
+%
 
 arguments
 
