@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
+        release: R2022b
       - name: Run lint_mfiles on m/
         uses: matlab-actions/run-command@v1
         with:
@@ -24,6 +25,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
+        release: R2022b
       - name: Run lint_mfiles on plugins/
         uses: matlab-actions/run-command@v1
         with:
