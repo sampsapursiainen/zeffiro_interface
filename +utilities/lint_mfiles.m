@@ -17,8 +17,6 @@ end
 
     mfile_paths = utilities.get_mfile_paths ( folder ) ;
 
-    unacceptable_message_found = false ;
-
     UNACCEPTABLE_MESSAGES = [ "NODEF" ; "EVLDOT" ] ;
 
     unacceptable_message_count = uint64( 0 ) ;
@@ -37,8 +35,6 @@ end
 
                 unacceptable_message_count = unacceptable_message_count + 1 ;
 
-                unacceptable_message_found = true ;
-
                 disp ( "Found unacceptable linter message in " + fpath + ":" ) ;
 
                 disp ( " " ) ; % This is needed for exactly one newline between the previous display and the next.
@@ -51,7 +47,7 @@ end
 
     end % for
 
-    if unacceptable_message_found
+    if unacceptable_message_count > 0
 
         error( newline + "During linting, unacceptable code style violations were found. See the above " + unacceptable_message_count + " messages for details." ) ;
 
