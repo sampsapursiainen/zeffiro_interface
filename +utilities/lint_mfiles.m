@@ -35,12 +35,18 @@ end
 
                 disp ( "Found unacceptable linter message in " + fpath + ":" ) ;
 
-                disp ( message ) ;
+                disp ( newline + message ) ;
 
             end % if
 
         end % for
 
     end % for
+
+    if unacceptable_message_found
+
+        error( newline + "During linting, unacceptable code style violations were found. See the above messages for details." ) ;
+
+    end
 
 end % function
