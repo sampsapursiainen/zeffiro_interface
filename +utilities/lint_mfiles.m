@@ -112,6 +112,8 @@ function n_of_issues = lint_with_legacy_linter(fpath, UNACCEPTABLE_MESSAGES)
 
             n_of_issues = n_of_issues + 1 ;
 
+            disp ( " " ) ; % This is needed for exactly one newline between the previous display and the next.
+
             disp ( "Found unacceptable linter message in " + fpath + ":" ) ;
 
             disp ( " " ) ; % This is needed for exactly one newline between the previous display and the next.
@@ -158,7 +160,9 @@ function n_of_issues = lint_with_codeIssues(fpath, UNACCEPTABLE_MESSAGES)
 
             n_of_issues = n_of_issues + 1 ;
 
-            disp ( newline + "Found unacceptable linter message in " + fpath + ":" ) ;
+            disp( " " ) ;
+
+            disp ("Found unacceptable linter message in " + fpath + ":" ) ;
 
             disp ( " " ) ; % This is needed for exactly one newline between the previous display and the next.
 
