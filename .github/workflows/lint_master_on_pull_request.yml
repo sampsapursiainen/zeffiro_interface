@@ -1,0 +1,30 @@
+name: Lint Matlab source files on master upon pull request
+on:
+  pull_request:
+    branches:
+      - master
+jobs:
+  lint-m-folder:
+    name: Run MATLAB linter on m/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+      - name: Run lint_mfiles on m/
+        uses: matlab-actions/run-command@v1
+        with:
+          command: 'utilities.lint_mfiles("m")'
+  lint-plugins-folder:
+    name: Run MATLAB linter on plugins/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+      - name: Run lint_mfiles on plugins/
+        uses: matlab-actions/run-command@v1
+        with:
+          command: 'utilities.lint_mfiles("plugins")'
