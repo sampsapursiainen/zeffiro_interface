@@ -2,9 +2,9 @@ function lint_mfiles(folder, kwargs)
 %
 % lint_mfiles
 %
-% Runs checkcode on all .m files in the given folder and its subfolders.
-% Throws and error at the end, if unacceptable linter messages were discovered
-% in the process.
+% Runs a linter on all .m files in the given folder and its subfolders. Throws
+% and error at the end, if unacceptable linter messages were discovered in the
+% process.
 %
 % Inputs:
 %
@@ -12,13 +12,13 @@ function lint_mfiles(folder, kwargs)
 %
 %   The folder whose .m files will be linted.
 %
-% - UNACCEPTABLE_MESSAGES (1,1) string = [ "NODEF" ; "EVLDOT" ]
+% - kwargs.UNACCEPTABLE_MESSAGES (1,1) string = [ "NODEF" ; "EVLDOT" ]
 %
 %   This optional second argument can be used to adjust which linter message
 %   IDs are undesirable. To see a full list of possible values, check out the
 %   [linter message index].
 %
-% - linter_fn_name (1,1) string { mustBeMember(linter_fn, [ "mlint", "checkcode", "codeIssues" ]) } = "codeIssues"
+% - kwargs.linter_fn_name (1,1) string { mustBeMember(linter_fn, [ "mlint", "checkcode", "codeIssues" ]) } = "codeIssues"
 %
 %   The linter that is used for linting. One of "mlint", "checkcode" or
 %   "codeIssues", where the last option should be preferred when using Matlab
