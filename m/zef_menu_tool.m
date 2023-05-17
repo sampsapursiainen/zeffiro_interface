@@ -5,7 +5,7 @@ zef_data.h_zeffiro_menu.Visible = zef.use_display;
 set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 
 set(zef.h_menu_settings,'Tag','settings');
@@ -121,9 +121,9 @@ zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 
 for zef_k = 1 : length(zef.h_temp);
-if zef_k <= length(zef.menu_accelerator_vec)
-    set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));
-end
+    if zef_k <= length(zef.menu_accelerator_vec)
+        set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));
+    end
 end
 
 clear  zef_k
@@ -133,18 +133,18 @@ zef = rmfield(zef,'menu_accelerator_vec');
 zef_set_size_change_function(zef.h_zeffiro_menu,1);
 
 if zef.h_segmentation_tool_toggle == 1
-    
-zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
-                          zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
-                          2.25*0.505*zef.segmentation_tool_default_position(3),...
-                          0];
-                          
+
+    zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
+        zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
+        2.25*0.505*zef.segmentation_tool_default_position(3),...
+        0];
+
 else
 
-zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
-                          zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
-                          2.25*zef.segmentation_tool_default_position(3),...
-                          0]; 
+    zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
+        zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
+        2.25*zef.segmentation_tool_default_position(3),...
+        0];
 
 end
 
@@ -158,13 +158,13 @@ zef.h_temp = findobj(zef.h_zeffiro_menu,'Type','uimenu');
 for i = 1 : length(zef.h_temp)
 
     if isempty(zef.h_temp(i).Children)
-    
+
         zef.h_temp(i).MenuSelectedFcn = [ zef.h_temp(i).MenuSelectedFcn ' zef_set_menu_size(zef,''minimized'');'];
-    
+
     else
-        
+
         zef.h_temp(i).MenuSelectedFcn = [ zef.h_temp(i).MenuSelectedFcn ' zef_set_menu_size(zef,''expanded'');'];
-    
+
     end
 end
 
@@ -173,52 +173,52 @@ zef = rmfield(zef,'h_temp');
 set(findobj(zef.h_zeffiro_menu.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 if not(isprop(zef.h_zeffiro_menu,'ZefTool'))
-addprop(zef.h_zeffiro_menu,'ZefTool');
+    addprop(zef.h_zeffiro_menu,'ZefTool');
 end
 zef.h_zeffiro_menu.ZefTool = mfilename;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefVerboseMode'))
-addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
+    addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
 end
 zef.h_zeffiro_menu.ZefVerboseMode = zef.zeffiro_verbose_mode;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefUseWaitbar'))
-addprop(zef.h_zeffiro_menu,'ZefUseWaitbar');
+    addprop(zef.h_zeffiro_menu,'ZefUseWaitbar');
 end
 zef.h_zeffiro_menu.ZefUseWaitbar = zef.use_waitbar;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefUseLog'))
-addprop(zef.h_zeffiro_menu,'ZefUseLog');
+    addprop(zef.h_zeffiro_menu,'ZefUseLog');
 end
 zef.h_zeffiro_menu.ZefUseLog = zef.use_log;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefWaitbarSize'))
-addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');
+    addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');
 end
 zef.h_zeffiro_menu.ZefWaitbarSize(1) = 1.5*0.5*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3);
 zef.h_zeffiro_menu.ZefWaitbarSize(2) = 0.7*zef.h_zeffiro_menu.ZefWaitbarSize(1);
 
 if not(isprop(zef.h_zeffiro_menu,'ZefTaskId'))
-addprop(zef.h_zeffiro_menu,'ZefTaskId');
+    addprop(zef.h_zeffiro_menu,'ZefTaskId');
 end
 zef.h_zeffiro_menu.ZefTaskId = zef.zeffiro_task_id;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefRestartTime'))
-addprop(zef.h_zeffiro_menu,'ZefRestartTime');
+    addprop(zef.h_zeffiro_menu,'ZefRestartTime');
 end
 zef.h_zeffiro_menu.ZefRestartTime = zef.zeffiro_restart_time;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefProgramPath'))
-addprop(zef.h_zeffiro_menu,'ZefProgramPath');
+    addprop(zef.h_zeffiro_menu,'ZefProgramPath');
 end
 zef.h_zeffiro_menu.ZefProgramPath = zef.program_path;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefFontSize'))
-addprop(zef.h_zeffiro_menu,'ZefFontSize');
+    addprop(zef.h_zeffiro_menu,'ZefFontSize');
 end
 zef.h_zeffiro_menu.ZefFontSize = zef.font_size;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefWaitbarHandle'))
-addprop(zef.h_zeffiro_menu,'ZefWaitbarHandle');
+    addprop(zef.h_zeffiro_menu,'ZefWaitbarHandle');
 end
 zef.h_zeffiro_menu.ZefWaitbarHandle = findall(groot,'-property','ZefWaitStartTime');
