@@ -1,4 +1,4 @@
-function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwargs)
+function [ electrode_data, electrode_labels ] = electrodes_from(file, kwargs)
 %
 % electrodes_from
 %
@@ -12,11 +12,12 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 %   The text file that the electrodes and their labels are to be imported
 %   from. The format of the lines in the file should be
 %
-%       x y z [label]
+%       x y z [label inner_radius outer_radius impedance]
 %
-%   where x, y and z are the coordinates of the electrode and [label] is its
-%   optional label. The fields should be separated by whitespace, and no
-%   whitespace is allowed within the fields.
+%   where x, y and z are the coordinates of the electrode and label is its
+%   optional label. The last 3 columns are what the names imply, and if any of
+%   them are present, then all must be. The fields should be separated by
+%   whitespace, and no whitespace is allowed within the fields.
 %
 % - kwargs.MISSING_LABEL (1,1) string = "N/A"
 %
@@ -25,10 +26,11 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 %
 % Outputs:
 %
-% - electrode_positions
+% - electrode_data
 %
-%   The double-precision electrode positions as a 3-by-N array, where N is the
-%   number of electrodes.
+%   The double-precision electrode positions as a N-by-3 or N-by-6 array,
+%   where N is the number of electrodes. Whether there are 3 or 6 columns
+%   depends on whether the input file contained 4 or 7 columns.
 %
 % - electrode_labels
 %
@@ -50,7 +52,7 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 
     n_of_rows = numel ( text_lines ) ;
 
-    electrode_positions = zeros ( n_of_rows, 3 ) ;
+    electrode_data = zeros ( n_of_rows, 6 ) ;
 
     electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) ;
 
@@ -60,9 +62,11 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 
         line_cols = split ( text_lines ( li ) ) ;
 
-        if not ( numel ( line_cols ) == 3 || numel ( line_cols ) == 4 )
+        n_of_cols = numel ( line_cols ) ;
 
-            error ( "Line " + li + " of the given electrode file does not contain 3 or 4 columns. The format of each line should be ""x y z [label]"". Aborting..." ) ;
+        if not ( n_of_cols == 3 || n_of_cols == 4 || n_of_cols == 7 )
+
+            error ( "Line " + li + " of the given electrode file does not contain 3, 4 or 7 columns. The format of each line should be ""x y z [label inner_radius outer_radius impedance]"". Aborting..." ) ;
 
         end
 
@@ -80,17 +84,72 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 
         end % for
 
-        electrode_positions ( li, : ) = position ;
+        electrode_data ( li, 1 : 3 ) = position ;
 
         % Check what should be used as the label of this electrode.
 
-        if numel ( line_cols ) == 4
+        if n_of_cols >= 4
 
             label = line_cols ( 4 ) ;
 
             if strlength ( label ) == 0
 
                 label = kwargs.MISSING_LABEL ;
+
+            end % if
+
+            % If there is complete electrode model (CEM) information
+            % available, read it in.
+
+            if n_of_cols == 7
+
+                inner_radius = double ( line_cols ( 5 ) ) ;
+
+                if isnan ( inner_radius )
+
+                    error ( "Could not convert electrode inner radius (column 5) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+                end % if
+
+                if inner_radius < 0
+
+                    error ( "The radius of an electrode inner radius (column 5) cannot be less than 0 on line " + li + " of file " + file + ". Aborting..." )
+
+                end % if
+
+                outer_radius = double ( line_cols ( 6 ) ) ;
+
+                if isnan ( outer_radius )
+
+                    error ( "Could not convert electrode outer radius (column 6) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+                end % if
+
+                if inner_radius >= outer_radius
+
+                    error ( "The inner radius (column 5) of a given electrode was the same or greater than its outer radius (column 6) on line " + li + " of " + file + ". Aborting..." ) ;
+
+                end % if
+
+                impedance = double ( line_cols ( 7 ) ) ;
+
+                if isnan ( impedance )
+
+                    error ( "Could not convert electrode impedance (column 7) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+                end % if
+
+                if impedance <= 0
+
+                    error ( "The impedance (column 7) of a complete electrode on line " + li + " of file " + file + " cannot be 0 or negative. Aborting..." ) ;
+
+                end % if
+
+                electrode_data (li, 5) = inner_radius;
+
+                electrode_data (li, 6) = outer_radius;
+
+                electrode_data (li, 7) = impedance;
 
             end % if
 
@@ -103,5 +162,18 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
         electrode_labels ( li ) = label ;
 
     end % for
+
+    % Reduce size of matrix, if nothing was written to the complete electrode
+    % model columns.
+
+    last_3_cols = electrode_data ( : , 4 : 6 ) ;
+
+    linear_last_3_cols = last_3_cols(:);
+
+    if all ( linear_last_3_cols == 0 )
+
+        electrode_data(:, 4 : 6 ) = [] ;
+
+    end
 
 end % function
