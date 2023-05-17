@@ -135,13 +135,13 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
             if isnan ( inner_radius )
 
-                error ( "Could not convert electrode inner radius (column 5) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+                error ( "Could not convert electrode inner radius (column " + iri + ") on line " + li + " of file " + file + " into a double. Aborting..." ) ;
 
             end % if
 
             if inner_radius < 0
 
-                error ( "The radius of an electrode inner radius (column 5) cannot be less than 0 on line " + li + " of file " + file + ". Aborting..." )
+                error ( "The radius of an electrode inner radius (column " + iri + ") cannot be less than 0 on line " + li + " of file " + file + ". Aborting..." )
 
             end % if
 
@@ -149,13 +149,13 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
             if isnan ( outer_radius )
 
-                error ( "Could not convert electrode outer radius (column 6) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+                error ( "Could not convert electrode outer radius (column " + ori + ") on line " + li + " of file " + file + " into a double. Aborting..." ) ;
 
             end % if
 
             if inner_radius >= outer_radius
 
-                error ( "The inner radius (column 5) of a given electrode was the same or greater than its outer radius (column 6) on line " + li + " of " + file + ". Aborting..." ) ;
+                error ( "The inner radius (column " + iri + ") of a given electrode was the same or greater than its outer radius (column " + ori + ") on line " + li + " of " + file + ". Aborting..." ) ;
 
             end % if
 
@@ -163,13 +163,13 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
             if isnan ( impedance )
 
-                error ( "Could not convert electrode impedance (column 7) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+                error ( "Could not convert electrode impedance (column " + ii + ") on line " + li + " of file " + file + " into a double. Aborting..." ) ;
 
             end % if
 
             if impedance <= 0
 
-                error ( "The impedance (column 7) of a complete electrode on line " + li + " of file " + file + " cannot be 0 or negative. Aborting..." ) ;
+                error ( "The impedance (column " + ii + ") of a complete electrode on line " + li + " of file " + file + " cannot be 0 or negative. Aborting..." ) ;
 
             end % if
 
