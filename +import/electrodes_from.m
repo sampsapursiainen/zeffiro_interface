@@ -46,7 +46,7 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
     % Read text lines from the given file and pre-allocate the needed output
     % arrays.
 
-    text_lines = readlines ( file ) ;
+    text_lines = readlines ( file, "EmptyLineRule", "skip"  ) ;
 
     n_of_rows = numel ( text_lines ) ;
 
@@ -60,7 +60,7 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 
         line_cols = split ( text_lines ( li ) ) ;
 
-        if not ( numel ( line_cols ) == 3 ) || not ( numel ( line_cols ) == 4 )
+        if not ( numel ( line_cols ) == 3 || numel ( line_cols ) == 4 )
 
             error ( "Line " + li + " of the given electrode file does not contain 3 or 4 columns. The format of each line should be ""x y z [label]"". Aborting..." ) ;
 
