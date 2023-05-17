@@ -1,4 +1,4 @@
-function [ electrode_data, electrode_labels ] = electrodes_from(file, kwargs)
+function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs)
 %
 % electrodes_from
 %
