@@ -86,70 +86,15 @@ function [ electrode_data, electrode_labels ] = electrodes_from(file, kwargs)
 
         electrode_data ( li, 1 : 3 ) = position ;
 
-        % Check what should be used as the label of this electrode.
+        % Read labels in case there are 4 or 7 columns.
 
-        if n_of_cols >= 4
+        if n_of_cols == 4 || n_of_cols == 7
 
             label = line_cols ( 4 ) ;
 
             if strlength ( label ) == 0
 
                 label = kwargs.MISSING_LABEL ;
-
-            end % if
-
-            % If there is complete electrode model (CEM) information
-            % available, read it in.
-
-            if n_of_cols == 7
-
-                inner_radius = double ( line_cols ( 5 ) ) ;
-
-                if isnan ( inner_radius )
-
-                    error ( "Could not convert electrode inner radius (column 5) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
-
-                end % if
-
-                if inner_radius < 0
-
-                    error ( "The radius of an electrode inner radius (column 5) cannot be less than 0 on line " + li + " of file " + file + ". Aborting..." )
-
-                end % if
-
-                outer_radius = double ( line_cols ( 6 ) ) ;
-
-                if isnan ( outer_radius )
-
-                    error ( "Could not convert electrode outer radius (column 6) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
-
-                end % if
-
-                if inner_radius >= outer_radius
-
-                    error ( "The inner radius (column 5) of a given electrode was the same or greater than its outer radius (column 6) on line " + li + " of " + file + ". Aborting..." ) ;
-
-                end % if
-
-                impedance = double ( line_cols ( 7 ) ) ;
-
-                if isnan ( impedance )
-
-                    error ( "Could not convert electrode impedance (column 7) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
-
-                end % if
-
-                if impedance <= 0
-
-                    error ( "The impedance (column 7) of a complete electrode on line " + li + " of file " + file + " cannot be 0 or negative. Aborting..." ) ;
-
-                end % if
-
-                electrode_data (li, 5) = inner_radius;
-
-                electrode_data (li, 6) = outer_radius;
-
-                electrode_data (li, 7) = impedance;
 
             end % if
 
@@ -161,18 +106,95 @@ function [ electrode_data, electrode_labels ] = electrodes_from(file, kwargs)
 
         electrode_labels ( li ) = label ;
 
+        % If there is complete electrode model (CEM) information available,
+        % read it in. But first set the indices from which it can be found.
+
+        if n_of_cols == 6
+
+            iri = 4 ; % Inner radius index.
+            ori = 5 ; % Outer radius index.
+            ii  = 6 ; % Impedance index.
+
+        elseif n_of_cols == 7
+
+            iri = 5 ; % Inner radius index.
+            ori = 6 ; % Outer radius index.
+            ii  = 7 ; % Impedance index.
+
+        else
+
+            % Do nothing.
+
+        end
+
+        % Read CEM data.
+
+        if n_of_cols == 6 || n_of_cols == 7
+
+            inner_radius = double ( line_cols ( iri ) ) ;
+
+            if isnan ( inner_radius )
+
+                error ( "Could not convert electrode inner radius (column 5) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+            end % if
+
+            if inner_radius < 0
+
+                error ( "The radius of an electrode inner radius (column 5) cannot be less than 0 on line " + li + " of file " + file + ". Aborting..." )
+
+            end % if
+
+            outer_radius = double ( line_cols ( ori) ) ;
+
+            if isnan ( outer_radius )
+
+                error ( "Could not convert electrode outer radius (column 6) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+            end % if
+
+            if inner_radius >= outer_radius
+
+                error ( "The inner radius (column 5) of a given electrode was the same or greater than its outer radius (column 6) on line " + li + " of " + file + ". Aborting..." ) ;
+
+            end % if
+
+            impedance = double ( line_cols ( ii ) ) ;
+
+            if isnan ( impedance )
+
+                error ( "Could not convert electrode impedance (column 7) on line " + li + " of file " + file + " into a double. Aborting..." ) ;
+
+            end % if
+
+            if impedance <= 0
+
+                error ( "The impedance (column 7) of a complete electrode on line " + li + " of file " + file + " cannot be 0 or negative. Aborting..." ) ;
+
+            end % if
+
+            electrode_data (li, 4) = inner_radius;
+
+            electrode_data (li, 5) = outer_radius;
+
+            electrode_data (li, 6) = impedance;
+
+        end % if
+
     end % for
 
-    % Reduce size of matrix, if nothing was written to the complete electrode
-    % model columns.
+    % Reduce size of electrode data matrix, if nothing was written to the
+    % complete electrode model columns.
 
-    last_3_cols = electrode_data ( : , 4 : 6 ) ;
+    cem_cols = 4 : 6 ;
 
-    linear_last_3_cols = last_3_cols(:);
+    last_3_cols = electrode_data ( : , cem_cols ) ;
+
+    last_3_cols = last_3_cols(:);
 
     if all ( linear_last_3_cols == 0 )
 
-        electrode_data(:, 4 : 6 ) = [] ;
+        electrode_data(:, cem_cols ) = [] ;
 
     end
 
