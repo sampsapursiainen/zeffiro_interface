@@ -52,7 +52,7 @@ function [ electrode_positions, electrode_labels ] = electrodes_from(file, kwarg
 
     electrode_positions = zeros ( n_of_rows, 3 ) ;
 
-    electrode_labels = repmat ( MISSING_LABEL, n_of_rows, 1 ) ;
+    electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) ;
 
     % Populate the output arrays with positions and labels.
 
