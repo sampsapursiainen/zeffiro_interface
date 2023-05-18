@@ -22,11 +22,43 @@ function zef = import_electrodes_callback(zef)
 
     if extension == ".dat"
 
-        [ electrode_data, electrode_labels ] = import.electrodes_from_dat ( abspath ) ;
+        try
+
+            [ electrode_data, electrode_labels ] = import.electrodes_from_dat ( abspath ) ;
+
+        catch err
+
+            msg = err.message ;
+
+            title_str = "Could not read DAT file." ;
+
+            fig = errordlg ( msg, title_str ) ;
+
+            uiwait ( fig ) ;
+
+            return
+
+        end
 
     elseif extension == ".csv"
 
-        [ electrode_data, electrode_labels ] = import.electrodes_from_csv ( abspath ) ;
+        try
+
+            [ electrode_data, electrode_labels ] = import.electrodes_from_csv ( abspath ) ;
+
+        catch err
+
+            msg = err.message ;
+
+            title_str = "Could not read CSV file." ;
+
+            fig = errordlg ( msg, title_str ) ;
+
+            uiwait ( fig ) ;
+
+            return
+
+        end
 
     else
 
