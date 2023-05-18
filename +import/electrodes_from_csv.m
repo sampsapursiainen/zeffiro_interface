@@ -125,9 +125,9 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 
     % Shrink numerical electrode data, if CEM columns were not found.
 
-    if cem_data_set
+    if not ( cem_data_set )
 
-        electrode_data(:, 3 : 6) = [] ;
+        electrode_data(:, 4 : 6) = [] ;
 
     end
 
