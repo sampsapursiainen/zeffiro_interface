@@ -93,7 +93,7 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 
     if ismember ( "label", column_titles )
 
-        electrode_labels = electrode_table.label ;
+        electrode_labels = string ( electrode_table.label ) ;
 
     end
 
