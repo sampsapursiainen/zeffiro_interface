@@ -192,7 +192,7 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
     last_3_cols = last_3_cols(:);
 
-    if all ( linear_last_3_cols == 0 )
+    if all ( last_3_cols == 0 )
 
         electrode_data(:, cem_cols ) = [] ;
 
