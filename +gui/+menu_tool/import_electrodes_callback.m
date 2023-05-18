@@ -12,7 +12,9 @@ function zef = import_electrodes_callback(zef)
 
     end
 
-    [name, path] = uigetfile ( ["*.dat", "*.csv"], "Import electrodes from .dat or .csv" ) ;
+    filter = { '*.dat', 'DAT files' ; '*.csv', 'CSV files' } ;
+
+    [name, path] = uigetfile ( filter, "Import electrodes from .dat or .csv" ) ;
 
     abspath = fullfile ( path, name ) ;
 
