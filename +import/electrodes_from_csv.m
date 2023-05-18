@@ -11,6 +11,8 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 % where the square brackets signify that those columns are optional. In other
 % words, at least the electrode positions must be given.
 %
+% Throws an error if the given file was invalid.
+%
 % Inputs:
 %
 % - file (1,1) string { mustBeFile }

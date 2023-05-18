@@ -1,9 +1,9 @@
 function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs)
 %
-% electrodes_from
+% electrodes_from_dat
 %
 % Imports a set of electrodes and their (optional) labels from a given text
-% file.
+% file. Throws an error if the given file could not be read.
 %
 % Inputs:
 %
