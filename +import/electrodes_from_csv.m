@@ -103,11 +103,59 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
     && ismember ( "outer_radius", column_titles) ...
     && ismember ( "impedance", column_titles )
 
-        electrode_data(:,4) = double ( electrode_table.inner_radius ) ;
+        inner_radii = double ( electrode_table.inner_radius ) ;
 
-        electrode_data(:,5) = double ( electrode_table.outer_radius ) ;
+        outer_radii = double ( electrode_table.outer_radius ) ;
 
-        electrode_data(:,6) = double ( electrode_table.impedance ) ;
+        impedances = double ( electrode_table.impedance ) ;
+
+        assert ( ( numel ( inner_radii ) == numel ( outer_radii ) ) && ( numel ( outer_radii ) == numel ( impedances ) ), "Each column in file " + file + " must contain the same number of rows. Aborting..." ) ;
+
+        for ii = 1 : numel( inner_radii )
+
+            if isnan ( inner_radii (ii) )
+
+                error ( "The inner radius at row " + ii + " of file " + file + " could not be converted to double. Aborting..." ) ;
+
+            end
+
+            if isnan ( outer_radii (ii) )
+
+                error ( "The outer radius at row " + ii + " of file " + file + " could not be converted to double. Aborting..." ) ;
+
+            end
+
+            if isnan ( impedances (ii) )
+
+                error ( "The impedance at row " + ii + " of file " + file + " could not be converted to double. Aborting..." ) ;
+
+            end
+
+            if inner_radii (ii) < 0
+
+                error ( "The inner radius at row " + ii + " of file " + file + " was less than 0. Aborting..." ) ;
+
+            end
+
+            if impedances (ii) < 0
+
+                error ( "The impedance at row " + ii + " of file " + file + " was less than 0. Aborting..." ) ;
+
+            end
+
+            if inner_radii (ii) >= outer_radii (ii)
+
+                error ( "The inner radius at row " + ii + " of file " + file + " was greater than or equal to the corresponding outer radius. Aborting..." ) ;
+
+            end
+
+        end
+
+        electrode_data(:,4) = inner_radii ;
+
+        electrode_data(:,5) = outer_radii ;
+
+        electrode_data(:,6) = impedances ;
 
         cem_data_set = true ;
 
