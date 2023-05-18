@@ -120,7 +120,7 @@ zef_plugin;
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 
-for zef_k = 1 : length(zef.h_temp);
+for zef_k = 1 : length(zef.h_temp)
     if zef_k <= length(zef.menu_accelerator_vec)
         set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));
     end
@@ -222,3 +222,53 @@ if not(isprop(zef.h_zeffiro_menu,'ZefWaitbarHandle'))
     addprop(zef.h_zeffiro_menu,'ZefWaitbarHandle');
 end
 zef.h_zeffiro_menu.ZefWaitbarHandle = findall(groot,'-property','ZefWaitStartTime');
+
+%% Helper functions.
+
+function zef = import_electrodes_callback(zef)
+%
+% import_electrodes_fn
+%
+% The callback called by Menu tool > Import > Import elecrodes. Adds the
+% fields sensors and s2_name_list to zef.
+%
+
+    arguments
+
+        zef (1,1) struct
+
+    end
+
+    [name, path] = uigetfile ( ["*.dat", "*.csv"], "Import electrodes from .dat or .csv" ) ;
+
+    abspath = fullfile ( path, name ) ;
+
+    [ ~, ~, extension ] = fileparts ( abspath ) ;
+
+    if extension == ".dat"
+
+        [ electrode_data, electrode_labels ] = import.electrodes_from_dat ( abspath ) ;
+
+    elseif extension == ".csv"
+
+        [ electrode_data, electrode_labels ] = import.electrodes_from_csv ( abspath ) ;
+
+    else
+
+        msg = "The chosen file was not a .dat or .csv file." ;
+
+        title_str = "Wrong file type" ;
+
+        fig = errordlg ( msg, title_str ) ;
+
+        uiwait ( fig ) ;
+
+        return
+
+    end
+
+    zef.sensors = electrode_data ;
+
+    zef.s2_name_list = electrode_labels ;
+
+end % function
