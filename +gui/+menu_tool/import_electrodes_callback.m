@@ -3,7 +3,21 @@ function zef = import_electrodes_callback(zef)
 % import_electrodes_fn
 %
 % The callback called by Menu tool > Import > Import elecrodes. Adds the
-% fields "sensors" and "s2_name_list" to the given zef struct.
+% fields "sensors" and "s2_name_list" to the given zef struct, or overwrites
+% them if they already exist. If the chosen input file could not be read, an
+% error dialog is opened with the related error message.
+%
+% Inputs:
+%
+% - zef
+%
+%   The central Zeffiro struct.
+%
+% Outputs:
+%
+% - zef
+%
+%   The input struct, augmented with the fields "sensors" and "s2_name_list".
 %
 
     arguments
