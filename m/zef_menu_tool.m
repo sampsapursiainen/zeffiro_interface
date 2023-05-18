@@ -113,6 +113,10 @@ set(zef.h_menu_edit,'Tag','edit');
 set(zef.h_menu_window,'Tag','window');
 set(zef.h_menu_help,'Tag','about');
 
+zef.ImportelectrodesMenu = zef_data.ImportelectrodesMenu ;
+
+set(zef.ImportelectrodesMenu, "MenuSelectedFcn", "zef = gui.menu_tool.import_electrodes_callback(zef);")
+
 zef.h_zeffiro_menu.DeleteFcn = 'zef_close_all;';
 
 zef_plugin;
