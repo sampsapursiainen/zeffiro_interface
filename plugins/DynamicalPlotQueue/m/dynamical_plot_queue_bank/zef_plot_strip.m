@@ -22,6 +22,9 @@ end
 %ylabel('y')
 %zlabel('z')
 
+h_axes = evalin('caller','h_axes_image');
+axes(h_axes);
+
 
 hold on
 tri = strip_struct.faces;

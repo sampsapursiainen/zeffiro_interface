@@ -33,7 +33,7 @@ end
 
 color_cell = {'k','r','g','b','y','m','c'};
 h_axes = evalin('caller','h_axes_image');
-%axes(h_axes);
+axes(h_axes);
 s = evalin('base','zef.inv_synth_source');
 s_o = s(:,4:6)./repmat(sqrt(sum(s(:,4:6).^2,2)),1,3);
 for i = 1 : size(s,1)
