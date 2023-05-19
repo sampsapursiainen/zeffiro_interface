@@ -105,8 +105,44 @@ function zef = import_electrodes_callback(zef)
 
     end
 
+    % Generate correct field names.
+
+    if isfield(zef, "current_sensors")
+
+        name_field_prefix = zef.current_sensors ;
+
+    else
+
+        name_field_prefix = "s" ;
+
+    end
+
+    % Build needed zef field names and set data.
+
+    name_field_name = name_field_prefix + "_name_list" ;
+
+    points_field_name = name_field_prefix + "_points" ;
+
     zef.sensors = electrode_data ;
 
-    zef.s2_name_list = electrode_labels ;
+    zef.(points_field_name) = electrode_data (:,1:3) ;
+
+    zef.(name_field_name) = electrode_labels ;
+
+    % Set CEM data if available: column 4 is inner radii, column 5 is outer
+    % radii and column 6 are the impedances.
+
+    if size ( electrode_data, 2 ) == 6
+
+        zef.(points_field_name) = [ ...
+            zef.(points_field_name) ...
+            electrode_data(:,4) ...
+            electrode_data(:,5) ...
+            electrode_data(:,6) ...
+        ] ;
+
+    end
+
+    zef = zef_update ( zef ) ;
 
 end % function
