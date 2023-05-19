@@ -1,0 +1,1 @@
+GMModelApp_start;

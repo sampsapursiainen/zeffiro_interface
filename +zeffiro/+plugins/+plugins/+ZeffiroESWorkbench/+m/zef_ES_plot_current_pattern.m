@@ -1,0 +1,3 @@
+function zef_ES_plot_current_pattern(varargin)
+zef_ES_plot_current_pattern(varargin);
+end
