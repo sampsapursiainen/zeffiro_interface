@@ -26,13 +26,22 @@ function zef = import_electrodes_callback(zef)
 
     end
 
+    % Read file from user.
+
     filter = { '*.dat', 'DAT files' ; '*.csv', 'CSV files' } ;
 
     [name, path] = uigetfile ( filter, "Import electrodes from .dat or .csv" ) ;
 
+    % Perform type conversion, because uigetfile is not type stable. Who
+    % designed this...?
+
+    name = string ( name ) ;
+
+    path = string ( path ) ;
+
     % If user presses "Cancel", return early.
 
-    if name == 0 || path == 0
+    if name == "0" || path == "0"
 
         return
 
