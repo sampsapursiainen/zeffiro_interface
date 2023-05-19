@@ -30,6 +30,14 @@ function zef = import_electrodes_callback(zef)
 
     [name, path] = uigetfile ( filter, "Import electrodes from .dat or .csv" ) ;
 
+    % If user presses "Cancel", return early.
+
+    if name == 0 || path == 0
+
+        return
+
+    end
+
     abspath = fullfile ( path, name ) ;
 
     [ ~, ~, extension ] = fileparts ( abspath ) ;
