@@ -19,10 +19,10 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 %   them are present, then all must be. The fields should be separated by
 %   whitespace, and no whitespace is allowed within the fields.
 %
-% - kwargs.MISSING_LABEL (1,1) string = "N/A"
+% - kwargs.MISSING_LABEL (1,1) string = "S"
 %
-%   Allows one to specify the label to be used in case a line did not contain
-%   a label. By default, this is "N/A".
+%   Allows one to specify the label to be used as a prefix of numbered labels,
+%   in case a line did not contain a label. By default, this is "S".
 %
 % Outputs:
 %
@@ -41,7 +41,7 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
         file (1,1) string { mustBeFile }
 
-        kwargs.MISSING_LABEL (1,1) string = "N/A"
+        kwargs.MISSING_LABEL (1,1) string = "S"
 
     end
 
@@ -54,7 +54,7 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
     electrode_data = zeros ( n_of_rows, 6 ) ;
 
-    electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) ;
+    electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) + ( 1 : n_of_rows )' ;
 
     % Populate the output arrays with positions and labels.
 
@@ -64,9 +64,9 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
         n_of_cols = numel ( line_cols ) ;
 
-        if not ( n_of_cols == 3 || n_of_cols == 4 || n_of_cols == 7 )
+        if not ( n_of_cols == 3 || n_of_cols == 4 || n_of_cols == 6 || n_of_cols == 7 )
 
-            error ( "Line " + li + " of the given electrode file does not contain 3, 4 or 7 columns. The format of each line should be ""x y z [label inner_radius outer_radius impedance]"". Aborting..." ) ;
+            error ( "Line " + li + " of the given electrode file does not contain 3, 4, 6 or 7 columns. The format of each line should be ""x y z [label inner_radius outer_radius impedance]"". Aborting..." ) ;
 
         end
 
@@ -94,13 +94,13 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
             if strlength ( label ) == 0
 
-                label = kwargs.MISSING_LABEL ;
+                label = electrode_labels ( li ) ;
 
             end % if
 
         else
 
-            label = kwargs.MISSING_LABEL ;
+            label = electrode_labels ( li ) ;
 
         end % if
 

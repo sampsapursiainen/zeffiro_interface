@@ -19,10 +19,10 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 %
 %   The CSV file from which the electrodes are to be read from.
 %
-% - kwargs.MISSING_LABEL (1,1) string = "N/A"
+% - kwargs.MISSING_LABEL (1,1) string = "S"
 %
-%   The label that will be used in place of labels, of none are found in the
-%   file.
+%   The label that will be used as a prefix of numbered labels, of none are
+%   found in the input file.
 %
 % Outputs:
 %
@@ -43,7 +43,7 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 
         file (1,1) string { mustBeFile }
 
-        kwargs.MISSING_LABEL (1,1) string = "N/A"
+        kwargs.MISSING_LABEL (1,1) string = "S"
 
     end
 
@@ -59,7 +59,7 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 
     electrode_data = zeros ( n_of_rows, 6 ) ;
 
-    electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) ;
+    electrode_labels = repmat ( kwargs.MISSING_LABEL, n_of_rows, 1 ) + ( 1 : n_of_rows )' ;
 
     % Read other data from column names.
 
@@ -151,7 +151,7 @@ function [electrode_data, electrode_labels] = electrodes_from_csv(file, kwargs)
 
             end
 
-        end
+        end % for
 
         electrode_data(:,4) = inner_radii ;
 
