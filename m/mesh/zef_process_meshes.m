@@ -307,7 +307,7 @@ pml_outer_radius = eval('zef.pml_outer_radius');
                   8  7  4;
                   2  3  7;
                   2  7  6;
-                  5  1  8;
+                  1  5  8;
                   4  1  8;
                   2  1  4;
                   4  3  2;
