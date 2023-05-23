@@ -5,7 +5,7 @@ f1 = gcf;
 f2 = figure();
 copyobj(findobj(f1.Children, 'tag','axes1'), f2);
 
-f2.Children.Position(2) = 40; 
+f2.Children.Position(2) = 40;
 f2.Children.Box = 0;
 l = legend(gca, 'show');
 l.AutoUpdate = 'off';

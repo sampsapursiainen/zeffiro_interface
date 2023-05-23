@@ -13,58 +13,58 @@ function [processed_data] = zef_ellip_band_stop_filter(f, filter_order, ripple, 
 
 %Conversion between string and numeric data types.
 if isstr(filter_order)
-filter_order = str2num(filter_order);
+    filter_order = str2num(filter_order);
 end
 if isstr(ripple)
-ripple = str2num(ripple);
+    ripple = str2num(ripple);
 end
 if isstr(attenuation)
-attenuation = str2num(attenuation);
+    attenuation = str2num(attenuation);
 end
 if isstr(center_frequency)
-center_frequency = str2num(center_frequency);
+    center_frequency = str2num(center_frequency);
 end
 if isstr(band_width)
-band_width = str2num(band_width);
+    band_width = str2num(band_width);
 end
 if isequal(lower(harmonic_filtering),'true')
-harmonic_filtering = true;
+    harmonic_filtering = true;
 elseif isequal(lower(harmonic_filtering),'false')
-harmonic_filtering = false;
+    harmonic_filtering = false;
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 
 if size(f,2) > 1 && center_frequency > 0
 
-band_pass = (band_width/sampling_frequency)*[-1 1] + center_frequency/(sampling_frequency/2);
-[bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
-f = filter(bp_f_1,bp_f_2,f')';
+    band_pass = (band_width/sampling_frequency)*[-1 1] + center_frequency/(sampling_frequency/2);
+    [bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
+    f = filter(bp_f_1,bp_f_2,f')';
 
-if harmonic_filtering
+    if harmonic_filtering
 
-k = 2;
+        k = 2;
 
-h = zef_waitbar(0,['Harmonic band-stop filter.']);
+        h = zef_waitbar(0,['Harmonic band-stop filter.']);
 
-band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(sampling_frequency/2);
+        band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(sampling_frequency/2);
 
-while band_pass(2) < 1
+        while band_pass(2) < 1
 
-zef_waitbar(k*center_frequency/(sampling_frequency/2),h,['Harmonic band-stop filter.']);
+            zef_waitbar(k*center_frequency/(sampling_frequency/2),h,['Harmonic band-stop filter.']);
 
-[bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
-f = filter(bp_f_1,bp_f_2,f')';
-k = k + 1;
-band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(sampling_frequency/2);
+            [bp_f_1,bp_f_2] = ellip(filter_order,ripple,attenuation,band_pass,'stop');
+            f = filter(bp_f_1,bp_f_2,f')';
+            k = k + 1;
+            band_pass = (band_width/sampling_frequency)*[-1 1] + k*center_frequency/(sampling_frequency/2);
 
-end
+        end
 
-close(h);
+        close(h);
 
-end
+    end
 end
 
 processed_data = f;

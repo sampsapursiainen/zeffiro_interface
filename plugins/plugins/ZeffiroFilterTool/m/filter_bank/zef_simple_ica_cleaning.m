@@ -10,7 +10,7 @@ function [processed_data] = zef_simple_ica_cleaning(f, ica_reference_channels)
 
 %Conversion between string and numeric data types.
 if isstr(ica_reference_channels)
-ica_reference_channels = str2num(ica_reference_channels);
+    ica_reference_channels = str2num(ica_reference_channels);
 end
 %End of conversion.
 
@@ -24,10 +24,10 @@ h = zef_waitbar(0,['Simple ICA filter.']);
 
 for i = 1 : size_f
 
-  Mdl = rica(f(:,[i ica_reference_channels]),n_ica);
-  aux_vec = transform(Mdl,f(:,[i ica_reference_channels]));
-  f_2(:,i) = aux_vec(:,1);
-  zef_waitbar(i/size_f,h,['Simple ICA filter.']);
+    Mdl = rica(f(:,[i ica_reference_channels]),n_ica);
+    aux_vec = transform(Mdl,f(:,[i ica_reference_channels]));
+    f_2(:,i) = aux_vec(:,1);
+    zef_waitbar(i/size_f,h,['Simple ICA filter.']);
 
 end
 

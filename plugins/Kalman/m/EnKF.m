@@ -15,13 +15,13 @@ for f_ind = 1:number_of_frames
     C = cov(x_f');
     correlationLocalization = true;
     if correlationLocalization
-    T = corrcoef(x_f');
-    % explain How to find 0.05
-    T(abs(T) < 0.05) = 0;
-    C = C .* T;
+        T = corrcoef(x_f');
+        % explain How to find 0.05
+        T(abs(T) < 0.05) = 0;
+        C = C .* T;
     end
     v = mvnrnd(zeros(size(R,1),1), R, n_ensembles);
-    
+
     % method to calculate resolution D
     method = '3';
     if(method == '1')

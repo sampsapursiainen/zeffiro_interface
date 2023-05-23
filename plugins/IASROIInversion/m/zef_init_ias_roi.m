@@ -32,9 +32,9 @@ if not(isfield(zef,'iasroi_pcg_tol'));
     zef.iasroi_pcg_tol = 1e-8;
 end;
 
-    zef.iasroi_sampling_frequency = zef.inv_sampling_frequency;
-    zef.iasroi_low_cut_frequency = zef.inv_low_cut_frequency;
-    zef.iasroi_high_cut_frequency = zef.inv_high_cut_frequency;
+zef.iasroi_sampling_frequency = zef.inv_sampling_frequency;
+zef.iasroi_low_cut_frequency = zef.inv_low_cut_frequency;
+zef.iasroi_high_cut_frequency = zef.inv_high_cut_frequency;
 
 if not(isfield(zef,'iasroi_data_segment'));
     zef.iasroi_data_segment = 1;
@@ -43,10 +43,10 @@ if not(isfield(zef,'iasroi_normalize_data'));
     zef.iasroi_normalize_data = 1;
 end;
 
-    zef.iasroi_time_1 = zef.inv_time_1;
-    zef.iasroi_time_2 = zef.inv_time_2;
-    zef.iasroi_time_3 = zef.inv_time_3;
-    zef.iasroi_number_of_frames = zef.number_of_frames;
+zef.iasroi_time_1 = zef.inv_time_1;
+zef.iasroi_time_2 = zef.inv_time_2;
+zef.iasroi_time_3 = zef.inv_time_3;
+zef.iasroi_number_of_frames = zef.number_of_frames;
 
 zef.iasroi_snr = zef.inv_snr;
 
@@ -96,8 +96,8 @@ else;
 end;
 
 uistack(flipud([zef.h_iasroi_roi_mode; zef.h_iasroi_roi_sphere_1;  zef.h_iasroi_roi_sphere_2;  zef.h_iasroi_roi_sphere_3;
-zef.h_iasroi_roi_sphere_4;
-zef.h_iasroi_roi_threshold; zef.h_iasroi_hyperprior;
+    zef.h_iasroi_roi_sphere_4;
+    zef.h_iasroi_roi_threshold; zef.h_iasroi_hyperprior;
     zef.h_iasroi_snr ; zef.h_iasroi_n_map_iterations ;
     zef.h_iasroi_sampling_frequency ; zef.h_iasroi_low_cut_frequency ;
     zef.h_iasroi_high_cut_frequency ; zef.h_iasroi_time_1 ; zef.h_iasroi_time_2;

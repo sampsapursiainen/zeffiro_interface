@@ -11,13 +11,13 @@ function [processed_data] = zef_define_time_interval(f, start_time, end_time, sa
 
 %Conversion between string and numeric data types.
 if isstr(start_time)
-start_time = str2num(start_time);
+    start_time = str2num(start_time);
 end
 if isstr(end_time)
-end_time = str2num(end_time);
+    end_time = str2num(end_time);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 

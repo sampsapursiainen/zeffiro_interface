@@ -1,30 +1,30 @@
 function [x,fval,exitflag] = zef_mosek_linprog(f,A,b,Aeq,beq,lb,ub,options)
 
 exitflag = -1;
-fval     = []; 
+fval     = [];
 x = [];
 
 if nargin < 4
- Aeq = [];
+    Aeq = [];
 end
 
 if nargin < 5
-beq = [];
+    beq = [];
 end
 
 if nargin > 5
     if not(isempty(lb))
-model.lb = lb;
-else 
-    model.lb = -Inf*ones(size(A,2),1);
+        model.lb = lb;
+    else
+        model.lb = -Inf*ones(size(A,2),1);
     end
-    end
+end
 
 if nargin > 6
     if not(isempty(ub))
-model.ub = ub;
-else 
-  model.ub = Inf*ones(size(A,2),1);
+        model.ub = ub;
+    else
+        model.ub = Inf*ones(size(A,2),1);
     end
 end
 
@@ -34,23 +34,23 @@ param.MSK_DPAR_BASIS_TOL_X = options.TolFun;
 param.MSK_DPAR_BASIS_TOL_S = options.TolFun;
 param.MSK_DPAR_OPTIMIZER_MAX_TIME = options.MaxTime;
 if isequal(lower(options.Algorithm),'interior-point')
-param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_INTPNT';
+    param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_INTPNT';
 elseif isequal(lower(options.Algorithm),'primal-simplex')
-  param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_PRIMAL_SIMPLEX';  
-  elseif isequal(lower(options.Algorithm),'dual-simplex')
-  param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_DUAL_SIMPLEX'; 
+    param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_PRIMAL_SIMPLEX';
+elseif isequal(lower(options.Algorithm),'dual-simplex')
+    param.MSK_IPAR_OPTIMIZER = 'MSK_OPTIMIZER_DUAL_SIMPLEX';
 end
 
-n                = length(f); 
+n                = length(f);
 [r,b,beq,lb,ub]      = mskcheck('linprog',verb,n,size(A),b,size(Aeq),beq,lb,ub);
 
 if not(isequal(r,0))
-   exitflag = r;
-   output   = []; 
-   fval     = []; 
-   lambda   = [];
-   return;
-end   
+    exitflag = r;
+    output   = [];
+    fval     = [];
+    lambda   = [];
+    return;
+end
 
 model        = [];
 [n_ineq,t] = size(A);
@@ -58,10 +58,10 @@ model        = [];
 model.c      = reshape(f,n,1);
 model.a      = [A;Aeq];
 if ( isempty(model.a) )
-   model.a = sparse(0,length(f));
+    model.a = sparse(0,length(f));
 elseif not(issparse(model.a))
-   model.a = sparse(model.a);
-end   
+    model.a = sparse(model.a);
+end
 model.blc    = [-inf*ones(size(b));beq];
 model.buc    = [b;beq];
 model.blx    = lb;
@@ -71,23 +71,23 @@ clear f A b B beq lb ub options;
 [rcode,res] = mosekopt(cmd,model,param);
 
 mskstatus('linprog',verb,0,rcode,res);
- 
+
 if ( isfield(res,'sol') )
-  if ( isfield(res.sol,'itr') )
-    x = res.sol.itr.xx;
-  else
-    x = res.sol.bas.xx;
-  end
+    if ( isfield(res.sol,'itr') )
+        x = res.sol.itr.xx;
+    else
+        x = res.sol.bas.xx;
+    end
 else
-  x = [];
+    x = [];
 end
 
 if isequal(length(model.c), length(x))
-   fval = model.c'*x; 
+    fval = model.c'*x;
 else
-  fval = [];
+    fval = [];
 end
 
-   exitflag = mskeflag(rcode,res); 
+exitflag = mskeflag(rcode,res);
 
 end

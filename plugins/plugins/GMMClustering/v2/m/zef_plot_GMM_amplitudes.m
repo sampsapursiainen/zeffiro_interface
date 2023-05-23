@@ -110,7 +110,7 @@ if ~isempty(findobj(zef_temp_axis.Parent.Children,'Tag','image_details'))
     else
         time_string = ['Time: ' num2str(evalin('base','zef.inv_time_1') + evalin('base','zef.inv_time_2')/2 + evalin('base','zef.inv_sampling_frequency')*(f_ind - 1)*evalin('base','zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(end_frame) '.'];
     end
-set(findobj(zef_temp_axis.Parent.Children,'Tag','image_details').Children,'String',time_string)
+    set(findobj(zef_temp_axis.Parent.Children,'Tag','image_details').Children,'String',time_string)
 end
 set(zef_temp_axis,'visible','on')
 set(zef_temp_axis,'CLim',[0 1])

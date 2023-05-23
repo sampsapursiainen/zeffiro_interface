@@ -27,7 +27,7 @@ for mod=[1,2,4] %[1,2, 3]
 
                 if mod~=4
 
-                zef.dataBank.hash=strcat('node_', num2str(mod),'_4_', num2str(index));
+                    zef.dataBank.hash=strcat('node_', num2str(mod),'_4_', num2str(index));
                 else
                     zef.dataBank.hash=strcat('node_', num2str(mod),'_3_', num2str(index));
                 end

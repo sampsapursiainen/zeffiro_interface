@@ -14,13 +14,13 @@ zef.LeadFieldProcessingTool.bankSize=size(zef.LeadFieldProcessingTool.bank,2);
 if zef.LeadFieldProcessingTool.bankSize>=1
 
     for zef_LeadfieldProcessingTool_startIndex=1:zef.LeadFieldProcessingTool.bankSize
-         zef.LeadFieldProcessingTool.bankPosition=zef_LeadfieldProcessingTool_startIndex;
+        zef.LeadFieldProcessingTool.bankPosition=zef_LeadfieldProcessingTool_startIndex;
 
-          if ~isfield(zef.LeadFieldProcessingTool.bank{zef_LeadfieldProcessingTool_startIndex}, 'lead_field_id')
+        if ~isfield(zef.LeadFieldProcessingTool.bank{zef_LeadfieldProcessingTool_startIndex}, 'lead_field_id')
             warning('old project data. IDs are set sequentially');
             [zef.lead_field_id,zef.lead_field_id_max] = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'bank_oldData');
             zef.LeadFieldProcessingTool.bank{zef_LeadfieldProcessingTool_startIndex}.lead_field_id=zef.lead_field_id_max;
-          end
+        end
 
         zef_LeadfieldProcessingTool_updateTable;
     end

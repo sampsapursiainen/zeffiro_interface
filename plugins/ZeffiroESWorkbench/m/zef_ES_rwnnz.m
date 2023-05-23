@@ -15,7 +15,7 @@ if not(isempty(varargin))
 end
 
 if not(isequal(current_score_nnz_lim, 2))
-    
+
     sorted_y = sort(abs(y),'descend');
     sorted_sum_y = sum(sorted_y);
     if sorted_sum_y == 0
@@ -31,18 +31,18 @@ if not(isequal(current_score_nnz_lim, 2))
             current_score_ind = [];
         end
     end
-    
+
     if not(isempty(current_score_ind))
         y(current_score_ind) = 0;
     end
-    
+
 else
-    
+
     [~, y_positive] = max(y(:));
     [~, y_negative] = min(y(:));
-    
+
     current_score_nnz = 2;
-    
+
     y(setdiff(1:length(y), [y_negative y_positive])) = 0;
 end
 end

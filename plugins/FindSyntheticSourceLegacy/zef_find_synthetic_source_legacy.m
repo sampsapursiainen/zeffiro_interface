@@ -1,8 +1,8 @@
-  function zef = zef_find_synthetic_source_legacy(zef)
+function zef = zef_find_synthetic_source_legacy(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
-end    
+    zef = evalin('base','zef');
+end
 
 zef = zef_tool_start(zef,'zef_find_synthetic_source_legacy_window',1/4,0);
 

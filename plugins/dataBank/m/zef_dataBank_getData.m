@@ -8,12 +8,12 @@ switch type
     case 'data'
         data.measurements=zef.measurements;
 
-            case 'noisedata'
+    case 'noisedata'
         data.noisedata=zef.noise_data;
 
     case 'reconstruction'
         if iscell(zef.reconstruction)
-           data.reconstruction=zef.reconstruction;
+            data.reconstruction=zef.reconstruction;
         else
             data.reconstruction={zef.reconstruction};
         end
@@ -29,7 +29,7 @@ switch type
         data.imaging_method = zef.imaging_method;
         data.noise_data = zef.noise_data;
         if isfield(zef,'lf_tag')
-        data.lf_tag = zef.lf_tag;
+            data.lf_tag = zef.lf_tag;
         else
             data.lf_tag = '';
         end

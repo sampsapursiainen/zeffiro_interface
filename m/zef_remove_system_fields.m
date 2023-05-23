@@ -5,9 +5,9 @@ zef.system_fields = zef.ini_cell(:,3);
 zef.system_fields = setdiff(zef.system_fields,{'save_file','save_file_path'});
 zef.system_fields = [zef.system_fields; zef.fields_to_be_removed'];
 for zef_i  =  1 : length(zef.system_fields)
-if isfield(zef_data,zef.system_fields{zef_i});
-zef_data = rmfield(zef_data,zef.system_fields{zef_i});
-end
+    if isfield(zef_data,zef.system_fields{zef_i});
+        zef_data = rmfield(zef_data,zef.system_fields{zef_i});
+    end
 end
 
 zef = rmfield(zef,'fields_to_be_removed');

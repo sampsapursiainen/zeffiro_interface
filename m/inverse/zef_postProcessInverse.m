@@ -12,7 +12,7 @@ n_interp=procFile.n_interp;
 
 z=cell(size(z_inverse));
 for f_ind=1:length(z_inverse)
-z_vec=z_inverse{f_ind};
+    z_vec=z_inverse{f_ind};
 
     if ismember(source_direction_mode, [1,2])
         z_aux = zeros(sizeL2,1);
@@ -39,10 +39,10 @@ z_vec=z_inverse{f_ind};
         z_aux(s_ind_2) = z_vec;
     end
 
-%    if number_of_frames > 1
-        z{f_ind} = z_aux;
-%     else
-%         z = z_aux;
-%     end
+    %    if number_of_frames > 1
+    z{f_ind} = z_aux;
+    %     else
+    %         z = z_aux;
+    %     end
 
 end

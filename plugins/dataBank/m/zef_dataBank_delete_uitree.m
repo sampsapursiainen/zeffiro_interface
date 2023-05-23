@@ -1,7 +1,7 @@
 zef = zef_dataBank_delete_uitree(zef)
 
 if nargin == 0
-zef = evalin('base','zef')
+    zef = evalin('base','zef')
 end
 
 if size(zef.dataBank.app.Tree.SelectedNodes,1)>1
@@ -19,7 +19,7 @@ end
 clear dbk;
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

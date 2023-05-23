@@ -1,7 +1,7 @@
 function zef = zef_eeg_lead_field(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 warning('off');
@@ -18,7 +18,7 @@ end
 warning('on');
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

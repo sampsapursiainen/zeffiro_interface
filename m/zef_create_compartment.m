@@ -2,12 +2,12 @@ function zef = zef_create_compartment(zef,compartment_tag, varargin)
 
 n_compartments = eval('length(zef.compartment_tags)');
 color_default = [ 0.3984    0.7615    0.4435 ;
-                  0.5810    0.4690    0.3430 ; 
-                   0.7000    0.7000    0.6000 ; 
-                   0.4200    0.4800    0.4200 ;
-                    0.3500    0.3500    0.3500 ;
-                     0.8000    0.8000    0.8000];
-                          
+    0.5810    0.4690    0.3430 ;
+    0.7000    0.7000    0.6000 ;
+    0.4200    0.4800    0.4200 ;
+    0.3500    0.3500    0.3500 ;
+    0.8000    0.8000    0.8000];
+
 
 rng('default');
 rng(n_compartments);
@@ -18,7 +18,7 @@ field_cell_update = cell(0);
 if not(isempty(varargin))
     zef_struct_name = varargin{1};
     if length(varargin) > 1
-field_cell_update = varargin{2};
+        field_cell_update = varargin{2};
     end
 end
 
@@ -47,18 +47,18 @@ field_cell_default =  {{'on', '1'       }
     {'transform_name','{''Transform 1''}'}};
 
 if n_compartments < size(color_default,1)
-field_cell_default{2}{2} = mat2str(color_default(n_compartments+1,:));
+    field_cell_default{2}{2} = mat2str(color_default(n_compartments+1,:));
 end
 
 for i = 1 : length(field_cell_default)
 
-eval([zef_struct_name '.' compartment_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
+    eval([zef_struct_name '.' compartment_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
 
 end
 
 for i = 1 : length(field_cell_update)
 
-eval([zef_struct_name '.' compartment_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]);
+    eval([zef_struct_name '.' compartment_tag '_' field_cell_update{i}{1} '=[' field_cell_update{i}{2} '];' ]);
 
 end
 

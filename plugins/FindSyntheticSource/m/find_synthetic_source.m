@@ -46,11 +46,11 @@ if isfield(zef,'synth_source_data')
     %Display elements on synth_source_data
     zef.find_synth_source.h_source_list.Data=[];
     if ~iscell(zef.synth_source_data)
-       zef_aux_data = zef.synth_source_data;
-       zef.synth_source_data = [];
-       zef_aux_fields = fields(zef_aux_data);
-       for zef_n = 1:length(zef_aux_fields)
-          zef.synth_source_data{zef_n} = zef_aux_data.(zef_aux_fields{zef_n});
+        zef_aux_data = zef.synth_source_data;
+        zef.synth_source_data = [];
+        zef_aux_fields = fields(zef_aux_data);
+        for zef_n = 1:length(zef_aux_fields)
+            zef.synth_source_data{zef_n} = zef_aux_data.(zef_aux_fields{zef_n});
         end
         clear zef_aux_fields zef_aux_data;
         zef.fss_time_val = [];
@@ -58,7 +58,7 @@ if isfield(zef,'synth_source_data')
     for zef_j = 1:length(zef.synth_source_data)
         zef.find_synth_source.h_source_list.Data{zef_j,1}=zef.synth_source_data{zef_j}.name;
     end
-     %If FSS uses Noise STD instead of signal to noise ratio
+    %If FSS uses Noise STD instead of signal to noise ratio
     for zef_n = 1:length(zef.synth_source_data)
         if strcmp(zef.synth_source_data{zef_n}.parameters{8,1},'Noise STD w.r.t. amplitude')
             zef.synth_source_data{zef_n}.parameters{8,1} = 'Noise STD w.r.t. amplitude (dB)';

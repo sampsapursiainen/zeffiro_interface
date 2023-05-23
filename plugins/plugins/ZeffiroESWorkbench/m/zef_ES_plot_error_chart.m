@@ -29,10 +29,10 @@ switch nargin
             vec = zef_ES_table(arg_aux);
         end
         [sr, sc] = zef_ES_objective_function(zef, vec);
-        
+
     case {3}
         [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{2});
-        
+
     otherwise
         error('ZI: Invalid number of arguments.')
 end

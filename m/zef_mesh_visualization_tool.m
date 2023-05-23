@@ -1,7 +1,7 @@
 if isfield(zef,'h_mesh_visualization_tool')
-if isvalid(zef.h_mesh_visualization_tool)
-    delete(zef.h_mesh_visualization_tool)
-end
+    if isvalid(zef.h_mesh_visualization_tool)
+        delete(zef.h_mesh_visualization_tool)
+    end
 end
 
 zef_data = zef_mesh_visualization_tool_app_exported;
@@ -9,10 +9,10 @@ zef_data.h_mesh_visualization_tool.Visible = zef.use_display;
 
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-if isprop(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn')
-set(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn','zef_update_mesh_visualization_tool;');
-end
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    if isprop(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn')
+        set(zef.(zef.fieldnames{zef_i}),'ValueChangedFcn','zef_update_mesh_visualization_tool;');
+    end
 end
 
 %*******
@@ -44,8 +44,8 @@ set(zef.h_mesh_visualization_parameter_list,'value',zef.mesh_visualization_param
 zef.mesh_visualization_graph_list = cell(0);
 zef.dir_aux = dir(fileparts(which('zef_histogram')));
 for zef_i = 3 : length(zef.dir_aux)
-zef.mesh_visualization_graph_list{1}{zef_i-2} = help([zef.dir_aux(zef_i).folder filesep zef.dir_aux(zef_i).name]);
-[~, zef.mesh_visualization_graph_list{2}{zef_i-2}] = fileparts(zef.dir_aux(zef_i).name);
+    zef.mesh_visualization_graph_list{1}{zef_i-2} = help([zef.dir_aux(zef_i).folder filesep zef.dir_aux(zef_i).name]);
+    [~, zef.mesh_visualization_graph_list{2}{zef_i-2}] = fileparts(zef.dir_aux(zef_i).name);
 end
 
 set(zef.h_mesh_visualization_graph_list,'Items',zef.mesh_visualization_graph_list{1});
@@ -128,18 +128,18 @@ zef_set_size_change_function(zef.h_mesh_visualization_tool,2);
 clear zef_data;
 
 if zef.h_segmentation_tool_toggle == 1
-    
-zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*0.505*zef.segmentation_tool_default_position(3), ...
-                          zef.segmentation_tool_default_position(2),...
-                          0.5*0.505*zef.segmentation_tool_default_position(3),...
-                          zef.segmentation_tool_default_position(4)];
-                          
+
+    zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*0.505*zef.segmentation_tool_default_position(3), ...
+        zef.segmentation_tool_default_position(2),...
+        0.5*0.505*zef.segmentation_tool_default_position(3),...
+        zef.segmentation_tool_default_position(4)];
+
 else
 
-zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*zef.segmentation_tool_default_position(3), ...
-                          zef.segmentation_tool_default_position(2),...
-                          0.5*zef.segmentation_tool_default_position(3),...
-                          zef.segmentation_tool_default_position(4)]; 
+    zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*zef.segmentation_tool_default_position(3), ...
+        zef.segmentation_tool_default_position(2),...
+        0.5*zef.segmentation_tool_default_position(3),...
+        zef.segmentation_tool_default_position(4)];
 
 end
 
@@ -149,6 +149,6 @@ set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'Font
 set(zef.h_mesh_visualization_tool,'DeleteFcn','zef_closereq;');
 
 if not(ismember('ZefTool',properties(zef.h_mesh_visualization_tool)))
-addprop(zef.h_mesh_visualization_tool,'ZefTool');
+    addprop(zef.h_mesh_visualization_tool,'ZefTool');
 end
 zef.h_mesh_visualization_tool.ZefTool = mfilename;

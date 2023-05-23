@@ -6,11 +6,11 @@ c_1 = str2num(c_0);
 
 n_varargin = length(varargin);
 if n_varargin == 2
-n_1 = varargin{1};
-n_2 = varargin{2};
-c_1 = c_1(:,n_1:n_2);
+    n_1 = varargin{1};
+    n_2 = varargin{2};
+    c_1 = c_1(:,n_1:n_2);
 else
-c_1 = c_1(:,1:3);
+    c_1 = c_1(:,1:3);
 end
 
 end

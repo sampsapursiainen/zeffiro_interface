@@ -41,36 +41,36 @@ function out_coeff_sys = zef_pbo_system( ...
     arg_interp_locs, ...
     arg_interp_loc_row, ...
     arg_n_of_coeffs ...
-)
+    )
 
-    arguments
-        arg_locs (:,3) double
-        arg_dirs (:,3) double
-        arg_interp_locs (:,3) double
-        arg_interp_loc_row (:,1) double { mustBePositive, mustBeInteger }
-        arg_n_of_coeffs (1,1) double { mustBePositive, mustBeInteger }
-    end
+arguments
+    arg_locs (:,3) double
+    arg_dirs (:,3) double
+    arg_interp_locs (:,3) double
+    arg_interp_loc_row (:,1) double { mustBePositive, mustBeInteger }
+    arg_n_of_coeffs (1,1) double { mustBePositive, mustBeInteger }
+end
 
-    % PBO weigth coefficients from differences between barycentra
-    % (interpolation positions) and dipole positions.
+% PBO weigth coefficients from differences between barycentra
+% (interpolation positions) and dipole positions.
 
-    interp_pos = arg_interp_locs(arg_interp_loc_row, :);
+interp_pos = arg_interp_locs(arg_interp_loc_row, :);
 
-    interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
+interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
 
-    pos_diffs = arg_locs - interp_pos;
+pos_diffs = arg_locs - interp_pos;
 
-    weight_coefs = zef_L2_norm(pos_diffs, 2);
+weight_coefs = zef_L2_norm(pos_diffs, 2);
 
-    % Position-based optimization matrix.
+% Position-based optimization matrix.
 
-    PBO_mat = [                     ...
-        diag(weight_coefs) arg_dirs; ...
-        arg_dirs' zeros(3,3)         ...
+PBO_mat = [                     ...
+    diag(weight_coefs) arg_dirs; ...
+    arg_dirs' zeros(3,3)         ...
     ];
 
-    % Solve for Lagrangian multipliers to generate coefficient matrix.
+% Solve for Lagrangian multipliers to generate coefficient matrix.
 
-    out_coeff_sys = PBO_mat \ [zeros(arg_n_of_coeffs,3); eye(3)];
+out_coeff_sys = PBO_mat \ [zeros(arg_n_of_coeffs,3); eye(3)];
 
 end

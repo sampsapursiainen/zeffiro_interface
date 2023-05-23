@@ -18,16 +18,16 @@ n_levels = size(multigrid_dec{1},2);
 n_decs = size(multigrid_dec,2);
 
 for j = 1 : n_levels
-for i = 1 : n_decs
-for k = 1 : length(multigrid_dec{i}{j})
-ind_aux_1 = multigrid_dec{i}{j}{k};
-ind_aux_2 = multigrid_perm{1}(ind_aux_1);
-ind_aux_2 = [3*(ind_aux_2'-1)+1; 3*(ind_aux_2'-1)+2; 3*ind_aux_2'];
-ind_aux_2 = ind_aux_2(:);
-LTL = L(:,ind_aux_2)'*L(:,ind_aux_2);
-M(ind_aux_2,ind_aux_2) = M(ind_aux_2,ind_aux_2) + LTL;
-end
-end
+    for i = 1 : n_decs
+        for k = 1 : length(multigrid_dec{i}{j})
+            ind_aux_1 = multigrid_dec{i}{j}{k};
+            ind_aux_2 = multigrid_perm{1}(ind_aux_1);
+            ind_aux_2 = [3*(ind_aux_2'-1)+1; 3*(ind_aux_2'-1)+2; 3*ind_aux_2'];
+            ind_aux_2 = ind_aux_2(:);
+            LTL = L(:,ind_aux_2)'*L(:,ind_aux_2);
+            M(ind_aux_2,ind_aux_2) = M(ind_aux_2,ind_aux_2) + LTL;
+        end
+    end
 end
 
 eig_max = eigs(M,1);

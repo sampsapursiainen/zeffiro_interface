@@ -4,10 +4,10 @@ zef_data = zef_graphics_processing_options;
 
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
-if find(ismember(properties(zef.(zef.fieldnames{zef_i})),'ValueChangedFcn'))
-zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_graphics_options;';
-end
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    if find(ismember(properties(zef.(zef.fieldnames{zef_i})),'ValueChangedFcn'))
+        zef.(zef.fieldnames{zef_i}).ValueChangedFcn = 'zef_update_graphics_options;';
+    end
 end
 
 zef = rmfield(zef,'fieldnames');

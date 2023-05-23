@@ -47,8 +47,8 @@ zef_reconstructionTool_refresh;
 
 %app functions
 zef.reconstructionTool.app.AddButton.ButtonPushedFcn='zef_reconstructionTool_addCurrent2bank';
- zef.reconstructionTool.app.replaceButton.ButtonPushedFcn='zef_reconstructionTool_replace';
- zef.reconstructionTool.app.RefreshButton.ButtonPushedFcn='zef_reconstructionTool_refresh';
+zef.reconstructionTool.app.replaceButton.ButtonPushedFcn='zef_reconstructionTool_replace';
+zef.reconstructionTool.app.RefreshButton.ButtonPushedFcn='zef_reconstructionTool_refresh';
 %
 zef.reconstructionTool.app.deleteButton.ButtonPushedFcn='zef_reconstructionTool_delete';
 zef.reconstructionTool.app.ApplytransformationButton.ButtonPushedFcn='zef_reconstructionTool_apply';

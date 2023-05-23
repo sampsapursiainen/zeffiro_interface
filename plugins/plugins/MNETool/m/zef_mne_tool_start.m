@@ -1,7 +1,7 @@
 function zef = zef_mne_tool_start(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 zef = zef_mne_tool_window(zef);
@@ -19,7 +19,7 @@ uistack(flipud([zef.h_mne_type ; zef.h_mne_prior;
     zef.h_mne_apply; zef.h_mne_start  ]),'top');
 
 if nargout == 0
-  assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
-  
+
 end

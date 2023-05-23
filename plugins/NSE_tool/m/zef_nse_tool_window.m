@@ -245,7 +245,7 @@ zef.nse_field.h_plot_pulse.ButtonPushedFcn = '';
 
 zef.nse_field.h_artery_domain_ind.Items = cell(0);
 for i = 1 : length(zef.compartment_tags)
-zef.nse_field.h_artery_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
+    zef.nse_field.h_artery_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
 end
 zef.nse_field.h_artery_domain_ind.ItemsData = [1:length(zef.nse_field.h_artery_domain_ind.Items)];
 zef.nse_field.h_artery_domain_ind.Multiselect = 'on';
@@ -253,7 +253,7 @@ zef.nse_field.h_artery_domain_ind.Value = zef.nse_field.artery_domain_ind;
 
 zef.nse_field.h_capillary_domain_ind.Items = cell(0);
 for i = 1 : length(zef.compartment_tags)
-zef.nse_field.h_capillary_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
+    zef.nse_field.h_capillary_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
 end
 zef.nse_field.h_capillary_domain_ind.ItemsData = [1:length(zef.nse_field.h_capillary_domain_ind.Items)];
 zef.nse_field.h_capillary_domain_ind.Multiselect = 'on';

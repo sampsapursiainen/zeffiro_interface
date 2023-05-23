@@ -57,29 +57,29 @@ for zef_i = 2:length(zef_props)
         end
         if isfield(zef,zef_props{zef_i})
             if ~ischar(zef.(zef_props{zef_i})) && ~strcmp(zef_props{zef_i},'GMM_colors')
-            zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
+                zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
             elseif strcmp(zef_props{zef_i},'GMM_colors') && ~isempty(zef.GMM_colors)
                 if isempty(zef.GMM_colors)
-                   zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = '';
+                    zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = '';
                 else
-                zef_aux_mat = reshape(zef.GMM_colors',[],1)';
-                zef_aux_str = ['[',num2str(zef_aux_mat(1))];
-                for zef_j = 2:length(zef_aux_mat)
-                    if mod(zef_j,3)==0
-                        zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j)),'],'];
-                    elseif mod(zef_j,3)==1
-                        zef_aux_str = [zef_aux_str,' [',num2str(zef_aux_mat(zef_j))];
-                    else
-                        zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j))];
+                    zef_aux_mat = reshape(zef.GMM_colors',[],1)';
+                    zef_aux_str = ['[',num2str(zef_aux_mat(1))];
+                    for zef_j = 2:length(zef_aux_mat)
+                        if mod(zef_j,3)==0
+                            zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j)),'],'];
+                        elseif mod(zef_j,3)==1
+                            zef_aux_str = [zef_aux_str,' [',num2str(zef_aux_mat(zef_j))];
+                        else
+                            zef_aux_str = [zef_aux_str,' ',num2str(zef_aux_mat(zef_j))];
+                        end
                     end
-                end
-                zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
-                clear zef_aux_str zef_aux_mat
+                    zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef_aux_str(1:end-1);
+                    clear zef_aux_str zef_aux_mat
                 end
             elseif isempty(zef.(zef_props{zef_i}))
                 zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = '';
             else
-            	zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
+                zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
             end
             %zef = rmfield(zef,zef_props{zef_i});
             zef.GMM.parameters{zef_n,2} = {zef.GMM.apps.PlotOpt.(zef_props{zef_i}).Value};

@@ -9,7 +9,7 @@ if nargin == 0
 end
 
 zef.brain_ind = zef_find_active_compartment_ind(zef);
-zef.active_compartment_ind = zef.brain_ind; 
+zef.active_compartment_ind = zef.brain_ind;
 
 [zef.lead_field_id, zef.lead_field_id_max]  = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'create');
 
@@ -20,11 +20,11 @@ if zef.source_direction_mode == 1
 end
 
 if zef.source_direction_mode == 2
-zef.lf_param.direction_mode = 'normal';
+    zef.lf_param.direction_mode = 'normal';
 end
 
 if zef.source_direction_mode == 3
-zef.lf_param.direction_mode = 'face_based';
+    zef.lf_param.direction_mode = 'face_based';
 end
 
 if isfield(zef,'preconditioner')
@@ -77,7 +77,7 @@ end
     zef.nodes, ...
     zef.tetra, ...
     zef.brain_ind ...
-);
+    );
 
 % Also restrict to tetra which have 4 neighbours to make sure we are not on
 % the surface, but in the brain.
@@ -91,7 +91,7 @@ clear T_fi;
     zef.tetra, ...
     zef.brain_activity_inds, ...
     zef.acceptable_source_depth ...
-);
+    );
 
 zef.brain_activity_inds = intersect(zef.brain_activity_inds, valid_source_inds_builder);
 
@@ -118,7 +118,7 @@ zef.lf_tag = zef.forward_simulation_table{zef.forward_simulation_selected(1), 1}
     zef.source_model, ...
     zef.n_sources, ...
     zef.source_space_creation_iterations ...
-);
+    );
 
 % Determine which tetra are to be used as sources in their own frame of
 % reference.
@@ -168,7 +168,7 @@ if zef.lead_field_type == 1
         zef.brain_ind, ...
         zef.source_ind, ...
         zef.lf_param ...
-    );
+        );
 end
 
 if zef.lead_field_type == 2
@@ -183,7 +183,7 @@ if zef.lead_field_type == 2
         zef.brain_ind, ...
         zef.source_ind, ...
         zef.lf_param ...
-    );
+        );
 
 end
 
@@ -199,7 +199,7 @@ if zef.lead_field_type == 3
         zef.brain_ind, ...
         zef.source_ind, ...
         zef.lf_param ...
-    );
+        );
 
 end
 
@@ -219,7 +219,7 @@ if zef.lead_field_type == 4
         zef.brain_ind, ...
         zef.source_ind, ...
         zef.lf_param ...
-    );
+        );
 
 end
 
@@ -230,16 +230,16 @@ if zef.lead_field_type == 5
     end
 
 
-        [zef.L, zef.S, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_tes_fem( ...
-            zef, ...
-            zef.nodes_aux, ...
-            {zef.tetra,zef.prisms}, ...
-            {zef.sigma(:,1),zef.sigma_prisms}, ...
-            zef.sensors_aux, ...
-            zef.nearest_source_neighbour_inds, ...
-            zef.brain_ind, ...
-            zef.source_ind, ...
-            zef.lf_param ...
+    [zef.L, zef.S, zef.source_positions, zef.source_directions, zef.eit_ind, zef.eit_count] = zef_lead_field_tes_fem( ...
+        zef, ...
+        zef.nodes_aux, ...
+        {zef.tetra,zef.prisms}, ...
+        {zef.sigma(:,1),zef.sigma_prisms}, ...
+        zef.sensors_aux, ...
+        zef.nearest_source_neighbour_inds, ...
+        zef.brain_ind, ...
+        zef.source_ind, ...
+        zef.lf_param ...
         );
 
 end
@@ -271,7 +271,7 @@ if zef.source_interpolation_on
 end
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end
@@ -285,108 +285,108 @@ function [nearest_source_neighbour_inds, source_inds] = decomposition_and_source
     source_model, ...
     wanted_n_of_sources, ...
     source_space_creation_iterations ...
-)
+    )
 
-    % Documentation
-    %
-    % Generates (extrapolated) node (degree of freedom) and source indices for
-    % a node space.
-    %
-    % Input:
-    %
-    % - nodes
-    %
-    %   The finite element node cloud of the model under observation.
-    %
-    % - tetra
-    %
-    %   The tetrahedra (4-tuples of node indices) that are formed from the
-    %   above nodes.
-    %
-    % - restricted_brain_inds
-    %
-    %   The subset of tetra that dipolar sources can be placed into.
-    %
-    % - wanted_n_of_sources
-    %
-    %   The number of sources one wishes to generate.
-    %
-    % - source_space_creation_iterations
-    %
-    %   The number of extrapolation iterations performed to make sure that we
-    %   get as close to the wanted number of sources as was wanted.
-    %
-    % Output:
-    %
-    % - nearest_source_neighbour_inds
-    %
-    %   The indices that denote the node decomposition positions in the FEM
-    %   mesh.
-    %
-    % - source_inds
-    %
-    %   The tetrahedra that will be used as sources, based on the generated
-    %   decomposition.
+% Documentation
+%
+% Generates (extrapolated) node (degree of freedom) and source indices for
+% a node space.
+%
+% Input:
+%
+% - nodes
+%
+%   The finite element node cloud of the model under observation.
+%
+% - tetra
+%
+%   The tetrahedra (4-tuples of node indices) that are formed from the
+%   above nodes.
+%
+% - restricted_brain_inds
+%
+%   The subset of tetra that dipolar sources can be placed into.
+%
+% - wanted_n_of_sources
+%
+%   The number of sources one wishes to generate.
+%
+% - source_space_creation_iterations
+%
+%   The number of extrapolation iterations performed to make sure that we
+%   get as close to the wanted number of sources as was wanted.
+%
+% Output:
+%
+% - nearest_source_neighbour_inds
+%
+%   The indices that denote the node decomposition positions in the FEM
+%   mesh.
+%
+% - source_inds
+%
+%   The tetrahedra that will be used as sources, based on the generated
+%   decomposition.
 
-    arguments
-        nodes (:,3) double
-        tetra (:,4) double { mustBeInteger, mustBePositive }
-        restricted_brain_inds (:,1) double { mustBeInteger, mustBePositive }
-        source_model
-        wanted_n_of_sources (1,1) double { mustBeInteger, mustBePositive }
-        source_space_creation_iterations (1,1) double { mustBeInteger, mustBePositive }
-    end
+arguments
+    nodes (:,3) double
+    tetra (:,4) double { mustBeInteger, mustBePositive }
+    restricted_brain_inds (:,1) double { mustBeInteger, mustBePositive }
+    source_model
+    wanted_n_of_sources (1,1) double { mustBeInteger, mustBePositive }
+    source_space_creation_iterations (1,1) double { mustBeInteger, mustBePositive }
+end
 
-    % Create initial decomposition of node (degree of freedom, DOF) space.
+% Create initial decomposition of node (degree of freedom, DOF) space.
+
+[nearest_source_neighbour_inds, ~, ~, source_inds] = zef_decompose_dof_space( ...
+    nodes, ...
+    tetra, ...
+    restricted_brain_inds, ...
+    [], ...
+    wanted_n_of_sources, ...
+    2 ...
+    );
+
+% Extrapolate, if we have less sources than we wanted.
+
+n_of_sources = wanted_n_of_sources;
+
+for ind = 1 : source_space_creation_iterations
+
+    n_of_sources = round(wanted_n_of_sources * n_of_sources / length(source_inds));
 
     [nearest_source_neighbour_inds, ~, ~, source_inds] = zef_decompose_dof_space( ...
         nodes, ...
         tetra, ...
         restricted_brain_inds, ...
         [], ...
-        wanted_n_of_sources, ...
+        n_of_sources, ...
         2 ...
-    );
-
-    % Extrapolate, if we have less sources than we wanted.
-
-    n_of_sources = wanted_n_of_sources;
-
-    for ind = 1 : source_space_creation_iterations
-
-        n_of_sources = round(wanted_n_of_sources * n_of_sources / length(source_inds));
-
-        [nearest_source_neighbour_inds, ~, ~, source_inds] = zef_decompose_dof_space( ...
-            nodes, ...
-            tetra, ...
-            restricted_brain_inds, ...
-            [], ...
-            n_of_sources, ...
-            2 ...
         );
 
-    end
+end
 
-    % Set empty decomposition indices, if source model is not continuous.
+% Set empty decomposition indices, if source model is not continuous.
 
-    switch ZefSourceModel.from(source_model)
+switch ZefSourceModel.from(source_model)
 
-        case ZefSourceModel.Error
+    case ZefSourceModel.Error
 
-            error('Received and erraneous source model.')
+        error('Received and erraneous source model.')
 
-        case { ...
+    case { ...
             ZefSourceModel.ContinuousWhitney, ...
             ZefSourceModel.ContinuousHdiv, ...
             ZefSourceModel.ContinuousStVenant ...
-        }
+            }
 
-            % Do nothing
+        % Do nothing
 
-        otherwise
+    otherwise
 
-            nearest_source_neighbour_inds = [];
+        nearest_source_neighbour_inds = [];
 
-    end % switch
+end % switch
 
 end % function

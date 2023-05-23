@@ -7,7 +7,7 @@ zef.reconstructionTool.currentInfo=zef.reconstructionTool.bankInfo(indexOfMinimu
 
 %set every checkbox to false
 for indexOfMinimumTrueElement=1:zef.reconstructionTool.bankSize
-zef.reconstructionTool.bankInfo{indexOfMinimumTrueElement,7}=false;
+    zef.reconstructionTool.bankInfo{indexOfMinimumTrueElement,7}=false;
 end
 
 zef.reconstructionTool.app.BankTable.Data=zef.reconstructionTool.bankInfo;

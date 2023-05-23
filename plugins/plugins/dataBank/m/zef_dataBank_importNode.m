@@ -6,10 +6,10 @@ if ~iscell(saveFile)
     tree.(hash).name=node.name;
 
     if strcmp(dataBank.save2disk, 'On')
-    folderName=strcat(dataBank.folder, hash);
-    data=node.data;
-    save(folderName, '-struct', 'data');
-    tree.(hash).data=matfile(folderName);
+        folderName=strcat(dataBank.folder, hash);
+        data=node.data;
+        save(folderName, '-struct', 'data');
+        tree.(hash).data=matfile(folderName);
     end
 
 else

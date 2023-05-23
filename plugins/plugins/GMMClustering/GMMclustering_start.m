@@ -99,9 +99,9 @@ zef_props = properties(zef.GMMclustering);
 for zef_i = 1:length(zef_props)
     if isfield(zef,zef_props{zef_i})
         if ~ischar(zef.(zef_props{zef_i}))
-        zef.GMMclustering.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
+            zef.GMMclustering.(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));
         else
-        zef.GMMclustering.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
+            zef.GMMclustering.(zef_props{zef_i}).Value = zef.(zef_props{zef_i});
         end
     end
 end

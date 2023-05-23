@@ -13,7 +13,7 @@ colormap_vec_aux = [([20/colortune_param*[c_aux_1:-1:1] zeros(1,colormap_size-c_
 colormap_vec = zeros(3,size(colormap_vec_aux,2));
 
 for i = 1 : 4
-colormap_vec = colormap_vec + repmat(color_mat(:,i),1,size(colormap_vec_aux,2)).*colormap_vec_aux(i*[1 1 1],:);
+    colormap_vec = colormap_vec + repmat(color_mat(:,i),1,size(colormap_vec_aux,2)).*colormap_vec_aux(i*[1 1 1],:);
 end
 
 colormap_vec = colormap_vec'./max(colormap_vec(:));

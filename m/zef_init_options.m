@@ -2,27 +2,27 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if not(isfield(zef,'streamline_draw'))
-zef.streamline_draw = 0;
+    zef.streamline_draw = 0;
 end
 
 if not(isfield(zef,'streamline_linestyle'));
-zef.streamline_linestyle = '-';
+    zef.streamline_linestyle = '-';
 end
 
 if not(isfield(zef,'smoothing_steps_ele'));
-zef.smoothing_steps_ele = 100;
+    zef.smoothing_steps_ele = 100;
 end
 
 if not(isfield(zef,'streamline_linewidth'));
-zef.streamline_linewidth = 1;
+    zef.streamline_linewidth = 1;
 end
 
 if not(isfield(zef,'streamline_color'));
-zef.streamline_color = 'blue';
+    zef.streamline_color = 'blue';
 end
 
 if not(isfield(zef,'n_streamline'));
-zef.n_streamline = 100;
+    zef.n_streamline = 100;
 end
 
 if not(isfield(zef,'submesh_num'));

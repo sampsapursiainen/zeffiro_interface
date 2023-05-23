@@ -4,13 +4,13 @@ if nargin < 3
     type = 'single_pulse';
 end
 
-axes(zef.h_axes1); 
-cla(zef.h_axes1); 
+axes(zef.h_axes1);
+cla(zef.h_axes1);
 
 if isequal(type,'single_pulse')
-t = nse_field.cycle_length*[0:0.001:1];
+    t = nse_field.cycle_length*[0:0.001:1];
 elseif isequal(type,'full_data')
-t = [0:nse_field.time_step_length:nse_field.time_length];
+    t = [0:nse_field.time_step_length:nse_field.time_length];
 end
 y = zef_nse_signal_pulse(t,nse_field,256);
 

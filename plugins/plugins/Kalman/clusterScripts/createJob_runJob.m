@@ -15,7 +15,7 @@ c.saveProfile
 j = cell(0);
 idx = 1;
 run_profiler = false;
- folders = {'/scratch/project_2002680/Kalman/KalmanSLAuditory/', '/scratch/project_2002680/Kalman/KalmanAuditory/'};
+folders = {'/scratch/project_2002680/Kalman/KalmanSLAuditory/', '/scratch/project_2002680/Kalman/KalmanAuditory/'};
 for fol = folders
     f = fol{1}
     j{idx} = batch(c, @run_cluster_job,1,{fullfile(f,'/data/'), run_profiler}, 'CurrentFolder',fullfile(f,'/zeffiro_interface/'), 'AutoAddClientPath', false)

@@ -1,7 +1,7 @@
 if isfield(zef,'h_zeffiro_window_main')
-if isvalid(zef.h_zeffiro_window_main)
-    delete(zef.h_zeffiro_window_main)
-end
+    if isvalid(zef.h_zeffiro_window_main)
+        delete(zef.h_zeffiro_window_main)
+    end
 end
 
 set(groot,'defaultFigureVisible','off')
@@ -10,7 +10,7 @@ zef_data.h_zeffiro_window_main.Visible = zef.use_display;
 set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 
 set(zef.h_transform_table,'columnformat',{'numeric','char'});
@@ -42,7 +42,7 @@ zef_j = 0;
 for zef_i = 3 : length(zef.aux_dir)
     if zef.aux_dir(zef_i).isdir
         zef_j = zef_j + 1;
-   zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name;
+        zef.aux_cell{zef_j} = zef.aux_dir(zef_i).name;
     end
 end
 zef.h_profile_name.Items = zef.aux_cell;
@@ -59,18 +59,18 @@ zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO In
 set(zef.h_zeffiro_window_main,'DeleteFcn','zef_closereq;');
 
 if isempty(zef.h_segmentation_tool_toggle.UserData)
-zef.h_segmentation_tool_toggle.ButtonPushedFcn = 'zef_segmentation_tool_toggle(zef,zef.h_segmentation_tool_toggle);';
-zef.h_set_position.ButtonPushedFcn = 'zef_set_position(zef);';
+    zef.h_segmentation_tool_toggle.ButtonPushedFcn = 'zef_segmentation_tool_toggle(zef,zef.h_segmentation_tool_toggle);';
+    zef.h_set_position.ButtonPushedFcn = 'zef_set_position(zef);';
 
-zef.h_segmentation_tool_toggle.UserData = 1;
-eval(zef.h_segmentation_tool_toggle.ButtonPushedFcn);
-zef.h_zeffiro_window_main.Position = zef.segmentation_tool_default_position;
+    zef.h_segmentation_tool_toggle.UserData = 1;
+    eval(zef.h_segmentation_tool_toggle.ButtonPushedFcn);
+    zef.h_zeffiro_window_main.Position = zef.segmentation_tool_default_position;
 end
 
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 if not(ismember('ZefTool',properties(zef.h_zeffiro_window_main)))
-addprop(zef.h_zeffiro_window_main,'ZefTool');
+    addprop(zef.h_zeffiro_window_main,'ZefTool');
 end
 zef.h_zeffiro_window_main.ZefTool = mfilename;
 

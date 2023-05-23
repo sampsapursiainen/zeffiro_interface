@@ -15,22 +15,22 @@ function [processed_data] = zef_constant_epoching(f, first_epoch_point, epoch_st
 
 %Conversion between string and numeric data types.
 if isstr(first_epoch_point)
-first_epoch_point = str2num(first_epoch_point);
+    first_epoch_point = str2num(first_epoch_point);
 end
 if isstr(number_of_epochs)
-number_of_epochs = str2num(number_of_epochs);
+    number_of_epochs = str2num(number_of_epochs);
 end
 if isstr(epoch_step)
-epoch_step = str2num(epoch_step);
+    epoch_step = str2num(epoch_step);
 end
 if isstr(start_time)
-start_time = str2num(start_time);
+    start_time = str2num(start_time);
 end
 if isstr(end_time)
-end_time = str2num(end_time);
+    end_time = str2num(end_time);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 

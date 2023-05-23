@@ -72,14 +72,14 @@ if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
 end
 
-    z = cell(number_of_frames,1);
+z = cell(number_of_frames,1);
 f_data = zef_getFilteredData;
 n = size(L,2);
 
 tic;
 for f_ind = 1 : number_of_frames
 
-        time_val = toc;
+    time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
         zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
@@ -94,58 +94,58 @@ for f_ind = 1 : number_of_frames
         f = gpuArray(f);
     end
 
-% inversion starts here
+    % inversion starts here
 
-if f_ind == 1
-zef_waitbar(0,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
-end
+    if f_ind == 1
+        zef_waitbar(0,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+    end
 
-if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
-f = gpuArray(f);
-end
-%__ Initialize parameters __
-z_vec = zeros(n,1);
-gamma =zeros(length(z_vec),1)+(beta+1/q-1)./theta0;
+    if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
+        f = gpuArray(f);
+    end
+    %__ Initialize parameters __
+    z_vec = zeros(n,1);
+    gamma =zeros(length(z_vec),1)+(beta+1/q-1)./theta0;
 
-%__Update theta__
+    %__Update theta__
     if q==2
         %__ Iteration Loop __
         for i = 1 : n_ias_map_iter
-        %_Draw waitbar_
-        if f_ind > 1;
-        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
-        end;
-        w = 1./(gamma*std_lhood^2*max(f)^2);
+            %_Draw waitbar_
+            if f_ind > 1;
+                zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            else
+                zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            end;
+            w = 1./(gamma*std_lhood^2*max(f)^2);
 
-        z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
-        %_ gamma update _
-        gamma = (beta+1/q-1)./(theta0+0.5*abs(z_vec).^q);
+            z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
+            %_ gamma update _
+            gamma = (beta+1/q-1)./(theta0+0.5*abs(z_vec).^q);
         end
     else
         x_old = zeros(n,1)+1e-10;%it seems sensitive to initialization!
         %__ Iteration Loop __
         for i = 1 : n_ias_map_iter
-        %_Draw waitbar_
-        if f_ind > 1;
-        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
-        end;
-        %focal activity
-        z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);
-        gamma = beta./(theta0+0.5*abs(z_vec));
+            %_Draw waitbar_
+            if f_ind > 1;
+                zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            else
+                zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration for EP. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            end;
+            %focal activity
+            z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);
+            gamma = beta./(theta0+0.5*abs(z_vec));
 
-        x_old = z_vec;
+            x_old = z_vec;
         end
     end
 
-if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
-z_vec = gather(z_vec);
-end
+    if evalin('base','zef.use_gpu') == 1 & gpuDeviceCount > 0
+        z_vec = gather(z_vec);
+    end
 
-z{f_ind} = z_vec;
+    z{f_ind} = z_vec;
 end;
 
 z = zef_postProcessInverse(z, procFile);

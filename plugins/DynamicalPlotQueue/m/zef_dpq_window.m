@@ -5,7 +5,7 @@ function zef = zef_dpq_window(zef)
 zef_data=zeffiro_interface_dynamical_plot_queue_app;
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
-zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
 end
 set(zef.h_dynamical_plot_queue,'Name','ZEFFIRO Interface: Dynamical plot queue');
 set(findobj(zef.h_dynamical_plot_queue.Children,'-property','FontUnits'),'FontUnits','pixels')
@@ -20,11 +20,11 @@ zef.dpq_dir = [fileparts(zef.dpq_dir) '/' 'dynamical_plot_queue_bank/*.m'];
 zef.dynamical_plot_queue_list =  cell(0);
 zef.aux_field = dir(zef.dpq_dir);
 for zef_i = 1 : length(zef.aux_field)
-[~, zef.dynamical_plot_queue_list{zef_i}] = fileparts(zef.aux_field(zef_i).name);
+    [~, zef.dynamical_plot_queue_list{zef_i}] = fileparts(zef.aux_field(zef_i).name);
 end
 zef.dynamica_plot_queue_description = cell(0);
 for zef_i = 1 : length(zef.dynamical_plot_queue_list)
-zef.dynamical_plot_queue_description{zef_i} = erase(help(zef.dynamical_plot_queue_list{zef_i}),char(10));
+    zef.dynamical_plot_queue_description{zef_i} = erase(help(zef.dynamical_plot_queue_list{zef_i}),char(10));
 end
 
 zef = rmfield(zef,'aux_field');

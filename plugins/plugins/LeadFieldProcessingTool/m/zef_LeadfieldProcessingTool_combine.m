@@ -57,13 +57,13 @@ for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bank
 
 end
 
-        zef.LeadFieldProcessingTool.auxData=[];
-        zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.combineData;
+zef.LeadFieldProcessingTool.auxData=[];
+zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.combineData;
 
-        [zef.lead_field_id,zef.lead_field_id_max] = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'bank_apply');
-        zef.LeadFieldProcessingTool.auxData.lead_field_id=zef.lead_field_id_max;
+[zef.lead_field_id,zef.lead_field_id_max] = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'bank_apply');
+zef.LeadFieldProcessingTool.auxData.lead_field_id=zef.lead_field_id_max;
 
-        zef.LeadFieldProcessingTool.combineData=[];
-        zef_LeadFieldProcessingTool_aux2bank_new;
+zef.LeadFieldProcessingTool.combineData=[];
+zef_LeadFieldProcessingTool_aux2bank_new;
 
-        clear zef_LeadFieldProcessingTool_index_combine;
+clear zef_LeadFieldProcessingTool_index_combine;

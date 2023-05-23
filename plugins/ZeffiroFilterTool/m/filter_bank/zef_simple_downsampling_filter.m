@@ -11,10 +11,10 @@ function [processed_data] = zef_simple_downsampling_filter(f, downsampled_freque
 
 %Conversion between string and numeric data types.
 if isstr(downsampled_frequency)
-downsampled_frequency = str2num(downsampled_frequency);
+    downsampled_frequency = str2num(downsampled_frequency);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 

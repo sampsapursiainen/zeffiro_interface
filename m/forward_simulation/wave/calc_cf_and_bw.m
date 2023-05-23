@@ -11,7 +11,7 @@ s_fft = fft(real(pulse_vec));
 db_vec = db(abs(s_fft(2:1+ceil((length(pulse_vec)-1)/2))));
 db_vec = db_vec - max(db_vec);
 db_I = find(db_vec>=-3);
-cf = (1/max(t_vec))*(f_vec(db_I(end))+f_vec(db_I(1)))/2; 
+cf = (1/max(t_vec))*(f_vec(db_I(end))+f_vec(db_I(1)))/2;
 bw = (1/max(t_vec))*(1+f_vec(db_I(end))-f_vec(db_I(1)));
 db_I = find(db_vec>=signal_threshold);
 hf = (1/max(t_vec))*f_vec(db_I(end));

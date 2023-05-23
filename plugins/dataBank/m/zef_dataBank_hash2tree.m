@@ -1,7 +1,7 @@
 function [zef] = zef_dataBank_hash2tree(zef)
 
 if nargin == 0
-zef = evalin('base','zef')
+    zef = evalin('base','zef')
 end
 
 %this builds a uiTree in the databank.app from the databank.tree node
@@ -26,9 +26,9 @@ for dbi=1:length(zef.dataBank.hashList)
     zef.dataBank.hash=extractAfter(zef.dataBank.hashList{dbi}, 'node_');
 
     while contains(zef.dataBank.hash, '_')
-    hashNumber=extractBefore(zef.dataBank.hash, '_');
-    dbparent=dbparent.Children(str2double(hashNumber));
-    zef.dataBank.hash=extractAfter(zef.dataBank.hash, '_');
+        hashNumber=extractBefore(zef.dataBank.hash, '_');
+        dbparent=dbparent.Children(str2double(hashNumber));
+        zef.dataBank.hash=extractAfter(zef.dataBank.hash, '_');
     end
     newNode=uitreenode(dbparent, 'Text', zef.dataBank.tree.(zef.dataBank.hashList{dbi}).name, 'NodeData',zef.dataBank.tree.(zef.dataBank.hashList{dbi}).hash);
     newNode.ContextMenu=zef.dataBank.app.treeMenu;
@@ -40,7 +40,7 @@ expand(zef.dataBank.app.Tree, 'all');
 clear dbparent newNode
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

@@ -14,19 +14,19 @@ function [processed_data] = zef_threshold_epoching(f, threshold_value, number_of
 
 %Conversion between string and numeric data types.
 if isstr(threshold_value)
-threshold_value = str2num(threshold_value);
+    threshold_value = str2num(threshold_value);
 end
 if isstr(number_of_epochs)
-number_of_epochs = str2num(number_of_epochs);
+    number_of_epochs = str2num(number_of_epochs);
 end
 if isstr(start_time)
-start_time = str2num(start_time);
+    start_time = str2num(start_time);
 end
 if isstr(end_time)
-end_time = str2num(end_time);
+    end_time = str2num(end_time);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 

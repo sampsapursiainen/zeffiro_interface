@@ -124,6 +124,7 @@ zef_plugin;
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 
+
 for zef_k = 1 : length(zef.h_temp)
     if zef_k <= length(zef.menu_accelerator_vec)
         set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));

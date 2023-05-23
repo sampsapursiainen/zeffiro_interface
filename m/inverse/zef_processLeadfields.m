@@ -15,7 +15,7 @@ end
 
 source_directions = eval('zef.source_directions');
 if isempty(source_direction_mode)
-source_direction_mode = zef.source_direction_mode;
+    source_direction_mode = zef.source_direction_mode;
 end
 
 s_ind_2=[];
