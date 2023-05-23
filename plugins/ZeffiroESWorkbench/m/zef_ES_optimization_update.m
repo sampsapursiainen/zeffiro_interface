@@ -8,6 +8,14 @@ zef.ES_obj_fun                  = zef.h_ES_obj_fun.Value;
 zef.ES_obj_fun_2                = zef.h_ES_obj_fun_2.Value;
 zef.ES_threshold_condition      = zef.h_ES_threshold_condition.Value;
 
+
+if zef.h_ES_HPO_search_method.Value ~= 2; 
+    zef.h_ES_HPO_recursive_instances.Visible = 'off'; 
+    zef.h_ES_recursive_instances_label.Visible = 'off'; 
+else; 
+    zef.h_ES_HPO_recursive_instances.Visible = 'on'; 
+    zef.h_ES_recursive_instances_label.Visible = 'on'; 
+end;
 zef.ES_HPO_search_method        = zef.h_ES_HPO_search_method.Value;
 
 zef.ES_inv_colormap             = get(zef.h_ES_inv_colormap,'Value');

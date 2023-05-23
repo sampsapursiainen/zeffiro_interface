@@ -113,6 +113,10 @@ set(zef.h_menu_edit,'Tag','edit');
 set(zef.h_menu_window,'Tag','window');
 set(zef.h_menu_help,'Tag','about');
 
+zef.ImportelectrodesMenu = zef_data.ImportelectrodesMenu ;
+
+set(zef.ImportelectrodesMenu, "MenuSelectedFcn", "zef = gui.menu_tool.import_electrodes_callback(zef);")
+
 zef.h_zeffiro_menu.DeleteFcn = 'zef_close_all;';
 
 zef_plugin;
@@ -120,7 +124,8 @@ zef_plugin;
 zef.menu_accelerator_vec = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 zef.h_temp = findobj(zef.h_zeffiro_window_main,{'parent',zef.h_menu_forward_tools,'-or','parent',zef.h_menu_inverse_tools,'-or','parent',zef.h_menu_multi_tools});
 
-for zef_k = 1 : length(zef.h_temp);
+
+for zef_k = 1 : length(zef.h_temp)
     if zef_k <= length(zef.menu_accelerator_vec)
         set(zef.h_temp(zef_k),'accelerator',char(zef.menu_accelerator_vec(zef_k)));
     end

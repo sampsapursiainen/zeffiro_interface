@@ -1,0 +1,3 @@
+function zef_plot_synthetic_source(varargin)
+zef_plot_synthetic_source(varargin);
+end

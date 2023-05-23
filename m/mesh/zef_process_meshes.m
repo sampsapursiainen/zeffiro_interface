@@ -9,7 +9,7 @@ if nargin == 0
 end
 
 reuna_p_inf = [];
-output_mode = 'compact';
+output_mode = 'compact'; 
 
 if not(isempty(varargin))
     explode_param = varargin{1};
@@ -291,35 +291,37 @@ for k = 1 : length(compartment_tags)
         elseif pml_outer_radius_unit == 2
             box_outer_radius = pml_outer_radius;
         end
-        reuna_p{box_ind} = [
-            -box_outer_radius  -box_outer_radius  -box_outer_radius;
-            box_outer_radius  -box_outer_radius -box_outer_radius;
-            box_outer_radius  box_outer_radius -box_outer_radius;
-            -box_outer_radius  box_outer_radius -box_outer_radius;
-            -box_outer_radius  -box_outer_radius box_outer_radius ;
-            box_outer_radius  -box_outer_radius box_outer_radius;
-            box_outer_radius  box_outer_radius box_outer_radius;
-            -box_outer_radius  box_outer_radius box_outer_radius;
-            ];
-        reuna_t{box_ind} = [1 2 6;
-            6  5  1;
-            3  4  7;
-            8  7  4;
-            2  3  7;
-            2  7  6;
-            5  1  8;
-            4  1  8;
-            2  1  4;
-            4  3  2;
-            5  6  8;
-            7  8  6;
-            ];
 
-        eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_points = reuna_p{box_ind};']);
-        eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_triangles = reuna_t{box_ind};']);
-        eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_submesh_ind = size(reuna_t{box_ind},1);']);
+    reuna_p{box_ind} = [
+        -box_outer_radius  -box_outer_radius  -box_outer_radius;
+        box_outer_radius  -box_outer_radius -box_outer_radius;
+        box_outer_radius  box_outer_radius -box_outer_radius;
+        -box_outer_radius  box_outer_radius -box_outer_radius;
+               -box_outer_radius  -box_outer_radius box_outer_radius ;
+        box_outer_radius  -box_outer_radius box_outer_radius;
+        box_outer_radius  box_outer_radius box_outer_radius;
+        -box_outer_radius  box_outer_radius box_outer_radius;
+        ];
+    reuna_t{box_ind} = [1 2 6;
+                  6  5  1;
+                  3  4  7;
+                  8  7  4;
+                  2  3  7;
+                  2  7  6;
+                  1  5  8;
+                  4  1  8;
+                  2  1  4;
+                  4  3  2;
+                  5  6  8;
+                  7  8  6;
+                  ];
 
-    end
+    eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_points = reuna_p{box_ind};']);
+    eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_triangles = reuna_t{box_ind};']);
+    eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_submesh_ind = size(reuna_t{box_ind},1);']);
+
+end
+
 end
 
 zef.sensors = sensors;

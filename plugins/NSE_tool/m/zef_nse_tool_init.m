@@ -238,5 +238,9 @@ if not(isfield(zef.nse_field,'gravity_z'))
     zef.nse_field.gravity_z = 9.81;
 end
 
+if not(isfield(zef.nse_field,'conductivity_statistic'))
+zef.nse_field.conductivity_statistic = 1;
+end
+
 
 end

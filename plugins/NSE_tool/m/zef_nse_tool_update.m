@@ -33,6 +33,8 @@ zef.nse_field.gravity_z = zef.nse_field.h_gravity_z.Value;
 zef.nse_field.conductivity_model = zef.nse_field.h_conductivity_model.Value;
 zef.nse_field.conductivity_exponent = zef.nse_field.h_conductivity_exponent.Value;
 
+zef.nse_field.conductivity_statistic = zef.nse_field.h_conductivity_statistic.Value;
+
 zef.nse_field.arteriole_diameter = zef.nse_field.h_arteriole_diameter.Value;
 zef.nse_field.venule_diameter = zef.nse_field.h_venule_diameter.Value;
 

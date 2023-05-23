@@ -1,0 +1,1 @@
+remove_synthetic_source;
