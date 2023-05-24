@@ -85,11 +85,11 @@ function sigma_out = zef_nse_sigma(nse_field, nodes, tetra, domain_labels, sigma
 
     if cm == 1 % All
 
-        sigma_out = repmat(sigma_in(:,1), 1, n_of_time_frames);
+        sigma_out = zeros ( size ( sigma_in(:,1), 1), n_of_time_frames ) ;
 
     elseif ismember(cm, [2, 3, 4, 5] ) % mean, std, max, min
 
-        sigma_out = sigma_in(:,1);
+        sigma_out = zeros ( size ( sigma_in (:,1), 1 ), 1 ) ;
 
     else
 
@@ -182,8 +182,6 @@ function sigma_out = conductivity_fn( ...
     nse_field, ...
     sigma_out, ...
     sigma_out_builder_vec, ...
-    active_compartment_ind, ...
-    I1, ...
     tfi, ...
     n_of_columns, ...
     ~ ...
@@ -205,10 +203,6 @@ function sigma_out = conductivity_fn( ...
 
         sigma_out_builder_vec (:,1) double
 
-        active_compartment_ind (:,1) uint64 { mustBePositive }
-
-        I1 (:,1) uint64 { mustBePositive }
-
         tfi (1,1) uint64 { mustBePositive }
 
         n_of_columns (1,1) uint64 { mustBePositive }
@@ -219,23 +213,21 @@ function sigma_out = conductivity_fn( ...
 
     cm = nse_field.conductivity_statistic;
 
-    ais = active_compartment_ind(I1); % active index set
-
     if cm == 1 % all
 
-        sigma_out(ais,tfi) = sigma_out_builder_vec;
+        sigma_out(:,tfi) = sigma_out_builder_vec;
 
     elseif ismember(cm, [2 3]) % mean and std
 
-        sigma_out(ais,1) = sigma_out(ais,1) + sigma_out_builder_vec ./ double(n_of_columns);
+        sigma_out = sigma_out + sigma_out_builder_vec ./ double(n_of_columns);
 
     elseif cm == 4 % maximum
 
-        sigma_out(ais,1) = max(sigma_out_builder_vec, sigma_out(ais, 1));
+        sigma_out = max(sigma_out_builder_vec, sigma_out);
 
     elseif cm == 5 % minimum
 
-        sigma_out(ais,1) = min(sigma_out_builder_vec, sigma_out(ais, 1));
+        sigma_out = min(sigma_out_builder_vec, sigma_out);
 
     else
 
@@ -249,8 +241,6 @@ function sigma_std = standard_deviation_fn( ...
     nse_field, ...
     sigma_out, ...
     sigma_out_builder_vec, ...
-    active_compartment_ind, ...
-    I1, ...
     ~, ...
     n_of_time_frames, ...
     sigma_std ...
@@ -272,10 +262,6 @@ function sigma_std = standard_deviation_fn( ...
 
         sigma_out_builder_vec (:,1) double
 
-        active_compartment_ind (:,1) uint64 { mustBePositive }
-
-        I1 (:,1) uint64 { mustBePositive }
-
         ~
 
         n_of_time_frames (1,1) uint64 { mustBePositive }
@@ -286,11 +272,19 @@ function sigma_std = standard_deviation_fn( ...
 
     cm = nse_field.conductivity_statistic;
 
-    ais = active_compartment_ind(I1); % active index set
-
     if cm == 3 % squared differences for standard deviation.
 
-        sigma_std(ais,1) =  sigma_std(ais,1) + ( sigma_out(ais,1) - sigma_out_builder_vec ) .^ 2 ./ double ( n_of_time_frames ) ;
+        squared_diffs = ( sigma_out - sigma_out_builder_vec ) .^ 2 ;
+
+        % mean ( sigma_out )
+
+        % mean ( sigma_out_builder_vec )
+
+        % mean ( squared_diffs )
+
+        sigma_std = sigma_std + squared_diffs ./ double ( n_of_time_frames ) ;
+
+        % mean ( sigma_std )
 
     elseif ismember( cm, [1, 2, 4, 5] )
 
@@ -373,8 +367,6 @@ function [I1, I2] = filtering_inds_fn( ...
     I3 = find(abs(interpolated_relative_blood_concentrations(I4)) > 1 - singular_threshold);
 
     I2 = I4(I3);
-
-    I_aux = find(abs(interpolated_relative_blood_concentrations(I4)) <= 1);
 
     I1 = setdiff(I4, I2);
 
@@ -523,6 +515,10 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
     % Start iterating over time frames.
 
+    computing_something_other_than_std = iteration == 1 ;
+
+    computing_std = iteration == 2 && nse_field.conductivity_statistic == 3;
+
     for tfi = 1 : n_of_time_frames
 
         updated_waitbar_title = waitbar_title + ": time frame " + tfi + " / " + n_of_time_frames + "..." ;
@@ -553,7 +549,7 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
         else
 
-            sigma_out_builder_vec = zeros(size(sigma_out, 1), 1);
+            sigma_out_builder_vec = sigma_in (:,1) ; % zeros(size(sigma_out, 1), 1);
 
         end
 
@@ -594,26 +590,35 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
                 s = log(1-interpolated_relative_blood_concentrations(I1).^m)./log(1-interpolated_relative_blood_concentrations(I1));
 
-                sigma_out_builder_vec = (1-interpolated_relative_blood_concentrations(I1)).^s.*background_conductivity + nse_field.blood_conductivity .* interpolated_relative_blood_concentrations(I1).^m;
-
-                % If we are computing the standard deviation, modify sigma_std
-                % instead of sigma_out during the second iteration.
-
-                if iteration == 1
-
-                    sigma_out = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I1, col_ind, n_of_time_frames, sigma_std) ;
-
-                elseif nse_field.conductivity_statistic == 3 && iteration == 2
-
-                    sigma_std = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I1, col_ind, n_of_time_frames, sigma_std) ;
-
-                else
-
-                    error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
-
-                end
+                sigma_out_builder_vec(active_compartment_ind(I1)) = (1-interpolated_relative_blood_concentrations(I1)).^s.*background_conductivity + nse_field.blood_conductivity .* interpolated_relative_blood_concentrations(I1).^m;
 
             end % for
+
+            % If we are computing the standard deviation, modify sigma_std
+            % instead of sigma_out during the second iteration.
+
+            result = input_operation ( ...
+                nse_field, ...
+                sigma_out, ...
+                sigma_out_builder_vec, ...
+                col_ind, ...
+                n_of_time_frames, ...
+                sigma_std ...
+            ) ;
+
+            if computing_something_other_than_std
+
+                sigma_out = result ;
+
+            elseif computing_std
+
+                sigma_std = result ;
+
+            else
+
+                error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
+
+            end
 
         elseif isequal(nse_field.conductivity_model,2) % Hashin--Shtrikman upper bound
 
@@ -625,24 +630,33 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
                 background_conductivity = sum(active_sigma_in(I).*volume(I))./volume_aux;
 
-                sigma_out_builder_vec = background_conductivity.*(1-interpolated_relative_blood_concentrations(I)) + nse_field.blood_conductivity.*(interpolated_relative_blood_concentrations(I));
+                sigma_out_builder_vec(active_compartment_ind(I1)) = background_conductivity.*(1-interpolated_relative_blood_concentrations(I)) + nse_field.blood_conductivity.*(interpolated_relative_blood_concentrations(I));
 
-                % If we are computing the standard deviation, modify sigma_std
-                % instead of sigma_out during the second iteration.
+            end % for
 
-                if iteration == 1
+            % If we are computing the standard deviation, modify sigma_std
+            % instead of sigma_out during the second iteration.
 
-                    sigma_out = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I, col_ind, n_of_time_frames, sigma_std) ;
+            result = input_operation ( ...
+                nse_field, ...
+                sigma_out, ...
+                sigma_out_builder_vec, ...
+                col_ind, ...
+                n_of_time_frames, ...
+                sigma_std ...
+            ) ;
 
-                elseif nse_field.conductivity_statistic == 3 && iteration == 2
+            if computing_something_other_than_std
 
-                    sigma_std = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I, col_ind, n_of_time_frames, sigma_std) ;
+                sigma_out = result ;
 
-                else
+            elseif computing_std
 
-                    error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
+                sigma_std = result ;
 
-                end
+            else
+
+                error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
 
             end
 
@@ -659,7 +673,7 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
                     singular_threshold ...
                 );
 
-                sigma_out(I3, col_ind) = nse_field.blood_conductivity;
+                sigma_out(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
 
                 interpolated_relative_blood_concentrations(I2) = 1 - singular_threshold;
 
@@ -667,55 +681,33 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
                 background_conductivity = sum(active_sigma_in(I1).*volume(I1))./volume_aux;
 
-                sigma_out_builder_vec = background_conductivity.*(1 + (3.*interpolated_relative_blood_concentrations(I1).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - interpolated_relative_blood_concentrations(I1)).*(nse_field.blood_conductivity-background_conductivity)));
+                sigma_out_builder_vec(active_compartment_ind(I1)) = background_conductivity.*(1 + (3.*interpolated_relative_blood_concentrations(I1).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - interpolated_relative_blood_concentrations(I1)).*(nse_field.blood_conductivity-background_conductivity)));
 
-                % If we are computing the standard deviation, modify sigma_std
-                % instead of sigma_out during the second iteration.
+            end % for
 
-                if iteration == 1
+            % If we are computing the standard deviation, modify sigma_std
+            % instead of sigma_out during the second iteration.
 
-                    sigma_out = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I1, col_ind, n_of_time_frames, sigma_std) ;
+            result = input_operation ( ...
+                nse_field, ...
+                sigma_out, ...
+                sigma_out_builder_vec, ...
+                col_ind, ...
+                n_of_time_frames, ...
+                sigma_std ...
+            ) ;
 
-                elseif nse_field.conductivity_statistic == 3 && iteration == 2
+            if computing_something_other_than_std
 
-                    sigma_std = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I1, col_ind, n_of_time_frames, sigma_std) ;
+                sigma_out = result ;
 
-                else
+            elseif computing_std
 
-                    error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
+                sigma_std = result ;
 
-                end
+            else
 
-            end
-
-        elseif isequal(nse_field.conductivity_model,4) % What is this ???
-
-            for cdi = 1 : length(nse_field.capillary_domain_ind)
-
-                I = find(active_domain_labels == nse_field.capillary_domain_ind(cdi));
-
-                volume_aux = sum(volume(I));
-
-                background_conductivity = sum(active_sigma_in(I).*volume(I))./volume_aux;
-
-                sigma_out_builder_vec = (nse_field.blood_conductivity + (background_conductivity - nse_field.blood_conductivity).*(1-(2.*interpolated_relative_blood_concentrations(I)./3)))./(1 + (interpolated_relative_blood_concentrations(I)./3).*(background_conductivity./nse_field.blood_conductivity-1));
-
-                % If we are computing the standard deviation, modify sigma_std
-                % instead of sigma_out during the second iteration.
-
-                if iteration == 1
-
-                    sigma_out = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I, col_ind, n_of_time_frames, sigma_std) ;
-
-                elseif nse_field.conductivity_statistic == 3 && iteration == 2
-
-                    sigma_std = input_operation(nse_field, sigma_out, sigma_out_builder_vec, active_compartment_ind, I, col_ind, n_of_time_frames, sigma_std) ;
-
-                else
-
-                    error("Either this was not the 1st iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
-
-                end
+                error("Either this was not the first iteration of conductivity_loop, or something other than STD was to be computed during the second iteration. Aborting...")
 
             end
 
