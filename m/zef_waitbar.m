@@ -149,7 +149,7 @@ else
 
     log_frequency = 5;
     first_step = 0;
-    progress_value = varargin{1};
+    progress_value = double ( varargin{1} );
     progress_value = min(1,progress_value(:));
     progress_value = max(0,progress_value(:));
 
@@ -274,7 +274,6 @@ else
 
     end
 
-
     h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
     h_text.String = progress_bar_text;
 
@@ -312,9 +311,9 @@ else
 
         if progress_value(1) > 0
 
-            progress_bar_ready_text = datestr(now + ((1-progress_value(end))/progress_value(end))*(now - h_waitbar.ZefWaitbarStartTime));
+            time_in_seconds = now + ((1-progress_value(end))/progress_value(end))*(now - h_waitbar.ZefWaitbarStartTime) ;
 
-            h_text_ready.String = ['Ready: ' progress_bar_ready_text];
+            progress_bar_ready_text = datestr ( time_in_seconds );
 
         else
 
