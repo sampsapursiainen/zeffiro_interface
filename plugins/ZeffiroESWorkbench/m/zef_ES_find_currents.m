@@ -108,7 +108,6 @@ if isempty(zef.source_positions)
     error('ZI: No discretized sources found. Perhaps you forgot to calculate or load them...?')
 end
 %% waitbar
-zef.use_waitbar = 0;
 if zef.use_waitbar == 1
     wait_bar_temp = zef_waitbar(...
         [0 0], ...
