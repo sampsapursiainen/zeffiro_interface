@@ -1,9 +1,10 @@
-function colorbar_from_fig_fn(figtool, filename_without_suffix, filetypes)
+function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, kwargs)
 %
-% colorbar_from_fig_fn
+% colorbar_from_figtool_fn
 %
-% Takes in a handle to a figure, extracts the colobar from it and saves it to
-% files with given set of suffixes.
+% Takes in a handle to a Zeffiro Interface Figure tool (possibly saved to a
+% Matlab .fig file), extracts the colobar from it and saves it to files with
+% given set of suffixes.
 %
 % NOTE: utilizes matlab.lang.internal.uuid, which might break at some point.
 %
@@ -21,6 +22,19 @@ function colorbar_from_fig_fn(figtool, filename_without_suffix, filetypes)
 %
 %   The file types which one wants to save.
 %
+% - kwargs.colormap (:,3) double { mustBeInRange( colormap, [0,1] ) } = []
+%
+%   The colormap that the colorbar will use. If this is empty, the colormap of
+%   the given Figure tool handle will be used.
+%
+% - kwargs.fontsize (1,1) double { mustBePositive } = 20
+%
+%   The font size of the saved colorbar in points.
+%
+% - kwargs.resolution (1,1) double { mustBePositive } = 400
+%
+%   The resolution of the image, if PNG format is used to save the colorbar.
+%
 % Outputs:
 %
 % - None.
@@ -33,6 +47,12 @@ function colorbar_from_fig_fn(figtool, filename_without_suffix, filetypes)
         filename_without_suffix (1,1) string { mustBeValidVariableName }
 
         filetypes (:,1) string { mustBeMember(filetypes, [".png", ".pdf", ".eps"]) }
+
+        kwargs.colormap (:,3) double { mustBeInRange( kwargs.colormap, 0, 1 ) } = []
+
+        kwargs.fontsize (1,1) double { mustBePositive } = 20
+
+        kwargs.resolution (1,1) double { mustBePositive } = 400
 
     end
 
@@ -61,15 +81,37 @@ function colorbar_from_fig_fn(figtool, filename_without_suffix, filetypes)
 
     % Set new figure colormap.
 
-    fig.Colormap = figtool.Colormap;
+    if not ( isempty ( kwargs.colormap ) )
+
+        fig.Colormap = kwargs.colormap;
+
+    else
+
+        fig.Colormap = figtool.Colormap;
+
+    end
 
     % Generate axes into the new figure.
 
     ax = axes ( fig );
 
-    % Attach a new colorbar to axes.
+    % Attach a new colorbar to axes with certain ticks and tick labels.
 
-    colorbar ( ax ) ;
+    cb = colorbar ( ax ) ;
+
+    lowerlim = ftcb.Limits(1) ;
+
+    upperlim = ftcb.Limits(2) ;
+
+    delta = ( upperlim - lowerlim ) / 5 ;
+
+    cb.Ticks = lowerlim : delta : upperlim ;
+
+    cb.TickLabels = round ( cb.Ticks, 0 ) ;
+
+    % Set colorbar fontsize.
+
+    cb.FontSize = kwargs.fontsize ;
 
     % Set color limits. The function caxis was renamed to clim in R2022b, so check for that first.
 
