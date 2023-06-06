@@ -12,6 +12,8 @@ if not(isempty(varargin))
     end
 end
 
+triangles = double(triangles);
+
 h_fig = gcf;
 h_axes = findobj(h_fig.Children,'Tag','axes1');
 hold_status = ishold(h_axes);
