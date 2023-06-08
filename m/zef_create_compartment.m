@@ -51,8 +51,11 @@ if n_compartments < size(color_default,1)
 end
 
 for i = 1 : length(field_cell_default)
-
+    
+    
+if     eval(['not(isfield(' zef_struct_name ',''' compartment_tag '_' field_cell_default{i}{1} '''));'])   
     eval([zef_struct_name '.' compartment_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
+end
 
 end
 
@@ -62,6 +65,8 @@ for i = 1 : length(field_cell_update)
 
 end
 
+if eval(['not(ismember(' zef_struct_name '.compartment_tags,''' compartment_tag '''));'])
 eval([zef_struct_name '.compartment_tags = ['''  compartment_tag ''', ' zef_struct_name '.compartment_tags];']);
+end
 
 end

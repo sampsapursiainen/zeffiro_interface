@@ -94,6 +94,15 @@ if not(isequal(file_name,0))
     end
 
     clear zef_data;
+    
+    for zef_i = 1 : length(zef.sensor_tags)
+    zef = zef_create_sensors(zef, zef.sensor_tags{zef_i});
+    end
+    
+    for zef_i = 1 : length(zef.compartment_tags)
+    zef = zef_create_compartment(zef, zef.compartment_tags{zef_i});
+    end
+    
     zef = zef_set_figure_tool_sliders(zef);
     zef_plugin;
     zef_mesh_tool;

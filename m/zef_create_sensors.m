@@ -33,8 +33,9 @@ field_cell_default =  {{'on', '1'}
 
 for i = 1 : length(field_cell_default)
 
+    if eval(['not(isfield(' zef_struct_name ',''' sensor_tag '_' field_cell_default{i}{1} '''));']) 
     eval([zef_struct_name '.' sensor_tag '_' field_cell_default{i}{1} '=' field_cell_default{i}{2} ';' ]);
-
+    end
 end
 
 for i = 1 : length(field_cell_update)
@@ -43,4 +44,8 @@ for i = 1 : length(field_cell_update)
 
 end
 
+if eval(['not(ismember(' zef_struct_name '.sensor_tags,''' sensor_tag '''));'])
 eval([zef_struct_name '.sensor_tags = ['''  sensor_tag ''', ' zef_struct_name '.sensor_tags];']);
+end
+
+end
