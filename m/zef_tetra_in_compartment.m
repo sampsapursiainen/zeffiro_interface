@@ -94,14 +94,14 @@ for i = 1 : par_num : length_I
 
     if not(isempty(compartment_info))
         if  mod(i_ind,bar_ind)==0
-            zef_waitbar(i/length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,length_I,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
         end
     end
 
 end
 
 if not(isempty(compartment_info))
-    zef_waitbar(1,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
+    zef_waitbar(1,1,evalin('caller','h'),['Compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
 end
 
 ind_vec(I) = gather(ind_vec_aux);

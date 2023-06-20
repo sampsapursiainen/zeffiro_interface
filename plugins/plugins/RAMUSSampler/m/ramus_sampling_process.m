@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z] = ramus_sampling_process(void)
 
-h = zef_waitbar(0,['RAMUS Sampler.']);
+h = zef_waitbar(0,1,['RAMUS Sampler.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
@@ -197,7 +197,7 @@ for f_ind = 1 : number_of_frames
         f = mean(f,2);
     end
     if f_ind == 1
-        zef_waitbar(0,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
     n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
 
@@ -258,9 +258,9 @@ for f_ind = 1 : number_of_frames
 
         for i = 1 : n_iter(j)
             if f_ind > 1;
-                zef_waitbar(iter_ind/n_iterations,h,['Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                zef_waitbar(iter_ind,n_iterations,h,['Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             else
-                zef_waitbar(iter_ind/n_iterations,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                zef_waitbar(iter_ind,n_iterations,h,['RAMUS Sampler. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
             end;
             d_sqrt = sqrt(theta);
             if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0

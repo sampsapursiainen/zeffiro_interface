@@ -70,7 +70,7 @@ G = [];
 % Open up a zef_waitbar.
 
 wbtitle = 'Lead field Whitney interpolation';
-wb = zef_waitbar(0, wbtitle);
+wb = zef_waitbar(0,1, wbtitle);
 
 % Define cleanup operations, in case of an interruption.
 
@@ -219,7 +219,7 @@ for i = 1 : n_of_iterations
         time_val = toc;
 
         zef_waitbar( ...
-            i/n_of_iterations, ...
+            i,n_of_iterations, ...
             wb, ...
             [ ...
             wbtitle, ...
@@ -280,7 +280,7 @@ S_fi = sparse(I_fi, J_fi, K_fi, size(G_fi,2), G_cols);
 
 G = G_fi * S_fi;
 
-zef_waitbar(1, wb);
+zef_waitbar(1,1, wb);
 
 end
 

@@ -127,7 +127,7 @@ if eval('zef.location_unit_current') == 3
     zef.parcellation_p = 1000*parcellation_p;
 end
 
-h = zef_waitbar(0,['Interp. 1.']);
+h = zef_waitbar(0,1,['Interp. 1.']);
 
 p_counter = 0;
 for p_ind = p_selected + 1
@@ -142,7 +142,7 @@ for p_ind = p_selected + 1
     center_points = nodes(center_points,:);
     size_center_points = size(center_points,1);
 
-    zef_waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+    zef_waitbar(p_counter,length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
     source_positions = parcellation_p(find(p_points_ind_aux == p_ind),:);
     parcellation_interpolation_ind{p_ind-1}{1} = [];
@@ -159,7 +159,7 @@ for p_ind = p_selected + 1
             MdlKDT = KDTreeSearcher(source_positions);
             source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-            %zef_waitbar(p_counter/length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
+            %zef_waitbar(p_counter,length(p_selected),h,['Interp. 1. ' num2str(p_counter) '/' num2str(length(p_selected))  '.' ]);
 
             source_interpolation_ind = source_interpolation_ind(:);
 
@@ -185,7 +185,7 @@ for ab_ind = 1 : length(aux_brain_ind)
     for p_ind = p_selected + 1
         p_counter = p_counter + 1;
 
-        zef_waitbar([ab_ind/length(aux_brain_ind) p_counter/length(p_selected)],h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
+        zef_waitbar([ab_ind p_counter], [length(aux_brain_ind) length(p_selected)],h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected)) '.']);
 
 
         parcellation_interpolation_ind{p_ind-1}{2}{ab_ind} = [];
@@ -227,7 +227,7 @@ for ab_ind = 1 : length(aux_brain_ind)
                 MdlKDT = KDTreeSearcher(source_positions);
                 source_interpolation_ind = knnsearch(MdlKDT,center_points);
 
-                %zef_waitbar(p_counter/length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
+                %zef_waitbar(p_counter,length(p_selected),h,['Interp. 2: ' num2str(p_counter) '/' num2str(length(p_selected))  ',' num2str(ab_ind) '/' num2str(length(aux_brain_ind)) '.']);
 
                 source_interpolation_ind = source_interpolation_ind(:);
 

@@ -1,6 +1,6 @@
 function [z,Var_loc] = MUSIC_iteration
 
-h = zef_waitbar(0,['MUSIC.']);
+h = zef_waitbar(0,1,['MUSIC.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 snr_val = evalin('base','zef.inv_snr');
@@ -437,7 +437,7 @@ for f_ind = 1 : number_of_frames
         end
     end
     if f_ind == 1
-        zef_waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
 
     if size_f > 1
@@ -549,9 +549,9 @@ for f_ind = 1 : number_of_frames
 
         if mod(n_iter-2,update_waiting_bar) == 0
             if f_ind > 1;
-                zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             elseif number_of_frames == 1
-                zef_waitbar(n_iter/nn,h,['MUSIC iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                zef_waitbar(n_iter,nn,h,['MUSIC iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
             end;
         end
     end

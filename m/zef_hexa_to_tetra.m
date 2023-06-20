@@ -1,7 +1,7 @@
 function [tetra,labels_tetra] = zef_hexa_to_tetra(hexa,varargin)
 
 labels_hexa = [];
-h = zef_waitbar(0,'Mesh conversion.');
+h = zef_waitbar(0,1,'Mesh conversion.');
 if not(isempty(varargin))
     labels_hexa = varargin{1};
 end
@@ -23,7 +23,7 @@ end
 for i = 1 : n_cubes
 
     if mod(i,ceil(n_cubes/100))==0
-        zef_waitbar(i/n_cubes,h,'Mesh conversion.');
+        zef_waitbar(i,n_cubes,h,'Mesh conversion.');
     end
 
     tetra(6*(i-1)+1:6*i,:) = reshape(hexa(i,ind_mat_1),6,4);

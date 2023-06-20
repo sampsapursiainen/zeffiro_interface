@@ -18,7 +18,7 @@ A = spalloc(n_of_nodes,n_of_nodes,0);
 % termination.
 
 wbtitle = 'Adjacency matrix';
-wb = zef_waitbar(0, wbtitle);
+wb = zef_waitbar(0,1, wbtitle);
 
 cleanupfn = @(h) close(h);
 cleanupobj = onCleanup(@() cleanupfn(wb));
@@ -35,7 +35,7 @@ for i = 1 : 4
         progress_num = ind / n_of_iters;
         progress_str = [wbtitle, ': neighbours ', num2str(ind), ' / ', num2str(n_of_iters)];
 
-        zef_waitbar(progress_num, wb, progress_str);
+        zef_waitbar(ind,n_of_iters, wb, progress_str);
 
         A = A + sparse(            ...
             tetra(:,i),            ...
@@ -50,16 +50,16 @@ end
 
 % Stensils are symmetric, as they describe an undirected graph.
 
-zef_waitbar(0, wb, strcat(wbtitle, ': take care of symmetricity'));
+zef_waitbar(0,1, wb, strcat(wbtitle, ': take care of symmetricity'));
 
 A = A + A';
 
-zef_waitbar(1, wb);
+zef_waitbar(1,1, wb);
 
 % Take care of the diagonal.
 
 init_progress_str = strcat(wbtitle, ': the diagonal ');
-zef_waitbar(0, wb, progress_str);
+zef_waitbar(0,1, wb, progress_str);
 
 n_of_iters = 4;
 
@@ -67,7 +67,7 @@ for i = 1 : 4
 
     progress_num = i / n_of_iters;
     progress_str = [init_progress_str, ' ', num2str(i), ' / ', num2str(n_of_iters)];
-    zef_waitbar(progress_num, wb, progress_str);
+    zef_waitbar(i,n_of_iters, wb, progress_str);
 
     A = A + sparse(            ...
         tetra(:,i),            ...

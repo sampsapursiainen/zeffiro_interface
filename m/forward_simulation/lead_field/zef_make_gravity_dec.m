@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [gravity_ind,gravity_count] = zef_make_gravity_dec(nodes,tetrahedra,brain_ind,source_ind)
 
-h = zef_waitbar(0,'Field decomposition');
+h = zef_waitbar(0,1,'Field decomposition');
 
 center_points = (nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrahedra(:,3),:)+ nodes(tetrahedra(:,4),:))/4;
 center_points = center_points';
@@ -16,7 +16,7 @@ gravity_ind = source_interpolation_aux;
 [aux_vec, i_a, i_c] = unique(source_interpolation_aux);
 gravity_count = accumarray(i_c,1);
 
-zef_waitbar(1,h,'Field decomposition');
+zef_waitbar(1,1,h,'Field decomposition');
 
 close(h);
 

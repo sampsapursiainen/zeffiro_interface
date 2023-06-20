@@ -11,7 +11,7 @@ r_squared = chi2inv(cred_val,size(rec_points,2));
 
 k = 0;
 
-h_waitbar = zef_waitbar(0,'Clustering');
+h_waitbar = zef_waitbar(0,1,'Clustering');
 GMModel_old = [];
 MahalanobisD_old = [];
 index_vec_old = [];
@@ -35,7 +35,7 @@ while  and(k < n_clusters,k<max(index_vec))
         [~,~,index_vec] = unique(index_vec);
     end
 
-    zef_waitbar(k/n_clusters,h_waitbar,'Clustering.');
+    zef_waitbar(k,n_clusters,h_waitbar,'Clustering.');
 
 end
 
@@ -44,7 +44,7 @@ GMModel = fitgmdist(rec_points,k,'CovarianceType','full','RegularizationValue',r
 [index_vec, ~,~,~, MahalanobisD]=cluster(GMModel, rec_points);
 
 if k < n_clusters
-    zef_waitbar(1,h_waitbar,'Clustering.');
+    zef_waitbar(1,1,h_waitbar,'Clustering.');
 end
 
 close(h_waitbar);

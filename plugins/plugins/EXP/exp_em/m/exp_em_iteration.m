@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = exp_em_iteration(void)
-h = zef_waitbar(0,['EM MAP iteration.']);
+h = zef_waitbar(0,1,['EM MAP iteration.']);
 
 hyper_type = evalin('base','zef.exp_em_hyper_type');
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
@@ -82,7 +82,7 @@ for f_ind = 1 : number_of_frames
     time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind, number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -96,7 +96,7 @@ for f_ind = 1 : number_of_frames
 
     % inversion starts here
     if f_ind == 1
-        zef_waitbar(0,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
 
     %__ Initialize parameters __
@@ -121,9 +121,9 @@ for f_ind = 1 : number_of_frames
         for i = 1 : n_ias_map_iter
             %_Draw waitbar_
             if f_ind > 1;
-                zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                zef_waitbar(i,n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             else
-                zef_waitbar(i/n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                zef_waitbar(i,n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
             end;
             w = 1./(gamma*std_lhood^2*max(f)^2);
 
@@ -143,9 +143,9 @@ for f_ind = 1 : number_of_frames
         for i = 1 : n_ias_map_iter
             %_Draw waitbar_
             if f_ind > 1;
-                zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                zef_waitbar(i,n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             else
-                zef_waitbar(i/n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                zef_waitbar(i,n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
             end;
             %focal activity
             z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);

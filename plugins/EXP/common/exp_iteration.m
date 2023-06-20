@@ -63,7 +63,7 @@ reconstruction_information.exp_multires_n_decompositions = multires_n_decomposit
 reconstruction_information.exp_multires_n_levels = multires_n_levels;
 reconstruction_information.exp_multires_sparsity = multires_sparsity_factor;
 
-h = zef_waitbar(0,[reconstruction_information.tag,' MAP iteration.']);
+h = zef_waitbar(0,1,[reconstruction_information.tag,' MAP iteration.']);
 
 [L,n_interp, procFile] = zef_processLeadfields(zef);
 f_data = zef_getFilteredData;
@@ -84,7 +84,7 @@ for f_ind = 1 : number_of_frames
     time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind, number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -102,9 +102,9 @@ for f_ind = 1 : number_of_frames
     for n_rep = 1 : multires_n_decompositions
 
         if f_ind > 1
-            zef_waitbar(n_rep/multires_n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(multires_n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            zef_waitbar(n_rep,multires_n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(multires_n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-            zef_waitbar(n_rep/multires_n_decompositions,h,[reconstruction_information.tag,' MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(multires_n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            zef_waitbar(n_rep,multires_n_decompositions,h,[reconstruction_information.tag,' MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(multires_n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end
 
         %_ Iterations over multiresolution levels _
@@ -200,7 +200,7 @@ for f_ind = 1 : number_of_frames
 
                     x_old = z_vec;
                     if multires_n_decompositions == 1
-                        zef_waitbar(i/n_map_iterations(j),h,[StartTAG,' MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                        zef_waitbar(i,n_map_iterations(j),h,[StartTAG,' MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
                     end
                 end
             else
@@ -223,7 +223,7 @@ for f_ind = 1 : number_of_frames
                     z_vec = (T_scale.*w).*(L_aux'*((L_aux*(w.*L_aux') + eye(size(L_aux,1)))\f));
                     gamma = beta./(theta0+abs(z_vec).^q);
                     if multires_n_decompositions == 1
-                        zef_waitbar(i/n_map_iterations(j),h,[StartTAG,' MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                        zef_waitbar(i,n_map_iterations(j),h,[StartTAG,' MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
                     end
                 end
             end

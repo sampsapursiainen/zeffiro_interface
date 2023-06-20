@@ -4,7 +4,7 @@ function [z,reconstruction_information] = ias_iteration(zef)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
-h = zef_waitbar(0,['IAS MAP iteration.']);
+h = zef_waitbar(0,1,['IAS MAP iteration.']);
 [s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
@@ -102,7 +102,7 @@ for f_ind = 1 : number_of_frames
     [f] = zef_getTimeStep(f_data, f_ind, zef);
 
     if f_ind == 1
-        zef_waitbar(0,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
     n_ias_map_iter = eval('zef.ias_n_map_iterations');
 
@@ -112,9 +112,9 @@ for f_ind = 1 : number_of_frames
 
     for i = 1 : n_ias_map_iter
         if f_ind > 1;
-            zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            zef_waitbar(i,n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-            zef_waitbar(i/n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            zef_waitbar(i,n_ias_map_iter,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end;
         m_max = sqrt(size(L_aux,2));
         u = zeros(length(z_vec),1);

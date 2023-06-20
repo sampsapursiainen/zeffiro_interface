@@ -17,7 +17,7 @@ function nse_field = zef_nse_poisson(nse_field,nodes,tetra,domain_labels,mvd_len
 %nse_field.mu
 %nse_field.pressure
 
-h_waitbar = zef_waitbar(0,'NSE solver: pressure');
+h_waitbar = zef_waitbar(0,3,'NSE solver: pressure');
 
 c_ind_1_domain = find(ismember(domain_labels,nse_field.artery_domain_ind));
 c_ind_2_domain = find(ismember(domain_labels,nse_field.capillary_domain_ind));
@@ -101,7 +101,7 @@ end
 
 nse_field.bp_vessels = p;
 
-zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
+zef_waitbar(1,3,h_waitbar,'NSE solver: velocity');
 
 nse_field.mu_vec = nse_field.mu*ones(size(v_1_tetra,1),1);
 
@@ -170,7 +170,7 @@ nse_field.bp_vessels = nse_field.bp_vessels/hgmm_conversion;
 
 if nse_field.microcirculation_model
 
-    zef_waitbar(0.67,h_waitbar,'NSE solver: concentration');
+    zef_waitbar(2,3,h_waitbar,'NSE solver: concentration');
 
     bp_vessels_aux = zeros(size(nodes,1),1);
     bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p;
@@ -202,7 +202,7 @@ end
 
 nse_field.bp_vessels = abs(nse_field.bp_vessels);
 
-zef_waitbar(1,h_waitbar,'NSE solver');
+zef_waitbar(3,3,h_waitbar,'NSE solver');
 
 close(h_waitbar);
 

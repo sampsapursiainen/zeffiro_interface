@@ -101,7 +101,7 @@ end
 %% waitbar
 if zef.use_waitbar == 1
     wait_bar_temp = zef_waitbar(...
-        [0 0], ...
+        [0 0], [1 1], ...
         sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: i = %d, j = d%' '.'], 0, 0)...
         );
 end
@@ -198,11 +198,11 @@ for i = 1:step_size
         end
 
         if zef.use_waitbar
-            zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+            zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
         end
     end
     if zef.use_waitbar
-        zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+        zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
     end
 end
 

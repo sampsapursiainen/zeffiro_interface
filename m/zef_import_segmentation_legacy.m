@@ -44,9 +44,9 @@ if not(isequal(file_name,0));
     for i = 1 : n_segmentation
 
         if i == 1
-            h_waitbar = zef_waitbar(1/n_segmentation,['Item ' int2str(1) ' of ' int2str(n_segmentation) '.']);
+            h_waitbar = zef_waitbar(1,n_segmentation,['Item ' int2str(1) ' of ' int2str(n_segmentation) '.']);
         else
-            zef_waitbar(i/n_segmentation,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_segmentation) '.']);
+            zef_waitbar(i,n_segmentation,h_waitbar,['Item ' int2str(i) ' of ' int2str(n_segmentation) '.']);
         end
 
         if isequal(ini_cell{1}{n_columns*(i-1)+2},'sensor_points')

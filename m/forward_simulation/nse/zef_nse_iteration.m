@@ -48,7 +48,7 @@ zef.nse_field.signal_pulse = signal_pulse;
 div_data = zeros(size(zef.nse_field.t_data));
 div_data(1) = 1;
 
-h_waitbar = zef_waitbar(0,'NSE iteration.');
+h_waitbar = zef_waitbar(0,1,'NSE iteration.');
 
 nse_mat = zef_nse_matrices(zef.nse_field.nodes,zef.nse_field.tetra,zef.nse_field.rho,zef.nse_field.mu);
 
@@ -160,7 +160,7 @@ field_store_counter = 0;
 
 for t_ind = 1 : length(zef.nse_field.t_data)
 
-    zef_waitbar(t_ind/length(zef.nse_field.t_data),h_waitbar,'NSE iteration.');
+    zef_waitbar(t_ind,length(zef.nse_field.t_data),h_waitbar,'NSE iteration.');
 
     f_1 = nse_mat.F*f_1_aux;
     f_2 = nse_mat.F*f_2_aux;

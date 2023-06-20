@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = zef_ramus_iteration(zef)
 
-h = zef_waitbar([0 0 0],['RAMUS iteration.']);
+h = zef_waitbar([0 0 0], [1 1 1],['RAMUS iteration.']);
 [s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 n_multires = eval('zef.ramus_multires_n_levels');
@@ -73,7 +73,7 @@ for f_ind = 1 : zef.number_of_frames
     [f] = zef_getTimeStep(f_data, f_ind, zef);
 
     if f_ind == 1
-        zef_waitbar([0 0 0],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
+        zef_waitbar([0 0 0], [1 1 1],h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
     end
     n_ias_map_iter = eval('zef.ramus_n_map_iterations');
 
@@ -159,9 +159,9 @@ for f_ind = 1 : zef.number_of_frames
 
                 for i = 1 : n_iter(j)
                     if f_ind > 1;
-                        zef_waitbar([ i/n_iter(j) j/n_multires n_rep/n_decompositions f_ind/zef.number_of_frames],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
+                        zef_waitbar([i j n_rep f_ind], [n_iter(j) n_multires n_decompositions zef.number_of_frames],h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
                     else
-                        zef_waitbar([ i/n_iter(j) j/n_multires n_rep/n_decompositions f_ind/zef.number_of_frames],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
+                        zef_waitbar([i j n_rep f_ind], [n_iter(j) n_multires n_decompositions zef.number_of_frames],h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
                     end;
                     d_sqrt = sqrt(theta);
                     if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0

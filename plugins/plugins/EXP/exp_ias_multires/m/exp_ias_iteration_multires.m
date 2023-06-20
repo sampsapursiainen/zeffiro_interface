@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = exp_ias_iteration_multires(void)
-h = zef_waitbar(0,['IAS MAP iteration for EP.']);
+h = zef_waitbar(0,1,['IAS MAP iteration for EP.']);
 
 n_multires = evalin('base','zef.exp_multires_n_levels');
 sparsity_factor = evalin('base','zef.exp_multires_sparsity');
@@ -78,7 +78,7 @@ for f_ind = 1 : number_of_frames
     time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind, number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -102,9 +102,9 @@ for f_ind = 1 : number_of_frames
         end
 
         if f_ind > 1
-            zef_waitbar(n_rep/n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            zef_waitbar(n_rep,n_decompositions,h,['Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         else
-            zef_waitbar(n_rep/n_decompositions,h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            zef_waitbar(n_rep,n_decompositions,h,['IAS MAP iteration. Dec. ' int2str(n_rep) ' of ' int2str(n_decompositions) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
         end
 
         for j = 1 : n_multires

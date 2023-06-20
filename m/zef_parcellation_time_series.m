@@ -17,7 +17,7 @@ selected_list = evalin('base','zef.parcellation_selected');
 p_i_ind = evalin('base','zef.parcellation_interp_ind');
 time_series = zeros(length(selected_list), number_of_frames);
 
-h_waitbar = zef_waitbar(0,['Time series.']);
+h_waitbar = zef_waitbar(0,1,['Time series.']);
 
 max_abs_reconstruction = 0;
 min_rec = Inf;
@@ -105,7 +105,7 @@ reuna_t = evalin('base','zef.reuna_t');
 f_ind = frame_start;
 f_ind_aux = 1;
 tic;
-zef_waitbar(0,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(0,1,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
 
 i = 0;
 
@@ -218,7 +218,7 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
     end
     f_ind_aux = f_ind_aux + 1;
     time_val = toc;
-    zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames)/(f_ind_aux-1) - 1)*time_val/86400)) '.']);
+    zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames)/(f_ind_aux-1) - 1)*time_val/86400)) '.']);
 
     for i = intersect(aux_brain_ind,aux_brain_visible_ind)
         ab_ind = find(aux_brain_ind == i);
@@ -295,7 +295,7 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
 
 end
 
-zef_waitbar(1,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+zef_waitbar(1,1,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
 
 time_series(find(isnan(time_series))) = 0;
 time_series = time_series.^2;

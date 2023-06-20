@@ -1,6 +1,6 @@
 function nse_field = zef_nse_poisson_dynamic(nse_field,nodes,tetra,domain_labels,mvd_length)
 
-h_waitbar = zef_waitbar(0,'NSE solver: pressure');
+h_waitbar = zef_waitbar(0,1,'NSE solver: pressure');
 
 if not(isfield(nse_field,'nse_type'))
     nse_field.nse_type = 1;
@@ -98,7 +98,7 @@ D_1 = spdiags(sqrt(mu_vec),0,size(M_1,1),size(M_1,2));
 w_1 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, ones(size(v_1_tetra,1),1));
 w_1 = w_1(i_node_ind);
 
-zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
+zef_waitbar(1,3,h_waitbar,'NSE solver: velocity');
 
 Q_1 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 1, ones(size(v_1_tetra,1),1));
 Q_2 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 2, ones(size(v_1_tetra,1),1));
@@ -191,7 +191,7 @@ if nse_field.microcirculation_model
 
 end
 
-h_waitbar = zef_waitbar(0,'NSE solver: compute' );
+h_waitbar = zef_waitbar(0,1,'NSE solver: compute' );
 
 u_1 = zeros(length(i_node_ind),1);
 u_2 = zeros(length(i_node_ind),1);
@@ -273,7 +273,7 @@ for i = 1 : n_time
 
     pressure_aux = (p + pressure_reference + p_hydrostatic)/hgmm_conversion;
     total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(ml_min_conversion);
-    zef_waitbar(i/n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', 90 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.9)) ', 10 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.1)) '.']);
+    zef_waitbar(i,n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', 90 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.9)) ', 10 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.1)) '.']);
 
     y_0 = y(i);
 

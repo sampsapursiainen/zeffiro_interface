@@ -142,7 +142,7 @@ c_tet = 0.25*(nodes(tetrahedra(:,1),:) + nodes(tetrahedra(:,2),:) + nodes(tetrah
 
 [eit_ind, eit_count] = zef_make_gravity_dec(nodes,tetrahedra,gravity_ind,source_ind);
 
-h = zef_waitbar(0,'Lead field.');
+h = zef_waitbar(0,1,'Lead field.');
 
 if evalin('base','zef.gravity_field_type') == 2
 
@@ -167,7 +167,7 @@ if evalin('base','zef.gravity_field_type') == 2
 
         if mod(i,floor(K4/50))==0
             time_val = toc;
-            zef_waitbar(i/K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -185,7 +185,7 @@ if evalin('base','zef.gravity_field_type') == 2
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Background Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Background Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -208,7 +208,7 @@ elseif evalin('base','zef.gravity_field_type') == 1
 
         if mod(i,floor(K4/50))==0
             time_val = toc;
-            zef_waitbar(i/K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K4,h,['Lead field. Ready approx: ' datestr(datevec(now+(K4/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -222,7 +222,7 @@ elseif evalin('base','zef.gravity_field_type') == 1
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Background. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Background. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 

@@ -4,7 +4,7 @@ function [z,Var_loc,reconstruction_information] = RAP_MUSIC_iteration
 %- "EEG and MEG Source Localization using Recursively Applied (RAP) MUSIC" (1997)
 %by John C. Mosher and Richard M. Leahy
 
-h = zef_waitbar(0,['RAP MUSIC.']);
+h = zef_waitbar(0,1,['RAP MUSIC.']);
 [s_ind_1] = unique(evalin('base','zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 snr_val = evalin('base','zef.inv_snr');
@@ -83,7 +83,7 @@ for f_ind = 1 : number_of_frames
     end
 
     if f_ind == 1
-        zef_waitbar(0,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['MUSIC. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
 
     %---------------CALCULATIONS STARTS HERE----------------------------------
@@ -144,9 +144,9 @@ for f_ind = 1 : number_of_frames
         search_space = setdiff(search_space,ind_space(d_iter)); %extract the found dipole location from searched nodes.
 
         if f_ind > 1;
-            zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
         elseif number_of_frames == 1
-            zef_waitbar(d_iter/n_dipoles,h,['RAP MUSIC iteration ',num2str(d_iter),' of ',num2str(n_dipoles),'. Ready: ' date_str '.']);
+            zef_waitbar(d_iter,n_dipoles,h,['RAP MUSIC iteration ',num2str(d_iter),' of ',num2str(n_dipoles),'. Ready: ' date_str '.']);
         end;
     end
 

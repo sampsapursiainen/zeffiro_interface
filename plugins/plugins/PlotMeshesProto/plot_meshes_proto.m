@@ -851,7 +851,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
 
                         %if i == aux_brain_visible_ind
                         %if  iscell(evalin('base','zef.reconstruction'))
-                        %h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+                        %h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
                         %set(h_waitbar,'handlevisibility','off');
                         %end
                         %end
@@ -1134,7 +1134,7 @@ while loop_movie && loop_count <= evalin('base','zef.loop_movie_count')
                     end
                 end
                 f_ind_aux = f_ind_aux + 1;
-                %zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
+                %zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
 
                 if ismember(evalin('base','zef.visualization_type'),[3])
                     for i = intersect(aux_brain_ind,aux_brain_visible_ind)

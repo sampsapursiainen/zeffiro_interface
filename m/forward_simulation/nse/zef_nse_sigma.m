@@ -507,7 +507,7 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
     % Initialize waitbar and its cleanup operations.
 
-    wb = zef_waitbar ( 0, waitbar_title ) ;
+    wb = zef_waitbar ( 0, 1, waitbar_title ) ;
 
     cleanup_fn = @(hh) close ( hh ) ;
 
@@ -523,7 +523,7 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
         updated_waitbar_title = waitbar_title + ": time frame " + tfi + " / " + n_of_time_frames + "..." ;
 
-        wb = zef_waitbar ( tfi / n_of_time_frames, wb, updated_waitbar_title ) ;
+        wb = zef_waitbar ( tfi , n_of_time_frames, wb, updated_waitbar_title ) ;
 
         interpolated_relative_blood_concentrations = mean ( min ( 1, max ( 0, abs ( nse_field.bf_capillaries{tfi}( s_interp_ind ) ) ) ), 2 );
 

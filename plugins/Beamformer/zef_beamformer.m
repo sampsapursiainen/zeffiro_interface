@@ -1,6 +1,6 @@
 function [z,Var_loc,reconstruction_information] = zef_beamformer(zef)
 
-h = zef_waitbar(0,['Beamformer.']);
+h = zef_waitbar(0,1,['Beamformer.']);
 [procFile.s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(procFile.s_ind_1);
 snr_val = eval('zef.inv_snr');
@@ -98,7 +98,7 @@ for f_ind = 1 : number_of_frames
     end
 
     if f_ind == 1
-        zef_waitbar(0,h,['Beamformer. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['Beamformer. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
 
     %---------------CALCULATIONS STARTS HERE----------------------------------
@@ -190,9 +190,9 @@ for f_ind = 1 : number_of_frames
 
             if mod(n_iter-2,update_waiting_bar) == 0
                 if f_ind > 1;
-                    zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
                 elseif number_of_frames == 1
-                    zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                    zef_waitbar(n_iter,nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
                 end;
             end
         end
@@ -344,9 +344,9 @@ for f_ind = 1 : number_of_frames
 
             if mod(n_iter-2,update_waiting_bar) == 0
                 if f_ind > 1;
-                    zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
                 elseif number_of_frames == 1
-                    zef_waitbar(n_iter/nn,h,['UNG iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                    zef_waitbar(n_iter,nn,h,['UNG iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
                 end;
             end
         end
@@ -442,9 +442,9 @@ for f_ind = 1 : number_of_frames
 
             if mod(n_iter-2,update_waiting_bar) == 0
                 if f_ind > 1;
-                    zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
                 elseif number_of_frames == 1
-                    zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                    zef_waitbar(n_iter,nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
                 end;
             end
         end
@@ -542,9 +542,9 @@ for f_ind = 1 : number_of_frames
 
             if mod(n_iter-2,update_waiting_bar) == 0
                 if f_ind > 1;
-                    zef_waitbar(f_ind/number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                    zef_waitbar(f_ind,number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
                 elseif number_of_frames == 1
-                    zef_waitbar(n_iter/nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
+                    zef_waitbar(n_iter,nn,h,['Beamformer iteration ',num2str(n_iter),' of ',num2str(nn),'. Ready: ' date_str '.']);
                 end;
             end
         end

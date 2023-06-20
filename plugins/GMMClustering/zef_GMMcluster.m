@@ -1,5 +1,5 @@
 function [GMModel,GMModelDipoles] = zef_GMMcluster
-h = zef_waitbar(0,['Gaussian mixature model.']);
+h = zef_waitbar(0,1,['Gaussian mixature model.']);
 
 %Options
 options = statset('MaxIter',evalin('base','zef.GMMcluster_MaxIter'));
@@ -59,7 +59,7 @@ if length(K) < T
     K = [K,K(end)*ones(1,T-length(K))];
 end
 
-zef_waitbar(0,h,['Step 1 of ',num2str(T),'. Please wait.']);
+zef_waitbar(0,1,h,['Step 1 of ',num2str(T),'. Please wait.']);
 tic;
 for t=t_start:T
     best_BIC = Inf;
@@ -134,7 +134,7 @@ for t=t_start:T
         end
 
         if T==1
-            zef_waitbar(k/K(t),h,['Step ',num2str(k),' of ',num2str(K(t)),'. ',date_str]);
+            zef_waitbar(k,K(t),h,['Step ',num2str(k),' of ',num2str(K(t)),'. ',date_str]);
         end
 
     end     %end of k loop
@@ -146,7 +146,7 @@ for t=t_start:T
         end
         disp(['Relative centroid current densities at the frame ',num2str(t),': ',num2str(J(ind2)'/max(J))])
         GMModelDipoles{t} = J(ind2).*GMModel{t}.mu(:,4:6);
-        zef_waitbar((t-t_start+1)/(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
+        zef_waitbar((t-t_start+1),(T-t_start+1),h,['Frame ',num2str(t),' of ',num2str(T),'. ',date_str]);
     else
         ind2 = [];
         for k = 1:size(GMModel.mu,1)
