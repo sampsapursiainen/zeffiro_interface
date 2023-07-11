@@ -99,7 +99,7 @@ if use_gpu == 1 & eval('zef.gpu_count') > 0
 
         if not(isempty(compartment_info))
             if mod(i_ind,bar_ind)==0
-                zef_waitbar([i/length_I compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
+                zef_waitbar([i compartment_info(1)], [length_I compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(length_I/i - 1)*time_val/86400)) '.']);
             end
         end
     end
@@ -147,7 +147,7 @@ else
 
         if not(isempty(compartment_info))
             if isequal(mod(restart_ind,ceil(n_restarts/50)),0)
-                zef_waitbar([restart_ind/n_restarts compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
+                zef_waitbar([restart_ind compartment_info(1)], [n_restarts compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now+(n_restarts/restart_ind - 1)*time_val/86400)) '.']);
             end
         end
 
@@ -165,7 +165,7 @@ else
     %%%%%%%%%%%%%%%%CPU part%%%%%%%%%%%%%%%%%%%
 
     if not(isempty(compartment_info))
-        zef_waitbar([1 compartment_info(1)/compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
+        zef_waitbar([1 compartment_info(1)], [1 compartment_info(2)],evalin('caller','h'),['Labeling compartment ' int2str(compartment_info(1)) ' of ' int2str(compartment_info(2)) '. Ready: ' datestr(datevec(now)) '.']);
     end
 
 end

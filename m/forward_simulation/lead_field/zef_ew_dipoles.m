@@ -10,7 +10,7 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
 % tetrahedral mesh: locations, directions and dipole moments. Also returns the
 % adjacent node pairs that form the dipoles.
 
-wb = zef_waitbar(0, 'Edgewise dipoles');
+wb = zef_waitbar(0,1, 'Edgewise dipoles');
 
 % Define cleanup operations
 
@@ -85,6 +85,6 @@ stensil = sparse(                   ...
     n_of_tetra                              ...
     );
 
-zef_waitbar(1,wb);
+zef_waitbar(1,1,wb);
 
 end

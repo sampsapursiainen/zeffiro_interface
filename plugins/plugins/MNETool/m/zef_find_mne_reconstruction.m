@@ -6,7 +6,7 @@ end
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
-h = zef_waitbar(0,['MNE Reconstruction.']);
+h = zef_waitbar(0,1,['MNE Reconstruction.']);
 [procFile.s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(procFile.s_ind_1);
 
@@ -104,7 +104,7 @@ for f_ind = 1 : zef.number_of_frames
 
 
     if f_ind == 1
-        zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
+        zef_waitbar(0,1,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
     end
 
     if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
@@ -112,9 +112,9 @@ for f_ind = 1 : zef.number_of_frames
     end
 
     if f_ind > 1;
-        zef_waitbar(f_ind/zef.number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind,zef.number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
     else
-        zef_waitbar(f_ind/zef.number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
+        zef_waitbar(f_ind,zef.number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
     end;
     m_max = sqrt(size(L,2));
     u = zeros(length(z_vec),1);

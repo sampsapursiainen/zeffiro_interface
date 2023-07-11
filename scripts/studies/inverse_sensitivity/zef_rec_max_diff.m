@@ -13,7 +13,7 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
     dist_vec = zeros(3*size(zef.source_positions,1),1);
     angle_vec = zeros(3*size(zef.source_positions,1),1);
 
-    h_waitbar = zef_waitbar(0,'Creating synthetic measurements');
+    h_waitbar = zef_waitbar(0,1,'Creating synthetic measurements');
 
     cleanup_fn = @(wb) close(wb);
 
@@ -31,7 +31,7 @@ function [dist_vec,angle_vec,mag_vec] = zef_rec_max_diff(zef, inverse_method, no
 
         if mod(i,floor(n_sources/10))==0
 
-            h_waitbar = zef_waitbar(i/n_sources,h_waitbar,'Creating synthetic measurements');
+            h_waitbar = zef_waitbar(i,n_sources,h_waitbar,'Creating synthetic measurements');
 
         end
 

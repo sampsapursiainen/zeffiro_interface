@@ -151,7 +151,7 @@ ind_m = [ 2 3 4 ;
     4 1 2 ;
     1 2 3 ];
 
-h=zef_waitbar(0,'System matrices.');
+h=zef_waitbar(0,1,'System matrices.');
 waitbar_ind = 0;
 
 D_A_count = 0;
@@ -221,7 +221,7 @@ for i = 1 : 4
     end
 
     waitbar_ind = waitbar_ind + 1;
-    zef_waitbar(waitbar_ind/waitbar_length,h);
+    zef_waitbar(waitbar_ind,waitbar_length,h);
 
 end
 
@@ -364,7 +364,7 @@ if not(isempty(prisms))
         end
 
         waitbar_ind = waitbar_ind + 1;
-        zef_waitbar(waitbar_ind/waitbar_length,h);
+        zef_waitbar(waitbar_ind,waitbar_length,h);
 
     end
 
@@ -455,7 +455,7 @@ A = A_aux;
 clear A_aux A_part;
 
 close(h);
-h = zef_waitbar(0,'PCG iteration.');
+h = zef_waitbar(0,1,'PCG iteration.');
 
 if evalin('base','zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
     precond_vec = gpuArray(1./full(diag(A)));
@@ -524,10 +524,10 @@ if evalin('base','zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
         end
         time_val = toc;
         if isequal(electrode_model,'PEM')
-            zef_waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
         end
         if isequal(electrode_model,'CEM')
-            zef_waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -599,10 +599,10 @@ else
         end
         time_val = toc;
         if isequal(electrode_model,'PEM')
-            zef_waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
         end
         if isequal(electrode_model,'CEM')
-            zef_waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
         end
     end
 

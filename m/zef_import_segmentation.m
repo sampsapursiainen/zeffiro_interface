@@ -23,7 +23,7 @@ if not(isequal(file_name,0))
 
     else
 
-        h = zef_waitbar(0,'Importing.');
+        h = zef_waitbar(0,1,'Importing.');
 
         ini_cell_ind = [];
         ini_cell = readcell(fullfile(folder_name,file_name),'FileType','Text','NumHeaderLines',0,'Delimiter',',');
@@ -46,7 +46,7 @@ if not(isequal(file_name,0))
             compartment_data = zef.h_compartment_table.Data;
             sensors_data = zef.h_sensors_table.Data;
 
-            zef_waitbar(i/size(ini_cell,1),h,['Importing ' num2str(i) '/' num2str(size(ini_cell,1)) '.']);
+            zef_waitbar(i,size(ini_cell,1),h,['Importing ' num2str(i) '/' num2str(size(ini_cell,1)) '.']);
             ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'type'),1)];
             ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
             type = (ini_cell{i,find(ismember(ini_cell(i,:),'type'),1)+1});

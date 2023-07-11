@@ -71,7 +71,7 @@ G = [];
 % Open up a zef_waitbar.
 
 wbtitle = 'Lead field H(div) interpolation';
-wb = zef_waitbar(0, wbtitle);
+wb = zef_waitbar(0,1, wbtitle);
 
 % Define cleanup operations, in case of an interruption.
 
@@ -236,7 +236,7 @@ for i = 1 : n_of_iterations
         time_val = toc;
 
         zef_waitbar( ...
-            i/n_of_iterations, ...
+            i,n_of_iterations, ...
             wb, ...
             [ ...
             wbtitle, ...
@@ -317,7 +317,7 @@ S_ew = sparse(I_ew, J_ew, K_ew, size(G_ew,2), G_cols);
 
 G = G_fi * S_fi + G_ew * S_ew;
 
-zef_waitbar(1, wb);
+zef_waitbar(1,1, wb);
 
 end
 

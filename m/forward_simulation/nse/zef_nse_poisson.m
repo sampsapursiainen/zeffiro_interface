@@ -24,7 +24,7 @@ nse_field.bv_vessels_3 = cell(0);
 nse_field.mu_vessels = cell(0);
 nse_field.bf_capillaries = cell(0);
 
-h_waitbar = zef_waitbar(0,'NSE solver: pressure');
+h_waitbar = zef_waitbar(0,3,'NSE solver: pressure');
 
 c_ind_1_domain = find(ismember(domain_labels,nse_field.artery_domain_ind));
 c_ind_2_domain = find(ismember(domain_labels,nse_field.capillary_domain_ind));
@@ -157,7 +157,7 @@ p = pulse_amplitude*p;
 
 nse_field.bp_vessels{1} = p  + p_hydrostatic + (max(p_hydrostatic) - min(p_hydrostatic))/2 + nse_field.pressure.*hgmm_conversion ;
 
-zef_waitbar(0.33,h_waitbar,'NSE solver: velocity');
+zef_waitbar(1,3,h_waitbar,'NSE solver: velocity');
 
 mu_vec = nse_field.mu*ones(size(v_1_tetra,1),1);
 
@@ -226,7 +226,7 @@ nse_field.bp_vessels{1} = nse_field.bp_vessels{1}/hgmm_conversion;
 
 if nse_field.microcirculation_model
 
-    zef_waitbar(0.67,h_waitbar,'NSE solver: concentration');
+    zef_waitbar(2,3,h_waitbar,'NSE solver: concentration');
 
     bp_vessels_aux = zeros(size(nodes,1),1);
     bp_vessels_aux(nse_field.bp_vessel_node_ind) =  p;
@@ -259,7 +259,7 @@ end
 nse_field.bp_vessels{1} = abs(nse_field.bp_vessels{1});
 nse_field.mu_vessels{1} = nse_field.mu*ones(size(nse_field.bp_vessels{1}));
 
-zef_waitbar(1,h_waitbar,'NSE solver');
+zef_waitbar(3,3,h_waitbar,'NSE solver');
 
 close(h_waitbar);
 

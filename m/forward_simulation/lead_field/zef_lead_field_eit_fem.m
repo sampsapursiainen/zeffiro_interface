@@ -144,7 +144,7 @@ ind_m = [ 2 3 4 ;
     4 1 2 ;
     1 2 3 ];
 
-h=zef_waitbar(0,'System matrices.');
+h=zef_waitbar(0,waitbar_length,'System matrices.');
 waitbar_ind = 0;
 
 D_A_count = 0;
@@ -214,7 +214,7 @@ for i = 1 : 4
     end
 
     waitbar_ind = waitbar_ind + 1;
-    zef_waitbar(waitbar_ind/waitbar_length,h);
+    zef_waitbar(waitbar_ind,waitbar_length,h);
 
 end
 
@@ -288,7 +288,7 @@ A_aux = A(perm_vec,perm_vec);
 A = A_aux;
 clear A_aux A_part;
 
-zef_waitbar(0,h,'PCG iteration.');
+zef_waitbar(0,L-1,h,'PCG iteration.');
 
 if eval('zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
     precond_vec = gpuArray(1./full(diag(A)));
@@ -357,10 +357,10 @@ if eval('zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
         end
         time_val = toc;
         if isequal(electrode_model,'PEM')
-            zef_waitbar(i/(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,(L-1),h,['PCG iteration. Ready: ' datestr(datevec(now+((L-1)/i - 1)*time_val/86400)) '.']);
         end
         if isequal(electrode_model,'CEM')
-            zef_waitbar(i/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -462,7 +462,7 @@ else
         end
         time_val = toc;
         if isequal(electrode_model,'CEM')
-            zef_waitbar((i+length(block_ind)-1)/L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+length(block_ind)-1) - 1)*time_val/86400)) '.']);
+            zef_waitbar((i+length(block_ind)-1),L,h,['PCG iteration. Ready: ' datestr(datevec(now+(L/(i+length(block_ind)-1) - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -502,7 +502,7 @@ bg_data = bg_data(:);
 K3 = length(dof_count);
 L_eit_aux = zeros(size(Current_pattern,2)*L,K3);
 
-zef_waitbar(0,h,'Interpolation.');
+zef_waitbar(0,K,h,'Interpolation.');
 
 tic;
 
@@ -529,11 +529,11 @@ for i = 1 : K
 
     if mod(i,floor(K/50))==0
         time_val = toc;
-        zef_waitbar(i/K,h,['Interpolation. Ready: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+        zef_waitbar(i,K,h,['Interpolation. Ready: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
     end
 end
 
-zef_waitbar(1,h);
+zef_waitbar(K,K,h);
 
 close(h);
 

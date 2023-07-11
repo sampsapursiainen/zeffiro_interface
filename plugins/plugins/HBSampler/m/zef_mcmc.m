@@ -4,7 +4,7 @@ function [z,reconstruction_information] = zef_mcmc(zef)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
-h = zef_waitbar(0,['MCMC sampling.']);
+h = zef_waitbar(0,1,['MCMC sampling.']);
 [s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
@@ -104,7 +104,7 @@ for f_ind = 1 : number_of_frames
     [f] = zef_getTimeStep(f_data, f_ind, zef);
 
     if f_ind == 1
-        zef_waitbar(0,h,['MCMC sampling. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['MCMC sampling. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
     n_iter = eval('zef.inv_sample_size');
 
@@ -135,7 +135,7 @@ for f_ind = 1 : number_of_frames
     z_vec = zeros(size(L,2),1);
 
 
-    h = zef_waitbar(0,'Gibbs sampler.');
+    h = zef_waitbar(0,1,'Gibbs sampler.');
 
     if isempty(gcp('nocreate'))
         parpool(parallel_processes);
@@ -150,7 +150,7 @@ for f_ind = 1 : number_of_frames
     for i =  1 : n_iter_process
 
         if mod(i,ceil(n_iter_process/100))==0
-            zef_waitbar(i/n_iter_process,h,['Gibbs sampler: ' num2str(parallel_processes) ' parallel chains.']);
+            zef_waitbar(i,n_iter_process,h,['Gibbs sampler: ' num2str(parallel_processes) ' parallel chains.']);
         end
         parfor j = 1 : parallel_processes
             [x{j}, theta{j}] = zef_gibbs_sampler_step(L, f, x{j}, theta{j}, theta0, beta, std_lhood, hypermodel, decay_val_hyperprior, nbins_hyperprior, source_direction_mode);

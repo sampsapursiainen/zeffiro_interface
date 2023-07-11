@@ -24,7 +24,7 @@ for n_rep = 1 : n_decompositions
     center_points = source_points;
 
     if n_rep == 1
-        h = zef_waitbar([0 0],['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
+        h = zef_waitbar([0 0], [1 1],['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
     end
 
     multires_dec{n_rep}{n_levels} = [1:size_center_points]';
@@ -52,7 +52,7 @@ for n_rep = 1 : n_decompositions
         MdlKDT = KDTreeSearcher(source_points');
         source_interpolation_aux = knnsearch(MdlKDT,center_points');
 
-        zef_waitbar([k/n_levels n_rep/n_decompositions],h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
+        zef_waitbar([k n_rep], [n_levels n_decompositions],h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
 
         multires_ind{n_rep}{k} = source_interpolation_aux;
         [aux_vec, i_a, i_c] = unique(source_interpolation_aux);

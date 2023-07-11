@@ -14,7 +14,7 @@ if eval('zef.refinement_on')
     if surface_refinement_on
 
         length_waitbar = 11;
-        zef_waitbar(0,h,'Surface refinement.');
+        zef_waitbar(0,1,h,'Surface refinement.');
 
         J_c = [];
 
@@ -63,7 +63,7 @@ if eval('zef.refinement_on')
 
         tetra = tetra_aux;
 
-        zef_waitbar(1/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(1,length_waitbar,h,'Surface refinement.');
 
         tetra_vec = sum(ismember(tetra,J_c),2);
         J = find(tetra_vec);
@@ -77,7 +77,7 @@ if eval('zef.refinement_on')
         J_3 = find(sum_aux==3);
 
         clear ind_aux sum_aux tetra_vec;
-        zef_waitbar(2/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(2,length_waitbar,h,'Surface refinement.');
 
         J_aux = [J; J_2; J_3];
         aux_vec = [ones(size(J)); 2*ones(size(J_2)); 3*ones(size(J_3))];
@@ -94,7 +94,7 @@ if eval('zef.refinement_on')
         new_node_ind = 0;
         current_edge = [0 0];
 
-        zef_waitbar(3/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(3,length_waitbar,h,'Surface refinement.');
 
         for i = 1 : size(edge_ind,1)
             if edge_ind(i,5) == 1
@@ -112,7 +112,7 @@ if eval('zef.refinement_on')
             end
         end
 
-        zef_waitbar(4/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(4,length_waitbar,h,'Surface refinement.');
 
         [edge_val_aux edge_ind_2] = unique(edge_ind(:,4));
         clear edge_val_aux;
@@ -122,7 +122,7 @@ if eval('zef.refinement_on')
         nodes = [nodes ; nodes_new];
         clear edge_ind_2 nodes_new;
 
-        zef_waitbar(5/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(5,length_waitbar,h,'Surface refinement.');
 
         I =find(edge_ind(:,4));
         edge_ind(I,4) = edge_ind(I,4) + size_nodes;
@@ -130,7 +130,7 @@ if eval('zef.refinement_on')
         edge_mat = reshape(edge_ind(:,4),6,length(J_aux))';
         clear edge_ind I;
 
-        zef_waitbar(6/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(6,length_waitbar,h,'Surface refinement.');
 
         t_ind_1 = [  1     5     6     7
             7     9     6    10
@@ -159,12 +159,12 @@ if eval('zef.refinement_on')
 
         clear t_ind_1 t_ind_2;
 
-        zef_waitbar(7/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(7,length_waitbar,h,'Surface refinement.');
 
         tetra = [tetra ; tetra_new ];
         domain_labels = [domain_labels ; (domain_labels_new)];
 
-        zef_waitbar(8/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(8,length_waitbar,h,'Surface refinement.');
 
         ind_aux = length(J) + [1 : length(J_2)]';
         tetra_new = [];
@@ -196,7 +196,7 @@ if eval('zef.refinement_on')
         tetra = [tetra ; tetra_new];
         domain_labels = [domain_labels ; (domain_labels_new)];
 
-        zef_waitbar(9/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(9,length_waitbar,h,'Surface refinement.');
 
         ind_aux = length(J) + length(J_2) + [1 : length(J_3)]';
         tetra_new = [];
@@ -263,7 +263,7 @@ if eval('zef.refinement_on')
 
         clear tetra_new_ind tetra_new_out;
 
-        zef_waitbar(10/length_waitbar,h,'Surface refinement.');
+        zef_waitbar(10,length_waitbar,h,'Surface refinement.');
 
         Aux_mat = [nodes(tetra(:,1),:)'; nodes(tetra(:,2),:)'; nodes(tetra(:,3),:)'] - repmat(nodes(tetra(:,4),:)',3,1);
         ind_m = [1 4 7; 2 5 8 ; 3 6 9];
@@ -277,7 +277,7 @@ if eval('zef.refinement_on')
 
     end
 
-    zef_waitbar(1,h,'Surface refinement.');
+    zef_waitbar(1,1,h,'Surface refinement.');
 
     tetra_vec = sum(ismember(tetra,J_c),2);
     J = find(tetra_vec);

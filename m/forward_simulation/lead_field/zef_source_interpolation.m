@@ -28,7 +28,7 @@ tetra = eval('zef.tetra');
 
 if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
 
-    h = zef_waitbar(0,['Interpolation 1.']);
+    h = zef_waitbar(0,1,['Interpolation 1.']);
 
     if eval('zef.location_unit_current') == 2
         source_positions = 10*source_positions;
@@ -87,7 +87,7 @@ if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not
 
     for ab_ind = 1 : length(aux_active_compartment_ind)
 
-        zef_waitbar((ab_ind+1)/(length(aux_active_compartment_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_active_compartment_ind)) '.' ]);
+        zef_waitbar((ab_ind+1),(length(aux_active_compartment_ind)+2),h,['Interpolation 2: ' num2str(ab_ind) '/' num2str(length(aux_active_compartment_ind)) '.' ]);
 
         aux_point_ind = unique(gather(source_interpolation_ind{1}));
         source_positions = source_positions_aux(aux_point_ind,:);
@@ -108,7 +108,7 @@ if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    zef_waitbar(1,h,['Interpolation 3.']);
+    zef_waitbar(1,1,h,['Interpolation 3.']);
 
     aux_p = [];
     aux_t = [];

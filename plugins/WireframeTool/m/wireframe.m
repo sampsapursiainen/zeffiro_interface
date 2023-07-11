@@ -12,7 +12,7 @@
 
 function [m_triangles,m_nodes,filling_vec,w_vec,shape_vec] = wireframe(tetra,nodes,domain_labels,filling_vec,varargin)
 
-h_w = zef_waitbar(0,'Wireframe optimization');
+h_w = zef_waitbar(0,1,'Wireframe optimization');
 
 R = 4/3*pi*(0.5)^3;
 overlap_param = R^(1/3)/2;
@@ -147,7 +147,8 @@ while norm_val >= evalin('base','zef.wireframe_tolerance') && i < n_iter
     norm_val = norm(filling_vec - D_mat_inv*E_mat_2*w_vec)/norm(D_mat*filling_vec);
     bar_val = max(bar_val,evalin('base','zef.wireframe_tolerance')/norm_val);
     bar_val = min(1,bar_val);
-    zef_waitbar(bar_val,h_w,'Wireframe optimization');
+    % zef_waitbar(bar_val,h_w,'Wireframe optimization');
+    zef_waitbar(i, n_iter,bar_val,h_w,'Wireframe optimization');
 end
 
 i = 0;
@@ -174,7 +175,7 @@ w_vec = w_vec(I);
 shape_vec = shape_vec(I);
 edges = edges(I,:);
 
-zef_waitbar(1,h_w,'Wireframe optimization');
+zef_waitbar(1,1,h_w,'Wireframe optimization');
 
 m_triangles = zeros(8*size(edges,1),3);
 m_nodes = zeros(6*size(edges,1),3);

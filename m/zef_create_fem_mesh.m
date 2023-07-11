@@ -50,7 +50,7 @@ end
 
 size_xyz = size(X);
 
-h = zef_waitbar(0,'Initial mesh.');
+h = zef_waitbar(0,1,'Initial mesh.');
 
 %************************************************************
 
@@ -75,7 +75,7 @@ if isequal(eval('zef.initial_mesh_mode'),1)
     i = 1;
 
     for i_x = 1 : size(X,2) - 1
-        zef_waitbar(i_x/(size(X,2)-1),h,'Initial mesh.');
+        zef_waitbar(i_x,(size(X,2)-1),h,'Initial mesh.');
         for i_y = 1 : size(X,1) - 1
             for i_z = 1 : size(X,3) - 1
 
@@ -117,7 +117,7 @@ elseif isequal(eval('zef.initial_mesh_mode'),2)
     i = 1;
 
     for i_x = 1 : size(X,2) - 1
-        zef_waitbar(i_x/(size(X,2)-1),h,'Initial mesh.');
+        zef_waitbar(i_x,(size(X,2)-1),h,'Initial mesh.');
         for i_y = 1 : size(X,1) - 1
             for i_z = 1 : size(X,3) - 1
 
@@ -227,11 +227,11 @@ if eval('zef.refinement_on')
 
         if length(n_refinement) == 1
 
-            zef_waitbar(0,h,'Volume refinement.');
+            zef_waitbar(0,1,h,'Volume refinement.');
 
             for i = 1 : n_refinement
                 [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments));
-                zef_waitbar(i/n_refinement,h,'Volume refinement.');
+                zef_waitbar(i,n_refinement,h,'Volume refinement.');
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
@@ -244,7 +244,7 @@ if eval('zef.refinement_on')
 
         else
 
-            zef_waitbar(0/length(n_refinement),h,'Volume refinement.');
+            zef_waitbar(0,length(n_refinement),h,'Volume refinement.');
 
             for j = 1 : length(n_refinement)
                 for i = 1 : n_refinement(j)
@@ -260,7 +260,7 @@ if eval('zef.refinement_on')
 
                     end
 
-                    zef_waitbar(i/length(n_refinement(j)),h,'Volume refinement.');
+                    zef_waitbar(i,length(n_refinement(j)),h,'Volume refinement.');
 
                 end
             end
@@ -285,7 +285,7 @@ if eval('zef.refinement_on')
 
         if length(n_refinement) == 1
 
-            zef_waitbar(0,h,'Adaptive volume refinement.');
+            zef_waitbar(0,1,h,'Adaptive volume refinement.');
 
             for i = 1 : n_refinement
                 k_param = eval('zef.adaptive_refinement_k_param');
@@ -293,7 +293,7 @@ if eval('zef.refinement_on')
                 tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,domain_labels,reuna_p,reuna_t);
                 [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments), tetra_refine_ind);
                 tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
-                zef_waitbar(i/n_refinement,h,'Adaptive volume refinement.');
+                zef_waitbar(i,n_refinement,h,'Adaptive volume refinement.');
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
@@ -306,7 +306,7 @@ if eval('zef.refinement_on')
 
         else
 
-            zef_waitbar(0/length(n_refinement),h,'Adaptive volume refinement.');
+            zef_waitbar(0,length(n_refinement),h,'Adaptive volume refinement.');
 
             for j = 1 : length(n_refinement)
                 for i = 1 : n_refinement(j)
@@ -326,7 +326,7 @@ if eval('zef.refinement_on')
 
                     end
 
-                    zef_waitbar(i/length(n_refinement(j)),h,'Adaptive volume refinement.');
+                    zef_waitbar(i,length(n_refinement(j)),h,'Adaptive volume refinement.');
 
                 end
             end

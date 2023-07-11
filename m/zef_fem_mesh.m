@@ -4,7 +4,7 @@ function [nodes, nodes_b, tetra, johtavuus_ind, surface_triangles,name_tags] = z
 
 void = [];
 
-h = zef_waitbar(0,'Initial mesh.');
+h = zef_waitbar(0,1,'Initial mesh.');
 
 mesh_res = evalin('base','zef.mesh_resolution');
 reuna_p = evalin('base','zef.reuna_p');
@@ -94,7 +94,7 @@ johtavuus_ind_2 = zeros(6*n_cubes,4);
 i = 1;
 
 for i_x = 1 : length(x_vec) - 1
-    zef_waitbar(i_x/(length(x_vec)-1),h,'Initial mesh.');
+    zef_waitbar(i_x,(length(x_vec)-1),h,'Initial mesh.');
     for i_y = 1 : length(y_vec) - 1
         for i_z = 1 : length(z_vec) - 1
 

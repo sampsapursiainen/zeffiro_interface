@@ -465,7 +465,7 @@ elseif  eval('zef.visualization_type') == 2
     end
 end
 %if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-%h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+%h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
 %set(h_waitbar,'handlevisibility','off');
 %end
 
@@ -480,7 +480,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
     f_ind_aux = 1;
     for f_ind = frame_start : frame_start
         %if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-        %zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+        %zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
         %set(h_waitbar,'handlevisibility','off');
         %end
         axes(eval('zef.h_axes1'));
@@ -805,7 +805,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
 
         f_ind_aux = f_ind_aux + 1;
         %if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-        %zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+        %zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
         %set(h_waitbar,'handlevisibility','off');
         %end
         %delete(h_text);

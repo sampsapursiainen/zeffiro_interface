@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = zef_relax_iteration(void)
 
-h = zef_waitbar(0,['Relaxation iteration.']);
+h = zef_waitbar(0,1,['Relaxation iteration.']);
 n_multires = evalin('base','zef.relax_multires_n_levels');
 sparsity_factor = evalin('base','zef.relax_multires_sparsity');
 snr_val = evalin('base','zef.relax_snr');
@@ -55,7 +55,7 @@ for f_ind = 1 : number_of_frames
     [f] = zef_getTimeStep(f_data, f_ind);
 
     if f_ind == 1
-        zef_waitbar(0,h,['Iterative relaxation. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+        zef_waitbar(0,1,h,['Iterative relaxation. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
 
     L_aux = L;
@@ -83,9 +83,9 @@ for f_ind = 1 : number_of_frames
 
         for i = 1 : n_iter
             if f_ind > 1;
-                zef_waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+                zef_waitbar((n_rep*(n_iter-1)+1),(length(M)*n_iter),h,['Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
             else
-                zef_waitbar((n_rep*(n_iter-1)+1)/(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+                zef_waitbar((n_rep*(n_iter-1)+1),(length(M)*n_iter),h,['Iterative relaxation. Dec. ' int2str(n_rep) ' of ' int2str(length(M)) ', Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
             end;
 
             if isequal(evalin('base','zef.relax_iteration_type'),1)

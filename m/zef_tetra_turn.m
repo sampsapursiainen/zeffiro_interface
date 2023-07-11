@@ -6,7 +6,7 @@ end
 
 flag_val = 1;
 
-h = zef_waitbar(0,'Mesh optimization.');
+h = zef_waitbar(0,1,'Mesh optimization.');
 
 ind_m = [1 4 7; 2 5 8 ; 3 6 9];
 
@@ -18,8 +18,6 @@ iter_ind_aux_0 = 0;
 while not(isempty(tetra_ind)) & iter_ind_aux_0 < eval('zef.mesh_optimization_repetitions')
 
     iter_ind_aux_0 =  iter_ind_aux_0 + 1;
-
-    zef_waitbar(0, h,'Mesh optimization.');
 
     condition_number_thresh = max(0,thresh_val*max(condition_number));
 
@@ -109,7 +107,7 @@ while not(isempty(tetra_ind)) & iter_ind_aux_0 < eval('zef.mesh_optimization_rep
             end
 
             if mod(i,ceil(length(tetra_ind)/100)) == 0
-                zef_waitbar(i/length(tetra_ind),h,['Mesh optimization. Rejected elements: ' num2str(rejected_elements)]);
+                zef_waitbar(i,length(tetra_ind),h,['Mesh optimization. Rejected elements: ' num2str(rejected_elements)]);
             end
 
         end

@@ -1,5 +1,5 @@
 function [time_serie,time_var] = zef_generate_time_sequence(zef)
-h = zef_waitbar(0,['Generate time sequence.']);
+h = zef_waitbar(0,1,['Generate time sequence.']);
 if nargin == 0
     zef = evalin('base','zef');
 end
@@ -39,7 +39,7 @@ for n = 1:length(peak_time)
         signal_pulse = pulse_amp{n}(j)*blackmanharris_aux.*cos(2*pi*oscillation_freq{n}(j)*time_var_aux+oscillation_phase{n}(j));
         time_serie(n,start_ind:end_ind) = time_serie(n,start_ind:end_ind) + signal_pulse;
     end
-    zef_waitbar(n/size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
+    zef_waitbar(n,size(peak_time,1),h,['Generating time sequence ',num2str(n),' of ',num2str(size(peak_time,1))])
 end
 
 close(h);

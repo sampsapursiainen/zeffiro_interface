@@ -4,7 +4,7 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-zef.h = zef_waitbar(0,'Resampling surfaces.');
+zef.h = zef_waitbar(0,1,'Resampling surfaces.');
 zef.temp_time = now;
 zef.number_of_compartments = length(zef.compartment_tags);
 
@@ -78,7 +78,7 @@ for zef_k = 1 : zef.number_of_compartments
         end
     end
 
-    zef_waitbar(zef_k/zef.number_of_compartments,zef.h,['Resampling surfaces. Ready approx.: ' datestr(now + (zef.number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
+    zef_waitbar(zef_k,zef.number_of_compartments,zef.h,['Resampling surfaces. Ready approx.: ' datestr(now + (zef.number_of_compartments-zef_k)*(now-zef.temp_time)/zef_k) '.'] );
 
 end
 

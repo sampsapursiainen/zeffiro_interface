@@ -10,7 +10,7 @@ if isempty(zef)
     zef = evalin('base','zef');
 end
 
-h = zef_waitbar(0,'Mesh post-processing');
+h = zef_waitbar(0,1,'Mesh post-processing');
 
 parameter_profile = eval('zef.parameter_profile');
 
@@ -143,7 +143,7 @@ end
 
 
 if eval('zef.refinement_volume_on_2');
-    zef_waitbar(0,h,'Volume refinement.');
+    zef_waitbar(0,1,h,'Volume refinement.');
     n_refinement = eval('zef.refinement_volume_number_2');
     refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
 
@@ -158,7 +158,7 @@ if eval('zef.refinement_volume_on_2');
     for i = 1 : n_refinement
 
         [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments);
-        zef_waitbar(i/n_refinement,h,'Volume refinement.');
+        zef_waitbar(i,n_refinement,h,'Volume refinement.');
 
     end
 

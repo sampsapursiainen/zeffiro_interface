@@ -38,7 +38,7 @@ function [stensil, signs, source_moments, source_directions, source_locations, n
 % sources.
 
 
-wb = zef_waitbar(0,'Face intersecting dipoles.');
+wb = zef_waitbar(0,1,'Face intersecting dipoles.');
 
 % Define cleanup operations
 
@@ -173,7 +173,7 @@ stensil = sparse(                                       ...
     n_of_tetra                                          ...
     );
 
-zef_waitbar(1, wb);
+zef_waitbar(1,1, wb);
 
 end
 

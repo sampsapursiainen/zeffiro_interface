@@ -17,7 +17,7 @@ for n_rep = 1 : n_decompositions
     center_points = source_points;
 
     if n_rep == 1
-        h = zef_waitbar(1/size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
+        h = zef_waitbar(1,size_center_points,['Dec: ' int2str(1) '/' int2str(n_decompositions) ', Level ' int2str(1) '/' int2str(n_levels) '.']);
     end
 
     exp_multires_dec{n_rep}{n_levels} = [1:size_center_points]';
@@ -63,9 +63,9 @@ for n_rep = 1 : n_decompositions
 
             time_val = toc;
             if i == 1
-                zef_waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
+                zef_waitbar(i,size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) '.']);
             elseif mod(i_ind,bar_ind)==0
-                zef_waitbar(i/size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
+                zef_waitbar(i,size_center_points,h,['Dec.: ' int2str(n_rep) '/' int2str(n_decompositions) ', Level ' int2str(k) '/' int2str(n_levels) ', Ready: ' datestr(datevec(now+(size_center_points/i - 1)*time_val/86400)) '.']);
             end
 
         end

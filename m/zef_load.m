@@ -39,7 +39,7 @@ if not(isequal(file_name,0))
         end
     end
 
-    h_waitbar = zef_waitbar(0,'Loading fields.');
+    h_waitbar = zef_waitbar(0,1,'Loading fields.');
     n_fields = length(matfile_fieldnames);
     if zef.use_display
         figure(h_waitbar);
@@ -48,7 +48,7 @@ if not(isequal(file_name,0))
         aux_struct = load([path_name filesep file_name],matfile_fieldnames{i});
         zef_data.(matfile_fieldnames{i}) = aux_struct.(matfile_fieldnames{i});
         if isequal(mod(i,ceil(n_fields/100)),0)
-            zef_waitbar(i/n_fields,h_waitbar,['Loading fields: ' num2str(i) ' / ' num2str(n_fields) '.']);
+            zef_waitbar(i,n_fields,h_waitbar,['Loading fields: ' num2str(i) ' / ' num2str(n_fields) '.']);
         end
     end
     close(h_waitbar);
@@ -94,15 +94,15 @@ if not(isequal(file_name,0))
     end
 
     clear zef_data;
-    
+
     for zef_i = 1 : length(zef.sensor_tags)
     zef = zef_create_sensors(zef, zef.sensor_tags{zef_i});
     end
-    
+
     for zef_i = 1 : length(zef.compartment_tags)
     zef = zef_create_compartment(zef, zef.compartment_tags{zef_i});
     end
-    
+
     zef = zef_set_figure_tool_sliders(zef);
     zef_plugin;
     zef_mesh_tool;

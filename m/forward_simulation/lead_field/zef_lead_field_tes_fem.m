@@ -262,7 +262,7 @@ end
 
 % Initialize progress bar
 
-h = zef_waitbar(0,'Form L_tes from transfer matrix R_tes.');
+h = zef_waitbar(0,1,'Form L_tes from transfer matrix R_tes.');
 waitbar_ind = 0;
 
 % Modify transfer matrix R_tes for lead field L_tes calculation
@@ -274,7 +274,7 @@ if not(impedance_inf == 0)
 end
 
 clear S r p x aux_vec inv_M_r a b;
-% zef_waitbar(0,h,'Interpolation.');
+% zef_waitbar(0,1,h,'Interpolation.');
 
 %if isequal(electrode_model,'CEM')
 Aux_mat = inv(Aux_mat);
@@ -325,5 +325,5 @@ dof_directions = ones(size(dof_positions));
 L_tes = L_tes';
 S_tes = S_tes';
 
-zef_waitbar(1,h);
+zef_waitbar(1,1,h);
 close(h);

@@ -486,7 +486,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
 
     if ismember(eval('zef.visualization_type'),[2])
         if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-            h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+            h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
             set(h_waitbar,'handlevisibility','off');
         end
     end
@@ -494,7 +494,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
     f_ind_aux = 1;
     for f_ind = frame_start : frame_start
         if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-            zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+            zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
             set(h_waitbar,'handlevisibility','off');
         end
         %axes(eval('zef.h_axes1'));
@@ -899,7 +899,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
         pause(1/30);
         f_ind_aux = f_ind_aux + 1;
         if  iscell(volumetric_distribution) & eval('zef.visualization_type') == 2
-            zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+            zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
             set(h_waitbar,'handlevisibility','off');
         end
         delete(h_bar);
@@ -1765,7 +1765,7 @@ else
                         if ismember(eval('zef.visualization_type'),[3])
                             if  i == aux_brain_visible_ind
                                 if  iscell(volumetric_distribution)
-                                    h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+                                    h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
                                     set(h_waitbar,'handlevisibility','off');
                                 end
                             end
@@ -1980,12 +1980,12 @@ else
                             %%%%%Topography reconstruction.
 
                             if  iscell(eval('zef.top_reconstruction'))
-                                h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+                                h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
                                 set(h_waitbar,'handlevisibility','off');
                             end
 
                             if  iscell(eval('zef.top_reconstruction'))
-                                h_waitbar = zef_waitbar(1/number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
+                                h_waitbar = zef_waitbar(1,number_of_frames,['Frame ' int2str(1) ' of ' int2str(number_of_frames) '.']);
                                 set(h_waitbar,'handlevisibility','off');
                             end
 
@@ -2212,9 +2212,9 @@ else
                 f_ind_aux = f_ind_aux + 1;
                 if f_ind_aux > 2
                     time_val = toc;
-                    zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames-1)/(f_ind_aux-2) - 1)*time_val/86400)) '.']);
+                    zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '. Ready: ' datestr(datevec(now+((number_of_frames-1)/(f_ind_aux-2) - 1)*time_val/86400)) '.']);
                 else
-                    zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
+                    zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
                 end
                 set(h_waitbar,'handlevisibility','off');
                 %******************************************************

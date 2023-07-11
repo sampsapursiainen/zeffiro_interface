@@ -33,7 +33,7 @@ if ~eval( 'isfield(zef,''time_sequence'')')
     n_val = max(abs(meas_data));
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level + max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;
 else
-    h = zef_waitbar(0,['Create time sequence data.']);
+    h = zef_waitbar(0,1,['Create time sequence data.']);
     if isempty(eval( 'zef.fss_time_val'))
         if eval( 'str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
             time_seq = eval( 'zef.time_sequence(1:length(zef.find_synth_source.selected_source),:)');
@@ -62,7 +62,7 @@ else
         for j = 1:size(time_seq,2)
             meas_data(:,j) = meas_data(:,j) + s_f(i,1,j)*L(:,3*(s_ind-1)+1) + s_f(i,2,j)*L(:,3*(s_ind-1)+2) + s_f(i,3,j)*L(:,3*(s_ind-1)+3);
         end
-        zef_waitbar(i/size(s_p,1),h,['Creating the time sequence data. ',num2str(i),''/'',num2str(size(s_p,1))]);
+        zef_waitbar(i,size(s_p,1),h,['Creating the time sequence data. ',num2str(i),''/'',num2str(size(s_p,1))]);
     end
     n_val = max(abs(meas_data));
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level+max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;

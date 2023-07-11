@@ -135,7 +135,7 @@ ind_m = [ 2 3 4 ;
 
 sensors = evalin('base','zef.sensors(:,1:3)');
 
-h = zef_waitbar(0,'Interpolation.');
+h = zef_waitbar(0,1,'Interpolation.');
 
 if evalin('base','zef.imaging_method') == 4
     eit_data_vec = zeros(3*L, 1);
@@ -151,7 +151,7 @@ if evalin('base','zef.imaging_method') == 4
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -169,7 +169,7 @@ elseif evalin('base','zef.imaging_method') == 3
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -194,7 +194,7 @@ elseif evalin('base','zef.imaging_method') == 2
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 
@@ -216,13 +216,13 @@ elseif evalin('base','zef.imaging_method') == 1
 
         if mod(i,floor(K/50))==0
             time_val = toc;
-            zef_waitbar(i/K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
+            zef_waitbar(i,K,h,['Interpolation. Ready approx: ' datestr(datevec(now+(K/i - 1)*time_val/86400)) '.']);
         end
     end
 
 end
 
-zef_waitbar(1,h);
+zef_waitbar(1,1,h);
 
 close(h);
 
