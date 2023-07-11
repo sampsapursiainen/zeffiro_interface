@@ -39,6 +39,9 @@ zef.nse_field.h_velocity_smoothing.ValueChangedFcn = 'zef = zef_nse_tool_update(
 zef.nse_field.h_n_frames = zef_data.h_n_frames;
 zef.nse_field.h_n_frames.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
+zef.nse_field.h_poisson_tolerance = zef_data.h_poisson_tolerance;
+zef.nse_field.h_poisson_tolerance.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
 zef.nse_field.h_sphere_radius = zef_data.h_sphere_radius;
 zef.nse_field.h_sphere_radius.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_sphere_x = zef_data.h_sphere_x;
@@ -165,6 +168,8 @@ zef.nse_field.h_conductivity_statistic.Value = zef.nse_field.conductivity_statis
 zef.nse_field.h_rho.Value = zef.nse_field.rho;
 zef.nse_field.h_mu.Value = zef.nse_field.mu;
 zef.nse_field.h_start_time.Value = zef.nse_field.start_time;
+
+zef.nse_field.h_poisson_tolerance.Value = zef.nse_field.poisson_tolerance;
 
 zef.nse_field.h_arteriole_diameter.Value = zef.nse_field.arteriole_diameter;
 zef.nse_field.h_venule_diameter.Value = zef.nse_field.venule_diameter;

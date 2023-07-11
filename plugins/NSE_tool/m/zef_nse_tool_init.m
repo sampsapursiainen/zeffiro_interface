@@ -16,6 +16,10 @@ if not(isfield(zef,'inv_time_3'))
     zef.nse_field.inv_time_3 = 0;
 end
 
+if not(isfield(zef,'poisson_tolerance'))
+    zef.nse_field.poisson_tolerance = 0.01;
+end
+
 if not(isfield(zef.nse_field,'viscosity_model'))
     zef.nse_field.viscosity_model = 1;
 end

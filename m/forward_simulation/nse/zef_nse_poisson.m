@@ -17,6 +17,13 @@ function nse_field = zef_nse_poisson(nse_field,nodes,tetra,domain_labels,mvd_len
 %nse_field.mu
 %nse_field.pressure
 
+nse_field.bp_vessels = cell(0);
+nse_field.bv_vessels_1 = cell(0);
+nse_field.bv_vessels_2 = cell(0);
+nse_field.bv_vessels_3 = cell(0);
+nse_field.mu_vessels = cell(0);
+nse_field.bf_capillaries = cell(0);
+
 h_waitbar = zef_waitbar(0,3,'NSE solver: pressure');
 
 c_ind_1_domain = find(ismember(domain_labels,nse_field.artery_domain_ind));
@@ -31,6 +38,9 @@ venule_fraction = (1-nse_field.capillary_arteriole_total_area_ratio)/2;
 arteriole_scale = 1./( arteriole_fraction*nse_field.arteriole_diameter.^2./(arteriole_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.arteriole_diameter.^2./(arteriole_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.arteriole_diameter.^2./(arteriole_fraction.*nse_field.venule_diameter.^2));
 capillary_scale = 1./( arteriole_fraction*nse_field.capillary_diameter.^2./(capillary_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.capillary_diameter.^2./(capillary_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.capillary_diameter.^2./(capillary_fraction.*nse_field.venule_diameter.^2));
 venule_scale = 1./( arteriole_fraction*nse_field.venule_diameter.^2./(venule_fraction*nse_field.arteriole_diameter.^2) + capillary_fraction*nse_field.venule_diameter.^2./(venule_fraction*nse_field.capillary_diameter.^2) + venule_fraction.*nse_field.venule_diameter.^2./(venule_fraction.*nse_field.venule_diameter.^2));
+pulse_amplitude = nse_field.pulse_amplitude.*hgmm_conversion;
+%time_vec = [0:nse_field.time_step_length:nse_field.time_length];
+%p_aux = zef_nse_signal_pulse(time_vec,nse_field);
 
 mvd_length = 1E6.*mvd_length(:,1);
 
@@ -84,13 +94,44 @@ beta = 8*pi*nse_field.mu*ml_min_conversion*nse_field.total_flow/((pi*(nse_field.
 
 arteriole_length = nse_field.pressure_decay_in_arterioles*pi*(nse_field.arteriole_diameter/2).^2*arteriole_scale/beta;
 
+ source_radius = nse_field.sphere_radius;
+ source_node_ind = [];
+ for i  = 1 : length(nse_field.sphere_radius)
+     source_node_ind_aux = find(sqrt(sum((v_1_nodes(b_node_ind,:) - mm_conversion*ones(length(b_node_ind),1)*[nse_field.sphere_x(i) nse_field.sphere_y(i) nse_field.sphere_z(i)]).^2,2)) <= mm_conversion*source_radius(i));
+     source_node_ind = [source_node_ind ; source_node_ind_aux];
+ end
+ source_vec = zeros(size(v_1_nodes,1),1);
+ source_vec(b_node_ind(source_node_ind)) = 1;
+
+ %p_aux = p_aux/max(p_aux); 
+ %p_aux = pulse_amplitude*p_aux;
+ 
 K_1 = zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 1, 1, ones(size(v_1_tetra,1),1)) + ...
     zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 2, 2, ones(size(v_1_tetra,1),1)) + ...
     zef_volume_scalar_matrix_GG(v_1_nodes, v_1_tetra, 3, 3, ones(size(v_1_tetra,1),1));
 M_1 = zef_surface_scalar_matrix_FF(v_1_nodes, v_1_tetra, beta.*param_aux);
 A = K_1 + M_1;
-b =  M_1 * (3*p_hydrostatic - (max(p_hydrostatic) - min(p_hydrostatic))/2 + nse_field.pressure.*hgmm_conversion);
+% b =  M_1 * (p_hydrostatic);
+% if nse_field.use_gpu
+%     DM = 1./diag(A);
+%     p_hydrostatic = pcg_iteration_gpu(A,b,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+% else
+%     DM = spdiags(diag(A),0,size(A,1),size(A,1));
+%     p_hydrostatic = pcg_iteration(A,b,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+% end
 
+%p = zeros(size(source_vec));
+p = source_vec;
+p_old = zeros(size(p));
+iter_ind = 0;
+conv_val = Inf;
+nse_field.conv_vec = [];
+while conv_val > nse_field.poisson_tolerance
+iter_ind = iter_ind + 1;
+%p_integral = zeros(size(source_vec));
+%for i = 1 : length(time_vec)
+%b = M_1*(p_aux(i)*source_vec + p);
+b = M_1*p;
 if nse_field.use_gpu
     DM = 1./diag(A);
     p = pcg_iteration_gpu(A,b,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
@@ -98,25 +139,40 @@ else
     DM = spdiags(diag(A),0,size(A,1),size(A,1));
     p = pcg_iteration(A,b,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
 end
+%if and(time_vec(i) >= nse_field.start_time, time_vec(i)<=nse_field.time_length)
+%p_integral = p_integral + nse_field.time_step_length*p;
+%p_integral = max(p_integral,p);
+%end
+%zef_waitbar(i/length(time_vec),h_waitbar,'NSE solver: pressure');
+conv_val = norm(p - p_old)./norm(p_old);
+p_old = p;
+nse_field.conv_vec = [nse_field.conv_vec conv_val];
+end
 
-nse_field.bp_vessels = p;
+%p = p_integral/(nse_field.time_length - nse_field.start_time);
+%p = p_integral;
+p = abs(p); 
+p = p/max(p); 
+p = pulse_amplitude*p;
+
+nse_field.bp_vessels{1} = p  + p_hydrostatic + (max(p_hydrostatic) - min(p_hydrostatic))/2 + nse_field.pressure.*hgmm_conversion ;
 
 zef_waitbar(1,3,h_waitbar,'NSE solver: velocity');
 
-nse_field.mu_vec = nse_field.mu*ones(size(v_1_tetra,1),1);
+mu_vec = nse_field.mu*ones(size(v_1_tetra,1),1);
 
-nse_field.bv_vessels_1 = zeros(size(nse_field.bp_vessels));
-nse_field.bv_vessels_2 = zeros(size(nse_field.bp_vessels));
-nse_field.bv_vessels_3 = zeros(size(nse_field.bp_vessels));
-nse_field.bv_vessels_b = zeros(size(nse_field.bp_vessels));
+nse_field.bv_vessels_1{1} = zeros(size(nse_field.bp_vessels{1}));
+nse_field.bv_vessels_2{1} = zeros(size(nse_field.bp_vessels{1}));
+nse_field.bv_vessels_3{1} = zeros(size(nse_field.bp_vessels{1}));
+%nse_field.bv_vessels_b = zeros(size(nse_field.bp_vessels{1}));
 
-Q_1 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 1, nse_field.mu_vec.^(-1));
-Q_2 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 2, nse_field.mu_vec.^(-1));
-Q_3 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 3, nse_field.mu_vec.^(-1));
+Q_1 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 1, mu_vec.^(-1));
+Q_2 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 2, mu_vec.^(-1));
+Q_3 = zef_volume_scalar_matrix_FG(v_1_nodes,v_1_tetra, 3, mu_vec.^(-1));
 
-g_1 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_x * nse_field.mu_vec.^(-1));
-g_2 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_y * nse_field.mu_vec.^(-1));
-g_3 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_z * nse_field.mu_vec.^(-1));
+g_1 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_x * mu_vec.^(-1));
+g_2 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_y * mu_vec.^(-1));
+g_3 = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra, nse_field.rho * nse_field.gravity_z * mu_vec.^(-1));
 
 n_p_1 = Q_1*p;
 n_p_2 = Q_2*p;
@@ -162,11 +218,11 @@ else
     aux_vec = pcg_iteration(L, n_p - g, nse_field.pcg_tol, nse_field.pcg_maxit, DM);
 end
 
-nse_field.bv_vessels_1(i_node_ind) = aux_vec([1:n_i_nodes]);
-nse_field.bv_vessels_2(i_node_ind) = aux_vec(n_i_nodes+[1:n_i_nodes]);
-nse_field.bv_vessels_3(i_node_ind) = aux_vec(2*n_i_nodes+[1:n_i_nodes]);
+nse_field.bv_vessels_1{1}(i_node_ind) = aux_vec([1:n_i_nodes]);
+nse_field.bv_vessels_2{1}(i_node_ind) = aux_vec(n_i_nodes+[1:n_i_nodes]);
+nse_field.bv_vessels_3{1}(i_node_ind) = aux_vec(2*n_i_nodes+[1:n_i_nodes]);
 
-nse_field.bp_vessels = nse_field.bp_vessels/hgmm_conversion;
+nse_field.bp_vessels{1} = nse_field.bp_vessels{1}/hgmm_conversion;
 
 if nse_field.microcirculation_model
 
@@ -190,17 +246,18 @@ if nse_field.microcirculation_model
 
     if nse_field.use_gpu
         DM = 1./diag(K_2);
-        nse_field.bf_capillaries = pcg_iteration_gpu(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+        nse_field.bf_capillaries{1} = pcg_iteration_gpu(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
     else
         DM = spdiags(diag(K_2),0,size(K_2,1),size(K_2,1));
-        nse_field.bf_capillaries  = pcg_iteration(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
+        nse_field.bf_capillaries{1}  = pcg_iteration(K_2,u,nse_field.pcg_tol,nse_field.pcg_maxit,DM);
     end
 
-    nse_field.bf_capillaries = min(1,abs(nse_field.bf_capillaries));
+    nse_field.bf_capillaries{1} = min(1,abs(nse_field.bf_capillaries{1}));
 
 end
 
-nse_field.bp_vessels = abs(nse_field.bp_vessels);
+nse_field.bp_vessels{1} = abs(nse_field.bp_vessels{1});
+nse_field.mu_vessels{1} = nse_field.mu*ones(size(nse_field.bp_vessels{1}));
 
 zef_waitbar(3,3,h_waitbar,'NSE solver');
 

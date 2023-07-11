@@ -578,7 +578,7 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
                     singular_threshold ...
                 );
 
-                sigma_out(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
+                sigma_out_builder_vec(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
 
                 interpolated_relative_blood_concentrations(I2) = 1 - singular_threshold;
 
@@ -624,13 +624,24 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
 
             for cdi = 1 : length(nse_field.capillary_domain_ind)
 
-                I = find(active_domain_labels == nse_field.capillary_domain_ind(cdi));
+                capillary_domain_inds = nse_field.capillary_domain_ind ( cdi ) ;
 
-                volume_aux = sum(volume(I));
+                [ I1, I2 ] = filtering_inds_fn( ...
+                    active_domain_labels, ...
+                    capillary_domain_inds, ...
+                    interpolated_relative_blood_concentrations, ...
+                    singular_threshold ...
+                );
 
-                background_conductivity = sum(active_sigma_in(I).*volume(I))./volume_aux;
+                sigma_out_builder_vec(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
 
-                sigma_out_builder_vec(active_compartment_ind(I1)) = background_conductivity.*(1-interpolated_relative_blood_concentrations(I)) + nse_field.blood_conductivity.*(interpolated_relative_blood_concentrations(I));
+                interpolated_relative_blood_concentrations(I2) = 1 - singular_threshold;
+
+                volume_aux = sum(volume(I1));
+
+                background_conductivity = sum(active_sigma_in(I1).*volume(I1))./volume_aux;
+
+                sigma_out_builder_vec(active_compartment_ind(I1)) = background_conductivity.*(1-interpolated_relative_blood_concentrations(I1)) + nse_field.blood_conductivity.*(interpolated_relative_blood_concentrations(I1));
 
             end % for
 
@@ -673,14 +684,14 @@ function [ sigma_out, sigma_std ] = conductivity_loop( ...
                     singular_threshold ...
                 );
 
-                sigma_out(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
+                sigma_out_builder_vec(active_compartment_ind(I2), col_ind) = nse_field.blood_conductivity;
 
                 interpolated_relative_blood_concentrations(I2) = 1 - singular_threshold;
 
                 volume_aux = sum(volume(I1));
 
                 background_conductivity = sum(active_sigma_in(I1).*volume(I1))./volume_aux;
-
+                
                 sigma_out_builder_vec(active_compartment_ind(I1)) = background_conductivity.*(1 + (3.*interpolated_relative_blood_concentrations(I1).*(nse_field.blood_conductivity-background_conductivity))./(3.*background_conductivity + (1 - interpolated_relative_blood_concentrations(I1)).*(nse_field.blood_conductivity-background_conductivity)));
 
             end % for
