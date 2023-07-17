@@ -1,4 +1,3 @@
-
 function h_waitbar = zef_waitbar(varargin)
 %
 % zef_waitbar
@@ -33,33 +32,34 @@ function h_waitbar = zef_waitbar(varargin)
 %
 
 
-if nargin < 3 || nargin > 4
+% if nargin < 3 || nargin > 4
+% 
+%     error("zef_waitbar needs 3 or 4 arguments")
+% 
+% end
 
-    error("zef_waitbar needs 3 or 4 arguments")
+% current_iter = double ( varargin { 1 } ) ;
+% 
+% max_iter = double ( varargin { 2 } ) ;
+% 
+% assert ( isequal ( size ( current_iter ), size ( max_iter ) ), "The first and second arguments need to be integer arrays of equal size." ) ;
+% 
+% if any ( isnan ( current_iter ) ) || not ( all ( is_integer ( current_iter ) ) ) || not ( all ( current_iter >= 0 ) )
+% 
+%     error ( "The first argument must be a positive integer." ) ;
+% 
+% end
+% 
+% if any ( isnan ( max_iter ) ) || not ( all ( is_integer ( max_iter ) ) ) || not ( all ( max_iter >= current_iter ) )
+% 
+%     error ( "The second argument must be a positive integer, greater than the first argument." ) ;
+% 
+% end
 
-end
 
-current_iter = double ( varargin { 1 } ) ;
+%progress_ratio = current_iter ./ max_iter ;
 
-max_iter = double ( varargin { 2 } ) ;
-
-assert ( isequal ( size ( current_iter ), size ( max_iter ) ), "The first and second arguments need to be integer arrays of equal size." ) ;
-
-if any ( isnan ( current_iter ) ) || not ( all ( is_integer ( current_iter ) ) ) || not ( all ( current_iter >= 0 ) )
-
-    error ( "The first argument must be a positive integer." ) ;
-
-end
-
-if any ( isnan ( max_iter ) ) || not ( all ( is_integer ( max_iter ) ) ) || not ( all ( max_iter >= current_iter ) )
-
-    error ( "The second argument must be a positive integer, greater than the first argument." ) ;
-
-end
-
-progress_ratio = current_iter ./ max_iter ;
-
-progress_threshold = ceil ( max_iter / 100 ) ;
+%progress_threshold = ceil ( max_iter / 100 ) ;
 
 % Set our plan of action. Start by setting constants.
 
@@ -70,6 +70,7 @@ PROGRESSING_WITH_CHANGED_TEXT = "{{progressing with text}}";
 if nargin == 3
 
     third = varargin{3};
+    second = varargin{2};
 
     if isa(third, "matlab.graphics.Graphics")
 
@@ -85,6 +86,7 @@ if nargin == 3
         else
 
             plan_of_action = INITIALIZING;
+            
 
         end
 
@@ -92,11 +94,18 @@ if nargin == 3
 
         plan_of_action = INITIALIZING;
 
-    else
-
-        error("Got 2 arguments but third one was neither a string nor a figure that could be updated. Aborting...");
-
     end
+    
+     if isa(second, "matlab.graphics.Graphics")
+        
+      h_waitbar = second ; 
+      plan_of_action = PROGRESSING;
+      progress_ratio = varargin{1};
+      progress_bar_text = varargin{3};
+      progress_threshold = 1;
+         
+     end
+    
 
 elseif nargin == 4 && ( isa(varargin{4}, "string") || isa(varargin{4}, "char") )
 
@@ -118,10 +127,12 @@ elseif nargin == 4 && ( isa(varargin{4}, "string") || isa(varargin{4}, "char") )
 
     end
 
-else
+elseif nargin == 2
 
-    error("zef_waitbar received more or less arguments than it wants to handle: 3 or 4 needed. The 4th argument should also be a string.")
-
+     progress_ratio = varargin{1};
+    progress_bar_text = varargin{2};
+    progress_threshold = 1;
+    plan_of_action = INITIALIZING;
 end
 
 
@@ -264,8 +275,13 @@ if plan_of_action == INITIALIZING
 
 elseif plan_of_action == PROGRESSING
 
+    
+ if   isa(second, "matlab.graphics.Graphics")
+    h_waitbar = varargin{2};
+elseif isa(third, "matlab.graphics.Graphics")
     h_waitbar = varargin{3};
-
+end
+    
     h_text = findobj(h_waitbar.Children,'Tag','progress_bar_text');
 
     h_text_ready = findobj(h_waitbar.Children,'Tag','progress_bar_ready_text');
