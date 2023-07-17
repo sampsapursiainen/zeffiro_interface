@@ -39,7 +39,14 @@ GPU. After the forward simulation phase, the model can be processed also without
 
 Zeffiro Interface relies on the external repositories, such as SDPT3, SeDuMi and others, that will
 be fetched automatically when cloning with `--recurse-submodules`. To install Zeffiro Interface, run
-the following commands in the console:
+the following commands in matlab:
+
+```matlab
+urlwrite('https://tinyurl.com/zeffiro','zeffiro_downloader.m')
+zeffiro_downloader('folder_name','zeffiro_folder','branch_name','main_development_branch')
+```
+
+(for more instructionstype help zeffiro_downloader) or the following ones in console:
 
 ```bash
 git clone --depth=1 https://github.com/sampsapursiainen/zeffiro_interface.git
