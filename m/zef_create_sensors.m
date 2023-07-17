@@ -44,7 +44,7 @@ for i = 1 : length(field_cell_update)
 
 end
 
-if eval(['not(ismember(' zef_struct_name '.sensor_tags,''' sensor_tag '''));'])
+if eval(['not(ismember(''' sensor_tag ''', ' zef_struct_name '.sensor_tags));'])
 eval([zef_struct_name '.sensor_tags = ['''  sensor_tag ''', ' zef_struct_name '.sensor_tags];']);
 end
 
