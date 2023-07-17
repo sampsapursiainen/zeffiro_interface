@@ -262,7 +262,7 @@ if eval('zef.mesh_smoothing_on')
                 else
                     convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
                 end
-                zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind),convergence_criterion,h,'Volume smoothing.');
+                zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
             end
         end
 
