@@ -51,7 +51,7 @@ if eval('zef.mesh_smoothing_on')
         surface_triangles = [];
         J = [];
         for k = 1 : length(priority_vec)
-            zef_waitbar(k,length_waitbar,h,'Smoothing operators.');
+            zef_waitbar(k/length_waitbar,h,'Smoothing operators.');
             if not(pml_vec(k))
                 I = find(submesh_ind_1(domain_labels)==k);
                 [surface_triangles] = [ surface_triangles ; zef_surface_mesh(tetra(I,:))];
@@ -61,13 +61,13 @@ if eval('zef.mesh_smoothing_on')
             end
         end
 
-        zef_waitbar((1+length(priority_vec)),length_waitbar,h,'Smoothing operators.');
+        zef_waitbar((1+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
         surface_triangles = sort(surface_triangles,2);
         surface_triangles = unique(surface_triangles,'rows');
 
         J = setdiff(tetra(:),K);
 
-        zef_waitbar((2+length(priority_vec)),length_waitbar,h,'Smoothing operators.');
+        zef_waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
         %eval('zef.tetra_raw');
 
@@ -90,7 +90,7 @@ if eval('zef.mesh_smoothing_on')
                 end
             end
 
-            zef_waitbar((3+length(priority_vec)),length_waitbar,h,'Smoothing operators.');
+            zef_waitbar((3+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
             clear surface_triangles;
 
             clear A_part;
@@ -122,7 +122,7 @@ if eval('zef.mesh_smoothing_on')
                 outer_surface_nodes_aux = unique(outer_surface_nodes_aux);
             end
 
-            zef_waitbar((4+length(priority_vec)),length_waitbar,h,'Smoothing operators.');
+            zef_waitbar((4+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
             clear B_part;
             B = spones(B);
             sum_B = full(sum(B))';
@@ -172,7 +172,7 @@ if eval('zef.mesh_smoothing_on')
                 else
                     convergence_criterion = smoothing_steps_surf(smoothing_repetition_ind).^2/iter_ind_aux;
                 end
-                zef_waitbar(smoothing_steps_surf(smoothing_repetition_ind),convergence_criterion,h,'Surface smoothing.');
+                zef_waitbar(smoothing_steps_surf(smoothing_repetition_ind)/convergence_criterion,h,'Surface smoothing.');
 
             end
         end
@@ -307,7 +307,7 @@ if eval('zef.mesh_smoothing_on')
             % else
             %  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
             % end
-            % zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind),convergence_criterion,h,'Volume smoothing.');
+            % zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
             % end
             % end
             %     end
