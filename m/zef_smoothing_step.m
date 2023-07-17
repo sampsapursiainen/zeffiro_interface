@@ -188,7 +188,7 @@ if eval('zef.mesh_smoothing_on')
             else
                 electrode_is_point = find(electrode_is_point(:,4)==0);
             end
-            zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1),(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
+   zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
             C = [];
             for electrode_ind = 1 : length(L)
                 zef_waitbar(electrode_ind,length(L),h,'Sensor smoothing.');
