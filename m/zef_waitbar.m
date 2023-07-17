@@ -38,9 +38,6 @@ function h_waitbar = zef_waitbar(varargin)
 % 
 % end
 
-% current_iter = double ( varargin { 1 } ) ;
-% 
-% max_iter = double ( varargin { 2 } ) ;
 % 
 % assert ( isequal ( size ( current_iter ), size ( max_iter ) ), "The first and second arguments need to be integer arrays of equal size." ) ;
 % 
@@ -57,9 +54,15 @@ function h_waitbar = zef_waitbar(varargin)
 % end
 
 
-%progress_ratio = current_iter ./ max_iter ;
-
-%progress_threshold = ceil ( max_iter / 100 ) ;
+if not(isa(varargin{2}, "matlab.graphics.Graphics"))
+current_iter = double ( varargin { 1 } ) ;
+max_iter = double ( varargin { 2 } ) ;
+progress_ratio = current_iter ./ max_iter ;
+progress_threshold = ceil ( max_iter / 100 ) ;
+else 
+    progress_ratio = varargin{1};
+    progress_threshold = 1;
+end
 
 % Set our plan of action. Start by setting constants.
 
