@@ -32,20 +32,20 @@ tick_labels = cell(0);
 
 for i = 1 : n_intervals
 
-   I = find(n_s_p_1 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_1 <= ecc_min + i*(1-ecc_min)/n_intervals);
-   index_vec_1(I) = i;
+    I = find(n_s_p_1 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_1 <= ecc_min + i*(1-ecc_min)/n_intervals);
+    index_vec_1(I) = i;
 
-   I = find(n_s_p_2 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_2 <= ecc_min + i*(1-ecc_min)/n_intervals);
-   index_vec_2(I) = i;
+    I = find(n_s_p_2 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_2 <= ecc_min + i*(1-ecc_min)/n_intervals);
+    index_vec_2(I) = i;
 
-   I = find(n_s_p_3 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_3 <= ecc_min + i*(1-ecc_min)/n_intervals);
-   index_vec_3(I) = i;
+    I = find(n_s_p_3 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_3 <= ecc_min + i*(1-ecc_min)/n_intervals);
+    index_vec_3(I) = i;
 
-   I = find(n_s_p_4 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_4 <= ecc_min + i*(1-ecc_min)/n_intervals);
-   index_vec_4(I) = i;
+    I = find(n_s_p_4 >= ecc_min + (i-1)*(1-ecc_min)/n_intervals & n_s_p_4 <= ecc_min + i*(1-ecc_min)/n_intervals);
+    index_vec_4(I) = i;
 
 
-tick_labels{i} = round(ecc_min + 0.5*(i+(i-1))*(1-ecc_min)/n_intervals,3);
+    tick_labels{i} = round(ecc_min + 0.5*(i+(i-1))*(1-ecc_min)/n_intervals,3);
 
 end
 
@@ -57,10 +57,10 @@ figure(1); set(gcf,'renderer','painters');
 h_rdm = boxchart(x_scale*[index_vec_1; index_vec_2; index_vec_3; index_vec_4],log10([rdm_v_1; rdm_v_2; rdm_v_3; rdm_v_4]),'GroupByColor',group_vec);
 %set(gca,'yscale','log')
 for i = 1 : length(h_rdm)
-set(h_rdm(i),'MarkerStyle','.')
-set(h_rdm(i),'MarkerSize',0.1)
-set(h_rdm(i),'JitterOutliers','off')
-set(h_rdm(i),'linewidth',0.25)
+    set(h_rdm(i),'MarkerStyle','.')
+    set(h_rdm(i),'MarkerSize',0.1)
+    set(h_rdm(i),'JitterOutliers','off')
+    set(h_rdm(i),'linewidth',0.25)
 end
 set(gca,'Xtick',x_scale*[1:n_intervals])
 set(gca,'XtickLabels',tick_labels)
@@ -85,10 +85,10 @@ figure(2);  set(gcf,'renderer','painters');
 h_mag = boxchart(x_scale*[index_vec_1; index_vec_2; index_vec_3; index_vec_4],log10(abs([mag_v_1; mag_v_2; mag_v_3; mag_v_4])),'GroupByColor',group_vec);
 %set(gca,'yscale','log')
 for i = 1 : length(h_mag)
-set(h_mag(i),'MarkerStyle','.')
-set(h_rdm(i),'MarkerSize',0.1)
-set(h_mag(i),'JitterOutliers','off')
-set(h_mag(i),'linewidth',0.25)
+    set(h_mag(i),'MarkerStyle','.')
+    set(h_rdm(i),'MarkerSize',0.1)
+    set(h_mag(i),'JitterOutliers','off')
+    set(h_mag(i),'linewidth',0.25)
 end
 set(gca,'Xtick',x_scale*[1:n_intervals])
 set(gca,'XtickLabels',tick_labels)

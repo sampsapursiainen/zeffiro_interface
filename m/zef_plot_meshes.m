@@ -14,17 +14,17 @@ cdata_info.frame_step = eval('zef.frame_step');
 if isequal(eval('zef.volumetric_distribution_mode'),1)
     volumetric_distribution = eval('zef.reconstruction');
 elseif isequal(eval('zef.volumetric_distribution_mode'),2)
-        volumetric_distribution = repmat(eval('zef.sigma(:,1)')',3,1)/sqrt(3);
-        volumetric_distribution = volumetric_distribution(:);
- elseif isequal(eval('zef.volumetric_distribution_mode'),3)
-     volumetric_distribution = eval('y_ES');
-if iscell(volumetric_distribution)
-         for i = 1 : length(volumetric_distribution)
+    volumetric_distribution = repmat(eval('zef.sigma(:,1)')',3,1)/sqrt(3);
+    volumetric_distribution = volumetric_distribution(:);
+elseif isequal(eval('zef.volumetric_distribution_mode'),3)
+    volumetric_distribution = eval('y_ES');
+    if iscell(volumetric_distribution)
+        for i = 1 : length(volumetric_distribution)
             volumetric_distribution{i} = eval('zef.L')*volumetric_distribution{i};
-         end
-else
-    volumetric_distribution = eval('zef.L')*volumetric_distribution;
-end
+        end
+    else
+        volumetric_distribution = eval('zef.L')*volumetric_distribution;
+    end
 end
 
 h_colorbar = findobj(eval('zef.h_zeffiro'),'-regexp','tag','Colorbar');
@@ -54,23 +54,23 @@ reuna_p_inf = eval('zef.reuna_p_inf');
 reuna_t = eval('zef.reuna_t');
 reuna_type = eval('zef.reuna_type');
 if isequal(reuna_type{end,1},-1)
-reuna_p = reuna_p(1:end-1);
-reuna_p_inf = reuna_p_inf(1:end-1);
-reuna_t = reuna_t(1:end-1);
-compartment_tags = compartment_tags(1:end-1);
+    reuna_p = reuna_p(1:end-1);
+    reuna_p_inf = reuna_p_inf(1:end-1);
+    reuna_t = reuna_t(1:end-1);
+    compartment_tags = compartment_tags(1:end-1);
 end
 
 if ismember(eval('zef.visualization_type'), [3,4])
     if not(isempty(eval('zef.source_interpolation_ind')))
-    s_i_ind = eval('zef.source_interpolation_ind{2}');
+        s_i_ind = eval('zef.source_interpolation_ind{2}');
     end
-        if ismember(eval('zef.volumetric_distribution_mode'), [1,3])
-            if not(isempty(eval('zef.source_interpolation_ind')))
-s_i_ind_2 = eval('zef.source_interpolation_ind{1}');
-            end
-    elseif ismember(eval('zef.volumetric_distribution_mode'), [2])
-    s_i_ind_2 = eval('zef.active_compartment_ind');
+    if ismember(eval('zef.volumetric_distribution_mode'), [1,3])
+        if not(isempty(eval('zef.source_interpolation_ind')))
+            s_i_ind_2 = eval('zef.source_interpolation_ind{1}');
         end
+    elseif ismember(eval('zef.volumetric_distribution_mode'), [2])
+        s_i_ind_2 = eval('zef.active_compartment_ind');
+    end
 end
 
 if eval('zef.use_parcellation')
@@ -99,9 +99,9 @@ if ismember(eval('zef.visualization_type'), [3])
         frame_stop = min(length_reconstruction_cell,frame_stop);
         number_of_frames = length([frame_start : frame_step : frame_stop]);
 
-cdata_info.frame_start = frame_start;
-cdata_info.frame_step = frame_step;
-cdata_info.frame_stop = frame_stop;
+        cdata_info.frame_start = frame_start;
+        cdata_info.frame_step = frame_step;
+        cdata_info.frame_stop = frame_stop;
 
         for f_ind = frame_start : frame_step : frame_stop
             reconstruction = (volumetric_distribution{f_ind});
@@ -152,7 +152,7 @@ cdata_info.frame_stop = frame_stop;
             if eval('zef.inv_scale') == 1
                 min_rec_log10 = 20*log10(max(min_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                 max_rec = -min_rec_log10 + 20*log10(max(max_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
-            min_rec = 0;
+                min_rec = 0;
             elseif eval('zef.inv_scale') == 2
                 min_rec = (max(min_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                 max_rec = (max(max_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
@@ -186,8 +186,8 @@ if ismember(eval('zef.visualization_type'), [5])
         number_of_frames = length([frame_start : frame_step : frame_stop]);
 
         cdata_info.frame_start = frame_start;
-cdata_info.frame_step = frame_step;
-cdata_info.frame_stop = frame_stop;
+        cdata_info.frame_step = frame_step;
+        cdata_info.frame_stop = frame_stop;
 
         for f_ind = frame_start : frame_step : frame_stop
             reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
@@ -203,8 +203,8 @@ cdata_info.frame_stop = frame_stop;
         number_of_frames = 1;
 
         cdata_info.frame_start = frame_start;
-cdata_info.frame_step = frame_step;
-cdata_info.frame_stop = frame_stop;
+        cdata_info.frame_step = frame_step;
+        cdata_info.frame_stop = frame_stop;
 
         reconstruction = eval('zef.top_reconstruction');
         reconstruction = reconstruction(:);
@@ -268,13 +268,13 @@ light('Position',[0 0 -1],'Style','infinite');
 %April 2021
 sensors = eval('zef.sensors');
 %January 2023
-       sensor_explosion_parameter_1 = zef.sensor_explosion_parameter_1;
-       sensor_explosion_parameter_2 = zef.sensor_explosion_parameter_2; 
-       sensors(:,1) = sensors(:,1).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*(max(sensors(:,3))-sensors(:,3))./(max(sensors(:,3))-min(sensors(:,3)))));
-       sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(:,3))/(max(sensors(:,3))-min(sensors(:,3)))))); 
-       sensors(:,3) = sensors(:,3)+sign(sensor_explosion_parameter_2).*(max(sensors(:,3))-sensors(:,3));
+sensor_explosion_parameter_1 = zef.sensor_explosion_parameter_1;
+sensor_explosion_parameter_2 = zef.sensor_explosion_parameter_2;
+sensors(:,1) = sensors(:,1).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*(max(sensors(:,3))-sensors(:,3))./(max(sensors(:,3))-min(sensors(:,3)))));
+sensors(:,2) = sensors(:,2).*(1 + sensor_explosion_parameter_2.*exp(sensor_explosion_parameter_1.*((max(sensors(:,3))-sensors(:,3))/(max(sensors(:,3))-min(sensors(:,3))))));
+sensors(:,3) = sensors(:,3)+sign(sensor_explosion_parameter_2).*(max(sensors(:,3))-sensors(:,3));
 %January 2023
-        sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));
+sensors_visible = find(eval(['zef.' sensor_tag '_visible_list']));
 sensors_color_table = eval(['zef.' sensor_tag '_color_table']);
 sensors_name = eval(['zef.' sensor_tag '_name_list']);
 aux_scale_val = eval('zef.sensors_visual_size');
@@ -294,7 +294,7 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
     for i = 1 : length(reuna_t)
         reuna_t{i} = uint32(reuna_t{i});
         triangle_c{i} = (1/3)*(reuna_p{i}(reuna_t{i}(:,1),:) + reuna_p{i}(reuna_t{i}(:,2),:) + reuna_p{i}(reuna_t{i}(:,3),:));
-        end
+    end
 end
 
 aux_ind_1 = [];
@@ -333,7 +333,7 @@ if eval('zef.cp_on')
             aux_ind_2{i} = zef_clipping_plane(triangle_c{i},clipping_plane);
         end
     end
-  clipped = 1;
+    clipped = 1;
 end
 
 if eval('zef.cp2_on')
@@ -365,7 +365,7 @@ if eval('zef.cp3_on')
     cp3_c = eval('zef.cp3_c');
     cp3_d = eval('zef.cp3_d');
 
-     clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
+    clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 
     if clipped
         aux_ind_1 = zef_clipping_plane(sensors(:,1:3),clipping_plane,aux_ind_1);
@@ -386,23 +386,23 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
     if eval('zef.cp_mode') == 1
         sensors = sensors(aux_ind_1,:);
         if not(isempty(sensors_visible))
-        sensors_visible = sensors_visible(aux_ind_1,:);
+            sensors_visible = sensors_visible(aux_ind_1,:);
         end
         if not(isempty(sensors_color_table))
-        sensors_color_table = sensors_color_table(aux_ind_1,:);
-        sensors_name = sensors_name(aux_ind_1);
+            sensors_color_table = sensors_color_table(aux_ind_1,:);
+            sensors_name = sensors_name(aux_ind_1);
         end
-        elseif eval('zef.cp_mode') == 2
+    elseif eval('zef.cp_mode') == 2
         aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
         sensors = sensors(aux_ind_1,:);
         if not(isempty(sensors_visible))
-        sensors_visible = sensors_visible(aux_ind_1,:);
+            sensors_visible = sensors_visible(aux_ind_1,:);
         end
         if not(isempty(sensors_color_table))
-        sensors_color_table = sensors_color_table(aux_ind_1,:);
-        sensors_name = sensors_name(aux_ind_1);
+            sensors_color_table = sensors_color_table(aux_ind_1,:);
+            sensors_name = sensors_name(aux_ind_1);
         end
-        end
+    end
     for i = 1 : length(reuna_t)
         if eval('zef.cp_mode') == 1
             reuna_t{i} = reuna_t{i}(aux_ind_2{i},:);
@@ -700,7 +700,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             if not(ismember(eval('zef.reconstruction_type'), [6]))
                                 if eval('zef.inv_scale') == 1
                                     reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
-  elseif eval('zef.inv_scale') == 2
+                                elseif eval('zef.inv_scale') == 2
                                     reconstruction = (max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                                 elseif eval('zef.inv_scale') == 3
                                     reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
@@ -733,18 +733,18 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             %**********************************************
                             if ismember(i,aux_active_compartment_ind) && eval('zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
 
-                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+                                h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','reconstruction');
                             else
-                            h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+                                h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                                 set(h_surf_2{ab_ind},'Tag','reconstruction');
                             end
 
                             %**********************************************
                             set(h_surf_2{ab_ind},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
-                            
+
                             if isequal(min_rec,max_rec)
-                            min_rec = min_rec - 1e-15;
+                                min_rec = min_rec - 1e-15;
                             end
                             set(gca,'CLim',[min_rec max_rec]);
                             %set(h_surf_2{ab_ind},'specularstrength',0.2);
@@ -777,7 +777,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                                 set(h_surf_2{ab_ind},'AlphaDataMapping','none');
                             end
                             if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-                            zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
+                                zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
                             end
 
                             if ismember(i,aux_active_compartment_ind) && cb_done == 0 && ismember(eval('zef.visualization_type'),[3])
@@ -786,8 +786,8 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                                 set(h_colorbar,'Tag','rightColorbar');
                                 h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                                 set(h_axes_text,'tag','image_details');
-                                 h_text = findobj(get(gcf,'Children'),'Tag','time_text');
-  set(h_text,'String',['Time: ' num2str(eval('zef.inv_time_1') + eval('zef.inv_time_2')/2 + frame_step*(f_ind - 1)*eval('zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+                                h_text = findobj(get(gcf,'Children'),'Tag','time_text');
+                                set(h_text,'String',['Time: ' num2str(eval('zef.inv_time_1') + eval('zef.inv_time_2')/2 + frame_step*(f_ind - 1)*eval('zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
                                 set(h_text,'visible','on','Tag','time_text');
                                 set(h_axes_text,'layer','bottom');
                                 axes(eval('zef.h_axes1'));
@@ -815,21 +815,21 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             reconstruction = reconstruction(:);
 
                             if ismember(i,aux_active_compartment_ind) && eval('zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                            h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
-                            set(h_surf_2{i},'Tag','reconstruction');
-                            %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                                h_surf_2{i} = trisurf(reuna_t{i},reuna_p_inf{i}(:,1),reuna_p_inf{i}(:,2),reuna_p_inf{i}(:,3),reconstruction,'edgecolor','none');
+                                set(h_surf_2{i},'Tag','reconstruction');
+                                %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                             else
-                            h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
-                            set(h_surf_2{i},'Tag','reconstruction');
-                            %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
+                                h_surf_2{i} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
+                                set(h_surf_2{i},'Tag','reconstruction');
+                                %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
                             end
 
-                           if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-                            zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
-                           end
+                            if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
+                                zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
+                            end
                             set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
                             if isequal(min_rec,max_rec)
-                            min_rec = min_rec - 1e-15;
+                                min_rec = min_rec - 1e-15;
                             end
                             set(gca,'CLim',gather([min_rec max_rec]));
                             %set(h_surf_2{i},'specularstrength',0.2);
@@ -865,15 +865,15 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             set(h_colorbar,'Tag','rightColorbar');
                             h_axes_text = axes('position',[0.0325 0.95 0.5 0.05],'visible','off');
                             set(h_axes_text,'tag','image_details');
-                             h_text = findobj(get(gcf,'Children'),'Tag','time_text');
-  set(h_text,'String',['Time: ' num2str(eval('zef.inv_time_1') + eval('zef.inv_time_2')/2 + frame_step*(f_ind - 1)*eval('zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
+                            h_text = findobj(get(gcf,'Children'),'Tag','time_text');
+                            set(h_text,'String',['Time: ' num2str(eval('zef.inv_time_1') + eval('zef.inv_time_2')/2 + frame_step*(f_ind - 1)*eval('zef.inv_time_3'),'%0.6f') ' s, Frame: ' num2str(f_ind) ' / ' num2str(length_reconstruction_cell) '.']);
                             set(h_text,'visible','on','Tag','time_text');
                             set(h_axes_text,'layer','bottom');
                             axes(eval('zef.h_axes1'));
 
                             lighting phong;
-                            
-        
+
+
                             %%%% End of topography reconstruction
 
                         else
@@ -917,17 +917,17 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
         sensor_patches = findobj(eval('zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
         try
-zef_plot_dpq('static');
+            zef_plot_dpq('static');
         catch
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_plot_dpq('dynamical');
-        catch 
+            zef_plot_dpq('dynamical');
+        catch
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour(zef);
+            zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end
@@ -937,7 +937,7 @@ zef_update_contour(zef);
 
         if ismember(eval('zef.visualization_type'),[3,5])
 
-                 eval(['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+            eval(['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
 
             f_ind_aux = 1;
             for f_ind = frame_start + frame_step : frame_step : frame_stop
@@ -953,7 +953,7 @@ zef_update_contour(zef);
                     end
                 end
                 f_ind_aux = f_ind_aux + 1;
-                %zef_waitbar(f_ind_aux/number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
+                %zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])
 
                 if ismember(eval('zef.visualization_type'),[3])
                     for i = intersect(aux_active_compartment_ind,aux_brain_visible_ind)
@@ -1090,12 +1090,12 @@ zef_update_contour(zef);
                     %h_surf_2{ab_ind} = trisurf(reuna_t{i},reuna_p{i}(:,1),reuna_p{i}(:,2),reuna_p{i}(:,3),reconstruction,'edgecolor','none');
                     set(h_surf_2{i},'CData',gather(reconstruction));
                     if ismember(i,aux_active_compartment_ind) && eval('zef.use_inflated_surfaces') && not(isempty(reuna_p_inf))
-                    %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
+                        %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p_inf{i});
                     else
-                     %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});      
+                        %[h_contour{i},h_contour_text{i}] = zef_plot_contour(zef,eval('zef.contour_set'),reconstruction,reuna_t{i},reuna_p{i});
                     end
                     if ismember(eval('zef.volumetric_distribution_mode'),[1, 3])
-                    zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
+                        zef_plot_cone_field(zef,eval('zef.h_axes1'),f_ind);
                     end
 
                     %set(h_surf_2{i},'edgecolor','none','facecolor','flat','facelighting','flat','CDataMapping','scaled');
@@ -1131,16 +1131,16 @@ zef_update_contour(zef);
                     %End of topography reconstruction.
                 end
 
-        try
-zef_plot_dpq('dynamical');
-        catch 
-            warning('Dynamical Plot Queue not successful.')
-        end
-        try
-zef_update_contour(zef);
-        catch
-            warning('Contour plot not successful.')
-        end
+                try
+                    zef_plot_dpq('dynamical');
+                catch
+                    warning('Dynamical Plot Queue not successful.')
+                end
+                try
+                    zef_update_contour(zef);
+                catch
+                    warning('Contour plot not successful.')
+                end
                 zef_set_sliders_plot(2);
                 camorbit(zef.h_axes1,frame_step*eval('zef.orbit_1')/movie_fps,frame_step*eval('zef.orbit_2')/movie_fps);
 
@@ -1157,12 +1157,12 @@ zef_update_contour(zef);
                 set(h_text,'visible','on');
                 set(h_axes_text,'layer','bottom');
 
-               drawnow limitrate;
+                drawnow limitrate;
 
                 zef_store_cdata(cdata_counter,cdata_info);
                 cdata_counter = cdata_counter + 1;
 
-                 eval(['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
+                eval(['zef.h_slider.Value=' num2str(max(1e-5,(f_ind-frame_start)/(frame_step*(number_of_frames-1)))) ';']);
 
             end
 
@@ -1181,13 +1181,13 @@ zef_update_contour(zef);
                 if visible_val
                     [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{i},reuna_t{i});
                     if not(isempty(min_n_aux))
-                    h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
-                    set(h_surf,'Tag','surface');
-                    %set(h_surf,'specularstrength',0.1);
-                    %set(h_surf,'diffusestrength',0.5);
-                    %set(h_surf,'ambientstrength',0.85);
-                    set(h_surf,'facealpha',eval('zef.layer_transparency'));
-                    lighting phong;
+                        h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
+                        set(h_surf,'Tag','surface');
+                        %set(h_surf,'specularstrength',0.1);
+                        %set(h_surf,'diffusestrength',0.5);
+                        %set(h_surf,'ambientstrength',0.85);
+                        set(h_surf,'facealpha',eval('zef.layer_transparency'));
+                        lighting phong;
                     end
                 end
             end
@@ -1211,17 +1211,17 @@ zef_update_contour(zef);
         sensor_patches = findobj(eval('zef.h_axes1'),'Type','Patch','Tag','sensor');
         uistack(sensor_patches,'top');
         try
-zef_plot_dpq('static');
+            zef_plot_dpq('static');
         catch
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_plot_dpq('dynamical');
-        catch 
+            zef_plot_dpq('dynamical');
+        catch
             warning('Dynamical Plot Queue not successful.')
         end
         try
-zef_update_contour(zef);
+            zef_update_contour(zef);
         catch
             warning('Contour plot not successful.')
         end

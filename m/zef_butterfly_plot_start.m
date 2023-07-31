@@ -9,12 +9,12 @@ set(findobj(zef.h_butterfly_plot.Children,'-property','FontUnits'),'FontUnits','
 set(findobj(zef.h_butterfly_plot.Children,'-property','FontSize'),'FontSize',9);
 zef_init_butterfly_plot;
 if isfield(zef,'measurements')
-if iscell(zef.measurements)
-    set(zef.h_bf_data_segment,'enable','on');
-end
-if not(iscell(zef.measurements))
-    set(zef.h_bf_data_segment,'enable','off');
-end
+    if iscell(zef.measurements)
+        set(zef.h_bf_data_segment,'enable','on');
+    end
+    if not(iscell(zef.measurements))
+        set(zef.h_bf_data_segment,'enable','off');
+    end
 end
 uistack(flipud([zef.h_bf_sampling_frequency ; zef.h_bf_low_cut_frequency ;
     zef.h_bf_high_cut_frequency ; zef.h_bf_time_1 ; zef.h_bf_time_2; zef.h_bf_data_segment ; zef.h_bf_cancel ; zef.h_bf_normalize_data;

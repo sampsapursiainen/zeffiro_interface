@@ -12,11 +12,11 @@ zef_n = 0;
 
 for zef_k =  1  : size(parameter_profile,1)
     if ismember(parameter_profile{zef_k,8},{'Segmentation', 'Free-form'}) ...
-    && isequal(parameter_profile{zef_k,6},'On') ...
-    && isequal(parameter_profile{zef_k,3},'Scalar')
-       zef_n = zef_n + 1;
-       name_cell{zef_n} = parameter_profile{zef_k,1};
-       variable_cell{zef_n} = ['zef.' parameter_profile{zef_k,2}];
+            && isequal(parameter_profile{zef_k,6},'On') ...
+            && isequal(parameter_profile{zef_k,3},'Scalar')
+        zef_n = zef_n + 1;
+        name_cell{zef_n} = parameter_profile{zef_k,1};
+        variable_cell{zef_n} = ['zef.' parameter_profile{zef_k,2}];
     end
 end
 

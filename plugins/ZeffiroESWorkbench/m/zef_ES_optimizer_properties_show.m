@@ -11,7 +11,7 @@ vec = zef_ES_table(zef.y_ES_interval);
 for i_aux = 1:size(vec, 2)-1 % Last one are the ES channels.
     zef.h_ES_optimizer_properties_table.Data{i_aux, 1} = vec.Properties.VariableNames{i_aux};
     if not(isempty(vec{:, i_aux}))
-        
+
         if     i_aux == 13      % alpha
             zef.h_ES_optimizer_properties_table.Data{i_aux, 2} = round(vec{:, i_aux}{1}(sc), 4);
         elseif i_aux == 14 % beta or k-val

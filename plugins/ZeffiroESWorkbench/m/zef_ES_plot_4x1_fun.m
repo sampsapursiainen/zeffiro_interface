@@ -12,7 +12,7 @@ for i = 1:length(sensors)
         scatter3(sensors(i,1),sensors(i,2),sensors(i,3),'r','filled');
     elseif ismember(i,ell_idx(2:5))
         scatter3(sensors(i,1),sensors(i,2),sensors(i,3),'b','filled');
-     else
+    else
         scatter3(sensors(i,1),sensors(i,2),sensors(i,3),'.','k');
     end
 end

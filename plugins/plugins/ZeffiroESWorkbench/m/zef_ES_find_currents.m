@@ -101,7 +101,7 @@ end
 %% waitbar
 if zef.use_waitbar == 1
     wait_bar_temp = zef_waitbar(...
-        [0 0], ...
+        [0 0], [1 1], ...
         sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: i = %d, j = d%' '.'], 0, 0)...
         );
 end
@@ -145,7 +145,7 @@ for i = 1:step_size
                 flag{parallel_ind}, ...
                 source_amplitude{parallel_ind}, ...
                 source_position_index{parallel_ind}, ...
-                source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data, alpha(parallel_ind + j), beta(i)); %#ok<PFBNS> 
+                source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data, alpha(parallel_ind + j), beta(i)); %#ok<PFBNS>
             run_time{parallel_ind} = 86400*(now - run_time{parallel_ind});
         end
 
@@ -158,7 +158,7 @@ for i = 1:step_size
             zef.y_ES_interval.flag{i,j}                         = flag{parallel_ind};
             zef.y_ES_interval.source_amplitude{i,j}             = source_amplitude{parallel_ind};
             zef.y_ES_interval.nnz{i,j}                          = zef_ES_rwnnz(y_ES{parallel_ind}, zef_data.relative_weight_nnz, zef_data.score_dose);
-            
+
             %% Field source
             if ismember(flag{parallel_ind}, [1, 3]) && norm(y_ES{parallel_ind}, 2) > 0
                 for running_index = 1:length(source_position_index{parallel_ind})
@@ -198,12 +198,12 @@ for i = 1:step_size
         end
 
         if zef.use_waitbar
-            zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+            zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
         end
     end
-        if zef.use_waitbar
-            zef_waitbar([j/length(alpha) i/length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
-        end
+    if zef.use_waitbar
+        zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+    end
 end
 
 zef.y_ES_interval.alpha = alpha;

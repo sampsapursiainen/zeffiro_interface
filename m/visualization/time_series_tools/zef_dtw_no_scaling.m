@@ -9,7 +9,7 @@ function [y_vals, plot_mode] = zef_dtw_no_scaling(time_series)
 y_vals = zeros(size(time_series,1), size(time_series,1));
 for i = 1 : size(time_series,1)
     for j = 1 : size(time_series,1)
-y_vals(i,j) = dtw(time_series(i,:),time_series(j,:));
+        y_vals(i,j) = dtw(time_series(i,:),time_series(j,:));
     end
 end
 

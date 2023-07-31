@@ -1,7 +1,7 @@
 function zef = zef_ES_clear_plot_data(zef)
 
-if nargin == 0 
-zef = eval('zef');
+if nargin == 0
+    zef = eval('zef');
 end
 
 switch eval('zef.ES_plot_type');

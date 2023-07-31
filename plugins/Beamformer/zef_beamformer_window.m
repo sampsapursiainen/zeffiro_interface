@@ -7,10 +7,10 @@ zef.beamformer = zef_beamformer_app;
 
 %_ Names of methods that are included in app _
 zef_bf_names = {'Linearly constraint minimum variance (LCMV)'
-                'Unit noise gain beamformer'
-                'Unit-gain constraint beamformer'
-                'Unit nosie gain scalar beamformer'
-                };
+    'Unit noise gain beamformer'
+    'Unit-gain constraint beamformer'
+    'Unit nosie gain scalar beamformer'
+    };
 
 zef.beamformer.bf_type.Items = zef_bf_names;
 zef.beamformer.bf_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
@@ -22,10 +22,10 @@ end
 %_ Covariance calculation types _
 %_ Covariance calculation types _
 zef_bf_names = {'Full data, measurement based',
-                'Full data, basic',
-                'Pointwise, measurement based',
-                'Pointwise, basic'
-                };
+    'Full data, basic',
+    'Pointwise, measurement based',
+    'Pointwise, basic'
+    };
 
 zef.beamformer.cov_type.Items = zef_bf_names;
 zef.beamformer.cov_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
@@ -36,7 +36,7 @@ end
 
 %_ Names of leadfield regularization methods _
 zef_bf_names = {'Basic'
-                'Pseudoinverse'};
+    'Pseudoinverse'};
 
 zef.beamformer.L_reg_type.Items = zef_bf_names;
 zef.beamformer.L_reg_type.ItemsData = strsplit(num2str(1:length(zef_bf_names)));
@@ -47,9 +47,9 @@ end
 
 %_ Names of leadfield normalizations _
 zef_bf_names = {'Matrix norm'
-                'Column norm'
-                'Row norm'
-                'None'};
+    'Column norm'
+    'Row norm'
+    'None'};
 
 zef.beamformer.normalize_leadfield.Items = zef_bf_names;
 zef.beamformer.normalize_leadfield.ItemsData = strsplit(num2str(1:length(zef_bf_names)));

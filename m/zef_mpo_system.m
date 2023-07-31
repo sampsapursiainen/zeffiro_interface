@@ -41,67 +41,67 @@ function out_coeff_sys = zef_mpo_system( ...
     arg_interp_locs, ...
     arg_interp_loc_row, ...
     arg_n_of_coeffs ...
-)
+    )
 
-    arguments
-        arg_locs (:,3) double
-        arg_dirs (:,3) double
-        arg_interp_locs (:,3) double
-        arg_interp_loc_row (:,1) double { mustBePositive, mustBeInteger }
-        arg_n_of_coeffs (1,1) double { mustBePositive, mustBeInteger }
-    end
+arguments
+    arg_locs (:,3) double
+    arg_dirs (:,3) double
+    arg_interp_locs (:,3) double
+    arg_interp_loc_row (:,1) double { mustBePositive, mustBeInteger }
+    arg_n_of_coeffs (1,1) double { mustBePositive, mustBeInteger }
+end
 
-    % Distances between interpolation and dipole positions.
+% Distances between interpolation and dipole positions.
 
-    interp_pos = arg_interp_locs(arg_interp_loc_row, :);
+interp_pos = arg_interp_locs(arg_interp_loc_row, :);
 
-    interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
+interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
 
-    pos_diffs = arg_locs - interp_pos;
+pos_diffs = arg_locs - interp_pos;
 
-    dists = zef_L2_norm(pos_diffs, 2);
+dists = zef_L2_norm(pos_diffs, 2);
 
-    % Reference distance for scaling purposes: twice the length of longest
-    % edge, although here distances do not represent edges…
+% Reference distance for scaling purposes: twice the length of longest
+% edge, although here distances do not represent edges…
 
-    scaling_factor = 1 / max(dists) / 2;
+scaling_factor = 1 / max(dists) / 2;
 
-    % Moments whose components will be inserted into the P-matrices.
+% Moments whose components will be inserted into the P-matrices.
 
-    moments = scaling_factor * pos_diffs;
+moments = scaling_factor * pos_diffs;
 
-    moment_x = moments(:,1);
-    moment_y = moments(:,2);
-    moment_z = moments(:,3);
+moment_x = moments(:,1);
+moment_y = moments(:,2);
+moment_z = moments(:,3);
 
-    % Generate position difference matrices.
+% Generate position difference matrices.
 
-    Px = diag(moment_x);
-    Py = diag(moment_y);
-    Pz = diag(moment_z);
+Px = diag(moment_x);
+Py = diag(moment_y);
+Pz = diag(moment_z);
 
-    % Generate the MPO matrix M with with the position difference matrices and
-    % direction matrices.
+% Generate the MPO matrix M with with the position difference matrices and
+% direction matrices.
 
-    M = [
-        arg_dirs' ;
-        arg_dirs' * Px ;
-        arg_dirs' * Py ;
-        arg_dirs' * Pz ;
+M = [
+    arg_dirs' ;
+    arg_dirs' * Px ;
+    arg_dirs' * Py ;
+    arg_dirs' * Pz ;
     ];
 
-    % The vector b, against which M will be inverted, with a Cartesian basis
-    % assumption.
+% The vector b, against which M will be inverted, with a Cartesian basis
+% assumption.
 
-    zero_block = zeros(arg_n_of_coeffs-1,3);
+zero_block = zeros(arg_n_of_coeffs-1,3);
 
-    basis = eye(3);
+basis = eye(3);
 
-    b = [ basis ; zero_block ];
+b = [ basis ; zero_block ];
 
-    % Calculate interpolation coefficients (lsqminnorm is advertised as being
-    % more efficient than pinv).
+% Calculate interpolation coefficients (lsqminnorm is advertised as being
+% more efficient than pinv).
 
-    out_coeff_sys = lsqminnorm(M, b);
+out_coeff_sys = lsqminnorm(M, b);
 
 end

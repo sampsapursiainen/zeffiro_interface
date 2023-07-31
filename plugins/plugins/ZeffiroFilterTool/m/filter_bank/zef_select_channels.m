@@ -11,7 +11,7 @@ function [processed_data] = zef_select_channels(f, select_channels)
 %Conversion between string and numeric data types.
 
 if isstr(select_channels)
-select_channels = str2num(select_channels);
+    select_channels = str2num(select_channels);
 end
 %End of conversion.
 

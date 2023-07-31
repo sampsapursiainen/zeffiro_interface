@@ -19,8 +19,8 @@ for zef_LeadFieldProcessingTool_index=1:zef.LeadFieldProcessingTool.bankSize
 
 end
 
-    zef.LeadFieldProcessingTool.auxData=[];
+zef.LeadFieldProcessingTool.auxData=[];
 
-    zef_LeadfieldProcessingTool_updateTable;
+zef_LeadfieldProcessingTool_updateTable;
 
 clear zef_LeadFieldProcessingTool_index;

@@ -34,6 +34,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
         h_menu_import_reconstruction    matlab.ui.container.Menu
         h_menu_import_current_pattern   matlab.ui.container.Menu
         h_menu_import_resection_points  matlab.ui.container.Menu
+        ImportelectrodesMenu            matlab.ui.container.Menu
         h_menu_edit                     matlab.ui.container.Menu
         h_menu_reset_lead_field         matlab.ui.container.Menu
         h_menu_reset_volume_data        matlab.ui.container.Menu
@@ -86,8 +87,8 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
         h_menu_help                     matlab.ui.container.Menu
         h_menu_documentation            matlab.ui.container.Menu
         h_menu_about                    matlab.ui.container.Menu
-        CheckBox                        matlab.ui.control.CheckBox
         h_menu_logo                     matlab.ui.control.Image
+        CheckBox                        matlab.ui.control.CheckBox
     end
 
     
@@ -122,7 +123,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
 
             % Create h_zeffiro_menu and hide until all components are created
             app.h_zeffiro_menu = uifigure('Visible', 'off');
-            app.h_zeffiro_menu.Colormap = [0 0 0.5625;0 0 0.625;0 0 0.6875;0 0 0.75;0 0 0.8125;0 0 0.875;0 0 0.9375;0 0 1;0 0.0625 1;0 0.125 1;0 0.1875 1;0 0.25 1;0 0.3125 1;0 0.375 1;0 0.4375 1;0 0.5 1;0 0.5625 1;0 0.625 1;0 0.6875 1;0 0.75 1;0 0.8125 1;0 0.875 1;0 0.9375 1;0 1 1;0.0625 1 1;0.125 1 0.9375;0.1875 1 0.875;0.25 1 0.8125;0.3125 1 0.75;0.375 1 0.6875;0.4375 1 0.625;0.5 1 0.5625;0.5625 1 0.5;0.625 1 0.4375;0.6875 1 0.375;0.75 1 0.3125;0.8125 1 0.25;0.875 1 0.1875;0.9375 1 0.125;1 1 0.0625;1 1 0;1 0.9375 0;1 0.875 0;1 0.8125 0;1 0.75 0;1 0.6875 0;1 0.625 0;1 0.5625 0;1 0.5 0;1 0.4375 0;1 0.375 0;1 0.3125 0;1 0.25 0;1 0.1875 0;1 0.125 0;1 0.0625 0;1 0 0;0.9375 0 0;0.875 0 0;0.8125 0 0;0.75 0 0;0.6875 0 0;0.625 0 0;0.5625 0 0];
+            colormap(app.h_zeffiro_menu, 'parula');
             app.h_zeffiro_menu.Position = [42 157 796 386];
             app.h_zeffiro_menu.Name = 'ZEFFIRO Interface: Menu tool';
             app.h_zeffiro_menu.Scrollable = 'on';
@@ -254,6 +255,10 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_import_resection_points
             app.h_menu_import_resection_points = uimenu(app.h_menu_import);
             app.h_menu_import_resection_points.Text = 'Import resection points';
+
+            % Create ImportelectrodesMenu
+            app.ImportelectrodesMenu = uimenu(app.h_menu_import);
+            app.ImportelectrodesMenu.Text = 'Import electrodes';
 
             % Create h_menu_edit
             app.h_menu_edit = uimenu(app.h_zeffiro_menu);
@@ -480,7 +485,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
             app.h_menu_logo.ImageSource = 'zeffiro_logo_compass.png';
 
             % Show the figure after all components are created
-            app.h_zeffiro_menu.Visible = 'off';
+            app.h_zeffiro_menu.Visible = 'on';
         end
     end
 

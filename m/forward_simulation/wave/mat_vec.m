@@ -9,7 +9,7 @@ x = gpuArray(double(x));
 y = R*x;
 
 if (ismember(gpu_extended_memory,[0 2]))
-y = gather(y);
+    y = gather(y);
 end
 
 end

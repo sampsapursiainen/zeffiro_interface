@@ -20,7 +20,7 @@ end
 
 i=1;
 while isfield(tree, strcat(parentHash, '_', num2str(i)))
-i=i+1;
+    i=i+1;
 end
 hash=strcat(parentHash, '_', num2str(i));
 

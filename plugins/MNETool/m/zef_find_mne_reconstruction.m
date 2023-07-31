@@ -6,7 +6,7 @@ end
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
-h = zef_waitbar(0,['MNE Reconstruction.']);
+h = zef_waitbar(0,1,['MNE Reconstruction.']);
 [procFile.s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(procFile.s_ind_1);
 
@@ -46,8 +46,8 @@ info.time_step = eval('zef.mne_time_3');
 info.source_direction_mode = eval('zef.source_direction_mode');
 info.source_directions = eval('zef.source_directions');
 
- [L,n_interp, procFile] = zef_processLeadfields(zef);
- 
+[L,n_interp, procFile] = zef_processLeadfields(zef);
+
 source_count = n_interp;
 if eval('zef.mne_normalize_data')==1;
     normalize_data = 'maximum';
@@ -64,93 +64,93 @@ end
 [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.mne_normalize_data'),balance_spatially);
 
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
-L = gpuArray(L);
+    L = gpuArray(L);
 end
 
 S_mat = std_lhood^2*eye(size(L,1));
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
-S_mat = gpuArray(S_mat);
+    S_mat = gpuArray(S_mat);
 end
 
 if zef.number_of_frames > 1
-z = cell(zef.number_of_frames,1);
+    z = cell(zef.number_of_frames,1);
 else
-zef.number_of_frames = 1;
+    zef.number_of_frames = 1;
 end
 
 [f_data] = zef_getFilteredData(zef);
 
 tic;
 for f_ind = 1 : zef.number_of_frames
-time_val = toc;
-if f_ind > 1;
-date_str = datestr(datevec(now+(zef.number_of_frames/(f_ind-1) - 1)*time_val/86400));
-end;
+    time_val = toc;
+    if f_ind > 1;
+        date_str = datestr(datevec(now+(zef.number_of_frames/(f_ind-1) - 1)*time_val/86400));
+    end;
 
-if ismember(source_direction_mode, [1,2])
-z_aux = zeros(size(L,2),1);
-end
-if source_direction_mode == 3
-z_aux = zeros(3*size(L,2),1);
-end
-z_vec = ones(size(L,2),1);
+    if ismember(source_direction_mode, [1,2])
+        z_aux = zeros(size(L,2),1);
+    end
+    if source_direction_mode == 3
+        z_aux = zeros(3*size(L,2),1);
+    end
+    z_vec = ones(size(L,2),1);
 
-%aux_norm = (sum(L.^2))';
-%aux_norm = aux_norm./max(aux_norm(:));
-%theta = theta0*aux_norm;
-
-
-[f] = zef_getTimeStep(f_data, f_ind, zef);
+    %aux_norm = (sum(L.^2))';
+    %aux_norm = aux_norm./max(aux_norm(:));
+    %theta = theta0*aux_norm;
 
 
-if f_ind == 1
-zef_waitbar(0,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
-end
+    [f] = zef_getTimeStep(f_data, f_ind, zef);
 
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
-f = gpuArray(f);
-end
 
-if f_ind > 1;
-zef_waitbar(f_ind/zef.number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
-else
-zef_waitbar(f_ind/zef.number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
-end;
-m_max = sqrt(size(L,2));
-u = zeros(length(z_vec),1);
-z_vec = zeros(length(z_vec),1);
-if length(theta0)==1
-d_sqrt = sqrt(theta0)*ones(size(z_vec));
-else
-    d_sqrt = sqrt(theta0);
-end
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
-d_sqrt = gpuArray(d_sqrt);
-end
-L_inv = L.*repmat(d_sqrt',size(L,1),1);
-L_inv = d_sqrt.*(L_inv'*(inv(L_inv*L_inv' + S_mat)));
+    if f_ind == 1
+        zef_waitbar(0,1,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
+    end
 
-if isequal(mne_type,2)
-% dSPM
-    aux_vec = sum(L_inv.^2, 2);
-    aux_vec = sqrt(aux_vec);
-    L_inv = L_inv./aux_vec;
+    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+        f = gpuArray(f);
+    end
 
-elseif isequal(mne_type, 3)
-%'sLORETA'
+    if f_ind > 1;
+        zef_waitbar(f_ind,zef.number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '. Ready: ' date_str '.' ]);
+    else
+        zef_waitbar(f_ind,zef.number_of_frames,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.' ]);
+    end;
+    m_max = sqrt(size(L,2));
+    u = zeros(length(z_vec),1);
+    z_vec = zeros(length(z_vec),1);
+    if length(theta0)==1
+        d_sqrt = sqrt(theta0)*ones(size(z_vec));
+    else
+        d_sqrt = sqrt(theta0);
+    end
+    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+        d_sqrt = gpuArray(d_sqrt);
+    end
+    L_inv = L.*repmat(d_sqrt',size(L,1),1);
+    L_inv = d_sqrt.*(L_inv'*(inv(L_inv*L_inv' + S_mat)));
 
-aux_vec = sqrt(sum(L_inv.*L', 2));
-L_inv = L_inv./aux_vec;
+    if isequal(mne_type,2)
+        % dSPM
+        aux_vec = sum(L_inv.^2, 2);
+        aux_vec = sqrt(aux_vec);
+        L_inv = L_inv./aux_vec;
 
-end
+    elseif isequal(mne_type, 3)
+        %'sLORETA'
 
-z_vec = L_inv * f;
+        aux_vec = sqrt(sum(L_inv.*L', 2));
+        L_inv = L_inv./aux_vec;
 
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
-z_vec = gather(z_vec);
-end
+    end
 
-z_inverse{f_ind} = z_vec;
+    z_vec = L_inv * f;
+
+    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+        z_vec = gather(z_vec);
+    end
+
+    z_inverse{f_ind} = z_vec;
 
 end
 

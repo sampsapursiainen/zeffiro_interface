@@ -8,7 +8,7 @@ function [L_tes, S_tes, dof_positions, dof_directions, dof_ind, dof_count] = lea
     electrodes, ...
     p_nearest_neighbour_inds, ...
     varargin ...
-)
+    )
 % 17.6.2020
 % Sentence used:
 %
@@ -96,7 +96,7 @@ else
     else
         sigma_tetrahedra = sigma;
     end
-sigma_prisms = [];
+    sigma_prisms = [];
 end
 clear elements;
 
@@ -214,7 +214,7 @@ A = zef_stiffness_matrix(nodes, tetrahedra, tilavuus, sigma_tetrahedra);
     impedance_inf, ...
     ele_ind, ...
     A ...
-);
+    );
 
 % Sampsa 28.3.2022: zef_massmatrix_2d zef_diagonal_matrix zef_boundary_integral END TODO
 
@@ -232,37 +232,37 @@ end
 
 [R_tes, Aux_mat, A] = zef_transfer_matrix( ...
     zef                                    ...
-,                                          ...
+    ,                                          ...
     A                                      ...
-,                                          ...
+    ,                                          ...
     B                                      ...
-,                                          ...
+    ,                                          ...
     C                                      ...
-,                                          ...
+    ,                                          ...
     N                                      ...
-,                                          ...
+    ,                                          ...
     L                                      ...
-,                                          ...
+    ,                                          ...
     electrode_model                        ...
-,                                          ...
+    ,                                          ...
     permutation                            ...
-,                                          ...
+    ,                                          ...
     precond                                ...
-,                                          ...
+    ,                                          ...
     impedance_vec                          ...
-,                                          ...
+    ,                                          ...
     impedance_inf                          ...
-,                                          ...
+    ,                                          ...
     tol_val                                ...
-,                                          ...
+    ,                                          ...
     m_max                                  ...
-,                                          ...
+    ,                                          ...
     Schur_expression                       ...
-);
+    );
 
 % Initialize progress bar
 
-h = zef_waitbar(0,'Form L_tes from transfer matrix R_tes.');
+h = zef_waitbar(0,1,'Form L_tes from transfer matrix R_tes.');
 waitbar_ind = 0;
 
 % Modify transfer matrix R_tes for lead field L_tes calculation
@@ -274,56 +274,56 @@ if not(impedance_inf == 0)
 end
 
 clear S r p x aux_vec inv_M_r a b;
-% zef_waitbar(0,h,'Interpolation.');
+% zef_waitbar(0,1,h,'Interpolation.');
 
 %if isequal(electrode_model,'CEM')
-    Aux_mat = inv(Aux_mat);
-    R_tes = R_tes*Aux_mat;
+Aux_mat = inv(Aux_mat);
+R_tes = R_tes*Aux_mat;
 
-    % S_tes
-    J = eye(size(B'*R_tes));
-    S_tes = ( (eye(L)-(1/L)*ones(L,L)) ) * (inv(C) * (J+(B'*R_tes))) * J;
+% S_tes
+J = eye(size(B'*R_tes));
+S_tes = ( (eye(L)-(1/L)*ones(L,L)) ) * (inv(C) * (J+(B'*R_tes))) * J;
 
-    if isfield(zef,'redo_eit_dec')
-        if eval('zef.redo_eit_dec') == 1
-            [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
-        else
-            dof_ind   = eval('zef.dof_ind');
-            dof_count = eval('zef.dof_count');
-            dof_positions = eval('zef.source_positions');
-        end
-    else
+if isfield(zef,'redo_eit_dec')
+    if eval('zef.redo_eit_dec') == 1
         [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+    else
+        dof_ind   = eval('zef.dof_ind');
+        dof_count = eval('zef.dof_count');
+        dof_positions = eval('zef.source_positions');
     end
+else
+    [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+end
 
-    R_tes_1 = -Grad_1*R_tes;
-    R_tes_2 = -Grad_2*R_tes;
-    R_tes_3 = -Grad_3*R_tes;
+R_tes_1 = -Grad_1*R_tes;
+R_tes_2 = -Grad_2*R_tes;
+R_tes_3 = -Grad_3*R_tes;
 
-    clear R_tes;
+clear R_tes;
 
-    K3 = length(dof_count);
-    L_tes = zeros(3*K3,L);
+K3 = length(dof_count);
+L_tes = zeros(3*K3,L);
 
 % 25.06.2020
-    for i = 1 : K
-        L_tes(3*(dof_ind(i)-1)+1,:) =  L_tes(3*(dof_ind(i)-1)+1,:) + R_tes_1(i,:);
-        L_tes(3*(dof_ind(i)-1)+2,:) =  L_tes(3*(dof_ind(i)-1)+2,:) + R_tes_2(i,:);
-        L_tes(3*(dof_ind(i)-1)+3,:) =  L_tes(3*(dof_ind(i)-1)+3,:) + R_tes_3(i,:);
-    end
+for i = 1 : K
+    L_tes(3*(dof_ind(i)-1)+1,:) =  L_tes(3*(dof_ind(i)-1)+1,:) + R_tes_1(i,:);
+    L_tes(3*(dof_ind(i)-1)+2,:) =  L_tes(3*(dof_ind(i)-1)+2,:) + R_tes_2(i,:);
+    L_tes(3*(dof_ind(i)-1)+3,:) =  L_tes(3*(dof_ind(i)-1)+3,:) + R_tes_3(i,:);
+end
 
-    for i = 1 : K3
-        L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/dof_count(i);
-        L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/dof_count(i);
-        L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/dof_count(i);
-    end
+for i = 1 : K3
+    L_tes(3*(i-1)+1,:) = L_tes(3*(i-1)+1,:)/dof_count(i);
+    L_tes(3*(i-1)+2,:) = L_tes(3*(i-1)+2,:)/dof_count(i);
+    L_tes(3*(i-1)+3,:) = L_tes(3*(i-1)+3,:)/dof_count(i);
+end
 
-    clear R_tes_1 R_tes_2 R_tes_3;
+clear R_tes_1 R_tes_2 R_tes_3;
 
-    dof_directions = ones(size(dof_positions));
+dof_directions = ones(size(dof_positions));
 
-    L_tes = L_tes';
-    S_tes = S_tes';
+L_tes = L_tes';
+S_tes = S_tes';
 
-zef_waitbar(1,h);
+zef_waitbar(1,1,h);
 close(h);

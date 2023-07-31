@@ -2,22 +2,22 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if not(isfield(zef,'bf_sampling_frequency'))
-zef.bf_sampling_frequency = zef.inv_sampling_frequency;
+    zef.bf_sampling_frequency = zef.inv_sampling_frequency;
 end
 
 if not(isfield(zef,'bf_low_cut_frequency'))
-zef.bf_low_cut_frequency = zef.inv_low_cut_frequency;
+    zef.bf_low_cut_frequency = zef.inv_low_cut_frequency;
 end
 
-if not(isfield(zef,'bf_high_cut_frequency')) 
-zef.bf_high_cut_frequency = zef.inv_high_cut_frequency;
+if not(isfield(zef,'bf_high_cut_frequency'))
+    zef.bf_high_cut_frequency = zef.inv_high_cut_frequency;
 end
 
-if not(isfield(zef,'bf_time_1')) 
+if not(isfield(zef,'bf_time_1'))
     zef.bf_time_1 = zef.inv_time_1;
 end
 
-if not(isfield(zef,'bf_time_2')) 
+if not(isfield(zef,'bf_time_2'))
     zef.bf_time_2 = zef.inv_time_2;
 end
 

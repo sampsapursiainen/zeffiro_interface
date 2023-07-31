@@ -4,19 +4,19 @@
 %Script for plotting dipoles that SESAME estimates.
 
 if size(zef.SESAME_time_serie,2) == 1
-d_est = zef.SESAME_time_serie{1}.estimated_dipoles;
-zef.inv_rec_source = repmat(zef.inv_rec_source(1,:),length(d_est),1);
-zef.inv_rec_source(:,1:3) = zef.SESAME_time_serie{1}.dipole_positions;
+    d_est = zef.SESAME_time_serie{1}.estimated_dipoles;
+    zef.inv_rec_source = repmat(zef.inv_rec_source(1,:),length(d_est),1);
+    zef.inv_rec_source(:,1:3) = zef.SESAME_time_serie{1}.dipole_positions;
 
-for d_ind = 1 : length(d_est)
-zef.inv_rec_source(d_ind,4:6) = zef.SESAME_time_serie{1}.QV_estimated(1+3*(d_ind-1):3*d_ind)/zef.SESAME_time_serie{1}.Q_estimated(d_ind);
-end
+    for d_ind = 1 : length(d_est)
+        zef.inv_rec_source(d_ind,4:6) = zef.SESAME_time_serie{1}.QV_estimated(1+3*(d_ind-1):3*d_ind)/zef.SESAME_time_serie{1}.Q_estimated(d_ind);
+    end
 
-zef.inv_rec_source(:,7)=zef.SESAME_time_serie{1}.Q_estimated;
+    zef.inv_rec_source(:,7)=zef.SESAME_time_serie{1}.Q_estimated;
 
-zef.h_rec_source = zef_plot_source(2);
+    zef.h_rec_source = zef_plot_source(2);
 
-clear d_est d_ind
+    clear d_est d_ind
 else
     h_axes_text = findobj(evalin('base','zef.h_zeffiro'),'tag','image_details');
     zef_boolean = 1;
@@ -29,9 +29,9 @@ else
         if size(zef.SESAME_time_serie{zef_j}.dipole_positions,1)>0
             zef.inv_rec_source(:,1:3) = zef.SESAME_time_serie{zef_j}.dipole_positions;
             for d_ind = 1 : length(d_est)
-            zef.inv_rec_source(d_ind,4:6) = mean(zef.SESAME_time_serie{zef_j}.QV_estimated(1+3*(d_ind-1):3*d_ind,:),2);
-            zef.inv_rec_source(d_ind,7) = norm(zef.inv_rec_source(d_ind,4:6));
-            zef.inv_rec_source(d_ind,4:6) = zef.inv_rec_source(d_ind,4:6)./zef.inv_rec_source(d_ind,7);
+                zef.inv_rec_source(d_ind,4:6) = mean(zef.SESAME_time_serie{zef_j}.QV_estimated(1+3*(d_ind-1):3*d_ind,:),2);
+                zef.inv_rec_source(d_ind,7) = norm(zef.inv_rec_source(d_ind,4:6));
+                zef.inv_rec_source(d_ind,4:6) = zef.inv_rec_source(d_ind,4:6)./zef.inv_rec_source(d_ind,7);
             end
             %zef.inv_rec_source(:,7)=mean(zef.SESAME_time_serie{zef_j}.Q_estimated,2);
 

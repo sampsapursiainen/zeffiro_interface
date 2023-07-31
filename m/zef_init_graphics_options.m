@@ -1,9 +1,9 @@
 if not(isfield(zef,'streamline_draw'))
-zef.streamline_draw = 0;
+    zef.streamline_draw = 0;
 end
 
 if not(isfield(zef,'streamline_linestyle'));
-zef.streamline_linestyle = '-';
+    zef.streamline_linestyle = '-';
 end
 
 if not(isfield(zef,'cone_alpha'));

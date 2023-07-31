@@ -18,7 +18,7 @@ for i=1:length(newHash)
 
     end
     if ~duplicate
-            workingHashes{end+1}=newHash{i};
+        workingHashes{end+1}=newHash{i};
     end
 
 end

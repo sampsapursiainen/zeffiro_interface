@@ -1,7 +1,7 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function [z,reconstruction_information] = exp_em_iteration(void)
-h = zef_waitbar(0,['EM MAP iteration.']);
+h = zef_waitbar(0,1,['EM MAP iteration.']);
 
 hyper_type = evalin('base','zef.exp_em_hyper_type');
 n_ias_map_iter = evalin('base','zef.inv_n_map_iterations');
@@ -72,17 +72,17 @@ if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
     L = gpuArray(L);
 end
 
-    z = cell(number_of_frames,1);
+z = cell(number_of_frames,1);
 f_data = zef_getFilteredData;
 n = size(L,2);
 
 tic;
 for f_ind = 1 : number_of_frames
 
-        time_val = toc;
+    time_val = toc;
     if f_ind > 1
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
-        zef_waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+        zef_waitbar(f_ind, number_of_frames,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
 
     end
 
@@ -94,45 +94,45 @@ for f_ind = 1 : number_of_frames
         f = gpuArray(f);
     end
 
-% inversion starts here
-if f_ind == 1
-zef_waitbar(0,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
-end
+    % inversion starts here
+    if f_ind == 1
+        zef_waitbar(0,1,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
+    end
 
-%__ Initialize parameters __
-z_vec = zeros(n,1);
-gamma =zeros(length(z_vec),1)+(beta+1/q)./theta0;
+    %__ Initialize parameters __
+    z_vec = zeros(n,1);
+    gamma =zeros(length(z_vec),1)+(beta+1/q)./theta0;
 
-%__ Iteration Loops __
-%m_max = sqrt(size(L,2));
-%u = zeros(length(z_vec),1);
-%z_vec = zeros(length(z_vec),1);
-%d_sqrt = sqrt(theta);
-%if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
-%d_sqrt = gpuArray(d_sqrt);
-%end
-%__Set L and z_vec to their final form__
-%L = L_aux.*repmat(d_sqrt',size(L,1),1);
+    %__ Iteration Loops __
+    %m_max = sqrt(size(L,2));
+    %u = zeros(length(z_vec),1);
+    %z_vec = zeros(length(z_vec),1);
+    %d_sqrt = sqrt(theta);
+    %if evalin('base','zef.use_gpu') == 1 & evalin('base','zef.gpu_count') > 0
+    %d_sqrt = gpuArray(d_sqrt);
+    %end
+    %__Set L and z_vec to their final form__
+    %L = L_aux.*repmat(d_sqrt',size(L,1),1);
 
-%z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
+    %z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
-%__Update theta__
+    %__Update theta__
     if q==2
         for i = 1 : n_ias_map_iter
-        %_Draw waitbar_
-        if f_ind > 1;
-        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        zef_waitbar(i/n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
-        end;
-        w = 1./(gamma*std_lhood^2*max(f)^2);
+            %_Draw waitbar_
+            if f_ind > 1;
+                zef_waitbar(i,n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            else
+                zef_waitbar(i,n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            end;
+            w = 1./(gamma*std_lhood^2*max(f)^2);
 
-        z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
-        %_ gamma update _
+            z_vec = w.*(L'*((L*(w.*L') + eye(size(L,1)))\f));
+            %_ gamma update _
 
-        %--------------------------------------------------------------------------
-        gamma = (beta+1/q)./(theta0+0.5*abs(z_vec).^q);
-        %--------------------------------------------------------------------------
+            %--------------------------------------------------------------------------
+            gamma = (beta+1/q)./(theta0+0.5*abs(z_vec).^q);
+            %--------------------------------------------------------------------------
         end
     else
         %gamma = 0.5*max((At*b));
@@ -141,25 +141,25 @@ gamma =zeros(length(z_vec),1)+(beta+1/q)./theta0;
         x_old = zeros(n,1)+1e-10;%it seems sensitive to initialization!
 
         for i = 1 : n_ias_map_iter
-        %_Draw waitbar_
-        if f_ind > 1;
-        zef_waitbar(i/n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
-        else
-        zef_waitbar(i/n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
-        end;
-        %focal activity
-        z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);
+            %_Draw waitbar_
+            if f_ind > 1;
+                zef_waitbar(i,n_ias_map_iter,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
+            else
+                zef_waitbar(i,n_ias_map_iter,h,['EM MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.' ]);
+            end;
+            %focal activity
+            z_vec = L1_optimization(L,std_lhood,f,gamma,x_old,n_L1_iter);
 
-        gamma = (beta+1)./(theta0+0.5*abs(z_vec));
+            gamma = (beta+1)./(theta0+0.5*abs(z_vec));
         end
     end
 
-%end;
-if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
-z_vec = gather(z_vec);
-end
+    %end;
+    if evalin('base','zef.use_gpu') == 1 && evalin('base','zef.gpu_count') > 0
+        z_vec = gather(z_vec);
+    end
 
-z{f_ind} = z_vec;
+    z{f_ind} = z_vec;
 end;
 
 z = zef_postProcessInverse(z, procFile);

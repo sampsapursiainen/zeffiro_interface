@@ -24,7 +24,7 @@ A = 1/sigma*A;
 b = 1/sigma*y;
 reg = sqrt(0.5*pi/m)*norm(A,'fro');
 
- for iter = 1 : maxiter
+for iter = 1 : maxiter
     if estimation_type == 3
         P_sqrt = abs(x)./gamma;   %Fixed-point/FOCUSS
         L_aux = A.*P_sqrt';
@@ -33,7 +33,7 @@ reg = sqrt(0.5*pi/m)*norm(A,'fro');
         T_scale = 1./sqrt(R)';
         D = spdiags(abs(x)./gamma,0,size(A,2),size(A,2));
         ADA_T = A*(D*A');
-        
+
         x = T_scale.*(D*(A'*((ADA_T + reg*trace(D)*eye(size(ADA_T)))\b)));
     else
         D = spdiags(abs(x)./gamma,0,size(A,2),size(A,2));

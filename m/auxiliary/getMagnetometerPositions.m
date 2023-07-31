@@ -28,7 +28,7 @@ if nargin==3
     OptionalSaveToFile0or1=1;
 end
 
-    tra=MEGdata.grad.tra;
+tra=MEGdata.grad.tra;
 
 posOri=horzcat(MEGdata.grad.coilpos, MEGdata.grad.coilori);
 
@@ -37,10 +37,10 @@ gradiometerLabel=MEGdata.grad.label;
 magnetometerLabel=cell(587,1);
 
 for i=1:271
-%for the regular gradiometers, it is grad(i)=mag(i)+mag(i+271)
+    %for the regular gradiometers, it is grad(i)=mag(i)+mag(i+271)
 
-magnetometerLabel{i}=strcat(gradiometerLabel{i}, '_mag1');
-magnetometerLabel{i+271}=strcat(gradiometerLabel{i}, '_mag2');
+    magnetometerLabel{i}=strcat(gradiometerLabel{i}, '_mag1');
+    magnetometerLabel{i+271}=strcat(gradiometerLabel{i}, '_mag2');
 end
 
 i=543;
@@ -61,9 +61,9 @@ for j=272:298
 
 end
 
-    %some coils are only used for higher order gradiometers or other things
-    %we will ignore these coils later, so we cut them out and do not
-    %calculate leadfields for them
+%some coils are only used for higher order gradiometers or other things
+%we will ignore these coils later, so we cut them out and do not
+%calculate leadfields for them
 
 index=find(tra(1,:));
 

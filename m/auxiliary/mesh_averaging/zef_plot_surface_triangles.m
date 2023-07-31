@@ -19,7 +19,7 @@ surface_nodes_wg = [surface_nodes_w; surface_nodes_g];
 for i = 1 : length(distance_vec)
 
     i
-d  =  zef_distance_to_mesh(zef.nodes(nodes_ind_aux(i), surface_nodes_wg, surface_triangles_wg)
-distance_vec(i) = d;
+    d  =  zef_distance_to_mesh(zef.nodes(nodes_ind_aux(i), surface_nodes_wg, surface_triangles_wg)
+    distance_vec(i) = d;
 
 end

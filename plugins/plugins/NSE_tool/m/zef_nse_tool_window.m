@@ -49,7 +49,7 @@ zef.nse_field.h_sphere_x.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_sphere_y = zef_data.h_sphere_y;
 zef.nse_field.h_sphere_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_sphere_z = zef_data.h_sphere_z;
-zef.nse_field.h_sphere_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_sphere_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
 zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -58,7 +58,7 @@ zef.nse_field.h_time_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_time_step_length = zef_data.h_time_step_length;
 zef.nse_field.h_time_step_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_pulse_amplitude = zef_data.h_pulse_amplitude;
-zef.nse_field.h_pulse_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_pulse_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_cycle_length = zef_data.h_cycle_length;
 zef.nse_field.h_cycle_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_p_wave_start = zef_data.h_p_wave_start;
@@ -74,7 +74,7 @@ zef.nse_field.h_t_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);
 zef.nse_field.h_d_wave_length = zef_data.h_d_wave_length;
 zef.nse_field.h_d_wave_length.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_p_wave_weight = zef_data.h_p_wave_weight;
-zef.nse_field.h_p_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);'; 
+zef.nse_field.h_p_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_t_wave_weight = zef_data.h_t_wave_weight;
 zef.nse_field.h_t_wave_weight.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_d_wave_weight = zef_data.h_d_wave_weight;
@@ -246,7 +246,7 @@ zef.nse_field.h_plot_pulse.ButtonPushedFcn = '';
 
 zef.nse_field.h_artery_domain_ind.Items = cell(0);
 for i = 1 : length(zef.compartment_tags)
-zef.nse_field.h_artery_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
+    zef.nse_field.h_artery_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
 end
 zef.nse_field.h_artery_domain_ind.ItemsData = [1:length(zef.nse_field.h_artery_domain_ind.Items)];
 zef.nse_field.h_artery_domain_ind.Multiselect = 'on';
@@ -254,7 +254,7 @@ zef.nse_field.h_artery_domain_ind.Value = zef.nse_field.artery_domain_ind;
 
 zef.nse_field.h_capillary_domain_ind.Items = cell(0);
 for i = 1 : length(zef.compartment_tags)
-zef.nse_field.h_capillary_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
+    zef.nse_field.h_capillary_domain_ind.Items{i} = eval(['zef.' zef.compartment_tags{i} '_name']);
 end
 zef.nse_field.h_capillary_domain_ind.ItemsData = [1:length(zef.nse_field.h_capillary_domain_ind.Items)];
 zef.nse_field.h_capillary_domain_ind.Multiselect = 'on';

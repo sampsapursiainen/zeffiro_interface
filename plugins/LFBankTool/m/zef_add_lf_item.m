@@ -2,7 +2,7 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 if not(isempty(zef.s_points))
-zef_process_meshes;
+    zef_process_meshes;
 end
 
 zef_i = length(zef.lf_bank_storage)+1;

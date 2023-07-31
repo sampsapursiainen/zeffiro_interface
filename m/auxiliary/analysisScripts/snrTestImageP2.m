@@ -25,11 +25,11 @@ for mod=[1,2,3] %[1,2, 3]
         for p=1:16
             for s=1:10
 
-               % if mod~=4
+                % if mod~=4
 
                 zef.dataBank.hash=strcat('node_', num2str(mod),'_3_', num2str(index));
                 %else
-                 %   zef.dataBank.hash=strcat('node_', num2str(mod),'_3_', num2str(index));
+                %   zef.dataBank.hash=strcat('node_', num2str(mod),'_3_', num2str(index));
                 %end
 
                 %zef.dataBank.loadParents=true;
@@ -64,7 +64,7 @@ for mod=[1,2,3] %[1,2, 3]
         subplot(3,3,pInd)
         pInd=pInd+1;
         imagesc(distances');
-              xticks(1:length(psnr));
+        xticks(1:length(psnr));
         yticks(1:length(snr))
         xticklabels(psnr);
         xlabel('psnr');

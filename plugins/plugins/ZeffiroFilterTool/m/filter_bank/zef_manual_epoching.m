@@ -13,16 +13,16 @@ function [processed_data] = zef_manual_epoching(f, epoch_points, start_time, end
 
 %Conversion between string and numeric data types.
 if isstr(epoch_points)
-epoch_points = str2num(epoch_points);
+    epoch_points = str2num(epoch_points);
 end
 if isstr(start_time)
-start_time = str2num(start_time);
+    start_time = str2num(start_time);
 end
 if isstr(end_time)
-end_time = str2num(end_time);
+    end_time = str2num(end_time);
 end
 if isstr(sampling_frequency)
-sampling_frequency = str2num(sampling_frequency);
+    sampling_frequency = str2num(sampling_frequency);
 end
 %End of conversion.
 

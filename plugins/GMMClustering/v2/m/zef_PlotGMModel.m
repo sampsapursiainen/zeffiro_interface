@@ -100,185 +100,185 @@ evalin('base','zef_layer_transparency_temp=zef.layer_transparency; zef.layer_tra
 evalin('base','zef_brain_transparency_temp=zef.brain_transparency; zef.brain_transparency=str2num(zef.GMM.parameters.Values{10});')
 %If there is no time serie:
 if ~iscell(GMModel)
-max_iter = min(size(GMModel.mu,1),ellip_num);
-if strcmp(comp_ord,'1')
-    order = 1:size(GMModel.mu,1);
-elseif strcmp(comp_ord,'2')
-    Amp = sum(GMMdipoles.^2,2);
-    [~,order] = sort(Amp,'descend');
-elseif strcmp(comp_ord,'3')
-    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
-    max_iter = min(length(order),max_iter);
-end
+    max_iter = min(size(GMModel.mu,1),ellip_num);
+    if strcmp(comp_ord,'1')
+        order = 1:size(GMModel.mu,1);
+    elseif strcmp(comp_ord,'2')
+        Amp = sum(GMMdipoles.^2,2);
+        [~,order] = sort(Amp,'descend');
+    elseif strcmp(comp_ord,'3')
+        order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel.mu,1))));
+        max_iter = min(length(order),max_iter);
+    end
 
-evalin('base','zef_GMM_subs_time_vars(''in''); zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMM.parameters.Values{17}; zef.frame_stop=zef.GMM.parameters.Values{18};');
-evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
-hold(h,'on')
-if strcmp(plot_ellipsoids,'1')
-if ~strcmp(covtype,'1')
-    principal_axes = eye(3);
-end
-for k = 1:max_iter
-    %Determine principal and semi axes of the ellipsoid:
-    if strcmp(identcov,'1')
-        if strcmp(covtype,'1')
-            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3,order(k))));
-            semi_axes = transpose(r./sqrt(diag(semi_axes)));
-        else
-            semi_axes = r*sqrt(GMModel.Sigma(1,1:3,order(k)));
+    evalin('base','zef_GMM_subs_time_vars(''in''); zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop; zef.frame_start=zef.GMM.parameters.Values{17}; zef.frame_stop=zef.GMM.parameters.Values{18};');
+    evalin('base','zef_visualize_surfaces; zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear zef_frame_start_temp zef_frame_stop_temp;');
+    hold(h,'on')
+    if strcmp(plot_ellipsoids,'1')
+        if ~strcmp(covtype,'1')
+            principal_axes = eye(3);
         end
-    else
-        if strcmp(covtype,'1')
-            [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3)));
-            semi_axes = transpose(r./sqrt(diag(semi_axes)));
-        else
-            semi_axes = r*sqrt(GMModel.Sigma(1:3));
+        for k = 1:max_iter
+            %Determine principal and semi axes of the ellipsoid:
+            if strcmp(identcov,'1')
+                if strcmp(covtype,'1')
+                    [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3,order(k))));
+                    semi_axes = transpose(r./sqrt(diag(semi_axes)));
+                else
+                    semi_axes = r*sqrt(GMModel.Sigma(1,1:3,order(k)));
+                end
+            else
+                if strcmp(covtype,'1')
+                    [principal_axes,semi_axes]=eig(inv(GMModel.Sigma(1:3,1:3)));
+                    semi_axes = transpose(r./sqrt(diag(semi_axes)));
+                else
+                    semi_axes = r*sqrt(GMModel.Sigma(1:3));
+                end
+            end
+            %form ellipsoid mesh:
+            [X,Y,Z]=ellipsoid(GMModel.mu(order(k),1),GMModel.mu(order(k),2),GMModel.mu(order(k),3),semi_axes(1),semi_axes(2),semi_axes(3),100);
+            s(k) = surf(h,X,Y,Z);
+            set(s(k),'EdgeColor','none');
+            if iscell(colors)
+                set(s(k),'FaceColor',colors{k});
+            else
+                set(s(k),'FaceColor',colors(k,:));
+            end
+            set(s(k),'FaceAlpha',ellip_trans);
+            %Rotate standard coordinated ellipsoid to the direction of principal
+            %axes (rotation command is based on right-hand-rule):
+            CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
+            ang = real(acosd(CosTheta));
+            rot_axis = cross([1;0;0],principal_axes(:,1));
+            if ang ~= 0
+                rotate(s(k),rot_axis,ang,GMModel.mu(order(k),1:3));
+            end
+            %transform (0,1,0) vector to the new direction via Rodrigues' formula:
+            e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
+
+            CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
+            ang = real(acosd(CosTheta));
+            if ang ~= 0
+                rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel.mu(order(k),1:3));
+            end
+
         end
     end
-    %form ellipsoid mesh:
-    [X,Y,Z]=ellipsoid(GMModel.mu(order(k),1),GMModel.mu(order(k),2),GMModel.mu(order(k),3),semi_axes(1),semi_axes(2),semi_axes(3),100);
-    s(k) = surf(h,X,Y,Z);
-    set(s(k),'EdgeColor','none');
-    if iscell(colors)
-        set(s(k),'FaceColor',colors{k});
+
+    if ~strcmp(comp_ord,'3')
+        dip_ind = order(1:min(dip_num,size(GMModel.mu,1)));
     else
-        set(s(k),'FaceColor',colors(k,:));
+        dip_ind = intersect(dip_components,1:size(GMModel.mu,1));
     end
-    set(s(k),'FaceAlpha',ellip_trans);
-    %Rotate standard coordinated ellipsoid to the direction of principal
-    %axes (rotation command is based on right-hand-rule):
-    CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
-    ang = real(acosd(CosTheta));
-    rot_axis = cross([1;0;0],principal_axes(:,1));
-    if ang ~= 0
-    rotate(s(k),rot_axis,ang,GMModel.mu(order(k),1:3));
+    %plot centroid marks:
+    plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+    %set direction vectors (original can be non-unit length)
+    %direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
+    if estim_param == 1
+        direct = s_length*[cos(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,4)),sin(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,1)),cos(GMModel.mu(dip_ind,4))];
+    elseif estim_param == 2
+        direct = zeros(length(dip_ind),3);
     end
-    %transform (0,1,0) vector to the new direction via Rodrigues' formula:
-    e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
+    quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
+    hold(h,'off')%set old time parameters back to their places:
+    evalin('base','zef_GMM_subs_time_vars(''out'')');
 
-    CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
-    ang = real(acosd(CosTheta));
-    if ang ~= 0
-    rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel.mu(order(k),1:3));
-    end
-
-end
-end
-
-if ~strcmp(comp_ord,'3')
-    dip_ind = order(1:min(dip_num,size(GMModel.mu,1)));
-else
-    dip_ind = intersect(dip_components,1:size(GMModel.mu,1));
-end
-%plot centroid marks:
-plot3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
-%set direction vectors (original can be non-unit length)
-%direct = s_length*GMModel.mu(dip_ind,4:6)./sqrt(sum(GMModel.mu(dip_ind,4:6).^2,2));
-if estim_param == 1
-direct = s_length*[cos(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,4)),sin(GMModel.mu(dip_ind,5)).*sin(GMModel.mu(dip_ind,1)),cos(GMModel.mu(dip_ind,4))];
-elseif estim_param == 2
-    direct = zeros(length(dip_ind),3);
-end
-quiver3(h,GMModel.mu(dip_ind,1),GMModel.mu(dip_ind,2),GMModel.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'), 'linewidth',m_width,'MarkerSize',m_size);
-hold(h,'off')%set old time parameters back to their places:
-evalin('base','zef_GMM_subs_time_vars(''out'')');
-
-%If time serie exists:
+    %If time serie exists:
 else
     evalin('base','zef_GMM_subs_time_vars(''in''); zef_frame_start_temp=zef.frame_start; zef_frame_stop_temp=zef.frame_stop;');
     if  length(GMModel) < stop_t
         stop_t = length(GMModel);
     end
 
-for t = start_t:stop_t
-    if isempty(GMModel{t})
-        error(['There is no Gaussian mixature model for the frame ',num2str(t),'.'])
-    end
-max_iter = min(size(GMModel{t}.mu,1),ellip_num);
-if strcmp(comp_ord,'1')
-    order = 1:size(GMModel{t}.mu,1);
-elseif strcmp(comp_ord,'2')
-    Amp = sum(GMMdipoles{t}.^2,2);
-    [~,order] = sort(Amp,'descend');
-elseif strcmp(comp_ord,'3')
-    order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
-    max_iter = min(length(order),max_iter);
-end
-
-%set surface visualization frames to go along this for loop:
-assignin('base','zef_t',t);
-evalin('base','zef.frame_start=zef_t; zef.frame_stop=zef_t;');
-evalin('base','zef_visualize_surfaces;');
-hold(h,'on')
-if strcmp(plot_ellipsoids,'1')
-if strcmp(covtype,'1')
-    principal_axes = eye(3);
-end
-for k = 1:max_iter
-    %Determine principal and semi axes of the ellipsoid:
-    if strcmp(identcov,'1')
-        if strcmp(covtype,'1')
-            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3,order(k))));
-            semi_axes = transpose(r./sqrt(diag(semi_axes)));
-        else
-            semi_axes = r*sqrt(GMModel{t}.Sigma(1,1:3,order(k)));
+    for t = start_t:stop_t
+        if isempty(GMModel{t})
+            error(['There is no Gaussian mixature model for the frame ',num2str(t),'.'])
         end
-    else
-        if strcmp(covtype,'1')
-            [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3)));
-            semi_axes = transpose(r./sqrt(diag(semi_axes)));
-        else
-            semi_axes = r*sqrt(GMModel{t}.Sigma(1:3));
+        max_iter = min(size(GMModel{t}.mu,1),ellip_num);
+        if strcmp(comp_ord,'1')
+            order = 1:size(GMModel{t}.mu,1);
+        elseif strcmp(comp_ord,'2')
+            Amp = sum(GMMdipoles{t}.^2,2);
+            [~,order] = sort(Amp,'descend');
+        elseif strcmp(comp_ord,'3')
+            order = ellip_components(ismember(ellip_components,intersect(ellip_components,1:size(GMModel{t}.mu,1))));
+            max_iter = min(length(order),max_iter);
         end
-    end
-    %form ellipsoid mesh:
-    [X,Y,Z]=ellipsoid(GMModel{t}.mu(order(k),1),GMModel{t}.mu(order(k),2),GMModel{t}.mu(order(k),3),semi_axes(1),semi_axes(2),semi_axes(3),100);
-    s(k) = surf(h,X,Y,Z);
-    set(s(k),'EdgeColor','none');
-    if iscell(colors)
-        set(s(k),'FaceColor',colors{k});
-    else
-        set(s(k),'FaceColor',colors(k,:));
-    end
-    set(s(k),'FaceAlpha',ellip_trans);
-    %Rotate standard coordinated ellipsoid to the direction of principal
-    %axes (rotation command is based on right-hand-rule):
-    CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
-    ang = real(acosd(CosTheta));
-    rot_axis = cross([1;0;0],principal_axes(:,1));
-    if ang ~= 0
-    rotate(s(k),rot_axis,ang,GMModel{t}.mu(order(k),1:3));
-    end
-    %transform (0,1,0) vector to the new direction via Rodrigues' formula:
-    e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
 
-    CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
-    ang = real(acosd(CosTheta));
-    if ang ~= 0
-    rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel{t}.mu(order(k),1:3));
-    end
-end
-end
+        %set surface visualization frames to go along this for loop:
+        assignin('base','zef_t',t);
+        evalin('base','zef.frame_start=zef_t; zef.frame_stop=zef_t;');
+        evalin('base','zef_visualize_surfaces;');
+        hold(h,'on')
+        if strcmp(plot_ellipsoids,'1')
+            if strcmp(covtype,'1')
+                principal_axes = eye(3);
+            end
+            for k = 1:max_iter
+                %Determine principal and semi axes of the ellipsoid:
+                if strcmp(identcov,'1')
+                    if strcmp(covtype,'1')
+                        [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3,order(k))));
+                        semi_axes = transpose(r./sqrt(diag(semi_axes)));
+                    else
+                        semi_axes = r*sqrt(GMModel{t}.Sigma(1,1:3,order(k)));
+                    end
+                else
+                    if strcmp(covtype,'1')
+                        [principal_axes,semi_axes]=eig(inv(GMModel{t}.Sigma(1:3,1:3)));
+                        semi_axes = transpose(r./sqrt(diag(semi_axes)));
+                    else
+                        semi_axes = r*sqrt(GMModel{t}.Sigma(1:3));
+                    end
+                end
+                %form ellipsoid mesh:
+                [X,Y,Z]=ellipsoid(GMModel{t}.mu(order(k),1),GMModel{t}.mu(order(k),2),GMModel{t}.mu(order(k),3),semi_axes(1),semi_axes(2),semi_axes(3),100);
+                s(k) = surf(h,X,Y,Z);
+                set(s(k),'EdgeColor','none');
+                if iscell(colors)
+                    set(s(k),'FaceColor',colors{k});
+                else
+                    set(s(k),'FaceColor',colors(k,:));
+                end
+                set(s(k),'FaceAlpha',ellip_trans);
+                %Rotate standard coordinated ellipsoid to the direction of principal
+                %axes (rotation command is based on right-hand-rule):
+                CosTheta = max(min(dot([1;0;0],principal_axes(:,1))/(norm(principal_axes(:,1))),1),-1);
+                ang = real(acosd(CosTheta));
+                rot_axis = cross([1;0;0],principal_axes(:,1));
+                if ang ~= 0
+                    rotate(s(k),rot_axis,ang,GMModel{t}.mu(order(k),1:3));
+                end
+                %transform (0,1,0) vector to the new direction via Rodrigues' formula:
+                e2_vec = [0;1;0]*cosd(ang)+cross(rot_axis,[0;1;0])*sind(ang)+rot_axis*dot(rot_axis,[0;1;0])*(1-cosd(ang));
 
-if ~strcmp(comp_ord,'3')
-    dip_ind = order(1:min(dip_num,length(order)));
-else
-    dip_ind = intersect(dip_components,1:size(GMModel{t}.mu,1));
-end
-%plot centroid marks:
-plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
-%set direction vectors (original can be non-unit length)
-if estim_param == 1
-direct = s_length*[cos(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),sin(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),cos(GMModel{t}.mu(dip_ind,4))];
-elseif estim_param == 2
-    direct = zeros(length(dip_ind),3);
-end
-quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
-hold(h,'off')
-pause(1.5)
-end
-%set old frame values and time parameters back to their places:
-evalin('base','zef_GMM_subs_time_vars(''out''); clear(''zef_t''); zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear(''zef_frame_start_temp'',''zef_frame_stop_temp'');');
+                CosTheta = max(min(dot(e2_vec,principal_axes(:,2))/(norm(principal_axes(:,2))),1),-1);
+                ang = real(acosd(CosTheta));
+                if ang ~= 0
+                    rotate(s(k),cross(e2_vec,principal_axes(:,2)),ang,GMModel{t}.mu(order(k),1:3));
+                end
+            end
+        end
+
+        if ~strcmp(comp_ord,'3')
+            dip_ind = order(1:min(dip_num,length(order)));
+        else
+            dip_ind = intersect(dip_components,1:size(GMModel{t}.mu,1));
+        end
+        %plot centroid marks:
+        plot3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),m_sym,'LineWidth',m_width,'MarkerSize',m_size)
+        %set direction vectors (original can be non-unit length)
+        if estim_param == 1
+            direct = s_length*[cos(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),sin(GMModel{t}.mu(dip_ind,5)).*sin(GMModel{t}.mu(dip_ind,4)),cos(GMModel{t}.mu(dip_ind,4))];
+        elseif estim_param == 2
+            direct = zeros(length(dip_ind),3);
+        end
+        quiver3(h,GMModel{t}.mu(dip_ind,1),GMModel{t}.mu(dip_ind,2),GMModel{t}.mu(dip_ind,3),direct(:,1),direct(:,2),direct(:,3),0,'color',erase(m_sym,'o'),'linewidth',m_width,'MarkerSize',m_size);
+        hold(h,'off')
+        pause(1.5)
+    end
+    %set old frame values and time parameters back to their places:
+    evalin('base','zef_GMM_subs_time_vars(''out''); clear(''zef_t''); zef.frame_start=zef_frame_start_temp; zef.frame_stop=zef_frame_stop_temp; clear(''zef_frame_start_temp'',''zef_frame_stop_temp'');');
 
 end
 %set transparencies back:

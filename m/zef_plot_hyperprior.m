@@ -20,19 +20,19 @@ eps_val = 1e-12;
 max_val = 1E6;
 t = 10.^[-min_amp_exp:dt:max_amp_exp];
 if evalin('base','zef.inv_hyperprior') == 1
-[a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
-[~,d] = zef_find_ig_hyperprior(snr_val-pm_val,tail_length);
-plot_vec = zef_inverse_gamma_gpu(t,a,b*1e4);
-plot_vec(isnan(plot_vec)) = -Inf;
-plot_vec(plot_vec==Inf) = -Inf;
-mean_val = sqrt(b*1e4/(a-1));
+    [a,b] = zef_find_ig_hyperprior(snr_val,tail_length);
+    [~,d] = zef_find_ig_hyperprior(snr_val-pm_val,tail_length);
+    plot_vec = zef_inverse_gamma_gpu(t,a,b*1e4);
+    plot_vec(isnan(plot_vec)) = -Inf;
+    plot_vec(plot_vec==Inf) = -Inf;
+    mean_val = sqrt(b*1e4/(a-1));
 elseif evalin('base','zef.inv_hyperprior') == 2
-[a,b] = zef_find_g_hyperprior(snr_val,tail_length);
-[~,d] = zef_find_g_hyperprior(snr_val-pm_val,tail_length);
-plot_vec = zef_gamma_gpu(t,a,b*1e4);
-plot_vec(isnan(plot_vec)) = -Inf;
-plot_vec(plot_vec==Inf) = -Inf;
-mean_val = sqrt(b*1e4*a);
+    [a,b] = zef_find_g_hyperprior(snr_val,tail_length);
+    [~,d] = zef_find_g_hyperprior(snr_val-pm_val,tail_length);
+    plot_vec = zef_gamma_gpu(t,a,b*1e4);
+    plot_vec(isnan(plot_vec)) = -Inf;
+    plot_vec(plot_vec==Inf) = -Inf;
+    mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
 amplitude_val = 10.^(-(pm_val + amplitude_db)/20);
@@ -69,24 +69,24 @@ legend(evalin('base','zef.h_axes1'),{'Hyperprior density','Mean','Tail reference
 %set(evalin('base','zef.h_axes1'),'fontsize',evalin('base','zef.font_size'))
 
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.10*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['SNR = ' num2str(snr_val) ' dB']);
+    y_lim_vec(1)*10.^(0.10*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+    ['SNR = ' num2str(snr_val) ' dB']);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.15*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['PM-SNR = ' num2str(pm_snr_val) ' dB']);
+    y_lim_vec(1)*10.^(0.15*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+    ['PM-SNR = ' num2str(pm_snr_val) ' dB']);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.20*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Tail reference = ' num2str(tail_length) ' dB']);
+    y_lim_vec(1)*10.^(0.20*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+    ['Tail reference = ' num2str(tail_length) ' dB']);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.25*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Shape = ' num2str(a)]);
+    y_lim_vec(1)*10.^(0.25*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+    ['Shape = ' num2str(a)]);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
 h_text = text(x_lim_vec(1)*10.^(0.7*(log10(x_lim_vec(2))-log10(x_lim_vec(1)))),...
-y_lim_vec(1)*10.^(0.30*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
-['Scale = ' num2str(d)]);
+    y_lim_vec(1)*10.^(0.30*(log10(y_lim_vec(2))-log10(y_lim_vec(1)))),...
+    ['Scale = ' num2str(d)]);
 set(h_text,'fontsize',get(evalin('base','zef.h_axes1'),'FontSize'));
 
 hold(evalin('base','zef.h_axes1'),'off');
@@ -104,7 +104,7 @@ h_axes.XTickLabelMode = 'manual';
 tick_label_vec = 10.^(round(20*[-min_amp_exp/2 : max_amp_exp/2])/20);
 tick_label_cell = cell(0);
 for i = 1 : length(tick_label_vec)
-tick_label_cell{i} = num2str(db(tick_label_vec(i)));
+    tick_label_cell{i} = num2str(db(tick_label_vec(i)));
 end
 h_axes.XTick = tick_label_vec;
 h_axes.XTickLabel = tick_label_cell;
@@ -113,7 +113,7 @@ h_axes.YTickLabelMode = 'manual';
 tick_label_vec = 10.^(round(20*[log10(eps_val): log10(eps_val*10.^(1.05*(log10(max(max_val))-log10(eps_val))))])/20);
 tick_label_cell = cell(0);
 for i = 1 : length(tick_label_vec)
-tick_label_cell{i} = num2str(db(tick_label_vec(i)));
+    tick_label_cell{i} = num2str(db(tick_label_vec(i)));
 end
 h_axes.YTick = tick_label_vec;
 h_axes.YTickLabel = tick_label_cell;

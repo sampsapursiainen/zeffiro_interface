@@ -8,16 +8,16 @@ zef = zeffiro_interface('start_mode','nodisplay','open_project',project_file_nam
 end
 zef_start_dataBank;
 
-waitbar_counter = 0; 
-h_waitbar = zef_waitbar(waitbar_counter/(training_data_size*length(snr_vec)),'Creating training dataset.');
+waitbar_counter = 0;
+h_waitbar = zef_waitbar(waitbar_counter,(training_data_size*length(snr_vec)),'Creating training dataset.');
 
 for data_ind = 1 : training_data_size
 for snr_ind = 1 : length(snr_vec)
-    
-waitbar_counter = waitbar_counter + 1; 
-zef_waitbar(waitbar_counter/(training_data_size*length(snr_vec)),h_waitbar,'Creating training dataset.');
- 
-rand_data_point = randperm(size(zef.source_positions,2)); 
+
+waitbar_counter = waitbar_counter + 1;
+zef_waitbar(waitbar_counter,(training_data_size*length(snr_vec)),h_waitbar,'Creating training dataset.');
+
+rand_data_point = randperm(size(zef.source_positions,2));
 rand_data_point = rand_data_point(1);
 rand_data_dir = randn(3,1);
 rand_data_dir = rand_data_dir/norm(rand_data_dir,2);
@@ -52,7 +52,7 @@ zef.dataBank.tree.node_1_2_2.data.reconstruction_information = zef.reconstructio
 
 %MNE-RAMUS
 zef_ramus_inversion_tool;
-zef.h_ramus_hyperprior.Value = 2; 
+zef.h_ramus_hyperprior.Value = 2;
 zef.h_ramus_multires_n_decompositions.String = '20';
 zef.h_ramus_snr.String = num2str(snr_vec(snr_ind));
 eval(zef.h_ramus_start.Callback);
@@ -164,7 +164,7 @@ zef.dataBank.tree.node_2_2_2.data.reconstruction_information = zef.reconstructio
 
 %MNE-RAMUS
 zef_ramus_inversion_tool;
-zef.h_ramus_hyperprior.Value = 2; 
+zef.h_ramus_hyperprior.Value = 2;
 zef.h_ramus_multires_n_decompositions.String = '20';
 zef.h_ramus_snr.String = num2str(snr_vec(snr_ind));
 eval(zef.h_ramus_start.Callback);
@@ -276,7 +276,7 @@ zef.dataBank.tree.node_3_2_2.data.reconstruction_information = zef.reconstructio
 
 %MNE-RAMUS
 zef_ramus_inversion_tool;
-zef.h_ramus_hyperprior.Value = 2; 
+zef.h_ramus_hyperprior.Value = 2;
 zef.h_ramus_multires_n_decompositions.String = '20';
 zef.h_ramus_snr.String = num2str(snr_vec(snr_ind));
 eval(zef.h_ramus_start.Callback);
@@ -362,8 +362,8 @@ zef.dataBank.tree.node_3_2_11.data.reconstruction_information = zef.reconstructi
 
 training_data.z_inverse_results{data_ind}{snr_ind} = z_inverse_results;
 training_data.z_inverse_info{data_ind}{snr_ind} = z_inverse_info;
-training_data.dipole_positions{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:); 
-training_data.dipole_moments{data_ind}{snr_ind} = rand_data_dir; 
+training_data.dipole_positions{data_ind}{snr_ind} = zef.source_positions(rand_data_point,:);
+training_data.dipole_moments{data_ind}{snr_ind} = rand_data_dir;
 
 
 end

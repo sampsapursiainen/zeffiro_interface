@@ -19,9 +19,9 @@ zef_update;
 i = 1;
 for rec = z_inverse_results
     zef.reconstruction = rec{1};
-    
 
-    
+
+
     % Take sg006 and lh023
     zef.h_parcellation_list.Value = [23, 77];
     zef.parcellation_selected = get(zef.h_parcellation_list,'value');
@@ -31,7 +31,7 @@ for rec = z_inverse_results
 
     zef.h_parcellation_plot_type.Value = 20;
     zef.h_time_series_tools_list.Value = 21;
-    
+
     zef.parcellation_time_series = zef_parcellation_time_series([]);
     zef_plot_parcellation_time_series([]);
 

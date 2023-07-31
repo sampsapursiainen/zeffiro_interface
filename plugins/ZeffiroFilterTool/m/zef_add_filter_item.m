@@ -12,14 +12,14 @@ zef.aux_field = textscan(zef.aux_field,'%s','Delimiter',',');
 zef.aux_field = zef.aux_field{:};
 zef.filter_parameter_list = cell(size(zef.aux_field,1),2);
 for zef_j = 1 : size(zef.aux_field,1)
-zef.filter_parameter_list{zef_j,1} = strtrim(zef.aux_field{zef_j}(1:strfind(zef.aux_field{zef_j},'[Default:')-1));
-zef.filter_parameter_list{zef_j,2} = strtrim(zef.aux_field{zef_j}(strfind(zef.aux_field{zef_j},'[Default:')+9:strfind(zef.aux_field{zef_j},']')-1));
-if isfield(zef,zef.filter_parameter_list{zef_j,2})
-    zef.filter_parameter_list{zef_j,2} = evalin('base',['zef.' zef.filter_parameter_list{zef_j,2}]);
- if isnumeric(zef.filter_parameter_list{zef_j,2})
-     zef.filter_parameter_list{zef_j,2} = num2str(zef.filter_parameter_list{zef_j,2});
- end
-end
+    zef.filter_parameter_list{zef_j,1} = strtrim(zef.aux_field{zef_j}(1:strfind(zef.aux_field{zef_j},'[Default:')-1));
+    zef.filter_parameter_list{zef_j,2} = strtrim(zef.aux_field{zef_j}(strfind(zef.aux_field{zef_j},'[Default:')+9:strfind(zef.aux_field{zef_j},']')-1));
+    if isfield(zef,zef.filter_parameter_list{zef_j,2})
+        zef.filter_parameter_list{zef_j,2} = evalin('base',['zef.' zef.filter_parameter_list{zef_j,2}]);
+        if isnumeric(zef.filter_parameter_list{zef_j,2})
+            zef.filter_parameter_list{zef_j,2} = num2str(zef.filter_parameter_list{zef_j,2});
+        end
+    end
 end
 
 zef.filter_pipeline{zef_i}.parameters = zef.filter_parameter_list;

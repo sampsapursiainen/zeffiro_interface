@@ -33,6 +33,8 @@
 !documentation/fonts/JuliaMono*.ttf
 !documentation/fonts/Erewhon*.otf
 
+!.github/workflows/*.yml
+
 # These are apparently not a part of the app itself, so keep ignoring them
 
 profile

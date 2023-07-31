@@ -35,7 +35,7 @@ for i=1:length(hashList)
             else
                 info{i,2}='';
             end
-             [info{i, 3}, info{i, 4}]=zef_size(tree.(hashList{i}).data, 'reconstruction');
+            [info{i, 3}, info{i, 4}]=zef_size(tree.(hashList{i}).data, 'reconstruction');
 
         case 'gmm'
 
@@ -47,15 +47,15 @@ end
 
 switch type
 
-        case 'leadfield'
-            columnNames={'type', 'sensors', 'sources'};
+    case 'leadfield'
+        columnNames={'type', 'sensors', 'sources'};
 
-        case 'data'
-            columnNames={'sensors', 'samples'};
+    case 'data'
+        columnNames={'sensors', 'samples'};
 
-        case 'reconstruction'
-            columnNames={'tag', 'type', 'samples', 'sources'};
+    case 'reconstruction'
+        columnNames={'tag', 'type', 'samples', 'sources'};
 
-        case 'gmm'
+    case 'gmm'
 
 end

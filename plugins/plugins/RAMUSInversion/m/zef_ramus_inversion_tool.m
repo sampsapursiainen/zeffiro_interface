@@ -1,8 +1,8 @@
 function zef = zef_ramus_inversion_tool(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
-end    
+    zef = evalin('base','zef');
+end
 
 zef = zef_tool_start(zef,'zef_ramus_window',1/4,0);
 

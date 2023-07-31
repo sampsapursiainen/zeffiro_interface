@@ -10,13 +10,13 @@ else
         ES_active_electrodes = [];
         return
     end
-    
+
     if isempty(sr)
         ES_active_electrodes = [];
     else
         y_ES_interval = zef.y_ES_interval;
         %ES_active_electrodes = find(y_ES_interval.y_ES{sr,sc});
-        
+
         [~,I] = maxk(abs(y_ES_interval.y_ES{sr,sc}), zef.ES_score_dose);
         ES_active_electrodes = sort(I);
     end

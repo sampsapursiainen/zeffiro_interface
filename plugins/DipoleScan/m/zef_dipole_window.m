@@ -31,7 +31,7 @@ for invNames=1:length(zef.inv_names)
         zef.(zef.inv_names{invNames})=zef.inv_default{invNames};
     end
     %if isfield(zef.(appName),zef.inv_names{invNames})
-%        zef.(appName).(zef.inv_names{invNames}).Value=zef.(zef.inv_names{invNames});
+    %        zef.(appName).(zef.inv_names{invNames}).Value=zef.(zef.inv_names{invNames});
     %end
 end
 
@@ -39,7 +39,7 @@ end
 %
 % %set parameters if saved in ZI:
 % %(Naming concept: zef.(app)."field" = zef."field")
- zef_props = properties(zef.(appName));
+zef_props = properties(zef.(appName));
 for zef_i = 1:length(zef_props)
     if isfield(zef,zef_props{zef_i})
         zef.(appName).(zef_props{zef_i}).Value = num2str(zef.(zef_props{zef_i}));

@@ -6,7 +6,7 @@ if not(hold_val)
     hold(h_axes,'on');
 end
 
-h_sphere = findobj(h_axes.Children,'Tag','nse_sphere');
+h_sphere = findobj(h_axes.Children,'Tag','additional:nse_sphere');
 delete(h_sphere);
 
 [X,Y,Z]  = sphere(100);
@@ -16,8 +16,8 @@ h_surf = surf(nse_field.sphere_radius(i)*X + nse_field.sphere_x(i), nse_field.sp
 
 set(h_surf,'FaceColor',[0.5 0.5 0.5]);
 set(h_surf,'EdgeColor','none');
-set(h_surf,'FaceAlpha',0.5);
-set(h_surf,'Tag','nse_sphere');
+set(h_surf,'FaceAlpha',1);
+set(h_surf,'Tag','additional:nse_sphere');
 
 end
 

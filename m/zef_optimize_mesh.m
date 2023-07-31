@@ -6,9 +6,9 @@ tetra_old = tetra;
 [tetra, optimizer_flag] = zef_tetra_turn(zef, nodes, tetra, evalin('base','zef.mesh_optimization_parameter'));
 
 if optimizer_flag == -1
-nodes = nodes_old;
-tetra = tetra_old;
-errordlg('Mesh optimization failed.');
-return;
+    nodes = nodes_old;
+    tetra = tetra_old;
+    errordlg('Mesh optimization failed.');
+    return;
 
 end

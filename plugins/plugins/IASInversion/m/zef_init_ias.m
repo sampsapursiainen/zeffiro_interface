@@ -35,10 +35,10 @@ if not(isfield(zef,'ias_type'));
 end;
 
 
-    zef.ias_time_1 = zef.inv_time_1;
-    zef.ias_time_2 = zef.inv_time_2;
-    zef.ias_time_3 = zef.inv_time_3;
-    zef.ias_number_of_frames = zef.number_of_frames;
+zef.ias_time_1 = zef.inv_time_1;
+zef.ias_time_2 = zef.inv_time_2;
+zef.ias_time_3 = zef.inv_time_3;
+zef.ias_number_of_frames = zef.number_of_frames;
 
 if not(isfield(zef,'ias_data_segment'));
     zef.ias_data_segment = 1;

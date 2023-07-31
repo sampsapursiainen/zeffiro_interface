@@ -1,7 +1,7 @@
 function zef = zef_add_bounding_box(zef,name_str)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 if nargin < 2
@@ -16,7 +16,7 @@ zef.compartment_tags = [zef.compartment_tags(2:end) zef.compartment_tags(1)];
 zef = zef_build_compartment_table(zef);
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

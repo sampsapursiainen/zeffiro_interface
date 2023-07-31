@@ -10,9 +10,9 @@ if noise_level > 1
     warning(['Noise level ',num2str(eval( 'zef.inv_synth_source(1,8)')),' corresponds to ',num2str(round(100*noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
 end
 if ~isempty(eval( 'zef.fss_bg_noise'))
-bg_noise_level = 10^(eval( 'zef.fss_bg_noise')/20);    %background noise
+    bg_noise_level = 10^(eval( 'zef.fss_bg_noise')/20);    %background noise
 else
-bg_noise_level = 0;
+    bg_noise_level = 0;
 end
 if bg_noise_level > 1
     warning(['Background noise level ',num2str(eval( 'zef.fss_bg_noise')),' corresponds to ',num2str(round(100*bg_noise_level)),' % of noise. If this is not decired, please check the definition of Matlab function "db" and readjust the noise.'])
@@ -27,13 +27,13 @@ if ~eval( 'isfield(zef,''time_sequence'')')
     L = eval( 'zef.L');
     meas_data = zeros(size(L(:,1),1),1);
     for i = 1 : size(s_p,1)
-    [s_min,s_ind] = min(sqrt(sum((source_positions - repmat(s_p(i,:),size(source_positions,1),1)).^2,2)));
-    meas_data = meas_data + s_f(i,1)*L(:,3*(s_ind-1)+1) + s_f(i,2)*L(:,3*(s_ind-1)+2) + s_f(i,3)*L(:,3*(s_ind-1)+3);
+        [s_min,s_ind] = min(sqrt(sum((source_positions - repmat(s_p(i,:),size(source_positions,1),1)).^2,2)));
+        meas_data = meas_data + s_f(i,1)*L(:,3*(s_ind-1)+1) + s_f(i,2)*L(:,3*(s_ind-1)+2) + s_f(i,3)*L(:,3*(s_ind-1)+3);
     end
     n_val = max(abs(meas_data));
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level + max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;
 else
-    h = zef_waitbar(0,['Create time sequence data.']);
+    h = zef_waitbar(0,1,['Create time sequence data.']);
     if isempty(eval( 'zef.fss_time_val'))
         if eval( 'str2num(zef.find_synth_source.h_plot_switch.Value)') == 1
             time_seq = eval( 'zef.time_sequence(1:length(zef.find_synth_source.selected_source),:)');
@@ -60,9 +60,9 @@ else
     for i = 1 : size(s_p,1)
         [s_min,s_ind] = min(sqrt(sum((source_positions - repmat(s_p(i,:),size(source_positions,1),1)).^2,2)));
         for j = 1:size(time_seq,2)
-        meas_data(:,j) = meas_data(:,j) + s_f(i,1,j)*L(:,3*(s_ind-1)+1) + s_f(i,2,j)*L(:,3*(s_ind-1)+2) + s_f(i,3,j)*L(:,3*(s_ind-1)+3);
+            meas_data(:,j) = meas_data(:,j) + s_f(i,1,j)*L(:,3*(s_ind-1)+1) + s_f(i,2,j)*L(:,3*(s_ind-1)+2) + s_f(i,3,j)*L(:,3*(s_ind-1)+3);
         end
-        zef_waitbar(i/size(s_p,1),h,['Creating the time sequence data. ',num2str(i),''/'',num2str(size(s_p,1))]);
+        zef_waitbar(i,size(s_p,1),h,['Creating the time sequence data. ',num2str(i),''/'',num2str(size(s_p,1))]);
     end
     n_val = max(abs(meas_data));
     meas_data = meas_data + max(abs(meas_data)).*randn(size(meas_data,1),size(noise_level,1))*noise_level+max(abs(meas_data),[],'all').*randn(size(meas_data))*bg_noise_level;

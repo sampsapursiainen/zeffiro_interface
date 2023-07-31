@@ -6,8 +6,8 @@
 function zef = zef_minimum_norm_estimation(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
-end    
+    zef = evalin('base','zef');
+end
 
 zef = zef_tool_start(zef,'zef_mne_tool_start',1/4,0);
 

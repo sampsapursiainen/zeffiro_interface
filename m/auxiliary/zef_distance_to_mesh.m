@@ -13,33 +13,33 @@ distance_vec = zeros(1,size(p,2));
 
 for i = 1 : size(p,2)
 
- k = p(:,i*ones(1,size(c,2))) - c;
- s = sum(k.*v_3);
- t = k - s([1 1 1],:).*v_3;
+    k = p(:,i*ones(1,size(c,2))) - c;
+    s = sum(k.*v_3);
+    t = k - s([1 1 1],:).*v_3;
 
- a = sum(v_1.*v_1);
- b = sum(v_2.*v_1);
- d = sum(v_2.*v_2);
+    a = sum(v_1.*v_1);
+    b = sum(v_2.*v_1);
+    d = sum(v_2.*v_2);
 
- m = a.*d - b.*b;
+    m = a.*d - b.*b;
 
- f = sum(t.*v_1);
- g = sum(t.*v_2);
+    f = sum(t.*v_1);
+    g = sum(t.*v_2);
 
- lambda_1 = (d.*f - b.*g)./m;
- lambda_2 = (-b.*f + a.*g)./m;
+    lambda_1 = (d.*f - b.*g)./m;
+    lambda_2 = (-b.*f + a.*g)./m;
 
- I_1 = intersect(find(lambda_1 < 1),find(lambda_1 >0));
- I_2 = intersect(find(lambda_2 < 1),find(lambda_2 >0));
+    I_1 = intersect(find(lambda_1 < 1),find(lambda_1 >0));
+    I_2 = intersect(find(lambda_2 < 1),find(lambda_2 >0));
 
- I = intersect(I_1,I_2);
+    I = intersect(I_1,I_2);
 
- z = min(abs(s(I)));
- if not(isempty(z))
- distance_vec(i) = z;
- else
- distance_vec(i) = min(sqrt(sum((nodes - p(:,i*ones(1,size(nodes,2)))).^2)));
- end
- end
+    z = min(abs(s(I)));
+    if not(isempty(z))
+        distance_vec(i) = z;
+    else
+        distance_vec(i) = min(sqrt(sum((nodes - p(:,i*ones(1,size(nodes,2)))).^2)));
+    end
+end
 
 end

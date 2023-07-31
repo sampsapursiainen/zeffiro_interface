@@ -1,7 +1,7 @@
 function zef = zef_add_compartment(zef)
 
 if nargin == 0
-zef = evalin('base','zef');
+    zef = evalin('base','zef');
 end
 
 zef.aux_field_1 = zef.h_compartment_table.Data;
@@ -26,7 +26,7 @@ clear zef_i;
 zef = zef_update(zef);
 
 if nargout == 0
-assignin('base','zef',zef);
+    assignin('base','zef',zef);
 end
 
 end

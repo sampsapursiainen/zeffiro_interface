@@ -9,14 +9,14 @@ L_2 = zeros(M,N);
 
 K = size(source_positions,1);
 
-    for i = 1 : K
-        L_2(:,3*(dof_ind(i)-1)+1) =  L(:,3*(dof_ind(i)-1)+1) + L_1(:,i);
-        L_2(:,3*(dof_ind(i)-1)+2) =  L(:,3*(dof_ind(i)-1)+2) + L_1(:,i+1);
-        L_2(:,3*(dof_ind(i)-1)+3) =  L_tes(:,3*(dof_ind(i)-1)+3) + L_1(:,i+2);
-    end
+for i = 1 : K
+    L_2(:,3*(dof_ind(i)-1)+1) =  L(:,3*(dof_ind(i)-1)+1) + L_1(:,i);
+    L_2(:,3*(dof_ind(i)-1)+2) =  L(:,3*(dof_ind(i)-1)+2) + L_1(:,i+1);
+    L_2(:,3*(dof_ind(i)-1)+3) =  L_tes(:,3*(dof_ind(i)-1)+3) + L_1(:,i+2);
+end
 
-    for i = 1 : M
-        L(:,3*(i-1)+1) = L(:,3*(i-1)+1)/dof_count(i);
-        L(:,3*(i-1)+2) = L(:,3*(i-1)+2)/dof_count(i);
-        L(:,3*(i-1)+3) = L(:,3*(i-1)+3)/dof_count(i);
-    end
+for i = 1 : M
+    L(:,3*(i-1)+1) = L(:,3*(i-1)+1)/dof_count(i);
+    L(:,3*(i-1)+2) = L(:,3*(i-1)+2)/dof_count(i);
+    L(:,3*(i-1)+3) = L(:,3*(i-1)+3)/dof_count(i);
+end

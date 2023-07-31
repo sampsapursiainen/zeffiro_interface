@@ -10,7 +10,7 @@ function [processed_data] = zef_exclude_channels(f, exclude_channels)
 
 %Conversion between string and numeric data types.
 if isstr(exclude_channels)
-exclude_channels = str2num(exclude_channels);
+    exclude_channels = str2num(exclude_channels);
 end
 %End of conversion.
 

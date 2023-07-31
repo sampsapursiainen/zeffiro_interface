@@ -57,9 +57,9 @@ for zef_LeadFieldProcessingTool_index_combine=1:zef.LeadFieldProcessingTool.bank
 
 end
 
-        zef.LeadFieldProcessingTool.auxData=[];
-        zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.combineData;
-        zef.LeadFieldProcessingTool.combineData=[];
-        zef_LeadFieldProcessingTool_aux2bank_new;
+zef.LeadFieldProcessingTool.auxData=[];
+zef.LeadFieldProcessingTool.auxData=zef.LeadFieldProcessingTool.combineData;
+zef.LeadFieldProcessingTool.combineData=[];
+zef_LeadFieldProcessingTool_aux2bank_new;
 
-        clear zef_LeadFieldProcessingTool_index_combine;
+clear zef_LeadFieldProcessingTool_index_combine;

@@ -19,9 +19,9 @@ for i=1:length(hashes)
     nameOfSaveFile=nameOfSaveFile{1};
 
     if ~strcmp(hashes{i}, nameOfSaveFile)
-       complNameOfSaveFile=tree.(hashes{i}).data.Properties.Source;
-       complNameOfTMPSaveFile=strcat(folder, nameOfSaveFile, '_temporaryDataBankFile.mat');
-       movefile(complNameOfSaveFile, complNameOfTMPSaveFile);
+        complNameOfSaveFile=tree.(hashes{i}).data.Properties.Source;
+        complNameOfTMPSaveFile=strcat(folder, nameOfSaveFile, '_temporaryDataBankFile.mat');
+        movefile(complNameOfSaveFile, complNameOfTMPSaveFile);
 
     end
 
@@ -33,10 +33,10 @@ for i=1:length(hashes)
     nameOfSaveFile=nameOfSaveFile{1};
 
     if ~strcmp(hashes{i}, nameOfSaveFile)
-       complNameOfSaveFile=strcat(folder, hashes{i}, '.mat') ;
-       complNameOfTMPSaveFile=strcat(folder, nameOfSaveFile, '_temporaryDataBankFile.mat');
-       movefile(complNameOfTMPSaveFile, complNameOfSaveFile);
-       tree.(hashes{i}).data=matfile(complNameOfSaveFile);
+        complNameOfSaveFile=strcat(folder, hashes{i}, '.mat') ;
+        complNameOfTMPSaveFile=strcat(folder, nameOfSaveFile, '_temporaryDataBankFile.mat');
+        movefile(complNameOfTMPSaveFile, complNameOfSaveFile);
+        tree.(hashes{i}).data=matfile(complNameOfSaveFile);
 
     end
 

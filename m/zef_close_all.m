@@ -2,7 +2,7 @@ function  zef_close_all(zef)
 
 if nargin == 0
     if evalin('base','exist(''zef'',''var'')')
-    zef = evalin('base','zef');
+        zef = evalin('base','zef');
     end
 end
 
@@ -12,21 +12,21 @@ set(zef.h_window_aux,'DeleteFcn','');
 delete(zef.h_window_aux);
 zef_delete_waitbar;
 if exist('zef','var')
-if isfield(zef,'zeffiro_restart')
-if isequal(zef.zeffiro_restart,0)
-warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
-warning('on','MATLAB:rmpath:DirNotFound');
-end
+    if isfield(zef,'zeffiro_restart')
+        if isequal(zef.zeffiro_restart,0)
+            warning('off','MATLAB:rmpath:DirNotFound');
+            rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
+            warning('on','MATLAB:rmpath:DirNotFound');
+        end
+    else
+        warning('off','MATLAB:rmpath:DirNotFound');
+        rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
+        warning('on','MATLAB:rmpath:DirNotFound');
+    end
 else
-warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
-warning('on','MATLAB:rmpath:DirNotFound');    
-end
-else
-warning('off','MATLAB:rmpath:DirNotFound');
-rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
-warning('on','MATLAB:rmpath:DirNotFound');    
+    warning('off','MATLAB:rmpath:DirNotFound');
+    rmpath(genpath(fileparts(which('zeffiro_interface.m'))));
+    warning('on','MATLAB:rmpath:DirNotFound');
 end
 
 evalin('base','clear zef zef_data zef_i zef_j zef_k;');

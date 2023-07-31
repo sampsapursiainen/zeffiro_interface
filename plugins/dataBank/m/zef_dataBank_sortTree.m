@@ -3,14 +3,14 @@ function [tree, newText] = zef_dataBank_sortTree(tree)
 %this is needed to build the tree easily
 
 if isstruct(tree)
-text=fieldnames(tree);
+    text=fieldnames(tree);
 else
     text=properties(tree);
 
     for i=1:length(text)
         if strcmp(text{i}, 'Properties')
-        text(i)=[];
-        break;
+            text(i)=[];
+            break;
         end
     end
 end
@@ -35,14 +35,14 @@ for i=1:length(R2)
 
     end
 end
-        tmp=sortrows(tmp);
-    newText=[];
-    for i=1:length(tmp)
-        newText{i,1}=zef_dataBank_number2hash(tmp(i,:));
-    end
+tmp=sortrows(tmp);
+newText=[];
+for i=1:length(tmp)
+    newText{i,1}=zef_dataBank_number2hash(tmp(i,:));
+end
 
-    if isstruct(tree)
+if isstruct(tree)
     tree=orderfields(tree, newText);
-    end
+end
 
 end
