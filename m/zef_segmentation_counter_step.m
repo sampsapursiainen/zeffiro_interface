@@ -1,19 +1,38 @@
+function [ ...
+    pml_ind_aux, ...
+    mesh_res, ...
+    reuna_p, ...
+    reuna_t, ...
+    reuna_type, ...
+    submesh_cell, ...
+    aux_active_compartment_ind, ...
+    priority_vec_aux, ...
+    priority_vec_aux_segmentation, ...
+    name_tags ...
+] = zef_segmentation_counter_step(zef)
+%
+% zef_segmentation_counter_step
+%
+% TODO: Does something related to segmentation counting. Also returns way too
+% many things to be well-defined. This function should be split into multiple
+% smaller ones.
+%
 
 pml_ind_aux = [];
 pml_ind = [];
 
-mesh_res = eval('zef.mesh_resolution');
-reuna_p = eval('zef.reuna_p');
-reuna_t = eval('zef.reuna_t');
-reuna_type = eval('zef.reuna_type');
-sensors = eval('zef.sensors');
+mesh_res = zef.mesh_resolution;
+reuna_p = zef.reuna_p;
+reuna_t = zef.reuna_t;
+reuna_type = zef.reuna_type;
+sensors = zef.sensors;
 
 i = 0;
 sigma_vec = [];
 priority_vec = [];
 submesh_cell = cell(0);
 aux_active_compartment_ind = [];
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 
 for k = 1 : length(compartment_tags)
 
@@ -71,4 +90,4 @@ end
 
 priority_vec_aux = max(submesh_ind_1) +1 - submesh_ind_1;
 
-
+end % function
