@@ -40,7 +40,7 @@ set(h_axes_image,'fontsize',zef.font_size);
 set(h_axes_image,'linewidth',0.5);
 set(h_axes_image,'box','on');
 h_legend = findobj(h_axes_image.Parent.Children,'Type','Legend');
-h_legend.Visible = 'off';
+delete(h_legend)
 
 end
 
