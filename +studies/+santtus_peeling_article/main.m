@@ -274,10 +274,12 @@ function output_struct = add_statistics_to_struct(input_struct, n_reconstruction
     input_struct.dist_vec_avg = zeros(size(input_struct.dist_vec{1}));
     input_struct.angle_vec_avg = zeros(size(input_struct.angle_vec{1}));
     input_struct.mag_vec_avg = zeros(size(input_struct.mag_vec{1}));
+    input_struct.dispersion_avg = zeros(size(input_struct.dispersion_vec{1}));
 
     input_struct.dist_vec_std = zeros(size(input_struct.dist_vec{1}));
     input_struct.angle_vec_std = zeros(size(input_struct.angle_vec{1}));
     input_struct.mag_vec_std = zeros(size(input_struct.mag_vec{1}));
+    input_struct.dispersion_std = zeros(size(input_struct.dispersion_vec{1}));
 
     % Compute means.
 
@@ -286,12 +288,14 @@ function output_struct = add_statistics_to_struct(input_struct, n_reconstruction
         input_struct.dist_vec_avg = input_struct.dist_vec_avg + input_struct.dist_vec{i};
         input_struct.angle_vec_avg = input_struct.angle_vec_avg + input_struct.angle_vec{i};
         input_struct.mag_vec_avg = input_struct.mag_vec_avg + input_struct.mag_vec{i};
+        input_struct.dispersion_avg = input_struct.dispersion_avg + input_struct.dispersion_vec{i};
 
     end
 
     input_struct.dist_vec_avg = input_struct.dist_vec_avg/n_reconstructions;
     input_struct.angle_vec_avg = input_struct.angle_vec_avg/n_reconstructions;
-    input_struct.mag_vec_avg = input_struct.mag_vec_avg/n_reconstructions;
+    input_struct.mag_vec_avg = input_struct.mag_vec_avg / n_reconstructions;
+    input_struct.dispersion_avg = input_struct.dispersion_avg/n_reconstructions;
 
     % Compute standard deviations.
 
@@ -299,11 +303,13 @@ function output_struct = add_statistics_to_struct(input_struct, n_reconstruction
         input_struct.dist_vec_std = input_struct.dist_vec_std + (input_struct.dist_vec{i} - input_struct.dist_vec_avg).^2;
         input_struct.angle_vec_std = input_struct.angle_vec_std + (input_struct.angle_vec{i} - input_struct.angle_vec_avg).^2;
         input_struct.mag_vec_std = input_struct.mag_vec_std + (input_struct.mag_vec{i} - input_struct.mag_vec_avg).^2;
+        input_struct.dispersion_std = input_struct.dispersion_std + (input_struct.dispersion_vec{i} - input_struct.dispersion_avg).^2;
     end
 
     input_struct.dist_vec_std = sqrt(input_struct.dist_vec_std/(n_reconstructions-1));
     input_struct.angle_vec_std = sqrt(input_struct.angle_vec_std/(n_reconstructions-1));
     input_struct.mag_vec_std = sqrt(input_struct.mag_vec_std/(n_reconstructions-1));
+    input_struct.dispersion_std = sqrt(input_struct.dispersion_std/(n_reconstructions-1));
 
     % Everything succeeded, so set output value.
 
