@@ -1,16 +1,31 @@
 [submodule "external/CVX"]
 	path = external/CVX
-	url = https://github.com/cvxr/CVX.git
+	url = https://github.com/SeSodesa/CVX.git
+	branch = 15-gitmodules-to-use-https
+	startupscript = external/CVX/cvx_startup.m
 [submodule "external/SDPT3"]
 	path = external/SDPT3
 	url = https://github.com/sqlp/sdpt3.git
+	branch = master
 [submodule "external/SeDuMi"]
 	path = external/SeDuMi
 	url = https://github.com/sqlp/sedumi.git
+	branch = master
 [submodule "external/SESAME"]
 	path = external/SESAME
 	url = https://github.com/i-am-sorri/SESAME_core.git
+	branch = hyperprior
 [submodule "external/fieldtrip"]
 	path = external/fieldtrip
 	url = https://github.com/fieldtrip/fieldtrip.git
-	
+	branch = release
+	startupscript = external/fieldtrip/ft_defaults.m
+
+[submodule "external/spm12"]
+	path = external/spm12
+	url = https://github.com/spm/spm12.git
+	branch = master
+[submodule "external/OSQP"]
+	path = external/OSQP
+	url = https://github.com/osqp/osqp-matlab.git
+	branch = master

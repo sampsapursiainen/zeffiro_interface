@@ -7,9 +7,9 @@ for f_ind = 1: number_of_frames
         ['Filtering ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     f = timeSteps{f_ind};
     % Prediction
-    [m,P] = zeffiro.plugins.Kalman.m.kf_predict(m, P, A, Q);
+    [m,P] = kf_predict(m, P, A, Q);
     % Update
-    [m, P] = zeffiro.plugins.Kalman.m.kf_update(m, P, f, L, R);
+    [m, P] = kf_update(m, P, f, L, R);
     if (smoothing == 2)
         P_store{f_ind} = gather(P);
     end

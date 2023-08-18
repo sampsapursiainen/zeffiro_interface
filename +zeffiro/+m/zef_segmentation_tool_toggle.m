@@ -1,3 +1,0 @@
-function zef_segmentation_tool_toggle(zef,h_button)
-zef_segmentation_tool_toggle(zef,h_button);
-end

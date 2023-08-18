@@ -44,9 +44,9 @@ arguments
     p_regparam (1,1) double
 end
 
-switch ZefSourceModel.from(p_source_model)
+switch core.ZefSourceModel.from(p_source_model)
 
-    case { ZefSourceModel.Whitney, ZefSourceModel.ContinuousWhitney }
+    case { core.ZefSourceModel.Whitney, core.ZefSourceModel.ContinuousWhitney }
 
         [G, dipole_locations] = zef_whitney_interpolation( ...
             p_nodes, ...
@@ -57,7 +57,7 @@ switch ZefSourceModel.from(p_source_model)
             p_optimization_system_type ...
             );
 
-    case { ZefSourceModel.Hdiv, ZefSourceModel.ContinuousHdiv }
+    case { core.ZefSourceModel.Hdiv, core.ZefSourceModel.ContinuousHdiv }
 
         [G, dipole_locations] = zef_hdiv_interpolation( ...
             p_nodes, ...
@@ -68,7 +68,7 @@ switch ZefSourceModel.from(p_source_model)
             p_optimization_system_type ...
             );
 
-    case { ZefSourceModel.StVenant, ZefSourceModel.ContinuousStVenant }
+    case { core.ZefSourceModel.StVenant, core.ZefSourceModel.ContinuousStVenant }
 
         [G, dipole_locations] = zef_st_venant_interpolation( ...
             p_nodes, ...

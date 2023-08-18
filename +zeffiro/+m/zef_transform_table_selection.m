@@ -1,3 +1,0 @@
-function zef_transform_table_selection(hObject,eventdata,handles)
-zef_transform_table_selection(hObject,eventdata,handles);
-end

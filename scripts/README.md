@@ -1,6 +1,6 @@
-# Scripts
+# scripts
 
-The subfolders of this folder include examples on how to use Zeffiro
-Interface, in addition to containing study-specific scripts and related
-configuration files. See the README files in the individual folders for the
-purpose of each folder.
+This folder functions as a scratchpad for ideas that might be included into the
+main functionality in the [`m/`](../m) folder. Scripts or functions under
+construction can be placed here, if for some reason the code can't be placed in
+the final intended position right away.

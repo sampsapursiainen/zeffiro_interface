@@ -1,3 +1,0 @@
-function angles_list = zef_ES_find_valid_separation_angle
-angles_list = zef_ES_find_valid_separation_angle;
-end

@@ -1,1 +1,0 @@
-zef_delete_filter_item;

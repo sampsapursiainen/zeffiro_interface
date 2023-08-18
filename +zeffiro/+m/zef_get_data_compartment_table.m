@@ -1,1 +1,0 @@
-zef_get_data_compartment_table;

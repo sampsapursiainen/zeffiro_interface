@@ -1,1 +1,0 @@
-zef_init_fields_compartment_table_profile;

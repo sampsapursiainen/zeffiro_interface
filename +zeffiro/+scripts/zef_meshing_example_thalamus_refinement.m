@@ -1,3 +1,0 @@
-function zef_meshing_example_thalamus_refinement
-zef_meshing_example_thalamus_refinement;
-end

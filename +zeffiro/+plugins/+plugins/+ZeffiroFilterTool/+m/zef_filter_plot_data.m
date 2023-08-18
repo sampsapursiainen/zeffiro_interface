@@ -1,3 +1,0 @@
-function zef_filter_plot_data
-zef_filter_plot_data;
-end

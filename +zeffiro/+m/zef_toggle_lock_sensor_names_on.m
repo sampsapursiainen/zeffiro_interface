@@ -1,1 +1,0 @@
-zef_toggle_lock_sensor_names_on;

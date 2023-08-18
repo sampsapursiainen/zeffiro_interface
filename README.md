@@ -1,12 +1,8 @@
 [![View Zeffiro Forward and Inverse Interface for Complex Geometries on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://se.mathworks.com/matlabcentral/fileexchange/68285-zeffiro-forward-and-inverse-interface-for-complex-geometries)
 
-Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team, is an open source code package constituting an accessible tool for multidisciplinary finite element (FE) based forward and inverse simulations in complex geometries. Install ZI using zeffiro_downloader.m to allow automatic updates between the local and remote repositories. The installer and then ZI can be obtained on matlab's command line as follows:
+Zeffiro Interface (ZI), © 2018- Sampsa Pursiainen & ZI Development Team, is an open source code package constituting an accessible tool for multidisciplinary finite element (FE) based forward and inverse simulations in complex geometries. See the [installation wiki page][installation-wiki] for instructions on how to install Zeffiro Interface.
 
-urlwrite('https://tinyurl.com/zeffiro','zeffiro_downloader.m'); zeffiro_downloader;
-
-where the URL is a shortcut to the page:
-
-https://raw.githubusercontent.com/sampsapursiainen/zeffiro_interface/master/zeffiro_downloader.m
+[installation-wiki]: https://github.com/sampsapursiainen/zeffiro_interface/wiki/Downloading-and-Setting-Up-Zeffiro
 
 With ZI, one can can generate a volumetric finite element mesh for a realistic multilayer geometry, if triangular surface grids in STL, DAT or ASC (ASCII) file format are available. A suitable surface segmentation can be produced, for example, using the FreeSurfer software suite (Copyright © FreeSurfer, 2013). Such a segmentation can be imported at once from a folder containing a set of ASCII files. An example folder can be found in the repository. ZI allows also importing a parcellation created with FreeSurfer to enable distinguishing different brain regions and, thereby, analysing the connectivity of the brain function over a time series. Different compartments can be defined as active, allowing the analysis of the sub-cortical strucures. In each compartment, the orientation of the activity can be either normally constrained or unconstrained. The main routines of ZI can be accelerated significantly in a computer equipped with a graphics computing unit (GPU). It is especially recommendable to perform the forward simulation process, i.e., to generate the finite element mesh, the lead field matrix and to interpolate between different point sets, utilizing a GPU. After the forward simulation phase, the model can be processed also without GPU acceleration.
 

@@ -9,14 +9,6 @@ function indent_mfiles(folder)
 % NOTE 1: this function requires that Matlab was opened with the Java
 % components enabled.
 %
-% NOTE 2: be very careful about opening a project with the number of files in
-% the thousands. Due to the way the function
-%
-%   matlab.desktop.editor.openDocument
-%
-% works, the files will all be opened before the indentation will be applied.
-% This will end up overflowing the Java heap.
-%
 % Inputs:
 %
 % - folder
@@ -35,26 +27,14 @@ function indent_mfiles(folder)
 
     end
 
-    mfile_paths = utilities.get_mfile_paths( folder ) ;
+    mfile_paths = utilities.get_mfile_paths( folder )
 
-    for ff = mfile_paths
+    for fi = 1 : numel ( mfile_paths )
 
-        fh = matlab.desktop.editor.openDocument(ff) ;
+        fp = mfile_paths ( fi ) ;
 
-        cleanup_object = onCleanup( @() cleanup_fn ( fh ) );
-
-        fh.smartIndentContents()
-
-        fh.save()
+        utilities.indent_mfile ( fp ) ;
 
     end % for
-
-end % function
-
-%% Helper functions.
-
-function cleanup_fn(document)
-
-    document.close();
 
 end % function

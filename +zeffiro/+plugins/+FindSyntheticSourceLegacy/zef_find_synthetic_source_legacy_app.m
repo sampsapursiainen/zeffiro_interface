@@ -1,1 +1,0 @@
-zef_find_synthetic_source_legacy_app;
