@@ -946,11 +946,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 stop_movie = eval('zef.stop_movie');
                 pause(0.01);
                 if stop_movie
-                    if get(eval('zef.h_pause_movie'),'value') == 1
-                        waitfor(eval('zef.h_pause_movie'),'value');
-                    else
                         return;
-                    end
                 end
                 f_ind_aux = f_ind_aux + 1;
                 %zef_waitbar(f_ind_aux,number_of_frames,h_waitbar,['Frame ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.'])

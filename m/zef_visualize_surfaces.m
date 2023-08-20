@@ -11,5 +11,3 @@ set(zef.h_stop_movie,'foregroundcolor',[0 0 0]);
 set(zef.h_stop_movie,'string','Stop');
 
 set(zef.h_stop_movie,'value',zef.stop_movie);
-set(zef.h_pause_movie,'foregroundcolor',[0 0 0]);
-set(zef.h_pause_movie,'string','Pause');
