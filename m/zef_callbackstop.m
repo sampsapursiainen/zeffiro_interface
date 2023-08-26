@@ -1,7 +1,7 @@
 function []=zef_callbackstop(src,~)
 
 if ~src.Value
-    evalin('base',['zef.stop_movie=zef.h_pause_movie.Value || ' num2str(src.Value),';'])
+    evalin('base',[ num2str(src.Value),';'])
     set(src,'foregroundcolor',[0 0 0]);
     set(src,'string','Stop');
 else

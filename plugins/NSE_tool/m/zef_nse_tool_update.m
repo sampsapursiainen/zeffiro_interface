@@ -50,6 +50,7 @@ zef.nse_field.viscosity_relaxation_time = zef.nse_field.h_viscosity_relaxation_t
 zef.nse_field.viscosity_transition = zef.nse_field.h_viscosity_transition.Value;
 
 zef.nse_field.reconstruction_type = zef.nse_field.h_reconstruction_type.Value;
+zef.nse_field.graph_type = zef.nse_field.h_graph_type.Value;
 zef.nse_field.solver_type = zef.nse_field.h_solver_type.Value;
 
 zef.nse_field.max_reconstruction_quantile = zef.nse_field.h_max_reconstruction_quantile.Value;
@@ -76,6 +77,12 @@ zef.nse_field.sphere_radius = str2num(zef.nse_field.h_sphere_radius.Value);
 zef.nse_field.sphere_x = str2num(zef.nse_field.h_sphere_x.Value);
 zef.nse_field.sphere_y = str2num(zef.nse_field.h_sphere_y.Value);
 zef.nse_field.sphere_z = str2num(zef.nse_field.h_sphere_z.Value);
+
+
+zef.nse_field.roi_radius = str2num(zef.nse_field.h_roi_radius.Value);
+zef.nse_field.roi_x = str2num(zef.nse_field.h_roi_x.Value);
+zef.nse_field.roi_y = str2num(zef.nse_field.h_roi_y.Value);
+zef.nse_field.roi_z = str2num(zef.nse_field.h_roi_z.Value);
 
 zef.nse_field.n_frames = zef.nse_field.h_n_frames.Value;
 

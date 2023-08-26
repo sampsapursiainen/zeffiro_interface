@@ -30,7 +30,11 @@ if eval('isfield(zef,''h_axes1'');')
             eval('zef.h_colorscale_min_slider.Value = 0;');
             eval('zef.h_colorscale_max_slider.Value = 0;');
             eval('zef.update_lights = 1; zef.h_update_lights.Value = 1;');
-
+            
+            h_axes = findobj(zef.h_update_colormap.Parent.Children,'Tag','axes1');
+            axis(h_axes,'auto');
+            axis(h_axes,'tight');
+            
         else
 
             eval('zef.h_update_colormap.Value = zef.update_colormap;');

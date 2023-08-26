@@ -1,5 +1,10 @@
 function zef_nse_plot_sphere(h_axes,nse_field)
 
+if nargin == 0
+    h_axes = evalin('base','gca');
+    nse_field = evalin('base','zef.nse_field');
+end
+
 axes(h_axes); 
 hold_val = ishold(h_axes);
 if not(hold_val)

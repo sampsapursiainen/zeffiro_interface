@@ -24,6 +24,10 @@ if not(isfield(zef.nse_field,'viscosity_model'))
     zef.nse_field.viscosity_model = 1;
 end
 
+if not(isfield(zef.nse_field,'graph_type'))
+    zef.nse_field.graph_type = 1;
+end
+
 if not(isfield(zef.nse_field,'velocity_smoothing'))
     zef.nse_field.velocity_smoothing = 0.15;
 end
@@ -78,6 +82,7 @@ if not(isfield(zef.nse_field,'sphere_radius'))
     zef.nse_field.sphere_radius = 30;
 end
 
+
 if not(isfield(zef.nse_field,'sphere_x'))
     zef.nse_field.sphere_x = 0;
 end
@@ -89,6 +94,23 @@ end
 if not(isfield(zef.nse_field,'sphere_z'))
     zef.nse_field.sphere_z = 0;
 end
+
+if not(isfield(zef.nse_field,'roi_radius'))
+    zef.nse_field.roi_radius = 30;
+end
+
+if not(isfield(zef.nse_field,'roi_x'))
+    zef.nse_field.roi_x = 0;
+end
+
+if not(isfield(zef.nse_field,'roi_y'))
+    zef.nse_field.roi_y = 0;
+end
+
+if not(isfield(zef.nse_field,'roi_z'))
+    zef.nse_field.roi_z = 0;
+end
+
 
 if not(isfield(zef.nse_field,'cycle_length'))
     zef.nse_field.cycle_length = 1;
