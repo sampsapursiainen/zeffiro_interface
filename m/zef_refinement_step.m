@@ -20,9 +20,11 @@ if eval('zef.refinement_on')
 
         I = [];
         if refinement_flag == 1
-            refinement_type = eval('zef.refinement_surface_compartments');
+            refinement_type = zef.refinement_surface_compartments;
+            surface_refinement_mode = zef.refinement_surface_mode;
         elseif refinement_flag == 2
-            refinement_type = eval('zef.refinement_surface_compartments_2');
+            refinement_type = zef.refinement_surface_compartments_2;
+            surface_refinement_mode = zef.refinement_surface_mode_2;
         end
 
         if length(n_surface_refinement) > 1
@@ -33,9 +35,30 @@ if eval('zef.refinement_on')
             I = zef_find_active_compartment_ind(zef,submesh_ind_1(domain_labels));
         end
         refinement_type = zef_compartment_to_subcompartment(zef,setdiff(refinement_type,-1));
+        
+        I_cell = cell(0);
+        
+        if surface_refinement_mode == 1
+        
         I = [I ; find(ismember(domain_labels,refinement_type(:)))];
-
-
+        I_cell{1} = I; 
+        
+        elseif surface_refinement_mode == 2
+            
+            I_cell{1} = I;
+            
+            for surface_loop_ind = 1 : length(refinement_type)
+               
+                I_cell{surface_loop_ind+1} =  find(ismember(domain_labels,refinement_type(surface_loop_ind))); 
+                
+            end
+            
+        end
+        
+        for surface_loop_ind = 1 : length(I_cell) 
+        
+        I = I_cell{surface_loop_ind};    
+            
         tetra = tetra_aux;
 
         tetra = tetra(I,:);
@@ -57,9 +80,12 @@ if eval('zef.refinement_on')
         tetra_ind(I+1) = 1;
         I = find(tetra_ind == 0);
         tetra_ind = sub2ind(size(tetra),repmat(tetra_sort(I,5),1,3),ind_m(tetra_sort(I,4),:));
-        surface_triangles = [ tetra(tetra_ind)];
+        surface_triangles = tetra(tetra_ind);
         J_c = [J_c ;  unique(surface_triangles)];
         clear tetra_sort;
+        
+        end
+        
 
         tetra = tetra_aux;
 

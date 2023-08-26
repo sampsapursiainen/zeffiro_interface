@@ -42,6 +42,7 @@ else
     zef.h_as_opt_5.Value = -1;
 end
 
+
 zef.h_refinement_volume_compartments.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments.Items)-1];
 zef.h_refinement_volume_compartments.Multiselect = 'on';
 if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_compartments.ItemsData)
@@ -73,6 +74,13 @@ if max(zef.adaptive_refinement_compartments) <= length(zef.h_adaptive_refinement
 else
     zef.h_adaptive_refinement_compartments.Value = -1;
 end
+
+zef.h_refinement_surface_mode.Items = {'Surface of union','All surfaces'};
+zef.h_refinement_surface_mode_2.Items = {'Surface of union','All surfaces'};
+zef.h_refinement_surface_mode.ItemsData = [1:length(zef.h_refinement_surface_mode.Items)];
+zef.h_refinement_surface_mode_2.ItemsData = [1:length(zef.h_refinement_surface_mode_2.Items)];
+zef.h_refinement_surface_mode.Value = zef.refinement_surface_mode;
+zef.h_refinement_surface_mode_2.Value = zef.refinement_surface_mode_2;
 
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;
 zef.h_refinement_volume_number.Value = num2str(zef.refinement_volume_number);

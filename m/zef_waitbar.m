@@ -388,12 +388,13 @@ if detail_condition
 
     if progress_value(1) > 0
 
-
-
         time_in_seconds = now + ((1-progress_value(end))/progress_value(end))*(now - h_waitbar.ZefWaitbarStartTime) ;
 
         progress_bar_ready_text = datestr ( time_in_seconds );
 
+     h_text_ready.String = ['Ready: ' progress_bar_ready_text];
+
+    
     else
 
         progress_bar_ready_text = '';
