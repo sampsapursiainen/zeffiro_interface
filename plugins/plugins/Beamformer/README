@@ -1,2 +1,0 @@
-Add the following line to zeffiro_plugins.ini
-Beamformer, inverse_tools, zef_beamformer_start

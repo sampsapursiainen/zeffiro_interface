@@ -1,4 +1,4 @@
-function zef_plot_synthetic_source(varargin)
+function zef_plot_3D_arrow_synthetic_source(varargin)
 %A static plot showing the active synthetic sources
 
 arrow_scale = 1;

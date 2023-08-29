@@ -1,7 +1,0 @@
-add the following line to zeffiro_plugins.ini file to utilize this plugin:
-Classical Sparse Methods, inverse_tools, CSM_app_start
-
-App contains following methods:
-- dSPM
-- sLORETA
-- Sparse Bayesian Learning

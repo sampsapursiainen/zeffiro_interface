@@ -7,12 +7,13 @@ if size(zef.SESAME_time_serie,2) == 1
     d_est = zef.SESAME_time_serie{1}.estimated_dipoles;
     zef.inv_rec_source = repmat(zef.inv_rec_source(1,:),length(d_est),1);
     zef.inv_rec_source(:,1:3) = zef.SESAME_time_serie{1}.dipole_positions;
-
+        zef.inv_rec_source(1,9) = str2num(zef.SESAME_App.h_inv_rec_source_9.Value);
+        zef.inv_rec_source(1,8) = str2num(zef.SESAME_App.h_inv_rec_source_8.Value);
     for d_ind = 1 : length(d_est)
         zef.inv_rec_source(d_ind,4:6) = zef.SESAME_time_serie{1}.QV_estimated(1+3*(d_ind-1):3*d_ind)/zef.SESAME_time_serie{1}.Q_estimated(d_ind);
     end
 
-    zef.inv_rec_source(:,7)=zef.SESAME_time_serie{1}.Q_estimated;
+    zef.inv_rec_source(:,7)=zef.inv_rec_source(1,8)*zef.SESAME_time_serie{1}.Q_estimated;
 
     zef.h_rec_source = zef_plot_source(2);
 
@@ -30,7 +31,7 @@ else
             zef.inv_rec_source(:,1:3) = zef.SESAME_time_serie{zef_j}.dipole_positions;
             for d_ind = 1 : length(d_est)
                 zef.inv_rec_source(d_ind,4:6) = mean(zef.SESAME_time_serie{zef_j}.QV_estimated(1+3*(d_ind-1):3*d_ind,:),2);
-                zef.inv_rec_source(d_ind,7) = norm(zef.inv_rec_source(d_ind,4:6));
+                zef.inv_rec_source(d_ind,7) = zef.inv_rec_source(1,8)*norm(zef.inv_rec_source(d_ind,4:6));
                 zef.inv_rec_source(d_ind,4:6) = zef.inv_rec_source(d_ind,4:6)./zef.inv_rec_source(d_ind,7);
             end
             %zef.inv_rec_source(:,7)=mean(zef.SESAME_time_serie{zef_j}.Q_estimated,2);
@@ -45,7 +46,7 @@ else
             zef_boolean = 0;
         end
 
-        zef.h_synth_source = zef_plot_active_source(zef_time_val);
+        %zef.h_synth_source = zef_plot_active_source(zef_time_val);
 
         if not(isempty(h_axes_text))
             delete(h_axes_text);
