@@ -1,6 +1,6 @@
 classdef Zef < handle
 %
-% core.Zef
+% Zef
 %
 % The central data structure of Zeffiro Interface. Holds onto the data that is needed for running
 % reconstruction / inverse methods on data gathered by some sensors, including the sensor
@@ -36,9 +36,24 @@ classdef Zef < handle
 
         function self = Zef ( kwargs )
         %
-        % Zef (kwargs)
+        % Zef ( kwargs )
         %
         % A constructor for the Zef class.
+        %
+        % Inputs:
+        %
+        % - kwargs.nodes
+        %
+        %   The nodes of the stored finite element mesh.
+        %
+        % - kwargs.tetra
+        %
+        %   The tetrahedra which indicate the shapes formed by the above nodes.
+        %
+        % kwargs.L
+        %
+        % - A lead field matrix constructed from a given set of synthetic sources and a sensor
+        %   configuration.
         %
 
             arguments

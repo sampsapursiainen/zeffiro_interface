@@ -33,6 +33,16 @@ classdef LeadField
         % Constructs a lead field from the given keyword arguments, which correspond to the class
         % properties.
         %
+        % Inputs:
+        %
+        % - kwargs.matrix
+        %
+        %   The lead fielf matrix.
+        %
+        % - kwargs.modality
+        %
+        %   The modality of the lead field.
+        %
 
             arguments
 
