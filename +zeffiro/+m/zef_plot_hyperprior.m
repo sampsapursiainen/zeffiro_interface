@@ -1,3 +1,0 @@
-function zef_plot_hyperprior
-zef_plot_hyperprior;
-end

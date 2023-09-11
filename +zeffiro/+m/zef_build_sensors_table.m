@@ -1,1 +1,0 @@
-zef_build_sensors_table;

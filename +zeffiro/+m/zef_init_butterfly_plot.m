@@ -1,1 +1,0 @@
-zef_init_butterfly_plot;

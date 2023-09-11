@@ -1,16 +1,16 @@
 function str = zef_string_from_source_model(input)
 
-% Converts a ZefSourceModel input into a character array.
+% Converts a core.ZefSourceModel input into a character array.
 
 switch input
-    case ZefSourceModel.Error
+    case core.ZefSourceModel.Error
         str = 'Error';
-    case ZefSourceModel.Whitney
+    case core.ZefSourceModel.Whitney
         str = 'Whitney';
-    case ZefSourceModel.Hdiv
+    case core.ZefSourceModel.Hdiv
         str = 'H(div)'
     otherwise
-        warning("Did not receive a valid ZefSourceModel. Returning Error.")
+        warning("Did not receive a valid core.ZefSourceModel. Returning Error.")
         str = 'Error';
 end
 end

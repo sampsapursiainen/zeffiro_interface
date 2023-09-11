@@ -1,3 +1,0 @@
-function slider_value_new = zef_update_transparency_reconstruction(varargin)
-slider_value_new = zef_update_transparency_reconstruction(varargin);
-end

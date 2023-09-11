@@ -1,1 +1,0 @@
-zef_init_graphics_options;

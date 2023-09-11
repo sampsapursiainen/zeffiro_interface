@@ -1,1 +1,0 @@
-zef_meg_magnetometers_make_all;

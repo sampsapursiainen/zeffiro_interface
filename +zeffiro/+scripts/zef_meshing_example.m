@@ -1,3 +1,0 @@
-function zef_meshing_example
-zef_meshing_example;
-end

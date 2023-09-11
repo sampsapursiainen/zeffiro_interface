@@ -1,3 +1,0 @@
-function zef_compartment_table_selection(hObject,eventdata,handles)
-zef_compartment_table_selection(hObject,eventdata,handles);
-end

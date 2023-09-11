@@ -1,3 +1,0 @@
-function [reconstruction,reconstruction_information] = zef_reconstructionTool_import
-[reconstruction,reconstruction_information] = zef_reconstructionTool_import;
-end

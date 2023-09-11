@@ -171,7 +171,7 @@ end
 
 % Convert source model to new format.
 
-source_model = ZefSourceModel.from(source_model);
+source_model = core.ZefSourceModel.from(source_model);
 
 % Volume
 

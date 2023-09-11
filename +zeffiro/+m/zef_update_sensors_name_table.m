@@ -1,1 +1,0 @@
-zef_update_sensors_name_table;

@@ -1,1 +1,0 @@
-creat_points;
