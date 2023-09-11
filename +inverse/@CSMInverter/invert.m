@@ -46,7 +46,7 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
         f (:,1) {mustBeA(f,["double","gpuArray"])}
 
-        L (:,:) {mustBeA(f,["double","gpuArray"])}
+        L (:,:) {mustBeA(L,["double","gpuArray"])}
 
         procFile (1,1) struct
 
