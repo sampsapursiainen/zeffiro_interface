@@ -49,9 +49,9 @@ function [z_vec] = invert(self, f, L, procFile, f_data, source_direction_mode, o
 
         self (1,1) inverse.EXPInverter
 
-        f (:,1) double
+        f (:,:) {mustBeA(f,["double","gpuArray"])}
 
-        L (:,:) double
+        L (:,:) {mustBeA(L,["double","gpuArray"])}
 
         procFile (1,1) struct
 
@@ -60,6 +60,8 @@ function [z_vec] = invert(self, f, L, procFile, f_data, source_direction_mode, o
         source_direction_mode
 
         opts.use_gpu (1,1) logical = false
+
+        opts.normalize_data (1,1) double = 1
 
     end
 
@@ -71,6 +73,13 @@ cleanup_fn = @(wb) close(wb);
 cleanup_obj = onCleanup(@() cleanup_fn(h));
 
 estimation_type = self.estimation_type;
+if strcmp(estimation_type,"IAS")
+    estimation_type = 1;
+elseif strcmp(estimation_type,"EM")
+    estimation_type = 2;
+elseif strcmp(estimation_type,"sLORETA")
+    estimation_type = 3;
+end
 n_map_iterations = self.n_map_iterations;
 n_L1_iterations = self.n_L1_iterations;
 hypermode = self.hyperprior_mode;
@@ -96,44 +105,42 @@ else
 end
 
 %Saved reconstruction information:
-% if use_multires
-%     EndTAG = ' Multiresolution';
-% else
-%     EndTAG = '';
-% end
-% if estimation_type == 1
-%     StartTAG = 'EXP IAS';
-% elseif estimation_type == 2
-%     StartTAG = 'EXP EM';
-% elseif estimation_type == 3
-%     StartTAG = 'EXP sLORETA';
-% end
-% reconstruction_information.tag = [StartTAG,EndTAG];
-% reconstruction_information.inv_time_1 = zef.inv_time_1;
-% reconstruction_information.inv_time_2 = zef.inv_time_2;
-% reconstruction_information.inv_time_3 = zef.inv_time_3;
-% reconstruction_information.inv_sampling_frequency = zef.inv_sampling_frequency;
-% reconstruction_information.inv_high_cut_frequency = zef.inv_high_cut_frequency;
-% reconstruction_information.inv_low_cut_frequency = zef.inv_low_cut_frequency;
-% reconstruction_information.number_of_frames = zef.number_of_frames;
-% reconstruction_information.source_direction_mode = zef.source_direction_mode;
-% reconstruction_information.source_directions = zef.source_directions;
-% reconstruction_information.inv_snr = zef.inv_snr;
-% reconstruction_information.exp_q = q;
-% reconstruction_information.exp_n_L1_iterations = n_L1_iterations;
-% reconstruction_information.exp_n_map_iterations = n_map_iterations;
+if use_multires
+    EndTAG = ' Multiresolution';
+else
+    EndTAG = '';
+end
+if estimation_type == 1
+    StartTAG = 'EXP IAS';
+elseif estimation_type == 2
+    StartTAG = 'EXP EM';
+elseif estimation_type == 3
+    StartTAG = 'EXP sLORETA';
+end
+reconstruction_information.tag = [StartTAG,EndTAG];
+reconstruction_information.inv_time_1 = self.time_start;
+reconstruction_information.inv_time_2 = self.time_window;
+reconstruction_information.inv_time_3 = self.time_step;
+reconstruction_information.inv_sampling_frequency = self.sampling_frequency;
+reconstruction_information.inv_high_cut_frequency = self.high_cut_frequency;
+reconstruction_information.inv_low_cut_frequency = self.low_cut_frequency;
+reconstruction_information.number_of_frames = self.number_of_frames;
+reconstruction_information.inv_snr = self.inv_snr;
+reconstruction_information.exp_q = q;
+reconstruction_information.exp_n_L1_iterations = n_L1_iterations;
+reconstruction_information.exp_n_map_iterations = n_map_iterations;
 
-% if ismember(hypermode,[1,2])
-%     reconstruction_information.inv_hyperprior = zef.inv_hyperprior;
-%     reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
-% else
-%     reconstruction_information.exp_multires_theta0 = theta0;
-%     reconstruction_information.exp_multires_beta = beta;
-% end
-% 
-% reconstruction_information.exp_multires_n_decompositions = multires_n_decompositions;
-% reconstruction_information.exp_multires_n_levels = multires_n_levels;
-% reconstruction_information.exp_multires_sparsity = multires_sparsity_factor;
+if ismember(hypermode,["constant","balanced"])
+    reconstruction_information.inv_hyperprior = self.hyperprior_mode;
+    reconstruction_information.pm_val = self.inv_prior_over_measurement_db;
+else
+    reconstruction_information.exp_multires_theta0 = theta0;
+    reconstruction_information.exp_multires_beta = beta;
+end
+
+reconstruction_information.exp_multires_n_decompositions = multires_n_decompositions;
+reconstruction_information.exp_multires_n_levels = multires_n_levels;
+reconstruction_information.exp_multires_sparsity = multires_sparsity_factor;
 
 
 S_mat = std_lhood^2*max(f_data.^2,[],'all')*eye(size(L,1));
@@ -197,14 +204,14 @@ for j = 1 : multires_n_levels
     end
     source_count = size(L_aux,2);
 
-    if ismember(hypermode,[1,2])
+    if ismember(hypermode,["constant","balanced"])
         if opts.normalize_data==1
             normalize_data = 'maximum';
         else
             normalize_data = 'average';
         end
     
-        if hypermode == 1
+        if strcmp(hypermode,"balanced")
             balance_spatially = 1;
         else
             balance_spatially = 0;
@@ -253,7 +260,9 @@ if q == 1
 
         x_old = z_vec;
         if multires_n_decompositions == 1
-            zef_waitbar(i/n_map_iterations(j),h,[StartTAG,' MAP iteration.']);
+            if i/n_map_iterations(j) < 1
+                zef_waitbar(i/n_map_iterations(j),h,[StartTAG,' MAP iteration.']);
+            end
         end
     end
 else

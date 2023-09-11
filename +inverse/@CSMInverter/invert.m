@@ -44,9 +44,9 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
 
         self (1,1) inverse.CSMInverter
 
-        f (:,1) double
+        f (:,1) {mustBeA(f,["double","gpuArray"])}
 
-        L (:,:) double
+        L (:,:) {mustBeA(f,["double","gpuArray"])}
 
         procFile (1,1) struct
 
@@ -55,6 +55,8 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
         source_positions
 
         opts.use_gpu (1,1) logical = false
+
+        opts.normalize_data (1,1) double = 1
 
     end
 

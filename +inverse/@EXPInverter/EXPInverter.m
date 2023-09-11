@@ -39,6 +39,8 @@ classdef EXPInverter < inverse.CommonInverseParameters
 
         inv_hyperprior_weight (1,1) double = 0
 
+        inv_snr (1,1) double = 30
+
     end % properties
 
     methods
@@ -86,6 +88,8 @@ classdef EXPInverter < inverse.CommonInverseParameters
                 args.inv_hyperprior_tail_length_db = 10
 
                 args.inv_hyperprior_weight = 0
+
+                args.inv_snr = 30
 
                 args.low_cut_frequency = 7
 
@@ -146,6 +150,8 @@ classdef EXPInverter < inverse.CommonInverseParameters
             self.inv_hyperprior_tail_length_db = args.inv_hyperprior_tail_length_db;
             
             self.inv_hyperprior_weight = args.inv_hyperprior_weight;
+
+            self.inv_snr = args.inv_snr;
 
         end
     
