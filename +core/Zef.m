@@ -28,7 +28,7 @@ classdef Zef < handle
         % configuration. The rows correspond to sensors and column correspond to the different
         % source positions.
         %
-        L (:,:) double { mustBeNonNan, mustBeFinite }
+        L (1,1) core.LeadField = core.LeadField
         %
     end % properties
 
@@ -47,7 +47,7 @@ classdef Zef < handle
 
                 kwargs.tetra = []
 
-                kwargs.L = []
+                kwargs.L = core.LeadField
 
             end
 
