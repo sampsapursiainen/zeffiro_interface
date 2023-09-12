@@ -170,7 +170,7 @@ function self = from_ascii_file ( self, fname )
 
     end
 
-    labels = ( largest_label + 1 ) * ones ( n_of_faces, 1 ) ;
+    labels = ( largest_label + 1 ) * uint64 ( ones ( n_of_faces, 1 ) ) ;
 
     self.labels = [ self.labels ; labels ] ;
 
