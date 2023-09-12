@@ -9,18 +9,9 @@ classdef Zef < handle
 
     properties
         %
-        % nodes
+        % A tetrahedral finite element mesh.
         %
-        % Triples of coordinates making up the the 3D nodes of a finite element mesh.
-        %
-        nodes (:,3) double { mustBeNonNan, mustBeFinite } = []
-        %
-        % tetra
-        %
-        % Quadruples of node indices of a finite element mesh, defining which nodes belong to which
-        % element.
-        %
-        tetra (:,4) uint64 { mustBePositive } = []
+        tetra_mesh (1,1) core.TetraMesh = core.TetraMesh
         %
         % L
         %
@@ -62,9 +53,7 @@ classdef Zef < handle
 
             arguments
 
-                kwargs.nodes = []
-
-                kwargs.tetra = []
+                kwargs.tetra_mesh = core.TetraMesh
 
                 kwargs.L = core.LeadField
 
