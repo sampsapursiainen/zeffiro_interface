@@ -74,13 +74,9 @@ classdef Electrode
 
             if self.inner_radius > self.outer_radius
 
-                self.inner_radius = self.outer_radius ;
+                self.inner_radius = kwargs.outer_radius ;
 
-            end
-
-            if self.outer_radius < self.inner_radius
-
-                self.outer_radius = self.inner_radius + eps ( self.inner_radius ) ;
+                self.inner_radius = kwargs.outer_radius + eps ( kwargs.outer_radius ) ;
 
             end
 
