@@ -199,29 +199,13 @@ classdef CommonInverseParameters
 
             end % arguments
 
-            self.low_cut_frequency = args.low_cut_frequency;
+            fns = string ( fieldnames ( args ) ) ;
 
-            self.high_cut_frequency = args.high_cut_frequency;
+            for ii = 1 : numel ( fns )
 
-            self.data_normalization_method = args.data_normalization_method;
+                self.(fns(ii)) = args.(fns(ii)) ;
 
-            self.number_of_frames = args.number_of_frames;
-
-            self.prior_mode = args.prior_mode;
-
-            self.sampling_frequency = args.sampling_frequency;
-
-            self.time_start = args.time_start;
-
-            self.time_window = args.time_window;
-
-            self.time_step = args.time_step;
-
-            self.signal_to_noise_ratio = args.signal_to_noise_ratio;
-
-            self.inv_amplitude_db = args.inv_amplitude_db;
-
-            self.inv_prior_over_measurement_db = args.inv_prior_over_measurement_db;
+            end
 
         end % function
 
