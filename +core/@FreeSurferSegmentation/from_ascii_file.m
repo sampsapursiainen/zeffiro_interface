@@ -156,11 +156,11 @@ function self = from_ascii_file ( self, fname )
         error ( "Found faces with indices greater than the number of nodes in '" + fname + "'." )
     end
 
-    % We got to the end, so set fields in self.
+    % We got to the end, so expand fields in self.
 
-    self.nodes = nodes ;
+    self.nodes = [ self.nodes, nodes ] ;
 
-    self.triangles = faces + 1 ;
+    self.triangles = [ self.triangles, faces + 1 ] ;
 
 end % function
 
