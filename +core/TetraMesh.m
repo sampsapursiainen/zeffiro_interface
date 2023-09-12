@@ -64,7 +64,7 @@ classdef TetraMesh
 
             if n_of_nodes > maxind
 
-                error ( "The tetrahedra in the mesh are referencing a maximum node index of " + maxind + ", but the number of nodes is" + n_of_nodes + ".")
+                error ( "The tetrahedra in the mesh are referencing a maximum node index of " + maxind + ", but the number of nodes is " + n_of_nodes + ".")
 
             end
 
@@ -72,19 +72,29 @@ classdef TetraMesh
 
             n_of_tetra = size ( self.tetra, 2 ) ;
 
+            node_inds = 1 : n_of_nodes ;
+
             for ii = 1 : n_of_tetra
 
-                tetra = self.tetra ( ii : ii + 3 )
+                ti = 4 * (ii - 1) + 1 ;
 
-                unique_inds = unique ( tetra )
+                hedron = self.tetra ( ti : ti + 3 ) ;
+
+                unique_inds = unique ( hedron ) ;
 
                 if numel ( unique_inds ) ~= 4
 
-                    error ( "The tetrahedron " + ii + " does not contain 4 separate node indices." ) ;
+                    error ( "The tetrahedron with index " + ii + " does not contain 4 separate node indices." ) ;
 
                 end
 
-            end
+                if not ( all ( ismember ( hedron, node_inds ) ) )
+
+                    error ( "Tetrahedron with index " + ii + " is referencing a node that does not exist." ) ;
+
+                end
+
+            end % for
 
             % Check that all nodes in the mesh are referenced by at least one tetrahedron.
 
