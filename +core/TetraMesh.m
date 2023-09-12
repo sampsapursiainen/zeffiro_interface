@@ -48,6 +48,23 @@ classdef TetraMesh
 
             end % for
 
+            self = self.validate () ;
+
+        end % function
+
+        function self = validate ( self )
+        %
+        % validate_mesh ( self )
+        %
+        % Checks that the mesh is valid.
+        %
+
+            arguments
+
+                self (1,1) core.TetraMesh
+
+            end
+
             % Check that there are at least 4 nodes in the mesh.
 
             n_of_nodes = size ( self.nodes, 2 ) ;
