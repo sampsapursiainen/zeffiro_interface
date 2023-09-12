@@ -50,9 +50,9 @@ classdef Zef < handle
         %
         %   The tetrahedra which indicate the shapes formed by the above nodes.
         %
-        % kwargs.L
+        % - kwargs.L
         %
-        % - A lead field matrix constructed from a given set of synthetic sources and a sensor
+        %   A lead field matrix constructed from a given set of synthetic sources and a sensor
         %   configuration.
         %
 
