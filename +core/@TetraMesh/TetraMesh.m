@@ -18,6 +18,10 @@ classdef TetraMesh
         %
         tetra (4,:) uint64 { mustBePositive } = []
         %
+        % The labels that indicate which compartment each tetrahedron belongs into.
+        %
+        labels (:,1) uint64 = []
+        %
     end % properties
 
     methods
@@ -26,7 +30,8 @@ classdef TetraMesh
         %
         % TetraMesh (
         %   kwargs.nodes,
-        %   kwargs.tetra
+        %   kwargs.tetra,
+        %   kwargs.labels
         % )
         %
         % A constructor for this class.
@@ -37,6 +42,8 @@ classdef TetraMesh
                 kwargs.nodes = []
 
                 kwargs.tetra = []
+
+                kwargs.labels = []
 
             end
 
