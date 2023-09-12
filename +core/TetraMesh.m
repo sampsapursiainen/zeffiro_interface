@@ -95,9 +95,9 @@ classdef TetraMesh
 
                 end
 
-                maxind = max ( hedron )
+                maxind = max ( hedron ) ;
 
-                n_of_nodes
+                n_of_nodes ;
 
                 if n_of_nodes < maxind
 
