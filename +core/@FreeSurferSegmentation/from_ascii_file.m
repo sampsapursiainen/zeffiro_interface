@@ -162,6 +162,18 @@ function self = from_ascii_file ( self, fname )
 
     self.triangles = [ self.triangles, faces + 1 ] ;
 
+    largest_label = max ( self.labels ) ;
+
+    if isempty ( largest_label )
+
+        largest_label = 0 ;
+
+    end
+
+    labels = ( largest_label + 1 ) * ones ( n_of_faces, 1 ) ;
+
+    self.labels = [ self.labels ; labels ] ;
+
 end % function
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
