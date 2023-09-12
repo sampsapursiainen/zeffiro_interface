@@ -30,6 +30,10 @@ classdef Zef < handle
         %
         L (1,1) core.LeadField = core.LeadField
         %
+        % The electrodes used in computing the lead field, among other things.
+        %
+        electrodes (:,1) core.Electrode = core.Electrode.empty
+        %
     end % properties
 
     methods
@@ -63,6 +67,8 @@ classdef Zef < handle
                 kwargs.tetra = []
 
                 kwargs.L = core.LeadField
+
+                kwargs.electrodes = core.Electrode.empty
 
             end
 
