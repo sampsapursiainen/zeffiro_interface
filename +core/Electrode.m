@@ -76,7 +76,7 @@ classdef Electrode
 
                 self.inner_radius = kwargs.outer_radius ;
 
-                self.inner_radius = kwargs.outer_radius + eps ( kwargs.outer_radius ) ;
+                self.outer_radius = kwargs.outer_radius + eps ( kwargs.outer_radius ) ;
 
             end
 
