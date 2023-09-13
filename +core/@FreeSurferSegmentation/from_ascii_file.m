@@ -158,9 +158,13 @@ function self = from_ascii_file ( self, fname )
 
     % We got to the end, so expand fields in self.
 
-    self.nodes = [ self.nodes, nodes ] ;
+    node_range = ( self.node_count : self.node_count + n_of_nodes - 1 ) + 1 ;
 
-    self.triangles = [ self.triangles, faces + 1 ] ;
+    triangle_range = ( self.triangle_count : self.triangle_count + n_of_faces - 1 ) + 1 ;
+
+    self.nodes ( : , node_range ) = nodes ;
+
+    self.triangles ( : , triangle_range ) = faces + 1 ;
 
     largest_label = max ( self.labels ) ;
 
@@ -172,7 +176,7 @@ function self = from_ascii_file ( self, fname )
 
     labels = ( largest_label + 1 ) * uint64 ( ones ( n_of_faces, 1 ) ) ;
 
-    self.labels = [ self.labels ; labels ] ;
+    self.labels ( triangle_range ) = labels ;
 
 end % function
 
