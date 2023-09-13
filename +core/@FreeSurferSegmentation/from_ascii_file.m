@@ -28,25 +28,13 @@ function self = from_ascii_file ( self, fname )
 
     end
 
-    fid = fopen ( fname, 'r' ) ;
+    fcontents = string ( fileread ( fname ) ) ;
 
-    if fid == -1
-        error ( "Could not open file '" + fname + "'." ) ;
-    end
-
-    cleanup_obj = utilities.cleanup_via_fclose ( fid ) ; % Make sure file is closed, if it was opened.
+    flines = split ( fcontents, newline ) ;
 
     ERR = "ERR: " + fname + ": " ;
 
-    first_line = fgetl ( fid ) ;
-
-    % The file was empty and we found an EOF character.
-
-    if utilities.is_eof ( first_line )
-        return % error ( ERR + "Empty file" ) ;
-    end
-
-    first_line = string ( first_line ) ;
+    first_line = flines ( 1 ) ;
 
     % The file did not contain the expected header information
 
@@ -56,15 +44,7 @@ function self = from_ascii_file ( self, fname )
 
     % Read second line for needed array sizes.
 
-    second_line = string ( fgetl ( fid ) );
-
-    % The file was empty and we found an EOF character.
-
-    if utilities.is_eof ( second_line )
-        return % error ( ERR + "No second line" ) ;
-    end
-
-    second_line = string ( second_line ) ;
+    second_line = flines ( 2 ) ;
 
     n_of_nodes_and_faces = string ( strsplit ( second_line, " " ) ) ;
 
@@ -92,7 +72,7 @@ function self = from_ascii_file ( self, fname )
 
     for ii = 1 : n_of_nodes
 
-        this_line = fgetl ( fid ) ;
+        this_line = flines ( 2 + ii ) ;
 
         if utilities.is_eof ( this_line )
             error ( ERR + "Reached end of file before all nodes were handled" ) ;
@@ -124,7 +104,7 @@ function self = from_ascii_file ( self, fname )
 
         linenum = n_of_nodes + ii + 2 ;
 
-        this_line = fgetl ( fid ) ;
+        this_line = flines ( linenum ) ;
 
         if utilities.is_eof ( this_line )
             error ( ERR + "Reached end of file before all faces were handled" ) ;
