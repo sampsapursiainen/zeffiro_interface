@@ -24,17 +24,25 @@ function self = preallocate_from_ascii_folder ( self, folder )
 
     triangle_count = 0 ;
 
+    file_count = 0 ;
+
     for ii = 1 : numel ( ascii_paths )
 
         ascii_path = ascii_paths ( ii ) ;
 
-        [ n_of_nodes, n_of_triangles ] = counts_from_file ( ascii_path ) ;
+        [ n_of_nodes, n_of_triangles, is_segmentation_file ] = counts_from_file ( ascii_path ) ;
 
         node_count = node_count + n_of_nodes ;
 
         triangle_count = triangle_count + n_of_triangles ;
 
-    end
+        if is_segmentation_file
+
+            file_count = file_count + 1 ;
+
+        end
+
+    end % for
 
     % Preallocate arrays in self.
 
@@ -44,9 +52,11 @@ function self = preallocate_from_ascii_folder ( self, folder )
 
     self.labels = zeros ( triangle_count, 1 ) ;
 
+    self.label_names = repmat ( "", file_count , 1 ) ;
+
 end % function
 
-function [ node_count, triangle_count ] = counts_from_file ( fpath )
+function [ node_count, triangle_count, is_segmentation_file ] = counts_from_file ( fpath )
 
     arguments
 
@@ -57,6 +67,8 @@ function [ node_count, triangle_count ] = counts_from_file ( fpath )
     node_count = 0 ;
 
     triangle_count = 0 ;
+
+    is_segmentation_file = false ;
 
     fid = fopen ( fpath, 'r' ) ;
 
@@ -119,5 +131,7 @@ function [ node_count, triangle_count ] = counts_from_file ( fpath )
     node_count = potential_node_count ;
 
     triangle_count = potential_triangle_count ;
+
+    is_segmentation_file = true ;
 
 end

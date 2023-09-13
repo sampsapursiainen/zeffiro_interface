@@ -170,4 +170,20 @@ function self = from_ascii_file ( self, fname )
 
     self.labels ( triangle_range ) = labels ;
 
+    [ ~, name, ~ ] = fileparts ( fname ) ;
+
+    name = string ( name ) ;
+
+    if isempty ( self.label_names ) || all ( self.label_names == "" )
+
+        name_ind = 1 ;
+
+    else
+
+        name_ind = min ( find ( self.label_names == "" ) ) ;
+
+    end
+
+    self.label_names ( name_ind ) = name ;
+
 end % function

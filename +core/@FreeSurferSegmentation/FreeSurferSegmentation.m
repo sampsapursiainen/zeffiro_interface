@@ -23,6 +23,8 @@ classdef FreeSurferSegmentation
         %
         labels (:,1) uint64 = []
 
+        label_names (:,1) string = string ( [] )
+
     end % properties
 
     methods
@@ -32,13 +34,15 @@ classdef FreeSurferSegmentation
         % FreeSurferSegmentation (
         %   kwargs.nodes,
         %   kwargs.triangles,
-        %   kwargs.labels
+        %   kwargs.labels,
+        %   kwargs.label_names
         % )
         %
             arguments
                 kwargs.nodes = []
                 kwargs.triangles = []
                 kwargs.labels = []
+                kwargs.label_names = string ( [] )
             end
 
             field_names = string ( fieldnames ( kwargs ) ) ;
