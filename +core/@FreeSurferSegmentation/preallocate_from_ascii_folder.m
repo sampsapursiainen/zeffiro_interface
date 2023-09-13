@@ -38,11 +38,11 @@ function self = preallocate_from_ascii_folder ( self, folder )
 
     % Preallocate arrays in self.
 
-    self.nodes = zeros ( 3, node_count ) ;
+    self.nodes = NaN ( 3, node_count ) ;
 
-    self.triangles = ones ( 3, triangle_count ) ;
+    self.triangles = zeros ( 3, triangle_count ) ;
 
-    self.labels = ones ( triangle_count, 1 ) ;
+    self.labels = zeros ( triangle_count, 1 ) ;
 
 end % function
 
@@ -116,8 +116,8 @@ function [ node_count, triangle_count ] = counts_from_file ( fpath )
         return
     end
 
-    node_count = double ( n_of_nodes_and_faces (1) );
+    node_count = potential_node_count ;
 
-    triangle_count = double ( n_of_nodes_and_faces (2) ) ;
+    triangle_count = potential_triangle_count ;
 
 end

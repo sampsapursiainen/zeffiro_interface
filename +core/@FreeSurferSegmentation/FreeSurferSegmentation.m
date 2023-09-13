@@ -11,17 +11,17 @@ classdef FreeSurferSegmentation
         %
         % The nodes read in from a surface segmentation file.
         %
-        nodes (3,:) double { mustBeNonNan, mustBeFinite }
+        nodes (3,:) double = []
 
         %
         % The triangles (triples of node indices) read in from a segmentation file.
         %
-        triangles (3,:) uint64 { mustBePositive }
+        triangles (3,:) uint64 = []
 
         %
         % The numerical labels indicating which compartment each triangle belongs to.
         %
-        labels (:,1) uint64 { mustBePositive }
+        labels (:,1) uint64 = []
 
     end % properties
 

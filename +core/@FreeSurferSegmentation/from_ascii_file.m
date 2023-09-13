@@ -34,7 +34,7 @@ function self = from_ascii_file ( self, fname )
         error ( "Could not open file '" + fname + "'." ) ;
     end
 
-    cleanup_obj = onCleanup ( @() cleanup_fn ( fid ) ) ; % Make sure file is closed, if it was opened.
+    cleanup_obj = utilities.cleanup_via_fclose ( fid ) ; % Make sure file is closed, if it was opened.
 
     ERR = "ERR: " + fname + ": " ;
 
@@ -43,7 +43,7 @@ function self = from_ascii_file ( self, fname )
     % The file was empty and we found an EOF character.
 
     if utilities.is_eof ( first_line )
-        error ( ERR + "Empty file" ) ;
+        return % error ( ERR + "Empty file" ) ;
     end
 
     first_line = string ( first_line ) ;
@@ -51,7 +51,7 @@ function self = from_ascii_file ( self, fname )
     % The file did not contain the expected header information
 
     if not ( startsWith ( first_line, "#!ascii version of" ) )
-        error ( ERR + "Invalid first line '" + first_line + "'" );
+        return % error ( ERR + "Invalid first line '" + first_line + "'" );
     end
 
     % Read second line for needed array sizes.
@@ -61,7 +61,7 @@ function self = from_ascii_file ( self, fname )
     % The file was empty and we found an EOF character.
 
     if utilities.is_eof ( second_line )
-        error ( ERR + "No second line" ) ;
+        return % error ( ERR + "No second line" ) ;
     end
 
     second_line = string ( second_line ) ;
@@ -69,7 +69,7 @@ function self = from_ascii_file ( self, fname )
     n_of_nodes_and_faces = string ( strsplit ( second_line, " " ) ) ;
 
     if numel ( n_of_nodes_and_faces ) ~= 2
-        error ( ERR + "Wrong 2nd line length" ) ;
+        return % error ( ERR + "Wrong 2nd line length" ) ;
     end
 
     n_of_nodes = double ( n_of_nodes_and_faces (1) );
@@ -77,11 +77,11 @@ function self = from_ascii_file ( self, fname )
     n_of_faces = double ( n_of_nodes_and_faces (2) ) ;
 
     if not ( utilities.float_is_int ( n_of_nodes ) ) || n_of_nodes < 1
-        error ( ERR + "Number of nodes on 2nd line was not a positive integer" ) ;
+        return % error ( ERR + "Number of nodes on 2nd line was not a positive integer" ) ;
     end
 
     if not ( utilities.float_is_int ( n_of_faces ) ) || n_of_faces < 1
-        error ( ERR + "Number of faces on 2nd line was not a positive integer" ) ;
+        return % error ( ERR + "Number of faces on 2nd line was not a positive integer" ) ;
     end
 
     % Then go over the nodes and store them in the array...
@@ -156,11 +156,23 @@ function self = from_ascii_file ( self, fname )
         error ( "Found faces with indices greater than the number of nodes in '" + fname + "'." )
     end
 
-    % We got to the end, so expand fields in self.
+    % We got to the end, so expand fields in self in a way that is compatible with pre-allocation.
 
-    node_range = ( self.node_count : self.node_count + n_of_nodes - 1 ) + 1 ;
+    if isempty ( self.nodes ) || all ( isnan ( self.nodes (:) ) )
+        node_start_pos = 1 ;
+    else
+        node_start_pos = min ( find ( any ( isnan ( self.nodes ), 1 ) ) ) ;
+    end
 
-    triangle_range = ( self.triangle_count : self.triangle_count + n_of_faces - 1 ) + 1 ;
+    if isempty ( self.triangles ) || all ( self.triangles (:) == 0 )
+        face_start_pos = 1 ;
+    else
+        face_start_pos = min ( find ( any ( self.triangles == 0, 1 ) ) ) ;
+    end
+
+    node_range = ( node_start_pos : node_start_pos + n_of_nodes - 1 ) ;
+
+    triangle_range = ( face_start_pos : face_start_pos + n_of_faces - 1 ) ;
 
     self.nodes ( : , node_range ) = nodes ;
 
@@ -179,11 +191,3 @@ function self = from_ascii_file ( self, fname )
     self.labels ( triangle_range ) = labels ;
 
 end % function
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function cleanup_fn ( fid )
-
-    fclose ( fid ) ;
-
-end
