@@ -35,7 +35,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 
     end
 
-    fprintf ( io_descriptor, newline + "Reading " + fname + "..."  ) ;
+    fprintf ( io_descriptor, "Reading " + fname + "..." + newline ) ;
 
     fcontents = string ( fileread ( fname ) ) ;
 
