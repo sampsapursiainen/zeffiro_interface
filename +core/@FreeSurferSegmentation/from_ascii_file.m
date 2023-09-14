@@ -150,13 +150,13 @@ function self = from_ascii_file ( self, fname, io_descriptor )
     if isempty ( self.nodes ) || all ( isnan ( self.nodes (:) ) )
         node_start_pos = 1 ;
     else
-        node_start_pos = min ( find ( any ( isnan ( self.nodes ), 1 ) ) ) ;
+        node_start_pos = max ( find ( any ( not ( isnan ( self.nodes ) ), 1 ) ) ) + 1 ;
     end
 
     if isempty ( self.triangles ) || all ( self.triangles (:) == 0 )
         face_start_pos = 1 ;
     else
-        face_start_pos = min ( find ( any ( self.triangles == 0, 1 ) ) ) ;
+        face_start_pos = max ( find ( any ( self.triangles ~= 0, 1 ) ) ) + 1 ;
     end
 
     node_range = ( node_start_pos : node_start_pos + n_of_nodes - 1 ) ;
@@ -189,7 +189,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 
     else
 
-        name_ind = min ( find ( self.label_names == "" ) ) ;
+        name_ind = max ( find ( self.label_names ~= "" ) ) + 1;
 
     end
 
