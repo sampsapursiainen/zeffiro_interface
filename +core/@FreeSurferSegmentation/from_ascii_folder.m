@@ -1,10 +1,12 @@
-function self = from_ascii_folder ( self, folder )
+function self = from_ascii_folder ( self, folder, io_descriptor )
 
     arguments
 
         self (1,1) core.FreeSurferSegmentation
 
         folder (1,1) string { mustBeFolder }
+
+        io_descriptor (1,1) double { mustBePositive, mustBeInteger } = utilities.fopen_devnull
 
     end
 
@@ -22,7 +24,7 @@ function self = from_ascii_folder ( self, folder )
 
     for ii = 1 : numel ( ascii_paths )
 
-        self = self.from_ascii_file ( ascii_paths ( ii ) ) ;
+        self = self.from_ascii_file ( ascii_paths ( ii ), io_descriptor ) ;
 
     end
 

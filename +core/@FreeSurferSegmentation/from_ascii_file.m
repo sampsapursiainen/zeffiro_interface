@@ -1,6 +1,6 @@
-function self = from_ascii_file ( self, fname )
+function self = from_ascii_file ( self, fname, io_descriptor )
 %
-% from_ascii_file ( self, fname )
+% self = from_ascii_file ( self, fname, io_descriptor )
 %
 % Reads in a segmentation file line by line and extracts the information from within it. Throws an
 % exception if the given file does not conform to the expected format.
@@ -11,6 +11,11 @@ function self = from_ascii_file ( self, fname )
 %
 %   The file name of a FreeSurfer-generated ASCII segmentation file from which
 %   nodes and faces are to be extracted.
+%
+% - io_descriptor
+%
+%   The text file the logs will be written to. By default, this is the null device, so priting is
+%   discarded.
 %
 % Outputs:
 %
@@ -26,7 +31,11 @@ function self = from_ascii_file ( self, fname )
 
         fname (1,1) string { mustBeFile }
 
+        io_descriptor (1,1) double { mustBePositive, mustBeInteger } = utilities.fopen_devnull
+
     end
+
+    fprintf ( io_descriptor, newline + "Reading " + fname + "..."  ) ;
 
     fcontents = string ( fileread ( fname ) ) ;
 
