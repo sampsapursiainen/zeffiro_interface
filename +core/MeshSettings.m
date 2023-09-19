@@ -15,7 +15,8 @@ classdef MeshSettings
         exclude_box (1,1) logical = true
         fem_mesh_inflation_strength (1,1) double { mustBeNonnegative } = 0.05
         fix_outer_surface (1,1) logical = true
-        initial_mesh_mode (1,1) double { mustBeMember (initial_mesh_mode, [1, 2]) } = 1
+        initial_mesh_mode (1,1) double { mustBeMember(initial_mesh_mode, [1, 2]) } = 1
+        label_array_cols (1,1) uint64 { mustBeMember( label_array_cols, [4,8] ) } = 8
         mesh_labeling_approach (1,1) double { mustBeMember (mesh_labeling_approach, [1, 2]) } = 1
         mesh_optimization_parameter (1,1) double { mustBePositive } = 1e-5
         mesh_optimization_repetitions (1,1) double { mustBeNonnegative, mustBeInteger } = 10
@@ -45,6 +46,7 @@ classdef MeshSettings
         smoothing_steps_ele (1,1) double { mustBePositive } = 0.2
         smoothing_steps_surf (1,1) double { mustBePositive } = 0.10
         smoothing_steps_vol (1,1) double { mustBePositive } = 0.90
+        tetra_subdivisions (1,1) uint64 { mustBeMember(tetra_subdivisions, [5,6]) } = 5
         use_fem_mesh_inflation (1,1) logical = true
         use_gpu (1,1) logical = true;
     end % properties
@@ -68,6 +70,7 @@ classdef MeshSettings
                 kwargs.fem_mesh_inflation_strength = 0.05
                 kwargs.fix_outer_surface = true
                 kwargs.initial_mesh_mode = 1
+                kwargs.label_array_cols = 8
                 kwargs.mesh_labeling_approach = 1
                 kwargs.mesh_optimization_parameter = 1e-5
                 kwargs.mesh_optimization_repetitions = 10
@@ -97,6 +100,7 @@ classdef MeshSettings
                 kwargs.smoothing_steps_ele = 0.2
                 kwargs.smoothing_steps_surf = 0.10
                 kwargs.smoothing_steps_vol = 0.90
+                kwargs.tetra_subdivisions = 5
                 kwargs.use_fem_mesh_inflation = true
                 kwargs.use_gpu = true
             end
