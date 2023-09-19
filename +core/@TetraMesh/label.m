@@ -12,9 +12,13 @@ function self = label ( self, segmentation, settings, stage )
         stage (1,1) string { mustBeMember( stage, ["initial","relabeling","adaptive-relabeling"] ) }
     end
 
+    nodes = transpose ( self.nodes ) ;
+
+    tetra = transpose ( self.tetra ) ;
+
     if stage == "initial"
 
-        domain_labels = initial_labeling ( nodes, tetra, settings, segmentation ) ;
+        domain_labels = initial_labeling ( nodes, stetra, settings, segmentation ) ;
 
     elseif stage == "relabeling"
 
@@ -123,7 +127,7 @@ function labels = initial_labeling ( nodes, tetra, segmentation, settings )
 
 end % function
 
-function domain_labels = relabeling ( nodes, tetra, segmentation )
+function domain_labels = relabeling ( nodes, tetra, segmentation, settings )
 %
 % domain_labels = relabeling ( nodes, tetra, segmentation )
 %
@@ -170,7 +174,7 @@ function domain_labels = relabeling ( nodes, tetra, segmentation )
                         reuna_t_aux = reuna_t{i_labeling}(submesh_cell{i_labeling}(k_labeling-1)+1: submesh_cell{i_labeling}(k_labeling),:);
                     end
 
-                end
+                end % if
 
                 tetra_ind_aux = 0;
                 test_ind = -ones(size(nodes,1),1);
