@@ -33,8 +33,132 @@ function self = fromFreeSurferSegmentation ( self, segmentation, settings )
         self (1,1) core.TetraMesh
         segmentation (1,1) core.FreeSurferSegmentation
         settings (1,1) core.MeshSettings = core.MeshSettings
-    end % arguments
+    end
 
-    % TODO: mesh building algorithm.
+    % First, generate the nodes of a hexahedral mesh.
+
+    [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings ) ;
+
+    % Then generate an initial set of tetrahedra based on the nodes.
+
+    xnh = xnn - 1 ;
+    ynh = ynn - 1 ;
+    znh = znn - 1 ;
+
+    n_of_hexa = xnh * ynh * znh ;
+
+    tetra = uint64 ( zeros ( n_of_hexa * settings.tetra_subdivisions, 4 ) ) ;
+
+    label_ind = uint64 ( zeros ( n_of_hexa * settings.tetra_subdivisions, settings.label_array_cols ) ) ;
+
+    % Each hexaherdon contains 8 vertices, which the below matrix shares among
+    % the different tetrahedra. See Figure 1 of
+    % https://doi.org/10.48550/arXiv.2203.10000 for where vertex_mat comes
+    % from.
+
+    if settings.tetra_subdivisions == 5
+
+        vertex_mat = uint8 ( zeros ( 5, 4, 8 ) ) ;
+
+        vertex_mat (:,:,1) = [ 7 8 3 6 ; 8 1 3 6 ; 2 3 1 6 ; 1 5 6 8 ; 1 3 4 8 ];
+        vertex_mat (:,:,2) = [ 4 3 7 2 ; 2 7 4 5 ; 5 7 6 2 ; 1 5 2 4 ; 8 7 5 4 ];
+        vertex_mat (:,:,3) = [ 2 5 6 7 ; 7 5 4 2 ; 2 3 4 7 ; 1 2 4 5 ; 4 7 8 5 ];
+        vertex_mat (:,:,4) = [ 6 2 1 3 ; 1 3 8 6 ; 8 7 6 3 ; 5 8 6 1 ; 3 8 4 1 ];
+        vertex_mat (:,:,5) = [ 7 8 4 5 ; 5 4 7 2 ; 2 4 1 5 ; 2 5 6 7 ; 2 3 4 7 ];
+        vertex_mat (:,:,6) = [ 3 6 8 1 ; 1 3 4 8 ; 5 8 6 1 ; 1 6 2 3 ; 8 7 6 3 ];
+        vertex_mat (:,:,7) = [ 1 5 6 8 ; 6 8 3 1 ; 3 4 1 8 ; 2 3 1 6 ; 3 7 8 6 ];
+        vertex_mat (:,:,8) = [ 5 2 1 4 ; 4 2 7 5 ; 5 8 7 4 ; 5 7 6 2 ; 3 7 4 2 ];
+
+    elseif settings.tetra_subdivisions == 6
+
+        vertex_mat = uint8 ( [ 3 4 1 7 ; 2 3 1 7 ; 1 2 7 6 ; 7 1 6 5 ; 7 4 1 8 ; 7 8 1 5 ] ) ;
+
+    else
+
+        error ( "ZI mesh generation routine does not yet support hexahedral subdivisions other than 5 or 6." ) ;
+
+    end % if
+
+    ti = 1 ; % tetra index
+
+    for xi = 1 : xnh
+
+        for yi = 1 : ynh
+
+            for zi = 1 : znh
+
+                x_ind = [ xi ; xi+1 ; xi+1 ; xi   ; xi   ; xi+1 ; xi+1 ; xi   ] ;
+                y_ind = [ yi ; yi   ; yi+1 ; yi+1 ; yi   ; yi   ; yi+1 ; yi+1 ] ;
+                z_ind = [ zi ; zi   ; zi   ; zi   ; zi+1 ; zi+1 ; zi+1 ; zi+1 ] ;
+
+                dimension_sizes = [ xnn, ynn, znn ] ;
+
+                local_ind_mat = sub2ind ( dimension_sizes, x_ind, y_ind, z_ind ) ;
+
+                page = ( 2 - mod(xi,2) ) * ( 2 - mod(yi,2) ) * ( 2 - mod(zi,2) ) ;
+
+                local_vertices = vertex_mat ( :, :, page ) ;
+
+                tetra ( ti:ti+4, : ) = local_ind_mat ( local_vertices ) ;
+
+                if settings.label_array_cols == 8
+
+                    label_ind ( ti:ti+4, : ) = transpose ( local_ind_mat( :, ones ( 5, 1 ) ) ) ;
+
+                elseif settings.label_array_cols == 4
+
+                    label_ind ( ti:ti+4, : ) = tetra ( ti:ti+4, : ) ;
+
+                else
+
+                    error ( "Unsupported mesh labeling approach." ) ;
+
+                end % if
+
+                ti = ti + settings.tetra_subdivisions ;
+
+            end % for
+
+        end % for
+
+    end % for
+
+    self.nodes = hexanodes' ;
+
+    self.tetra = tetra' ;
+
+end % function
+
+%% Helper functions
+
+function [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings )
+%
+% [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings )
+%
+% Constructs a hexahedral mesh from a given surface segmentation. Returns the
+% nodes as a matrix [X, Y, Z] and the numbers of nodes along each dimension.
+%
+
+    arguments
+        segmentation (1,1) core.FreeSurferSegmentation
+        settings (1,1) core.MeshSettings
+    end
+
+    % First, find the boundaries of the mesh coordinates.
+
+    minb = min ( segmentation.nodes, [], 2 ) ;
+    maxb = max ( segmentation.nodes, [], 2 ) ;
+
+    boundaries = [ minb, maxb ];
+
+    xx = boundaries (1,1) : settings.mesh_resolution : boundaries (1,2) ;
+    yy = boundaries (2,1) : settings.mesh_resolution : boundaries (2,2) ;
+    zz = boundaries (3,1) : settings.mesh_resolution : boundaries (3,2) ;
+
+    [X,Y,Z] = meshgrid ( xx, yy, zz ) ;
+
+    [ xnn, ynn, znn ] = size ( X ) ;
+
+    hexanodes = [ X(:), Y(:), Z(:) ] ;
 
 end % function
