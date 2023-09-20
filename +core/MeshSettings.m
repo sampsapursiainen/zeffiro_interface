@@ -25,6 +25,8 @@ classdef MeshSettings
         mesh_smoothing_on (1,1) logical = true;
         mesh_smoothing_repetitions (1,1) double { mustBeNonnegative, mustBeInteger } = 1
         meshing_threshold (1,1) double { mustBePositive } = 0.25
+        parallel_processes (1,1) uint32 { mustBePositive } = 1
+        parallel_vectors (1,1) uint32 { mustBePositive } = 1
         pml_max_size (1,1) double { mustBePositive } = 2
         pml_max_size_unit (1,1) double { mustBeMember ( pml_max_size_unit, [1, 2] ) } = 1
         pml_outer_radius (1,1) double { mustBePositive } = 1.1
@@ -79,6 +81,8 @@ classdef MeshSettings
                 kwargs.mesh_smoothing_on = true;
                 kwargs.mesh_smoothing_repetitions = 1
                 kwargs.meshing_threshold = 0.25
+                kwargs.parallel_processes = 1
+                kwargs.parallel_vectors = 1
                 kwargs.pml_max_size = 2
                 kwargs.pml_max_size_unit = 1
                 kwargs.pml_outer_radius = 1.1
