@@ -13,7 +13,7 @@ function self = validate ( self )
 
     % Check that there are at least 4 nodes in the mesh.
 
-    n_of_nodes = size ( self.nodes, 2 ) ;
+    n_of_nodes = size ( self.nodes, 1 ) ;
 
     if not ( isempty ( self.nodes ) ) && n_of_nodes < 4
 
@@ -23,7 +23,7 @@ function self = validate ( self )
 
     % Check that tetrahedra consist of 4 separate nodes.
 
-    n_of_tetra = size ( self.tetra, 2 ) ;
+    n_of_tetra = size ( self.tetra, 1 ) ;
 
     node_inds = 1 : n_of_nodes ;
 

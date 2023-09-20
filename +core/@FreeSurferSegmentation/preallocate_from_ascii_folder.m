@@ -46,9 +46,9 @@ function self = preallocate_from_ascii_folder ( self, folder )
 
     % Preallocate arrays in self.
 
-    self.nodes = NaN ( 3, node_count ) ;
+    self.nodes = NaN ( node_count, 3 ) ;
 
-    self.triangles = zeros ( 3, triangle_count ) ;
+    self.triangles = zeros ( triangle_count, 3 ) ;
 
     self.labels = zeros ( triangle_count, 1 ) ;
 
