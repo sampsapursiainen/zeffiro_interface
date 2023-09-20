@@ -165,7 +165,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 
     self.nodes ( node_range, : ) = nodes ;
 
-    self.triangles ( triangle_range, : ) = faces + 1 ;
+    self.triangles ( triangle_range, : ) = faces + node_range(1) ;
 
     largest_label = max ( self.labels ) ;
 
