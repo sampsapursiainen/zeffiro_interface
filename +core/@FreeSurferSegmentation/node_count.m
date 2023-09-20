@@ -5,6 +5,6 @@ function count = node_count ( self )
 % Returns the number of nodes currently in the segmentation.
 %
 
-    count = size ( self.nodes, 2 ) ;
+    count = size ( self.nodes, 1 ) ;
 
 end % function
