@@ -1,0 +1,17 @@
+function coords = vertex_coordinates ( self, inds )
+%
+% coords = vertex_coords ( self, inds )
+%
+% Returns the coordinates of the triangles vertices in this surface mesh.
+%
+
+    arguments
+        self (1,1) core.FreeSurferSegmentation
+        inds (:,1) uint64 { mustBePositive } = 1 : self.triangle_count
+    end
+
+    triangles = self.triangles ( inds, : ) ;
+
+    coords = self.nodes ( triangles, : ) ;
+
+end % function
