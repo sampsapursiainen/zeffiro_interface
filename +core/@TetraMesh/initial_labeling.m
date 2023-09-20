@@ -40,13 +40,31 @@ function self = initial_labeling ( self, segmentation, settings )
 
         n_of_nodes_in_comp = size ( nodes_in_comp, 1 ) ;
 
-        surface_integrals = zeros ( n_of_nodes_in_comp, 1 ) ;
-
         % Compute surface normals for the triangles in this compartment.
 
         surface_normals = segmentation.surface_normals ( triI ) ;
 
         normal_positions = segmentation.triangle_barycenters ( triI ) ;
+
+        n_of_normal_positions = size ( normal_positions, 1 ) ;
+
+        triangle_areas = segmentation.triangle_areas ( triI ) ;
+
+        % Compute solid angle integral for each FEM node.
+
+        for jj = 1 : n_of_nodes_in_comp
+
+            femnode = nodes_in_comp ( jj, : ) ;
+
+            replicated_femnode = repmat ( femnode, n_of_normal_positions, 1 ) ; % TODO: get rid of this repeated allocation via preallocation.
+
+            diffs = normal_positions - replicated_femnode ;
+
+            dotprods = dot ( diffs, surface_normals, 2 ) ;
+
+            solid_angle_integral = sum ( dotprods .* triangle_areas ) ;
+
+        end % for
 
     end % for
 
