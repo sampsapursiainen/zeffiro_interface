@@ -12,6 +12,10 @@ function coords = vertex_coordinates ( self, inds )
 
     triangles = self.triangles ( inds, : ) ;
 
+    % This is needed because of the column major order of MATLAB matrices.
+
+    triangles = transpose ( triangles ) ;
+
     coords = self.nodes ( triangles, : ) ;
 
 end % function
