@@ -1,8 +1,10 @@
-function normals = surface_normals ( self, inds )
+function [ normals, norms, vertex_coords ] = surface_normals ( self, inds )
 %
-% normals = surface_normals ( self, inds )
+% [ normals, norms, vertex_coords ] = surface_normals ( self, inds )
 %
-% Computes the surface normals of the triangles in this segmentation.
+% Computes the surface normals of the triangles in this segmentation. Also
+% returns the norms of the normals and the vertex coordinates used in computing
+% the normals.
 %
 
     arguments
@@ -25,7 +27,5 @@ function normals = surface_normals ( self, inds )
     normals = cross ( first_edges, second_edges ) ;
 
     norms = sqrt ( sum ( normals .^ 2 , 2 ) ) ;
-
-    normals = normals ./ norms ;
 
 end % function

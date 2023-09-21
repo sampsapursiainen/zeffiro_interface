@@ -1,9 +1,10 @@
-function areas = triangle_areas ( self, inds )
+function [ areas, normals, norms, vertex_coordinates ] = triangle_areas ( self, inds )
 %
-% areas = triangle_areas ( self, inds )
+% [ areas, normals, norms, vertex_coordinates ] = triangle_areas ( self, inds )
 %
 % Computes the areas of the triangles indicated by the given inds in this
-% surface segmentation.
+% surface segmentation. Also returns the surface normals, their norms and
+% vertex coordinates used to compute the normals.
 %
 
     arguments
@@ -11,7 +12,7 @@ function areas = triangle_areas ( self, inds )
         inds (:,1) uint64 { mustBePositive } = 1 : self.triangle_count
     end
 
-    normals = self.surface_normals ( inds ) ;
+    [ normals, norms, vertex_coordinates ] = self.surface_normals ( inds ) ;
 
     norms = sqrt ( sum ( normals .^ 2 , 2 ) ) ;
 
