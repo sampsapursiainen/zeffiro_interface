@@ -14,7 +14,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 %
 % - io_descriptor
 %
-%   The text file the logs will be written to. By default, this is the null device, so priting is
+%   The text file the logs will be written to. By default, this is the null device, so printing is
 %   discarded.
 %
 % Outputs:
