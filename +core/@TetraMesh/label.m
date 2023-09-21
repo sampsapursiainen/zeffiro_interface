@@ -7,7 +7,7 @@ function self = label ( self, segmentation, settings, stage )
 
     arguments
         self (1,1) core.TetraMesh
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
         stage (1,1) string { mustBeMember( stage, ["initial","relabeling","adaptive-relabeling"] ) }
     end
@@ -47,7 +47,7 @@ function labels = initial_labeling ( nodes, tetra, segmentation, settings )
     arguments
         nodes (:,3) double
         tetra (:,4) uint64
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
     end
 
@@ -138,7 +138,7 @@ function domain_labels = relabeling ( nodes, tetra, segmentation, settings )
     arguments
         nodes (:,3) double
         tetra (:,4) uint64
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
     end
 
@@ -249,7 +249,7 @@ function labels = adaptive_relabeling ( nodes, tetra, segmentation, settings )
     arguments
         nodes (:,3) double
         tetra (:,4) uint64
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
     end
 

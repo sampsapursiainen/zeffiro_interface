@@ -11,7 +11,7 @@ function self = initial_labeling ( self, segmentation, settings )
 
     arguments
         self (1,1) core.TetraMesh
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
     end
 

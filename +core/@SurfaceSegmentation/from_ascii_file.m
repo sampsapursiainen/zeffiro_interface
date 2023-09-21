@@ -27,7 +27,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 
     arguments
 
-        self (1,1) core.FreeSurferSegmentation
+        self (1,1) core.SurfaceSegmentation
 
         fname (1,1) string { mustBeFile }
 

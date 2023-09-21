@@ -2,7 +2,7 @@ function self = preallocate_from_ascii_folder ( self, folder )
 
     arguments
 
-        self (1,1) core.FreeSurferSegmentation
+        self (1,1) core.SurfaceSegmentation
 
         folder (1,1) string { mustBeFolder }
 

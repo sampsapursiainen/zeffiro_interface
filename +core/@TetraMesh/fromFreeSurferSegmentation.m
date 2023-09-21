@@ -1,6 +1,6 @@
-function self = fromFreeSurferSegmentation ( self, segmentation, settings )
+function self = fromSurfaceSegmentation ( self, segmentation, settings )
 %
-% self = fromFreeSurferSegmentation (
+% self = fromSurfaceSegmentation (
 %   self,
 %   segmentation,
 %   settings
@@ -31,7 +31,7 @@ function self = fromFreeSurferSegmentation ( self, segmentation, settings )
 
     arguments
         self (1,1) core.TetraMesh
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings = core.MeshSettings
     end
 
@@ -140,7 +140,7 @@ function [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings )
 %
 
     arguments
-        segmentation (1,1) core.FreeSurferSegmentation
+        segmentation (1,1) core.SurfaceSegmentation
         settings (1,1) core.MeshSettings
     end
 

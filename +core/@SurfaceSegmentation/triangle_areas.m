@@ -7,7 +7,7 @@ function areas = triangle_areas ( self, inds )
 %
 
     arguments
-        self (1,1) core.FreeSurferSegmentation
+        self (1,1) core.SurfaceSegmentation
         inds (:,1) uint64 { mustBePositive } = 1 : self.triangle_count
     end
 
