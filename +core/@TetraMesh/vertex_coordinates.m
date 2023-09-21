@@ -26,18 +26,12 @@ function [ coords ] = vertex_coordinates ( self, inds )
 
         self (1,1) core.TetraMesh
 
-        inds (:,1) uint64 { mustBePositive }
+        inds (:,1) uint64 { mustBePositive } = 1 : self.tetra_count
 
     end
 
-    n_of_tetra = size ( self.tetra, 2 ) ;
+    tetra = transpose ( self.tetra ) ;
 
-    if any ( n_of_tetra < inds )
-
-        error ( "The given index set contains tetrahedral indices that are too large. The mesh only contains " + n_of_tetra + " tetrahedra."  ) ;
-
-    end
-
-    coords = self.nodes ( :, self.tetra ( :, inds ) ) ;
+    coords = self.nodes ( tetra , : ) ;
 
 end % function
