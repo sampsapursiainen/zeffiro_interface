@@ -36,7 +36,7 @@ function self = initial_labeling ( self, segmentation, settings )
         % Before computing the integral, form an Axis-Aligned Bounding Box, to
         % reduce the number of FEM nodes needed in the computation.
 
-        [ nodeI, tetraI, aabb ] = AABBFn ( surf_nodes, self, tetra_vertex_coords ) ;
+        [ nodeI, tetraI, ~ ] = AABBFn ( surf_nodes, self, tetra_vertex_coords ) ;
 
         nodes_in_aabb = self.nodes ( nodeI, : ) ;
 
@@ -50,11 +50,7 @@ function self = initial_labeling ( self, segmentation, settings )
 
         normal_positions = segmentation.triangle_barycenters ( triI ) ;
 
-        n_of_normal_positions = size ( normal_positions, 1 ) ;
-
-        [ triangle_areas, surface_normals, normal_norms, ~ ] = segmentation.triangle_areas ( triI ) ;
-
-        normed_normals = surface_normals ./ normal_norms ;
+        [ triangle_areas, surface_normals, ~, ~ ] = segmentation.triangle_areas ( triI ) ;
 
         % Compute solid angle integral for each FEM node in this compartment.
         % If a node is in compartment ii, add its global index to the set of
