@@ -12,14 +12,16 @@ function self = initial_labeling ( self, segmentation, settings )
     arguments
         self (1,1) core.TetraMesh
         segmentation (1,1) core.SurfaceSegmentation
-        settings (1,1) core.MeshSettings
+        settings (1,1) core.MeshSettings = core.MeshSettings
     end
 
     compartment_count = segmentation.compartment_count ;
 
     labels = zeros ( self.tetra_count, 1 ) ;
 
-    % Compute the solid angle integral for each compartment.
+    tetra_vertex_coords = self.vertex_coordinates ;
+
+    % Compute the solid angle integrals for each FEM node in the vicinity of each compartment.
 
     for ii = 1 : compartment_count
 
@@ -34,11 +36,13 @@ function self = initial_labeling ( self, segmentation, settings )
         % Before computing the integral, form an Axis-Aligned Bounding Box, to
         % reduce the number of FEM nodes needed in the computation.
 
-        [ inds, ~, ~, ~, ~, ~, ~ ] = AABBIndFn ( surf_nodes, self.nodes ) ;
+        [ nodeI, tetraI, aabb ] = AABBFn ( surf_nodes, self, tetra_vertex_coords ) ;
 
-        nodes_in_comp = self.nodes ( inds, : ) ;
+        nodes_in_comp = self.nodes ( nodeI, : ) ;
 
         n_of_nodes_in_comp = size ( nodes_in_comp, 1 ) ;
+
+        node_in_compartment = false ( n_of_nodes_in_comp, 1 ) ;
 
         % Compute surface normals for the triangles in this compartment.
 
@@ -50,21 +54,28 @@ function self = initial_labeling ( self, segmentation, settings )
 
         triangle_areas = segmentation.triangle_areas ( triI ) ;
 
-        % Compute solid angle integral for each FEM node.
+        % Compute solid angle integral for each FEM node in this compartment.
 
         for jj = 1 : n_of_nodes_in_comp
 
             femnode = nodes_in_comp ( jj, : ) ;
 
-            replicated_femnode = repmat ( femnode, n_of_normal_positions, 1 ) ; % TODO: get rid of this repeated allocation via preallocation.
-
-            diffs = normal_positions - replicated_femnode ;
+            diffs = normal_positions - femnode ;
 
             dotprods = dot ( diffs, surface_normals, 2 ) ;
 
-            solid_angle_integral = sum ( dotprods .* triangle_areas ) ;
+            solid_angle_integral = ( 1 / 4 / pi ) * sum ( dotprods .* triangle_areas ) ;
+
+            if solid_angle_integral >= settings.meshing_threshold
+
+                node_in_compartment ( jj ) = true ;
+
+            end
 
         end % for
+
+        % Then check the tetrahedra inside of the AABB. If so, the tetrahedron
+        % gets labeled into this compartment.
 
     end % for
 
@@ -74,42 +85,48 @@ end % function
 
 %% Local helper functions
 
-function [ inds, xmin, xmax, ymin, ymax, zmin, zmax ] = AABBIndFn ( snodes, femnodes )
+function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 %
-% [ inds, xmin, xmax, ymin, ymax, zmin, zmax ] = AABBIndFn ( snodes, femnodes )
+% [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 %
 % Computes an axis-aligned bounding box around a node cloud, and finds out
-% which nodes in the FEM mesh are contained inside of this box.
+% which nodes and tetra in the FEM mesh are contained inside of this box.
 %
 
     arguments
         snodes (:,3) double { mustBeFinite }
-        femnodes (:,3) double { mustBeFinite }
+        mesh (1,1) core.TetraMesh
+        tetra_vertex_coords (:,3) double { mustBeFinite }
     end
 
     minbs = min ( snodes ) ;
 
     maxbs = max ( snodes ) ;
 
-    xmin = minbs (1) ;
-    ymin = minbs (2) ;
-    zmin = minbs (3) ;
+    aabb = transpose ( [ minbs ; maxbs ] ) ;
 
-    xmax = maxbs (1) ;
-    ymax = maxbs (2) ;
-    zmax = maxbs (3) ;
+    femx = mesh.nodes ( :, 1 ) ;
+    femy = mesh.nodes ( :, 2 ) ;
+    femz = mesh.nodes ( :, 3 ) ;
 
-    femx = femnodes ( :, 1 ) ;
-    femy = femnodes ( :, 2 ) ;
-    femz = femnodes ( :, 3 ) ;
+    nodeI = find ( ...
+          femx >= aabb (1,1) ...
+        & femx <= aabb (1,2) ...
+        & femy >= aabb (2,1) ...
+        & femy <= aabb (2,2) ...
+        & femz >= aabb (3,1) ...
+        & femz <= aabb (3,2) ...
+    ) ;
 
-    inds = find ( ...
-          femx >= xmin ...
-        & femx <= xmax ...
-        & femy >= ymin ...
-        & femy <= ymax ...
-        & femz >= zmin ...
-        & femz <= zmax ...
+    tvc = tetra_vertex_coords ; % Abbreviation.
+
+    tetraI = find ( ...
+          tvc (:,1) >= aabb (1,1) ...
+        & tvc (:,1) <= aabb (1,2) ...
+        & tvc (:,2) >= aabb (2,1) ...
+        & tvc (:,2) <= aabb (2,2) ...
+        & tvc (:,3) >= aabb (3,1) ...
+        & tvc (:,3) <= aabb (3,2) ...
     ) ;
 
 end
