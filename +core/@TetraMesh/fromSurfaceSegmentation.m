@@ -127,6 +127,8 @@ function self = fromSurfaceSegmentation ( self, segmentation, settings )
 
     self.tetra = tetra ;
 
+    self = self.initial_labeling ( segmentation, settings ) ;
+
 end % function
 
 %% Helper functions
