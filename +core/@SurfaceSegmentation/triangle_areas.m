@@ -15,6 +15,6 @@ function areas = triangle_areas ( self, inds )
 
     norms = sqrt ( sum ( normals .^ 2 , 2 ) ) ;
 
-    areas = normals ./ norms / 2 ;
+    areas = norms / 2 ;
 
 end % function
