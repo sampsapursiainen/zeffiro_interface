@@ -21,6 +21,10 @@ function self = initial_labeling ( self, segmentation, settings )
 
     tetra_vertex_coords = self.vertex_coordinates ;
 
+    [ global_triangle_areas, global_surface_normals, ~, ~ ] = segmentation.triangle_areas ;
+
+    global_normal_positions = segmentation.triangle_barycenters ;
+
     % Compute the solid angle integrals for each FEM node in the vicinity of each compartment.
 
     for ii = 1 : compartment_count
@@ -50,9 +54,11 @@ function self = initial_labeling ( self, segmentation, settings )
 
         % Compute surface normals for the triangles in this compartment.
 
-        normal_positions = segmentation.triangle_barycenters ( triI ) ;
+        normal_positions = global_normal_positions ( triI ) ;
 
-        [ triangle_areas, surface_normals, ~, ~ ] = segmentation.triangle_areas ( triI ) ;
+        triangle_areas = global_triangle_areas ( triI ) ;
+
+        surface_normals = global_surface_normals ( triI, : ) ;
 
         % Compute solid angle integral for each FEM node in the axis-aligned
         % bounding box. If a node is in compartment ii, add its global index to
