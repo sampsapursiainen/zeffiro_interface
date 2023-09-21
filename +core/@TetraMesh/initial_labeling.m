@@ -78,11 +78,17 @@ function self = initial_labeling ( self, segmentation, settings )
 
         end % for
 
-        % Then check the tetrahedra inside of the AABB. If all nodes of a
-        % tetrahedron are in the compartment, the tetrahedron itself gets
-        % labeled into this compartment.
+        % If all nodes of a tetrahedron are in the compartment, the tetrahedron
+        % itself gets labeled into this compartment.
 
-        tetra_in_compartment = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 2 ) ;
+        tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 2 ) ;
+
+        % Get global indices of the tetrahedron, and label those as being in
+        % the current compartment.
+
+        global_tetra_I = tetraI ( tetra_in_compartment_I ) ;
+
+        labels ( global_tetra_I ) = ii ;
 
     end % for
 
