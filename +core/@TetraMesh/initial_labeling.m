@@ -42,25 +42,25 @@ function self = initial_labeling ( self, segmentation, settings )
 
         tetra_in_aabb = self.tetra ( tetraI, : ) ;
 
-        n_of_nodes_in_comp = size ( nodes_in_aabb, 1 ) ;
+        n_of_nodes_in_aabb = size ( nodes_in_aabb, 1 ) ;
 
-        node_inds_in_compartment = zeros ( n_of_nodes_in_comp, 1 ) ;
+        node_inds_in_compartment = zeros ( n_of_nodes_in_aabb, 1 ) ;
 
         % Compute surface normals for the triangles in this compartment.
-
-        surface_normals = segmentation.surface_normals ( triI ) ;
 
         normal_positions = segmentation.triangle_barycenters ( triI ) ;
 
         n_of_normal_positions = size ( normal_positions, 1 ) ;
 
-        triangle_areas = segmentation.triangle_areas ( triI ) ;
+        [ triangle_areas, surface_normals, normal_norms, ~ ] = segmentation.triangle_areas ( triI ) ;
+
+        normed_normals = surface_normals ./ normal_norms ;
 
         % Compute solid angle integral for each FEM node in this compartment.
         % If a node is in compartment ii, add its global index to the set of
         % in-compartment node indices.
 
-        for jj = 1 : n_of_nodes_in_comp
+        for jj = 1 : n_of_nodes_in_aabb
 
             femnode = nodes_in_aabb ( jj, : ) ;
 
