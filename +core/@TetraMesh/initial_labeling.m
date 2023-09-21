@@ -38,11 +38,13 @@ function self = initial_labeling ( self, segmentation, settings )
 
         [ nodeI, tetraI, aabb ] = AABBFn ( surf_nodes, self, tetra_vertex_coords ) ;
 
-        nodes_in_comp = self.nodes ( nodeI, : ) ;
+        nodes_in_aabb = self.nodes ( nodeI, : ) ;
 
-        n_of_nodes_in_comp = size ( nodes_in_comp, 1 ) ;
+        tetra_in_aabb = self.tetra ( tetraI, : ) ;
 
-        node_in_compartment = false ( n_of_nodes_in_comp, 1 ) ;
+        n_of_nodes_in_comp = size ( nodes_in_aabb, 1 ) ;
+
+        node_inds_in_compartment = zeros ( n_of_nodes_in_comp, 1 ) ;
 
         % Compute surface normals for the triangles in this compartment.
 
@@ -55,10 +57,12 @@ function self = initial_labeling ( self, segmentation, settings )
         triangle_areas = segmentation.triangle_areas ( triI ) ;
 
         % Compute solid angle integral for each FEM node in this compartment.
+        % If a node is in compartment ii, add its global index to the set of
+        % in-compartment node indices.
 
         for jj = 1 : n_of_nodes_in_comp
 
-            femnode = nodes_in_comp ( jj, : ) ;
+            femnode = nodes_in_aabb ( jj, : ) ;
 
             diffs = normal_positions - femnode ;
 
@@ -68,14 +72,17 @@ function self = initial_labeling ( self, segmentation, settings )
 
             if solid_angle_integral >= settings.meshing_threshold
 
-                node_in_compartment ( jj ) = true ;
+                node_inds_in_compartment ( jj ) = nodeI ( jj ) ;
 
-            end
+            end % if
 
         end % for
 
-        % Then check the tetrahedra inside of the AABB. If so, the tetrahedron
-        % gets labeled into this compartment.
+        % Then check the tetrahedra inside of the AABB. If all nodes of a
+        % tetrahedron are in the compartment, the tetrahedron itself gets
+        % labeled into this compartment.
+
+        tetra_in_compartment = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 2 ) ;
 
     end % for
 
@@ -120,13 +127,34 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 
     tvc = tetra_vertex_coords ; % Abbreviation.
 
-    tetraI = find ( ...
+    vertexI = ...
           tvc (:,1) >= aabb (1,1) ...
         & tvc (:,1) <= aabb (1,2) ...
         & tvc (:,2) >= aabb (2,1) ...
         & tvc (:,2) <= aabb (2,2) ...
         & tvc (:,3) >= aabb (3,1) ...
         & tvc (:,3) <= aabb (3,2) ...
-    ) ;
+    ;
+
+    % Look for 4 consequtive ones in vertexI set. They indicate, that a
+    % tetrahedron is covered by the tissue boundary.
+
+    tetraI = zeros ( mesh.tetra_count, 1 ) ;
+
+    for ii = 1 : mesh.tetra_count
+
+        jj = (ii - 1) * 4 + 1 ;
+
+        vrange = jj : jj + 3 ;
+
+        if all ( vertexI ( vrange ) ~= 0 )
+
+            tetraI ( ii ) = ii ;
+
+        end
+
+    end
+
+    tetraI = tetraI ( tetraI ~= 0 ) ;
 
 end
