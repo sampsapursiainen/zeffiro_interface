@@ -31,7 +31,9 @@ function self = initial_labeling ( self, segmentation, settings )
 
         surf_triangles = segmentation.triangles ( triI, : ) ;
 
-        surf_nodes = segmentation.nodes ( surf_triangles, : ) ;
+        surf_nodes = segmentation.nodes ( surf_triangles', : ) ;
+
+        surf_nodes = unique ( surf_nodes, "rows" ) ;
 
         % Before computing the integral, form an Axis-Aligned Bounding Box, to
         % reduce the number of FEM nodes needed in the computation.
@@ -52,9 +54,9 @@ function self = initial_labeling ( self, segmentation, settings )
 
         [ triangle_areas, surface_normals, ~, ~ ] = segmentation.triangle_areas ( triI ) ;
 
-        % Compute solid angle integral for each FEM node in this compartment.
-        % If a node is in compartment ii, add its global index to the set of
-        % in-compartment node indices.
+        % Compute solid angle integral for each FEM node in the axis-aligned
+        % bounding box. If a node is in compartment ii, add its global index to
+        % the set of in-compartment node indices.
 
         for jj = 1 : n_of_nodes_in_aabb
 
@@ -79,7 +81,7 @@ function self = initial_labeling ( self, segmentation, settings )
 
         tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 2 ) ;
 
-        % Get global indices of the tetrahedron, and label those as being in
+        % Get global indices of the tetrahedra, and label those as being in
         % the current compartment.
 
         global_tetra_I = tetraI ( tetra_in_compartment_I ) ;
