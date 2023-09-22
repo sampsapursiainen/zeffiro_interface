@@ -50,11 +50,9 @@ function self = initial_labeling ( self, segmentation, settings )
 
         n_of_nodes_in_aabb = size ( nodes_in_aabb, 1 ) ;
 
-        node_inds_in_compartment = zeros ( n_of_nodes_in_aabb, 1 ) ;
+        % Fetch triangle information related to this bounding box.
 
-        % Compute surface normals for the triangles in this compartment.
-
-        normal_positions = global_normal_positions ( triI ) ;
+        normal_positions = global_normal_positions ( triI, : ) ;
 
         triangle_areas = global_triangle_areas ( triI ) ;
 
@@ -63,6 +61,8 @@ function self = initial_labeling ( self, segmentation, settings )
         % Compute solid angle integral for each FEM node in the axis-aligned
         % bounding box. If a node is in compartment ii, add its global index to
         % the set of in-compartment node indices.
+
+        node_inds_in_compartment = zeros ( n_of_nodes_in_aabb, 1 ) ;
 
         for jj = 1 : n_of_nodes_in_aabb
 
