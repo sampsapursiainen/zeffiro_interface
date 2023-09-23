@@ -61,4 +61,10 @@ classdef TetraMesh
 
     end % methods
 
+    methods ( Static )
+
+       volumes = static_element_volumes ( nodes, tetra )
+
+    end % methods ( Static )
+
 end % classdef
