@@ -30,7 +30,7 @@ function [ coords ] = vertex_coordinates ( self, inds )
 
     end
 
-    tetra = transpose ( self.tetra ) ;
+    tetra = transpose ( self.tetra ( inds, : ) ) ;
 
     coords = self.nodes ( tetra , : ) ;
 
