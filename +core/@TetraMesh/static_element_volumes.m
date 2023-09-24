@@ -6,8 +6,8 @@ function volumes = static_element_volumes ( nodes, tetra )
 %
 
     arguments
-        nodes (:,3) double { mustBeFinite }
-        tetra (:,4) uint64 { mustBePositive }
+        nodes (3,:) double { mustBeFinite }
+        tetra (4,:) uint64 { mustBePositive }
     end
 
     % Directed edges E from 4th vertex of each tetrahedron.
@@ -16,15 +16,15 @@ function volumes = static_element_volumes ( nodes, tetra )
 
     N = nodes ;
 
-    N1 = N ( T ( : , 1 ) , : ) ;
+    N1 = N ( : , T ( 1 , : ) ) ;
 
-    N2 = N ( T ( : , 2 ) , : ) ;
+    N2 = N ( : , T ( 2 , : ) ) ;
 
-    N3 = N ( T ( : , 3 ) , : ) ;
+    N3 = N ( : , T ( 3 , : ) ) ;
 
-    N4 = N ( T ( : , 4 ) , : ) ;
+    N4 = N ( : , T ( 4 , : ) ) ;
 
-    E = [ N1' ; N2' ; N3' ] - repmat ( N4', 3, 1 );
+    E = [ N1 ; N2 ; N3 ] - repmat ( N4, 3, 1 );
 
     % Index matrix used in the determinant calculation.
     %

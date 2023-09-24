@@ -9,14 +9,14 @@ classdef TetraMesh
         %
         % Triples of coordinates making up the the 3D nodes of a finite element mesh.
         %
-        nodes (:,3) double { mustBeNonNan, mustBeFinite } = []
+        nodes (3,:) double { mustBeNonNan, mustBeFinite } = []
         %
         % tetra
         %
         % Quadruples of node indices of a finite element mesh, defining which nodes belong to which
         % element.
         %
-        tetra (:,4) uint64 { mustBePositive } = []
+        tetra (4,:) uint64 { mustBePositive } = []
         %
         % The labels that indicate which compartment each tetrahedron belongs into.
         %
@@ -55,7 +55,7 @@ classdef TetraMesh
 
             end % for
 
-            self = self.validate () ;
+            % self = self.validate () ;
 
         end % function
 

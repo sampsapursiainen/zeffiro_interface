@@ -13,6 +13,6 @@ function volumes = element_volumes ( self, inds )
 
     end
 
-    volumes = core.TetraMesh.static_element_volumes ( self.nodes, self.tetra ( inds, : ) ) ;
+    volumes = core.TetraMesh.static_element_volumes ( self.nodes, self.tetra ( :, inds ) ) ;
 
 end % function

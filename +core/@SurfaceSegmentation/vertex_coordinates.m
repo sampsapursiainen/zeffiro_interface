@@ -10,12 +10,8 @@ function coords = vertex_coordinates ( self, inds )
         inds (:,1) uint64 { mustBePositive } = 1 : self.triangle_count
     end
 
-    triangles = self.triangles ( inds, : ) ;
+    triangles = self.triangles ( :, inds ) ;
 
-    % This is needed because of the column major order of MATLAB matrices.
-
-    triangles = transpose ( triangles ) ;
-
-    coords = self.nodes ( triangles, : ) ;
+    coords = self.nodes ( :, triangles ) ;
 
 end % function

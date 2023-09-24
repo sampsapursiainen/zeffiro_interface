@@ -14,18 +14,18 @@ function [ normals, norms, vertex_coords ] = surface_normals ( self, inds )
 
     vertex_coords = self.vertex_coordinates ( inds ) ;
 
-    vertex1 = vertex_coords ( 1 : 3 : end, : ) ;
+    vertex1 = vertex_coords ( :, 1 : 3 : end ) ;
 
-    vertex2 = vertex_coords ( 2 : 3 : end, : ) ;
+    vertex2 = vertex_coords ( :, 2 : 3 : end ) ;
 
-    vertex3 = vertex_coords ( 3 : 3 : end, : ) ;
+    vertex3 = vertex_coords ( :, 3 : 3 : end ) ;
 
     first_edges  = vertex2 - vertex1 ;
 
     second_edges = vertex3 - vertex1 ;
 
-    normals = cross ( first_edges, second_edges ) ;
+    normals = cross ( first_edges, second_edges, 1 ) ;
 
-    norms = sqrt ( sum ( normals .^ 2 , 2 ) ) ;
+    norms = sqrt ( sum ( normals .^ 2 ) ) ;
 
 end % function

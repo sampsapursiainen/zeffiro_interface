@@ -14,7 +14,7 @@ function [ areas, normals, norms, vertex_coordinates ] = triangle_areas ( self, 
 
     [ normals, norms, vertex_coordinates ] = self.surface_normals ( inds ) ;
 
-    norms = sqrt ( sum ( normals .^ 2 , 2 ) ) ;
+    norms = sqrt ( sum ( normals .^ 2 ) ) ;
 
     areas = norms / 2 ;
 

@@ -75,7 +75,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
 
     % Then go over the nodes and store them in the array...
 
-    nodes = zeros ( n_of_nodes, 3 ) ;
+    nodes = zeros ( 3, n_of_nodes ) ;
 
     SEP = " " ;
 
@@ -101,13 +101,13 @@ function self = from_ascii_file ( self, fname, io_descriptor )
             error ( ERR + "One of the node coordinates '" + this_line + "' on line " + (ii + 1) + " was not a floating point number." ) ;
         end
 
-        nodes (ii,:) = node ( 1 : 3 ) ;
+        nodes (:,ii) = node ( 1 : 3 ) ;
 
     end % for
 
     % ... and then do the same for the faces.
 
-    faces = uint64 ( zeros ( n_of_faces, 3 ) ) ;
+    faces = uint64 ( zeros ( 3, n_of_faces ) ) ;
 
     for ii = 1 : n_of_faces
 
@@ -137,7 +137,7 @@ function self = from_ascii_file ( self, fname, io_descriptor )
             error ("Line " + linenum + " of file " + fname + " contained a negative array index.")
         end
 
-        faces (ii,:) = face ( 1 : 3 ) ;
+        faces (:,ii) = face ( 1 : 3 ) ;
 
     end % for
 
@@ -150,22 +150,22 @@ function self = from_ascii_file ( self, fname, io_descriptor )
     if isempty ( self.nodes ) || all ( isnan ( self.nodes (:) ) )
         node_start_pos = 1 ;
     else
-        node_start_pos = max ( find ( any ( not ( isnan ( self.nodes ) ), 2 ) ) ) + 1 ;
+        node_start_pos = max ( find ( any ( not ( isnan ( self.nodes ) ), 1 ) ) ) + 1 ;
     end
 
     if isempty ( self.triangles ) || all ( self.triangles (:) == 0 )
         face_start_pos = 1 ;
     else
-        face_start_pos = max ( find ( any ( self.triangles ~= 0, 2 ) ) ) + 1 ;
+        face_start_pos = max ( find ( any ( self.triangles ~= 0, 1 ) ) ) + 1 ;
     end
 
     node_range = ( node_start_pos : node_start_pos + n_of_nodes - 1 ) ;
 
     triangle_range = ( face_start_pos : face_start_pos + n_of_faces - 1 ) ;
 
-    self.nodes ( node_range, : ) = nodes ;
+    self.nodes ( :, node_range ) = nodes ;
 
-    self.triangles ( triangle_range, : ) = faces + node_range(1) ;
+    self.triangles ( :, triangle_range ) = faces + node_range(1) ;
 
     largest_label = max ( self.labels ) ;
 

@@ -33,30 +33,28 @@ function self = initial_labeling ( self, segmentation, settings )
 
         triI = find ( segmentation.labels == ii ) ;
 
-        surf_triangles = segmentation.triangles ( triI, : ) ;
+        surf_triangles = segmentation.triangles ( :, triI ) ;
 
-        surf_nodes = segmentation.nodes ( surf_triangles', : ) ;
-
-        surf_nodes = unique ( surf_nodes, "rows" ) ;
+        surf_nodes = segmentation.nodes ( :, surf_triangles ) ;
 
         % Before computing the integral, form an Axis-Aligned Bounding Box, to
         % reduce the number of FEM nodes needed in the computation.
 
         [ nodeI, tetraI, ~ ] = AABBFn ( surf_nodes, self, tetra_vertex_coords ) ;
 
-        nodes_in_aabb = self.nodes ( nodeI, : ) ;
+        nodes_in_aabb = self.nodes ( :, nodeI ) ;
 
-        tetra_in_aabb = self.tetra ( tetraI, : ) ;
+        tetra_in_aabb = self.tetra ( :, tetraI ) ;
 
-        n_of_nodes_in_aabb = size ( nodes_in_aabb, 1 ) ;
+        n_of_nodes_in_aabb = size ( nodes_in_aabb, 2 ) ;
 
         % Fetch triangle information related to this bounding box.
 
-        normal_positions = global_normal_positions ( triI, : ) ;
+        normal_positions = global_normal_positions ( :, triI ) ;
 
         triangle_areas = global_triangle_areas ( triI ) ;
 
-        surface_normals = global_surface_normals ( triI, : ) ;
+        surface_normals = global_surface_normals ( :, triI ) ;
 
         % Compute solid angle integral for each FEM node in the axis-aligned
         % bounding box. If a node is in compartment ii, add its global index to
@@ -66,11 +64,11 @@ function self = initial_labeling ( self, segmentation, settings )
 
         for jj = 1 : n_of_nodes_in_aabb
 
-            femnode = nodes_in_aabb ( jj, : ) ;
+            femnode = nodes_in_aabb ( :, jj ) ;
 
             diffs = normal_positions - femnode ;
 
-            dotprods = dot ( diffs, surface_normals, 2 ) ;
+            dotprods = dot ( diffs, surface_normals, 1 ) ;
 
             solid_angle_integral = ( 1 / 4 / pi ) * sum ( dotprods .* triangle_areas ) ;
 
@@ -85,7 +83,7 @@ function self = initial_labeling ( self, segmentation, settings )
         % If all nodes of a tetrahedron are in the compartment, the tetrahedron
         % itself gets labeled into this compartment.
 
-        tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 2 ) ;
+        tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 1 ) ;
 
         % Get global indices of the tetrahedra, and label those as being in
         % the current compartment.
@@ -111,20 +109,20 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 %
 
     arguments
-        snodes (:,3) double { mustBeFinite }
+        snodes (3,:) double { mustBeFinite }
         mesh (1,1) core.TetraMesh
-        tetra_vertex_coords (:,3) double { mustBeFinite }
+        tetra_vertex_coords (3,:) double { mustBeFinite }
     end
 
-    minbs = min ( snodes ) ;
+    minbs = min ( snodes, [], 2 ) ;
 
-    maxbs = max ( snodes ) ;
+    maxbs = max ( snodes, [], 2 ) ;
 
-    aabb = transpose ( [ minbs ; maxbs ] ) ;
+    aabb = [ minbs , maxbs ] ;
 
-    femx = mesh.nodes ( :, 1 ) ;
-    femy = mesh.nodes ( :, 2 ) ;
-    femz = mesh.nodes ( :, 3 ) ;
+    femx = mesh.nodes ( 1 , : ) ;
+    femy = mesh.nodes ( 2 , : ) ;
+    femz = mesh.nodes ( 3 , : ) ;
 
     nodeI = find ( ...
           femx >= aabb (1,1) ...
@@ -138,12 +136,12 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
     tvc = tetra_vertex_coords ; % Abbreviation.
 
     vertexI = ...
-          tvc (:,1) >= aabb (1,1) ...
-        & tvc (:,1) <= aabb (1,2) ...
-        & tvc (:,2) >= aabb (2,1) ...
-        & tvc (:,2) <= aabb (2,2) ...
-        & tvc (:,3) >= aabb (3,1) ...
-        & tvc (:,3) <= aabb (3,2) ...
+          tvc (1,:) >= aabb (1,1) ...
+        & tvc (1,:) <= aabb (1,2) ...
+        & tvc (2,:) >= aabb (2,1) ...
+        & tvc (2,:) <= aabb (2,2) ...
+        & tvc (3,:) >= aabb (3,1) ...
+        & tvc (3,:) <= aabb (3,2) ...
     ;
 
     % Look for 4 consequtive ones in vertexI set. They indicate, that a

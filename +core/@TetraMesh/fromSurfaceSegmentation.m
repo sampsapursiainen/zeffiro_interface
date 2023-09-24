@@ -47,7 +47,7 @@ function self = fromSurfaceSegmentation ( self, segmentation, settings )
 
     n_of_hexa = xnh * ynh * znh ;
 
-    tetra = uint64 ( zeros ( n_of_hexa * settings.tetra_subdivisions, 4 ) ) ;
+    tetra = uint64 ( zeros ( 4, n_of_hexa * settings.tetra_subdivisions ) ) ;
 
     label_ind = uint64 ( zeros ( n_of_hexa * settings.tetra_subdivisions, settings.label_array_cols ) ) ;
 
@@ -99,7 +99,7 @@ function self = fromSurfaceSegmentation ( self, segmentation, settings )
 
                 local_vertices = vertex_mat ( :, :, page ) ;
 
-                tetra ( ti:ti+4, : ) = local_ind_mat ( local_vertices ) ;
+                tetra ( :, ti:ti+4 ) = transpose ( local_ind_mat ( local_vertices ) ) ;
 
                 if settings.label_array_cols == 8
 
@@ -107,7 +107,7 @@ function self = fromSurfaceSegmentation ( self, segmentation, settings )
 
                 elseif settings.label_array_cols == 4
 
-                    label_ind ( ti:ti+4, : ) = tetra ( ti:ti+4, : ) ;
+                    label_ind ( ti:ti+4, : ) = tetra ( :, ti:ti+4 ) ;
 
                 else
 
@@ -161,6 +161,6 @@ function [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings )
 
     [ xnn, ynn, znn ] = size ( X ) ;
 
-    hexanodes = [ X(:), Y(:), Z(:) ] ;
+    hexanodes = [ X(:)' ; Y(:)' ; Z(:)' ] ;
 
 end % function

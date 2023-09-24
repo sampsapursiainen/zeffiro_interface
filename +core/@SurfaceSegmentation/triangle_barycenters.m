@@ -1,4 +1,7 @@
 function barycenters = triangle_barycenters ( self, inds )
+%
+% barycenters = triangle_barycenters ( self, inds )
+%
 
     arguments
         self (1,1) core.SurfaceSegmentation
@@ -7,17 +10,17 @@ function barycenters = triangle_barycenters ( self, inds )
 
     vertex_coordinates = self.vertex_coordinates ( inds ) ;
 
-    n_of_vertex_coordinates = size ( vertex_coordinates, 1 ) ;
+    n_of_vertex_coordinates = size ( vertex_coordinates, 2 ) ;
 
-    barycenters = zeros ( n_of_vertex_coordinates / 3, size ( vertex_coordinates, 2 ) ) ;
+    barycenters = zeros ( 3 , n_of_vertex_coordinates / 3 ) ;
 
-    for ii = 1 : size ( barycenters, 1 )
+    for ii = 1 : size ( barycenters, 2 )
 
         vi = 3 * (ii - 1) + 1 ;
 
         vrange = vi : vi + 2 ;
 
-        barycenters ( ii, : ) = sum ( vertex_coordinates ( vrange ,: ) ) / 3 ;
+        barycenters (:,ii) = sum ( vertex_coordinates ( :, vrange ), 2 ) / 3 ;
 
     end % for
 
