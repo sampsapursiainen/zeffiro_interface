@@ -1,6 +1,6 @@
-function [ edge_inds, edge_vecs ] = element_edges ( self, inds )
+function [ edge_inds, edge_endpoints, edge_directions ] = element_edges ( self, inds )
 %
-% [ edge_inds, edge_vecs ] = element_edges ( self, inds )
+% [ edge_inds, edge_endpoints, edge_directions ] = element_edges ( self, inds )
 %
 % Computes the directed edges of each element in the mesh.
 %
@@ -16,12 +16,12 @@ function [ edge_inds, edge_vecs ] = element_edges ( self, inds )
 
     edge_inds = elements ( cursor , : ) ;
 
-    node_coords = self.nodes ( :, edge_inds ) ;
+    edge_endpoints = self.nodes ( :, edge_inds ) ;
 
-    edge_starts = node_coords ( :, 1 : 2 : end ) ;
+    edge_starts = edge_endpoints ( :, 1 : 2 : end ) ;
 
-    edge_ends = node_coords ( :, 2 : 2 : end ) ;
+    edge_ends = edge_endpoints ( :, 2 : 2 : end ) ;
 
-    edge_vecs = edge_ends - edge_starts ;
+    edge_directions = edge_ends - edge_starts ;
 
 end % function
