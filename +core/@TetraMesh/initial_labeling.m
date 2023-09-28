@@ -21,7 +21,7 @@ function self = initial_labeling ( self, segmentation, settings )
 
     tetra_vertex_coords = self.vertex_coordinates ;
 
-    [ global_triangle_areas, global_surface_normals, ~, ~ ] = segmentation.triangle_areas ;
+    [ global_triangle_areas, global_surface_normals, global_normal_norms, ~ ] = segmentation.triangle_areas ;
 
     global_normal_positions = segmentation.triangle_barycenters ;
 
@@ -54,7 +54,7 @@ function self = initial_labeling ( self, segmentation, settings )
 
         triangle_areas = global_triangle_areas ( triI ) ;
 
-        surface_normals = global_surface_normals ( :, triI ) ;
+        surface_normals = global_surface_normals ( :, triI ) ./ global_normal_norms ( triI ) ;
 
         % Compute solid angle integral for each FEM node in the axis-aligned
         % bounding box. If a node is in compartment ii, add its global index to
@@ -62,28 +62,46 @@ function self = initial_labeling ( self, segmentation, settings )
 
         node_inds_in_compartment = zeros ( n_of_nodes_in_aabb, 1 ) ;
 
+        repeated_femnodes = repelem ( nodes_in_aabb, 1, size ( surface_normals, 2 ) ) ;
+
+        repeated_normals = repmat ( normal_positions, 1 , n_of_nodes_in_aabb ) ;
+
+        repeated_normal_positions = repmat ( normal_positions, 1, n_of_nodes_in_aabb ) ;
+
+        repeated_triangle_areas = repmat ( triangle_areas, 1, n_of_nodes_in_aabb ) ;
+
+        diffs = repeated_normal_positions - repeated_femnodes ;
+
+        diffs = diffs ./ sqrt ( sum ( diffs .^ 2 ) ) .^ 3 ;
+
+        dotprods = dot ( diffs, repeated_normals, 1 ) ;
+
+        solid_angle_integrals = zeros ( 1, n_of_nodes_in_aabb ) ;
+
         for jj = 1 : n_of_nodes_in_aabb
 
-            femnode = nodes_in_aabb ( :, jj ) ;
+            range_start = 1 + (jj - 1) * n_of_nodes_in_aabb ;
 
-            diffs = normal_positions - femnode ;
+            range_end = range_start + n_of_nodes_in_aabb - 1 ;
 
-            dotprods = dot ( diffs, surface_normals, 1 ) ;
+            range = range_start : range_end ;
 
-            solid_angle_integral = ( 1 / 4 / pi ) * sum ( dotprods .* triangle_areas ) ;
+            range_dotprods = dotprods ( range ) ;
 
-            if solid_angle_integral >= settings.meshing_threshold
+            range_triangle_areas = repeated_triangle_areas ( range ) ;
 
-                node_inds_in_compartment ( jj ) = nodeI ( jj ) ;
-
-            end % if
+            solid_angle_integrals ( jj ) = ( 1 / 4 / pi ) * sum ( range_dotprods .* range_triangle_areas ) ;
 
         end % for
+
+        intI = solid_angle_integrals >= settings.meshing_threshold ;
+
+        global_intI = nodeI ( intI ) ;
 
         % If all nodes of a tetrahedron are in the compartment, the tetrahedron
         % itself gets labeled into this compartment.
 
-        tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, node_inds_in_compartment ) , 1 ) ;
+        tetra_in_compartment_I = all ( ismember ( tetra_in_aabb, global_intI ) , 1 ) ;
 
         % Get global indices of the tetrahedra, and label those as being in
         % the current compartment.
