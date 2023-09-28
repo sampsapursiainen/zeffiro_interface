@@ -148,14 +148,14 @@ function [ hexanodes, xnn, ynn, znn ] = hexaNodeFn ( segmentation, settings )
 
     % First, find the boundaries of the mesh coordinates.
 
-    minb = min ( segmentation.nodes, [], 1 ) ;
-    maxb = max ( segmentation.nodes, [], 1 ) ;
+    minb = min ( segmentation.nodes, [], 2 ) ;
+    maxb = max ( segmentation.nodes, [], 2 ) ;
 
-    boundaries = [ minb ; maxb ];
+    boundaries = [ minb , maxb ];
 
-    xx = boundaries (1,1) : settings.mesh_resolution : boundaries (2,1) ;
-    yy = boundaries (1,2) : settings.mesh_resolution : boundaries (2,2) ;
-    zz = boundaries (1,3) : settings.mesh_resolution : boundaries (2,3) ;
+    xx = boundaries (1,1) : settings.mesh_resolution : boundaries (1,2) ;
+    yy = boundaries (2,1) : settings.mesh_resolution : boundaries (2,2) ;
+    zz = boundaries (3,1) : settings.mesh_resolution : boundaries (3,2) ;
 
     [X,Y,Z] = meshgrid ( xx, yy, zz ) ;
 
