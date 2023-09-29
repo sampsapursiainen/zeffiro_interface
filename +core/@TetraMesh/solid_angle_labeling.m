@@ -72,15 +72,21 @@ function self = solid_angle_labeling ( self, segmentation, settings )
 
         diffs = repeated_normal_positions - repeated_femnodes ;
 
-        diffs = diffs ./ sqrt ( sum ( diffs .^ 2 ) ) .^ 3 ;
+        normed_diffs = diffs ./ sqrt ( sum ( diffs .^ 2 ) ) .^ 3 ;
 
-        dotprods = dot ( diffs, repeated_normals, 1 ) ;
+        dotprods = dot ( normed_diffs, repeated_normals, 1 ) ;
 
         solid_angle_integrals = zeros ( 1, n_of_nodes_in_aabb ) ;
 
         for jj = 1 : n_of_nodes_in_aabb
 
             range_start = 1 + (jj - 1) * n_of_nodes_in_aabb ;
+
+            if range_start > numel ( dotprods )
+
+                break
+
+            end
 
             range_end = range_start + n_of_nodes_in_aabb - 1 ;
 
