@@ -173,19 +173,9 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 
     tetraI = zeros ( mesh.tetra_count, 1 ) ;
 
-    for ii = 1 : mesh.tetra_count
+    vertexI = reshape ( vertexI, 4, mesh.tetra_count ) ;
 
-        jj = (ii - 1) * 4 + 1 ;
-
-        vrange = jj : jj + 3 ;
-
-        if all ( vertexI ( vrange ) ~= 0 )
-
-            tetraI ( ii ) = ii ;
-
-        end % if
-
-    end % for
+    tetraI = all ( sum ( tetraI ) == 4, 1 ) ;
 
     tetraI = tetraI ( tetraI ~= 0 ) ;
 
