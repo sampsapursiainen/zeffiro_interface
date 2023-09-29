@@ -56,13 +56,13 @@ function self = solid_angle_labeling ( self, segmentation, settings )
 
         surface_normals = global_surface_normals ( :, triI ) ./ global_normal_norms ( triI ) ;
 
+        n_of_surface_normals = size ( surface_normals, 2 ) ;
+
         % Compute solid angle integral for each FEM node in the axis-aligned
         % bounding box. If a node is in compartment ii, add its global index to
         % the set of in-compartment node indices.
 
-        node_inds_in_compartment = zeros ( n_of_nodes_in_aabb, 1 ) ;
-
-        repeated_femnodes = repelem ( nodes_in_aabb, 1, size ( surface_normals, 2 ) ) ;
+        repeated_femnodes = repelem ( nodes_in_aabb, 1, n_of_surface_normals ) ;
 
         repeated_normals = repmat ( normal_positions, 1 , n_of_nodes_in_aabb ) ;
 
@@ -76,29 +76,13 @@ function self = solid_angle_labeling ( self, segmentation, settings )
 
         dotprods = dot ( normed_diffs, repeated_normals, 1 ) ;
 
-        solid_angle_integrals = zeros ( 1, n_of_nodes_in_aabb ) ;
+        integrands = dotprods .* repeated_triangle_areas ;
 
-        for jj = 1 : n_of_nodes_in_aabb
+        % Reshape to allow vectorized integration along matrix columns.
 
-            range_start = 1 + (jj - 1) * n_of_nodes_in_aabb ;
+        integrands = reshape ( integrands, n_of_surface_normals, n_of_nodes_in_aabb ) ;
 
-            if range_start > numel ( dotprods )
-
-                break
-
-            end
-
-            range_end = range_start + n_of_nodes_in_aabb - 1 ;
-
-            range = range_start : range_end ;
-
-            range_dotprods = dotprods ( range ) ;
-
-            range_triangle_areas = repeated_triangle_areas ( range ) ;
-
-            solid_angle_integrals ( jj ) = ( 1 / 4 / pi ) * sum ( range_dotprods .* range_triangle_areas ) ;
-
-        end % for
+        solid_angle_integrals = (1 / 4 / pi) * sum ( integrands ) ;
 
         intI = solid_angle_integrals >= settings.meshing_threshold ;
 
