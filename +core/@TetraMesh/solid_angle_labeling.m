@@ -155,11 +155,9 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
     % Look for 4 consequtive ones in vertexI set. They indicate, that a
     % tetrahedron is covered by the tissue boundary.
 
-    tetraI = zeros ( mesh.tetra_count, 1 ) ;
-
     vertexI = reshape ( vertexI, 4, mesh.tetra_count ) ;
 
-    tetraI = all ( sum ( tetraI ) == 4, 1 ) ;
+    tetraI = all ( sum ( vertexI ) == 4, 1 ) ;
 
     tetraI = tetraI ( tetraI ~= 0 ) ;
 
