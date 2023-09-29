@@ -1,6 +1,6 @@
-function self = initial_labeling ( self, segmentation, settings )
+function self = solid_angle_labeling ( self, segmentation, settings )
 %
-% self = initial_labeling ( self, segmentation, settings )
+% self = solid_angle_labeling ( self, segmentation, settings )
 %
 % Performs labeling of tetrahedra into their respective compartments, specified
 % by the given surface segmentation, after a mesh that has not yet been
@@ -177,10 +177,10 @@ function [ nodeI, tetraI, aabb ] = AABBFn ( snodes, mesh, tetra_vertex_coords )
 
             tetraI ( ii ) = ii ;
 
-        end
+        end % if
 
-    end
+    end % for
 
     tetraI = tetraI ( tetraI ~= 0 ) ;
 
-end
+end % function
