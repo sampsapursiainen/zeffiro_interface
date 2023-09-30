@@ -83,9 +83,9 @@ function [ surface_elements, geI ]  = surface_elements ( self, inds )
 
     nnI = nI == 0 ;
 
-    seI = unique ( tetra_ids ( nnI ), 'stable' ) ;
+    seI = tetra_ids ( nnI ) ;
 
-    sfI = unique ( face_ids ( nnI ), 'stable' ) ;
+    sfI = face_ids ( nnI ) ;
 
     % Make a transformation into the global element index set and fetch the elements.
 
