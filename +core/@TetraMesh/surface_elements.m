@@ -1,6 +1,6 @@
-function [ surface_elements, elementI ]  = surface_elements ( self, inds )
+function [ surface_elements, geI ]  = surface_elements ( self, inds )
 %
-% [ surface_elements, elementI ]  = surface_elements ( self, inds )
+% [ surface_elements, geI ]  = surface_elements ( self, inds )
 %
 % Given the indices of a set of elements, finds which of them comprise the
 % surface of the set, by checking which elements do not have as many neighbours
@@ -28,35 +28,69 @@ function [ surface_elements, elementI ]  = surface_elements ( self, inds )
     face3 = tetra (fr3,:) ;
     face4 = tetra (fr4,:) ;
 
-    % Form a face array and order it so that opposing faces are next to each other.
+    % Form a face array and order it, so that opposing faces with the same node
+    % indices are next to each other in columns.
 
     faces = [ face1 , face2 , face3 , face4 ] ;
 
     sorted_faces = sort ( faces, 1 ) ;
 
-    [ sorted_faces, sortI ] = sort ( sorted_faces, 2 ) ;
+    [ ~, sortI ] = sort ( sorted_faces (1,:), 2 ) ;
 
-    % Store faces and the opposing node indices they they correspond to and
-    % tetra indices in a single info array. Then order it columnwise based on
-    % sortI.
+    permutation = sortI ;
+
+    sorted_faces = sorted_faces ( :, sortI ) ;
+
+    [ ~, sortI ] = sort ( sorted_faces (2,:), 2 ) ;
+
+    permutation = permutation ( sortI ) ;
+
+    sorted_faces = sorted_faces ( :, sortI ) ;
+
+    [ ~, sortI ] = sort ( sorted_faces (3,:), 2 ) ;
+
+    permutation = permutation ( sortI ) ;
+
+    sorted_faces = sorted_faces ( :, sortI ) ;
+
+    % Store faces and the opposing node indices they correspond to and
+    % tetra indices into arrays. Then order them based on permutation.
 
     one = ones ( 1, size ( tetra, 2 ) ) ;
 
     face_ids = [ 1*one , 2*one , 3*one , 4*one ] ;
 
-    face_ids = face_ids ( sortI ) ;
+    face_ids = face_ids ( permutation ) ;
 
     tetra_ids = repmat ( 1 : n_of_tetra, 1, 4 ) ;
 
-    tetra_ids = tetra_ids ( sortI ) ;
+    tetra_ids = tetra_ids ( permutation ) ;
 
     % Find whether faces are opposing by checking whether adjacent subtracted
     % index sets subtract absolutely to 0.
 
-    adjacencyI = find ( sum ( abs ( sorted_faces (:,2:end) - sorted_faces (:,1:end-1) ) ) == 0 ) ;
+    aI = find ( sum ( abs ( sorted_faces (:,2:end) - sorted_faces (:,1:end-1) ) ) == 0 ) ;
 
-    elementI = tetra_ids ( adjacencyI ) ;
+    % Mark elements that had neighbours.
 
-    surface_elements = self.tetra ( : , elementI ) ;
+    nI = zeros ( 1 , n_of_tetra ) ;
+
+    nI ( aI ) = 1 ;
+
+    nI ( aI + 1 ) = 1 ;
+
+    % Determine surface element indices from incides that were not marked as having neighbours.
+
+    nnI = nI == 0 ;
+
+    seI = tetra_ids ( : , nnI ) ;
+
+    sfI = face_ids ( :, nnI ) ;
+
+    % Make a transformation into the global element index set and fetch the elements.
+
+    geI = unique ( inds ( seI ) ) ;
+
+    surface_elements = self.tetra ( :, geI ) ;
 
 end % function
