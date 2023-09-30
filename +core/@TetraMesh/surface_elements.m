@@ -1,0 +1,62 @@
+function [ surface_elements, elementI ]  = surface_elements ( self, inds )
+%
+% [ surface_elements, elementI ]  = surface_elements ( self, inds )
+%
+% Given the indices of a set of elements, finds which of them comprise the
+% surface of the set, by checking which elements do not have as many neighbours
+% as an element should have faces.
+%
+
+    arguments
+        self (1,1) core.TetraMesh
+        inds (1,:) uint64 { mustBePositive } = 1 : self.element_count
+    end
+
+    tetra = self.tetra ( :, inds ) ;
+
+    n_of_tetra = size ( tetra, 2 ) ;
+
+    face_rotations = self.face_rotations ;
+
+    fr1 = face_rotations (:,1) ;
+    fr2 = face_rotations (:,2) ;
+    fr3 = face_rotations (:,3) ;
+    fr4 = face_rotations (:,4) ;
+
+    face1 = tetra (fr1,:) ;
+    face2 = tetra (fr2,:) ;
+    face3 = tetra (fr3,:) ;
+    face4 = tetra (fr4,:) ;
+
+    % Form a face array and order it so that opposing faces are next to each other.
+
+    faces = [ face1 , face2 , face3 , face4 ] ;
+
+    sorted_faces = sort ( faces, 1 ) ;
+
+    [ sorted_faces, sortI ] = sort ( sorted_faces, 2 ) ;
+
+    % Store faces and the opposing node indices they they correspond to and
+    % tetra indices in a single info array. Then order it columnwise based on
+    % sortI.
+
+    one = ones ( 1, size ( tetra, 2 ) ) ;
+
+    face_ids = [ 1*one , 2*one , 3*one , 4*one ] ;
+
+    face_ids = face_ids ( sortI ) ;
+
+    tetra_ids = repmat ( 1 : n_of_tetra, 1, 4 ) ;
+
+    tetra_ids = tetra_ids ( sortI ) ;
+
+    % Find whether faces are opposing by checking whether adjacent subtracted
+    % index sets subtract absolutely to 0.
+
+    adjacencyI = find ( sum ( abs ( sorted_faces (:,2:end) - sorted_faces (:,1:end-1) ) ) == 0 ) ;
+
+    elementI = tetra_ids ( adjacencyI ) ;
+
+    surface_elements = self.tetra ( : , elementI ) ;
+
+end % function
