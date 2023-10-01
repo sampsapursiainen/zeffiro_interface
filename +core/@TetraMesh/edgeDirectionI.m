@@ -2,8 +2,8 @@ function I = edgeDirectionI ( self )
 %
 % I = edgeDirectionI ( self )
 %
-% Returns a 2-by-M matrix of indices, giving the directions of the edges in an
-% element of this mesh.
+% Returns a 2-by-N matrix of indices, where N is the number of edges, giving
+% the directions of the edges in an element of this mesh.
 %
 
     arguments
