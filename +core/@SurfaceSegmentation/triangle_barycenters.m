@@ -10,18 +10,6 @@ function barycenters = triangle_barycenters ( self, inds )
 
     vertex_coordinates = self.vertex_coordinates ( inds ) ;
 
-    n_of_vertex_coordinates = size ( vertex_coordinates, 2 ) ;
-
-    barycenters = zeros ( 3 , n_of_vertex_coordinates / 3 ) ;
-
-    for ii = 1 : size ( barycenters, 2 )
-
-        vi = 3 * (ii - 1) + 1 ;
-
-        vrange = vi : vi + 2 ;
-
-        barycenters (:,ii) = sum ( vertex_coordinates ( :, vrange ), 2 ) / 3 ;
-
-    end % for
+    barycenters = core.geometry.shape_barycenters ( vertex_coordinates, 3 ) ;
 
 end % function
