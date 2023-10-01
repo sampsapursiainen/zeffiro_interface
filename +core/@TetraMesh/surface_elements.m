@@ -35,23 +35,7 @@ function [ surface_elements, geI ]  = surface_elements ( self, inds )
 
     sorted_faces = sort ( faces, 1 ) ;
 
-    [ ~, sortI ] = sort ( sorted_faces (1,:), 2 ) ;
-
-    permutation = sortI ;
-
-    sorted_faces = sorted_faces ( :, sortI ) ;
-
-    [ ~, sortI ] = sort ( sorted_faces (2,:), 2 ) ;
-
-    permutation = permutation ( sortI ) ;
-
-    sorted_faces = sorted_faces ( :, sortI ) ;
-
-    [ ~, sortI ] = sort ( sorted_faces (3,:), 2 ) ;
-
-    permutation = permutation ( sortI ) ;
-
-    sorted_faces = sorted_faces ( :, sortI ) ;
+    [ sorted_faces, permutation ] = utilities.sortcolumns ( sorted_faces, [1 2 3] ) ;
 
     % Store faces and the opposing node indices they correspond to and
     % tetra indices into arrays. Then order them based on permutation.
