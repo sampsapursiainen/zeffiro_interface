@@ -57,7 +57,7 @@ function [ surface_elements, geI, surface_triangles ]  = surface_elements ( self
 
     % Mark elements that had neighbours.
 
-    nI = zeros ( 1 , n_of_tetra ) ;
+    nI = zeros ( 1 , size ( faces, 2 ) ) ;
 
     nI ( aI ) = 1 ;
 
