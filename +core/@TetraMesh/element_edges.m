@@ -12,9 +12,7 @@ function [ edge_inds, edge_endpoints, edge_directions ] = element_edges ( self, 
 
     elements = self.tetra ( :, inds ) ;
 
-    cursor = [ 1, 2, 2, 3, 3, 1, 1, 4, 2, 4, 3, 4 ] ;
-
-    edge_inds = elements ( cursor , : ) ;
+    edge_inds = elements ( self.edgeDirectionI , : ) ;
 
     edge_endpoints = self.nodes ( :, edge_inds ) ;
 

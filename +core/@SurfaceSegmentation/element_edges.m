@@ -12,9 +12,7 @@ function [ edge_inds, edge_endpoints, edge_directions ] = element_edges ( self, 
 
     triangles = self.triangles ( :, inds ) ;
 
-    cursor = [ 1, 2, 2, 3, 3, 1 ] ;
-
-    edge_inds = triangles ( cursor , : ) ;
+    edge_inds = triangles ( self.edgeDirectionI , : ) ;
 
     edge_endpoints = self.nodes ( :, edge_inds ) ;
 
