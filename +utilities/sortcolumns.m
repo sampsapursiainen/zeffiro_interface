@@ -41,7 +41,7 @@ function [ sorted_array , permutation ] = sortcolumns ( array, rowI )
 
         rowi = rowI ( ii ) ;
 
-        [ ~ , sortI ] = sort ( sorted_array ( ii, : ), 2 ) ;
+        [ ~ , sortI ] = sort ( sorted_array ( rowi, : ), 2 ) ;
 
         permutation = permutation ( sortI ) ;
 
