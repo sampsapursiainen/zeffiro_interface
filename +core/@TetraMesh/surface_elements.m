@@ -1,6 +1,6 @@
-function [ surface_elements, geI ]  = surface_elements ( self, inds )
+function [ surface_elements, geI, surface_triangles ]  = surface_elements ( self, inds )
 %
-% [ surface_elements, geI ]  = surface_elements ( self, inds )
+% [ surface_elements, geI, surface_triangles ]  = surface_elements ( self, inds )
 %
 % Given the indices of a set of elements, finds which of them comprise the
 % surface of the set, by checking which elements do not have as many neighbours
@@ -76,5 +76,15 @@ function [ surface_elements, geI ]  = surface_elements ( self, inds )
     geI = unique ( inds ( seI ) ) ;
 
     surface_elements = self.tetra ( :, geI ) ;
+
+    % Get surface triangles.
+
+    frs = face_rotations ( : , sfI ) ;
+
+    tI = repmat ( seI, 3, 1 ) ;
+
+    fI = sub2ind ( size ( tetra ), frs, tI ) ;
+
+    surface_triangles = tetra ( fI ) ;
 
 end % function
