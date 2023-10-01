@@ -13,7 +13,7 @@ function barycenters = shape_barycenters ( elements, shape_size )
 
     n_of_vertex_coordinates = size ( elements, 2 ) ;
 
-    barycenters = zeros ( shape_size , n_of_vertex_coordinates / shape_size ) ;
+    barycenters = zeros ( 3 , n_of_vertex_coordinates / shape_size ) ;
 
     for ii = 1 : size ( barycenters, 2 )
 
