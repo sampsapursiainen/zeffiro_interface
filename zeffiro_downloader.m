@@ -99,9 +99,7 @@ current_folder = pwd ;
 cd ( program_path ) ;
 
 if kwargs.run_setup
-    zeffiro_setup ( ...
-        "submodules", kwargs.submodules
-    ) ;
+    zeffiro_setup ( "submodules", kwargs.submodules ) ;
 end
 
 cd ( current_folder ) ;
