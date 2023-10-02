@@ -2,6 +2,10 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef = zef_import_parcellation_colortable(zef, varargin)
 
+if nargin == 0
+    zef = evalin('base','zef');
+end
+
 if isempty(zef)
     zef = evalin('base','zef');
 end
@@ -68,7 +72,7 @@ if not(isempty(filename))
 
 
     if isfield(zef,'h_zef_import_parcellation_points')
-        if isvalid('base','zef.h_zef_import_parcellation_points')
+        if isvalid(zef.h_zef_import_parcellation_points)
             if  isempty(zef.parcellation_points)
                 set(zef.h_zef_import_parcellation_points,'foregroundcolor',[1 0 0]);
             else
