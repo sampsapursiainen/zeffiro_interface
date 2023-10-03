@@ -9,6 +9,10 @@ classdef Zef < handle
 
     properties
         %
+        % A surface mesh, generated from (for example) FreeSurfer ASCII files.
+        %
+        surface_segmentation (1,1) core.SurfaceSegmentation = core.SurfaceSegmentation
+        %
         % A tetrahedral finite element mesh.
         %
         tetra_mesh (1,1) core.TetraMesh = core.TetraMesh
@@ -37,18 +41,23 @@ classdef Zef < handle
         %
         % Inputs:
         %
-        % - kwargs.nodes
+        % - kwargs.surface_segmentation
         %
-        %   The nodes of the stored finite element mesh.
+        %   An instance of core.SurfaceSegmentation.
         %
-        % - kwargs.tetra
+        % - kwargs.mesh
         %
-        %   The tetrahedra which indicate the shapes formed by the above nodes.
+        %   An instance of core.TetraMesh. This is constructed from
+        %   self.surface_segmentation.
         %
         % - kwargs.L
         %
         %   A lead field matrix constructed from a given set of synthetic sources and a sensor
         %   configuration.
+        %
+        % - kwargs.electrodes
+        %
+        %   A set of core.Electrode.
         %
 
             arguments
