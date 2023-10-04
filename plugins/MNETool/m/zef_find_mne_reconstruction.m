@@ -155,6 +155,7 @@ for f_ind = 1 : zef.number_of_frames
 end
 
 [z] = zef_postProcessInverse(z_inverse, procFile);
+z = zef_normalizeInverseReconstruction(z);
 
 
 close(h);
