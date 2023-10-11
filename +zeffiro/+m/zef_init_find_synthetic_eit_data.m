@@ -1,1 +1,0 @@
-zef_init_find_synthetic_eit_data;

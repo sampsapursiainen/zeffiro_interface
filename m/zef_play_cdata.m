@@ -62,11 +62,7 @@ for j = 1 : loop_count
                 stop_movie = eval('zef.stop_movie');
                 pause(0.01);
                 if stop_movie
-                    if get(eval('zef.h_pause_movie'),'value') == 1
-                        waitfor(eval('zef.h_pause_movie'),'value');
-                    else
                         return;
-                    end
                 end
 
                 if isequal(f_ind, length(h_c(i).UserData))

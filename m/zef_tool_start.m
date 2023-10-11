@@ -97,21 +97,39 @@ else
         else
             zef_set_size_change_function(h_groot_children(i),2,scale_positions);
         end
-
-        h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+        
+          if not(isempty(findobj(h_groot_children(i),'-property','Resize')))
+            h_groot_children(i).Resize = 'on';
+          end
 
         set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
         set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
-
-        if not(isempty(findobj(h_groot_children(i),'-property','Resize')))
-            h_groot_children(i).Resize = 'on';
-        end
 
         if not(ismember('ZefTool',properties(h_groot_children(i))))
             addprop(h_groot_children(i),'ZefTool');
         end
         h_groot_children(i).ZefTool = tool_script;
-
+     
+     if horizontal_aux < 0 
+     
+         scaling_factor = width_aux/(width_aux + horizontal_aux); 
+         horizontal_aux = 0; 
+         width_aux = scaling_factor*width_aux; 
+         height_aux = scaling_factor*height_aux; 
+     
+     end
+     
+         if vertical_aux < 0 
+     
+         scaling_factor = height_aux/(height_aux + vertical_aux); 
+         vertical_aux = 0; 
+         width_aux = scaling_factor*width_aux; 
+         height_aux = scaling_factor*height_aux; 
+     
+         end
+     
+              h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+     
     end
 
 end

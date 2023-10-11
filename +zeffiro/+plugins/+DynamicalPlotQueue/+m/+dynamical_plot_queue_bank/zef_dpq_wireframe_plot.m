@@ -1,3 +1,0 @@
-function zef_dpq_wireframe_plot
-zef_dpq_wireframe_plot;
-end

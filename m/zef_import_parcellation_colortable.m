@@ -2,6 +2,12 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 function zef = zef_import_parcellation_colortable(zef,varargin)
 
+if nargin==0
+
+    zef = evalin('base','zef');
+
+end
+
 if isempty(zef)
 
     zef = evalin('base','zef');
@@ -36,7 +42,7 @@ if strlength(filename) == 0
 
     save_file_path = fullfile(zef.save_file_path);
 
-    if not(isempty(save_file_path)) && not(save_file_path==0)
+    if or(not(isempty(save_file_path)),not(save_file_path==0))
 
         [file file_path, file_type] = uigetfile({'*.mat'},'Import parcellation colortable',save_file_path);
 
@@ -82,7 +88,7 @@ if not ( strlength ( filename ) == 0 )
         parcellation_segment, ...
         parcellation_aux{3}{3}, ...
         parcellation_aux{3}{4}, ...
-        parcellation_aux{2} ...
+        parcellation_aux{1} ...
         };
 
     if not(isempty(compartment_tag))
@@ -106,7 +112,7 @@ if not ( strlength ( filename ) == 0 )
 
     if eval('isfield(zef,''h_parcellation_list'')')
 
-        if isvalid('base','zef.h_parcellation_list')
+        if isvalid(zef.h_parcellation_list)
 
             h_parcellation_list = zef.h_parcellation_list;
 

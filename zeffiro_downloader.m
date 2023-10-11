@@ -1,71 +1,107 @@
-function zeffiro_downloader(varargin)
-
+function zeffiro_downloader( kwargs )
+%
+% zeffiro_downloader ( kwargs )
+%
 % This function downloads Zeffiro Interface in a given folder and sets it
 % to be a local repository of the remote origin at
 %
-% https://github.com/sampsapursiainen/zeffiro_interface
+%   https://github.com/sampsapursiainen/zeffiro_interface
 %
-% After downloading the local repository will be updated in each startup
+% After downloading, the local repository will be updated in each startup
 % (each time when running zeffiro_interface.m).
 %
-% Set up instructions:
+% Inputs:
 %
-% The arguments of this function are property-value pair of the form: 
-% <property 1>,<property value 1>,<property 2>,<property value 2>,...
-% 
-% These properties and their values are the following:
-% Property: <install_directory>, Value: <directory of the program folder>
-% Property: <folder_name>, Value: <program folder name>
-% Property: <branch_name>, Value: <branch to be downloaded from github>
-% Property: <profile_name>, Value: <name of the profile>
-% Property: <run_setup>, Value: 'yes' or 'no'
+% - kwargs.install_directory = pwd
 %
-% The length of the argument list can vary. By calling the function without 
-% arguments the default settings will be used. The default values are:
-% Property: <install_directory>, Default: <directory of the file>
-% Property: <folder_name>, Default: 'zeffiro_interface-<branch_name>'
-% Property: <branch_name>, Default: 'main_development_branch' and
-% Property: <profile_name>, Default: 'multicompartment_head'
-% Property: <run_setup>, Default: 'yes' 
+%   The directory into which the Zeffiro Interface folder will be placed.
 %
-% Note: Some other branch than the master should be used for pushes. The
+% - kwargs.folder_name = "zeffiro_interface"
+%
+%   The name of the installation folder in kwargs.install_directory.
+%
+% - kwargs.branch_name = "main_development_branch"
+%
+%   The branch of Zeffiro Interface that will be installed.
+%
+% - kwargs.profile_name = "multicompartment_head"
+%
+%   The name of the default profile file for Zeffiro projects.
+%
+% - kwargs.run_setup = true
+%
+%   If this set to true, the dependencies of Zeffiro Interface will also be
+%   installed via a function that is reserved for it
+%
+% - kwargs.submodules = []
+%
+%   Determines which submodules will be installed by zeffiro_setup.
+%   The option "all" can be given to install all submodules.
+%
+% NOTE: Some other branch than the master should be used for pushes. The
 % preferred branch is main_development_branch which will be merged with
-% master on a mothly basis.
+% master on a monthly basis.
 
-install_directory = pwd;
-branch_name = 'main_development_branch';
-profile_name = 'multicompartment_head';
-folder_name = [];
-run_setup = 'yes';
-
-if not(isempty(varargin))
-zef_i = 1;
-while zef_i <= length(varargin)
-eval([varargin{zef_i} '= ''' varargin{zef_i+1} ''';']);
-zef_i = zef_i + 2;
-end
+arguments
+    kwargs.install_directory (1,1) string { mustBeFolder } = pwd
+    kwargs.branch_name (1,1) string = "master"
+    kwargs.profile_name (1,1) string = "multicompartment_head"
+    kwargs.folder_name (1,1) string = "zeffiro_interface"
+    kwargs.run_setup (1,1) logical = true
+    kwargs.git_address (1,1) string = "https://github.com/sampsapursiainen/zeffiro_interface.git"
+    kwargs.submodules = string ([])
 end
 
-if isempty(folder_name)
-folder_name = ['zeffiro_interface-' branch_name];
-end
-program_path = [install_directory filesep folder_name];
-if not(isempty(folder_name))
+if isempty(kwargs.folder_name)
+    kwargs.folder_name = "zeffiro_interface-" + kwargs.branch_name ;
 end
 
-if not(isequal(branch_name,'master'))
-eval(['!git clone --depth=1 -b ' branch_name ' https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
-else
-eval(['!git clone --depth=1 https://github.com/sampsapursiainen/zeffiro_interface ' program_path]);
+program_path = fullfile ( kwargs.install_directory, kwargs.folder_name ) ;
+
+% Attempt cloning into the target folder.
+
+[status, cmdout] = system ( ...
+    "git clone --depth=1 -b " ...
+    + " " ...
+    + kwargs.branch_name ...
+    + " " ...
+    + kwargs.git_address ...
+    + " " ...
+    + program_path ...
+);
+
+if status ~= 0
+    error ( ...
+        "Downloading Zeffiro Interface with the branch name '" ...
+        + kwargs.branch_name ...
+        + "' and local destination folder '" ...
+        + program_path ...
+        + "' did not succeed. " ...
+        + "The specific encountered error was as follows:" ...
+        + newline + newline ...
+        + "    " + cmdout ...
+        + newline + newline ...
+        + "Check your spelling and try again." ...
+    ) ;
 end
 
-ini_cell = readcell([program_path filesep 'profile' filesep 'zeffiro_interface.ini'],'FileType','text');
-aux_row = find(ismember(ini_cell(:,3),'profile_name'));
-ini_cell{aux_row,2} = profile_name;
-writecell(ini_cell,[program_path filesep 'profile' filesep 'zeffiro_interface.ini'],'FileType','text');
+% Generate a profile file.
 
-if isequal(run_setup,'yes')
-run([program_path filesep 'zeffiro_setup.m']);
+ini_cell = readcell ( fullfile ( program_path, "profile", "zeffiro_interface.ini" ), "FileType", "text" );
+aux_row = find ( ismember ( ini_cell(:,3),"profile_name" ) );
+ini_cell{aux_row,2} = kwargs.profile_name;
+writecell ( ini_cell, fullfile ( program_path, "profile", "zeffiro_interface.ini" ), "FileType", "text");
+
+% Run setup with the possible options
+
+current_folder = pwd ;
+
+cd ( program_path ) ;
+
+if kwargs.run_setup
+    zeffiro_setup ( "submodules", kwargs.submodules ) ;
 end
 
-end
+cd ( current_folder ) ;
+
+end % function

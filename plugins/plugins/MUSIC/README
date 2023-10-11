@@ -1,2 +1,0 @@
-add the following line to zeffiro_plugins.ini file to utilize this plugin:
-MUSIC, inverse_tools, MUSIC_app_start

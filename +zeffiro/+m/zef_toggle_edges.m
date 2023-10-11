@@ -1,3 +1,0 @@
-function zef_toggle_edges
-zef_toggle_edges;
-end

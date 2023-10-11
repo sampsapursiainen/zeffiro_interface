@@ -796,11 +796,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
         stop_movie = eval('zef.stop_movie');
         pause(0.01);
         if stop_movie
-            if get(eval('zef.h_pause_movie'),'value') == 1
-                waitfor(eval('zef.h_pause_movie'),'value');
-            else
                 return;
-            end
         end
 
         f_ind_aux = f_ind_aux + 1;

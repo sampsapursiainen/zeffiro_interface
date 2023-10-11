@@ -1,3 +1,0 @@
-function zef_plot_parcellation_time_series(void)
-zef_plot_parcellation_time_series(void);
-end

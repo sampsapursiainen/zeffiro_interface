@@ -20,7 +20,7 @@ function zef = zeffiro_interface(args)
 %   Name                            Value and explanation
 %   ------------------------------- ------------------------------------------
 %
-%   'restart'                       true or false (default = false)
+%   'zeffiro_restart'               true or false (default = false)
 %
 %                                   If this is set to true, the closing of
 %                                   Zeffiro Interface is forced before any
@@ -152,6 +152,18 @@ function zef = zeffiro_interface(args)
 %                                   A path to a file where Zeffiro Interface
 %                                   is to write its log messages.
 %
+%   'submodules'                    <strings> (default = empty array)
+%
+%                                   An array of strings that specifies which
+%                                   submodules listed in the .gitmodules file
+%                                   are installed. If "all" is given, they all
+%                                   will be.
+%
+%   'skip_submodules'               <logical> (default = true)
+%
+%                                   If this is true, the setup of submodules
+%                                   will be skipped.
+%
 %   NOTE: the value behind the name "run_script" is run using the Matlab
 %   function eval, meaning one should be absolutely sure that the script
 %   contents come from a trusted source.
@@ -159,7 +171,7 @@ function zef = zeffiro_interface(args)
 
 arguments
 
-    args.restart (1,1) logical = false;
+    args.zeffiro_restart (1,1) logical = false;
 
     args.start_mode (1,1) string { mustBeMember(args.start_mode, ["display", "nodisplay", "default"]) } = "default";
 
@@ -203,11 +215,15 @@ arguments
 
     args.log_file_name (1,1) string;
 
+    args.submodules = string([])
+
+    args.skip_submodules (1,1) logical = false
+
 end
 
 % Prevent starting of Zeffiro, if there is an existing value of zef.
 
-if not(args.restart) && evalin("base","exist('zef', 'var');")
+if not(args.zeffiro_restart) && evalin("base","exist('zef', 'var');")
 
     error( ...
         "It looks like another instance of Zeffiro Interface is already open." ...
@@ -215,7 +231,7 @@ if not(args.restart) && evalin("base","exist('zef', 'var');")
         + " clear zef from the base workspace with the command 'clear zef' or" ...
         + " force a restart with" ...
         + newline + newline ...
-        + "    zef = zeffiro_interface('restart', true, other_options…);" ...
+        + "    zef = zeffiro_interface('zeffiro_restart', true, other_options…);" ...
         )
 
 end
@@ -228,15 +244,7 @@ zef_close_all();
 
 zef = struct;
 
-zef.zeffiro_restart = args.restart;
-
-args = rmfield(args,'restart');
-
-fieldnames_aux = fieldnames(args);
-for i = 1 : length(fieldnames_aux)
-    zef.(fieldnames_aux{i}) = args.(fieldnames_aux{i});
-end
-clear fieldnames_aux;
+zef = utilities.copy_fields ( args, zef ) ;
 
 %% Then do initial preparations like path building and additions.
 
@@ -280,10 +288,16 @@ addpath(zef.external_path);
 
 zef.start_mode = args.start_mode ;
 
+zeffiro_setup ( 'submodules', args.submodules, 'skip_submodules', args.skip_submodules ) ;
+
+addpath(zef.code_path);
+
 if not(zef.zeffiro_restart)
-
-    zef_start_config;
-
+    try
+        zef_start_config;
+    catch
+        error ( "Could not run zef_start_config. Did you run the zeffiro_setup script before trying to start Zeffiro?" ) ;
+    end
 end
 
 zef = zef_start(zef);

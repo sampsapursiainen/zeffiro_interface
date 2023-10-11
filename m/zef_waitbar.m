@@ -53,7 +53,6 @@ function h_waitbar = zef_waitbar(varargin)
 % 
 % end
 
-
 if not(isa(varargin{2}, "matlab.graphics.Graphics"))
 current_iter = double ( varargin { 1 } ) ;
 max_iter = double ( varargin { 2 } ) ;
@@ -80,6 +79,11 @@ if nargin == 3
         if isvalid(third)
             h_waitbar = third ;
             plan_of_action = PROGRESSING;
+
+            if not(isprop(varargin{3},'ZefWaitbarCurrentProgress'))
+                varargin{3}.ZefWaitBarCurrentProgress = 1;
+            end
+
             if abs(current_iter - varargin{3}.ZefWaitbarCurrentProgress) < progress_threshold
                 return
             else
@@ -90,7 +94,6 @@ if nargin == 3
 
             plan_of_action = INITIALIZING;
             
-
         end
 
     elseif isa(third, "string") || isa(third, "char")
@@ -105,7 +108,17 @@ if nargin == 3
       plan_of_action = PROGRESSING;
       progress_ratio = varargin{1};
       progress_bar_text = varargin{3};
-      progress_threshold = 1;
+      progress_threshold = 0.01;
+
+            if not(isprop(varargin{2},'ZefWaitbarCurrentProgress'))
+                varargin{2}.ZefWaitBarCurrentProgress = 0;
+            end
+
+            if abs(varargin{1} - varargin{2}.ZefWaitbarCurrentProgress) < progress_threshold
+                return
+            else
+                varargin{2}.ZefWaitbarCurrentProgress = varargin{1};
+            end
          
      end
     
@@ -388,12 +401,13 @@ if detail_condition
 
     if progress_value(1) > 0
 
-
-
         time_in_seconds = now + ((1-progress_value(end))/progress_value(end))*(now - h_waitbar.ZefWaitbarStartTime) ;
 
         progress_bar_ready_text = datestr ( time_in_seconds );
 
+     h_text_ready.String = ['Ready: ' progress_bar_ready_text];
+
+    
     else
 
         progress_bar_ready_text = '';

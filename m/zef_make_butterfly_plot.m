@@ -22,10 +22,10 @@ f = zef_getFilteredData(zef);
 zef.inv_time_interval_averaging = 0;
 [f,t] = zef_getTimeStep(f,1,zef);
 
-
 h_axes_image.Title.String = ['Time value = ' num2str(zef.inv_time_1)];
 h_axes_image.Colormap = lines(zef.colormap_size);
 h_plot = plot(t',f');
+
 for i = 1 : length(h_plot)
     h_plot(i).ButtonDownFcn = 'zef_set_timepointline(get(gcbo,''Parent''));';
 end
@@ -39,6 +39,8 @@ set(h_axes_image,'xgrid','on');
 set(h_axes_image,'fontsize',zef.font_size);
 set(h_axes_image,'linewidth',0.5);
 set(h_axes_image,'box','on');
+h_legend = findobj(h_axes_image.Parent.Children,'Type','Legend');
+delete(h_legend)
 
 end
 

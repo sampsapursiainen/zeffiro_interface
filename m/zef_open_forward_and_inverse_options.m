@@ -42,6 +42,7 @@ else
     zef.h_as_opt_5.Value = -1;
 end
 
+
 zef.h_refinement_volume_compartments.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments.Items)-1];
 zef.h_refinement_volume_compartments.Multiselect = 'on';
 if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_compartments.ItemsData)
@@ -73,6 +74,13 @@ if max(zef.adaptive_refinement_compartments) <= length(zef.h_adaptive_refinement
 else
     zef.h_adaptive_refinement_compartments.Value = -1;
 end
+
+zef.h_refinement_surface_mode.Items = {'Surface of union','All surfaces'};
+zef.h_refinement_surface_mode_2.Items = {'Surface of union','All surfaces'};
+zef.h_refinement_surface_mode.ItemsData = [1:length(zef.h_refinement_surface_mode.Items)];
+zef.h_refinement_surface_mode_2.ItemsData = [1:length(zef.h_refinement_surface_mode_2.Items)];
+zef.h_refinement_surface_mode.Value = zef.refinement_surface_mode;
+zef.h_refinement_surface_mode_2.Value = zef.refinement_surface_mode_2;
 
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;
 zef.h_refinement_volume_number.Value = num2str(zef.refinement_volume_number);
@@ -108,14 +116,14 @@ zef.h_adaptive_refinement_k_param.Value = num2str(zef.adaptive_refinement_k_para
 
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
-zef.h_source_model.Items = arrayfun(@to_string, setdiff(ZefSourceModel.variants, ZefSourceModel.Error));
-zef.h_source_model.ItemsData = arrayfun(@ZefSourceModel.from, setdiff(ZefSourceModel.variants, ZefSourceModel.Error));
-zef.source_model = ZefSourceModel.from(zef.source_model);
-if eq(zef.source_model, ZefSourceModel.Error)
+zef.h_source_model.Items = arrayfun(@to_string, setdiff(core.ZefSourceModel.variants, core.ZefSourceModel.Error));
+zef.h_source_model.ItemsData = arrayfun(@core.ZefSourceModel.from, setdiff(core.ZefSourceModel.variants, core.ZefSourceModel.Error));
+zef.source_model = core.ZefSourceModel.from(zef.source_model);
+if eq(zef.source_model, core.ZefSourceModel.Error)
     warning("Invalid source model. Setting it as H(div)");
-    zef.source_model = ZefSourceModel.Hdiv;
+    zef.source_model = core.ZefSourceModel.Hdiv;
 end
-zef.h_source_model.Value = ZefSourceModel.from(zef.source_model);
+zef.h_source_model.Value = core.ZefSourceModel.from(zef.source_model);
 zef.h_use_gpu.Value = zef.use_gpu;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);
 zef.h_mesh_labeling_approach.ItemsData = [1:length(zef.h_mesh_labeling_approach.Items)];

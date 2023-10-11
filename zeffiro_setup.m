@@ -1,65 +1,216 @@
-addpath([pwd filesep 'm']);
-zef_make_package(fileparts(mfilename('fullpath')));
+function zeffiro_setup ( kwargs )
+%
+% zeffiro_setup ( kwargs )
+%
+% Downloads dependencies specified in the .gitmodules file into the external/
+% folder and calls their installation scripts.
+%
+% Inputs:
+%
+% - kwargs.submodules = string([])
+%
+%   This column vector of submodule names specifies, which submodules listed in
+%   the .gitmodules files are installed by this function. In addition to the
+%   names in the .gitmodules file, the option "all" can be given, in which case
+%   all submodules are installed.
+%
+% - kwargs.init = true
+%
+%   Determines whether the submodules are initialized. This should probably be
+%   true at all times, as it does not harm if the submodules are already
+%   downloaded.
+%
+% - kwargs.remote = true
+%
+%   Whether to force the submodules be downloaded from the URL specified in the
+%   .gitmodules file, even when the folder is already populated.
+%
+% - kwargs.recursive = true
+%
+%   Whether to download the submodules of the submodules recursively.
+%
+% - kwargs.skip_submodules = false
+%
+%   If this is true, then only the zef_start_config file will be created, but
+%   no submodules will be downloaded.
+%
 
-zef_data.fid_temp = fopen([fileparts(mfilename('fullpath')) filesep 'm' filesep 'zef_start_config.m'],'w');
-fprintf(zef_data.fid_temp, ['warning off;']);
-mkdir(fileparts(mfilename('fullpath')),'external');
+arguments
+    kwargs.submodules (:,1) string = string ( [] )
+    kwargs.init (1,1) logical = true
+    kwargs.remote (1,1) logical = true
+    kwargs.recursive (1,1) logical = true
+    kwargs.skip_submodules (1,1) logical = false
+end
 
-% Download the external libraries to the folders specified in the .gitmodules
-% file.
+[this_folder, ~, ~] = fileparts ( mfilename ( "fullpath" ) ) ;
 
-%!git submodule update --init --recursive
+% Validate kwargs.submodules, as this cannot be done in the arguments
+% block without writing a validator function.
 
-%%% Install SDPT3 BEGIN %%%
-eval(['!git clone https://github.com/sqlp/sdpt3 ' fileparts(mfilename('fullpath')) filesep 'external/SDPT3'])
-run([fileparts(mfilename('fullpath')) filesep '/external/SDPT3/install_sdpt3.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/SDPT3/'']); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-%%% Install SDPT3 END %%%
+lower_submodule_names = unique ( lower ( kwargs.submodules ) ) ;
 
-%%% Install SeDuMi BEGIN %%%
-eval(['!git clone https://github.com/sqlp/sedumi ' fileparts(mfilename('fullpath')) filesep 'external/SeDuMi'])
-run([fileparts(mfilename('fullpath')) filesep '/external/SeDuMi/install_sedumi.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/SeDuMi/'']); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-%%% Install SeDuMi END %%%
+gitmodules_file = fullfile ( this_folder, ".gitmodules" ) ;
 
-%%% Install CVX BEGIN %%%
-eval(['!git clone https://github.com/cvxr/CVX ' fileparts(mfilename('fullpath')) filesep 'external/CVX'])
-run([fileparts(mfilename('fullpath')) filesep '/external/CVX/cvx_setup.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/CVX/'']); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), evalc(''cvx_startup''); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-%%% Install CVX BEGIN %%%
+submodule_structs = utilities.read_gitmodules ( gitmodules_file ) ;
 
-%%% Install FieldTrip BEGIN %%%
-eval(['!git clone https://github.com/fieldtrip/fieldtrip ' fileparts(mfilename('fullpath')) filesep 'external/fieldtrip'])
-run([fileparts(mfilename('fullpath')) filesep '/external/fieldtrip/ft_defaults.m']);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/fieldtrip/'']); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), evalc(''ft_defaults''); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-%%% Install FieldTrip BEGIN %%%
+allowed_names = [ submodule_structs.name ] ;
 
-%%% Install SPM12 BEGIN %%%
-eval(['!git clone https://github.com/spm/spm12 ' fileparts(mfilename('fullpath')) filesep 'external/spm12'])
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/spm12/'']); end';
-fprintf(zef_data.fid_temp, ['\n' zef_data.str_temp]);
-%%% Install SPM12 BEGIN %%%
+if isrow ( allowed_names )
+    allowed_names = transpose ( allowed_names ) ;
+end
 
-%%% Install SESAME BEGIN %%%
-eval(['!git clone https://github.com/i-am-sorri/SESAME_core ' fileparts(mfilename('fullpath')) filesep 'external/SESAME'])
-zef_data.str_temp = 'if isequal(zef.zeffiro_restart, 0), addpath([zef.program_path filesep ''/external/SESAME/'']); end';
-%%% Install SESAME END %%%
+allowed_names = [ allowed_names ; "all" ] ;
 
-fprintf(zef_data.fid_temp, '\n warning on;' );
+lower_allowed_names = lower ( allowed_names ) ;
 
-fclose(zef_data.fid_temp);
-clear zef_data;
+if not ( all ( ismember ( lower_submodule_names, lower_allowed_names ) ) )
+    error ( ...
+        "All of the given Git submodule names (" ...
+        + strjoin (lower_submodule_names, ", ") ...
+        + ") do not match with the acceptable ones. " ...
+        + "The following ones are accepted:" ...
+        + newline + newline ...
+        + "  " ...
+        + strjoin ( lower_allowed_names, newline + "  " ) ...
+    ) ;
+end
 
-rmpath([pwd filesep 'm']);
+%% Set up path variables.
 
+mfolder = fullfile ( this_folder, "m" ) ;
 
+start_config = fullfile ( mfolder, "zef_start_config.m" ) ;
 
+%% Do things with paths.
 
+addpath ( mfolder );
+
+zeffiro_start_config_fid = fopen ( start_config, 'w' );
+
+%% Make sure zef_start_config is closed even in the case of an error or an early return.
+
+cleanup_obj = onCleanup( @() cleanup_fn ( zeffiro_start_config_fid ) ) ;
+
+%% Return early if asked to.
+
+if kwargs.skip_submodules
+    return
+end
+
+%% Start installation of individual packages.
+
+fprintf(zeffiro_start_config_fid, "warning off;");
+
+% Set Git submodule cloning settings.
+
+if kwargs.init
+    init = " --init" ;
+else
+    init = "" ;
+end
+
+if kwargs.remote
+    remote = " --remote" ;
+else
+    remote = "" ;
+end
+
+if kwargs.recursive
+    recursive = " --recursive" ;
+else
+    recursive = "" ;
+end
+
+% Determine which set to iterate over, all or just user-provided.
+
+if ismember ( "all", lower_submodule_names )
+
+    iterable = allowed_names (1:end-1) ; % Remove "all"
+
+else
+
+    iterable = kwargs.submodules ;
+
+end
+
+% Clone submodules.
+
+stdout = 1 ;
+stderr = 2 ;
+
+for ii = 1 : numel ( iterable )
+
+    lower_submodule_name = lower ( iterable ( ii ) ) ;
+
+    % Find the path corresponding to the name under observation.
+
+    name_ind = find ( lower_allowed_names == lower_submodule_name ) ;
+
+    submodule = submodule_structs ( name_ind ) ;
+
+    [status, message] = system ( "git submodule update" + init + remote + recursive + " " + submodule.path, "-echo" ) ;
+
+    if status == 127
+
+        error ( ...
+            "Got exit code of " + status + " when trying to run Git." ...
+            + newline ...
+            + "This most likely means that Git is not properly installed on your system." ...
+            + newline ...
+            + " Make sure that the program is both present on your computer, and " ...
+            + newline ...
+            + "that it has been added to the program search path of the system." ...
+        ) ;
+
+    end
+
+    if status ~= 0
+
+        fprintf ( ...
+            stderr, ...
+            newline ...
+            + "Encountered a (possible) issue when cloning submodules with an exit code of " ...
+            + status ...
+            + ". The output message was as follows:" ...
+            + newline + newline ...
+            + message ...
+        ) ;
+
+        continue
+
+    end
+
+    fprintf ( ...
+        zeffiro_start_config_fid, ...
+        newline + "if isequal(zef.zeffiro_restart, 0), addpath('" + submodule.path + "'); end;" ...
+    ) ;
+
+    if not ( isempty ( submodule.startupscript ) )
+
+        fprintf ( ...
+            zeffiro_start_config_fid, ...
+            newline + "run ( '" + submodule.startupscript + "' ) ;" ...
+        ) ;
+
+    end % if
+
+end % for
+
+%% Perform finalization.
+
+rmpath ( mfolder ) ;
+
+end % function
+
+%%%%%%%%%%%%%%% Helper functions %%%%%%%%%%%%%%%
+
+function cleanup_fn ( fid )
+
+    fprintf(fid, newline + "warning on;" );
+
+    fprintf ( fid, newline ) ;
+
+    fclose ( fid ) ;
+
+end % function

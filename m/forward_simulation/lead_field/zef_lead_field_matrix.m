@@ -105,8 +105,6 @@ end
 
 clear zef_i;
 
-zef.lf_tag = zef.forward_simulation_table{zef.forward_simulation_selected(1), 1};
-
 % Decompose source space into a rectangular lattice and extract the indices of
 % the source tetra in this frame of reference. Nearest source neighbour inds
 % will be empty when discrete source models are used.
@@ -369,16 +367,16 @@ end
 
 % Set empty decomposition indices, if source model is not continuous.
 
-switch ZefSourceModel.from(source_model)
+switch core.ZefSourceModel.from(source_model)
 
-    case ZefSourceModel.Error
+    case core.ZefSourceModel.Error
 
         error('Received and erraneous source model.')
 
     case { ...
-            ZefSourceModel.ContinuousWhitney, ...
-            ZefSourceModel.ContinuousHdiv, ...
-            ZefSourceModel.ContinuousStVenant ...
+            core.ZefSourceModel.ContinuousWhitney, ...
+            core.ZefSourceModel.ContinuousHdiv, ...
+            core.ZefSourceModel.ContinuousStVenant ...
             }
 
         % Do nothing

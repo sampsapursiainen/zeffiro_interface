@@ -1,3 +1,0 @@
-function [relax_preconditioner, relax_preconditioner_permutation] = zef_relax_find_preconditioner
-[relax_preconditioner, relax_preconditioner_permutation] = zef_relax_find_preconditioner;
-end

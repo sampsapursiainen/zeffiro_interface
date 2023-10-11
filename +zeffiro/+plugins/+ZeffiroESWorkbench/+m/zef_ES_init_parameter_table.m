@@ -1,1 +1,0 @@
-zef_ES_init_parameter_table;

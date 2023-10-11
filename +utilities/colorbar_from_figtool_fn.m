@@ -6,8 +6,6 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 % Matlab .fig file), extracts the colobar from it and saves it to files with
 % given set of suffixes.
 %
-% NOTE: utilizes matlab.lang.internal.uuid, which might break at some point.
-%
 % Inputs:
 %
 % - figtool (1,1) matlab.ui.Figure
@@ -35,6 +33,10 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 %
 %   The resolution of the image, if PNG format is used to save the colorbar.
 %
+% - kwargs.decplaces (1,1) double { mustBeInteger, mustBeNonnegative } = 1
+%
+%   How many decimal places are to be included into the colorbar numbers.
+%
 % Outputs:
 %
 % - None.
@@ -54,26 +56,18 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
         kwargs.resolution (1,1) double { mustBePositive } = 400
 
+        kwargs.decplaces (1,1) double { mustBeInteger, mustBeNonnegative } = 1
+
     end
 
     % Get figure tool colorbar.
 
     ftcb = findobj(figtool,'Tag','rightColorbar');
 
-    % Generate unique-ish ID for a new figure. Turn off warnings emitted by base2dec.
+    % Generate new figure. Also initialize figure cleanup operations, in case
+    % of an interruption.
 
-    unwanted_warning_id = 'MATLAB:base2dec:InputExceedsFlintmax' ;
-
-    warning ( "off", unwanted_warning_id ) ;
-
-    uuid = double ( mod ( base2dec ( erase ( string ( matlab.lang.internal.uuid() ), "-" ), 16 ), 2^31-1 ) );
-
-    warning ( "on", unwanted_warning_id ) ;
-
-    % Generate new figure with the unique-ish ID. Also initialize figure
-    % cleanup operations, in case of an interruption.
-
-    fig = figure(uuid);
+    fig = figure ;
 
     cleanup_fn = @( hh ) close ( hh ) ;
 
@@ -107,7 +101,7 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
     cb.Ticks = lowerlim : delta : upperlim ;
 
-    cb.TickLabels = round ( cb.Ticks, 0 ) ;
+    cb.TickLabels = round ( cb.Ticks, kwargs.decplaces ) ;
 
     % Set colorbar fontsize.
 
@@ -149,7 +143,7 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
         suffix = filetypes ( si ) ;
 
-        exportgraphics(fig, filename_without_suffix + suffix, "Resolution", 400);
+        exportgraphics(fig, filename_without_suffix + suffix, "Resolution", kwargs.resolution);
 
     end
 

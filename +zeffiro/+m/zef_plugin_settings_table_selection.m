@@ -1,3 +1,0 @@
-function zef_plugin_settings_table_selection(hObject,eventdata,handles)
-zef_plugin_settings_table_selection(hObject,eventdata,handles);
-end

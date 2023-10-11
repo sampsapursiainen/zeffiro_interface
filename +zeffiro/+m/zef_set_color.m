@@ -1,3 +1,0 @@
-function zef_set_color
-zef_set_color;
-end

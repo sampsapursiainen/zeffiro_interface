@@ -92,7 +92,7 @@ zef.h_update_lights = uicontrol('Tag','lightsselection','Style','popupmenu','Par
 zef.h_reset_figure_tool_sliders = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.68 0.03 0.065 0.05],'String','Reset','Callback','zef = zef_set_figure_tool_sliders(zef,0);zef.h_reset_figure_tool_sliders.Value=0;');
 zef.h_play_movie = uicontrol('Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.755 0.03 0.065 0.05],'String','Play','Callback','zef_play_cdata(max(1,double(get(findobj(get(gcf,''Children''),''Tag'',''loop_movie''),''UserData''))*get(findobj(get(gcf,''Children''),''Tag'',''loop_count''),''UserData'')));');
 zef.h_stop_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.83 0.03 0.065 0.05],'String','Stop','Callback',@zef_callbackstop);
-zef.h_pause_movie = uicontrol('Style','togglebutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.905 0.03 0.065 0.05],'String','Pause','Callback',@zef_callbackpause);
+zef.h_logoplot = uicontrol('Style','pushbutton','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.905 0.03 0.065 0.05],'String','Logo','Callback',@zef_logoplot);
 
 zef.h_slider=uicontrol('Tag','slider','Style','slider','Parent',zef.h_zeffiro,'Units','normalized','Position',[0.80 0.90 0.17 0.03],'Min',1e-6,'Max',1,'Value',1e-5,'Sliderstep',[0.01 0.01],'Callback','zef_slidding_callback;');
 zef.h_loop_movie = uicontrol('Style','Checkbox','Parent',zef.h_zeffiro,'visible','on','Units','normalized','Position',[0.89 0.10 0.03 0.03],'Callback','if isequal(get(gca,''Parent''), zef.h_zeffiro); zef.loop_movie = get(gcbo,''value''); end;  set(gcbo,''UserData'',get(gcbo,''value''));','HorizontalAlignment','left','Tag','loop_movie');
@@ -114,12 +114,6 @@ uicontrol('Tag','slidertext','Style','text','Parent',zef.h_zeffiro,'Units','norm
 uicontrol('Tag','lightstext','Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Lights:','HorizontalAlignment','left','Position',[0.68 0.20 0.12 0.03]);
 
 set(zef.h_loop_movie_count,'string',num2str(zef.loop_movie_count));
-imagesc(zef.h_axes1,flipud(imread('zeffiro_interface_compass.png')));
-set(zef.h_axes1,'YDir','normal');
-axis(zef.h_axes1,'auto');
-zef.h_axes1.YLim = [0 1961];
-zef.h_axes1.XLim = [0 2592];
-
 
 %***********************
 
@@ -202,7 +196,6 @@ if not(ismember('ZefFig',properties(zef.h_zeffiro)))
 end
 set(zef.h_zeffiro,'ZefFig',zef_fig_num);
 
-
 set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
 set(findobj(zef.h_zeffiro.Children,'Tag','copyright_text'),'FontSize',0.5*zef.font_size);
@@ -211,4 +204,32 @@ zef.h_zeffiro.SizeChangedFcn = '';
 zef.h_zeffiro.Units = 'normalized';
 zef_set_size_change_function(zef.h_zeffiro,1,[],['{''rightColorbar'',''leftColorbar'',''legend''}']);
 zef = rmfield(zef,'size_temp');
+
+zef_logoplot;
+
+function zef_logoplot(o,e,h)
+
+if nargin == 0
+h_axes = evalin('caller','zef.h_axes1');
+else
+h_axes = findobj(allchild(get(o,'Parent')),'Tag','axes1');
+end 
+
+imagesc(h_axes,flipud(imread('zeffiro_interface_compass.png')));
+set(h_axes,'YDir','normal');
+axis(h_axes,'auto');
+h_axes.YLim = [0 1961];
+h_axes.XLim = [0 2592];
+view(0,90)
+axis('tight');
+h_axes.Visible = 'on';
+delete(h_axes.Legend);
+delete(h_axes.XLabel);
+delete(h_axes.YLabel);
+delete(h_axes.ZLabel);
+h_axes.DataAspectRatio = [1961 2592 1];
+h_axes.DataAspectRatioMode = 'auto';
+
+end
+
 

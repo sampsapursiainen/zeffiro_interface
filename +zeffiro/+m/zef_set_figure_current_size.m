@@ -1,1 +1,0 @@
-zef_set_figure_current_size;

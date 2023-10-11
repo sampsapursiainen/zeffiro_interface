@@ -1,1 +1,0 @@
-zef_update_find_synthetic_gravity_data;
