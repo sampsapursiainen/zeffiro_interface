@@ -60,7 +60,7 @@ function [ electrode_data, electrode_labels ] = electrodes_from_dat(file, kwargs
 
     for li = 1 : numel ( text_lines)
 
-        line_cols = split ( text_lines ( li ) ) ;
+        line_cols = split ( strtrim ( text_lines ( li ) ) ) ;
 
         n_of_cols = numel ( line_cols ) ;
 
