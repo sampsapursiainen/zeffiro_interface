@@ -283,23 +283,23 @@ else % Use CPU instead of GPU
             p = S2 \ aux_vec;
             m = 0;
 
-            while any ( sqrt( sum (r.^2)) ./ norm_b ( block_iter_sub ) > tol_val ( block_iter_sub ) ) && (m < m_max)
+            while any ( sqrt( sum (abs(r).^2)) ./ norm_b ( block_iter_sub ) > tol_val ( block_iter_sub ) ) && (m < m_max)
                 a = A * p;
-                a_dot_p = sum(a.*p);
-                aux_val = sum(r.*p);
+                a_dot_p = sum(conj(a).*p);
+                aux_val = sum(conj(r).*p);
                 lambda = aux_val ./ a_dot_p;
                 x = x + lambda .* p;
                 r = r - lambda .* a;
                 aux_vec = S1\r;
                 inv_M_r = S2\aux_vec;
-                aux_val = sum(inv_M_r.*a);
+                aux_val = sum(conj(inv_M_r).*a);
                 gamma = aux_val ./ a_dot_p;
                 p = inv_M_r - gamma .* p;
                 m=m+1;
             end
 
             x_block_cell{block_iter} = x(iperm_vec,:);
-            relres_cell{block_iter} = sqrt(sum(r.^2))./norm_b(block_iter_sub);
+            relres_cell{block_iter} = sqrt(sum(abs(r).^2))./norm_b(block_iter_sub);
 
         end
 
