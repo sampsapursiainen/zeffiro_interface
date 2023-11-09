@@ -6,10 +6,6 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 %
 % kwargs:
 %
-% - maxIters
-%
-%   The maximum number of iterations.
-%
 % - tolerance
 %
 %   The numerical tolerance of the solver.
@@ -23,12 +19,13 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         A                     (:,:)
         b                     (:,1)
         startPoint            (:,1)
-        kwargs.maxIters       (1,1) uint32 = size (A, 1)
         kwargs.tolerance      (1,1) double { mustBePositive } = 1e-5
         kwargs.preconditioner (:,:) double = diag(diag(A))\eye(size(A))
     end
 
-    assert ( all ( size ( kwargs.preconditioner ) == size ( A ) ), "The size of the given preconditioner needs to match th size of A." )
+    Asize = size ( A ) ;
+
+    assert ( all ( size ( kwargs.preconditioner ) == Asize ), "The size of the given preconditioner needs to match the size of A." )
 
     % Set initial values for the iteration, including the preconditioned step direction.
 
@@ -40,9 +37,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
     pos = startPoint
 
-    iter = 0 ;
-
-    while norm ( residual ) > kwargs.tolerance && iter < kwargs.maxIters
+    for ii = 1 : Asize ( 1 )
 
         % Compute values for next round.
 
@@ -73,8 +68,6 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         residual = nextResidual ;
 
         precResidual = precNextResidual ;
-
-        iter = iter + 1 ;
 
     end % while
 
