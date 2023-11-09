@@ -283,7 +283,7 @@ else % Use CPU instead of GPU
             p = S2 \ aux_vec;
             m = 0;
 
-            while( not(isempty(find(sqrt(sum(r.^2))./norm_b(block_iter_sub) > tol_val(block_iter_sub)))) & (m < m_max) )
+            while any ( sqrt( sum (r.^2)) ./ norm_b ( block_iter_sub ) > tol_val ( block_iter_sub ) ) && (m < m_max)
                 a = A * p;
                 a_dot_p = sum(a.*p);
                 aux_val = sum(r.*p);
