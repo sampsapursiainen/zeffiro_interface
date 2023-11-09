@@ -121,10 +121,10 @@ elseif isequal(permutation,'symmmd')
 elseif isequal(permutation,'symrcm')
     perm_vec = symrcm(A)';
 else
-    perm_vec = [1:n_of_fem_nodes]';
+    perm_vec = (1:n_of_fem_nodes)';
 end
 
-iperm_vec = sortrows([ perm_vec [1:n_of_fem_nodes]' ]);
+iperm_vec = sortrows([ perm_vec (1:n_of_fem_nodes)' ]);
 iperm_vec = iperm_vec(:,2);
 
 A_aux = A(perm_vec,perm_vec);
@@ -145,7 +145,7 @@ Schur_complement = zeros(n_of_electrodes);
 
 % GPU START
 
-if eval( 'zef.use_gpu') == 1 && eval( 'zef.gpu_count') > 0
+if zef.use_gpu == 1 && zef.gpu_count > 0
 
     precond_vec = gpuArray(1./full(diag(A)));
     A = gpuArray(A);
@@ -159,7 +159,7 @@ if eval( 'zef.use_gpu') == 1 && eval( 'zef.gpu_count') > 0
 
         b = full(B(:,i));
 
-        if isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+        if isequal(electrode_model,'PEM') && impedance_inf == 1 && i==1
             b = zeros(size(b));
         end
 
@@ -198,14 +198,10 @@ if eval( 'zef.use_gpu') == 1 && eval( 'zef.gpu_count') > 0
 
         T(:,i) = x;
 
-        if impedance_inf == 0
-            Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
-        else
-            Schur_complement(:,i) = schur_expression(x, i); % C(:,i);
-        end
+        Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
 
         if tol_val < relres_vec(i)
-            'Error: PCG iteration did not converge.'
+            warning ( "Error: PCG iteration did not converge." ) ;
             T = [];
             return
         end
@@ -226,7 +222,7 @@ else % Use CPU instead of GPU
 
     % Define preconditioner
 
-    if isequal(precond,'ssor');
+    if isequal(precond,'ssor')
         S1 = tril(A)*spdiags(1./sqrt(diag(A)),0,n_of_fem_nodes,n_of_fem_nodes);
         S2 = S1';
     else
@@ -238,7 +234,7 @@ else % Use CPU instead of GPU
 
     % Define block size
 
-    parallel_processes = eval( 'zef.parallel_processes');
+    parallel_processes = zef.parallel_processes;
     if isempty(gcp('nocreate'))
         parpool(parallel_processes);
     else
@@ -248,20 +244,20 @@ else % Use CPU instead of GPU
             parpool(parallel_processes);
         end
     end
-    processes_per_core = eval( 'zef.processes_per_core');
+    processes_per_core = zef.processes_per_core;
     tic;
     block_size =  parallel_processes*processes_per_core;
 
     for i = 1 : block_size : n_of_electrodes
 
-        block_ind = [i : min(n_of_electrodes,i+block_size-1)];
+        block_ind = i : min(n_of_electrodes,i+block_size-1);
 
         %Define right hand side
 
         b = full(B(:,block_ind));
         tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 
-        if isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
+        if isequal(electrode_model,'PEM') && impedance_inf == 1 && i==1
             b = zeros(size(b));
         end
 
@@ -273,11 +269,11 @@ else % Use CPU instead of GPU
         tol_val = tol_val(:)';
         norm_b = sqrt(sum(b.^2));
         block_iter_end = block_ind(end)-block_ind(1)+1;
-        [block_iter_ind] = [1 : processes_per_core : block_iter_end];
+        [block_iter_ind] = 1 : processes_per_core : block_iter_end ;
 
         parfor block_iter = 1 : length(block_iter_ind)
 
-            block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+            block_iter_sub = block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1) ;
             x = zeros(n_of_fem_nodes, length(block_iter_sub));
             r = b(perm_vec, block_iter_sub);
             aux_vec = S1 \ r;
@@ -305,18 +301,14 @@ else % Use CPU instead of GPU
         end
 
         for block_iter = 1 : length(block_iter_ind)
-            block_iter_sub = [block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1)];
+            block_iter_sub = block_iter_ind(block_iter) : min(block_iter_end,block_iter_ind(block_iter)+processes_per_core-1) ;
             T(:,block_ind(block_iter_sub)) = x_block_cell{block_iter};
             relres_vec(block_iter_sub) = relres_cell{block_iter};
         end
 
         % Construct stencil T column by column.
 
-        if impedance_inf == 0
-            Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
-        else
-            Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind);
-        end
+        Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
 
         if not(isempty(find(tol_val < relres_vec)))
             warning('Error: PCG iteration did not converge. Returning empty transfer matrix...')
