@@ -182,15 +182,15 @@ if zef.use_gpu == 1 && zef.gpu_count > 0
         % Optimization loop: iterate until a point close to minimum is
         % found, or number of max iterations are exceeded.
 
-        while( (norm(r)/norm_b > tol_val) && (m < m_max) )
+        while( (norm(r,2)/norm_b > tol_val) && (m < m_max) )
             a = A * p;
-            a_dot_p = sum(a.*p);
-            aux_val = sum(r.*p);
+            a_dot_p = sum(conj(a).*p);
+            aux_val = sum(conj(r).*p);
             lambda = aux_val ./ a_dot_p;
             x = x + lambda * p;
             r = r - lambda * a;
             inv_M_r = precond_vec .* r;
-            aux_val = sum(inv_M_r .* a);
+            aux_val = sum(conj(inv_M_r) .* a);
             gamma = aux_val ./ a_dot_p;
             p = inv_M_r - gamma * p;
             m = m+1;
@@ -205,9 +205,7 @@ if zef.use_gpu == 1 && zef.gpu_count > 0
         Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
 
         if tol_val < relres_vec(i)
-            warning ( "Error: PCG iteration did not converge." ) ;
-            T = [];
-            return
+            error('PCG iteration did not converge.') ;
         end
 
         time_val = toc;
@@ -314,9 +312,7 @@ else % Use CPU instead of GPU
         Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
 
         if not(isempty(find(tol_val < relres_vec)))
-            warning('Error: PCG iteration did not converge. Returning empty transfer matrix...')
-            T = [];
-            return
+            error('PCG iteration did not converge.') ;
         end
 
         time_val = toc;
