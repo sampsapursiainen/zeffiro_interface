@@ -1,14 +1,22 @@
 function [A, B, C] = zef_build_electrodes(nodes, electrode_model, impedance_vec, impedance_inf, ele_ind, A)
-
-% zef_build_elecrodes: constructs the matrices B and C [*] from given nodes,
-% impedances, a stiffness matrix A and electrode indices. Notice that the
-% stiffness matrix A is also returned from the function, to avoid the
-% copy-on-write behaviour of Matlab functions due to assignment in place [†].
-% In other words, the function needs to be called with
 %
-%     [A, B, C] = zef_build_elecrodes(A, ele_ind, n_of_nodes, n_of_electrodes);
+% [A, B, C] = zef_build_electrodes(
+%   nodes,
+%   electrode_model,
+%   impedance_vec,
+%   impedance_inf,
+%   ele_ind,
+%   A
+% )
 %
-% to possibly prevent the copying of the stiffness matrix A.
+% Given a discretized finite element system [*]
+%
+%       [A -B ; -B' C] * x = b ,
+%
+% this function constructs the matrices B and C from given nodes, impedances, a
+% stiffness matrix A and electrode indices. Also modifies A in order to
+% accommodate boundary conditions related to the system, meaning that A needs
+% to be returned from this function.
 %
 % [*]: https://iopscience.iop.org/article/10.1088/0031-9155/57/4/999/meta#pmb407475app1
 %
@@ -261,4 +269,3 @@ end
 
 zef_waitbar(1,1,wb);
 
-end
