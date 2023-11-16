@@ -147,7 +147,7 @@ end % for
 zeromat = zeros(size(reA)) ;
 
 if tensorIsNotReal
-    A = [ reA, zeromat ; zeromat, rimA ] ;
+    A = [ reA, zeromat ; zeromat, imA ] ;
 else
     A = reA ;
 end
