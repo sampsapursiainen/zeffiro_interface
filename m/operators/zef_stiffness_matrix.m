@@ -144,8 +144,10 @@ for i = 1 : n_of_tetra_faces
 
 end % for
 
+zeromat = zeros(size(reA)) ;
+
 if tensorIsNotReal
-    A = [ reA, imA ; imA', reA' ] ;
+    A = [ reA, zeromat ; zeromat, rimA ] ;
 else
     A = reA ;
 end
