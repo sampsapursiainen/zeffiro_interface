@@ -26,16 +26,14 @@ function [ As, Ads ] = tetraSurfaceAreas (nodes, tetra, tI)
 
     [triangles, ~] = core.tetraSurfaceTriangles ( tetra, tI ) ;
 
-    triangles = transpose ( triangles ) ;
-
     % Get the 3D vertex coordinates of the triangles.
 
-    [ c1, c2, c3 ] = core.triangleVertexCordinates ( nodes, triangles' ) ;
+    [ c1, c2, c3 ] = core.triangleVertexCoordinates ( nodes, triangles' ) ;
 
     % Compute area vectors as cross products of two edges, and then take their norms to find out the areas.
 
-    As = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
+    Ads = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
 
-    Ads = sqrt ( sum ( As .^ 2, 2 ) ) ;
+    As = sqrt ( sum ( Ads .^ 2, 2 ) ) ;
 
 end % function
