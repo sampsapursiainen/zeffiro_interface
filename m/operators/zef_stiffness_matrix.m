@@ -144,7 +144,7 @@ for i = 1 : n_of_tetra_faces
 
 end % for
 
-zeromat = sparse(size(reA)) ;
+zeromat = sparse(size(reA,1),size(reA,2)) ;
 
 if tensorIsNotReal
     A = [ reA, zeromat ; zeromat, imA ] ;
