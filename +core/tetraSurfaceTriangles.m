@@ -24,7 +24,7 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
 %
 % - tetra_ind
 %
-%   Indices of the tetrahedra on the surface of the volume.
+%   Indices of the tetrahedra that surface_triangles belong to.
 %
 
     arguments
