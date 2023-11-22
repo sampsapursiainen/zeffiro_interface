@@ -1,6 +1,6 @@
 function C = pemVoltageMat ( impedances )
 %
-% C = discretizedVoltageMat ( impedances )
+% C = pemVoltageMat ( impedances )
 %
 % Builds a sparse electrode voltage matrix C, which contains the ungrounded
 % voltages of a given set of point electrodes (PEM) to finite element nodes. In
