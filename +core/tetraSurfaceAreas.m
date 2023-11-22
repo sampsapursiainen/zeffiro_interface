@@ -1,6 +1,6 @@
-function [ As, Ads ] = tetraSurfaceAreas (nodes, tetra, tI)
+function [ As, Avs ] = tetraSurfaceAreas (nodes, tetra, tI)
 %
-% [ As, Ads ] = tetraSurfaceAreas (nodes, tetra, tI)
+% [ As, Avs ] = tetraSurfaceAreas (nodes, tetra, tI)
 %
 % Computes the areas of the surface triangles of a given tetrahedral volume,
 % indicated by the index set tI, which selects a subset of tetra.
@@ -11,7 +11,7 @@ function [ As, Ads ] = tetraSurfaceAreas (nodes, tetra, tI)
 %
 %   The surface areas of the surface triangles of the tetrahedral volume.
 %
-% - Ads
+% - Avs
 %
 %   The area vectors of the surface triangles.
 %
@@ -32,8 +32,8 @@ function [ As, Ads ] = tetraSurfaceAreas (nodes, tetra, tI)
 
     % Compute area vectors as cross products of two edges, and then take their norms to find out the areas.
 
-    Ads = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
+    Avs = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
 
-    As = sqrt ( sum ( Ads .^ 2, 2 ) ) ;
+    As = sqrt ( sum ( Avs .^ 2, 2 ) ) ;
 
 end % function
