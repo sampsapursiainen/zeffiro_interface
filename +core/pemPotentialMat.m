@@ -1,6 +1,6 @@
 function B = pemPotentialMat ( nN, impedances, e2nI )
 %
-% B = discretizedPotentialMat ( nN, impedances, outsize )
+% B = pemPotentialMat ( nN, impedances, e2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of point electrodes (PEM) to finite element nodes. In EEG and tES
