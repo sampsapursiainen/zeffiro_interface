@@ -53,9 +53,9 @@ function out = surfaceFnIntegral ( nodes, triangles, gradients )
 
     % Basis function values at the triangle centroids.
 
-    fnC1 = dd1 * l1 ;
-    fnC2 = dd2 * l2 ;
-    fnC3 = dd3 * l3 ;
+    fnC1 = 1 - dd1 * l1 ;
+    fnC2 = 1 - dd2 * l2 ;
+    fnC3 = 1 - dd3 * l3 ;
 
     % Approximation of integral as the sum of basis function values at the centroid.
 
