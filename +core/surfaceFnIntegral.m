@@ -47,9 +47,9 @@ function out = surfaceFnIntegral ( nodes, triangles, gradients )
 
     gradients = transpose ( gradients ) ;
 
-    dd1 = sum ( gradients(1 : 3 : end; :) .* d1, 2 ) ;
-    dd2 = sum ( gradients(2 : 3 : end; :) .* d2, 2 ) ;
-    dd3 = sum ( gradients(3 : 3 : end; :) .* d3, 2 ) ;
+    dd1 = sum ( gradients ( 1 : 3 : end, : ) .* d1, 2 ) ;
+    dd2 = sum ( gradients ( 2 : 3 : end, : ) .* d2, 2 ) ;
+    dd3 = sum ( gradients ( 3 : 3 : end, : ) .* d3, 2 ) ;
 
     % Basis function values at the triangle centroids.
 
@@ -59,6 +59,6 @@ function out = surfaceFnIntegral ( nodes, triangles, gradients )
 
     % Approximation of integral as the sum of basis function values at the centroid.
 
-    out = sum ( [fnC1 fnC2 fnC3], 2 ) ;
+    out = sum ( [ fnC1, fnC2, fnC3 ], 2 ) ;
 
 end % function
