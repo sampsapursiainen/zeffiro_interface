@@ -1,9 +1,11 @@
-function C = triangleCentroids ( nodes, triangles )
+function [ C, c1, c2, c3 ] = triangleCentroids ( nodes, triangles )
 %
-% C = triangleBarycenters ( nodes, triangles )
+% [ C, c1, c2, c3 ] = triangleCentroids ( nodes, triangles )
 %
 % Computes the arithemtic means of vertex points of the given triangles in the
 % coordinate system of the given nodes.
+%
+% Inputs:
 %
 % - nodes (:,3) double
 %
@@ -12,6 +14,16 @@ function C = triangleCentroids ( nodes, triangles )
 % - triangles (3,:) uint32
 %
 %   Triples of node indices, indicating which nodes form triangles.
+%
+% Outputs:
+%
+% - C
+%
+%   The triangle centroids
+%
+% - c1, c2 and c3
+%
+%   The vertices from which the centroids were computed.
 %
 
     arguments
