@@ -1,9 +1,9 @@
-function C = triangleBarycenters ( nodes, triangles )
+function C = triangleCentroids ( nodes, triangles )
 %
 % C = triangleBarycenters ( nodes, triangles )
 %
-% Computes the barycenters or arithemtic means of vertex points of the given
-% triangles in the coordinate system of the nodes.
+% Computes the arithemtic means of vertex points of the given triangles in the
+% coordinate system of the given nodes.
 %
 % - nodes (:,3) double
 %
