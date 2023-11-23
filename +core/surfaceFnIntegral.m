@@ -47,9 +47,9 @@ function out = surfaceFnIntegral ( nodes, triangles, gradients )
 
     gradients = transpose ( gradients ) ;
 
-    dd1 = sum ( gradients ( 1 : 3 : end, : ) .* d1, 2 ) ;
-    dd2 = sum ( gradients ( 2 : 3 : end, : ) .* d2, 2 ) ;
-    dd3 = sum ( gradients ( 3 : 3 : end, : ) .* d3, 2 ) ;
+    dd1 = core.directionalDerivative ( gradients ( 1 : 3 : end, : ), d1 ) ;
+    dd2 = core.directionalDerivative ( gradients ( 2 : 3 : end, : ), d2 ) ;
+    dd3 = core.directionalDerivative ( gradients ( 3 : 3 : end, : ), d3 ) ;
 
     % Basis function values at the triangle centroids.
 
