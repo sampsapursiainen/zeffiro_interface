@@ -1,10 +1,10 @@
-function B = cemPotentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
+function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
 %
-% B = cemPotentialMat ( nodes, Znum, impedances, triangles, eA, e2nI )
+% B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
-% given set of point electrodes to finite element nodes. In EEG and tES
-% literature, if we have a discretized finite element system
+% given set of electrodes to finite element nodes. In EEG and tES literature,
+% if we have a discretized finite element system
 %
 %   [ A -B ; -B' C ] * x = b ,
 %
