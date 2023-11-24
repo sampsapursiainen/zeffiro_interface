@@ -1,6 +1,6 @@
-function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
+function B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
 %
-% B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI )
+% B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -12,9 +12,9 @@ function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
 %
 % Inputs:
 %
-% - nodes
+% - nN
 %
-%   The finite element nodes in the mesh
+%   The number of finite element nodes in the mesh.
 %
 % - Znum
 %
@@ -26,10 +26,9 @@ function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
 %
 %   The impedances of the electrodes. Either real or complex.
 %
-% - triangles
+% - triA
 %
-%   Triples (3,:) of node indices corresponding to the surface mesh that the
-%   electrodes are attached to.
+%   The areas of the triangles that the electrode nodes are touching.
 %
 % - eA
 %
@@ -47,10 +46,10 @@ function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
 %
 
     arguments
-        nodes      (:,3) double { mustBeFinite }
+        nN         (:,1) double { mustBePositive, mustBeInteger }
         Znum       (:,1) double { mustBeFinite }
         impedances (:,1) double { mustBeNonNan }
-        triangles  (3,:) double { mustBePositive, mustBeInteger }
+        triA       (:,1) double { mustBeFinite }
         eA         (:,1) double { mustBeFinite }
         e2nI       (:,1) uint32 { mustBePositive }
         t2nI       (:,1) uint32 { mustBePositive }
@@ -65,10 +64,6 @@ function B = potentialMat ( nodes, Znum, impedances, triangles, eA, e2nI, t2nI )
     else
         Zden = conj ( impedances ) .* impedances ;
     end
-
-    % Compute triangle areas.
-
-    [ triA, ~ ] = core.triangleAreas ( nodes, triangles ) ;
 
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
