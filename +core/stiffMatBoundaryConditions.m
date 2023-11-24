@@ -128,26 +128,4 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, t2nI, trian
 
     end % for eI
 
-    for i = 1 : 3
-
-        for j = i : 3
-
-            if i == j
-
-                A_part = sparse ( e2nI(t2nI,i+1), e2nI(t2nI,j+1), (1/6) * entry_vec, nN, nN );
-
-                A = A + A_part;
-
-            else
-
-                A_part = sparse ( e2nI(t2nI,i+1),  e2nI(t2nI,j+1),  (1/12) * entry_vec , nN, nN );
-
-                A = A + A_part + A_part';
-
-            end % if
-
-        end % for
-
-    end % for
-
 end % function
