@@ -5,6 +5,26 @@ function [ A, Av ] = triangleAreas ( nodes, triangles )
 % Returns the areas A and area vectors Av of a given set of triangles,
 % based on their vertex coordinates in the given nodes.
 %
+% Inputs:
+%
+% - nodes (:,3)
+%
+%   The coordinates of the finite element nodes.
+%
+% - triangles (3,:)
+%
+%   Triples of node indices indicating which nodes partake in which triangles.
+%
+% Outputs:
+%
+% - A (:,1)
+%
+%   The areas.
+%
+% - Av (:,3)
+%
+%   The area vectors.
+%
 
     arguments
         nodes     (:,3) double { mustBeFinite }
