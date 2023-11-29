@@ -190,8 +190,8 @@ for i = 1:size(sensors,1)
         sensor_explosion_parameter_1 = 3.25;
         sensor_explosion_parameter_2 = 0.1;
         h_ES_current(i) = surf( sensors(i,1)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1 * ( (max(sensors(:,3)) - sensors(i,3)) / (max(sensors(:,3)) - min(sensors(:,3)))) )) + X_s, ...
-            sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1 * ( (max(sensors(:,3)) - sensors(i,3)) / (max(sensors(:,3)) - min(sensors(:,3)))) )) + Y_s, ...
-            max(sensors(:,3)) + Z_s );
+                                sensors(i,2)*(1 + sensor_explosion_parameter_2*exp(sensor_explosion_parameter_1 * ( (max(sensors(:,3)) - sensors(i,3)) / (max(sensors(:,3)) - min(sensors(:,3)))) )) + Y_s, ...
+                                max(sensors(:,3)) + Z_s );
         view(0,90)
     end
 

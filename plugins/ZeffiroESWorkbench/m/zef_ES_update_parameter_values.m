@@ -7,6 +7,7 @@ if ismember(zef.ES_opt_solver, 1)
         zef.ES_total_max_current    = str2double(zef.h_ES_parameter_table.Data{1,2});
         zef.ES_max_current_channel  = str2double(zef.h_ES_parameter_table.Data{2,2});
         zef.ES_relative_weight_nnz  = str2double(zef.h_ES_parameter_table.Data{3,2});
+        
         zef.ES_score_dose           = str2double(zef.h_ES_parameter_table.Data{4,2});
         zef.ES_boundary_color_limit = str2double(zef.h_ES_parameter_table.Data{5,2});
         zef.ES_roi_range            = str2double(zef.h_ES_parameter_table.Data{6,2});
@@ -20,11 +21,13 @@ end
 function zef = assign_common_parameters(zef)
 zef.ES_alpha             = 10^(str2double(zef.h_ES_parameter_table.Data{1,2})/20);
 zef.ES_alpha_max         = 10^(str2double(zef.h_ES_parameter_table.Data{2,2})/20);
-zef.ES_beta_min          = 10^(str2double(zef.h_ES_parameter_table.Data{3,2})/20);
-zef.ES_beta              = 10^(str2double(zef.h_ES_parameter_table.Data{4,2})/20);
+zef.ES_epsilon_min          = 10^(str2double(zef.h_ES_parameter_table.Data{3,2})/20);
+zef.ES_epsilon              = 10^(str2double(zef.h_ES_parameter_table.Data{4,2})/20);
+
 zef.ES_total_max_current    = str2double(zef.h_ES_parameter_table.Data{5,2});
 zef.ES_max_current_channel  = str2double(zef.h_ES_parameter_table.Data{6,2});
 zef.ES_relative_weight_nnz  = str2double(zef.h_ES_parameter_table.Data{7,2});
+
 zef.ES_score_dose           = str2double(zef.h_ES_parameter_table.Data{8,2});
 zef.ES_step_size            = str2double(zef.h_ES_parameter_table.Data{9,2});
 zef.ES_source_density       = str2double(zef.h_ES_parameter_table.Data{10,2});

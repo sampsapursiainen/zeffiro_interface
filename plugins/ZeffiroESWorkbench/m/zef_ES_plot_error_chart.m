@@ -29,10 +29,10 @@ switch nargin
             vec = zef_ES_table(arg_aux);
         end
         [sr, sc] = zef_ES_objective_function(zef, vec);
-
+        
     case {3}
         [vec, sr, sc] = deal(varargin{1}, varargin{2}, varargin{2});
-
+        
     otherwise
         error('ZI: Invalid number of arguments.')
 end
@@ -87,8 +87,8 @@ end
         ax.YLabel.String       = 'Nuisance field weight (dB)';
         ax.YLabel.FontSize     = 10;
         ax.YLabel.FontWeight   = 'bold';
-        ax.YTickLabel          = {num2str((vec.('Beta'){:}),'%1.0f')};
-        ax.YTick               = 1:length(vec.('Beta'){:});
+        ax.YTickLabel          = {num2str((vec.('Epsilon'){:}),'%1.0f')};
+        ax.YTick               = 1:length(vec.('Epsilon'){:});
         ax.YTickLabelRotation  = 0;
 
         %%% Colorbar TickLabels
@@ -119,7 +119,7 @@ end
         plot(ax, sc, sr, 'yp','MarkerFaceColor','w','MarkerEdgeColor','w','MarkerSize',12);
         lgd = legend('Location','SouthWest', 'FontName', 'FixedWidth');
         lgd.String(1) = {['\alpha : '   num2str((vec.('Alpha'){:}(sc)), '%1.0f')]};
-        lgd.String(2) = {['\epsilon : ' num2str((vec.('Beta'){:}(sr)), '%1.0f')]};
+        lgd.String(2) = {['\epsilon : ' num2str((vec.('Epsilon'){:}(sr)), '%1.0f')]};
         lgd.AutoUpdate = 'off';
         plot(ax, sc, sr, 'yp','MarkerFaceColor','y','MarkerEdgeColor','k','MarkerSize',12);
 

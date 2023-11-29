@@ -1,11 +1,11 @@
 function zef = zef_ES_plot_distance_curves(zef)
 
 if nargin == 0
-    zef = evalin('base','zef');
+zef = evalin('base','zef');
 end
 
-h_f = figure('Name','ZEFFIRO Interface: ES distance curves','NumberTitle','off', ...
-    'ToolBar','figure','MenuBar','none');
+    h_f = figure('Name','ZEFFIRO Interface: ES distance curves','NumberTitle','off', ...
+        'ToolBar','figure','MenuBar','none');
 
 distance_window = 10;
 n_distances = 2000;
@@ -27,13 +27,13 @@ amplitude_vec = zeros(size(distance_vec));
 
 for i = 1 : n_distances
 
-    [position_ind] = find(distance_vec_aux >= distance_vec(i) & distance_vec_aux <= distance_vec(i)+distance_window);
-    amplitude_vec(i) = mean(amplitude_vec_aux(position_ind));
-    angle_vec(i) = mean(180/pi*acos(sum(dipole_vec_aux(:,ones(1,length(position_ind))).*rec_vec_aux(:,position_ind))));
+[position_ind] = find(distance_vec_aux >= distance_vec(i) & distance_vec_aux <= distance_vec(i)+distance_window);
+amplitude_vec(i) = mean(amplitude_vec_aux(position_ind));
+angle_vec(i) = mean(180/pi*acos(sum(dipole_vec_aux(:,ones(1,length(position_ind))).*rec_vec_aux(:,position_ind))));
 
 end
 
-subplot(2,1,1);
+subplot(2,1,1); 
 amplitude_vec = smooth(amplitude_vec,smooth_range);
 pbaspect([3 1 1])
 hold on;
@@ -46,12 +46,12 @@ vert_pos_2 = distance_vec(find(amplitude_vec <= quantile_aux_2,1));
 vert_pos_3 = distance_vec(find(amplitude_vec <= quantile_aux_3,1));
 
 I1 = find(distance_vec <= vert_pos_3);
-fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec(I1(1))],[amplitude_vec(I1); 0; 0 ;amplitude_vec(I1(1))],'m')
+fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec(I1(1))],[amplitude_vec(I1); 0; 0 ;amplitude_vec(I1(1))],'m') 
 
 I2 = find(distance_vec <= vert_pos_2);
 I2 = setdiff(I2,I1);
 if not(isempty(I2))
-    fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[amplitude_vec(I2); 0; 0 ;amplitude_vec(I2(1))],'c')
+fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[amplitude_vec(I2); 0; 0 ;amplitude_vec(I2(1))],'c') 
 end
 
 
@@ -59,7 +59,7 @@ I3 = find(distance_vec <= vert_pos_1);
 I3 = setdiff(I3, I1);
 I3 = setdiff(I3, I2);
 if not(isempty(I3))
-    fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[amplitude_vec(I3); 0; 0 ;amplitude_vec(I3(1))],'g')
+fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[amplitude_vec(I3); 0; 0 ;amplitude_vec(I3(1))],'g') 
 end
 
 I4 = [1:length(distance_vec)];
@@ -67,7 +67,7 @@ I4 = setdiff(I4, I1);
 I4 = setdiff(I4, I2);
 I4 = setdiff(I4, I3);
 if not(isempty(I4))
-    fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[amplitude_vec(I4); 0; 0 ;amplitude_vec(I4(1))],'y')
+fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[amplitude_vec(I4); 0; 0 ;amplitude_vec(I4(1))],'y') 
 end
 
 set(gca,'ylim',[0 1.25*max(amplitude_vec)])
@@ -85,7 +85,7 @@ title('Distance vs. amplitude')
 
 hold off
 
-subplot(2,1,2);
+subplot(2,1,2); 
 angle_vec = smooth(angle_vec,smooth_range);
 pbaspect([3 1 1])
 hold on;
@@ -98,19 +98,19 @@ vert_pos_2 = distance_vec(find(angle_vec >= quantile_aux_2,1));
 vert_pos_3 = distance_vec(find(angle_vec >= quantile_aux_3,1));
 
 I1 = find(distance_vec <= vert_pos_3);
-fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec(I1(1))],[angle_vec(I1); 0; 0 ;angle_vec(I1(1))],'m')
+fill([distance_vec(I1) ;distance_vec(I1(end)) ;distance_vec(I1(1)) ;distance_vec(I1(1))],[angle_vec(I1); 0; 0 ;angle_vec(I1(1))],'m') 
 
 I2 = find(distance_vec <= vert_pos_2);
 I2 = setdiff(I2,I1);
 if not(isempty(I2))
-    fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[angle_vec(I2); 0; 0 ;angle_vec(I2(1))],'c')
+fill([distance_vec(I2) ;distance_vec(I2(end)) ;distance_vec(I2(1)) ;distance_vec(I2(1))],[angle_vec(I2); 0; 0 ;angle_vec(I2(1))],'c') 
 end
 
 I3 = find(distance_vec <= vert_pos_1);
 I3 = setdiff(I3, I1);
 I3 = setdiff(I3, I2);
 if not(isempty(I3))
-    fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[angle_vec(I3); 0; 0 ;angle_vec(I3(1))],'g')
+fill([distance_vec(I3) ;distance_vec(I3(end)) ;distance_vec(I3(1)) ;distance_vec(I3(1))],[angle_vec(I3); 0; 0 ;angle_vec(I3(1))],'g') 
 end
 
 I4 = [1:length(distance_vec)];
@@ -118,7 +118,7 @@ I4 = setdiff(I4, I1);
 I4 = setdiff(I4, I2);
 I4 = setdiff(I4, I3);
 if not(isempty(I4))
-    fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[angle_vec(I4); 0; 0 ;angle_vec(I4(1))],'y')
+fill([distance_vec(I4) ;distance_vec(I4(end)) ;distance_vec(I4(1)) ;distance_vec(I4(1))],[angle_vec(I4); 0; 0 ;angle_vec(I4(1))],'y') 
 end
 
 set(gca,'ylim',[0 1.25*max(angle_vec)])
