@@ -72,11 +72,11 @@ end
 if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
-if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 1;
+if not(isfield(zef,'ES_epsilon'))
+    zef.ES_epsilon = 1;
 end
-if not(isfield(zef,'ES_beta_min'))
-    zef.ES_beta_min = 1E-8;
+if not(isfield(zef,'ES_epsilon_min'))
+    zef.ES_epsilon_min = 1E-8;
 end
 if not(isfield(zef,'ES_alpha'))
     zef.ES_alpha = 1E-5;
@@ -92,9 +92,6 @@ if not(isfield(zef,'ES_positivity_constraint'))
 end
 if not(isfield(zef,'ES_negativity_constraint'))
     zef.ES_negativity_constraint = [];
-end
-if not(isfield(zef,'ES_max_current_channel'))
-    zef.ES_max_current_channel = 0.002;
 end
 if not(isfield(zef,'ES_cortex_thickness'))
     zef.ES_cortex_thickness = 4;

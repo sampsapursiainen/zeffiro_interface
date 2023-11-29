@@ -1,11 +1,11 @@
-function vec = zef_ES_error_criteria(zef)
+function vec = zef_ES_error_criteria(zef) 
 
-if nargin == 0
+if nargin == 0 
     zef = evalin('base','zef');
 end
 
 %% Variables and parameters setup
-load_aux = eval('zef.y_ES_interval');
+    load_aux = eval('zef.y_ES_interval');
 B = cell2mat(load_aux.residual);
 B = B/max(abs(B(:)));
 
