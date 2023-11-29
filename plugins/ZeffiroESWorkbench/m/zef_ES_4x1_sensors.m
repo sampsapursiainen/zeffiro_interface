@@ -19,50 +19,50 @@ d_norm = sqrt(sum((source_pos - sensor_coord).^2,2));
 [~,m_ind] = min(d_norm);
 
 p_1 = sensor_coord((m_ind),:);
-ell_idx(1) = m_ind;
+    ell_idx(1) = m_ind;
 
-v_1 = p_1;
-p_1_norm = sqrt(sum(p_1.^2,2));
+    v_1 = p_1;
+    p_1_norm = sqrt(sum(p_1.^2,2));
 
-v_1 = v_1./p_1_norm;
-v_2 = source_ori./sqrt(sum(source_ori.^2,2));
-v_3 = cross(v_1',v_2')';
+    v_1 = v_1./p_1_norm;
+    v_2 = source_ori./sqrt(sum(source_ori.^2,2));
+    v_3 = cross(v_1',v_2')';
 
-source_index = [1:size(sensor_coord,1)]; %#ok<NBRAK>
+    source_index = [1:size(sensor_coord,1)]; %#ok<NBRAK>
 
-source_index = setdiff(source_index, source_index(m_ind));
-sensor_coord_aux = sensor_coord;
-sensor_coord = sensor_coord_aux(source_index,:);
+    source_index = setdiff(source_index, source_index(m_ind));
+    sensor_coord_aux = sensor_coord;
+    sensor_coord = sensor_coord_aux(source_index,:);
 
 p_2 = p_1 + p_1_norm*tan(pi*separation_angle/180)*v_2;
-d_norm = sqrt(sum((p_2 - sensor_coord).^2,2));
-[~,m_ind] = min(d_norm);
-ell_idx(2) = source_index(m_ind);
+    d_norm = sqrt(sum((p_2 - sensor_coord).^2,2));
+    [~,m_ind] = min(d_norm);
+    ell_idx(2) = source_index(m_ind);
 
-%sensor_coord_aux = sensor_coord;
-source_index = setdiff(source_index, source_index(m_ind));
-sensor_coord = sensor_coord_aux(source_index,:);
+    %sensor_coord_aux = sensor_coord;
+    source_index = setdiff(source_index, source_index(m_ind));
+    sensor_coord = sensor_coord_aux(source_index,:);
 
 p_3 = p_1 + p_1_norm*tan(-pi*separation_angle/180)*v_2;
-d_norm = sqrt(sum((p_3 - sensor_coord).^2,2));
-[~,m_ind] = min(d_norm);
-ell_idx(3) = source_index(m_ind);
+    d_norm = sqrt(sum((p_3 - sensor_coord).^2,2));
+    [~,m_ind] = min(d_norm);
+    ell_idx(3) = source_index(m_ind);
 
-%sensor_coord_aux = sensor_coord;
-source_index = setdiff(source_index, source_index(m_ind));
-sensor_coord = sensor_coord_aux(source_index,:);
+    %sensor_coord_aux = sensor_coord;
+    source_index = setdiff(source_index, source_index(m_ind));
+    sensor_coord = sensor_coord_aux(source_index,:);
 
 p_4 = p_1 + p_1_norm*tan(pi*separation_angle/180)*v_3;
-d_norm = sqrt(sum((p_4 - sensor_coord).^2,2));
-[~,m_ind] = min(d_norm);
-ell_idx(4) = source_index(m_ind);
+    d_norm = sqrt(sum((p_4 - sensor_coord).^2,2));
+    [~,m_ind] = min(d_norm);
+    ell_idx(4) = source_index(m_ind);
 
-%sensor_coord_aux = sensor_coord;
-source_index = setdiff(source_index, source_index(m_ind));
-sensor_coord = sensor_coord_aux(source_index,:);
+    %sensor_coord_aux = sensor_coord;
+    source_index = setdiff(source_index, source_index(m_ind));
+    sensor_coord = sensor_coord_aux(source_index,:);
 
 p_5 = p_1 + p_1_norm*tan(-pi*separation_angle/180)*v_3;
-d_norm = sqrt(sum((p_5 - sensor_coord).^2,2));
-[~,m_ind] = min(d_norm);
-ell_idx(5) = source_index(m_ind);
+    d_norm = sqrt(sum((p_5 - sensor_coord).^2,2));
+    [~,m_ind] = min(d_norm);
+    ell_idx(5) = source_index(m_ind);
 end

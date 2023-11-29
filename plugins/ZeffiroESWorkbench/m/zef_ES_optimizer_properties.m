@@ -11,10 +11,10 @@ zef.h_ES_optimizer_properties_table     = zef_data.h_ES_optimizer_properties_tab
 
 zef.h_ES_optimizer_properties.Position(3)       = 1.5 * zef.h_ES_optimizer_properties.Position(3);
 zef.h_ES_optimizer_properties_table.Position(3) = 1.54* zef.h_ES_optimizer_properties_table.Position(3);
-zef.h_ES_optimizer_properties_table.ColumnName  = {'Parameter name','Value','Average deviation','Maximum deviation'};
+zef.h_ES_optimizer_properties_table.ColumnName  = {'Parameter name','Unit','Value','Average deviation','Maximum deviation'};
 
 set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontUnits'),'FontUnits','pixels');
-set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_ES_optimizer_properties.Children,'-property','FontSize'), 'FontSize',  zef.font_size);
 
 zef.h_ES_optimizer_properties_copy_all.MenuSelectedFcn = 'zef.ES_temp = zef.h_ES_optimizer_properties_table.Data''; clipboard(''copy'',sprintf(''%s\t%5.10g\n'', zef.ES_temp{:})); zef = rmfield(zef,''ES_temp'');';
 %% Autoresize
