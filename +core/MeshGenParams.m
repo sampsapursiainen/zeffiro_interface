@@ -108,7 +108,7 @@ classdef MeshGenParams
 
             for fnI = 1 : numel ( fns )
 
-                self.(fns(fnI)) = (fns(fnI)) ;
+                self.(fns(fnI)) = kwargs.(fns(fnI)) ;
 
             end % for
 
