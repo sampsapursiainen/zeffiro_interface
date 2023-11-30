@@ -109,7 +109,7 @@ if isempty(zef.source_positions)
 end
 %% waitbar
 if zef.use_waitbar == 1 && ~strcmpi(zef.ES_opt_method_list{zef.ES_opt_method},'Backpropagation')
-    wait_bar_temp = zef_waitbar([0 0],'ES Workbench');
+    wait_bar_temp = zef_waitbar(0,1,['ES Workbench']);
 end
 %% The real task...
 zef.y_ES_interval = [];
