@@ -100,7 +100,14 @@ classdef LeadFieldParams
 
     methods
 
-        function self = LeadFieldParams(kwargs)
+        function self = LeadFieldParams ( kwargs )
+        %
+        % self = LeadFieldParams ( kwargs )
+        %
+        % A constructor of this class. The kwargs contain the properties of
+        % this class, that one wishes to set. The ones that are omitted will
+        % use the default values.
+        %
 
             arguments
                 kwargs.acceptable_source_depth = 0
