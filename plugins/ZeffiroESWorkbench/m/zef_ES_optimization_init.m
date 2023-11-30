@@ -24,14 +24,14 @@ end
 if not(isfield(zef,'gurobi_path'))
     zef.gurobi_path = '';
 end
-if not(isfield(zef,'ES_effective_nnz')) %???
+if not(isfield(zef,'ES_effective_nnz'))
     zef.ES_effective_nnz = 20;
 end
-if not(isfield(zef,'ES_score_dose')) %% number of electrodes???
+if not(isfield(zef,'ES_score_dose'))
     zef.ES_score_dose = 20;
 end
 if not(isfield(zef,'ES_obj_fun'))
-    zef.ES_obj_fun = 2;
+    zef.ES_obj_fun = 4;
 end
 if not(isfield(zef,'ES_obj_fun_2'))
     zef.ES_obj_fun_2 = 4;
@@ -53,6 +53,9 @@ if not(isfield(zef,'ES_constraint_tolerance'))
 end
 if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
+end
+if not(isfield(zef,'ES_max_current_channel'))
+    zef.ES_max_current_channel = 0.002;
 end
 if not(isfield(zef,'ES_relative_weight_nnz'))
     zef.ES_relative_weight_nnz = 1e-3;
