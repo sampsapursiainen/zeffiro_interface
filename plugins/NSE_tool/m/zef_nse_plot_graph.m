@@ -20,7 +20,7 @@ if zef.nse_field.graph_type == 2
     for i = 1 : length(nse_field.bp_vessels)
     plot_vec(i) = mean(nse_field.bp_vessels{i}(roi_ind));
     end
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)',[]);
 end
 
 if zef.nse_field.graph_type == 3
@@ -31,12 +31,12 @@ end
 
 if zef.nse_field.graph_type == 4
     [plot_vec] = zef_nse_separate_waves_roi(zef, nse_field);
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)',[]);
 end
 
 if zef.nse_field.graph_type == 5
     [~, plot_vec] = zef_nse_separate_waves_roi(zef, nse_field);
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Pressure (mmHg)',[]);
 end
 
 if zef.nse_field.graph_type == 6
@@ -51,9 +51,11 @@ end
 if zef.nse_field.graph_type == 7
     roi_ind = zef_nse_roi_ind(zef, nse_field);
     [~, dir_aux] = zef_nse_mean_velocity_roi(zef,nse_field);
+    dir_aux = zef_nse_vel_dir(zef,nse_field);
     plot_vec = zeros(length(nse_field.bv_vessels_1),1);
-    for i = 1 : length(nse_field.bv_vessels_1)
-    plot_vec(i) = dir_aux(1).*mean(nse_field.bv_vessels_1{i}(roi_ind))+dir_aux(2).*mean(nse_field.bv_vessels_2{i}(roi_ind))+dir_aux(3).*mean(nse_field.bv_vessels_3{i}(roi_ind));    
+    for i=1:length(nse_field.bv_vessels_1)
+      plot_vec(i) = mean(dir_aux(:,1).*zef.nse_field.bv_vessels_1{i}(roi_ind,1)+dir_aux(:,2).*zef.nse_field.bv_vessels_2{i}(roi_ind)+dir_aux(:,3).*zef.nse_field.bv_vessels_3{i}(roi_ind,1));
+%     plot_vec(i) = dir_aux(1).*mean(nse_field.bv_vessels_1{i}(roi_ind))+dir_aux(2).*mean(nse_field.bv_vessels_2{i}(roi_ind))+dir_aux(3).*mean(nse_field.bv_vessels_3{i}(roi_ind));    
     end
     zef_nse_plot_full(zef,zef.nse_field,plot_vec,'Velocity (m/s)');
 end
@@ -61,11 +63,13 @@ end
 if zef.nse_field.graph_type == 8
     roi_ind = zef_nse_roi_ind(zef, nse_field);
     [~, dir_aux] = zef_nse_mean_velocity_roi(zef,nse_field);
+    dir_aux = zef_nse_vel_dir(zef,nse_field);
     plot_vec = zeros(length(nse_field.bv_vessels_1),1);
     for i = 1 : length(nse_field.bv_vessels_1)
-    plot_vec(i) = dir_aux(1).*mean(nse_field.bv_vessels_1{i}(roi_ind))+dir_aux(2).*mean(nse_field.bv_vessels_2{i}(roi_ind))+dir_aux(3).*mean(nse_field.bv_vessels_3{i}(roi_ind));    
+        plot_vec(i) = mean(dir_aux(:,1).*zef.nse_field.bv_vessels_1{i}(roi_ind,1)+dir_aux(:,2).*zef.nse_field.bv_vessels_2{i}(roi_ind)+dir_aux(:,3).*zef.nse_field.bv_vessels_3{i}(roi_ind,1));
+%     plot_vec(i) = dir_aux(1).*mean(nse_field.bv_vessels_1{i}(roi_ind))+dir_aux(2).*mean(nse_field.bv_vessels_2{i}(roi_ind))+dir_aux(3).*mean(nse_field.bv_vessels_3{i}(roi_ind));    
     end
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)',[]);
 end
 
 if zef.nse_field.graph_type == 9
@@ -76,12 +80,12 @@ end
 
 if zef.nse_field.graph_type == 10
     [~, ~,plot_vec] = zef_nse_separate_waves_roi(zef, nse_field);
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)',[]);
 end
 
 if zef.nse_field.graph_type == 11
     [~, ~,~, plot_vec] = zef_nse_separate_waves_roi(zef, nse_field);
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Velocity (m/s)',[]);
 end
 
 if zef.nse_field.graph_type == 12
@@ -110,7 +114,7 @@ if zef.nse_field.graph_type == 14
     for i = 1 : length(nse_field.mu_vessels)
     plot_vec(i) = mean(nse_field.mu_vessels{i}(roi_ind));
     end
-    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Viscosity (Pa s)');
+    zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Viscosity (Pa s)',[]);
 end
 
 if zef.nse_field.graph_type == 15
@@ -123,10 +127,25 @@ if zef.nse_field.graph_type == 15
 end
 
 if zef.nse_field.graph_type == 16
-    zef_nse_plot_signal_pulse(zef, zef.nse_field);
+plot_vec = zef_nse_calculate_perfusion(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.mvd_length);
+zef_nse_plot_full(zef,zef.nse_field,plot_vec,'Perfusion (ml / min)');
 end
 
 if zef.nse_field.graph_type == 17
+plot_vec = zef_nse_calculate_perfusion(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.mvd_length);
+zef_nse_plot_epoched(zef,zef.nse_field,plot_vec,'Perfusion (ml / min)',[]);
+end
+
+if zef.nse_field.graph_type == 18
+plot_vec = zef_nse_calculate_perfusion(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.mvd_length);
+zef_nse_plot_histogram(zef,zef.nse_field,plot_vec,'Perfusion (ml / min)');
+end
+
+if zef.nse_field.graph_type == 19
+    zef_nse_plot_signal_pulse(zef, zef.nse_field);
+end
+
+if zef.nse_field.graph_type == 20
     mmhg_conversion = 101325/760;
     plot_vec = zef_nse_signal_pulse([0:zef.nse_field.time_step_length:zef.nse_field.cycle_length],zef.nse_field)/mmhg_conversion;
      zef_nse_plot_histogram(zef,plot_vec(:),'Pressure (mmHg)');
