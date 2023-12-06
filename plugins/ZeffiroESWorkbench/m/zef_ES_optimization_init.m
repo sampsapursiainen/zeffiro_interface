@@ -24,14 +24,14 @@ end
 if not(isfield(zef,'gurobi_path'))
     zef.gurobi_path = '';
 end
-if not(isfield(zef,'ES_effective_nnz')) %???
+if not(isfield(zef,'ES_effective_nnz'))
     zef.ES_effective_nnz = 20;
 end
-if not(isfield(zef,'ES_score_dose')) %% number of electrodes???
+if not(isfield(zef,'ES_score_dose'))
     zef.ES_score_dose = 20;
 end
 if not(isfield(zef,'ES_obj_fun'))
-    zef.ES_obj_fun = 2;
+    zef.ES_obj_fun = 4;
 end
 if not(isfield(zef,'ES_obj_fun_2'))
     zef.ES_obj_fun_2 = 4;
@@ -54,6 +54,9 @@ end
 if not(isfield(zef,'ES_total_max_current'))
     zef.ES_total_max_current = 0.004;
 end
+if not(isfield(zef,'ES_max_current_channel'))
+    zef.ES_max_current_channel = 0.002;
+end
 if not(isfield(zef,'ES_relative_weight_nnz'))
     zef.ES_relative_weight_nnz = 1e-3;
 end
@@ -72,11 +75,11 @@ end
 if not(isfield(zef,'ES_volumetric_current_density'))
     zef.ES_volumetric_current_density = [];
 end
-if not(isfield(zef,'ES_beta'))
-    zef.ES_beta = 1;
+if not(isfield(zef,'ES_epsilon'))
+    zef.ES_epsilon = 1;
 end
-if not(isfield(zef,'ES_beta_min'))
-    zef.ES_beta_min = 1E-8;
+if not(isfield(zef,'ES_epsilon_min'))
+    zef.ES_epsilon_min = 1E-8;
 end
 if not(isfield(zef,'ES_alpha'))
     zef.ES_alpha = 1E-5;
@@ -92,9 +95,6 @@ if not(isfield(zef,'ES_positivity_constraint'))
 end
 if not(isfield(zef,'ES_negativity_constraint'))
     zef.ES_negativity_constraint = [];
-end
-if not(isfield(zef,'ES_max_current_channel'))
-    zef.ES_max_current_channel = 0.002;
 end
 if not(isfield(zef,'ES_cortex_thickness'))
     zef.ES_cortex_thickness = 4;

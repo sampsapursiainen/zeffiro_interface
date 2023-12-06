@@ -38,7 +38,7 @@ ind_m = [ 2 4 3 ;
 
 N = size(nodes,1);
 
-if nargin < 3
+if nargin < 4
     scalar_field = ones(size(tetra,1),1);
 end
 

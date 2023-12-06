@@ -93,7 +93,7 @@ zef.h_ES_threshold_condition.ItemsData          = 1:length(zef.h_ES_threshold_co
 zef.h_ES_threshold_condition.Value              = zef.ES_threshold_condition;
 
 zef.h_ES_HPO_search_method.Items                = zef.ES_HPO_search_method_list;
-zef.h_ES_HPO_search_method.ValueChangedFcn      = 'zef_ES_optimization_update;';
+zef.h_ES_HPO_search_method.ValueChangedFcn      = 'if zef.h_ES_HPO_search_method.Value ~= 2; zef.h_ES_HPO_recursive_instances.Visible = ''off''; zef.h_ES_recursive_instances_label.Visible = ''off''; else; zef.h_ES_HPO_recursive_instances.Visible = ''on''; zef.h_ES_recursive_instances_label.Visible = ''on''; end;';
 zef.h_ES_HPO_search_method.ItemsData            = 1:length(zef.h_ES_HPO_search_method.Items);
 zef.h_ES_HPO_search_method.Value                = zef.ES_HPO_search_method;
 
@@ -129,11 +129,7 @@ set(findobj(zef.h_ES_workbench.Children,'-property','FontUnits'), 'FontUnits', '
 set(findobj(zef.h_ES_workbench.Children,'-property','FontSize'),  'FontSize', 14);
 
 zef_ES_init_parameter_table;
-zef.h_ES_opt_method.Value = zef.ES_opt_method;
-zef.h_ES_opt_algorithm.Value = zef.h_ES_opt_algorithm.ItemsData(find(ismember(zef.h_ES_opt_algorithm.Items, zef.ES_opt_algorithm), 1));
 zef_ES_optimization_update;
-
-
 
 if nargout == 0
     assignin('base','zef',zef);

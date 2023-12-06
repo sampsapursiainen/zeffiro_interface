@@ -7,9 +7,9 @@ switch nargin
         else
             zef = varargin{1};
         end
-        [alpha, beta] = zef_ES_find_parameters(zef);
+        [alpha, epsilon] = zef_ES_find_parameters(zef);
     case {3}
-        [zef, alpha, beta] = deal(varargin{1}, varargin{2}, varargin{3});
+        [zef, alpha, epsilon] = deal(varargin{1}, varargin{2}, varargin{3});
     otherwise
         error('ZI: Too many input arguments.')
 end
@@ -42,8 +42,8 @@ if zef.ES_opt_solver == 4
     else
         error('ZI: unable to find relevant mosek folder. Are you initializing your calculations outside the main-branch working directory?')
     end
-
-
+    
+    
 end
 
 if isequal(lower(zef_data.solver_package),'mosek')
@@ -108,11 +108,8 @@ if isempty(zef.source_positions)
     error('ZI: No discretized sources found. Perhaps you forgot to calculate or load them...?')
 end
 %% waitbar
-if zef.use_waitbar == 1
-    wait_bar_temp = zef_waitbar(...
-        [0 0], [1 1]...
-        sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: i = %d, j = d%' '.'], 0, 0)...
-        );
+if zef.use_waitbar == 1 && ~strcmpi(zef.ES_opt_method_list{zef.ES_opt_method},'Backpropagation')
+    wait_bar_temp = zef_waitbar(0,1,['ES Workbench']);
 end
 %% The real task...
 zef.y_ES_interval = [];
@@ -146,18 +143,18 @@ for i = 1:step_size
         p_ind_max = min(step_size - j, n_parallel);
         parfor parallel_ind = 1:p_ind_max %parfor
             run_time{parallel_ind} = now;
-
+            
             [y_ES{parallel_ind}, ...
                 volumetric_current_density{parallel_ind}, ...
                 residual{parallel_ind}, ...
                 flag{parallel_ind}, ...
                 source_amplitude{parallel_ind}, ...
                 source_position_index{parallel_ind}, ...
-                source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data, alpha(parallel_ind + j), beta(i)); %#ok<PFBNS>
-
+                source_directions{parallel_ind}] = zef_ES_optimize_current(zef_data, alpha(parallel_ind + j), epsilon(i)); %#ok<PFBNS>
+            
             run_time{parallel_ind} = 86400*(now - run_time{parallel_ind});
         end
-
+        
         for parallel_ind = 1:p_ind_max
             j = j + 1;
             zef.y_ES_interval.run_time{i,j}                     = run_time{parallel_ind};
@@ -172,7 +169,7 @@ for i = 1:step_size
                 for running_index = 1:length(source_position_index{parallel_ind})
                     vec_1 = source_amplitude{parallel_ind}(running_index)*source_directions{parallel_ind}(running_index,:);
                     norm_vec_1 = norm(vec_1, 2);
-
+                    
                     if isequal(zef.ES_roi_range, 0)
                         source_running_ind = source_position_index{parallel_ind}(running_index);
                     else
@@ -181,7 +178,7 @@ for i = 1:step_size
                             zef.ES_roi_range);
                         source_running_ind = source_running_ind{1};
                     end
-
+                    
                     vec_2 = mean(volumetric_current_density{parallel_ind}(:,source_running_ind),2);
                     norm_vec_2 = norm(vec_2,2);
                     if isequal(norm_vec_2,0)
@@ -206,18 +203,18 @@ for i = 1:step_size
                 end
             end
         end
-
+        
         if zef.use_waitbar
-            zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+            zef_waitbar([j/length(alpha) i/length(epsilon)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], epsilon(i), alpha(j)));
         end
     end
     if zef.use_waitbar
-        zef_waitbar([j i], [length(alpha) length(beta)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], beta(i), alpha(j)));
+        zef_waitbar([j/length(alpha) i/length(epsilon)] , wait_bar_temp, sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: %1.2e -- %1.2e' '.'], epsilon(i), alpha(j)));
     end
 end
 
-zef.y_ES_interval.alpha = alpha;
-zef.y_ES_interval.beta  = beta;
+zef.y_ES_interval.alpha     = alpha;
+zef.y_ES_interval.epsilon   = epsilon;
 
 if exist('wait_bar_temp') %#ok<EXIST>
     close(wait_bar_temp)

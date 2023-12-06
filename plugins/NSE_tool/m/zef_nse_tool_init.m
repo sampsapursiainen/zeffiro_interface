@@ -111,6 +111,18 @@ if not(isfield(zef.nse_field,'roi_z'))
     zef.nse_field.roi_z = 0;
 end
 
+if not(isfield(zef.nse_field,'dir_v_x'))
+    zef.nse_field.dir_v_x = 0;
+end
+
+if not(isfield(zef.nse_field,'dir_v_y'))
+    zef.nse_field.dir_v_y = 0;
+end
+
+if not(isfield(zef.nse_field,'dir_v_z'))
+    zef.nse_field.dir_v_z = 0;
+end
+
 
 if not(isfield(zef.nse_field,'cycle_length'))
     zef.nse_field.cycle_length = 1;

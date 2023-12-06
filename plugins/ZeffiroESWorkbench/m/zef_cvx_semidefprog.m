@@ -4,7 +4,7 @@ function [x, function_val, flag_val] = zef_cvx_linprog(z, y, A,b,Aeq,beq,lb,ub,v
 %otherwise)
 %Arguments: z (size: [n x 1]), A (size: [m x n]), b
 %(size: [m x 1])
-%Variable argument list: max_1_norm (size: [1 x 1], maximum 1-norm for x), max_infty_norm (size: [1 x 1], maximum infinity norm for x)
+%Variable argument list: max_1_norm (size: [1 x 1], maximum 1-norm for x), max_infty_norm (size: [1 x 1], maximum infinity norm for x) 
 
 
 
@@ -17,7 +17,7 @@ function_val = [];
 solver_package = 'sdpt3';
 
 if not(isempty(varargin))
-    opts = varargin{1};
+        opts = varargin{1};
 end
 
 flag_val = -2;
@@ -28,7 +28,7 @@ if isfield(opts,'Solver')
 end
 
 try
-    cvx_solver(solver_package)
+cvx_solver(solver_package)
 end
 
 if isfield(opts,'TolVal')
@@ -37,47 +37,47 @@ end
 
 if isequal(opts.Display,'off')
 
-    cvx_begin quiet
-    variable x(n)
-    minimize(norm(z.*x) + sum(y.*x))
-    subject to:
+cvx_begin quiet
+variable x(n)
+minimize(norm(z.*x) + sum(y.*x))
+subject to: 
 
-    A*x - b <= 0; %#ok<*VUNUS>
-    if not(isempty(lb))
-        x >= lb;
-    end
-    if not(isempty(ub))
-        x <= ub;
-    end
-    if not(isempty(Aeq))
-        Aeq*x == beq;
-    end
+A*x - b <= 0; %#ok<*VUNUS>
+if not(isempty(lb))
+x >= lb;
+end
+if not(isempty(ub))
+x <= ub;
+end
+if not(isempty(Aeq))
+Aeq*x == beq;
+end
 
-    cvx_end
+cvx_end
 
 else
-    cvx_begin quiet
-    variable x(n)
-    minimize(norm(z.*x) + sum(y.*x))
-    subject to:
+   cvx_begin quiet
+variable x(n)
+minimize(norm(z.*x) + sum(y.*x))
+subject to: 
 
-    A*x - b <= 0; %#ok<*VUNUS>
-    if not(isempty(lb))
-        x >= lb;
-    end
-    if not(isempty(ub))
-        x <= ub;
-    end
-    if not(isempty(Aeq))
-        Aeq*x == beq;
-    end
+A*x - b <= 0; %#ok<*VUNUS>
+if not(isempty(lb))
+x >= lb;
+end
+if not(isempty(ub))
+x <= ub;
+end
+if not(isempty(Aeq))
+Aeq*x == beq;
+end
 
-    cvx_end
+cvx_end
 end
 
 if isequal(cvx_status,'Solved')
-    flag_val = 1;
+    flag_val = 1; 
     function_val = norm(A*x-b,1);
-
+    
 end
 end

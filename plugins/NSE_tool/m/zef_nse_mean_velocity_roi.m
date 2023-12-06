@@ -10,7 +10,7 @@ v_1 = v_1 + mean(zef.nse_field.bv_vessels_1{i}(roi_ind));
 v_2 = v_2 + mean(zef.nse_field.bv_vessels_2{i}(roi_ind));
 v_3 = v_3 + mean(zef.nse_field.bv_vessels_3{i}(roi_ind));
 end
-v_vec = [v_1 v_2 v_3]./length(nse_field.bv_vessels_1);
+v_vec = [v_1 v_2 v_3]./length(zef.nse_field.bv_vessels_1);
 v_mag = sqrt(sum(v_vec.^2));
 v_dir = v_vec/v_mag;
 

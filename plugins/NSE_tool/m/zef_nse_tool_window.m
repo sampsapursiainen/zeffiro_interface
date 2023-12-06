@@ -9,6 +9,7 @@ zef.nse_field.h_plot_roi = zef_data.h_plot_roi;
 zef.nse_field.h_plot_graph = zef_data.h_plot_graph;
 zef.nse_field.h_apply_roi = zef_data.h_apply_roi;
 zef.nse_field.h_apply_source_coordinates = zef_data.h_apply_source_coordinates;
+zef.nse_field.h_apply_dir_v = zef_data.h_apply_dir_v;
 
 zef.nse_field.h_nse_tool = zef_data.h_nse_tool;
 zef.nse_field.h_nse_tool.Name = 'ZEFFIRO Interface: NSE tool';
@@ -62,6 +63,14 @@ zef.nse_field.h_roi_y = zef_data.h_roi_y;
 zef.nse_field.h_roi_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_roi_z = zef_data.h_roi_z;
 zef.nse_field.h_roi_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+
+zef.nse_field.h_dir_v_x = zef_data.h_dir_v_x;
+zef.nse_field.h_dir_v_x.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_dir_v_y = zef_data.h_dir_v_y;
+zef.nse_field.h_dir_v_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_dir_v_z = zef_data.h_dir_v_z;
+zef.nse_field.h_dir_v_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
 zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -208,6 +217,11 @@ zef.nse_field.h_roi_x.Value = num2str(zef.nse_field.roi_x);
 zef.nse_field.h_roi_y.Value = num2str(zef.nse_field.roi_y);
 zef.nse_field.h_roi_z.Value = num2str(zef.nse_field.roi_z);
 
+
+zef.nse_field.h_dir_v_x.Value = num2str(zef.nse_field.dir_v_x);
+zef.nse_field.h_dir_v_y.Value = num2str(zef.nse_field.dir_v_y);
+zef.nse_field.h_dir_v_z.Value = num2str(zef.nse_field.dir_v_z);
+
 zef.nse_field.h_viscosity_smoothing.Value = zef.nse_field.viscosity_smoothing;
 
 zef.nse_field.h_gravity_amplitude.Value = zef.nse_field.gravity_amplitude;
@@ -241,11 +255,11 @@ zef.nse_field.h_pressure_decay_in_arterioles.Value = zef.nse_field.pressure_deca
 zef.nse_field.h_capillary_diameter.Value = zef.nse_field.capillary_diameter;
 zef.nse_field.h_pressure.Value = zef.nse_field.pressure;
 
-zef.nse_field.h_viscosity_model.Items = {'Constant','Power law','Carreau-Yasuda'};
+zef.nse_field.h_viscosity_model.Items = {'Constant','Power law','Carreau-Yasuda','Walburn-Schneck','Genaralized power law','Casson'};
 zef.nse_field.h_viscosity_model.ItemsData = [1 : length(zef.nse_field.h_viscosity_model.Items)];
 zef.nse_field.h_viscosity_model.Value = zef.nse_field.viscosity_model;
 
-zef.nse_field.h_graph_type.Items = {'Pressure (full)','Pressure (epoch)','Pressure (full seperated)','Pressure (epoch forward separation)','Pressure (epoch backward separation)','Pressure histogram', 'Velocity (full)', 'Velocity (epoch)', 'Velocity (full seperated)','Velocity (epoch forward separation)','Velocity (epoch backward separation)','Velocity histogram', 'Viscosity (full)','Viscosity (epoch)' ,'Viscosity histogram','Pulse function','Pulse histogram'};
+zef.nse_field.h_graph_type.Items = {'Pressure (full)','Pressure (epoch)','Pressure (full seperated)','Pressure (epoch forward separation)','Pressure (epoch backward separation)','Pressure histogram', 'Velocity (full)', 'Velocity (epoch)', 'Velocity (full seperated)','Velocity (epoch forward separation)','Velocity (epoch backward separation)','Velocity histogram', 'Viscosity (full)','Viscosity (epoch)' ,'Viscosity histogram','Perfusion (full)', 'Perfusion (epoch)', 'Perfusion histogram', 'Pulse function','Pulse histogram'};
 zef.nse_field.h_graph_type.ItemsData = [1 : length(zef.nse_field.h_graph_type.Items)];
 zef.nse_field.h_graph_type.Value = zef.nse_field.graph_type;
 
@@ -266,13 +280,14 @@ zef.nse_field.h_time_integration.ItemsData = [1 : length(zef.nse_field.h_time_in
 zef.nse_field.h_time_integration.Value = zef.nse_field.time_integration;
 
 zef.nse_field.h_solve_system.ButtonPushedFcn = 'zef_nse_run_solver';
-zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = 'zef.inv_time_1 = zef.nse_field.inv_time_1; zef.inv_time_2 = zef.nse_field.inv_time_2; zef.inv_time_3 = zef.nse_field.inv_time_3; [zef.reconstruction, zef.reconstruction_information] = zef_nse_struction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
+zef.nse_field.h_parse_reconstruction.ButtonPushedFcn = 'zef.inv_time_1 = zef.nse_field.inv_time_1; zef.inv_time_2 = zef.nse_field.inv_time_2; zef.inv_time_3 = zef.nse_field.inv_time_3; [zef.reconstruction, zef.reconstruction_information] = zef_nse_reconstruction(zef.nse_field,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_interpolate.ButtonPushedFcn = 'zef = zef_nse_interpolate(zef,zef.nse_field.h_reconstruction_type.Value);';
 zef.nse_field.h_nse_sigma.ButtonPushedFcn = 'zef.nse_sigma = zef_nse_sigma(zef.nse_field,zef.nodes,zef.tetra,zef.domain_labels,zef.sigma,zef.source_interpolation_ind{1});';
 zef.nse_field.h_plot_sphere.ButtonPushedFcn = 'zef_nse_plot_sphere;';
 zef.nse_field.h_plot_roi.ButtonPushedFcn = 'zef_nse_plot_roi;';
-zef.nse_field.h_apply_roi.ButtonPushedFcn = 'zef_nse_apply_roi;';
+zef.nse_field.h_apply_roi.ButtonPushedFcn = 'zef_nse_apply_roi';
 zef.nse_field.h_apply_source_coordinates.ButtonPushedFcn = 'zef_nse_apply_source';
+zef.nse_field.h_apply_dir_v.ButtonPushedFcn = 'zef_nse_dir_v_node;';
 
 
 zef.nse_field.h_plot_graph.ButtonPushedFcn = 'zef_nse_plot_graph;';
