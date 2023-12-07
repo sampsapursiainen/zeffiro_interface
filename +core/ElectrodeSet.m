@@ -7,10 +7,10 @@ classdef ElectrodeSet < core.Sensor
 %
 
     properties
-        positions  (:,3) double { mustBeFinite }      = [0 0 0]
-        innerRadii (:,1) double { mustBeFinite }      = 0
-        outerRadii (:,1) double { mustBeFinite }      = 10
-        impedances (:,1) double { mustBeNonnegative } = Inf
+        positions  (:,3) double { mustBeFinite }      = []
+        innerRadii (:,1) double { mustBeFinite }      = []
+        outerRadii (:,1) double { mustBeFinite }      = []
+        impedances (:,1) double { mustBeNonnegative } = []
     end
 
     methods
@@ -24,36 +24,38 @@ classdef ElectrodeSet < core.Sensor
         %
 
             arguments
-                kwargs.positions  = [0 0 0]
-                kwargs.innerRadii = 0
-                kwargs.outerRadii = 10
-                kwargs.impedances = Inf
+                kwargs.positions  = []
+                kwargs.innerRadii = []
+                kwargs.outerRadii = []
+                kwargs.impedances = []
             end
 
             sensorN = size ( kwargs.positions, 1 ) ;
 
+            sizeAssertion = @(arg) isscalar ( arg ) || numel ( arg ) == sensorN ;
+
             assert ( ...
-                isscalar ( kwargs.impedances ) || numel ( kwargs.impedances ) == sensorN, ...
+                sizeAssertion ( kwargs.impedances ), ...
                 "The number of given impedances must match the number of sensor positions, or be a scalar." ...
             ) ;
 
             assert ( ...
-                isscalar ( kwargs.innerRadii ) || numel ( kwargs.innerRadii ) == sensorN, ...
+                sizeAssertion ( kwargs.innerRadii ), ...
                 "The number of given inner radii must match the number of sensor positions, or be a scalar." ...
             ) ;
 
             assert ( ...
-                isscalar ( kwargs.outerRadii ) || numel ( kwargs.outerRadii ) == sensorN, ...
+                sizeAssertion ( kwargs.outerRadii ), ...
                 "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
             ) ;
 
             assert ( ...
-                all ( kwargs.innerRaddii < kwargs.outerRadii ), ...
-                "All of the given inner radii must be less than the given outer radii."
+                all ( kwargs.innerRadii < kwargs.outerRadii ), ...
+                "All of the given inner radii must be less than the given outer radii." ...
             ) ;
 
             assert ( ...
-                isscalar ( kwargs.impedances ) || numel ( kwargs.impedances ) == sensorN, ...
+                sizeAssertion ( kwargs.impedances ), ...
                 "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
             ) ;
 
@@ -69,6 +71,19 @@ classdef ElectrodeSet < core.Sensor
 
         end % function
 
+        function N = electrodeCount ( self )
+        %
+        % N = electrodeCount ( self )
+        %
+        % Returns the number of electrodes in self, defined by how many
+        % electrode positions there are.
+        %
+
+            N = size ( self.positions, 1 ) ;
+
+        end % function
+
+
         function A = areas ( self )
         %
         % A = areas ( self )
@@ -78,9 +93,13 @@ classdef ElectrodeSet < core.Sensor
 
             innerA = pi .* self.innerRadii .^ 2 ;
 
-            outerA = pi .* self.innerRadii .^ 2 ;
+            outerA = pi .* self.outerRadii .^ 2 ;
 
             A = outerA - innerA ;
+
+            if isscalar ( A )
+                A = repmat ( A, self.electrodeCount, 1 ) ;
+            end
 
         end % function
 
