@@ -48,6 +48,11 @@ classdef ElectrodeSet < core.Sensor
             ) ;
 
             assert ( ...
+                all ( kwargs.innerRaddii < kwargs.outerRadii ), ...
+                "All of the given inner radii must be less than the given outer radii."
+            ) ;
+
+            assert ( ...
                 isscalar ( kwargs.impedances ) || numel ( kwargs.impedances ) == sensorN, ...
                 "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
             ) ;
@@ -61,6 +66,21 @@ classdef ElectrodeSet < core.Sensor
                 self.(field) = kwargs.(field) ;
 
             end % for
+
+        end % function
+
+        function A = areas ( self )
+        %
+        % A = areas ( self )
+        %
+        % Computes the areas of the electrodes contained in this set.
+        %
+
+            innerA = pi .* self.innerRadii .^ 2 ;
+
+            outerA = pi .* self.innerRadii .^ 2 ;
+
+            A = outerA - innerA ;
 
         end % function
 
