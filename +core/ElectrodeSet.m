@@ -83,7 +83,6 @@ classdef ElectrodeSet < core.Sensor
 
         end % function
 
-
         function A = areas ( self )
         %
         % A = areas ( self )
