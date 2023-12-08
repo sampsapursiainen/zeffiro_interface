@@ -110,6 +110,42 @@ classdef ElectrodeSet < core.Sensor
 
         end % function
 
+        function Z = effectiveImpedances ( self )
+        %
+        % Z = effectiveImpedances ( self )
+        %
+        % Computes the effective impedances, the impedances multiplied byt
+        % electrode areas, of this electrode set.
+        %
+
+            As = self.areas ;
+
+            Zs = self.impedances ;
+
+            Z = Zs .* As ;
+
+        end % function
+
+        function M = electrodeModel ( self )
+        %
+        % M = electrodeModel ( self )
+        %
+        % Checks whether this electrode set conforms to the point electrode
+        % model PEM or complete electrode model CEM.
+        %
+
+            if all ( isinf ( self.effectiveImpedances ) )
+
+                M = core.ElectrodeModel.PEM ;
+
+            else
+
+                M = core.ElectrodeModel.CEM ;
+
+            end % if
+
+        end % function
+
     end % methods
 
 end % classdef
