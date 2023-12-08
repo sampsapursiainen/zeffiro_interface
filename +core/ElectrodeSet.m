@@ -114,7 +114,7 @@ classdef ElectrodeSet < core.Sensor
         %
         % Z = effectiveImpedances ( self )
         %
-        % Computes the effective impedances, the impedances multiplied byt
+        % Computes the effective impedances, the impedances multiplied by
         % electrode areas, of this electrode set.
         %
 
