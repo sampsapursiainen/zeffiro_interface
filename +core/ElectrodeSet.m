@@ -65,7 +65,15 @@ classdef ElectrodeSet < core.Sensor
 
                 field = fields ( fni ) ;
 
-                self.(field) = kwargs.(field) ;
+                fieldval = kwargs.(field) ;
+
+                if isscalar ( fieldval )
+
+                    fieldval = repmat ( fieldval, sensorN, 1 ) ;
+
+                end
+
+                self.(field) = fieldval ;
 
             end % for
 
