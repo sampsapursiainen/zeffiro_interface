@@ -1,0 +1,21 @@
+function L = gMegLeadField ( nodes, tetra, gradiometers, triA, eA, e2nI, t2nI, A, params )
+%
+% L = gMegLeadField ( nodes, tetra, gradiometers, triA, eA, e2nI, t2nI, A, params )
+%
+% Computes an uninterpolated gradiometric magnetoencephalography lead field L.
+%
+
+    arguments
+        nodes        (:,3) double { mustBeFinite }
+        tetra        (:,4) double { mustBePositive, mustBeInteger }
+        gradiometers (:,1) core.GradioMeterSet
+        triA         (:,1) double { mustBePositive }
+        e2nI         (:,1) double { mustBePositive, mustBeInteger }
+        t2nI         (:,1) double { mustBePositive, mustBeInteger }
+        A            (:,:) double { mustBeFinite }
+        params       (1,1) core.LeadFieldParams = core.LeadFieldParams
+    end
+
+    L = [] ;
+
+end % function
