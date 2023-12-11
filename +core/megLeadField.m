@@ -4,6 +4,15 @@ function L = megLeadField ( nodes, tetra, magnetometers, triA, eA, e2nI, t2nI, A
 %
 % Computes an uninterpolated magnetoencephalography lead field L.
 %
+% Outputs:
+%
+% - L
+%
+%   The MEG lead field. If the parameters P of the magnotemeters were complex,
+%   this will contain 2 pages: the first contains a lead field corresponding to
+%   the real part and the second page will correspond to the imaginary part of
+%   P.
+%
     arguments
         nodes         (:,3) double { mustBeFinite }
         tetra         (:,4) double { mustBePositive, mustBeInteger }

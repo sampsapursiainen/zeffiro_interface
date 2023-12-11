@@ -4,6 +4,15 @@ function L = tesLeadField ( nodes, tetra, electrodes, triA, eA, e2nI, t2nI, A, p
 %
 % Computes an uninterpolated gradiometric transcranial electrical stimulation lead field L.
 %
+% Outputs:
+%
+% - L
+%
+%   The tES lead field. If the impedances Z of the electrodes were complex,
+%   this will contain 2 pages: the first contains a lead field corresponding to
+%   the real part and the second page will correspond to the imaginary part of
+%   Z.
+%
 
     arguments
         nodes      (:,3) double { mustBeFinite }
