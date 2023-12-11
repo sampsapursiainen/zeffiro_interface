@@ -4,6 +4,15 @@ function L = gMegLeadField ( nodes, tetra, gradiometers, triA, eA, e2nI, t2nI, A
 %
 % Computes an uninterpolated gradiometric magnetoencephalography lead field L.
 %
+% Outputs:
+%
+% - L
+%
+%   The gMEG lead field. If the parameters P of the gradiometers were complex,
+%   this will contain 2 pages: the first contains a lead field corresponding to
+%   the real part and the second page will correspond to the imaginary part of
+%   P.
+%
 
     arguments
         nodes        (:,3) double { mustBeFinite }
