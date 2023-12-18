@@ -78,10 +78,6 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t
 
     import core.LeadFieldModality
 
-    % Convert source model to new format.
-
-    source_model = core.ZefSourceModel.from(params.source_model);
-
     % Compute volumes of the tetrahedra.
 
     tetraV = core.tetraVolume(nodes, tetra, true);
@@ -158,15 +154,25 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t
 
     end
 
-    % Perform source space interpolation. First generate face-intersecting and edgewise dipoles.
+    % Peel off unwanted tetra.
 
-    [AdjFI, signsFI, sourceMomentsFI, sourceDirFI, sourceLocFI, adjNodeNumFI] = core.faceIntersectingDipoles ( nodes, tetra, acI ) ;
-
-    [AdjEW, signsEW, sourceMomentsEW, sourceDirEW, sourceLocEW, adjNodeNumEW] = core.edgewiseDipoles ( nodes, tetra, acI ) ;
+    peeledI = core.peelSourcePositions ( nodes, tetra, acI, params.acceptable_source_depth ) ;
 
     % Then build a dipole interpolation matrix.
 
-    D
+    [interpM, ~] = core.leadFieldInterpolation ( ...
+        nodes, ...
+        tetra, ...
+        acI, ...
+        params.source_model, ...
+        peeledI, ...
+        [], ... nearest neighbour indices, that were supposed to be used with "continuous" source models.
+        params.optimization_system_type, ...
+        regparam ...
+    ) ;
+
+    realL = pagemtimes ( realL, interpM );
+    imagL = pagemtimes ( imagL, interpM );
 
     L = cat ( 3, realL, imagL ) ;
 
