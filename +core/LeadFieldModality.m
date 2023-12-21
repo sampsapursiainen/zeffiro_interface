@@ -11,6 +11,7 @@ classdef LeadFieldModality
         gMEG    % Magnetoencephalography performed with gradiometers
         EIT     % Electrical Impedance Tomography
         tES     % Transcranial Electric Stimulation.
+        None    % No modality specified. Useful mainly as a default value.
     end
 
 end % classdef
