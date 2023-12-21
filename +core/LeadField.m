@@ -36,6 +36,36 @@ classdef LeadField
 
         end % function
 
+        function self = plus ( self, other )
+        %
+        % self = plus ( self, other )
+        %
+        % Overleads the + operator for this class. Returns a LeadField, as long
+        % as other is a numerical matrix of same dimensions as self, or a lead
+        % field of the same modality.
+        %
+
+            arguments
+                self (1,1) core.LeadField
+                other
+            end
+
+            if isnumeric ( other )
+
+                self.matrix = self.matrix + other ;
+
+            elseif class ( other ) == "core.LeadField" && other.modality == self.modality
+
+                self.matrix = self.matrix + other.matrix ;
+
+            else
+
+                error ( "Received a non-numerical matrix as the second argument, or the modality of the given second lead field was not the same the first one." )
+
+            end % if
+
+        end
+
     end % methods
 
 end % classdef
