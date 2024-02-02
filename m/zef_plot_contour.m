@@ -6,9 +6,15 @@ end
 
 n_iter = eval('zef.contour_n_smoothing');
 line_width = eval('zef.contour_line_width');
+c_lim = zef.h_axes1.CLim;
 if not(isempty(varargin))
+    if not(isempty(varargin{1}))
     n_iter = varargin{1};
+    end
     if length(varargin) > 1
+        if not(isempty(varargin{2}))
+    c_lim = varargin{2};
+    end
     end
 end
 
@@ -29,15 +35,19 @@ elseif isequal(size(surf_func(:),1),3*size(triangles,1))
     surf_func = mean(reshape(surf_func,3,size(triangles,1)),1);
 end
 
-min_val = min(surf_func,[],'all');
-max_val = max(surf_func,[],'all');
+min_rec = min(surf_func,[],'all');
+max_rec = max(surf_func,[],'all');
+min_val = c_lim(1); 
+max_val = c_lim(2); 
+
+c_map_ind = [1:length(rel_val)]; %round(interp1(linspace(c_lim(1),c_lim(2),zef.colormap_size),[1:zef.colormap_size],max(min(min_val + rel_val*(max_val - min_val),c_lim(2)),c_lim(1)),"linear","extrap"));
 
 nodes_orig = nodes;
 
 for j = 1 : length(rel_val)
 
     nodes = nodes_orig;
-    thresh_val = min_val + rel_val(j)*(max_val - min_val);
+    thresh_val = max(min(min_val + rel_val(j)*(max_val - min_val),max_rec),min_rec);
     I = find(surf_func <= thresh_val);
     edges_aux = [triangles(I,[1 2]); triangles(I,[2 3]); triangles(I,[3 1])];
     edges_aux = sort(edges_aux,2);
@@ -114,7 +124,7 @@ for j = 1 : length(rel_val)
 
             h_contour(loop_start,j) = plot3(h_axes,nodes(edges_contour{loop_start},1),nodes(edges_contour{loop_start},2),nodes(edges_contour{loop_start},3));
             set(h_contour(loop_start,j),'linewidth',line_width)
-            set(h_contour(loop_start,j),'color',c_map(j,:))
+            set(h_contour(loop_start,j),'color',c_map(c_map_ind(j),:))
             set(h_contour(loop_start,j),'tag','contour')
 
             uistack(h_contour(loop_start,j),'top');
