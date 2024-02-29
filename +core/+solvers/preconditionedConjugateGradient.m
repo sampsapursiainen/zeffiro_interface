@@ -35,7 +35,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
     stepDir = precResidual ;
 
-    pos = startPoint
+    pos = startPoint ;
 
     for ii = 1 : Asize ( 1 )
 
@@ -45,9 +45,9 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         nextPos = pos + stepSize * stepDir ;
 
-        nextResidual = residual - stepSize * A * stepDir
+        nextResidual = residual - stepSize * A * stepDir ;
 
-        resNorm = norm ( nextResidual )
+        resNorm = norm ( nextResidual ) ;
 
         if resNorm < kwargs.tolerance
 
