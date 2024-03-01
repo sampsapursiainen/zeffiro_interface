@@ -111,7 +111,7 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
     % Initialize per-column tolerances.
 
     if isscalar (kwargs.tolerances)
-        tolerances = kwargs.tolerances * ones ( n_of_fem_nodes, 1 ) ;
+        tolerances = kwargs.tolerances * ones ( n_of_electrodes, 1 ) ;
     else
         tolerances = kwargs.tolerances ;
     end
