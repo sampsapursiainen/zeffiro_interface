@@ -1,4 +1,4 @@
-function [ newPos, newI ] = attachSensors ( senPos, triPos, triInd, kwargs )
+function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
 %
 % [ newPos, newI ] = attachSensors ( senPos, triPos, triInd, kwargs )
 %
@@ -35,23 +35,15 @@ function [ newPos, newI ] = attachSensors ( senPos, triPos, triInd, kwargs )
         kwargs.attachMode { mustBeMember( kwargs.attachMode, [ "nearestNode", "nearestTriangleCentroid" ] ) } = "nearestTriangleCentroid"
     end
 
-    % Compute position dimensionality for sensors and nodes, and the number of triangles.
-
-    Nsp = size ( senPos, 1 ) ;
-
-    Nnp = size ( nodePos, 1 ) ;
-
-    Ntri = size ( triInd, 2 ) ;
-
     % Compute new positions based on attachment mode.
 
     if kwargs.attachMode == "nearestNode"
 
-        [ newPos (:), new = nearestNodeFn ( senPos, nodePos, triInd ) ;
+        [ newPos, newI ] = nearestNodeFn ( senPos, nodePos ) ;
 
     elseif kwargs.attachMode == "nearestTriangleCentroid"
 
-        newPos (:) = nearestTriCentroidFn ( senPos, nodePos, triInd ) ;
+        [ newPos, newI ] = nearestTriCentroidFn ( senPos, nodePos, triInd ) ;
 
     else
 
@@ -63,7 +55,7 @@ end % function
 
 %% Helper functions
 
-function [ newPos, minI ] = nearestNodeFn ( senPos, nodePos, triInd )
+function [ newPos, minI ] = nearestNodeFn ( senPos, nodePos )
 %
 % Places the sensor positions at nearest mesh nodes.
 %
