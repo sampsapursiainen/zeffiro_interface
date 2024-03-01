@@ -25,12 +25,12 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 % - kwargs.maxiters = size ( A, 1 )
 %
 %   Theoretically, the PCG algorithm should converge in a number of steps that
-%   is equal to the number of rows of A.
+%   is equal to the number of rows of A (as it should be the same as that of
+%   B).
 %
-% - kwargs.preconditioner
+% - kwargs.preconditioner = 1 ./ diag ( A )
 %
-%   A preconditioner vector. Either given by a function such as  or another arbitrary value, i which
-%   case a different default preconditioner will be used.
+%   A preconditioner vector. By default, this is the Jacobi preconditioner.
 %
 % - kwargs.permutation (1,1) double = 1 : size (A,1)
 %
@@ -40,9 +40,9 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 %
 % - kwargs.tolerances = 1e-6
 %
-%   The per-columns of B tolerances of the PCG solver when solving each column
-%   of the system separately. If given as a scalar, all columns will use the
-%   same tolerance.
+%   The per-column tolerances of the PCG solver when solving each column of the
+%   system separately. If given as a scalar, all columns will use the same
+%   tolerance.
 %
 % - kwargs.useGPU = true
 %
@@ -50,11 +50,17 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 %
 % Output:
 %
-% - T: a transfer matrix of the FE system under observation.
+% - T
 %
-% - Schur_complement: the Schur complement of T.
+%   A transfer matrix that maps potentials from sensors to finite element nodes.
 %
-% - A: a possibly permuted stiffness matrix A.
+% - S
+%
+%   The Schur complement of T.
+%
+% - A
+%
+%   A possibly permuted stiffness matrix A.
 %
 
     arguments
