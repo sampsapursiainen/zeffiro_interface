@@ -28,7 +28,7 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 %
 % - t2nI
 %
-%   An index set that maps surface triangles to nodes.
+%   An index set that maps surface triangles to the surface nodes that form the triangle.
 %
 % - A
 %
