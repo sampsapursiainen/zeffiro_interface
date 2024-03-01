@@ -1,11 +1,14 @@
-function [T, S, A] = transferMatrix ( A, B, C, kwargs )
+function [T, S] = transferMatrix ( A, B, C, kwargs )
 %
-% [T, S, A] = transferMatrix ( A, B, C, kwargs )
+% [T, S] = transferMatrix ( A, B, C, kwargs )
 %
-% Builds a transfer matrix T and its Schur complement S from a given stiffness
-% matrix A, matrices B and C, sizes n_of_fem_nodes and n_of_electrodes, a
-% permutation matrix and a precoditioner, through preconditioned conjugate
-% gradient (PCG) iteration.
+% Builds a transfer matrix T that maps measurements from sensors to FE mesh
+% nodes, from a given stiffness matrix A, and sensor matrices B and C from a
+% discretized system
+%
+%   [ A B ; B' C ] * [ u v ] = [ x y ]
+%
+% Also returns the Schur complement S of T.
 %
 % Input:
 %
@@ -15,7 +18,7 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 %
 % - B (:,:) sparse
 %
-%   A sparse matrix that maps potentials from electrodes to FEM nodes.
+%   A sparse matrix that maps potentials from sensors to FE nodes.
 %
 % - C (:,:) sparse
 %
@@ -57,10 +60,6 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 % - S
 %
 %   The Schur complement of T.
-%
-% - A
-%
-%   A possibly permuted stiffness matrix A.
 %
 
     arguments
