@@ -83,11 +83,13 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 
     S = zeros (n_of_electrodes);
 
-    % Permute stiffness matrix A if a preconditioner requires it.
+    % Permute stiffness matrix A if a preconditioner requires it. Also
+    % construct an inverse permutation so that the final result can be
+    % presented in the original order.
 
-    iperm_vec = sortrows ([ kwargs.permutation (1:n_of_fem_nodes)' ]) ;
+    invperm = sortrows ([ kwargs.permutation (1:n_of_fem_nodes)' ]) ;
 
-    iperm_vec = iperm_vec (:,2) ;
+    invperm = invperm (:,2) ;
 
     A = A ( kwargs.permutation, kwargs.permutation ) ;
 
@@ -152,7 +154,7 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 
         relativeResidual = gather ( norm (r) / norm_b ) ;
 
-        r = gather ( x (iperm_vec) ) ;
+        r = gather ( x (invperm) ) ;
 
         x = r;
 
