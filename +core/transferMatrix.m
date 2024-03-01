@@ -152,9 +152,9 @@ function [T, S, A] = transferMatrix ( A, B, C, kwargs )
 
         end % while
 
-        relativeResidual = gather ( norm (r) / norm_b ) ;
+        relativeResidual = norm (r) / norm_b ;
 
-        r = gather ( x (invperm) ) ;
+        r (:) = x (invperm) ;
 
         x = r;
 
