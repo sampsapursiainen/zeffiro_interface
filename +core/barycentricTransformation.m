@@ -7,8 +7,8 @@ function T = barycentricTransformation ( nodes, elements )
 %
 
     arguments
-        nodes
-        elements
+        nodes    (:,:) double { mustBeFinite }
+        elements (:,:) uint64 { mustBePositive }
     end
 
     % Get the number of dimensions, vertices in a single element and the number
