@@ -40,28 +40,14 @@ function C = barycentricCoordinates ( nodes, elements, points )
 
     dN = size ( nodes, 1 ) ;
 
-    vN = size ( elements, 1 ) ;
-
     eN = size ( elements, 2 ) ;
 
     pN = size ( points, 2 ) ;
 
-    % First get the vertex coordinates of each element in groups of as many
-    % columns as there are vertices in a single element, taking into account
-    % the column-major ordering of MATLAB arrays.
+    % Compute transformations from a Cartesian system to the frame of reference
+    % of each element.
 
-    vertexCoords = nodes ( :, elements )
-
-    % Reshape it such that the vertex coordinates of each element are as pages
-    % of a 3D array.
-
-    vertexCoords = reshape ( vertexCoords, dN, vN, eN )
-
-    % Compute differences between the last vertex of each element and its other
-    % vertices. These give the basis of the coordinate system defined by each
-    % element in a 3D array B.
-
-    B = vertexCoords ( :, 1:end-1 ,: ) - vertexCoords ( :, end, : )
+    [ B, vertexCoords ] = core.barycentricTransformation ( nodes, elements ) ;
 
     % Compute differences between points and last vertices of each element.
 
@@ -76,8 +62,6 @@ function C = barycentricCoordinates ( nodes, elements, points )
         end % for
 
     end % for
-
-    diffs
 
     % Go over the points and invert each page of basis B with respect to them
     % to get the barycentric coordinates.
