@@ -1,4 +1,4 @@
-function T = barycentricTransformation ( nodes, elements )
+function [ T, vertexCoords ] = barycentricTransformation ( nodes, elements )
 %
 % T = barycentricTransformation ( nodes, elements )
 %
