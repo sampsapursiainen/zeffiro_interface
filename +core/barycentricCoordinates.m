@@ -1,6 +1,6 @@
-function C = barycentricCoordinates ( nodes, elements, points )
+function [ C, B ] = barycentricCoordinates ( nodes, elements, points )
 %
-% C = barycentricCoordinates ( nodes, elements, points )
+% [ C, B ] = barycentricCoordinates ( nodes, elements, points )
 %
 % Computes the barycentric coordinates of the given points in the frame of
 % reference of each (simplical) element. In other words, performs a change of
@@ -27,6 +27,16 @@ function C = barycentricCoordinates ( nodes, elements, points )
 %
 %   A 3D array with the barycentric coordinates of each point with respect to
 %   each element as its pages.
+%
+% - B
+%
+%   A 3D array of mappings that could be used to transform the barycentric
+%   coordinates back into the direction basis of the element edges:
+%
+%     B b = r - re ,
+%
+%  where b are the barycentric coordinates of r and re is the last vertex of an
+%  element.
 %
 
     arguments
