@@ -2,8 +2,13 @@ function [ T, vertexCoords ] = barycentricTransformation ( nodes, elements )
 %
 % T = barycentricTransformation ( nodes, elements )
 %
-% Returns a linear mapping T that maps points from a Cartesian coordinate
-% system to a barycentric one.
+% Returns a linear mapping T that maps points from a barycentric coordinate
+% system to a Cartesian one, such that
+%
+%   T b = r - re ,
+%
+% where b is a vector of barycenetric coordinates of a point r, and re is the
+% "last" vertex of a simplical element.
 %
 
     arguments
