@@ -95,7 +95,7 @@ function [ C, B, vertexCoords, diffs ] = barycentricCoordinates ( nodes, element
 
         for pI = 1 : pN
 
-            C (:,pI,eI) = B ( :, pI, eI ) \ diffs ( :, pI, eI ) ;
+            C (:,pI,eI) = B ( :, :, eI ) \ diffs ( :, pI, eI ) ;
 
         end % for
 
