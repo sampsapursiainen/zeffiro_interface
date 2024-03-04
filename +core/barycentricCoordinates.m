@@ -1,6 +1,6 @@
-function [ C, B ] = barycentricCoordinates ( nodes, elements, points )
+function [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, points )
 %
-% [ C, B ] = barycentricCoordinates ( nodes, elements, points )
+% [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, points )
 %
 % Computes the barycentric coordinates of the given points in the frame of
 % reference of each (simplical) element. In other words, performs a change of
@@ -10,16 +10,18 @@ function [ C, B ] = barycentricCoordinates ( nodes, elements, points )
 %
 % - nodes (:,:) double { mustBeFinite }
 %
-%   Mesh node coordinate matrix. Each column represents one node.
+%   Mesh node coordinate matrix. Each column represents one node in a simplex,
+%   such as a triangle or a tetrahedron.
 %
 % - elements (:,:) uint64 { mustBePositive }
 %
 %   Index matrix whose columns contain the indices of the nodes of elements in
-%   the mesh. Note that each element should be convex.
+%   the mesh. Note that each element should be a simplex.
 %
 % - points (:,:) double { mustBeFinite }
 %
-%   The points whose barycentric coordinates we wish to find out.
+%   The points whose barycentric coordinates with respect to the elements we
+%   wish to find out.
 %
 % Outputs:
 %
