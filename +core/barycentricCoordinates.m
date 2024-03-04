@@ -1,6 +1,6 @@
-function [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, points )
+function [ C, B, vertexCoords, diffs ] = barycentricCoordinates ( nodes, elements, points )
 %
-% [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, points )
+% [ C, B, vertexCoords, diffs ] = barycentricCoordinates ( nodes, elements, points )
 %
 % Computes the barycentric coordinates of the given points in the frame of
 % reference of each (simplical) element. In other words, performs a change of
@@ -44,6 +44,12 @@ function [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, poin
 %
 %   A 3D array of vertex coordinates for each element. Here
 %   vertexCoords(:,end,:) = re is the reference node used to compute B.
+%
+% - diffs
+%
+%   The differences between element vertices and a "last" reference vertex
+%   within the same element. Performing the multiplication Bb should output
+%   this array.
 %
 
     arguments
