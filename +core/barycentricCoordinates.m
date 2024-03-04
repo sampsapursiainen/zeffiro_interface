@@ -56,8 +56,8 @@ function [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, poin
 
     pN = size ( points, 2 ) ;
 
-    % Compute transformations from a Cartesian system to the frame of reference
-    % of each element.
+    % Compute transformations from a barycentric system to the frame of
+    % reference of each element.
 
     [ B, vertexCoords ] = core.barycentricTransformation ( nodes, elements ) ;
 
