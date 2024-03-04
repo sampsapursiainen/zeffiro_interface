@@ -40,6 +40,11 @@ function [ C, B, vertexCoords ] = barycentricCoordinates ( nodes, elements, poin
 %  where b are the barycentric coordinates of r and re is the last vertex of an
 %  element.
 %
+% - vertexCoords
+%
+%   A 3D array of vertex coordinates for each element. Here
+%   vertexCoords(:,end,:) = re is the reference node used to compute B.
+%
 
     arguments
         nodes    (:,:) double { mustBeFinite }
