@@ -1,6 +1,6 @@
-function B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
+function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
 %
-% B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
+% B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -30,10 +30,6 @@ function B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
 %
 %   The areas of the triangles that the electrode nodes are touching.
 %
-% - eA
-%
-%   The average area of the electrodes.
-%
 % - e2nI
 %
 %   A mapping of electrode indices to node indices. In other words, e2nI(i)
@@ -50,7 +46,6 @@ function B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
         Znum       (:,1) double { mustBeFinite }
         impedances (:,1) double { mustBeNonNan }
         triA       (:,1) double { mustBeFinite }
-        eA         (:,1) double { mustBeFinite }
         e2nI       (:,1) uint32 { mustBePositive }
         t2nI       (:,1) uint32 { mustBePositive }
     end
@@ -68,7 +63,7 @@ function B = potentialMat ( nN, Znum, impedances, triA, eA, e2nI, t2nI )
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
 
-    Zcoeff = Znum ./ Zden ./ eA ;
+    Zcoeff = Znum ./ Zden ./ eN ;
 
     % Adjust the coefficients in places that have point electrodes: if area is
     % zero or impedance is infinite.
