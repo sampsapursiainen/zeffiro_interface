@@ -86,6 +86,8 @@ function [ newPos, minI ] = nearestNodeFn ( senPos, nodePos )
 
     [ ~, minI ] = min ( repDiffNorms, [], 2 ) ;
 
+    minI = minI (:) ;
+
     newPos = nodePos ( :, minI ) ;
 
 end % function
