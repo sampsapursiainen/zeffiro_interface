@@ -32,7 +32,7 @@ function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
         senPos (:,:) double { mustBeFinite }
         nodePos (:,:) double { mustBeFinite }
         triInd (3,:) uint64 { mustBePositive }
-        kwargs.attachMode { mustBeMember( kwargs.attachMode, [ "nearestNode", "nearestTriangleCentroid" ] ) } = "nearestTriangleCentroid"
+        kwargs.attachMode { mustBeMember( kwargs.attachMode, [ "nearestNode", "nearestTriangleCentroid" ] ) } = "nearestNode"
     end
 
     % Compute new positions based on attachment mode.
