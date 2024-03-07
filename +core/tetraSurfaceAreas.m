@@ -17,14 +17,14 @@ function [ As, Avs ] = tetraSurfaceAreas (nodes, tetra, tI)
 %
 
     arguments
-        nodes   (:,3) double { mustBeFinite }
-        tetra   (:,4) uint32 { mustBePositive }
+        nodes   (3,:) double { mustBeFinite }
+        tetra   (4,:) uint32 { mustBePositive }
         tI      (:,1) uint32 { mustBePositive }
     end
 
     % Get the surface triangles and the indices of the tetra that they belong to.
 
-    [triangles, ~] = core.tetraSurfaceTriangles ( tetra, tI ) ;
+    [triangles, ~] = core.tetraSurfaceTriangles ( tetra', tI ) ;
 
     % Get the 3D vertex coordinates of the triangles.
 
@@ -32,8 +32,8 @@ function [ As, Avs ] = tetraSurfaceAreas (nodes, tetra, tI)
 
     % Compute area vectors as cross products of two edges, and then take their norms to find out the areas.
 
-    Avs = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
+    Avs = 1 / 2 * cross ( c2 - c1, c3 - c1, 1 ) ;
 
-    As = sqrt ( sum ( Avs .^ 2, 2 ) ) ;
+    As = sqrt ( sum ( Avs .^ 2, 1 ) ) ;
 
 end % function
