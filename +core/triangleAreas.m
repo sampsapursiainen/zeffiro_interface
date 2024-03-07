@@ -7,7 +7,7 @@ function [ A, Av ] = triangleAreas ( nodes, triangles )
 %
 % Inputs:
 %
-% - nodes (:,3)
+% - nodes (3,:)
 %
 %   The coordinates of the finite element nodes.
 %
@@ -27,14 +27,14 @@ function [ A, Av ] = triangleAreas ( nodes, triangles )
 %
 
     arguments
-        nodes     (:,3) double { mustBeFinite }
+        nodes     (3,:) double { mustBeFinite }
         triangles (3,:) uint32 { mustBePositive }
     end
 
     [ c1, c2, c3 ] = core.triangleVertexCoordinates ( nodes, triangles ) ;
 
-    Av = 1 / 2 * cross ( c2 - c1, c3 - c1 ) ;
+    Av = 1 / 2 * cross ( c2 - c1, c3 - c1, 1 ) ;
 
-    A = sqrt ( sum ( Av .^ 2, 2 ) ) ;
+    A = sqrt ( sum ( Av .^ 2, 1 ) ) ;
 
 end % function
