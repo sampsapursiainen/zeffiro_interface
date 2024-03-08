@@ -27,7 +27,7 @@ function [ C, c1, c2, c3 ] = triangleCentroids ( nodes, triangles )
 %
 
     arguments
-        nodes     (:,3) double { mustBeFinite }
+        nodes     (3,:) double { mustBeFinite }
         triangles (3,:) uint32 { mustBePositive }
     end
 
