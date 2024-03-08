@@ -1,6 +1,6 @@
-function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
+function B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
 %
-% B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
+% B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -35,10 +35,10 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
 %   A mapping of electrode indices to node indices. In other words, e2nI(i)
 %   gives the node index of the ith electrode.
 %
-% - t2nI
+% - triangles
 %
-%   A mapping of triangle indices to node indices. In other words, t2nI(i)
-%   gives the node that the triangle triangles(:,i) participates in.
+%   The surface triangles that the electrodes are attached to. The relation
+%   e2nI ⊂ triangles should hold.
 %
 
     arguments
@@ -47,7 +47,7 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
         impedances (:,1) double { mustBeNonNan }
         triA       (:,1) double { mustBeFinite }
         e2nI       (:,1) uint32 { mustBePositive }
-        t2nI       (:,1) uint32 { mustBePositive }
+        triangles  (3,:) uint32 { mustBePositive }
     end
 
     eN = numel ( impedances ) ;
@@ -77,7 +77,7 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
 
     B = sparse ( nN, eN ) ;
 
-    for eI = 1 : eN
+    for eI = uint32( 1 : eN )
 
         % Find node index corresponding to current electrode.
 
@@ -85,7 +85,7 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, t2nI )
 
         % Find triangles that are touching this node.
 
-        triI = nI == t2nI ;
+        triI = any ( ismember ( triangles, nI ), 1 ) ;
 
         % Sum up their areas.
 
