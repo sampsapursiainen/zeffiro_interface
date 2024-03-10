@@ -7,10 +7,6 @@ function Asums = sensorTriangleAreas (triangles, triA, s2nI)
 %
 % Inputs:
 %
-% - nodes
-%
-%   Finite element nodes.
-%
 % - triangles
 %
 %   Triples of node indices indicating which nodes form each
