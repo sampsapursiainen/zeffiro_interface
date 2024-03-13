@@ -63,13 +63,14 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 %
 
     arguments
-        A (:,:)
-        B (:,:) sparse
-        C (:,:) sparse
+        A (:,:) double { mustBeFinite }
+        B (:,:) double { mustBeFinite }
+        C (:,:) double { mustBeFinite }
         kwargs.permutation (:,1) double { mustBeInteger, mustBePositive } = 1 : size (A,1)
         kwargs.preconditioner (:,1) double = 1 ./ full ( diag ( A ) )
         kwargs.tolerances (:,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.useGPU (1,1) logical = true
+        kwargs.maxiters (1,1) uint32 { mustBePositive } = size(A,1)
     end
 
     % Preallocate output.
