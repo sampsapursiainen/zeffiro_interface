@@ -374,6 +374,26 @@ classdef StiffnessMatrix
 
         end % function
 
+        function out = cat (dim,varargin)
+        %
+        % out = cat (a,b)
+        %
+        % Implements cat for this class.
+        %
+
+            N = nargin-1;
+            newArgs = cell ( N, 1 ) ;
+            for ii = 1 : N
+                if isa ( varargin {ii}, 'core.StiffnessMatrix' )
+                    newArgs {ii} = varargin{ii}.data ;
+                else
+                    newArgs {ii} = varargin{ii} ;
+                end
+            end
+            out = core.StiffnessMatrix.fromDouble ( cat ( dim, newArgs {:} ) ) ;
+
+        end % function
+
     end % methods
 
     methods (Static)
