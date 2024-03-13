@@ -117,7 +117,7 @@ for i = 1 : n_of_tetra_faces
             real_integrand = real_integrand + real_tensor(k,:) .* tensor_coeff ;
 
             if tensorIsNotReal
-                imag_integrand = real_integrand + imag_tensor(k,:) .* tensor_coeff ;
+                imag_integrand = imag_integrand + imag_tensor(k,:) .* tensor_coeff ;
             end
 
         end
