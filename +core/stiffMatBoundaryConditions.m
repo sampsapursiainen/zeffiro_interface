@@ -1,6 +1,6 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, t2nI, triangles, triA, eA, kwargs )
+function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, eA, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, e2nI, t2nI, triangles, triA )
+% A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, eA, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
@@ -23,10 +23,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, t2nI, trian
 % - e2nI (:,1)
 %
 %   A mapping of electrodes to the nodes that they are attached to.
-%
-% - t2nI (:,1)
-%
-%   A mapping of mesh surface triangles to the nodes that they are attached to.
 %
 % - triangles (3,:)
 %
@@ -54,7 +50,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, t2nI, trian
         Znum         (:,1) double { mustBeNonNan }
         impedances   (:,1) double { mustBeNonNan }
         e2nI         (:,1) uint32 { mustBeFinite }
-        t2nI         (:,1) uint32 { mustBeFinite }
         triangles    (:,1) uint32 { mustBePositive }
         triA         (:,1) double { mustBeFinite }
         eA           (:,1) double { mustBeNonNan }
