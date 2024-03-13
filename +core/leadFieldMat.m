@@ -64,16 +64,16 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t
 %
 
     arguments
-        nodes    (:,3) double                 { mustBeFinite }
-        tetra    (:,4) double                 { mustBeFinite, mustBePositive, mustBeInteger }
-        sigma    (:,1) double                 { mustBeNonNan mustBeFinite }
-        sensors  (:,1)                        { mustBeA(sensors, "core.Sensor") }
-        modality (1,1) core.LeadFieldModality
-        triA     (:,1) double                 { mustBeFinite, mustBePositive }
-        s2nI     (:,1) double                 { mustBeInteger, mustBePositive }
-        t2nI     (:,1) double                 { mustBeInteger, mustBePositive }
-        acI      (:,1) double                 { mustBeInteger, mustBePositive }
-        params   (1,1) core.LeadFieldParams
+        nodes     (:,3) double                 { mustBeFinite }
+        tetra     (:,4) double                 { mustBeFinite, mustBePositive, mustBeInteger }
+        sigma     (:,1) double                 { mustBeNonNan mustBeFinite }
+        sensors   (:,1)                        { mustBeA(sensors, "core.Sensor") }
+        modality  (1,1) core.LeadFieldModality
+        triA      (:,1) double                 { mustBeFinite, mustBePositive }
+        s2nI      (:,1) double                 { mustBeInteger, mustBePositive }
+        triangles (3,:) double                 { mustBeInteger, mustBePositive }
+        acI       (:,1) double                 { mustBeInteger, mustBePositive }
+        params    (1,1) core.LeadFieldParams
     end
 
     import core.LeadFieldModality
@@ -84,17 +84,7 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t
 
     % Compute stiffness matrix.
 
-    if isreal ( sigma )
-
-        realA = core.stiffnessMat ( nodes, tetra, tetraV, sigma ) ;
-        imagA = sparse ([]) ;
-
-    else
-
-        realA = core.stiffnessMat ( nodes, tetra, tetraV, real(sigma) ) ;
-        imagA = core.stiffnessMat ( nodes, tetra, tetraV, imag(sigma) ) ;
-
-    end
+    [realA, imagA] = core.stiffnessMat ( nodes, tetra, tetraV, sigma ) ;
 
     % Compute uninterpolated lead field.
 
