@@ -34,6 +34,10 @@ classdef StiffnessMatrix
 
             end % for
 
+            isSquare = ~ ( ismatrix (self.data) && diff ( size (self.data) ) ) ;
+
+            assert ( isSquare, "Stiffness matrices should be square." ) ;
+
         end % function
 
         function out = real ( self )
