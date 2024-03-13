@@ -1,6 +1,6 @@
-function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, params )
+function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params )
 %
-% L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, params )
+% L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params )
 %
 % Computes an uninterpolated elecroencephalography lead field matrix.
 %
@@ -10,9 +10,9 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 %
 %   The finite element nodes.
 %
-% - tetra
+% - triangles
 %
-%   The finite elements.
+%   The surface triangles that the electrodes are attached to.
 %
 % - electrodes
 %
@@ -25,10 +25,6 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 % - e2nI
 %
 %   An index set that maps electrodes to nodes.
-%
-% - t2nI
-%
-%   An index set that maps surface triangles to the surface nodes that form the triangle.
 %
 % - A
 %
@@ -51,11 +47,10 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 %
     arguments
         nodes      (:,3) double { mustBeFinite }
-        tetra      (:,4) double { mustBePositive, mustBeInteger }
+        triangles  (3,:) uint32 { mustBePositive }
         electrodes (:,1) core.ElectrodeSet
         triA       (:,1) double { mustBePositive }
         e2nI       (:,1) double { mustBePositive, mustBeInteger }
-        t2nI       (:,1) double { mustBePositive, mustBeInteger }
         A          (:,:) double { mustBeFinite }
         params     (1,1) core.LeadFieldParams = core.LeadFieldParams
     end % arguments
@@ -64,9 +59,7 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 
     nN = size ( nodes, 1 ) ;
 
-    eA = electrodes.areas ;
-
-    realB = core.potentialMat ( nN, real ( electrodes.impedances ), electrodes.impedances, triA, eA, e2nI, t2nI ) ;
+    realB = core.potentialMat ( nN, Znum, real ( impedances ), triA, e2nI, triangles ) ;
 
     if isreal ( electrodes.impedances )
 
@@ -74,7 +67,7 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 
     else
 
-        imagB = core.potentialMat ( nN, imag ( electrodes.impedances ), electrodes.impedances, triA, eA, e2nI, t2nI ) ;
+        imagB = core.potentialMat ( nN, Znum, imag ( impedances ), triA, e2nI, triangles ) ;
 
     end
 
@@ -90,7 +83,7 @@ function L = eegLeadField ( nodes, tetra, electrodes, triA, e2nI, t2nI, A, param
 
     % Modify stiffness matrix A at the active electrodes via the related boundary conditions.
 
-    A = core.stiffMatBoundaryConditions ( A, e2nI, t2nI, triangles, triA ) ;
+    A = core.stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs ) ;
 
     % Compute transfer matrix T, a.k.a. the uninterpolated lead field.
 
