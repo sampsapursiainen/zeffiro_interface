@@ -178,7 +178,7 @@ classdef StiffnessMatrix
         %
         % out = power ( left, right )
         %
-        % Implements elementwise poiwer for this class.
+        % Implements .^ for this class.
         %
 
             dl = double ( left ) ;
@@ -186,6 +186,81 @@ classdef StiffnessMatrix
             dr = double ( right ) ;
 
             out = core.StiffnessMatrix.fromDouble ( dl .^ dr ) ;
+
+        end % function
+
+        function out = mpower ( left, right )
+        %
+        % out = power ( left, right )
+        %
+        % Implements ^ power for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl ^ dr ) ;
+
+        end % function
+
+        function out = rdivide ( left, right )
+        %
+        % out = rdivide ( left, right )
+        %
+        % Implements ./ for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl ./ dr ) ;
+
+        end % function
+
+        function out = ldivide ( left, right )
+        %
+        % out = ldivide ( left, right )
+        %
+        % Implements .\ for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl .\ dr ) ;
+
+        end % function
+
+        function out = mldivide ( left, right )
+        %
+        % out = mldivide ( left, right )
+        %
+        % Implements \ for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl \ dr ) ;
+
+        end % function
+
+        function out = mrdivide ( left, right )
+        %
+        % out = mldivide ( left, right )
+        %
+        % Implements / for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl / dr ) ;
 
         end % function
 
@@ -277,6 +352,28 @@ classdef StiffnessMatrix
 
         end % function
 
+        function out = numel (self)
+        %
+        % out = numel (a,b)
+        %
+        % Implements numel for this class.
+        %
+
+            out = numel ( self.data ) ;
+
+        end % function
+
+        function out = size (self)
+        %
+        % out = size (a,b)
+        %
+        % Implements size for this class.
+        %
+
+            out = size ( self.data ) ;
+
+        end % function
+
     end % methods
 
     methods (Static)
@@ -293,6 +390,24 @@ classdef StiffnessMatrix
             end
 
             self = core.StiffnessMatrix ( data=array ) ;
+
+        end % function
+
+        function self = empty ( sizevec, varargin )
+        %
+        % self = empty
+        %
+        % Constructs an empty StiffnessMatrix.
+        %
+
+            if nargin > 1
+                sizevec = [sizevec varargin{:}]
+                self = core.StiffnessMatrix ( data=double.empty (sizevec) ) ;
+            elseif nargin == 1
+                self = core.StiffnessMatrix ( data=double.empty (sizevec) ) ;
+            else
+                self = core.StiffnessMatrix ( data=double.empty ) ;
+            end
 
         end % function
 
