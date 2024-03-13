@@ -89,7 +89,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, t2nI, trian
 
         % Find triangles that are touching this node.
 
-        triI = nI == t2nI ;
+        triI = any ( ismember ( triangles, nI ), 1 ) ;
 
         % Sum the areas of the triangles together.
 
