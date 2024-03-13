@@ -28,7 +28,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     arguments
         nodes  (:,3) double { mustBeFinite }
         tetra  (:,4) double { mustBeFinite, mustBePositive, mustBeInteger }
-        tetraV (:,4) double { mustBeFinite, mustBePositive }
+        tetraV (1,:) double { mustBeFinite, mustBePositive }
         tensor (:,1) double { mustBeNonNan }
     end
 
@@ -64,14 +64,14 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     for i = 1 : n_of_tetra_faces
 
-        grad_1 = core.volumeGradient(nodes, tetra, i);
+        grad_1 = core.tetraVolumeGradient(nodes, tetra, i);
 
         for j = i : n_of_tetra_faces
 
             if i == j
                 grad_2 = grad_1;
             else
-                grad_2 = core.volumeGradient(nodes, tetra, j);
+                grad_2 = core.tetraVolumeGradient(nodes, tetra, j);
             end
 
             for k = 1 : 6
