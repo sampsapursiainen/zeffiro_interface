@@ -1,6 +1,6 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, eA, kwargs )
+function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, eA, kwargs )
+% A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
@@ -32,10 +32,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 %
 %   The areas of the surface triangles the electrode nodes are in contact with.
 %
-% - eA (:,1) or (1,1)
-%
-%   Electrode areas.
-%
 % - kwargs.onDC = 1 / 6
 %
 %   The value of the integral ∫ ψi ψj dS on the diagonal.
@@ -52,7 +48,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
         e2nI         (:,1) uint32 { mustBeFinite }
         triangles    (:,1) uint32 { mustBePositive }
         triA         (:,1) double { mustBeFinite }
-        eA           (:,1) double { mustBeNonNan }
         kwargs.onDC  (1,1) double { mustBeFinite } = 1 / 6
         kwargs.offDC (1,1) double { mustBeFinite } = 1 / 12
     end
@@ -71,7 +66,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
         Zden = conj ( impedances ) .* impedances ;
     end
 
-    Zcoeff = Znum ./ Zden ./ eA ;
+    Zcoeff = Znum ./ Zden ./ eN ;
 
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
     % coefficients.
