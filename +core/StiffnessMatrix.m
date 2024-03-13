@@ -189,6 +189,94 @@ classdef StiffnessMatrix
 
         end % function
 
+        function out = lt (a,b)
+        %
+        % out = lt (a,b)
+        %
+        % Implements the < operator for this class.
+        %
+
+            out = double (a) < double (b) ;
+
+        end % function
+
+        function out = gt (a,b)
+        %
+        % out = gt (a,b)
+        %
+        % Implements the > operator for this class.
+        %
+
+            out = double (a) > double (b) ;
+
+        end % function
+
+        function out = le (a,b)
+        %
+        % out = le (a,b)
+        %
+        % Implements the <= operator for this class.
+        %
+
+            out = double (a) <= double (b) ;
+
+        end % function
+
+        function out = ge (a,b)
+        %
+        % out = ge (a,b)
+        %
+        % Implements the >= operator for this class.
+        %
+
+            out = double (a) >= double (b) ;
+
+        end % function
+
+        function out = eq (a,b)
+        %
+        % out = eq (a,b)
+        %
+        % Implements the == operator for this class.
+        %
+
+            out = double (a) == double (b) ;
+
+        end % function
+
+        function out = and (a,b)
+        %
+        % out = and (a,b)
+        %
+        % Implements the & operator for this class.
+        %
+
+            out = double (a) & double (b) ;
+
+        end % function
+
+        function out = or (a,b)
+        %
+        % out = or (a,b)
+        %
+        % Implements the | operator for this class.
+        %
+
+            out = double (a) | double (b) ;
+
+        end % function
+
+        function out = not (self)
+        %
+        % out = not (a,b)
+        %
+        % Implements the ~ operator for this class.
+        %
+
+            out = ~ self.data ;
+
+        end % function
+
     end % methods
 
     methods (Static)
