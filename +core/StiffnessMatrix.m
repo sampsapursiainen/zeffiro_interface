@@ -1,5 +1,3 @@
-
-
 classdef StiffnessMatrix
 %
 % StiffnessMatrix
@@ -7,8 +5,7 @@ classdef StiffnessMatrix
 % Defines the structure of a stiffness matrix.
 %
     properties
-        realPart (:,:) double { mustBeFinite } = sparse ([]) % The sparse real part of this stiffness matrix.
-        imagPart (:,:) double { mustBeFinite } = sparse ([]) % The sparse imaginary part of this stiffness matrix.
+        data (:,:) double { mustBeFinite } = sparse ([]) % Contains the numerical data related to this matrix.
     end
 
     methods
@@ -24,11 +21,10 @@ classdef StiffnessMatrix
         %
 
             arguments
-                kwargs.realPart = sparse ([])
-                kwargs.imagPart = sparse ([])
+                kwargs.data = sparse ([])
             end
 
-            fns = string ( fieldnames ( kwargs ) )
+            fns = string ( fieldnames ( kwargs ) ) ;
 
             for fni = 1 : numel ( fns )
 
@@ -37,14 +33,6 @@ classdef StiffnessMatrix
                 self.(fn) = sparse ( kwargs.(fn) ) ;
 
             end % for
-
-            rsize = size (self.realPart) ;
-
-            isize = size (self.imagPart) ;
-
-            sizeIsValid = all ( rsize == isize ) || isempty (self.realPart) || isempty (self.imagPart) ;
-
-            assert ( sizeIsValid, "StiffnessMatrix: either the real and imaginary parts need to be the same size, or one of them needs to be empty. Now size (realPart) = (" + strjoin (string ( rsize ),",") + ") and size (imagPart) = (" + strjoin ( string ( isize ),",") + ")." )
 
         end % function
 
@@ -55,7 +43,7 @@ classdef StiffnessMatrix
         % Returns the real part of this stiffness matrix.
         %
 
-            out = self.realPart ;
+            out = real ( self.data ) ;
 
         end % function
 
@@ -67,7 +55,7 @@ classdef StiffnessMatrix
         % Returns the imaginary part of this stiffness matrix.
         %
 
-            out = self.imagPart ;
+            out = imag ( self.data ) ;
 
         end % function
 
@@ -78,7 +66,7 @@ classdef StiffnessMatrix
         % Returns self as a sparse (complex-valued) matrix of doubles.
         %
 
-            out = self.realPart + i * self.imagPart ;
+            out = self.data ;
 
         end % function
 
@@ -104,11 +92,7 @@ classdef StiffnessMatrix
         % Implements unary plus for this class.
         %
 
-            rself = real (self) ;
-
-            iself = imag (self) ;
-
-            out = core.StiffnessMatrix.fromDouble ( + rself + iself ) ;
+            out = self ;
 
         end % function
 
@@ -134,11 +118,74 @@ classdef StiffnessMatrix
         % Implements unary minus or negation for this class.
         %
 
-            rself = real (self) ;
+            out = core.StiffnessMatrix.fromDouble ( - self.data ) ;
 
-            iself = imag (self) ;
+        end % function
 
-            out = core.StiffnessMatrix.fromDouble ( - rself - iself ) ;
+        function out = times (left, right)
+        %
+        % out = times (left, right)
+        %
+        % Imlements elementwise multiplication for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl .* dr ) ;
+
+        end % function
+
+        function out = mtimes (left, right)
+        %
+        % out = mtimes (left, right)
+        %
+        % Imlements matrix multiplication for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl * dr ) ;
+
+        end % function
+
+        function self = transpose (self)
+        %
+        % self = transpose (self)
+        %
+        % Implements traspose for this class.
+        %
+
+            self.data = transpose ( self.data ) ;
+
+        end % function
+
+        function self = ctranspose (self)
+        %
+        % self = ctranspose (self)
+        %
+        % Implements conjugate transpose for this class.
+        %
+
+            self.data = ctranspose (self.data) ;
+
+        end % function
+
+        function out = power ( left, right )
+        %
+        % out = power ( left, right )
+        %
+        % Implements elementwise poiwer for this class.
+        %
+
+            dl = double ( left ) ;
+
+            dr = double ( right ) ;
+
+            out = core.StiffnessMatrix.fromDouble ( dl .^ dr ) ;
 
         end % function
 
@@ -157,7 +204,7 @@ classdef StiffnessMatrix
                 array (:,:) double { mustBeFinite }
             end
 
-            self = core.StiffnessMatrix ( realPart=real(array), imagPart=imag(array) )
+            self = core.StiffnessMatrix ( data=array ) ;
 
         end % function
 
