@@ -23,6 +23,7 @@ function C = voltageMat ( Znum, impedances )
 %
 
     arguments
+        Znum (:,1) double { mustBeNonNan }
         impedances (:,1) double { mustBeNonNan }
     end
 
