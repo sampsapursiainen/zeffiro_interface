@@ -8,7 +8,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 %
 %   [ A B ; B' C ] * [ u v ] = [ x y ]
 %
-% Also returns the Schur complement S of T.
+% Also returns the Schur complement S of A.
 %
 % Input:
 %
@@ -116,7 +116,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         tolerances = kwargs.tolerances ;
     end
 
-    % Start generating T column by column.
+    % Start generating T column by column by inverting A against B.
 
     for i = 1 : n_of_electrodes
 
@@ -126,45 +126,17 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         x (:) = 0 ;
 
-        norm_b = norm (b);
-
-        r (:) = b (kwargs.permutation);
-
-        p (:) = r;
-
-        m = 0 ;
+        b (:) = b (kwargs.permutation) ;
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        while ( norm(r,2) / norm_b > tolerance) && (m < kwargs.maxiters)
+        x (:) = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=kwargs.preconditioner ) ;
 
-            a = A * p;
-            a_dot_p = sum ( conj (a) .* p ) ;
-            aux_val = sum ( conj (r) .* p ) ;
-            lambda = aux_val ./ a_dot_p ;
-            x (:) = x + lambda * p ;
-            r (:) = r - lambda * a ;
-            inv_M_r = kwargs.preconditioner .*  r ;
-            aux_val = sum ( conj (inv_M_r) .* a ) ;
-            gamma = aux_val ./ a_dot_p ;
-            p (:) = inv_M_r - gamma * p ;
-            m = m + 1 ;
+        x (:) = x (invperm) ;
 
-        end % while
-
-        relativeResidual = norm (r) / norm_b ;
-
-        r (:) = x (invperm) ;
-
-        x = r;
-
-        T (:,i) = x;
+        T (:,i) = x ;
 
         S (:,i) = C (:,i) - B' * x ;
-
-        if tolerance < relativeResidual
-            error('PCG iteration did not converge.') ;
-        end
 
     end % for
 
