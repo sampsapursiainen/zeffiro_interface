@@ -8,7 +8,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 %
 % - tolerance
 %
-%   The numerical tolerance of the solver.
+%   The numerical tolerance of the solver relative to the norm of b.
 %
 % - preconditioner
 %
@@ -37,6 +37,8 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
     pos = startPoint ;
 
+    bnorm = vecnorm (b) ;
+
     for ii = 1 : Asize
 
         % Compute values for next round.
@@ -49,7 +51,9 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         resNorm = vecnorm ( nextResidual ) ;
 
-        if resNorm <= kwargs.tolerance
+        relNorm = resNorm / bnorm ;
+
+        if relNorm <= kwargs.tolerance
 
             return
 
