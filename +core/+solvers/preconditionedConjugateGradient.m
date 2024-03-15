@@ -75,7 +75,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         precResidual = precNextResidual ;
 
-    end % while
+    end % for
 
     error ( "The preconditioned conjugate gradient iteration did not converge." )
 
