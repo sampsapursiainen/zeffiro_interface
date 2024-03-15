@@ -42,11 +42,11 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 %
 
     arguments
-        A            (:,:) sparse { mustBeFinite }
+        A            (:,:) double { mustBeFinite }
         Znum         (:,1) double { mustBeNonNan }
         impedances   (:,1) double { mustBeNonNan }
         e2nI         (:,1) uint32 { mustBeFinite }
-        triangles    (:,1) uint32 { mustBePositive }
+        triangles    (3,:) uint32 { mustBePositive }
         triA         (:,1) double { mustBeFinite }
         kwargs.onDC  (1,1) double { mustBeFinite } = 1 / 6
         kwargs.offDC (1,1) double { mustBeFinite } = 1 / 12
