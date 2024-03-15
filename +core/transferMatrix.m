@@ -97,24 +97,22 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
     b = zeros ( n_of_fem_nodes, 1 ) ;
     x = zeros ( n_of_fem_nodes , 1 ) ;
-    r = b (kwargs.permutation);
-    p = r ;
+
+    tolerances = kwargs.tolerances ;
+
+    if isscalar (tolerances)
+        tolerances = tolerances * ones ( n_of_electrodes, 1 ) ;
+    end
+
+    preconditioner = kwargs.preconditioner ;
 
     if kwargs.useGPU && gpuDeviceCount("available") > 0
         b = gpuArray (b) ;
         x = gpuArray (x) ;
-        r = gpuArray (r) ;
-        p = gpuArray (p) ;
         A = gpuArray (A) ;
+        tolerances = gpuArray (tolerances) ;
+        preconditioner = gpuArray (preconditioner) ;
     end % if
-
-    % Initialize per-column tolerances.
-
-    if isscalar (kwargs.tolerances)
-        tolerances = kwargs.tolerances * ones ( n_of_electrodes, 1 ) ;
-    else
-        tolerances = kwargs.tolerances ;
-    end
 
     % Start generating T column by column by inverting A against B.
 
@@ -130,7 +128,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        x (:) = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=kwargs.preconditioner ) ;
+        x (:) = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner ) ;
 
         x (:) = x (invperm) ;
 
