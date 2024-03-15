@@ -19,8 +19,8 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         A                     (:,:)
         b                     (:,1)
         startPoint            (:,1)
-        kwargs.tolerance      (1,1) double { mustBePositive } = 1e-5
-        kwargs.preconditioner (:,1) double = 1 ./ full ( diag ( A ) )
+        kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
+        kwargs.preconditioner (:,1) = 1 ./ full ( diag ( A ) )
     end
 
     Asize = size ( A, 1 ) ;
@@ -43,11 +43,13 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         % Compute values for next round.
 
-        stepSize = ( residual' * precResidual ) / ( stepDir' * A * stepDir ) ;
+        Ad = A * stepDir ;
+
+        stepSize = dot ( residual, precResidual ) / dot ( stepDir, Ad ) ;
 
         nextPos = pos + stepSize * stepDir ;
 
-        nextResidual = residual - stepSize * A * stepDir ;
+        nextResidual = residual - stepSize * Ad ;
 
         resNorm = vecnorm ( nextResidual ) ;
 
@@ -61,7 +63,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         precNextResidual = kwargs.preconditioner .* nextResidual ;
 
-        nextStepSize = ( nextResidual' * precNextResidual ) / ( residual' * precResidual ) ;
+        nextStepSize = dot ( nextResidual, precNextResidual ) / dot ( residual, precResidual ) ;
 
         % Update current values for use in the next round.
 
