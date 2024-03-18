@@ -1,4 +1,4 @@
-function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
+function pos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 %
 % solution = preconditionedConjugateGradient (A, b, start_point, kwargs)
 %
@@ -47,7 +47,7 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
         stepSize = dot ( residual, precResidual ) / dot ( stepDir, Ad ) ;
 
-        nextPos = pos + stepSize * stepDir ;
+        pos = pos + stepSize * stepDir ;
 
         nextResidual = residual - stepSize * Ad ;
 
@@ -68,8 +68,6 @@ function nextPos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         % Update current values for use in the next round.
 
         stepDir = precNextResidual + nextStepSize * stepDir ;
-
-        pos = nextPos ;
 
         residual = nextResidual ;
 
