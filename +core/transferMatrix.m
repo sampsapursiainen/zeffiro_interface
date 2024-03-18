@@ -104,7 +104,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         tolerances = tolerances * ones ( n_of_electrodes, 1 ) ;
     end
 
-    preconditioner = kwargs.preconditioner (permutation) ;
+    preconditioner = kwargs.preconditioner (kwargs.permutation) ;
 
     if kwargs.useGPU && gpuDeviceCount("available") > 0
         b = gpuArray (b) ;
