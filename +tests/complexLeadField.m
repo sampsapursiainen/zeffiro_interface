@@ -92,4 +92,8 @@ C = [ reC, zeromat ; zeromat, imC ];
 
 disp("Computing transfer matrices for real and imaginary parts. This will take a (long) while.")
 
-%transM = core.transferMatrix(A,B,C,tolerances=1e-5);
+% [ transM, schurC ] = core.transferMatrix(A,B,C,tolerances=1e-5);
+
+disp("Computing lead field as the product of Schur complement and transpose of transfer matrix…")
+
+% L = schurC * transpose ( transM )
