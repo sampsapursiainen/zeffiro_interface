@@ -90,10 +90,18 @@ zeromat = spalloc ( Csize, Csize, 0 ) ;
 
 C = [ reC, zeromat ; zeromat, imC ];
 
-disp("Computing transfer matrices for real and imaginary parts. This will take a (long) while.")
+disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-% [ transM, schurC ] = core.transferMatrix(A,B,C,tolerances=1e-5);
+[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-5) ;
 
-disp("Computing lead field as the product of Schur complement and transpose of transfer matrix…")
+disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-% L = schurC * transpose ( transM )
+[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-5) ;
+
+disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
+
+reL = reSC * transpose ( reTM ) ;
+
+disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
+
+imL = imSC * transpose ( imTM ) ;
