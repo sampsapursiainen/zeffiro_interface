@@ -1,5 +1,7 @@
 clc
 
+profile on
+
 disp("Extracting data from zef…")
 
 N = zef.nodes;
@@ -8,7 +10,7 @@ T = zef.tetra;
 
 S = zef.sensors(:,1:3)';
 
-sigma = zef.sigma(:,1);
+sigma = zef.sigma(:,1) + 1i ;
 
 disp("Computing surface triangles of mesh…")
 
@@ -32,7 +34,7 @@ disp("Computing surface triangle areas…")
 
 disp("Initializing impedances for sensors…")
 
-Z = ones ( 1, size (S,2) );
+Z = ones ( 1, size (S,2) ) + 1i ;
 
 reZ = real (Z) ;
 
@@ -105,3 +107,5 @@ reL = reSC * transpose ( reTM ) ;
 disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
 
 imL = imSC * transpose ( imTM ) ;
+
+profile viewer
