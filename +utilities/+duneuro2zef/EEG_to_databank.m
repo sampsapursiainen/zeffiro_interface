@@ -1,3 +1,3 @@
-zef_dataBank_add_data_item('custom',[],'EEG');
-zef_dataBank_add_data_item('data','EEG','EEG measurements');
-zef_dataBank_add_data_item('leadfield','EEG','EEG leadfield');
+zef = zef_dataBank_add_data_item(zef,'custom',[],'EEG');
+zef = zef_dataBank_add_data_item(zef,'data','EEG','EEG measurements');
+zef = zef_dataBank_add_data_item(zef,'leadfield','EEG','EEG leadfield');
