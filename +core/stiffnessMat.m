@@ -35,6 +35,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     N = size(nodes,1);
 
     reA = spalloc(N,N,0);
+    imA = spalloc(N,N,0) ;
 
     n_of_tetra_faces = 4;
 
@@ -53,11 +54,9 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     if tensorIsNotReal
         imag_integrand = zeros ( 1, size ( tetra, 1 ) ) ;
         imag_tensor = imag ( tensor ) ;
-        imA = spalloc(N,N,0) ;
     else
         imag_integrand = [] ;
         imag_tensor = [] ;
-        imA = spalloc(0,0,0) ;
     end
 
     % Start integration.
