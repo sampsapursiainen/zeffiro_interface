@@ -2,6 +2,7 @@ function preconditionedConjugateGradient(kwargs)
 
     arguments
         kwargs.testTol (1,1) double { mustBePositive } = 1e-6
+        kwargs.pcgTol (1,1) double { mustBePositive } = 1e-5
         kwargs.testSize (1,1) double { mustBePositive, mustBeInteger } = 10
     end
 
@@ -13,10 +14,12 @@ function preconditionedConjugateGradient(kwargs)
 
     x0 = zeros (kwargs.testSize,1) ;
 
-    pcgx = core.solvers.preconditionedConjugateGradient (testA,testb,x0, tolerance=kwargs.testTol) ;
+    [ pcgx, relResNorm, iters ] = core.solvers.preconditionedConjugateGradient (testA, testb, x0, tolerance=kwargs.pcgTol) ;
 
-    diffmaxnorm = max ( vecnorm (pcgx - testx, Inf) ) ;
+    infnorm = vecnorm (pcgx - testx, Inf) ;
 
-    disp ("PCG iteration converged with infimum norm " + diffmaxnorm)
+    assert ( infnorm <= kwargs.testTol, "PCG iteration did not converge after the theoretical maximum of " + iters + " iterations. The relative residual norm was " + relResNorm ) ;
+
+    disp ("PCG iteration converged with infinity norm " + infnorm) ;
 
 end

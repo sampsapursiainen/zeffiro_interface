@@ -128,7 +128,13 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        x (:) = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner ) ;
+        [ x (:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner ) ;
+
+        if relResNorm > tolerance
+
+            error ( "PCG iteration did not converge after the theoretical maximum number of iterations " + iters + ". The relative residual norm was " + relResNorm + "." ) ;
+
+        end
 
         x (:) = x (invperm) ;
 
