@@ -1,8 +1,11 @@
-function pos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
+function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 %
-% solution = preconditionedConjugateGradient (A, b, start_point, kwargs)
+% [ solution, relResNorm, ii ] = preconditionedConjugateGradient (A, b, start_point, kwargs)
 %
-% Solves the linear system Ax = b for x using preconditioned conjugate gradient method.
+% Solves the linear system Ax = b for x using preconditioned conjugate gradient
+% method. Returns the approximate solution, in addition to the relative
+% residual norm at the given point, and the number of iterations it took to
+% reach the solution.
 %
 % kwargs:
 %
@@ -41,6 +44,18 @@ function pos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
 
     for ii = 1 : Asize
 
+        % Check for convergence.
+
+        resNorm = vecnorm ( residual ) ;
+
+        relResNorm = resNorm / bnorm ;
+
+        if relResNorm <= kwargs.tolerance
+
+            return
+
+        end % if
+
         % Compute values for next round.
 
         Ad = A * stepDir ;
@@ -50,16 +65,6 @@ function pos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         pos = pos + stepSize * stepDir ;
 
         nextResidual = residual - stepSize * Ad ;
-
-        resNorm = vecnorm ( nextResidual ) ;
-
-        relNorm = resNorm / bnorm ;
-
-        if relNorm <= kwargs.tolerance
-
-            return
-
-        end % if
 
         precNextResidual = kwargs.preconditioner .* nextResidual ;
 
@@ -74,7 +79,5 @@ function pos = preconditionedConjugateGradient (A, b, startPoint, kwargs)
         precResidual = precNextResidual ;
 
     end % for
-
-    error ( "The preconditioned conjugate gradient iteration did not converge." )
 
 end % function
