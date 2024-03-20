@@ -1,4 +1,4 @@
-function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t2nI, acI, params)
+function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, acI, params)
 %
 % L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t2nI, params)
 %
@@ -69,74 +69,61 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, triA, s2nI, t
         sigma     (:,1) double                 { mustBeNonNan mustBeFinite }
         sensors   (:,1)                        { mustBeA(sensors, "core.Sensor") }
         modality  (1,1) core.LeadFieldModality
-        triA      (:,1) double                 { mustBeFinite, mustBePositive }
-        s2nI      (:,1) double                 { mustBeInteger, mustBePositive }
-        triangles (3,:) double                 { mustBeInteger, mustBePositive }
         acI       (:,1) double                 { mustBeInteger, mustBePositive }
         params    (1,1) core.LeadFieldParams
     end
 
     import core.LeadFieldModality
 
-    % Compute volumes of the tetrahedra.
+    disp("Computing surface triangles of mesh…")
 
-    tetraV = core.tetraVolume(nodes, tetra, true);
+    [ surfTri,~ ] = core.tetraSurfaceTriangles ( tetra,1:size(tetra,1) ) ;
 
-    % Compute stiffness matrix.
+    surfTri = transpose ( surfTri ) ;
 
-    [realA, imagA] = core.stiffnessMat ( nodes, tetra, tetraV, sigma ) ;
+    disp ("Indexing surface nodes…")
+
+    surfN = transpose ( nodes (surfTri,:) ) ;
+
+    disp ("Attaching sensors to surface nodes in a global reference…")
+
+    [ ~, e2nI ] = core.attachSensors(sensors.positions',surfN,[]) ;
+
+    s2nI = surfTri (e2nI) ;
+
+    disp ("Computing surface triangle areas…")
+
+    [ triA, ~ ] = core.triangleAreas(nodes',surfTri);
+
+    disp("Computing volumes of tetra…")
+
+    tetV = core.tetraVolume (nodes,tetra,true) ;
+
+    disp("Computing stiffness matrix components reA and imA…")
+
+    [ reA, imA ] = core.stiffnessMat(nodes,tetra,tetV,sigma);
 
     % Compute uninterpolated lead field.
 
-    if modality == LeadFieldModality.EEG && isreal ( sigma )
+    if modality == LeadFieldModality.EEG
 
-        realL = core.eegLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = [] ;
-
-    elseif modality == LeadFieldModality.EEG
-
-        realL = core.megLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = core.megLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, imagA ) ;
-
-    elseif modality == LeadFieldModality.MEG && isreal ( sigma )
-
-        realL = core.megLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = [] ;
+        L = core.eegLeadField ( nodes, surfTri, sensors, triA, s2nI, reA, imA, pcgTol=params.solver_tolerance ) ;
 
     elseif modality == LeadFieldModality.MEG
 
-        realL = core.megLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = core.megLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, imagA ) ;
-
-    elseif modality == LeadFieldModality.gMEG && isreal ( sigma )
-
-        realL = core.eegLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = [] ;
+        error ("MEG lead field is currently unimplemented in this module.")
 
     elseif modality == LeadFieldModality.gMEG
 
-        realL = core.gMegLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = core.gMegLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, imagA ) ;
-
-    elseif modality == LeadFieldModality.tES && isreal ( sigma )
-
-        realL = core.tesLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = [] ;
+        error ("gMEG lead field is currently unimplemented in this module.")
 
     elseif modality == LeadFieldModality.tES
 
-        realL = core.tesLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = core.tesLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, imagA ) ;
+        error ("tES lead field is currently unimplemented in this module.")
 
     elseif modality == LeadFieldModality.EIT && isreal ( sigma )
 
-        realL = core.eitLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = [] ;
-
-    elseif modality == LeadFieldModality.EIT
-
-        realL = core.eitLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, realA ) ;
-        imagL = core.eitLeadField ( nodes, tetra, sensors, triA, s2nI, t2nI, imagA ) ;
+        error ("EIT lead field is currently unimplemented in this module.")
 
     else
 
