@@ -29,6 +29,8 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     Asize = size ( A, 1 ) ;
 
+    maxiters = min ( Asize, kwargs.maxiters ) ;
+
     assert ( numel ( kwargs.preconditioner ) == Asize, "The size of the given preconditioner needs to match the size of A." )
 
     % Set initial values for the iteration, including the preconditioned step direction.
@@ -43,7 +45,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     bnorm = vecnorm (b) ;
 
-    for ii = 1 : kwargs.maxiters
+    for ii = 1 : maxiters
 
         % Check for convergence.
 
