@@ -9,13 +9,19 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 %
 % kwargs:
 %
-% - tolerance
+% - tolerance = 1e-5
 %
 %   The numerical tolerance of the solver relative to the norm of b.
 %
-% - preconditioner
+% - preconditioner = Jacobi
 %
 %   A preconditioner matrix. Needs to be positive definite and symmetric.
+%
+% - maxiters = 1.5 * size (A)
+%
+%   The maximum number of PCG iterations to be performed. Due to possible
+%   numerical inaccuracies, this defaults to a size that is larger than the
+%   theoretical number of maximum iterations, which is the size of A.
 %
 
     arguments
@@ -24,12 +30,10 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
         startPoint            (:,1)
         kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
         kwargs.preconditioner (:,1) = 1 ./ full ( diag ( A ) )
-        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = size (A,1)
+        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
     end
 
     Asize = size ( A, 1 ) ;
-
-    maxiters = min ( Asize, kwargs.maxiters ) ;
 
     assert ( numel ( kwargs.preconditioner ) == Asize, "The size of the given preconditioner needs to match the size of A." )
 
@@ -45,7 +49,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     bnorm = vecnorm (b) ;
 
-    for ii = 1 : maxiters
+    for ii = 1 : kwargs.maxiters
 
         % Check for convergence.
 
