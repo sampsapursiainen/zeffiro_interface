@@ -1,6 +1,6 @@
-function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params )
+function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, imagA, kwargs )
 %
-% L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params )
+% L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, imagA, kwargs )
 %
 % Computes an uninterpolated elecroencephalography lead field matrix.
 %
@@ -26,15 +26,17 @@ function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params 
 %
 %   An index set that maps electrodes to nodes.
 %
-% - A
+% - realA
 %
-%   The stiffness matrix related to the finite element mesh, before
-%   method-specific boundary conditions have been applied to it.
+%   Real part of a stiffness matrix.
 %
-% - params
+% - imagA
 %
-%   Parameters related to the numerical methods of the lead field construction.
-%   See core.LeadFieldParams for details.
+%   Imaginary part of a stiffness matrix.
+%
+% - kwargs.pcgTol
+%
+%   Relative residual tolerance of the PCG solver that is used to construct a transfer matrix.
 %
 % Outputs:
 %
@@ -46,66 +48,72 @@ function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, A, params 
 %   Z.
 %
     arguments
-        nodes      (:,3) double { mustBeFinite }
-        triangles  (3,:) uint32 { mustBePositive }
-        electrodes (:,1) core.ElectrodeSet
-        triA       (:,1) double { mustBePositive }
-        e2nI       (:,1) double { mustBePositive, mustBeInteger }
-        A          (:,:) double { mustBeFinite }
-        params     (1,1) core.LeadFieldParams = core.LeadFieldParams
+        nodes         (:,3) double { mustBeFinite }
+        triangles     (3,:) uint32 { mustBePositive }
+        electrodes    (:,1) core.ElectrodeSet
+        triA          (:,1) double { mustBePositive }
+        e2nI          (:,1) double { mustBePositive, mustBeInteger }
+        realA         (:,:) double { mustBeFinite }
+        imagA         (:,:) double { mustBeFinite }
+        kwargs.pcgTol (1,1) core.LeadFieldParams = 1e-5
     end % arguments
 
-    % Compute connection between electrodes and nodes.
+    disp ("Initializing impedances for sensors…")
+
+    Z = electrodes.impedances ;
+
+    reZ = real (Z) ;
+
+    imZ = imag (Z) ;
+
+    disp ("Applying boundary conditions to realA…")
+
+    realA = core.stiffMatBoundaryConditions ( realA, reZ, Z, s2nI, surfTri, triA ) ;
+
+    if not ( isreal ( Z ) )
+
+        disp ("Applying boundary conditions to imagA…")
+
+        imagA = core.stiffMatBoundaryConditions ( imagA, imZ, Z, s2nI, surfTri, triA ) ;
+
+    end
+
+    disp ("Compute connection between electrodes and nodes.")
 
     nN = size ( nodes, 1 ) ;
 
-    realB = core.potentialMat ( nN, Znum, real ( impedances ), triA, e2nI, triangles ) ;
+    realB = core.potentialMat ( nN, reZ, Z, triA, e2nI, triangles ) ;
 
-    if isreal ( electrodes.impedances )
+    imagB = core.potentialMat ( nN, imZ, Z, triA, e2nI, triangles ) ;
 
-        imagB = sparse ([]) ;
+    disp ("Compute voltages between electrodes.")
 
-    else
+    realC = core.voltageMat ( reZ, Z ) ;
 
-        imagB = core.potentialMat ( nN, Znum, imag ( impedances ), triA, e2nI, triangles ) ;
-
-    end
-
-    % Compute voltages between electrodes.
-
-    realC = core.voltageMat ( real ( impedances ), impedances ) ;
-
-    if isreal ( electrodes.impedances )
-        imagC = sparse ([]) ;
-    else
-        imagC = core.voltageMat ( imag ( impedances ), impedances ) ;
-    end
-
-    % Modify stiffness matrix A at the active electrodes via the related boundary conditions.
-
-    A = core.stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs ) ;
+    imagC = core.voltageMat ( imZ, Z ) ;
 
     % Compute transfer matrix T, a.k.a. the uninterpolated lead field.
 
     [ realT, realSC ] = core.transferMatrix( ...
-        real (A) , ...
+        realA , ...
         realB , ...
         realC , ...
-        tolerances = min ( real ( electrodes.impedances ), 1 ) * params.solver_tolerance ...
+        tolerances = min ( reZ, 1 ) * kwargs.pcgTol ...
     ) ;
 
-    if ~ isreal ( electrodes.impedances )
+    if not ( isreal ( Z ) )
 
-        [imagT, imagSC, ~] = core.transferMatrix( ...
-            imag (A) , ...
+        [ imagT, imagSC ] = core.transferMatrix( ...
+            imagA , ...
             imagB , ...
             imagC , ...
-            tolerances = min ( imag ( electrodes.impedances ), 1 ) * params.solver_tolerance ...
+            tolerances = min ( imZ, 1 ) * kwargs.pcgTol ...
         ) ;
 
     else
 
         imagT = [] ;
+
         imagSC = [] ;
 
     end
