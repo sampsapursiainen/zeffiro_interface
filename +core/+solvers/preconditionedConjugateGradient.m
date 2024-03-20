@@ -24,6 +24,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
         startPoint            (:,1)
         kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
         kwargs.preconditioner (:,1) = 1 ./ full ( diag ( A ) )
+        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = size (A,1)
     end
 
     Asize = size ( A, 1 ) ;
@@ -42,7 +43,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     bnorm = vecnorm (b) ;
 
-    for ii = 1 : Asize
+    for ii = 1 : kwargs.maxiters
 
         % Check for convergence.
 
