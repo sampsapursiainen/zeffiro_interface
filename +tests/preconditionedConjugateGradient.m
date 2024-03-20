@@ -1,7 +1,7 @@
 function preconditionedConjugateGradient(kwargs)
 
     arguments
-        kwargs.testTol (1,1) double { mustBePositive } = 1e-6
+        kwargs.testTol (1,1) double { mustBePositive } = 1e-2
         kwargs.pcgTol (1,1) double { mustBePositive } = 1e-5
         kwargs.testSize (1,1) double { mustBePositive, mustBeInteger } = 10
     end
