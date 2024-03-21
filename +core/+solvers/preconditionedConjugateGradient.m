@@ -59,7 +59,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     end
 
-    precResidual = applyP (kwargs.preconditioner, residual) ;
+    precResidual = applyP (P, residual) ;
 
     stepDir = precResidual ;
 
@@ -91,7 +91,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
         nextResidual = residual - stepSize * Ad ;
 
-        precNextResidual = applyP ( kwargs.preconditioner, nextResidual ) ;
+        precNextResidual = applyP ( P, nextResidual ) ;
 
         nextStepSize = dot ( nextResidual, precNextResidual ) / dot ( residual, precResidual ) ;
 
