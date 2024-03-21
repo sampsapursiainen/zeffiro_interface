@@ -13,7 +13,7 @@ function prec = ssor ( A, kwargs )
 %
 
     arguments
-        A (:,:)
+        A (:,:) { mustBeFinite }
         kwargs.coeff (1,1) double { mustBeInRange(kwargs.coeff, 0, 2) } = 1
     end
 
@@ -23,7 +23,7 @@ function prec = ssor ( A, kwargs )
 
     D = diag ( diag ( A ) ) ;
 
-    invD = D \ eye ( size ( D ) ) ;
+    invD = 1 ./ D ;
 
     coeff = kwargs.coeff ;
 
