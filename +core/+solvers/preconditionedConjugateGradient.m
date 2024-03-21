@@ -45,13 +45,13 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     % Choose method of applying the preconditioner.
 
-    if ismatrix ( P )
-
-        applyP = @mtimes ;
-
-    elseif isvector ( P )
+    if isvector ( P )
 
         applyP = @times ;
+
+    elseif ismatrix ( P )
+
+        applyP = @mtimes ;
 
     else
 
