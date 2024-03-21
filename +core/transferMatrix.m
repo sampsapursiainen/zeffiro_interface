@@ -132,7 +132,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         if relResNorm > tolerance
 
-            error ( "PCG iteration did not converge after the theoretical maximum number of iterations " + iters + ". The relative residual norm was " + relResNorm + "." ) ;
+            error ( "PCG iteration did not converge after the theoretical maximum number of iterations " + iters + ". The relative residual norm was " + gather (relResNorm) + "." ) ;
 
         end
 
