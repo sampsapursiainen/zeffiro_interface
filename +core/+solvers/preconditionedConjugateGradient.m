@@ -29,19 +29,37 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
         b                     (:,1)
         startPoint            (:,1)
         kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
-        kwargs.preconditioner (:,1) = 1 ./ full ( diag ( A ) )
+        kwargs.preconditioner (:,:) = 1 ./ full ( diag ( A ) )
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
     end
 
     Asize = size ( A, 1 ) ;
 
-    assert ( numel ( kwargs.preconditioner ) == Asize, "The size of the given preconditioner needs to match the size of A." )
+    assert ( size ( kwargs.preconditioner, 1 ) == Asize, "The size of the given preconditioner needs to match the size of A." )
 
     % Set initial values for the iteration, including the preconditioned step direction.
 
     residual = b - A * startPoint ;
 
-    precResidual = kwargs.preconditioner .* residual ;
+    P = kwargs.preconditioner ;
+
+    % Choose method of applying the preconditioner.
+
+    if ismatrix ( P )
+
+        applyP = @mtimes ;
+
+    elseif isvector ( P )
+
+        applyP = @times ;
+
+    else
+
+        error ( "The given preconditioner needs to be a matrix or a vector of size A." )
+
+    end
+
+    precResidual = applyP (kwargs.preconditioner, residual) ;
 
     stepDir = precResidual ;
 
@@ -73,7 +91,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
         nextResidual = residual - stepSize * Ad ;
 
-        precNextResidual = kwargs.preconditioner .* nextResidual ;
+        precNextResidual = applyP ( kwargs.preconditioner, nextResidual ) ;
 
         nextStepSize = dot ( nextResidual, precNextResidual ) / dot ( residual, precResidual ) ;
 
