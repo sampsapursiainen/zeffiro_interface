@@ -66,11 +66,11 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         A (:,:) double { mustBeFinite }
         B (:,:) double { mustBeFinite }
         C (:,:) double { mustBeFinite }
-        kwargs.permutation (:,1) double { mustBeInteger, mustBePositive } = 1 : size (A,1)
+        kwargs.permutation    (:,1) double { mustBeInteger, mustBePositive } = 1 : size (A,1)
         kwargs.preconditioner (:,1) double = 1 ./ full ( diag ( A ) )
-        kwargs.tolerances (:,1) double { mustBePositive, mustBeFinite } = 1e-6
-        kwargs.useGPU (1,1) logical = true
-        kwargs.maxiters (1,1) uint32 { mustBePositive } = size(A,1)
+        kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
+        kwargs.useGPU         (1,1) logical = true
+        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.2 * size (A,1) )
     end
 
     % Preallocate output.
@@ -128,7 +128,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        [ x (:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner ) ;
+        [ x (:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner, maxiters=kwargs.maxiters ) ;
 
         if relResNorm > tolerance
 
