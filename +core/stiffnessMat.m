@@ -53,6 +53,12 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     if isvector (tensor)
 
+        % Make sure input is a row vector, so broadcasting works later down the line.
+
+        if ~ isrow (tensor)
+            tensor = transpose (tensor) ;
+        end
+
         tensor = cat ( 1, repmat (tensor,3,1), zeros (3,Ntet) ) ;
 
     elseif ismatrix (tensor)
