@@ -22,20 +22,49 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 %
 % - tensor
 %
-%   The conductivities of the tetrahedra.
+%   The conductivities of the tetrahedra. This can be a vector, if the
+%   conductivity is isotrophic (σxx = σyy = σzz) and constant across a
+%   tetrahedron. If conductivity is anisotrophic, then this needs to be a
+%   6 × Ntetra matrix, where each column contains the conductivity components
+%   σxx, σyy, σzz, σxy, σxz and σyz.
 %
 
     arguments
         nodes  (:,3) double { mustBeFinite }
         tetra  (:,4) double { mustBeFinite, mustBePositive, mustBeInteger }
         tetraV (1,:) double { mustBeFinite, mustBePositive }
-        tensor (:,1) double { mustBeNonNan }
+        tensor (:,:) double { mustBeFinite }
     end
 
-    N = size(nodes,1);
+    % Abbreviations of matrix sizes.
 
-    reA = spalloc(N,N,0);
-    imA = spalloc(N,N,0) ;
+    Nn = size (nodes,1) ;
+
+    Ntet = size (tetra,1) ;
+
+    Nten = size (tensor,2) ;
+
+    Ntenr = size (tensor,1) ;
+
+    % Check size compatibility and adjust tensor size, if conductivity is
+    % isotrphic across each tetrahedon.
+
+    assert ( Ntet == Nten, "The number of conductivities needs to match the number of tetrahedra." ) ;
+
+    if isvector (tensor)
+
+        tensor = cat ( 1, repmat (tensor,3,1), zeros (3,Ntet) ) ;
+
+    elseif ismatrix (tensor)
+
+        assert ( Ntenr == 6, "If given as a matrix, the input tensor needs to contain 6 rows, equal to the number of node combinations in a tetrahedron.")
+
+    end
+
+    % Preallocate output.
+
+    reA = spalloc (Nn,Nn,0) ;
+    imA = spalloc (Nn,Nn,0) ;
 
     n_of_tetra_faces = 4;
 
@@ -72,6 +101,8 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
             else
                 grad_2 = core.tetraVolumeGradient(nodes, tetra, j);
             end
+
+            % Go over the conductivity combinations in a possibly anisotrophic system.
 
             for k = 1 : 6
                 switch k
@@ -114,7 +145,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
             % Construct a part of 𝐴 by mapping the indices of the tetra to the
             % real integrand.
 
-            reA_part = sparse(tetra(:,i),tetra(:,j), real_integrand',N,N);
+            reA_part = sparse(tetra(:,i),tetra(:,j), real_integrand',Nn,Nn);
 
             % Sum the integrand to 𝐴 iteratively. A is symmetric, and hence we
             % operate differently if we are on the diagonal.
@@ -127,7 +158,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
             if tensorIsNotReal
 
-                imA_part = sparse(tetra(:,i),tetra(:,j), imag_integrand',N,N);
+                imA_part = sparse(tetra(:,i),tetra(:,j), imag_integrand',Nn,Nn);
 
                 if i == j
                     imA = imA + imA_part;
