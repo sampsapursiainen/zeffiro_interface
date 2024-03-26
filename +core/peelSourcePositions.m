@@ -76,8 +76,8 @@ non_surface_nodes = in_nodes(non_surface_node_inds,:);
 % rangesearch.
 
 non_surface_node_inds_too_near_to_surface = nearestPoints ( ...
-    surface_nodes, ...
-    non_surface_nodes, ...
+    surface_nodes', ...
+    non_surface_nodes', ...
     in_acceptable_depth_mm ...
 );
 
@@ -86,8 +86,8 @@ non_surface_node_inds_too_near_to_surface = non_surface_node_inds(non_surface_no
 % Also take into account surface nodes themselves. D'uh.
 
 surface_node_inds_too_near_to_surface = nearestPoints ( ...
-    surface_nodes, ...
-    surface_nodes, ...
+    surface_nodes', ...
+    surface_nodes', ...
     in_acceptable_depth_mm ...
 ) ;
 
@@ -130,15 +130,20 @@ function pI = nearestPoints ( points, neighbour_points, radius )
 %
 
     arguments
-        points (:,3) double { mustBeFinite }
-        neighbour_points (:, 3) double { mustBeFinite }
+        points (3,:) double { mustBeFinite }
+        neighbour_points (3, :) double { mustBeFinite }
         radius (1,1) double { mustBeReal, mustBeNonnegative }
     end
 
-    pI = rangesearch ( neighbour_points, points, radius ) ;
+    pI = false ( 1, size (neighbour_points, 2 ) ) ;
 
-    % Reshape and -size
+    % Go over reference points one at a time, or memory consumption might
+    % become ridonculous.
 
-    pI = unique ( [ pI{:} ]' ) ;
+    for ii = 1 : size (points, 2)
+        point = points (:,ii) ;
+        [~, pIii] = core.rangeSearch ( point, neighbour_points, radius ) ;
+        pI = pI | pIii ;
+    end
 
 end % function
