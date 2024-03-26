@@ -90,7 +90,7 @@ vertices_in_deep_nodes = ismember ( in_tetra, out_deep_node_inds ) ;
 
 vertex_row_sums = sum ( vertices_in_deep_nodes, 2 ) ;
 
-out_deep_tetra_inds = vertex_row_sums == 4 ;
+out_deep_tetra_inds = find ( vertex_row_sums == 4 ) ;
 
 out_deep_tetra = in_tetra(out_deep_tetra_inds, :);
 
