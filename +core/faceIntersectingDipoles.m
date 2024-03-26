@@ -154,8 +154,6 @@ stensil = sparse ( ...
     n_of_tetra ...
 );
 
-zef_waitbar(1,1, wb);
-
 end
 
 function face = tetra_face_opposite_to(node_ind)
