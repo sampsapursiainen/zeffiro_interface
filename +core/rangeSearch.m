@@ -62,7 +62,7 @@ function [nP, nPI] = rangeSearch (refSet,neighbourSet, range)
 
     % Find unique neighbour indices by collapsing the third dimension with any.
 
-    nPI = any ( dI,  3 ) ;
+    nPI = find ( any ( dI,  3 ) );
 
     % The get unique points from neighbour set.
 
