@@ -58,53 +58,30 @@ end
 % the indices generated here should reference the "global" set of input
 % nodes.
 
-volume_tetra = in_tetra(in_volume_inds, :);
+volume_tetra = in_tetra(in_volume_inds, :) ;
 
-volume_node_inds = unique(volume_tetra(:));
+volume_node_inds = unique (volume_tetra(:)) ;
 
 [ surface_triangles, ~ ] = core.tetraSurfaceTriangles ( in_tetra, in_volume_inds ) ;
 
-surface_node_inds = unique(surface_triangles);
+surface_node_inds = unique (surface_triangles) ;
 
-non_surface_node_inds = setdiff(volume_node_inds, surface_node_inds);
+surface_nodes = in_nodes (surface_node_inds,:) ;
 
-surface_nodes = in_nodes(surface_node_inds,:);
-
-non_surface_nodes = in_nodes(non_surface_node_inds,:);
+all_nodes = in_nodes (volume_node_inds ,:) ;
 
 % Find out non-surface nodes deep enough within the volume with
 % rangesearch.
 
-non_surface_node_inds_too_near_to_surface = nearestPoints ( ...
+deepNodeI = deepPointI ( ...
     surface_nodes', ...
-    non_surface_nodes', ...
-    in_acceptable_depth_mm ...
-);
-
-non_surface_node_inds_too_near_to_surface = non_surface_node_inds(non_surface_node_inds_too_near_to_surface);
-
-% Also take into account surface nodes themselves. D'uh.
-
-surface_node_inds_too_near_to_surface = nearestPoints ( ...
-    surface_nodes', ...
-    surface_nodes', ...
+    all_nodes', ...
     in_acceptable_depth_mm ...
 ) ;
 
-surface_node_inds_too_near_to_surface = surface_node_inds(surface_node_inds_too_near_to_surface);
+out_deep_node_inds = find ( deepNodeI ) ;
 
-node_inds_too_near_to_surface = union ( ...
-    non_surface_node_inds_too_near_to_surface, ...
-    surface_node_inds_too_near_to_surface ...
-);
-
-out_deep_node_inds = setdiff ( ...
-    volume_node_inds, ...
-    node_inds_too_near_to_surface, ...
-    'rows' ...
-);
-
-out_deep_nodes = in_nodes(out_deep_node_inds, :);
+out_deep_nodes = in_nodes ( deepNodeI, : ) ;
 
 % Find tetra in the volume which only contain acceptable (deep) nodes.
 % Acceptable tetra consist of 4 deep nodes.
@@ -113,7 +90,7 @@ vertices_in_deep_nodes = ismember ( in_tetra, out_deep_node_inds ) ;
 
 vertex_row_sums = sum ( vertices_in_deep_nodes, 2 ) ;
 
-out_deep_tetra_inds = find ( vertex_row_sums == 4 ) ;
+out_deep_tetra_inds = vertex_row_sums == 4 ;
 
 out_deep_tetra = in_tetra(out_deep_tetra_inds, :);
 
@@ -121,11 +98,11 @@ end % function
 
 %% Helper functions.
 
-function pI = nearestPoints ( points, neighbour_points, radius )
+function pI = deepPointI ( points, neighbour_points, radius )
 %
-% pI = nearestPoints ( points, neighbour_points, radius )
+% pI = deepPointI ( points, neighbour_points, radius )
 %
-% Finds the indices of the points in a neighbouring set, that are within a
+% Finds the indices of the points in a neighbouring set, that are deeper than a
 % given radius from the points of a "current" set.
 %
 
@@ -142,8 +119,15 @@ function pI = nearestPoints ( points, neighbour_points, radius )
 
     for ii = 1 : size (points, 2)
         point = points (:,ii) ;
+        % Find nodes that are deep enough.
         [~, pIii] = core.rangeSearch ( point, neighbour_points, radius ) ;
+        % Accumulate results into logial array with logical or.
         pI = pI | pIii ;
     end
+
+    % Flip the final logical array to produce the node indices that are
+    % actually deeper than the given radius from the surface.
+
+    pI = not ( pI ) ;
 
 end % function
