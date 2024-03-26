@@ -25,7 +25,7 @@ function [nP, nPI] = rangeSearch (refSet,neighbourSet, range)
     arguments
         refSet       (:,:) double { mustBeFinite }
         neighbourSet (:,:) double { mustBeFinite }
-        range        (1,1) double { mustBePositive, mustBeFinite }
+        range        (1,1) double { mustNonNegative, mustBeFinite }
     end
 
     % Get numbers of coordinates and points.
