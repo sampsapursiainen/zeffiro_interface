@@ -7,26 +7,33 @@ function [ ...
     in_nodes, ...
     in_tetra, ...
     in_volume_inds, ...
-    in_acceptable_depth_mm ...
+    acceptableDepth ...
 )
 %
-% [ out_deep_nodes, out_deep_node_inds, out_deep_tetra, out_deep_tetra_inds ] = peelSourcePositions ( in_nodes, in_tetra, in_volume_inds, in_acceptable_depth_mm )
+% [ out_deep_nodes, out_deep_node_inds, out_deep_tetra, out_deep_tetra_inds ] = peelSourcePositions ( in_nodes, in_tetra, in_volume_inds, acceptableDepth )
 %
 % Produces the nodes and tetra which are deep enough within a given volume, and
 % also their indices in the given global tetra and node data structures.
 %
 % Input:
 %
-% - in_nodes: finite elements nodes.
+% - in_nodes
 %
-% - in_tetra: finite element tetrahedra (quadruples of node indices)
-%   constructed from above nodes.
+%   Finite elements nodes.
 %
-% - in_volume_inds: the indices of the tetrahedra that form the volume
-%   under observation.
+% - in_tetra
 %
-% - in_acceptable_depth_mm: the depth in millimetres, within which the
-%   deep tetra are located.
+%   Finite element tetrahedra (quadruples of node indices) constructed from
+%   above nodes.
+%
+% - in_volume_inds
+%
+%   The indices of the tetrahedra that form the volume under observation.
+%
+% - acceptableDepth
+%
+%   The depth within which the deep tetra are located. This should probably be
+%   in the same units as the input node coordinates.
 %
 % Output:
 %
@@ -44,14 +51,15 @@ function [ ...
 %
 % - out_tetra_ind
 %
-%   The indices of the tetrahedra that are deep enough inside the given brain segment.
+%   The indices of the tetrahedra that are deep enough inside the given brain
+%   segment.
 %
 
 arguments
     in_nodes (:,3) double
     in_tetra (:,4) double { mustBeInteger, mustBePositive }
     in_volume_inds (:,1) double { mustBeInteger, mustBePositive }
-    in_acceptable_depth_mm (1,1) double { mustBeNonnegative }
+    acceptableDepth (1,1) double { mustBeNonnegative }
 end
 
 % Find out the boundary- and non-boundary nodes of the volume. Note that
@@ -76,7 +84,7 @@ all_nodes = in_nodes (volume_node_inds ,:) ;
 deepNodeI = deepPointI ( ...
     surface_nodes', ...
     all_nodes', ...
-    in_acceptable_depth_mm ...
+    acceptableDepth ...
 ) ;
 
 out_deep_node_inds = find ( deepNodeI ) ;
