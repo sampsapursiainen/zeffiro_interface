@@ -1,14 +1,16 @@
 clc
 
+profile off
+
 profile on
 
 disp("Extracting data from zef…")
 
-N = zef.nodes;
+N = zef.nodes / 1e3 ;
 
 T = zef.tetra;
 
-S = zef.sensors(:,1:3)';
+S = zef.sensors(:,1:3)' / 1e3 ;
 
 sigma = zef.sigma(:,1) + 1i ;
 
@@ -94,11 +96,11 @@ C = [ reC, zeromat ; zeromat, imC ];
 
 disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-5) ;
+[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-5,useGPU=true) ;
 
 disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-5) ;
+[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-5, useGPU=true) ;
 
 disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
 
@@ -107,5 +109,29 @@ reL = reSC * transpose ( reTM ) ;
 disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
 
 imL = imSC * transpose ( imTM ) ;
+
+%% Find tetrahedra where dipoles can be placed.
+
+disp ("Peeling active brain layers.")
+
+grayMatterI = zef.brain_ind ;
+
+[ ~, ~, ~, dtI ] = core.peelSourcePositions (N,T,grayMatterI,0) ;
+
+% %% Generate dipoles.
+%
+% disp ("Generating face-intersecting dipoles.")
+%
+% tic
+% [stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , dtI ) ;
+% toc
+%
+% disp ("Generating edgewise dipoles.")
+%
+% tic
+% [stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , dtI ) ;
+% toc
+%
+% %%
 
 profile viewer
