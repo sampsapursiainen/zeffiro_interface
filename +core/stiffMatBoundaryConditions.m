@@ -58,6 +58,11 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
     eN = numel ( impedances ) ;
 
+    % Preallocate vectors needed in constructing the boundary condition matrix
+    % in one sweep.
+
+    [Arows, Acols, Avals] = preallocateEntries (eN, e2nI, triangles) ;
+
     % Compute impedance coefficients.
 
     if isreal ( impedances )
@@ -69,7 +74,10 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
     Zcoeff = Znum ./ Zden ./ eN ;
 
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
-    % coefficients.
+    % coefficients. Cursor is used in saving indices to the preallocated
+    % vectors.
+
+    cursor = 1 ;
 
     for eI = 1 : eN
 
@@ -90,6 +98,10 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
         tnI = triangles (:,triI) ;
 
+        rangeLen = size (tnI,2) - 1 ;
+
+        range = cursor : cursor + rangeLen ;
+
         % Go over the combinations of basis functions ψi and ψj in the
         % triangles, or the combinations of vertices.
 
@@ -99,28 +111,90 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
                 % The rows and columns of A that are being modified.
 
-                Arows = tnI (ii,:) ;
+                Arows (range) = tnI (ii,:) ;
 
-                Acols = tnI (jj,:) ;
+                Acols (range) = tnI (jj,:) ;
 
                 if ii == jj
-                    Aentry = Zcoeff ( eI ) .* kwargs.onDC .* sumA ;
+                    Avals (range) = Zcoeff ( eI ) .* kwargs.onDC .* sumA ;
                 else
-                    Aentry = Zcoeff ( eI ) .* kwargs.offDC .* sumA ;
+                    Avals (range) = Zcoeff ( eI ) .* kwargs.offDC .* sumA ;
                 end
 
-                Add = sparse ( Arows, Acols, Aentry, nN, nN ) ;
+                % Add = sparse ( Arows, Acols, Aentry, nN, nN ) ;
 
-                A = A + Add ;
+                % A = A + Add ;
 
-                if ii ~= jj
-                    A = A + Add' ;
-                end
+                % if ii ~= jj
+                %     A = A + Add' ;
+                % end
+
+                cursor = cursor + rangeLen + 1 ;
+
+                range = cursor : cursor + rangeLen ;
 
             end % for jj
 
         end % for ii
 
     end % for eI
+
+    % Apply boundary conditions to A.
+
+    Addend = sparse ( Arows, Acols, Avals, nN, nN ) ;
+
+    A = A + Addend + transpose (Addend) ;
+
+end % function
+
+%% Helper functions
+
+function [Arows, Acols, Avals] = preallocateEntries (eN,e2nI,triangles)
+%
+% [Arows, Acols, Avals] = preallocateEntries (Ne,e2nI,triangles)
+%
+% Preallocates the required vectors needed in applying boundary conditions to
+% the given sparse stiffness matrix at once.
+%
+
+    vecsize = 0 ;
+
+    for eI = 1 : eN
+
+        % Find node index corresponding to current electrode.
+
+        nI = e2nI ( eI ) ;
+
+        % Find triangles that are touching this node.
+
+        triI = any ( ismember ( triangles, nI ), 1 ) ;
+
+        % Also get the specific node indices of the triangles for accessing
+        % groups of columns and rows of A later.
+
+        tnI = triangles (:,triI) ;
+
+        % Go over the combinations of basis functions ψi and ψj in the
+        % triangles, or the combinations of vertices.
+
+        for ii = 1 : 3
+
+            for jj = ii : 3
+
+                % The rows and columns of A that are being modified.
+
+                colnum = numel ( tnI (ii,:) ) ;
+
+                vecsize = vecsize + colnum ;
+
+            end % for jj
+
+        end % for ii
+
+    end % for eI
+
+    Acols = zeros (vecsize,1) ;
+    Arows = zeros (vecsize,1) ;
+    Avals = zeros (vecsize,1) ;
 
 end % function
