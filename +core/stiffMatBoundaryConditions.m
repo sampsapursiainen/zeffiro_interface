@@ -99,9 +99,9 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
                 % The rows and columns of A that are being modified.
 
-                Arows = tnI (:,ii) ;
+                Arows = tnI (ii,:) ;
 
-                Acols = tnI (:,jj) ;
+                Acols = tnI (jj,:) ;
 
                 if ii == jj
                     Aentry = Zcoeff ( eI ) .* kwargs.onDC .* sumA ;
