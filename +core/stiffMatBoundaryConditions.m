@@ -85,6 +85,11 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
         sumA = sum ( triA ( triI ) ) ;
 
+        % Also get the specific node indices of the triangles for accessing
+        % groups of columns and rows of A later.
+
+        tnI = triangles (:,triI) ;
+
         % Go over the combinations of basis functions ψi and ψj in the
         % triangles, or the combinations of vertices.
 
@@ -94,9 +99,9 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
                 % The rows and columns of A that are being modified.
 
-                Arows = triangles ( :, triI ( ii ) );
+                Arows = tnI (:,ii) ;
 
-                Acols = triangles ( :, triI ( jj ) );
+                Acols = tnI (:,jj) ;
 
                 if ii == jj
                     Aentry = Zcoeff ( eI ) .* kwargs.onDC .* sumA ;
