@@ -72,7 +72,7 @@ volume_tetra = in_tetra(in_volume_inds, :) ;
 
 volume_node_inds = unique (volume_tetra(:)) ;
 
-[ surface_triangles, ~ ] = core.tetraSurfaceTriangles ( in_tetra, in_volume_inds ) ;
+surface_triangles = core.tetraSurfaceTriangles ( in_tetra (in_volume_inds,:) ) ;
 
 surface_node_inds = unique (surface_triangles) ;
 
