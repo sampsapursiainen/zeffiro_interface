@@ -23,7 +23,7 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 %
 %   A structure array that contains the following cell array fields:
 %
-%   - nodeOrd
+%   - indInTetra
 %
 %     The ordinals of each central node in the tetra that compose the
 %     supernodes. For example, a value of 1 at index I in this cell array
@@ -50,7 +50,7 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 
     % Preallocate space for the headers of the supernode data.
 
-    sNodes.nodeOrd = cell (1,Nc) ;
+    sNodes.indInTetra = cell (1,Nc) ;
 
     sNodes.tetra = cell (1,Nc) ;
 
@@ -65,11 +65,11 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 
         nI = nodeI (ii) ;
 
-        isTetMember = ismember ( tetra, nI ) ;
+        isTetraMember = ismember ( tetra, nI ) ;
 
-        [ nodeOrder, whichTetra ] = find ( isTetMember ) ;
+        [ nodeOrder, whichTetra ] = find ( isTetraMember ) ;
 
-        sNodes.nodeOrd {ii} = nodeOrder ;
+        sNodes.indInTetra {ii} = nodeOrder ;
 
         sNodes.tetra {ii} = whichTetra ;
 
