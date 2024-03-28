@@ -18,7 +18,7 @@ function [ V, nI ] = tetraFaces (nodes, tetra)
 
     % Define face combinations.
 
-    fc = [ 2 3 4 ; 1 3 4 ; 1 2 4 ; 1 2 3 ]' ;
+    fc = [ 2 4 3 ; 1 3 4 ; 1 4 2 ; 1 2 3 ]' ;
 
     % Index into tetra to get the triples of node indices.
 
