@@ -1,6 +1,6 @@
-function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
+function surface_triangles = tetraSurfaceTriangles ( tetra )
 %
-% [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
+% surface_triangles = tetraSurfaceTriangles ( tetra )
 %
 % Retrieves the surface triangles of a given tetrahedral volume, indicated by
 % the index set I.
@@ -11,10 +11,6 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
 %
 %   The set of all tetrahedra.
 %
-% - tI
-%
-%   The indices that select a subset of tetra.
-%
 % Outputs:
 %
 % - surface_triangles
@@ -22,14 +18,9 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
 %   Triples of node indices, corresponding to the surface triangles of the
 %   given tetrahedral volume.
 %
-% - tetra_ind
-%
-%   Indices of the tetrahedra that surface_triangles belong to.
-%
 
     arguments
         tetra (:,4) uint32
-        tI    (:,1) uint32
     end
 
     % Tetra faces (node index triples) opposite to row index node.
@@ -37,8 +28,6 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
     tetraFR = transpose (core.tetraFaceRotation) ;
 
     % Find tetra indices I that share a face, by sorting and subtracting.
-
-    tetra = tetra(tI,:) ;
 
     faces = [
         tetra(:,[2 4 3]);
@@ -75,7 +64,5 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
     surface_triangles = tetra(tetra_ind);
 
     surface_triangles = uint32(surface_triangles(:,[1 3 2]));
-
-    tetra_ind = faceLabels(I,2);
 
 end % function
