@@ -73,6 +73,8 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
     end
 
+    disp (newline + "Building a transfer matrix:" + newline) ;
+
     % Preallocate output.
 
     n_of_fem_nodes = size ( A, 1 ) ;
@@ -117,6 +119,8 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
     % Start generating T column by column by inverting A against B.
 
     for i = 1 : n_of_electrodes
+
+        disp ("  column " + i)
 
         b (:) = full ( B (:,i) ) ;
 
