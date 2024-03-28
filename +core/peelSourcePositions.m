@@ -80,18 +80,15 @@ surface_nodes = in_nodes (surface_node_inds,:) ;
 
 all_nodes = in_nodes (volume_node_inds ,:) ;
 
-% Find out non-surface nodes deep enough within the volume with
-% rangesearch.
+% Find out non-surface nodes deep enough within the volume with rangesearch.
 
-deepNodeI = deepPointI ( ...
-    surface_nodes', ...
-    all_nodes', ...
-    acceptableDepth ...
-) ;
+shallowI = rangesearch ( all_nodes, surface_nodes, acceptableDepth ) ;
 
-out_deep_node_inds = find ( deepNodeI ) ;
+shallowI = unique([ shallowI{:} ]') ;
 
-out_deep_nodes = in_nodes ( deepNodeI, : ) ;
+out_deep_node_inds = setdiff ( volume_node_inds, shallowI ) ;
+
+out_deep_nodes = in_nodes ( out_deep_node_inds, : ) ;
 
 % Find tetra in the volume which only contain acceptable (deep) nodes.
 % Acceptable tetra consist of 4 deep nodes.
@@ -103,52 +100,5 @@ vertex_row_sums = sum ( vertices_in_deep_nodes, 2 ) ;
 out_deep_tetra_inds = find ( vertex_row_sums == 4 ) ;
 
 out_deep_tetra = in_tetra(out_deep_tetra_inds, :);
-
-end % function
-
-%% Helper functions.
-
-function pI = deepPointI ( points, neighbour_points, radius )
-%
-% pI = deepPointI ( points, neighbour_points, radius )
-%
-% Finds the indices of the points in a neighbouring set, that are deeper than a
-% given radius from the points of a "current" set.
-%
-
-    arguments
-        points (3,:) double { mustBeFinite }
-        neighbour_points (3, :) double { mustBeFinite }
-        radius (1,1) double { mustBeReal, mustBeNonnegative }
-    end
-
-    disp ("") ;
-
-    pI = false ( 1, size (neighbour_points, 2 ) ) ;
-
-    % Go over reference points one at a time, or memory consumption might
-    % become ridonculous.
-
-    Np = size (points, 2) ;
-
-    printInterval = ceil (Np / 100) ;
-
-    for ii = 1 : Np
-
-        if ii == 1 || ii == Np || mod(ii,printInterval) == 0
-            disp ( "  surface node = " + ii + " / " + Np )
-        end
-
-        point = points (:,ii) ;
-        % Find nodes that are deep enough.
-        [~, pIii] = core.rangeSearch ( point, neighbour_points, radius ) ;
-        % Accumulate results into logial array with logical or.
-        pI = pI | pIii ;
-    end
-
-    % Flip the final logical array to produce the node indices that are
-    % actually deeper than the given radius from the surface.
-
-    pI = not ( pI ) ;
 
 end % function
