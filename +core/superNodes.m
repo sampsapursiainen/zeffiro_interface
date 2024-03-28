@@ -60,24 +60,15 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 
     for ii = 1 : numel (nodeI)
 
-        % Find which tetra (columns) contain this node index and whether the
-        % node is the 1st, 2nd 3rd or 4th node in the tetrahedron (the row).
-
         nI = nodeI (ii) ;
 
-        isTetraMember = ismember ( tetra, nI ) ;
+        [whichTetra,surfTri,indInTetra] = core.superNode (tetra,nI) ;
 
-        [ nodeOrder, whichTetra ] = find ( isTetraMember ) ;
-
-        sNodes.indInTetra {ii} = nodeOrder ;
+        sNodes.indInTetra {ii} = indInTetra ;
 
         sNodes.tetra {ii} = whichTetra ;
 
-        % Then find the surface triangles of the supernode.
-
-        [surfTri,~] = core.tetraSurfaceTriangles (tetra', whichTetra) ;
-
-        sNodes.surfTri {ii} = transpose (surfTri) ;
+        sNodes.surfTri {ii} = surfTri ;
 
     end % for
 
