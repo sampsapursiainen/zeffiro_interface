@@ -24,7 +24,7 @@ function [ As, Avs ] = tetraSurfaceAreas (nodes, tetra, tI)
 
     % Get the surface triangles and the indices of the tetra that they belong to.
 
-    [triangles, ~] = core.tetraSurfaceTriangles ( tetra', tI ) ;
+    [triangles, ~] = core.tetraSurfaceTriangles ( transpose ( tetra (:,tI) ) ) ;
 
     % Get the 3D vertex coordinates of the triangles.
 

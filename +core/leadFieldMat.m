@@ -77,7 +77,7 @@ function L = leadFieldMat (nodes, tetra, sigma, sensors, modality, acI, params)
 
     disp("Computing surface triangles of mesh…")
 
-    [ surfTri,~ ] = core.tetraSurfaceTriangles ( tetra,1:size(tetra,1) ) ;
+    surfTri = core.tetraSurfaceTriangles ( tetra ) ;
 
     surfTri = transpose ( surfTri ) ;
 
