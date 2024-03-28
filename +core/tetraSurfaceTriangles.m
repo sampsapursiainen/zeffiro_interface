@@ -34,7 +34,7 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
 
     % Tetra faces (node index triples) opposite to row index node.
 
-    ind_m = [ 2 4 3 ; 1 3 4 ; 1 4 2 ; 1 2 3 ];
+    tetraFR = transpose (core.tetraFaceRotation) ;
 
     % Find tetra indices I that share a face, by sorting and subtracting.
 
@@ -70,7 +70,7 @@ function [surface_triangles, tetra_ind] = tetraSurfaceTriangles ( tetra, tI )
 
     I = find(tetra_ind == 0);
 
-    tetra_ind = sub2ind(size(tetra),repmat(faceLabels(I,2),1,3),ind_m(faceLabels(I,1),:));
+    tetra_ind = sub2ind(size(tetra),repmat(faceLabels(I,2),1,3),tetraFR(faceLabels(I,1),:));
 
     surface_triangles = tetra(tetra_ind);
 
