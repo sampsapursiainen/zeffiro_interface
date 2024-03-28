@@ -44,7 +44,7 @@ function [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
 
     % Then find the surface triangles of the supernode.
 
-    surfTri = core.tetraSurfaceTriangles ( transpose ( tetra (:,whichTetra) ) ;
+    surfTri = core.tetraSurfaceTriangles ( transpose ( tetra (:,whichTetra) ) ) ;
 
     surfTri = transpose (surfTri) ;
 
