@@ -62,6 +62,8 @@ arguments
     acceptableDepth (1,1) double { mustBeNonnegative }
 end
 
+disp (newline + "Peeling source positions:") ;
+
 % Find out the boundary- and non-boundary nodes of the volume. Note that
 % the indices generated here should reference the "global" set of input
 % nodes.
@@ -120,12 +122,23 @@ function pI = deepPointI ( points, neighbour_points, radius )
         radius (1,1) double { mustBeReal, mustBeNonnegative }
     end
 
+    disp ("") ;
+
     pI = false ( 1, size (neighbour_points, 2 ) ) ;
 
     % Go over reference points one at a time, or memory consumption might
     % become ridonculous.
 
-    for ii = 1 : size (points, 2)
+    Np = size (points, 2) ;
+
+    printInterval = ceil (Np / 100) ;
+
+    for ii = 1 : Np
+
+        if ii == 1 || ii == Np || mod(ii,printInterval) == 0
+            disp ( "  surface node = " + ii + " / " + Np )
+        end
+
         point = points (:,ii) ;
         % Find nodes that are deep enough.
         [~, pIii] = core.rangeSearch ( point, neighbour_points, radius ) ;
