@@ -24,13 +24,13 @@ surfTriA = core.triangleAreas (N', surfTri) ;
 
 disp("Indexing surface nodes…")
 
-surfN = transpose ( N (surfTri,:) ) ;
+surfN = N' ; % transpose ( N (surfTri,:) ) ;
 
-disp("Attaching sensors to surface nodes in a global reference…")
+disp("Attaching sensors to nodes in a global reference…")
 
-[~, e2nI] = core.attachSensors(S,surfN,[]);
+[~, e2nI] = core.attachSensors(S,N',[]);
 
-e2nIG = surfTri(e2nI);
+e2nIG = e2nI ; % surfTri(e2nI);
 
 disp ("Finding supernodes surrounding electrodes.") ;
 
@@ -102,10 +102,9 @@ imL = imSC * transpose ( imTM ) ;
 disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
-profile off;
-profile on;
+
 [ ~, ~, ~, dtI ] = core.peelSourcePositions (N,T,grayMatterI,0) ;
-profile viewer;
+
 % %% Generate dipoles.
 %
 % disp ("Generating face-intersecting dipoles.")
