@@ -15,7 +15,7 @@ function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
 %
 % - nodePos
 %
-%   The vertex coordinates of a set of surface triangles.
+%   The nodes that the electrodes are to be attached to.
 %
 % - triInd
 %
