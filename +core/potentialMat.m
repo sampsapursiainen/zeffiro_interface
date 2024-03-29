@@ -1,6 +1,6 @@
-function B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
+function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 %
-% B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
+% B = potentialMat ( superNodeA, Znum, impedances, e2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -42,12 +42,11 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
 %
 
     arguments
-        nN         (:,1) double { mustBePositive, mustBeInteger }
+        superNodeA (1,:) double { mustBeFinite, mustBeNonnegative }
         Znum       (:,1) double { mustBeFinite }
         impedances (:,1) double { mustBeNonNan }
-        triA       (:,1) double { mustBeFinite }
         e2nI       (:,1) uint32 { mustBePositive }
-        triangles  (3,:) uint32 { mustBePositive }
+        nN         (1,1) uint32 { mustBePositive }
     end
 
     eN = numel ( impedances ) ;
@@ -65,35 +64,28 @@ function B = potentialMat ( nN, Znum, impedances, triA, e2nI, triangles )
 
     Zcoeff = Znum ./ Zden ./ eN ;
 
-    % Adjust the coefficients in places that have point electrodes: if area is
-    % zero or impedance is infinite.
+    % Silently disallow zero impedances.
 
-    peI = isinf ( Zcoeff ) | Zcoeff == 0 ;
+    Zcoeff ( Zcoeff == 0 ) = 1e3 ;
 
-    Zcoeff ( peI ) = 1 ;
+    % Take point electrodes into account according to (Agsten 2018).
+
+    superNodeA (superNodeA <= eps) = 1 ;
 
     % Iterate over the electrode triangles and place the integrals multiplied
     % by the Zcoeffs into the proper node--electrode indices.
 
     B = sparse ( nN, eN ) ;
 
-    for eI = uint32( 1 : eN )
+    for snI = uint32( 1 : eN )
 
         % Find node index corresponding to current electrode.
 
-        nI = e2nI ( eI ) ;
-
-        % Find triangles that are touching this node.
-
-        triI = any ( ismember ( triangles, nI ), 1 ) ;
-
-        % Sum up their areas.
-
-        sumA = sum ( triA ( triI ) ) ;
+        nI = e2nI ( snI ) ;
 
         % Add the elements to the potential matrix.
 
-        B = B + sparse ( nI, eI, Zcoeff ( eI ) * sumA, nN, eN) ;
+        B = B + sparse ( nI, snI, Zcoeff (snI) * superNodeA (snI), nN, eN) ;
 
     end % for
 
