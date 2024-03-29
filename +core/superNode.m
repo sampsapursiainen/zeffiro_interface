@@ -1,4 +1,4 @@
-function [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
+function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI)
 %
 % [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
 %
@@ -17,9 +17,9 @@ function [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
 %
 % Output:
 %
-% - whichTetra
+% - tetraOut
 %
-%   The global indices of the tetra that each supernode is composed of.
+%   The tetra that this supernode is composed of.
 %
 % - surfTri
 %
@@ -41,6 +41,8 @@ function [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
     isTetraMember = ismember ( tetra, nodeI ) ;
 
     [ indInTetra, whichTetra ] = find ( isTetraMember ) ;
+
+    tetraOut = tetra (:,whichTetra) ;
 
     % Then find the surface triangles of the supernode.
 
