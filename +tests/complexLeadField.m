@@ -10,7 +10,7 @@ N = zef.nodes / 1e3 ;
 
 T = zef.tetra;
 
-S = zef.s2_points (:,1:3)' * 2  / 1e3 ;
+S = zef.sensors (:,1:3)' * 2  / 1e3 ;
 
 sigma = zef.sigma (:,1) + 1i ;
 
@@ -71,9 +71,9 @@ imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, surfTri, surfTriA ) 
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-reB = core.potentialMat ( sNodes.tetra, sNodeA, reZ, Z, size (N,1) );
+reB = core.potentialMat ( e2nIG, sNodes.tetra, zeros(1,numel(e2nIG)), reZ, Z, size (N,1) );
 
-imB = core.potentialMat ( sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
+imB = core.potentialMat ( e2nIG, sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
 
 disp("Computing electrode voltage matrix C…")
 
