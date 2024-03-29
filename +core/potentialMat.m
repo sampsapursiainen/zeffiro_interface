@@ -12,9 +12,10 @@ function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 %
 % Inputs:
 %
-% - nN
+% - superNodeA
 %
-%   The number of finite element nodes in the mesh.
+%   The surface areas of the supernodes whose centers the elctrodes are
+%   associated with.
 %
 % - Znum
 %
@@ -26,19 +27,14 @@ function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 %
 %   The impedances of the electrodes. Either real or complex.
 %
-% - triA
-%
-%   The areas of the triangles that the electrode nodes are touching.
-%
 % - e2nI
 %
 %   A mapping of electrode indices to node indices. In other words, e2nI(i)
 %   gives the node index of the ith electrode.
 %
-% - triangles
+% - nN
 %
-%   The surface triangles that the electrodes are attached to. The relation
-%   e2nI ⊂ triangles should hold.
+%   The number of finite element nodes in the mesh.
 %
 
     arguments
