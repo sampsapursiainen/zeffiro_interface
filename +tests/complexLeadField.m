@@ -10,33 +10,44 @@ N = zef.nodes / 1e3 ;
 
 T = zef.tetra;
 
-S = zef.sensors(:,1:3)' / 1e3 ;
+S = zef.s2_points (:,1:3)' * 2  / 1e3 ;
 
-sigma = zef.sigma(:,1) + 1i ;
+sigma = zef.sigma (:,1) + 1i ;
 
 disp("Computing surface triangles of mesh…")
 
-[surfTri,~] = core.tetraSurfaceTriangles(T,1:size(T,1)) ;
+surfTri = core.tetraSurfaceTriangles (T) ;
 
 surfTri = transpose ( surfTri ) ;
+
+surfTriA = core.triangleAreas (N', surfTri) ;
 
 disp("Indexing surface nodes…")
 
 surfN = transpose ( N (surfTri,:) ) ;
 
-disp("Attaching sensors to surface nodes and in a global reference…")
+disp("Attaching sensors to surface nodes in a global reference…")
 
 [~, e2nI] = core.attachSensors(S,surfN,[]);
 
 e2nIG = surfTri(e2nI);
 
-disp("Computing surface triangle areas…")
+disp ("Finding supernodes surrounding electrodes.") ;
 
-[triA,triAV] = core.triangleAreas(N',surfTri);
+sNodes = core.superNodes (T',e2nIG) ;
+
+disp("Computing surface triangle areas for supernodes…")
+
+sNodeA = zeros ( 1, numel (sNodes.surfTri) ) ;
+
+for ii = 1 : numel (sNodeA)
+    [triA, ~] = core.triangleAreas (N',sNodes.surfTri {ii}) ;
+    sNodeA (ii) = sum (triA) ;
+end
 
 disp("Initializing impedances for sensors…")
 
-Z = ones ( 1, size (S,2) ) + 1i ;
+Z = ones ( 1, size (S,2) ) + 1i ; Z = Z * 1000 ;
 
 reZ = real (Z) ;
 
@@ -52,47 +63,23 @@ disp("Computing stiffness matrix components reA and imA…")
 
 disp("Applying boundary conditions to reA…")
 
-reA = core.stiffMatBoundaryConditions ( reA, real(Z), Z, e2nIG, surfTri, triA ) ;
+reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, e2nIG, surfTri, surfTriA ) ;
 
 disp("Applying boundary conditions to imA…")
 
-imA = core.stiffMatBoundaryConditions ( imA, imag(Z), Z, e2nIG, surfTri, triA ) ;
-
-disp("Combining reA and imA diagonally…")
-
-Asize = size (reA) ;
-
-zeromat = spalloc ( Asize(1), Asize(2), 0 ) ;
-
-A = [ reA, zeromat ; zeromat, imA ];
+imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, surfTri, surfTriA ) ;
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-reB = core.potentialMat ( size(N,1), reZ, Z, triA, e2nIG, surfTri );
+reB = core.potentialMat ( sNodeA, reZ, Z, e2nI, size (N,1) );
 
-imB = core.potentialMat ( size(N,1), imZ, Z, triA, e2nIG, surfTri );
-
-disp("Combining reB and imB…")
-
-Bsize = size (reB, 1) ;
-
-zeromat = spalloc ( Bsize, Bsize, 0 ) ;
-
-B = [ reB, zeromat ; zeromat, imB ];
+imB = core.potentialMat ( sNodeA, imZ, Z, e2nI, size (N,1) );
 
 disp("Computing electrode voltage matrix C…")
 
 reC = core.voltageMat (reZ,Z);
 
 imC = core.voltageMat (imZ,Z);
-
-disp("Combining reC and imC…")
-
-Csize = size (reC, 1) ;
-
-zeromat = spalloc ( Csize, Csize, 0 ) ;
-
-C = [ reC, zeromat ; zeromat, imC ];
 
 disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
@@ -115,9 +102,10 @@ imL = imSC * transpose ( imTM ) ;
 disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
-
+profile off;
+profile on;
 [ ~, ~, ~, dtI ] = core.peelSourcePositions (N,T,grayMatterI,0) ;
-
+profile viewer;
 % %% Generate dipoles.
 %
 % disp ("Generating face-intersecting dipoles.")
@@ -133,5 +121,5 @@ grayMatterI = zef.brain_ind ;
 % toc
 %
 % %%
-
+%%
 profile viewer
