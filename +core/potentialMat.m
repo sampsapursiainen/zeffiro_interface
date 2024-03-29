@@ -1,6 +1,6 @@
-function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
+function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN )
 %
-% B = potentialMat ( superNodeA, Znum, impedances, e2nI )
+% B = potentialMat ( tetra, superNodeA, Znum, impedances, e2nI )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -11,6 +11,10 @@ function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 % then the output corresponds to B.
 %
 % Inputs:
+%
+% - superNodeTetra (1,:) cell
+%
+%   Quaduples of node indices indicating which nodes the tetra are composed of.
 %
 % - superNodeA
 %
@@ -27,21 +31,16 @@ function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 %
 %   The impedances of the electrodes. Either real or complex.
 %
-% - e2nI
-%
-%   A mapping of electrode indices to node indices. In other words, e2nI(i)
-%   gives the node index of the ith electrode.
-%
 % - nN
 %
 %   The number of finite element nodes in the mesh.
 %
 
     arguments
+        superNodeTetra (1,:) cell
         superNodeA (1,:) double { mustBeFinite, mustBeNonnegative }
         Znum       (:,1) double { mustBeFinite }
         impedances (:,1) double { mustBeNonNan }
-        e2nI       (:,1) uint32 { mustBePositive }
         nN         (1,1) uint32 { mustBePositive }
     end
 
@@ -73,15 +72,15 @@ function B = potentialMat ( superNodeA, Znum, impedances, e2nI, nN )
 
     B = sparse ( nN, eN ) ;
 
-    for snI = uint32( 1 : eN )
+    for snI = uint32 (1 : eN)
 
-        % Find node index corresponding to current electrode.
+        % Find out the nodes that this supernode is made of.
 
-        nI = e2nI ( snI ) ;
+        nodeI = superNodeTetra {snI} ;
 
-        % Add the elements to the potential matrix.
+        % Distribute the impedance to the node positions in B.
 
-        B = B + sparse ( nI, snI, Zcoeff (snI) * superNodeA (snI), nN, eN) ;
+        B = B + sparse ( nodeI, snI, Zcoeff (snI) * superNodeA (snI), nN, eN) ;
 
     end % for
 
