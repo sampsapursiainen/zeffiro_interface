@@ -110,9 +110,9 @@ sorted_tetra_faces = [
 
 sorted_tetra_faces = sorted_tetra_faces(I,:);
 
-% Check that all of the elements were from a brain layer.
+% Select only faces from the target layer.
 
-sorted_tetra_faces = sorted_tetra_faces(find(sum(ismember(sorted_tetra_faces(:,1:2),brain_ind),2)),:);
+sorted_tetra_faces = sorted_tetra_faces(any(ismember(sorted_tetra_faces(:,1:2),brain_ind),2),:);
 
 % Set node pairs that share a face.
 
