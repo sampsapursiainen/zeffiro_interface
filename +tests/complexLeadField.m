@@ -71,9 +71,9 @@ imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, surfTri, surfTriA ) 
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-reB = core.potentialMat ( sNodeA, reZ, Z, e2nI, size (N,1) );
+reB = core.potentialMat ( sNodes.tetra, sNodeA, reZ, Z, size (N,1) );
 
-imB = core.potentialMat ( sNodeA, imZ, Z, e2nI, size (N,1) );
+imB = core.potentialMat ( sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
 
 disp("Computing electrode voltage matrix C…")
 
