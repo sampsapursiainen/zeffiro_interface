@@ -1,6 +1,6 @@
-function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN )
+function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN, kwargs )
 %
-% B = potentialMat ( tetra, superNodeA, Znum, impedances, e2nI )
+% B = potentialMat ( tetra, superNodeA, Znum, impedances, e2nI, kwargs )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -35,6 +35,10 @@ function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN )
 %
 %   The number of finite element nodes in the mesh.
 %
+% - kwargs.psiIntegral = 1 / 3
+%
+%   The value of ∫ ψi dS over the face of a tetrahedron.
+%
 
     arguments
         superNodeTetra (1,:) cell
@@ -42,6 +46,7 @@ function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN )
         Znum       (:,1) double { mustBeFinite }
         impedances (:,1) double { mustBeNonNan }
         nN         (1,1) uint32 { mustBePositive }
+        kwargs.psiIntegral (1,1) double { mustBePositive, mustBeFinite } = 1 / 3
     end
 
     eN = numel ( impedances ) ;
@@ -80,7 +85,9 @@ function B = potentialMat ( superNodeTetra, superNodeA, Znum, impedances, nN )
 
         % Distribute the impedance to the node positions in B.
 
-        B = B + sparse ( nodeI, snI, Zcoeff (snI) * superNodeA (snI), nN, eN) ;
+        entry = kwargs.psiIntegral * Zcoeff (snI) * superNodeA (snI) ;
+
+        B = B + sparse ( nodeI, snI, entry, nN, eN) ;
 
     end % for
 
