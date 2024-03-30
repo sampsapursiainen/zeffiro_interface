@@ -93,16 +93,42 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
         sourcePos (:,:,end-diffFromTarget:end) = [] ;
 
-    else if diffFromTarget < 0
+    elseif diffFromTarget < 0 && sourceN < Ne
 
-        % We created less sources than was ordered and more are needed.
-        % Find tetra where we didn't place sources yet.
+        % We created less sources than was ordered and more are needed. Find
+        % tetra where we didn't place sources yet and put them there.
 
         nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
 
         ntI = nonTetI (1 : abs(diffFromTarget)) ;
 
-        missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI)
+        missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI) ;
+
+        sourcePos = cat (3,sourcePos,missingPos) ;
+
+    elseif diffFromTarget < 0 && sourceN >= Ne
+
+        % We created less sources than was ordered and more are needed.
+        % Add sources to existing tetra.
+
+        absdft = abs (diffFromTarget) ;
+
+        tx = rand (1,1) ;
+        ty = rand (1,1) ;
+        tz = rand (1,1) ;
+
+        xx = xbuffer + tx .* (1 - 2 * xbuffer) ;
+        yy = ybuffer + ty .* (1 - xx - ybuffer) ;
+        zz = zbuffer +  tz .* (1 - yy - xx - zbuffer) ;
+
+        bcPos = transpose ([ xx', yy', zz' ]) ;
+
+        % FIXME: iterate here in case the number of sources is a multiple of Ne.
+        % This range is a temporary fix for now.
+
+        range = 1 : min (Ne,absdft) ;
+
+        missingPos = pagemtimes ( T (:,:,range), bcPos ) + lastVC (:,:,range) ;
 
         sourcePos = cat (3,sourcePos,missingPos) ;
 
