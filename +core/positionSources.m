@@ -1,10 +1,10 @@
 function sourcePos = positionSources ( nodes, elements, sourceN )
 %
-% sourcePos = positionSources ( nodes, tetra, activeI, sourceN )
+% sourcePos = positionSources ( nodes, elements, sourceN )
 %
-% Places sources evenly into a set of given active tetrahedra. Note that if the
-% given number of sources is less than the number of elements, each element
-% gets at least 1 source.
+% Places sources evenly into a set of given active elements. If there are less
+% sources than elements, some elements are skipped and the sources are placed
+% only into some.
 %
 
     arguments
@@ -13,57 +13,74 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
          sourceN (1,1) uint64 { mustBePositive }
     end
 
-    clc
+    % This together with the above arguments-block sourceN line is necessary
+    % because MATLAB is asenine about types.
 
-    % Define numbers of vertices in each element and other dimensions of the
-    % geometry.
+    sourceN = double (sourceN) ;
 
-    Nd = size ( nodes, 1 ) ;
-
-    Nv = size ( elements, 1 ) ;
+    % Number of elements.
 
     Ne = size ( elements, 2 ) ;
 
     % Compute the number of sources per element. Note that this is rounded into
-    % an integer.
+    % an integer. There's at least 1 source in the elements that contain one,
+    % hence the max.
 
-    sNperE = max ( double ( sourceN ) / Ne , 1 ) ;
+    sNperE = max ( floor ( sourceN / Ne ) , 1 ) ;
 
-    % Create this many points within a standard element. Note that all of the
-    % Nv barycentric coordinates (BCC) need to be in the interval [0,1] for a
-    % point to be located in an element. To this end, we need to choose a
-    % subset of coordinate combinations (bcP) for which this condition is true.
+    % Create this many x-points within a standard element.
 
-    da = 1 / double ( sNperE ) / 2 ;
+    xbuffer = 5e-2 ;
 
-    aa = linspace ( da, 1 - da , sNperE ) ;
+    tx = rand (1,sNperE) ;
 
-    [ X, Y, Z ] = meshgrid ( aa ) ;
+    xx = xbuffer + tx .* (1 - 2 * xbuffer) ;
 
-    bcP = zeros ( numel (X), Nv ) ;
+    Nx = numel (xx) ;
 
-    bcP (:,1:Nd) = [ X(:), Y(:), Z(:) ] ;
+    % Generate a random y inside the standard triangle with max y = ty * (1 -
+    % x), with ty ∈ [0,1]. Also do the same for z with z = tz * (1 - y - x).
+    % Also add in some buffering to position the points truly inside of the
+    % standard element, and not on the border.
 
-    bcP (:,end) = 1 - sum (bcP (:,1:Nd), 2) ; % Last BCC is always 1 - sum (others).
+    ty = rand (1,Nx) ;
 
-    validI = all ( 0 <= bcP & bcP <= 1, 2 ) ;
+    tz = rand (1,Nx) ;
 
-    bcPos = transpose ( bcP ( validI, 1:end-1 ) ) ;
+    ybuffer = (1 - xx) / 100 ;
+
+    yy = ybuffer + ty .* (1 - xx - ybuffer) ;
+
+    zbuffer = (1 - yy - xx) / 100 ;
+
+    zz = zbuffer +  tz .* (1 - yy - xx - zbuffer) ;
+
+    % Construct barycentric positions.
+
+    bcPos = transpose ([ xx', yy', zz' ]) ;
 
     % Compute the barycentric transformation T of the given tetrahedra and
     % extract vertex coordinates vc.
 
     [ T, vc ] = core.barycentricTransformation ( nodes, elements ) ;
 
-    NT = size ( T, 3 ) ;
-
     lastVC = vc ( :, end, : ) ;
 
     % Place sources into Cartesian coordinates r with the barycentric
     % transformation T b = r - re <=> r = T b + re.
 
-    dN = size ( bcPos, 2) / sNperE ;
+    emptySpace = max ( Ne - sourceN, 0 ) ;
 
-    sourcePos = pagemtimes ( T, bcPos (:, 1 : dN : end) ) + lastVC ;
+    if emptySpace == 0
+
+        step = 1 ;
+
+    else
+
+        step = floor (Ne / sourceN) ;
+
+    end % if
+
+    sourcePos = pagemtimes ( T (:,:,1:step:end), bcPos ) + lastVC (:,:,1:step:end) ;
 
 end % function
