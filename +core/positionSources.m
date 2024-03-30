@@ -81,6 +81,36 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     end % if
 
-    sourcePos = pagemtimes ( T (:,:,1:step:end), bcPos ) + lastVC (:,:,1:step:end) ;
+    tetI = 1 : step : Ne ;
+
+    sourcePos = pagemtimes ( T (:,:,tetI), bcPos ) + lastVC (:,:,tetI) ;
+
+    diffFromTarget = numel (tetI) - sourceN ;
+
+    if diffFromTarget > 0
+
+        % We created more sources than were ordered.
+
+        sourcePos (:,:,end-diffFromTarget:end) = [] ;
+
+    else if diffFromTarget < 0
+
+        % We created less sources than was ordered and more are needed.
+        % Find tetra where we didn't place sources yet.
+
+        nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
+
+        ntI = nonTetI (1 : abs(diffFromTarget)) ;
+
+        missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI)
+
+        sourcePos = cat (3,sourcePos,missingPos) ;
+
+    else
+
+        % Everything is OK.
+
+
+    end % if
 
 end % function
