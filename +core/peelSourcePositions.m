@@ -84,7 +84,7 @@ volume_nodes = in_nodes (volume_node_inds ,:) ;
 
 shallowI = rangesearch ( volume_nodes, surface_nodes, acceptableDepth ) ;
 
-shallowI = unique([ shallowI{:} ]') ;
+shallowI = volume_node_inds(unique([ shallowI{:} ]')) ;
 
 out_deep_node_inds = setdiff ( volume_node_inds, shallowI ) ;
 
