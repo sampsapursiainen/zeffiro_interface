@@ -22,6 +22,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     Ne = size ( elements, 2 ) ;
 
+    Nd = size (nodes,1) ;
+
     % Compute the number of sources per element. Note that this is rounded into
     % an integer. There's at least 1 source in the elements that contain one,
     % hence the max.
@@ -30,7 +32,7 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     % Create this many x-points within a standard element.
 
-    xbuffer = 5e-2 ;
+    xbuffer = 5e-2 * ones (1,sNperE) ;
 
     tx = rand (1,sNperE) ;
 
@@ -85,13 +87,17 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     sourcePos = pagemtimes ( T (:,:,tetI), bcPos ) + lastVC (:,:,tetI) ;
 
+    Ns = size (sourcePos,3) ;
+
+    sourcePos = reshape (sourcePos, Nd, sNperE * Ns) ;
+
     diffFromTarget = numel (tetI) - sourceN ;
 
     if diffFromTarget > 0
 
         % We created more sources than were ordered.
 
-        sourcePos (:,:,end-diffFromTarget:end) = [] ;
+        sourcePos (:,Ns-diffFromTarget+1:Ns) = [] ;
 
     elseif diffFromTarget < 0 && sourceN < Ne
 
@@ -100,37 +106,50 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
         nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
 
-        ntI = nonTetI (1 : abs(diffFromTarget)) ;
+        ntI = nonTetI (1 : abs(diffFromTarget) + 1) ;
 
         missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI) ;
 
-        sourcePos = cat (3,sourcePos,missingPos) ;
+        missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
+
+        sourcePos = cat (2,sourcePos,missingPos) ;
 
     elseif diffFromTarget < 0 && sourceN >= Ne
 
         % We created less sources than was ordered and more are needed.
-        % Add sources to existing tetra.
+        % Add sources to existing tetra with an even spacing.
 
         absdft = abs (diffFromTarget) ;
 
-        tx = rand (1,1) ;
-        ty = rand (1,1) ;
-        tz = rand (1,1) ;
+        sNperE = max ( floor ( absdft / Ne ) , 1 ) ;
 
+        tx = rand (1,sNperE) ;
+        ty = rand (1,sNperE) ;
+        tz = rand (1,sNperE) ;
+
+        xbuffer = 5e-2 * ones (1,sNperE) ;
         xx = xbuffer + tx .* (1 - 2 * xbuffer) ;
+
+        ybuffer = (1 - xx) / 100 ;
         yy = ybuffer + ty .* (1 - xx - ybuffer) ;
-        zz = zbuffer +  tz .* (1 - yy - xx - zbuffer) ;
+
+        zbuffer = (1 - yy - xx) / 100 ;
+        zz = zbuffer + tz .* (1 - yy - xx - zbuffer) ;
 
         bcPos = transpose ([ xx', yy', zz' ]) ;
 
         % FIXME: iterate here in case the number of sources is a multiple of Ne.
         % This range is a temporary fix for now.
 
-        range = 1 : min (Ne,absdft) ;
+        step = ceil (Ne / absdft) ;
+
+        range = 1 : step : Ne ;
 
         missingPos = pagemtimes ( T (:,:,range), bcPos ) + lastVC (:,:,range) ;
 
-        sourcePos = cat (3,sourcePos,missingPos) ;
+        missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
+
+        sourcePos = cat (2,sourcePos,missingPos) ;
 
     else
 
