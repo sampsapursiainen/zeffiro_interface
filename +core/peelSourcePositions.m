@@ -72,17 +72,17 @@ volume_tetra = in_tetra(in_volume_inds, :) ;
 
 volume_node_inds = unique (volume_tetra(:)) ;
 
-surface_triangles = core.tetraSurfaceTriangles ( in_tetra (in_volume_inds,:) ) ;
+surface_triangles = core.tetraSurfaceTriangles ( volume_tetra ) ;
 
 surface_node_inds = unique (surface_triangles) ;
 
 surface_nodes = in_nodes (surface_node_inds,:) ;
 
-all_nodes = in_nodes (volume_node_inds ,:) ;
+volume_nodes = in_nodes (volume_node_inds ,:) ;
 
 % Find out non-surface nodes deep enough within the volume with rangesearch.
 
-shallowI = rangesearch ( all_nodes, surface_nodes, acceptableDepth ) ;
+shallowI = rangesearch ( volume_nodes, surface_nodes, acceptableDepth ) ;
 
 shallowI = unique([ shallowI{:} ]') ;
 
