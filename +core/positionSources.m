@@ -71,91 +71,89 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
     % Place sources into Cartesian coordinates r with the barycentric
     % transformation T b = r - re <=> r = T b + re.
 
-    emptySpace = max ( Ne - sourceN, 0 ) ;
-
-    if emptySpace == 0
-
-        step = 1 ;
-
-    else
-
-        step = floor (Ne / sourceN) ;
-
-    end % if
+    step = ceil (Ne / sourceN) ;
 
     tetI = 1 : step : Ne ;
 
     sourcePos = pagemtimes ( T (:,:,tetI), bcPos ) + lastVC (:,:,tetI) ;
 
-    Ns = size (sourcePos,3) ;
+    Nse = size (sourcePos,3) ;
 
-    sourcePos = reshape (sourcePos, Nd, sNperE * Ns) ;
+    sourcePos = reshape (sourcePos, Nd, sNperE * Nse) ;
 
-    diffFromTarget = numel (tetI) - sourceN ;
+    Ns = size (sourcePos,2) ;
 
-    if diffFromTarget > 0
+    diffFromTarget = Ns - sourceN ;
 
-        % We created more sources than were ordered.
+    while diffFromTarget ~= 0
 
-        sourcePos (:,Ns-diffFromTarget+1:Ns) = [] ;
+        if diffFromTarget > 0
 
-    elseif diffFromTarget < 0 && sourceN < Ne
+            % We created more sources than were ordered.
 
-        % We created less sources than was ordered and more are needed. Find
-        % tetra where we didn't place sources yet and put them there.
+            sourcePos (:,Ns-sourceN+1:Ns) = [] ;
 
-        nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
+        elseif diffFromTarget < 0 && sourceN < Ne
 
-        ntI = nonTetI (1 : abs(diffFromTarget) + 1) ;
+            % We created less sources than was ordered and more are needed. Find
+            % tetra where we didn't place sources yet and put them there.
 
-        missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI) ;
+            nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
 
-        missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
+            ntI = nonTetI (1 : abs(diffFromTarget)) ;
 
-        sourcePos = cat (2,sourcePos,missingPos) ;
+            missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI) ;
 
-    elseif diffFromTarget < 0 && sourceN >= Ne
+            missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
 
-        % We created less sources than was ordered and more are needed.
-        % Add sources to existing tetra with an even spacing.
+            sourcePos = cat (2,sourcePos,missingPos) ;
 
-        absdft = abs (diffFromTarget) ;
+        elseif diffFromTarget < 0 && sourceN >= Ne
 
-        sNperE = max ( floor ( absdft / Ne ) , 1 ) ;
+            % We created less sources than was ordered and more are needed.
+            % Add sources to existing tetra with an even spacing.
 
-        tx = rand (1,sNperE) ;
-        ty = rand (1,sNperE) ;
-        tz = rand (1,sNperE) ;
+            absdft = abs (diffFromTarget) ;
 
-        xbuffer = 5e-2 * ones (1,sNperE) ;
-        xx = xbuffer + tx .* (1 - 2 * xbuffer) ;
+            sNperE = max ( floor ( absdft / Ne ) , 1 ) ;
 
-        ybuffer = (1 - xx) / 100 ;
-        yy = ybuffer + ty .* (1 - xx - ybuffer) ;
+            tx = rand (1,sNperE) ;
+            ty = rand (1,sNperE) ;
+            tz = rand (1,sNperE) ;
 
-        zbuffer = (1 - yy - xx) / 100 ;
-        zz = zbuffer + tz .* (1 - yy - xx - zbuffer) ;
+            xbuffer = 5e-2 * ones (1,sNperE) ;
+            xx = xbuffer + tx .* (1 - 2 * xbuffer) ;
 
-        bcPos = transpose ([ xx', yy', zz' ]) ;
+            ybuffer = (1 - xx) / 100 ;
+            yy = ybuffer + ty .* (1 - xx - ybuffer) ;
 
-        % FIXME: iterate here in case the number of sources is a multiple of Ne.
-        % This range is a temporary fix for now.
+            zbuffer = (1 - yy - xx) / 100 ;
+            zz = zbuffer + tz .* (1 - yy - xx - zbuffer) ;
 
-        step = ceil (Ne / absdft) ;
+            bcPos = transpose ([ xx', yy', zz' ]) ;
 
-        range = 1 : step : Ne ;
+            % FIXME: iterate here in case the number of sources is a multiple of Ne.
+            % This range is a temporary fix for now.
 
-        missingPos = pagemtimes ( T (:,:,range), bcPos ) + lastVC (:,:,range) ;
+            step = ceil (Ne / absdft) ;
 
-        missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
+            range = 1 : step : Ne ;
 
-        sourcePos = cat (2,sourcePos,missingPos) ;
+            missingPos = pagemtimes ( T (:,:,range), bcPos ) + lastVC (:,:,range) ;
 
-    else
+            missingPos = reshape (missingPos, Nd, sNperE * size(missingPos,3)) ;
 
-        % Everything is OK.
+            sourcePos = cat (2,sourcePos,missingPos) ;
+
+        else
+
+            % Everything is OK.
+
+            break
 
 
-    end % if
+        end % if
 
-end % function
+        diffFromTarget = size (sourcePos,2) - sourceN ;
+
+    end % while
