@@ -6,6 +6,26 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 % sources than elements, some elements are skipped and the sources are placed
 % only into some.
 %
+% Inputs:
+%
+% - nodes
+%
+%   FEM nodes.
+%
+% - elements
+%
+%   Indices of nodes ordered in column-major order, meaning a single element is a column of this array.
+%
+% - sourceN
+%
+%   The number of requested sources.
+%
+% Outputs:
+%
+% - sourcePos
+%
+%   An Ndim×sourceN array of source positions.
+%
 
     arguments
          nodes (3,:) double { mustBeFinite }
@@ -69,7 +89,7 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
     lastVC = vc ( :, end, : ) ;
 
     % Place sources into Cartesian coordinates r with the barycentric
-    % transformation T b = r - re <=> r = T b + re.
+    % transformation T b = r - lastVC <=> r = T b + lastVC.
 
     step = ceil (Ne / sourceN) ;
 
@@ -85,11 +105,14 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     diffFromTarget = Ns - sourceN ;
 
+    % After initial positioning, iterate until correct number of sources is reached.
+
     while diffFromTarget ~= 0
 
         if diffFromTarget > 0
 
-            % We created more sources than were ordered.
+            % We created more sources than were ordered. Just delete the extra
+            % from the end of the array.
 
             sourcePos (:,Ns-sourceN+1:Ns) = [] ;
 
@@ -132,9 +155,6 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
             bcPos = transpose ([ xx', yy', zz' ]) ;
 
-            % FIXME: iterate here in case the number of sources is a multiple of Ne.
-            % This range is a temporary fix for now.
-
             step = ceil (Ne / absdft) ;
 
             range = 1 : step : Ne ;
@@ -145,15 +165,14 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
             sourcePos = cat (2,sourcePos,missingPos) ;
 
-        else
-
-            % Everything is OK.
+        else % Correct number of sources reached.
 
             break
-
 
         end % if
 
         diffFromTarget = size (sourcePos,2) - sourceN ;
 
     end % while
+
+end % function
