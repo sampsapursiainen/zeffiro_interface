@@ -62,13 +62,10 @@ arguments
     acceptableDepth (1,1) double { mustBeNonnegative }
 end
 
-disp (newline + "Peeling source positions:") ;
+% Find out the boundary- and non-boundary nodes of the volume. Note that the
+% indices generated here should reference the "global" set of input nodes.
 
-% Find out the boundary- and non-boundary nodes of the volume. Note that
-% the indices generated here should reference the "global" set of input
-% nodes.
-
-volume_tetra = in_tetra(in_volume_inds, :) ;
+volume_tetra = in_tetra (in_volume_inds, :) ;
 
 volume_node_inds = unique (volume_tetra(:)) ;
 
@@ -84,7 +81,7 @@ volume_nodes = in_nodes (volume_node_inds ,:) ;
 
 shallowI = rangesearch ( volume_nodes, surface_nodes, acceptableDepth ) ;
 
-shallowI = volume_node_inds(unique([ shallowI{:} ]')) ;
+shallowI = volume_node_inds ( unique ( transpose ( [ shallowI{:} ] ) ) ) ;
 
 out_deep_node_inds = setdiff ( volume_node_inds, shallowI ) ;
 
