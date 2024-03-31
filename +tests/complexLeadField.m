@@ -105,20 +105,20 @@ grayMatterI = zef.brain_ind ;
 
 [ ~, ~, ~, dtI ] = core.peelSourcePositions (N,T,grayMatterI,0) ;
 
-% %% Generate dipoles.
-%
-% disp ("Generating face-intersecting dipoles.")
-%
-% tic
-% [stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , dtI ) ;
-% toc
-%
-% disp ("Generating edgewise dipoles.")
-%
-% tic
-% [stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , dtI ) ;
-% toc
-%
-% %%
+%% Generate dipoles and source Positions, that the dipoles can be interpolated into.
+
+disp ("Generating face-intersecting dipoles.")
+
+[stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , dtI ) ;
+
+disp ("Generating edgewise dipoles.")
+
+[stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , dtI ) ;
+
+disp ("Positioning sources into active domain") ;
+
+sourcePos = core.positionSources (N',T',numel(grayMatterI)) ;
+
 %%
+
 profile viewer
