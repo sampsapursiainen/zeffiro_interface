@@ -117,7 +117,7 @@ disp ("Generating edgewise dipoles.")
 
 disp ("Positioning sources into active domain") ;
 
-sourcePos = core.positionSources (N',T',numel(grayMatterI)) ;
+sourcePos = core.positionSources (N',T(grayMatterI,:)',numel(grayMatterI)) ;
 
 %%
 
