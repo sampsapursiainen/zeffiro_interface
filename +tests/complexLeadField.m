@@ -6,11 +6,13 @@ profile on
 
 disp("Extracting data from zef…")
 
-N = zef.nodes ;
+powOfTen = 1e-3 ;
+
+N = zef.nodes * powOfTen ;
 
 T = zef.tetra;
 
-S = zef.s2_points (:,1:3)' ;
+S = zef.s2_points (:,1:3)' * powOfTen ;
 
 sigma = zef.sigma (:,1) + 1i ;
 
@@ -103,7 +105,7 @@ disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
 
-[ dN, ~, dT, deepTetraI ] = core.peelSourcePositions (N,T,grayMatterI,1) ;
+[ dN, ~, dT, deepTetraI ] = core.peelSourcePositions (N,T,grayMatterI,1 * powOfTen) ;
 
 %% Generate dipoles and source Positions, that the dipoles can be interpolated into.
 
