@@ -6,11 +6,11 @@ profile on
 
 disp("Extracting data from zef…")
 
-N = zef.nodes / 1e3 ;
+N = zef.nodes ;
 
 T = zef.tetra;
 
-S = zef.sensors (:,1:3)' * 2  / 1e3 ;
+S = zef.s2_points (:,1:3)' ;
 
 sigma = zef.sigma (:,1) + 1i ;
 
@@ -103,7 +103,7 @@ disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
 
-[ ~, ~, ~, dtI ] = core.peelSourcePositions (N,T,grayMatterI,0) ;
+[ dN, ~, dT, dtI ] = core.peelSourcePositions (N,T,grayMatterI,1) ;
 
 %% Generate dipoles and source Positions, that the dipoles can be interpolated into.
 
@@ -115,9 +115,28 @@ disp ("Generating edgewise dipoles.")
 
 [stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , dtI ) ;
 
-disp ("Positioning sources into active domain") ;
+%% Add interpolation of dipoles to source positions.
 
-sourcePos = core.positionSources (N',T(grayMatterI,:)',numel(grayMatterI)) ;
+disp ("Building interpolation matrix...")
+
+warning off
+
+[G,sourcePos] = core.hdivInterpolation ( ...
+    N, ...
+    T, ...
+    dtI, ...
+    "pbo", ...
+    stensilFI, ...
+    signsFI, ...
+    sourceDirectionsFI, ...
+    sourceLocationsFI, ...
+    stensilEW, ...
+    signsEW, ...
+    sourceDirectionsEW, ...
+    sourceLocationsEW ...
+) ;
+
+warning on
 
 %%
 
