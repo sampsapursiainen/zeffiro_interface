@@ -24,13 +24,13 @@ surfTriA = core.triangleAreas (N', surfTri) ;
 
 disp("Indexing surface nodes…")
 
-surfN = N' ; % transpose ( N (surfTri,:) ) ;
+surfN = N' ;
 
 disp("Attaching sensors to nodes in a global reference…")
 
 [~, e2nI] = core.attachSensors(S,N',[]);
 
-e2nIG = e2nI ; % surfTri(e2nI);
+e2nIG = e2nI ;
 
 disp ("Finding supernodes surrounding electrodes.") ;
 
@@ -117,11 +117,9 @@ disp ("Generating edgewise dipoles.")
 
 %% Add interpolation of dipoles to source positions.
 
-disp ("Building interpolation matrix...")
+disp ("Building interpolation matrix G...")
 
 sourcePos = core.positionSources ( N', T (deepTetraI,:)', numel (deepTetraI) ) ;
-
-warning off
 
 G = core.hdivInterpolation ( ...
     deepTetraI, ...
@@ -137,8 +135,28 @@ G = core.hdivInterpolation ( ...
     sourceLocationsEW ...
 ) ;
 
-warning on
+%% Interpolate real and imaginary lead fields to source positions.
 
-%%
+disp ("Applying G to the real an imaginary parts of the lead field.") ;
+
+reLG = reL * G ;
+
+imLG = imL * G ;
+
+%% Set reference potential level by subtracting column means from the lead fields.
+
+disp ("Setting zero potential level as the column means of the lead field components.")
+
+reLGmean = mean (reL,1) ;
+
+imLGmean = mean (imL,1) ;
+
+%% Concatenate the real and imaginary parts as the pages of a single array.
+
+disp ("constructing final L as a 3D array.") ;
+
+L = cat (3,reLGmean, imLGmean) ;
+
+%% View profiler results.
 
 profile viewer
