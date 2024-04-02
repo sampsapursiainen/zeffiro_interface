@@ -1,8 +1,7 @@
 function out_coeff_sys = mpoSystem ( ...
     arg_locs, ...
     arg_dirs, ...
-    arg_interp_locs, ...
-    arg_interp_loc_row, ...
+    arg_interp_loc, ...
     arg_n_of_coeffs ...
     )
 %
@@ -10,7 +9,6 @@ function out_coeff_sys = mpoSystem ( ...
 %    arg_locs, ...
 %    arg_dirs, ...
 %    arg_interp_locs, ...
-%    arg_interp_loc_row, ...
 %    arg_n_of_coeffs ...
 % )
 %
@@ -31,12 +29,6 @@ function out_coeff_sys = mpoSystem ( ...
 %
 %   The M × 3 interpolation positions needed in interpolation.
 %
-% - arg_interp_loc_row
-%
-%   Since this function will be usually called in a loop, we need the loop
-%   index that signifies which interpolation position (row) we are at. Can
-%   also be a vector of indices.
-%
 % - arg_n_of_coeffs
 %
 %   The number if interpolation / optimization coefficients or the size of the
@@ -53,18 +45,13 @@ function out_coeff_sys = mpoSystem ( ...
 arguments
     arg_locs (:,3) double
     arg_dirs (:,3) double
-    arg_interp_locs (:,3) double
-    arg_interp_loc_row (:,1) double { mustBePositive, mustBeInteger }
+    arg_interp_loc (1,3) double
     arg_n_of_coeffs (1,1) double { mustBePositive, mustBeInteger }
 end
 
 % Distances between interpolation and dipole positions.
 
-interp_pos = arg_interp_locs(arg_interp_loc_row, :);
-
-interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
-
-pos_diffs = arg_locs - interp_pos;
+pos_diffs = arg_locs - arg_interp_loc;
 
 dists = sqrt ( sum ( pos_diffs .^ 2, 2 ) ) ;
 
