@@ -87,7 +87,7 @@ M = [
 % The vector b, against which M will be inverted, with a Cartesian basis
 % assumption.
 
-zero_block = zeros(arg_n_of_coeffs-1,3);
+zero_block = zeros(9,3);
 
 basis = eye(3);
 
