@@ -103,28 +103,29 @@ disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
 
-[ dN, ~, dT, dtI ] = core.peelSourcePositions (N,T,grayMatterI,1) ;
+[ dN, ~, dT, deepTetraI ] = core.peelSourcePositions (N,T,grayMatterI,1) ;
 
 %% Generate dipoles and source Positions, that the dipoles can be interpolated into.
 
 disp ("Generating face-intersecting dipoles.")
 
-[stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , dtI ) ;
+[stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , deepTetraI ) ;
 
 disp ("Generating edgewise dipoles.")
 
-[stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , dtI ) ;
+[stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , deepTetraI ) ;
 
 %% Add interpolation of dipoles to source positions.
 
 disp ("Building interpolation matrix...")
 
+sourcePos = core.positionSources (N',T',size(T,1)) ;
+
 warning off
 
 [G,sourcePos] = core.hdivInterpolation ( ...
-    N, ...
-    T, ...
-    dtI, ...
+    deepTetraI, ...
+    transpose (sourcePos), ...
     "pbo", ...
     stensilFI, ...
     signsFI, ...
