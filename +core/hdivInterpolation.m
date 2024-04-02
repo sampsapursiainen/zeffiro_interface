@@ -105,7 +105,7 @@ end
 
 % Form initial values based on given nodes, tetrahedra and lead field.
 
-n_of_iterations = size (p_intended_source_inds, 1);
+n_of_iterations = size (sourcePos, 1) ;
 
 print_interval = ceil (n_of_iterations / 100);
 
