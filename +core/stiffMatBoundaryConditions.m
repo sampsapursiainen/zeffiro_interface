@@ -121,14 +121,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
                     Avals (range) = Zcoeff ( eI ) .* kwargs.offDC .* sumA ;
                 end
 
-                % Add = sparse ( Arows, Acols, Aentry, nN, nN ) ;
-
-                % A = A + Add ;
-
-                % if ii ~= jj
-                %     A = A + Add' ;
-                % end
-
                 cursor = cursor + rangeLen + 1 ;
 
                 range = cursor : cursor + rangeLen ;
