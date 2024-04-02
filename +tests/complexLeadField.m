@@ -147,15 +147,19 @@ imLG = imL * G ;
 
 disp ("Setting zero potential level as the column means of the lead field components.")
 
-reLGmean = mean (reL,1) ;
+reLGmean = mean (reLG,1) ;
 
-imLGmean = mean (imL,1) ;
+imLGmean = mean (imLG,1) ;
+
+reLGM = reLG - reLGmean ;
+
+imLGM = imLG - imLGmean ;
 
 %% Concatenate the real and imaginary parts as the pages of a single array.
 
 disp ("constructing final L as a 3D array.") ;
 
-L = cat (3,reLGmean, imLGmean) ;
+L = cat (3,reLGM, imLGM) ;
 
 %% View profiler results.
 
