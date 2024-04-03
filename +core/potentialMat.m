@@ -73,14 +73,14 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
 
     Zden ( Zden == 0 ) = 1 ;
 
-    % Also handle infinite impedances according to (Agsten 2018).
-
-    Zden ( isinf (Zden) ) = 1 ;
-
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
 
     Zcoeff = Znum ./ Zden ./ eN ;
+
+    % Also handle infinite impedances according to (Agsten 2018).
+
+    Zcoeff ( isinf (Zden) ) = 1 ;
 
     % Iterate over the electrode triangles and place the integrals multiplied
     % by the Zcoeffs into the proper node--electrode indices.
