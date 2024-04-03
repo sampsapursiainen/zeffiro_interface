@@ -74,6 +74,10 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 
     Zcoeff = Znum ./ Zden ./ snN ;
 
+    % Take infinite impedance into account according to (Agsten 2018).
+
+    Zcoeff ( isinf (impedances) ) = 0 ;
+
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
     % coefficients. Cursor is used in saving indices to the preallocated
     % vectors.
