@@ -65,11 +65,11 @@ disp("Computing stiffness matrix components reA and imA…")
 
 disp("Applying boundary conditions to reA…")
 
-reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, e2nIG, surfTri, surfTriA ) ;
+reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, e2nIG, sNodes.surfTri, sNodeA ) ;
 
 disp("Applying boundary conditions to imA…")
 
-imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, surfTri, surfTriA ) ;
+imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, sNodes.surfTri, sNodeA ) ;
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 

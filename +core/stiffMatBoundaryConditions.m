@@ -1,6 +1,6 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs )
+function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeA, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, triA, kwargs )
+% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeCenters, superNodeTri, superNodeA, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
@@ -20,7 +20,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 %
 %   The (possibly complex) impedances of the electrodes.
 %
-% - e2nI (:,1)
+% - superNodeCenters (:,1)
 %
 %   A mapping of electrodes to the nodes that they are attached to.
 %
@@ -42,26 +42,27 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 %
 
     arguments
-        A            (:,:) double { mustBeFinite }
-        Znum         (:,1) double { mustBeNonNan }
-        impedances   (:,1) double { mustBeNonNan }
-        e2nI         (:,1) uint32 { mustBeFinite }
-        triangles    (3,:) uint32 { mustBePositive }
-        triA         (:,1) double { mustBeFinite }
-        kwargs.onDC  (1,1) double { mustBeFinite } = 1 / 6
-        kwargs.offDC (1,1) double { mustBeFinite } = 1 / 12
+        A                (:,:) double { mustBeFinite }
+        Znum             (:,1) double { mustBeNonNan }
+        impedances       (:,1) double { mustBeNonNan }
+        superNodeCenters (1,:) uint32 { mustBePositive }
+        superNodeTri     (1,:) cell
+        superNodeA       (1,:) double { mustBeFinite, mustBeNonnegative }
+        kwargs.onDC      (1,1) double { mustBeFinite } = 1 / 6
+        kwargs.offDC     (1,1) double { mustBeFinite } = 1 / 12
+        kwargs.areaThreshold (1,1) double { mustBeNonnegative } = eps
     end
 
     % Extract matrix sizes.
 
     nN = size ( A, 1 ) ;
 
-    eN = numel ( impedances ) ;
+    snN = numel ( impedances ) ;
 
     % Preallocate vectors needed in constructing the boundary condition matrix
     % in one sweep.
 
-    [Arows, Acols, Avals] = preallocateEntries (eN, e2nI, triangles) ;
+    [Arows, Acols, Avals] = preallocateEntries (snN, superNodeCenters, superNodeTri, superNodeA, kwargs.areaThreshold) ;
 
     % Compute impedance coefficients.
 
@@ -71,7 +72,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
         Zden = conj ( impedances ) .* impedances ;
     end
 
-    Zcoeff = Znum ./ Zden ./ eN ;
+    Zcoeff = Znum ./ Zden ./ snN ;
 
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
     % coefficients. Cursor is used in saving indices to the preallocated
@@ -79,26 +80,28 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
     cursor = 1 ;
 
-    for eI = 1 : eN
+    for snI = 1 : snN
 
-        % Find node index corresponding to current electrode.
+        % Find out the nodes that the surface of this supernode is made of and
+        % its area. If the area of the supernode is too small, it is
+        % interpreted as a point electrode and only the supernode center will
+        % be used (Agsten 2018).
 
-        nI = e2nI ( eI ) ;
+        useOnlyCenter = superNodeA (snI) <= kwargs.areaThreshold ;
 
-        % Find triangles that are touching this node.
+        if useOnlyCenter
 
-        triI = any ( ismember ( triangles, nI ), 1 ) ;
+            nodeI = superNodeCenters (snI) ;
+            area = 1 ;
 
-        % Sum the areas of the triangles together.
+        else
 
-        sumA = sum ( triA ( triI ) ) ;
+            nodeI = superNodeTri {snI} ;
+            area = superNodeA (snI) ;
 
-        % Also get the specific node indices of the triangles for accessing
-        % groups of columns and rows of A later.
+        end % if
 
-        tnI = triangles (:,triI) ;
-
-        rangeLen = size (tnI,2) - 1 ;
+        rangeLen = size (nodeI,2) - 1 ;
 
         range = cursor : cursor + rangeLen ;
 
@@ -107,29 +110,41 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, e2nI, triangles, 
 
         for ii = 1 : 3
 
-            for jj = ii : 3
+            if useOnlyCenter
 
-                % The rows and columns of A that are being modified.
+                Arows (range) = nodeI ;
 
-                Arows (range) = tnI (ii,:) ;
+                Acols (range) = nodeI ;
 
-                Acols (range) = tnI (jj,:) ;
+                Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* area ;
 
-                if ii == jj
-                    Avals (range) = Zcoeff ( eI ) .* kwargs.onDC .* sumA ;
-                else
-                    Avals (range) = Zcoeff ( eI ) .* kwargs.offDC .* sumA ;
-                end
+            else
 
-                cursor = cursor + rangeLen + 1 ;
+                for jj = ii : 3
 
-                range = cursor : cursor + rangeLen ;
+                    % The rows and columns of A that are being modified.
 
-            end % for jj
+                    Arows (range) = nodeI (ii,:) ;
+
+                    Acols (range) = nodeI (jj,:) ;
+
+                    if ii == jj
+                        Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* area ;
+                    else
+                        Avals (range) = Zcoeff ( snI ) .* kwargs.offDC .* area ;
+                    end
+
+                    cursor = cursor + rangeLen + 1 ;
+
+                    range = cursor : cursor + rangeLen ;
+
+                end % for jj
+
+            end % if
 
         end % for ii
 
-    end % for eI
+    end % for snI
 
     % Apply boundary conditions to A.
 
@@ -141,9 +156,9 @@ end % function
 
 %% Helper functions
 
-function [Arows, Acols, Avals] = preallocateEntries (eN,e2nI,triangles)
+function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, superNodeTri, superNodeA, areaThreshold)
 %
-% [Arows, Acols, Avals] = preallocateEntries (Ne,e2nI,triangles)
+% [Arows, Acols, Avals] = preallocateEntries (Ne,superNodeCenters,triangles)
 %
 % Preallocates the required vectors needed in applying boundary conditions to
 % the given sparse stiffness matrix at once.
@@ -151,39 +166,51 @@ function [Arows, Acols, Avals] = preallocateEntries (eN,e2nI,triangles)
 
     vecsize = 0 ;
 
-    for eI = 1 : eN
+    for snI = 1 : snN
 
-        % Find node index corresponding to current electrode.
+        % Determine whether to use all of supernode surface or just their
+        % centers.
 
-        nI = e2nI ( eI ) ;
+        useOnlyCenter = superNodeA (snI) <= areaThreshold ;
 
-        % Find triangles that are touching this node.
+        if useOnlyCenter
 
-        triI = any ( ismember ( triangles, nI ), 1 ) ;
+            nodeI = superNodeCenters (snI) ;
 
-        % Also get the specific node indices of the triangles for accessing
-        % groups of columns and rows of A later.
+        else
 
-        tnI = triangles (:,triI) ;
+            nodeI = superNodeTri {snI} ;
+
+        end % if
 
         % Go over the combinations of basis functions ψi and ψj in the
-        % triangles, or the combinations of vertices.
+        % triangles, or just use supernode center.
 
         for ii = 1 : 3
 
-            for jj = ii : 3
+            if useOnlyCenter
 
-                % The rows and columns of A that are being modified.
-
-                colnum = numel ( tnI (ii,:) ) ;
+                colnum = size (nodeI, 2) ;
 
                 vecsize = vecsize + colnum ;
 
-            end % for jj
+            else
+
+                for jj = ii : 3
+
+                    % The rows and columns of A that are being modified.
+
+                    colnum = size (nodeI, 2) ;
+
+                    vecsize = vecsize + colnum ;
+
+                end % for jj
+
+            end % if
 
         end % for ii
 
-    end % for eI
+    end % for snI
 
     Acols = zeros (vecsize,1) ;
     Arows = zeros (vecsize,1) ;
