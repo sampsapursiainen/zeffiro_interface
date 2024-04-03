@@ -35,6 +35,10 @@ function C = voltageMat ( Znum, impedances )
         Zden = conj(impedances) .* impedances ;
     end
 
+    % Disallow zero impedances by setting them to unity.
+
+    Zden ( Zden == 0 ) = 1 ;
+
     C = sparse ( 1 : eN, 1 : eN, Znum ./ Zden, eN, eN ) ;
 
 end % function
