@@ -39,6 +39,10 @@ function C = voltageMat ( Znum, impedances )
 
     Zden ( Zden == 0 ) = 1 ;
 
+    % Also handle infinite impedances according to (Agsten 2018).
+
+    Zden ( isinf (Zden) ) = 1 ;
+
     C = sparse ( 1 : eN, 1 : eN, Znum ./ Zden, eN, eN ) ;
 
 end % function

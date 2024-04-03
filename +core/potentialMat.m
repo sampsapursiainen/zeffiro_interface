@@ -73,6 +73,10 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
 
     Zden ( Zden == 0 ) = 1 ;
 
+    % Also handle infinite impedances according to (Agsten 2018).
+
+    Zden ( isinf (Zden) ) = 1 ;
+
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
 
