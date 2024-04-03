@@ -13,32 +13,33 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 %
 % - Znum
 %
-%   The numerator in the expression Z / (conj(Z) * Z), if the input impedances
-%   are complex. If the impedances are real, this should equal 1.
+%   The numerator in the expression Z / (conj(Z) * Z), where Z is an impedance
+%   vector. If the impedances are real, this should equal 1.
 %
 % - impedances (:,1)
 %
-%   The (possibly complex) impedances of the electrodes.
+%   The (possibly complex) impedances of the electrodes. If these are set to
+%   infinity (Inf), boundary effects will be nullified.
 %
 % - superNodeCenters (:,1)
 %
 %   A mapping of electrodes to the nodes that they are attached to.
 %
-% - triangles (3,:)
+% - superNodeTri (3,:)
 %
-%   Triangles that the elecrodes are in contact with.
+%   Mesh triangles that the elecrodes are in contact with.
 %
-% - triA (:,1)
+% - superNodeA (:,1)
 %
 %   The areas of the surface triangles the electrode nodes are in contact with.
 %
 % - kwargs.onDC = 1 / 6
 %
-%   The value of the integral ∫ ψi ψj dS on the diagonal.
+%   The value of the integral ∫ ψi ψj dS when i == j.
 %
 % - kwargs.offDC = 1 / 12
 %
-%   The value of the integral ∫ ψi ψj dS off the diagonal.
+%   The value of the integral ∫ ψi ψj dS when i ~= j.
 %
 
     arguments
