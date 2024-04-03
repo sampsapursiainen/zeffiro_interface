@@ -16,14 +16,6 @@ S = zef.s2_points (:,1:3)' * powOfTen ;
 
 sigma = zef.sigma (:,1) + 1i ;
 
-disp("Computing surface triangles of mesh…")
-
-surfTri = core.tetraSurfaceTriangles (T) ;
-
-surfTri = transpose ( surfTri ) ;
-
-surfTriA = core.triangleAreas (N', surfTri) ;
-
 disp("Indexing surface nodes…")
 
 surfN = N' ;
