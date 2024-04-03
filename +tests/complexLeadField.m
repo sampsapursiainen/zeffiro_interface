@@ -22,13 +22,11 @@ surfN = N' ;
 
 disp("Attaching sensors to nodes in a global reference…")
 
-[~, e2nI] = core.attachSensors(S,N',[]);
-
-e2nIG = e2nI ;
+[~, superNodeCenters] = core.attachSensors(S,N',[]);
 
 disp ("Finding supernodes surrounding electrodes.") ;
 
-sNodes = core.superNodes (T',e2nIG) ;
+sNodes = core.superNodes (T',superNodeCenters) ;
 
 disp("Computing surface triangle areas for supernodes…")
 
@@ -57,17 +55,17 @@ disp("Computing stiffness matrix components reA and imA…")
 
 disp("Applying boundary conditions to reA…")
 
-reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, e2nIG, sNodes.surfTri, sNodeA ) ;
+reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
 
 disp("Applying boundary conditions to imA…")
 
-imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, e2nIG, sNodes.surfTri, sNodeA ) ;
+imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-reB = core.potentialMat ( e2nIG, sNodes.tetra, zeros(1,numel(e2nIG)), reZ, Z, size (N,1) );
+reB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, reZ, Z, size (N,1) );
 
-imB = core.potentialMat ( e2nIG, sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
+imB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
 
 disp("Computing electrode voltage matrix C…")
 
@@ -77,11 +75,11 @@ imC = core.voltageMat (imZ,Z);
 
 disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-5,useGPU=true) ;
+[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
 
 disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-5, useGPU=true) ;
+[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
 
 disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
 
