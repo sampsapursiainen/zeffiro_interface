@@ -1,53 +1,61 @@
-function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI, kwargs)
+function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwargs)
 %
-% [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI, kwargs)
+% [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwargs)
 %
 % Gathers information about a single supernode, a set of tetrahedra who
 % surround a node whose index is nodeI.
 %
 % Input:
 %
-% - tetra (4,:) uint32
+% - elements ({3,4},:) uint32
 %
-%   Quadruples of node indices.
+%   Triples or quadruples of node indices, which indicate the sets of nodes
+%   that each surface triangle or tetrahedron is composed of.
 %
 % - nodeI (1,1) uint32
 %
-%   The index of the central node within the mesh.
+%   The index of the central node within the surface or volumetric mesh.
 %
 % - kwargs.radius = 0
 %
-%   If this is other than 0, all tetra that contain nodes that are within this
+%   If this is other than 0, all elements that contain nodes that are within this
 %   distance from the central node will be included into the supernode.
 %
 % - kwargs.nodes = []
 %
 %   This needs to contain the node set from which nodes within kwargs.radius
-%   are searched from. If this is empty, only the immediate tetra that contain
+%   are searched from. If this is empty, only the immediate elements that contain
 %   nodeI will be considered.
 %
 % Output:
 %
-% - tetraOut
+% - elementsOut
 %
-%   The tetra that this supernode is composed of.
+%   The elements that this supernode is composed of.
 %
 % - surfTri
 %
-%   The surface triangles of the volume that is comprised of tetraOut.
+%   The surface triangles of the volume that is comprised of elementsOut. If
+%   input elements were triangles, this will equal elementsOut.
 %
 % - indInTetra
 %
-%   A logical array whose columns indicate which nodes in corresponding tetra
-%   are within kwargs.radius of the supernode center.
+%   A logical array whose columns indicate which nodes in corresponding
+%   elements are within kwargs.radius of the supernode center.
 %
 
     arguments
-        tetra         (4,:) uint32 { mustBePositive }
+        elements      (:,:) uint32 { mustBePositive }
         nodeI         (1,1) uint32 { mustBePositive }
         kwargs.radius (1,1) double { mustBeNonnegative } = 0
         kwargs.nodes  (:,3) double { mustBeFinite } = []
     end
+
+    % Check validity of inputs.
+
+    [ Nv, ~ ] = size (elements) ;
+
+    assert ( ismember ( Nv, [3,4] ), "The first argument needs to consist of elements that have either 3 or 4 vertices." )
 
     % Find nodes that are within the given radius from the central nodeI.
 
@@ -57,23 +65,33 @@ function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI, kwargs)
 
         nodeI = [ nodeICell{:} ] ;
 
-    end
+    end % if
 
-    % Find which tetra (columns) contain nodeI and whether the node is the 1st,
+    % Find which elements (columns) contain nodeI and whether the node is the 1st,
     % 2nd, 3rd or 4th node in the tetrahedron (the row).
 
-    isTetraMember = ismember ( tetra, nodeI ) ;
+    isElementMember = ismember ( elements, nodeI ) ;
 
-    whichTetra = any (isTetraMember,1) ;
+    whichElements = any (isElementMember,1) ;
 
-    indInTetra = isTetraMember (:,whichTetra) ;
+    indInTetra = isElementMember (:,whichElements) ;
 
-    tetraOut = tetra (:,whichTetra) ;
+    elementsOut = elements (:,whichElements) ;
 
-    % Then find the surface triangles of the supernode.
+    % Then find the surface triangles of the supernode. If a mesh of triangles
+    % was given instead of elements, the surface mesh is the set of qualifying
+    % elements itself.
 
-    surfTri = core.tetraSurfaceTriangles ( transpose ( tetra (:,whichTetra) ) ) ;
+    if Nv == 4
 
-    surfTri = transpose (surfTri) ;
+        surfTri = core.tetraSurfaceTriangles ( transpose ( elements (:,whichElements) ) ) ;
+
+        surfTri = transpose (surfTri) ;
+
+    else
+
+        surfTri = elementsOut ;
+
+    end % if
 
 end % function
