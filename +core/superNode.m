@@ -1,9 +1,9 @@
-function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI)
+function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI, kwargs)
 %
-% [ whichTetra, surfTri, indInTetra ] = superNode (tetra, nodeI)
+% [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI, kwargs)
 %
-% Gathers information about a single supernode, a set of tetrahedra who all
-% have a node whose index is nodeI as one of their vertices.
+% Gathers information about a single supernode, a set of tetrahedra who
+% surround a node whose index is nodeI.
 %
 % Input:
 %
@@ -15,6 +15,17 @@ function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI)
 %
 %   The index of the central node within the mesh.
 %
+% - kwargs.radius = 0
+%
+%   If this is other than 0, all tetra that contain nodes that are within this
+%   distance from the central node will be included into the supernode.
+%
+% - kwargs.nodes = []
+%
+%   This needs to contain the node set from which nodes within kwargs.radius
+%   are searched from. If this is empty, only the immediate tetra that contain
+%   nodeI will be considered.
+%
 % Output:
 %
 % - tetraOut
@@ -23,16 +34,29 @@ function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI)
 %
 % - surfTri
 %
-%   The surface triangles of each supernode.
+%   The surface triangles of the volume that is comprised of tetraOut.
 %
 % - indInTetra
 %
-%   The ordinal of the central node in the tetra that compose the supernode.
+%   A logical array whose columns indicate which nodes in corresponding tetra
+%   are within kwargs.radius of the supernode center.
 %
 
     arguments
-        tetra (4,:) uint32 { mustBePositive }
-        nodeI (1,1) uint32 { mustBePositive }
+        tetra         (4,:) uint32 { mustBePositive }
+        nodeI         (1,1) uint32 { mustBePositive }
+        kwargs.radius (1,1) double { mustBeNonnegative } = 0
+        kwargs.nodes  (:,3) double { mustBeFinite } = []
+    end
+
+    % Find nodes that are within the given radius from the central nodeI.
+
+    if kwargs.radius > 0 && not ( isempty (kwargs.nodes) )
+
+        nodeICell = rangesearch ( kwargs.nodes, kwargs.nodes (nodeI,:), kwargs.radius ) ;
+
+        nodeI = [ nodeICell{:} ] ;
+
     end
 
     % Find which tetra (columns) contain nodeI and whether the node is the 1st,
@@ -40,7 +64,9 @@ function [ tetraOut, surfTri, indInTetra ] = superNode (tetra, nodeI)
 
     isTetraMember = ismember ( tetra, nodeI ) ;
 
-    [ indInTetra, whichTetra ] = find ( isTetraMember ) ;
+    whichTetra = any (isTetraMember,1) ;
+
+    indInTetra = isTetraMember (:,whichTetra) ;
 
     tetraOut = tetra (:,whichTetra) ;
 
