@@ -1,6 +1,6 @@
-function [ sNodes ] = superNodes (tetra,nodeI)
+function [ sNodes ] = superNodes (tetra,nodeI, kwargs)
 %
-% [ sNodes ] = superNodes (tetra,nodeI)
+% [ sNodes ] = superNodes (tetra,nodeI,kwargs)
 %
 % Given a set of central node indices nodeI, finds out the supernodes around
 % these nodes from the mesh defined by nodes and tetra. A supernode is a set of
@@ -16,6 +16,16 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 % - nodeI:
 %
 %   The indices of the central nodes within the mesh.
+%
+% - kwargs.radii = 0
+%
+%   The distances from the centers of the wanted supernodes, within which nodes
+%   and the elements that contain them will be included into the supernodes.
+%
+% - kwargs.nodes = []
+%
+%   If kwargs.radii > 0, this set of nodes wil be queried for nodes that are
+%   close enough to the central nodes.
 %
 % Output:
 %
@@ -42,11 +52,21 @@ function [ sNodes ] = superNodes (tetra,nodeI)
     arguments
         tetra (4,:) uint32 { mustBePositive }
         nodeI (1,:) uint32 { mustBePositive }
+        kwargs.radii (:,1) double { mustBeNonnegative } = 0
+        kwargs.nodes (:,3) double { mustBeFinite } = []
     end
 
     % Number of central nodes.
 
     Nc = numel (nodeI) ;
+
+    % Adjust radii in case it is a scalar.
+
+    if isscalar (kwargs.radii)
+        radii = kwargs.radii * ones (1,Nc) ;
+    else
+        radii = kwargs.radii ;
+    end
 
     % Preallocate space for the headers of the supernode data.
 
@@ -62,7 +82,9 @@ function [ sNodes ] = superNodes (tetra,nodeI)
 
         nI = nodeI (ii) ;
 
-        [whichTetra,surfTri,indInTetra] = core.superNode (tetra,nI) ;
+        radius = radii (ii) ;
+
+        [whichTetra,surfTri,indInTetra] = core.superNode (tetra,nI,radius=radius,nodes=kwargs.nodes) ;
 
         sNodes.indInTetra {ii} = indInTetra ;
 
