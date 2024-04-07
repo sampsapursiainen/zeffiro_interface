@@ -1,9 +1,9 @@
-function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwargs)
+function [ elementsOut, surfTri, indInTetra ] = superNode (elements, centerNodeI, kwargs)
 %
-% [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwargs)
+% [ elementsOut, surfTri, indInTetra ] = superNode (elements, centerNodeI, kwargs)
 %
 % Gathers information about a single supernode, a set of tetrahedra who
-% surround a node whose index is nodeI.
+% surround a node whose index is centerNodeI.
 %
 % Input:
 %
@@ -12,9 +12,9 @@ function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwar
 %   Triples or quadruples of node indices, which indicate the sets of nodes
 %   that each surface triangle or tetrahedron is composed of.
 %
-% - nodeI (1,1) uint32
+% - centerNodeI (1,:) uint32
 %
-%   The index of the central node within the surface or volumetric mesh.
+%   The indices of the central nodes on the surface or within the volumetric mesh.
 %
 % - kwargs.radius = 0
 %
@@ -25,7 +25,7 @@ function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwar
 %
 %   This needs to contain the node set from which nodes within kwargs.radius
 %   are searched from. If this is empty, only the immediate elements that contain
-%   nodeI will be considered.
+%   centerNodeI will be considered.
 %
 % Output:
 %
@@ -46,7 +46,7 @@ function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwar
 
     arguments
         elements      (:,:) uint32 { mustBePositive }
-        nodeI         (1,1) uint32 { mustBePositive }
+        centerNodeI   (1,:) uint32 { mustBePositive }
         kwargs.radius (1,1) double { mustBeNonnegative } = 0
         kwargs.nodes  (:,3) double { mustBeFinite } = []
     end
@@ -57,20 +57,20 @@ function [ elementsOut, surfTri, indInTetra ] = superNode (elements, nodeI, kwar
 
     assert ( ismember ( Nv, [3,4] ), "The first argument needs to consist of elements that have either 3 or 4 vertices." )
 
-    % Find nodes that are within the given radius from the central nodeI.
+    % Find nodes that are within the given radius from the central centerNodeI.
 
     if kwargs.radius > 0 && not ( isempty (kwargs.nodes) )
 
-        nodeICell = rangesearch ( kwargs.nodes, kwargs.nodes (nodeI,:), kwargs.radius ) ;
+        nodeICell = rangesearch ( kwargs.nodes, kwargs.nodes (centerNodeI,:), kwargs.radius ) ;
 
-        nodeI = [ nodeICell{:} ] ;
+        centerNodeI = [ nodeICell{:} ] ;
 
     end % if
 
-    % Find which elements (columns) contain nodeI and whether the node is the 1st,
+    % Find which elements (columns) contain centerNodeI and whether the node is the 1st,
     % 2nd, 3rd or 4th node in the tetrahedron (the row).
 
-    isElementMember = ismember ( elements, nodeI ) ;
+    isElementMember = ismember ( elements, centerNodeI ) ;
 
     whichElements = any (isElementMember,1) ;
 
