@@ -8,8 +8,8 @@ classdef ElectrodeSet < core.Sensor
 
     properties
         positions  (3,:) double { mustBeFinite } = []
-        innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = []
-        outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = []
+        innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
+        outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         impedances (:,1) double { mustBeNonNan } = []
     end
 
@@ -25,8 +25,8 @@ classdef ElectrodeSet < core.Sensor
 
             arguments
                 kwargs.positions  = []
-                kwargs.innerRadii = []
-                kwargs.outerRadii = []
+                kwargs.innerRadii = 0
+                kwargs.outerRadii = 0
                 kwargs.impedances = []
             end
 
