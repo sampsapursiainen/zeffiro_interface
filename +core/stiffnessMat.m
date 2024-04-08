@@ -42,10 +42,6 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     Ntet = size (tetra,1) ;
 
-    if ~ isrow (tensor)
-        tensor = transpose (tensor) ;
-    end
-
     Nten = size (tensor,2) ;
 
     % Check size compatibility and adjust tensor size, if conductivity is
@@ -54,6 +50,10 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     assert ( Ntet == Nten, "The number of conductivities needs to match the number of tetrahedra." ) ;
 
     if isvector (tensor)
+
+        if ~ isrow (tensor)
+            tensor = transpose (tensor) ;
+        end
 
         tensor = cat ( 1, repmat (tensor,3,1), zeros (3,Ntet) ) ;
 
