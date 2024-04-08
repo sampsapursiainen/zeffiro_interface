@@ -43,7 +43,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %
     arguments
         nodes                  (:,3) double { mustBeFinite }
-        tetra                  (:,4) uint32 { mustBePositive }
+        tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
         grayMatterI            (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
         conductivity           (:,:) double { mustBeFinite }
@@ -175,7 +175,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp ("Building interpolation matrix G...")
 
-    sourcePos = core.positionSources ( nodes', tetra (deepTetraI,:)', numel (deepTetraI) ) ;
+    sourcePos = core.positionSources ( nodes', tetra (deepTetraI,:)', kwargs.sourceN ) ;
 
     G = core.hdivInterpolation ( ...
         deepTetraI, ...
@@ -195,7 +195,15 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     reLG = reL * G ;
 
-    imLG = imL * G ;
+    if isempty (imL)
+
+        imLG = [] ;
+
+    else
+
+        imLG = imL * G ;
+
+    end
 
     disp ("Setting zero potential level as the column means of the lead field components.")
 
