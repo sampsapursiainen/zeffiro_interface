@@ -1,6 +1,6 @@
-function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, imagA, kwargs )
+function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity, kwargs )
 %
-% L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, imagA, kwargs )
+% L = eegLeadField ( nodes, tetra, electrodes, kwargs )
 %
 % Computes an uninterpolated elecroencephalography lead field matrix.
 %
@@ -10,29 +10,23 @@ function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, ima
 %
 %   The finite element nodes.
 %
-% - triangles
+% - tetra
 %
-%   The surface triangles that the electrodes are attached to.
+%   The surface tetra that the electrodes are attached to.
+%
+% - grayMatterI
+%
+%   Which elements in the head volume are considered active.
 %
 % - electrodes
 %
 %   The electrodes the lead field will map potentials to.
 %
-% - triA
+% - conductivity
 %
-%   Areas of the surface triangles touching the electrodes.
-%
-% - e2nI
-%
-%   An index set that maps electrodes to nodes.
-%
-% - realA
-%
-%   Real part of a stiffness matrix.
-%
-% - imagA
-%
-%   Imaginary part of a stiffness matrix.
+%   A 3D conductivity tensor, encoded wither as a 1×Ntetra vector in the
+%   isotrophiv case, or as a 6×Ntetra matrix in the anisotrophic case, with
+%   each column containing the values σxx, σyy, σzz, σxy, σxz and σyz.
 %
 % - kwargs.pcgTol
 %
@@ -48,17 +42,53 @@ function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, ima
 %   Z.
 %
     arguments
-        nodes         (:,3) double { mustBeFinite }
-        triangles     (3,:) uint32 { mustBePositive }
-        electrodes    (:,1) core.ElectrodeSet
-        triA          (:,1) double { mustBePositive }
-        e2nI          (:,1) double { mustBePositive, mustBeInteger }
-        realA         (:,:) double { mustBeFinite }
-        imagA         (:,:) double { mustBeFinite }
-        kwargs.pcgTol (1,1) core.LeadFieldParams = 1e-5
+        nodes                  (:,3) double { mustBeFinite }
+        tetra                  (:,4) uint32 { mustBePositive }
+        grayMatterI            (1,:) uint32 { mustBePositive }
+        electrodes             (:,1) core.ElectrodeSet
+        conductivity           (:,:) double { mustBeFinite }
+        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-5
+        kwargs.sourceN         (1,1) double { mustBePositive } = 1000
+        kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
+        kwargs.peelingRadius    (1,1) double { mustBeNonnegative, mustBeFinite } = 0
     end % arguments
 
-    disp ("Initializing impedances for sensors…")
+    disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
+
+    if kwargs.attachSensorsTo == "volume"
+
+        [~, superNodeCenters] = core.attachSensors (electrodes.positions,nodes',[]);
+
+    else
+
+        % First find head surface triangles and their coordinates.
+
+        surfTri = transpose ( core.tetraSurfaceTriangles (tetra) ) ;
+
+        surfTriCoords = transpose ( nodes (surfTri,:) ) ;
+
+        % Then attach sensors to surface triangles and map the result to global nodal indices.
+
+        [~, superNodeCenters] = core.attachSensors (electrodes.positions, surfTriCoords, []);
+
+        superNodeCenters = surfTri (:,superNodeCenters) ;
+
+    end % if
+
+    disp ("Finding supernodes surrounding electrodes…") ;
+
+    sNodes = core.superNodes (tetra',superNodeCenters,radii=electrodes.outerRadii,nodes=nodes) ;
+
+    disp("Computing surface triangle areas for supernodes…")
+
+    sNodeA = zeros ( 1, numel (sNodes.surfTri) ) ;
+
+    for ii = 1 : numel (sNodeA)
+        [triA, ~] = core.triangleAreas (nodes',sNodes.surfTri {ii}) ;
+        sNodeA (ii) = sum (triA) ;
+    end
+
+    disp("Initializing impedances for sensors…")
 
     Z = electrodes.impedances ;
 
@@ -66,66 +96,119 @@ function L = eegLeadField ( nodes, triangles, electrodes, triA, e2nI, realA, ima
 
     imZ = imag (Z) ;
 
-    disp ("Applying boundary conditions to realA…")
+    % Handle the real case.
 
-    realA = core.stiffMatBoundaryConditions ( realA, reZ, Z, s2nI, surfTri, triA ) ;
+    reZ (imZ == 0) = 1 ;
 
-    if not ( isreal ( Z ) )
+    imZ (imZ == 0) = 1 ;
 
-        disp ("Applying boundary conditions to imagA…")
+    disp("Computing volumes of tetra…")
 
-        imagA = core.stiffMatBoundaryConditions ( imagA, imZ, Z, s2nI, surfTri, triA ) ;
+    tetV = core.tetraVolume (nodes,tetra,true) ;
+
+    disp("Computing stiffness matrix components reA and imA…")
+
+    [ reA, imA ] = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+
+    nonEmptyImA = nnz (imA) > 0 ;
+
+    disp("Applying boundary conditions to reA…")
+
+    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
+
+    if nonEmptyImA
+
+        disp("Applying boundary conditions to imA…")
+
+        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
 
     end
 
-    disp ("Compute connection between electrodes and nodes.")
+    disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-    nN = size ( nodes, 1 ) ;
+    reB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, reZ, Z, size (nodes,1) );
 
-    realB = core.potentialMat ( nN, reZ, Z, triA, e2nI, triangles ) ;
+    imB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, size (nodes,1) );
 
-    imagB = core.potentialMat ( nN, imZ, Z, triA, e2nI, triangles ) ;
+    disp("Computing electrode voltage matrix C…")
 
-    disp ("Compute voltages between electrodes.")
+    reC = core.voltageMat (reZ,Z);
 
-    realC = core.voltageMat ( reZ, Z ) ;
+    imC = core.voltageMat (imZ,Z);
 
-    imagC = core.voltageMat ( imZ, Z ) ;
+    disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    % Compute transfer matrix T, a.k.a. the uninterpolated lead field.
+    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
 
-    [ realT, realSC ] = core.transferMatrix( ...
-        realA , ...
-        realB , ...
-        realC , ...
-        tolerances = min ( reZ, 1 ) * kwargs.pcgTol ...
-    ) ;
+    if nonEmptyImA
 
-    if not ( isreal ( Z ) )
+        disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-        [ imagT, imagSC ] = core.transferMatrix( ...
-            imagA , ...
-            imagB , ...
-            imagC , ...
-            tolerances = min ( imZ, 1 ) * kwargs.pcgTol ...
-        ) ;
+        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
 
     else
 
-        imagT = [] ;
-
-        imagSC = [] ;
+        imTM = [] ;
+        imSC = [] ;
 
     end
 
-    % Compute the uninterpolated and un-potential-adjusted EEG lead field. The
-    % Schur complement propagates each local solution near the electrodes to
-    % the global space.
+    disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
 
-    realL = realSC * realT' ;
+    reL = reSC * transpose ( reTM ) ;
 
-    imagL = imagSC * imagT' ;
+    disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
 
-    L = cat ( 3, realL, imagL ) ;
+    imL = imSC * transpose ( imTM ) ;
+
+    disp ("Peeling source positions…")
+
+    [ ~, ~, ~, deepTetraI ] = core.peelSourcePositions (nodes, tetra, grayMatterI, kwargs.peelingRadius) ;
+
+    disp ("Generating face-intersecting dipoles.")
+
+    [stensilFI, signsFI, ~, sourceDirectionsFI, sourceLocationsFI, ~] = core.faceIntersectingDipoles ( nodes, tetra , deepTetraI ) ;
+
+    disp ("Generating edgewise dipoles.")
+
+    [stensilEW, signsEW, ~, sourceDirectionsEW, sourceLocationsEW, ~] = core.edgewiseDipoles ( nodes, tetra , deepTetraI ) ;
+
+    disp ("Building interpolation matrix G...")
+
+    sourcePos = core.positionSources ( nodes', tetra (deepTetraI,:)', numel (deepTetraI) ) ;
+
+    G = core.hdivInterpolation ( ...
+        deepTetraI, ...
+        transpose (sourcePos), ...
+        "pbo", ...
+        stensilFI, ...
+        signsFI, ...
+        sourceDirectionsFI, ...
+        sourceLocationsFI, ...
+        stensilEW, ...
+        signsEW, ...
+        sourceDirectionsEW, ...
+        sourceLocationsEW ...
+    ) ;
+
+    disp ("Applying G to the real an imaginary parts of the lead field.") ;
+
+    reLG = reL * G ;
+
+    imLG = imL * G ;
+
+    disp ("Setting zero potential level as the column means of the lead field components.")
+
+    reLGmean = mean (reLG,1) ;
+
+    imLGmean = mean (imLG,1) ;
+
+    reLGM = reLG - reLGmean ;
+
+    imLGM = imLG - imLGmean ;
+
+    disp ("constructing final L as a 3D array.") ;
+
+    L = cat (3,reLGM, imLGM) ;
 
 end % function
