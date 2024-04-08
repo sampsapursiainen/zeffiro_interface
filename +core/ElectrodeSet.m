@@ -7,10 +7,10 @@ classdef ElectrodeSet < core.Sensor
 %
 
     properties
-        positions  (:,3) double { mustBeFinite }      = []
-        innerRadii (:,1) double { mustBeFinite }      = []
-        outerRadii (:,1) double { mustBeFinite }      = []
-        impedances (:,1) double { mustBeNonnegative } = []
+        positions  (3,:) double { mustBeFinite } = []
+        innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = []
+        outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = []
+        impedances (:,1) double { mustBeNonNan } = []
     end
 
     methods
@@ -30,7 +30,7 @@ classdef ElectrodeSet < core.Sensor
                 kwargs.impedances = []
             end
 
-            sensorN = size ( kwargs.positions, 1 ) ;
+            sensorN = size ( kwargs.positions, 2 ) ;
 
             sizeAssertion = @(arg) isscalar ( arg ) || numel ( arg ) == sensorN ;
 
@@ -50,7 +50,7 @@ classdef ElectrodeSet < core.Sensor
             ) ;
 
             assert ( ...
-                all ( kwargs.innerRadii < kwargs.outerRadii ), ...
+                all ( kwargs.innerRadii <= kwargs.outerRadii ), ...
                 "All of the given inner radii must be less than the given outer radii." ...
             ) ;
 
@@ -87,7 +87,7 @@ classdef ElectrodeSet < core.Sensor
         % electrode positions there are.
         %
 
-            N = size ( self.positions, 1 ) ;
+            N = size ( self.positions, 2 ) ;
 
         end % function
 
