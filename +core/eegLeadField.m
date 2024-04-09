@@ -1,6 +1,6 @@
 function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity, kwargs )
 %
-% L = eegLeadField ( nodes, tetra, electrodes, kwargs )
+% L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated elecroencephalography lead field matrix.
 %
