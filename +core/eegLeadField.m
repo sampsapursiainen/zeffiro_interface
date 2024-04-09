@@ -32,6 +32,25 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %
 %   Relative residual tolerance of the PCG solver that is used to construct a transfer matrix.
 %
+% - kwargs.sourceN
+%
+%   The number of source locations one wishes to generate.
+%
+% - kwargs.attachSensorsTo ∈ {"volume","surface"}
+%
+%   Whether to attach sensors to the entire volume, or just the surface of a
+%   head model.
+%
+% - kwargs.peelingRadius = 0
+%
+%   The distance from active compartment surfaces, within which source
+%   positions are not allowed.
+%
+% - kwargs.HdivOptimizationMethod ∈ {"pbo","mpo"} = "pbo"
+%
+%   Whether to use Position-Based Optimization or Mean Position and Orientation
+%   as a means of interpolating dipoles to source positions.
+%
 % Outputs:
 %
 % - L
