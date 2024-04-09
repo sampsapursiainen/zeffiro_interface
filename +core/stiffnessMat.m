@@ -44,27 +44,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     Ntet = size (tetra,1) ;
 
-    % Adjust tensor size and orientation, if given as a vector (isotropic constant conductivity).
-
-    if isvector (tensor)
-
-        if ~ isrow (tensor)
-            tensor = transpose (tensor) ;
-        end
-
-        tensor = cat ( 1, repmat (tensor,3,1), zeros (3,Ntet) ) ;
-
-    elseif ismatrix (tensor)
-
-        Ntenr = size (tensor,1) ;
-
-        assert ( Ntenr == 6, "If given as a matrix, the input tensor needs to contain 6 rows, equal to the number of node combinations in a tetrahedron.")
-
-    else
-
-        error ("The input tensor needs to be a row vector or a matrix.") ;
-
-    end
+    tensor = core.reshapeTensor (tensor) ;
 
     % Check tensor size.
 
