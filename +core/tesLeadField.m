@@ -204,6 +204,6 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp ("Constructing final L as a 3D array…") ;
 
-    L = cat (3,reL,imL);
+    L = pagetranspose ( cat (3,reL,imL) );
 
 end % function
