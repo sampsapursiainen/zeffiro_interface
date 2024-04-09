@@ -47,7 +47,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
         grayMatterI            (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
         conductivity           (:,:) double { mustBeFinite }
-        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-5
+        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-6
         kwargs.sourceN         (1,1) double { mustBePositive } = 1000
         kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
         kwargs.peelingRadius    (1,1) double { mustBeNonnegative, mustBeFinite } = 0
@@ -71,7 +71,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
         [~, superNodeCenters] = core.attachSensors (electrodes.positions, surfTriCoords, []);
 
-        superNodeCenters = surfTri (:,superNodeCenters) ;
+        superNodeCenters = surfTri (superNodeCenters) ;
 
     end % if
 
