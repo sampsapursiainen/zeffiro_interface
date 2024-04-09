@@ -42,15 +42,16 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %   Z.
 %
     arguments
-        nodes                  (:,3) double { mustBeFinite }
-        tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
-        grayMatterI            (1,:) uint32 { mustBePositive }
-        electrodes             (:,1) core.ElectrodeSet
-        conductivity           (:,:) double { mustBeFinite }
-        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-6
-        kwargs.sourceN         (1,1) double { mustBePositive } = 1000
-        kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
-        kwargs.peelingRadius    (1,1) double { mustBeNonnegative, mustBeFinite } = 0
+        nodes                         (:,3) double { mustBeFinite }
+        tetra                         (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
+        grayMatterI                   (1,:) uint32 { mustBePositive }
+        electrodes                    (:,1) core.ElectrodeSet
+        conductivity                  (:,:) double { mustBeFinite }
+        kwargs.pcgTol                 (1,1) double { mustBePositive, mustBeFinite }=  1e-6
+        kwargs.sourceN                (1,1) double { mustBePositive } = 1000
+        kwargs.attachSensorsTo        (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
+        kwargs.peelingRadius          (1,1) double { mustBeNonnegative, mustBeFinite } = 0
+        kwargs.HdivOptimizationMethod (1,1) string { mustBeMember(kwargs.HdivOptimizationMethod,["pbo","mpo"]) } = "pbo"
     end % arguments
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
@@ -180,7 +181,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
     G = core.hdivInterpolation ( ...
         deepTetraI, ...
         transpose (sourcePos), ...
-        "pbo", ...
+        kwargs.HdivOptimizationMethod, ...
         stensilFI, ...
         signsFI, ...
         sourceDirectionsFI, ...
