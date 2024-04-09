@@ -135,7 +135,7 @@ end
                         entry_vec_2 = entry_vec_2 + tensor(k,sourceElementI).*grad(k_1,:);
                     case 3
                         entry_vec_3 = entry_vec_3 + tensor(k,sourceElementI).*grad(k_1,:);
-                end % switch k_1
+                end % switch k_2
 
             end % if k
 
