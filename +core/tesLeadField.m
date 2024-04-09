@@ -32,10 +32,6 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %
 %   Relative residual tolerance of the PCG solver that is used to construct a transfer matrix.
 %
-% - kwargs.sourceN
-%
-%   The number of source locations one wishes to generate.
-%
 % - kwargs.attachSensorsTo ∈ {"volume","surface"}
 %
 %   Whether to attach sensors to the entire volume, or just the surface of a
@@ -45,11 +41,6 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %
 %   The distance from active compartment surfaces, within which source
 %   positions are not allowed.
-%
-% - kwargs.HdivOptimizationMethod ∈ {"pbo","mpo"} = "pbo"
-%
-%   Whether to use Position-Based Optimization or Mean Position and Orientation
-%   as a means of interpolating dipoles to source positions.
 %
 % Outputs:
 %
@@ -67,10 +58,8 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
         electrodes                    (:,1) core.ElectrodeSet
         conductivity                  (:,:) double { mustBeFinite }
         kwargs.pcgTol                 (1,1) double { mustBePositive, mustBeFinite }=  1e-6
-        kwargs.sourceN                (1,1) double { mustBePositive } = 1000
         kwargs.attachSensorsTo        (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
         kwargs.peelingRadius          (1,1) double { mustBeNonnegative, mustBeFinite } = 0
-        kwargs.HdivOptimizationMethod (1,1) string { mustBeMember(kwargs.HdivOptimizationMethod,["pbo","mpo"]) } = "pbo"
     end % arguments
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
@@ -199,35 +188,22 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     end
 
-    [G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, grayMatterI) ;
-
-    disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
-
-    reL = reSC * transpose ( reTM ) ;
-
-    disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
-
-    imL = imSC * transpose ( imTM ) ;
-
     disp ("Peeling source positions…")
 
     [ ~, ~, ~, deepTetraI ] = core.peelSourcePositions (nodes, tetra, grayMatterI, kwargs.peelingRadius) ;
 
-    disp ("Generating face-intersecting dipoles.")
+    [G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, deepTetraI) ;
 
-    [stensilFI, signsFI, ~, sourceDirectionsFI, sourceLocationsFI, ~] = core.faceIntersectingDipoles ( nodes, tetra , deepTetraI ) ;
+    disp ("Building lead field components…") ;
 
-    disp ("Generating edgewise dipoles.")
+    G = [ G1 ; G2 ; G3 ] ;
 
-    [stensilEW, signsEW, ~, sourceDirectionsEW, sourceLocationsEW, ~] = core.edgewiseDipoles ( nodes, tetra , deepTetraI ) ;
+    reL = G * reR ;
 
-    disp ("Building lead field…") ;
+    imL = G * imR ;
 
+    disp ("Constructing final L as a 3D array…") ;
 
-    disp ("constructing final L as a 3D array.") ;
-
-    error ("Unimplemented!")
-
-    L = [];
+    L = cat (3,reL,imL);
 
 end % function
