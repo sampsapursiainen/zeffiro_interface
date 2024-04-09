@@ -223,10 +223,11 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp ("Building lead field…") ;
 
-    reL
 
     disp ("constructing final L as a 3D array.") ;
 
-    L = cat (3,reLGM, imLGM) ;
+    error ("Unimplemented!")
+
+    L = [];
 
 end % function
