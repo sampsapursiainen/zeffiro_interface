@@ -198,16 +198,10 @@ if eval( 'zef.use_gpu') == 1 && eval( 'zef.gpu_count') > 0
 
         T(:,i) = x;
 
-        if impedance_inf == 0
-            Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
-        else
-            Schur_complement(:,i) = schur_expression(x, i); % C(:,i);
-        end
+        Schur_complement(:,i) = schur_expression(x, i); % C(:,i) - B'*x ;
 
         if tol_val < relres_vec(i)
-            'Error: PCG iteration did not converge.'
-            T = [];
-            return
+            disp("Warning: PCG iteration did not converge to dsired precision within maxiters at iteration " + i) ;
         end
 
         time_val = toc;
@@ -312,16 +306,10 @@ else % Use CPU instead of GPU
 
         % Construct stencil T column by column.
 
-        if impedance_inf == 0
-            Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
-        else
-            Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind);
-        end
+        Schur_complement(:,block_ind) = schur_expression(T(:,block_ind), block_ind); % C(:,block_ind) - B' * T(:,block_ind);
 
         if not(isempty(find(tol_val < relres_vec)))
-            warning('Error: PCG iteration did not converge. Returning empty transfer matrix...')
-            T = [];
-            return
+            disp('Warning: PCG iteration did not converge within given maxiters at iteration ' + i) ;
         end
 
         time_val = toc;
