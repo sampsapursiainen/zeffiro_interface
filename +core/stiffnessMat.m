@@ -20,20 +20,19 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 %
 %   The volumes of the tetrahedra.
 %
-% - tensor
+% - tensor (6,Ntetra) double
 %
-%   The conductivities of the tetrahedra. This can be a vector, if the
-%   conductivity is isotrophic (σxx = σyy = σzz) and constant across a
-%   tetrahedron. If conductivity is anisotrophic, then this needs to be a
-%   6 × Ntetra matrix, where each column contains the conductivity components
-%   σxx, σyy, σzz, σxy, σxz and σyz.
+%   The conductivities of the tetrahedra. This needs to be a 6 × Ntetra matrix,
+%   where each column contains the conductivity components σxx, σyy, σzz, σxy,
+%   σxz and σyz. If conductivity is isotropic, then the columns should contain
+%   the components σ, σ, σ, 0, 0, 0 for the constant coductivity σ.
 %
 
     arguments
         nodes  (:,3) double { mustBeFinite }
         tetra  (:,4) double { mustBeFinite, mustBePositive, mustBeInteger }
         tetraV (1,:) double { mustBeFinite, mustBePositive }
-        tensor (:,:) double { mustBeFinite }
+        tensor (6,:) double { mustBeFinite }
     end
 
     disp ("Computing stiffness matrix…" + newline) ;
@@ -43,8 +42,6 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     Nn = size (nodes,1) ;
 
     Ntet = size (tetra,1) ;
-
-    tensor = core.reshapeTensor (tensor) ;
 
     % Check tensor size.
 
