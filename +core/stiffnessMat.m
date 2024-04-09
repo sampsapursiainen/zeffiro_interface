@@ -36,6 +36,8 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
         tensor (:,:) double { mustBeFinite }
     end
 
+    disp ("Computing stiffness matrix…" + newline) ;
+
     % Abbreviations of matrix sizes.
 
     Nn = size (nodes,1) ;
@@ -104,6 +106,8 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
         grad_1 = core.tetraVolumeGradient(nodes, tetra, i);
 
         for j = i : n_of_tetra_faces
+
+            disp ("  ψ" + i + ", ψ" + j) ;
 
             if i == j
                 grad_2 = grad_1;
