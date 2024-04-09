@@ -76,11 +76,9 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     end % if
 
-    disp ("Finding supernodes surrounding electrodes…") ;
+    disp ("Finding electrode--head contact surfaces…") ;
 
     sNodes = core.superNodes (tetra',superNodeCenters,radii=electrodes.outerRadii,nodes=nodes) ;
-
-    disp("Computing surface triangle areas for supernodes…")
 
     sNodeA = zeros ( 1, numel (sNodes.surfTri) ) ;
 
