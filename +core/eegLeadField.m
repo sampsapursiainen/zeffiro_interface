@@ -126,6 +126,8 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Computing stiffness matrix components reA and imA…")
 
+    conductivity = core.reshapeTensor (conductivity) ;
+
     [ reA, imA ] = core.stiffnessMat (nodes,tetra,tetV,conductivity);
 
     nonEmptyImA = nnz (imA) > 0 ;
