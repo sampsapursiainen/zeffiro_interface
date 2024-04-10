@@ -27,33 +27,13 @@ wbi = 0;
 
 N = size(nodes,1);
 
-reA = spalloc(N,N,0);
+A = spalloc(N,N,0);
 
 n_of_tetra_faces = 4;
 
 % Start constructing the elements of 𝐴 iteratively. Summing the integrands
 % ∇ψⱼ ⋅ (𝑇∇ψᵢ) multiplied by volume elements d𝑉 like this corresponds to
 % integration.
-
-real_integrand = zeros ( 1, size ( tetrahedra, 1 ) ) ;
-
-real_tensor = real ( tensor ) ;
-
-% If tissues have a capacitance, we also have an imaginary part in our stiffness matrix.
-
-tensorIsNotReal = not ( isreal ( tensor ) ) ;
-
-if tensorIsNotReal
-    imag_integrand = zeros ( 1, size ( tetrahedra, 1 ) ) ;
-    imag_tensor = imag ( tensor ) ;
-    imA = spalloc(N,N,0) ;
-else
-    imag_integrand = [] ;
-    imag_tensor = [] ;
-    imA = spalloc(0,0,0) ;
-end
-
-% Start integration.
 
 for i = 1 : n_of_tetra_faces
 
@@ -66,6 +46,10 @@ for i = 1 : n_of_tetra_faces
         else
             grad_2 = zef_volume_gradient(nodes, tetrahedra, j);
         end
+
+        % Preallocate integrand vector
+
+        entry_vec = zeros(1,size(tetrahedra,1));
 
         for k = 1 : 6
             switch k
@@ -89,67 +73,66 @@ for i = 1 : n_of_tetra_faces
                     k_2 = 3;
             end
 
-            % Calculate the real_integrand times a volume element ∇ψⱼ⋅(σ∇ψᵢ) d𝑉
+            % Calculate the integrand times a volume element ∇ψⱼ⋅(σ∇ψᵢ) d𝑉
 
             if k <= 3
-                tensor_coeff = grad_1(k_1,:) .* grad_2(k_2,:) ./ (9 * volume);
+                entry_vec =         ...
+                    entry_vec       ...
+                    +               ...
+                    tensor(k,:)     ...
+                    .*              ...
+                    grad_1(k_1,:)   ...
+                    .*              ...
+                    grad_2(k_2,:)   ...
+                    ./              ...
+                    (9 * volume);
             else
-                tensor_coeff = ( grad_1(k_1,:) .* grad_2(k_2,:) + grad_1(k_2,:) .* grad_2(k_1,:) ) ./ (9 * volume);
+                entry_vec =             ...
+                    entry_vec           ...
+                    +                   ...
+                    tensor(k,:)         ...
+                    .*                  ...
+                    (                   ...
+                    grad_1(k_1,:)   ...
+                    .*              ...
+                    grad_2(k_2,:)   ...
+                    +               ...
+                    grad_1(k_2,:)   ...
+                    .*              ...
+                    grad_2(k_1,:)   ...
+                    )                   ...
+                    ./                  ...
+                    (9 * volume);
             end
-
-            real_integrand = real_integrand + real_tensor(k,:) .* tensor_coeff ;
-
-            if tensorIsNotReal
-                imag_integrand = real_integrand + imag_tensor(k,:) .* tensor_coeff ;
-            end
-
         end
 
-        % Construct a part of 𝐴 by mapping the indices of the tetrahedra to the
-        % real integrand.
+        % Construct a part of 𝐴 by mapping the indices of the tetrahedra to
+        % the integrand (a sparse matrix is a hash table).
 
-        reA_part = sparse(tetrahedra(:,i),tetrahedra(:,j), real_integrand',N,N);
+        A_part = sparse(tetrahedra(:,i),tetrahedra(:,j), entry_vec',N,N);
 
-        % Sum the integrand to 𝐴 iteratively. A is symmetric, and hence we
-        % operate differently if we are on the diagonal.
+        % Sum the integrand to 𝐴 iteratively. This corresponds to integration.
 
         if i == j
-            reA = reA + reA_part;
+
+            % On the diagonal, no need to do anthing special
+
+            A = A + A_part;
+
         else
-            reA = reA + reA_part + reA_part';
-        end % if
 
-        if tensorIsNotReal
+            % Stiffness matrices are symmetric, so what is added to the
+            % lower triangle must be added to the upper one. Hence the
+            % added transpose.
 
-            imA_part = sparse(tetrahedra(:,i),tetrahedra(:,j), imag_integrand',N,N);
+            A = A + A_part + A_part';
 
-            if i == j
-                imA = imA + imA_part;
-            else
-                imA = imA + imA_part + imA_part';
-            end % if
-
-        end % if
-
-    end % for
+        end
+    end
 
     wbi = wbi + 1;
-
     zef_waitbar(wbi , n_of_tetra_faces, wb);
 
-    % Reset integrand vectors for the next round.
-
-    real_integrand ( : ) = 0 ;
-    imag_integrand ( : ) = 0 ;
-
-end % for
-
-zeromat = sparse(size(reA,1),size(reA,2)) ;
-
-if tensorIsNotReal
-    A = [ reA, zeromat ; zeromat, imA ] ;
-else
-    A = reA ;
 end
 
 zef_waitbar(1,1,wb);
