@@ -200,7 +200,15 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     reL = G * reR ;
 
-    imL = G * imR ;
+    if isempty (imR)
+
+        imL = [] ;
+
+    else
+
+        imL = G * imR ;
+
+    end
 
     disp ("Constructing final L as a 3D array…") ;
 
