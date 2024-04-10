@@ -99,11 +99,14 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     sNodes = core.superNodes (tetra',superNodeCenters,radii=electrodes.outerRadii,nodes=nodes) ;
 
-    sNodeA = zeros ( 1, numel (sNodes.surfTri) ) ;
+    sNodeSurfArea = zeros ( 1, numel (sNodes.surfTri) ) ;
 
-    for ii = 1 : numel (sNodeA)
+    sNodeTriArea = cell (1,numel (sNodes.surfTri)) ;
+
+    for ii = 1 : numel (sNodeSurfArea)
         [triA, ~] = core.triangleAreas (nodes',sNodes.surfTri {ii}) ;
-        sNodeA (ii) = sum (triA) ;
+        sNodeSurfArea (ii) = sum (triA) ;
+        sNodeTriArea {ii} = triA ;
     end
 
     disp("Initializing impedances for sensors…")
@@ -134,21 +137,21 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Applying boundary conditions to reA…")
 
-    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
+    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeSurfArea ) ;
 
     if nonEmptyImA
 
         disp("Applying boundary conditions to imA…")
 
-        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
+        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeSurfArea ) ;
 
     end
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-    reB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, reZ, Z, size (nodes,1) );
+    reB = core.potentialMat ( superNodeCenters, sNodes.surfTri, sNodeTriArea, sNodeSurfArea, reZ, Z, size (nodes,1) );
 
-    imB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, size (nodes,1) );
+    imB = core.potentialMat ( superNodeCenters, sNodes.surfTri, sNodeTriArea, sNodeSurfArea, imZ, Z, size (nodes,1) );
 
     disp("Computing electrode voltage matrix C…")
 
