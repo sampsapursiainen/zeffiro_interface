@@ -1,6 +1,6 @@
-function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, impedances, nN, kwargs )
+function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAreas, superNodeSurfArea, Znum, impedances, nN, kwargs )
 %
-% B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, impedances, nN, kwargs )
+% B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAreas, superNodeSurfArea, Znum, impedances, nN, kwargs )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -16,13 +16,17 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
 %
 %   The indices of the supernode centers.
 %
-% - superNodeTetra (1,:) cell
+% - superNodeTriangles (1,:) cell
 %
-%   Quaduples of node indices indicating which nodes the tetra are composed of.
+%   Triples of node indices indicating which nodes supernode surfaces are composed of.
 %
-% - superNodeA
+% - superNodeTriAreas
 %
-%   The surface areas of the supernodes whose centers the elctrodes are
+%   Areas of the individual supernode surface triangles per supernode.
+%
+% - superNodeSurfArea
+%
+%   The total surface areas of the supernodes whose centers the electrodes are
 %   associated with.
 %
 % - Znum
@@ -50,8 +54,9 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
 
     arguments
         superNodeCenters     (1,:) uint32 { mustBePositive }
-        superNodeTetra       (1,:) cell
-        superNodeA           (1,:) double { mustBeFinite, mustBeNonnegative }
+        superNodeTriangles       (1,:) cell
+        superNodeTriAreas     (1,:) cell
+        superNodeSurfArea    (1,:) double { mustBeFinite, mustBeNonnegative }
         Znum                 (:,1) double { mustBeFinite }
         impedances           (:,1) double { mustBeNonNan }
         nN                   (1,1) uint32 { mustBePositive }
@@ -89,30 +94,48 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
 
     B = sparse ( nN, eN ) ;
 
+    mf = matfile("newB.mat",Writable=true) ;
+
     for snI = uint32 (1 : eN)
 
         % Find out the nodes that this supernode is made of and its area. If
         % the area of the supernode is too small, it is interpreted as a point
         % electrode and only the supernode center will be used (Agsten 2018).
 
-        if superNodeA (snI) <= kwargs.areaThreshold
+        isPointElectrode = superNodeSurfArea (snI) <= kwargs.areaThreshold ;
 
-            nodeI = superNodeCenters (snI) ;
-            area = 1 ;
+        superNodeCenter = superNodeCenters (snI) ;
+
+        if isPointElectrode
+
+            nodeI = superNodeCenter ;
+            totalArea = 1 ;
+            triArea = 1 ;
 
         else
 
-            nodeI = superNodeTetra {snI} ;
-            area = superNodeA (snI) ;
+            nodeI = superNodeTriangles {snI} ;
+            totalArea = superNodeSurfArea (snI) ;
+            triArea = superNodeTriAreas {snI} ;
 
         end % if
 
         % Distribute the impedance to the node positions in B.
 
-        entry = kwargs.psiIntegral * Zcoeff (snI) * area ;
+        entry = kwargs.psiIntegral * Zcoeff (snI) / totalArea .* triArea ;
 
-        B = B + sparse ( nodeI, snI, entry, nN, eN) ;
+        mf.("entry"+snI) = entry ;
+
+        for vi = 1 : 3
+
+            vertexI = nodeI (vi,:) ;
+
+            B = B + sparse ( vertexI, snI, entry, nN, eN) ;
+
+        end % for
 
     end % for
+
+    mf.B = B ;
 
 end % function
