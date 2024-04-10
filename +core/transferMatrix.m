@@ -73,7 +73,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
     end
 
-    disp (newline + "Building a transfer matrix:" + newline) ;
+    disp (newline + "Building a transfer matrix T = A \ B:" + newline) ;
 
     % Preallocate output.
 

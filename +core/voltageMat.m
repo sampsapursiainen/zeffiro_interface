@@ -27,6 +27,8 @@ function C = voltageMat ( Znum, impedances )
         impedances (:,1) double { mustBeNonNan }
     end
 
+    disp ("Computing voltage matrix C…")
+
     eN = numel ( impedances ) ;
 
     if isreal ( impedances )
