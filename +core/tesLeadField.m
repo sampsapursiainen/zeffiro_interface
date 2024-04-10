@@ -1,6 +1,6 @@
-function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity, kwargs )
+function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
-% L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity, kwargs )
+% L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -14,7 +14,7 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %
 %   The surface tetra that the electrodes are attached to.
 %
-% - grayMatterI
+% - volumeCurrentI
 %
 %   Which elements in the head volume are considered active.
 %
@@ -52,14 +52,13 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 %   Z.
 %
     arguments
-        nodes                         (:,3) double { mustBeFinite }
-        tetra                         (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
-        grayMatterI                   (1,:) uint32 { mustBePositive }
-        electrodes                    (:,1) core.ElectrodeSet
-        conductivity                  (:,:) double { mustBeFinite }
-        kwargs.pcgTol                 (1,1) double { mustBePositive, mustBeFinite }=  1e-6
-        kwargs.attachSensorsTo        (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
-        kwargs.peelingRadius          (1,1) double { mustBeNonnegative, mustBeFinite } = 0
+        nodes                  (:,3) double { mustBeFinite }
+        tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
+        volumeCurrentI         (1,:) uint32 { mustBePositive }
+        electrodes             (:,1) core.ElectrodeSet
+        conductivity           (:,:) double { mustBeFinite }
+        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-6
+        kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
     end % arguments
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
@@ -188,11 +187,9 @@ function L = tesLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     end
 
-    disp ("Peeling source positions…")
+    disp ("Computing volume currents σ∇ψ…")
 
-    [ ~, ~, ~, deepTetraI ] = core.peelSourcePositions (nodes, tetra, grayMatterI, kwargs.peelingRadius) ;
-
-    [G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, deepTetraI) ;
+    [G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
 
     disp ("Building lead field components…") ;
 
