@@ -59,6 +59,8 @@ function B = potentialMat ( superNodeCenters, superNodeTetra, superNodeA, Znum, 
         kwargs.areaThreshold (1,1) double { mustBeNonnegative } = eps
     end
 
+    disp ("Computing potential matrix B…")
+
     eN = numel ( impedances ) ;
 
     % Impedance coefficient denominator.
