@@ -158,12 +158,13 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
             end % if
 
+            % Reset integrand vectors for the next round.
+
+            real_integrand (:) = 0 ;
+            imag_integrand (:) = 0 ;
+
+
         end % for
-
-        % Reset integrand vectors for the next round.
-
-        real_integrand ( : ) = 0 ;
-        imag_integrand ( : ) = 0 ;
 
     end % for
 
