@@ -83,7 +83,7 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
 
-    Zcoeff = Znum ./ Zden ./ eN ;
+    Zcoeff = Znum ./ Zden ;
 
     % Also handle infinite impedances according to (Agsten 2018).
 
