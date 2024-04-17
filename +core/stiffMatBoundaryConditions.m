@@ -73,7 +73,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
         Zden = conj ( impedances ) .* impedances ;
     end
 
-    Zcoeff = Znum ./ Zden ./ snN ;
+    Zcoeff = Znum ./ Zden ;
 
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
     % coefficients. Cursor is used in saving indices to the preallocated
