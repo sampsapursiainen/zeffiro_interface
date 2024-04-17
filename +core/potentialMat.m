@@ -111,12 +111,14 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
             nodeI = superNodeCenter ;
             totalArea = 1 ;
             triArea = 1 ;
+            maxVertexI = 1 ;
 
         else
 
             nodeI = superNodeTriangles {snI} ;
             totalArea = superNodeSurfArea (snI) ;
             triArea = superNodeTriAreas {snI} ;
+            maxVertexI = 3 ;
 
         end % if
 
@@ -126,7 +128,7 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
 
         mf.("entry"+snI) = entry ;
 
-        for vi = 1 : 3
+        for vi = 1 : maxVertexI
 
             vertexI = nodeI (vi,:) ;
 
