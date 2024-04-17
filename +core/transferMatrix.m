@@ -144,7 +144,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         T (:,i) = x ;
 
-        S (:,i) = C (:,i) - B' * x ;
+        S (:,i) = B' * x - C (:,i) ;
 
     end % for
 
