@@ -71,6 +71,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
         kwargs.attachSensorsTo        (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
         kwargs.peelingRadius          (1,1) double { mustBeNonnegative, mustBeFinite } = 0
         kwargs.HdivOptimizationMethod (1,1) string { mustBeMember(kwargs.HdivOptimizationMethod,["pbo","mpo"]) } = "pbo"
+        kwargs.useGPU                 (1,1) logical = true
     end % arguments
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
@@ -161,13 +162,13 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
+    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=kwargs.pcgTol,useGPU=true) ;
 
     if nonEmptyImA
 
         disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
+        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=kwargs.pcgTol, useGPU=true) ;
 
     else
 

@@ -57,8 +57,9 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
         volumeCurrentI         (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
         conductivity           (:,:) double { mustBeFinite }
-        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite }=  1e-6
+        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
+        kwargs.useGPU          (1,1) logical = true
     end % arguments
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
@@ -149,13 +150,13 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
+    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
 
     if nonEmptyImA
 
         disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
+        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=kwargs.pcgTol, useGPU=kwargs.useGPU) ;
 
     else
 
