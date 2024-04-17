@@ -138,15 +138,20 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Applying boundary conditions to reA…")
 
-    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeSurfArea ) ;
+    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeTriArea, sNodeSurfArea ) ;
 
     if nonEmptyImA
 
         disp("Applying boundary conditions to imA…")
 
-        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeSurfArea ) ;
+        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeTriArea, sNodeSurfArea ) ;
 
     end
+
+    mf = matfile("newA.mat",Writable=true);
+
+    mf.reAbc = reA ;
+    mf.imAbc = imA ;
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 

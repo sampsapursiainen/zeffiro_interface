@@ -1,6 +1,6 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeA, kwargs )
+function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeTriAreas, superNodeSurfArea, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeCenters, superNodeTri, superNodeA, kwargs )
+% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeTriAreas, superNodeSurfArea, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
@@ -29,7 +29,11 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 %
 %   Mesh triangles that the elecrodes are in contact with.
 %
-% - superNodeA (:,1)
+% - superNodeTriAreas (1,:)
+%
+%   The areas of the individual triangles in each supernode.
+%
+% - superNodeSurfArea (:,1)
 %
 %   The areas of the surface triangles the electrode nodes are in contact with.
 %
@@ -43,14 +47,15 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 %
 
     arguments
-        A                (:,:) double { mustBeFinite }
-        Znum             (:,1) double { mustBeNonNan }
-        impedances       (:,1) double { mustBeNonNan }
-        superNodeCenters (1,:) uint32 { mustBePositive }
-        superNodeTri     (1,:) cell
-        superNodeA       (1,:) double { mustBeFinite, mustBeNonnegative }
-        kwargs.onDC      (1,1) double { mustBeFinite } = 1 / 6
-        kwargs.offDC     (1,1) double { mustBeFinite } = 1 / 12
+        A                    (:,:) double { mustBeFinite }
+        Znum                 (:,1) double { mustBeNonNan }
+        impedances           (:,1) double { mustBeNonNan }
+        superNodeCenters     (1,:) uint32 { mustBePositive }
+        superNodeTri         (1,:) cell
+        superNodeTriAreas    (1,:) cell
+        superNodeSurfArea    (1,:) double { mustBeFinite, mustBeNonnegative }
+        kwargs.onDC          (1,1) double { mustBeFinite } = 1 / 6
+        kwargs.offDC         (1,1) double { mustBeFinite } = 1 / 12
         kwargs.areaThreshold (1,1) double { mustBeNonnegative } = eps
     end
 
@@ -63,7 +68,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
     % Preallocate vectors needed in constructing the boundary condition matrix
     % in one sweep.
 
-    [Arows, Acols, Avals] = preallocateEntries (snN, superNodeCenters, superNodeTri, superNodeA, kwargs.areaThreshold) ;
+    [Arows, Acols, Avals] = preallocateEntries (snN, superNodeCenters, superNodeTri, superNodeSurfArea, kwargs.areaThreshold) ;
 
     % Compute impedance coefficients.
 
@@ -88,17 +93,19 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
         % interpreted as a point electrode and only the supernode center will
         % be used (Agsten 2018).
 
-        useOnlyCenter = superNodeA (snI) <= kwargs.areaThreshold ;
+        useOnlyCenter = superNodeSurfArea (snI) <= kwargs.areaThreshold ;
 
         if useOnlyCenter
 
             nodeI = superNodeCenters (snI) ;
-            area = 1 ;
+            totalArea = 1 ;
+            triArea = 1 ;
 
         else
 
             nodeI = superNodeTri {snI} ;
-            area = superNodeA (snI) ;
+            totalArea = superNodeSurfArea (snI) ;
+            triArea = superNodeTriAreas {snI} ;
 
         end % if
 
@@ -117,7 +124,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 
                 Acols (range) = nodeI ;
 
-                Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* area ;
+                Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* area / totalArea ;
 
             else
 
@@ -130,9 +137,9 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
                     Acols (range) = nodeI (jj,:) ;
 
                     if ii == jj
-                        Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* area ;
+                        Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* triArea / totalArea ;
                     else
-                        Avals (range) = Zcoeff ( snI ) .* kwargs.offDC .* area ;
+                        Avals (range) = Zcoeff ( snI ) .* kwargs.offDC .* triArea / totalArea ;
                     end
 
                     cursor = cursor + rangeLen + 1 ;
@@ -157,7 +164,7 @@ end % function
 
 %% Helper functions
 
-function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, superNodeTri, superNodeA, areaThreshold)
+function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, superNodeTri, superNodeSurfArea, areaThreshold)
 %
 % [Arows, Acols, Avals] = preallocateEntries (Ne,superNodeCenters,triangles)
 %
@@ -172,7 +179,7 @@ function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, super
         % Determine whether to use all of supernode surface or just their
         % centers.
 
-        useOnlyCenter = superNodeA (snI) <= areaThreshold ;
+        useOnlyCenter = superNodeSurfArea (snI) <= areaThreshold ;
 
         if useOnlyCenter
 
