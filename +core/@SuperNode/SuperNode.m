@@ -66,6 +66,22 @@ classdef SuperNode
 
         end % function
 
+        function self = attachToMesh (self,meshNodes)
+        %
+        % self = attachToMesh (self,meshNodes)
+        %
+        % Recomputes self.centralNode{I,Pos} based on given meshNodes.
+        %
+
+            arguments
+                self
+                meshNodes (3,:) double { mustBeFinite }
+            end
+
+            [self.centralNodePos, self.centralNodeI] = core.attachSensors (self.centralNodePos,meshNodes,[]) ;
+
+        end
+
     end % methods
 
     methods (Static)
@@ -98,7 +114,7 @@ classdef SuperNode
 
             else
 
-                nodeRadii = kwargs.radii ;
+                nodeRadii = kwargs.nodeRadii ;
 
             end % if
 
