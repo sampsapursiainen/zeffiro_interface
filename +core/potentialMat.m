@@ -1,4 +1,4 @@
-function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAreas, superNodeSurfArea, Znum, impedances, nN, kwargs )
+function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 %
 % B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAreas, superNodeSurfArea, Znum, impedances, nN, kwargs )
 %
@@ -12,22 +12,9 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
 %
 % Inputs:
 %
-% - superNodeCenters
+% - superNodes
 %
-%   The indices of the supernode centers.
-%
-% - superNodeTriangles (1,:) cell
-%
-%   Triples of node indices indicating which nodes supernode surfaces are composed of.
-%
-% - superNodeTriAreas
-%
-%   Areas of the individual supernode surface triangles per supernode.
-%
-% - superNodeSurfArea
-%
-%   The total surface areas of the supernodes whose centers the electrodes are
-%   associated with.
+%   The supernodes indicating the contact surface between the mesh and the electrodes.
 %
 % - Znum
 %
@@ -53,10 +40,7 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
 %
 
     arguments
-        superNodeCenters     (1,:) uint32 { mustBePositive }
-        superNodeTriangles       (1,:) cell
-        superNodeTriAreas     (1,:) cell
-        superNodeSurfArea    (1,:) double { mustBeFinite, mustBeNonnegative }
+        superNodes           (1,:) core.SuperNode
         Znum                 (:,1) double { mustBeFinite }
         impedances           (:,1) double { mustBeNonNan }
         nN                   (1,1) uint32 { mustBePositive }
@@ -102,9 +86,11 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
         % the area of the supernode is too small, it is interpreted as a point
         % electrode and only the supernode center will be used (Agsten 2018).
 
-        isPointElectrode = superNodeSurfArea (snI) <= kwargs.areaThreshold ;
+        totalArea = superNodes (snI) . totalSurfaceArea ;
 
-        superNodeCenter = superNodeCenters (snI) ;
+        isPointElectrode = totalArea <= kwargs.areaThreshold ;
+
+        superNodeCenter = superNodes (snI) . centralNodeI ;
 
         if isPointElectrode
 
@@ -115,9 +101,9 @@ function B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAr
 
         else
 
-            nodeI = superNodeTriangles {snI} ;
-            totalArea = superNodeSurfArea (snI) ;
-            triArea = superNodeTriAreas {snI} ;
+            nodeI = superNodes (snI) . surfaceTriangles ;
+            totalArea = totalArea ;
+            triArea = superNodes (snI) . surfaceTriangleAreas ;
             maxVertexI = 3 ;
 
         end % if

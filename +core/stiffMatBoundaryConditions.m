@@ -1,4 +1,4 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeTriAreas, superNodeSurfArea, kwargs )
+function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwargs )
 %
 % A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeTriAreas, superNodeSurfArea, kwargs )
 %
@@ -21,21 +21,10 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
 %   The (possibly complex) impedances of the electrodes. If these are set to
 %   infinity (Inf), boundary effects will be nullified.
 %
-% - superNodeCenters (:,1)
+% - superNodes (:,1)
 %
-%   A mapping of electrodes to the nodes that they are attached to.
-%
-% - superNodeTri (3,:)
-%
-%   Mesh triangles that the elecrodes are in contact with.
-%
-% - superNodeTriAreas (1,:)
-%
-%   The areas of the individual triangles in each supernode.
-%
-% - superNodeSurfArea (:,1)
-%
-%   The areas of the surface triangles the electrode nodes are in contact with.
+%   A set of supernodes establishing a contact surface between electrodes and
+%   the mesh.
 %
 % - kwargs.onDC = 1 / 6
 %
@@ -50,10 +39,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
         A                    (:,:) double { mustBeFinite }
         Znum                 (:,1) double { mustBeNonNan }
         impedances           (:,1) double { mustBeNonNan }
-        superNodeCenters     (1,:) uint32 { mustBePositive }
-        superNodeTri         (1,:) cell
-        superNodeTriAreas    (1,:) cell
-        superNodeSurfArea    (1,:) double { mustBeFinite, mustBeNonnegative }
+        superNodes           (1,:) core.SuperNode
         kwargs.onDC          (1,1) double { mustBeFinite } = 1 / 6
         kwargs.offDC         (1,1) double { mustBeFinite } = 1 / 12
         kwargs.areaThreshold (1,1) double { mustBeNonnegative } = eps
@@ -68,7 +54,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
     % Preallocate vectors needed in constructing the boundary condition matrix
     % in one sweep.
 
-    [Arows, Acols, Avals] = preallocateEntries (snN, superNodeCenters, superNodeTri, superNodeSurfArea, kwargs.areaThreshold) ;
+    [Arows, Acols, Avals] = preallocateEntries (snN, superNodes, kwargs.areaThreshold) ;
 
     % Compute impedance coefficients.
 
@@ -93,19 +79,21 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters,
         % interpreted as a point electrode and only the supernode center will
         % be used (Agsten 2018).
 
-        useOnlyCenter = superNodeSurfArea (snI) <= kwargs.areaThreshold ;
+        totalArea = superNodes (snI) . totalSurfaceArea ;
+
+        useOnlyCenter = totalArea <= kwargs.areaThreshold ;
 
         if useOnlyCenter
 
-            nodeI = superNodeCenters (snI) ;
+            nodeI = superNodes (snI) . centralNodeI ;
             totalArea = 1 ;
             triArea = 1 ;
 
         else
 
-            nodeI = superNodeTri {snI} ;
-            totalArea = superNodeSurfArea (snI) ;
-            triArea = superNodeTriAreas {snI} ;
+            nodeI = superNodes (snI) . surfaceTriangles ;
+            totalArea = totalArea ;
+            triArea = superNodes (snI) . surfaceTriangleAreas ;
 
         end % if
 
@@ -164,7 +152,7 @@ end % function
 
 %% Helper functions
 
-function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, superNodeTri, superNodeSurfArea, areaThreshold)
+function [Arows, Acols, Avals] = preallocateEntries (snN,superNodes, areaThreshold)
 %
 % [Arows, Acols, Avals] = preallocateEntries (Ne,superNodeCenters,triangles)
 %
@@ -179,15 +167,17 @@ function [Arows, Acols, Avals] = preallocateEntries (snN,superNodeCenters, super
         % Determine whether to use all of supernode surface or just their
         % centers.
 
-        useOnlyCenter = superNodeSurfArea (snI) <= areaThreshold ;
+        totalArea = superNodes (snI) . totalSurfaceArea ;
+
+        useOnlyCenter = totalArea <= areaThreshold ;
 
         if useOnlyCenter
 
-            nodeI = superNodeCenters (snI) ;
+            nodeI = superNodes (snI) . centralNodeI ;
 
         else
 
-            nodeI = superNodeTri {snI} ;
+            nodeI = superNodes (snI) . surfaceTriangles ;
 
         end % if
 
