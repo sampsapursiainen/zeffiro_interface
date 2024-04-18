@@ -1,6 +1,6 @@
 function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodeCenters, superNodeTri, superNodeTriAreas, superNodeSurfArea, kwargs )
+% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
