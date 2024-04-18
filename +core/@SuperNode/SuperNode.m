@@ -11,7 +11,7 @@ classdef SuperNode
     properties
         centralNodeI         (1,1) uint32 { mustBeNonnegative } = 0  % A central node of this supernode.
         radius               (1,1) double { mustBeNonnegative } = 0  % A radius of the largest sphere that is entirely contained in this supernode.
-        meshElements         (4,:) uint32 { mustBePositive }    = [] % Elements such as triangles or tetrahedra around the central node.
+        meshElements         (:,:) uint32 { mustBePositive }    = [] % Elements such as triangles or tetrahedra around the central node.
         indInElements        (:,:) logical                      = [] % A logical array whose columns indicate which nodes in corresponding elements are within kwargs.radius of the supernode center.
         surfaceTriangles     (3,:) uint32 { mustBePositive }    = [] % The surface of the volume defined by elements.
         surfaceTriangleAreas (1,:) double { mustBeNonnegative } = [] % Areas of the surface triangles.
@@ -93,19 +93,23 @@ classdef SuperNode
 
                 [~, centralNodeIs] = core.attachSensors (superNodePos,meshNodes,[]);
 
+                sNodeElements = meshElements ;
+
             else % use surface triangles.
 
                 % First find surface triangles and their coordinates.
 
                 surfTri = transpose ( core.tetraSurfaceTriangles (meshElements') ) ;
 
-                surfTriCoords = transpose ( meshNodes (:,surfTri) ) ;
+                surfTriCoords = meshNodes (:,surfTri) ;
 
                 % Then attach supernodes to surface triangles and map the result to global node indices.
 
                 [~, centralNodeIs] = core.attachSensors (superNodePos, surfTriCoords, []);
 
                 centralNodeIs = surfTri (centralNodeIs) ;
+
+                sNodeElements = surfTri ;
 
             end % if
 
@@ -121,7 +125,7 @@ classdef SuperNode
 
                 superNodes (ii) . radius = radius ;
 
-                [whichElements,surfTri,indInElements] = core.superNode (meshElements,nI,radius=radius,nodes=meshNodes') ;
+                [whichElements,surfTri,indInElements] = core.superNode (sNodeElements,nI,radius=radius,nodes=meshNodes') ;
 
                 superNodes (ii) . indInElements = indInElements ;
 
