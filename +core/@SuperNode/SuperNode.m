@@ -10,6 +10,7 @@ classdef SuperNode
 
     properties
         centralNodeI         (1,1) uint32 { mustBeNonnegative } = 0  % A central node of this supernode.
+        centralNodePos       (3,:) double { mustBeFinite }      = [] % The positions of the central node indices, after having been attached to a mesh.
         radius               (1,1) double { mustBeNonnegative } = 0  % A radius of the largest sphere that is entirely contained in this supernode.
         meshElements         (:,:) uint32 { mustBePositive }    = [] % Elements such as triangles or tetrahedra around the central node.
         indInElements        (:,:) logical                      = [] % A logical array whose columns indicate which nodes in corresponding elements are within kwargs.radius of the supernode center.
@@ -29,6 +30,7 @@ classdef SuperNode
 
             arguments
                 kwargs.centralNodeI = 0
+                kwargs.centralNodePos = []
                 kwargs.meshElements = []
                 kwargs.indInElements = []
                 kwargs.surfaceTriangles = []
@@ -91,7 +93,7 @@ classdef SuperNode
 
             if kwargs.attachNodesTo == "volume"
 
-                [~, centralNodeIs] = core.attachSensors (superNodePos,meshNodes,[]);
+                [centralNodePos, centralNodeIs] = core.attachSensors (superNodePos,meshNodes,[]);
 
                 sNodeElements = meshElements ;
 
@@ -105,7 +107,7 @@ classdef SuperNode
 
                 % Then attach supernodes to surface triangles and map the result to global node indices.
 
-                [~, centralNodeIs] = core.attachSensors (superNodePos, surfTriCoords, []);
+                [centralNodePos, centralNodeIs] = core.attachSensors (superNodePos, surfTriCoords, []);
 
                 centralNodeIs = surfTri (centralNodeIs) ;
 
@@ -120,6 +122,8 @@ classdef SuperNode
                 nI = centralNodeIs (ii) ;
 
                 superNodes (ii) . centralNodeI = nI ;
+
+                superNodes (ii) . centralNodePos = centralNodePos (:,ii) ;
 
                 radius = nodeRadii (ii) ;
 
