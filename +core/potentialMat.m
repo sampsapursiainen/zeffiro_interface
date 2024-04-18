@@ -1,6 +1,6 @@
 function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 %
-% B = potentialMat ( superNodeCenters, superNodeTriangles, superNodeTriAreas, superNodeSurfArea, Znum, impedances, nN, kwargs )
+% B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
