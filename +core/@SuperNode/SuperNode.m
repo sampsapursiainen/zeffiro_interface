@@ -49,6 +49,23 @@ classdef SuperNode
 
         end % function
 
+        function self = computeSurfaceAreas (self,meshNodes)
+        %
+        % self = computeSurfaceAreas (self,meshNodes)
+        %
+        % Computes the surface areas of self.surfaceTriangles and returns a
+        % modified instance of self.
+        %
+
+            arguments
+                self
+                meshNodes (3,:) double { mustBeFinite }
+            end
+
+            [ self.surfaceTriangleAreas, ~ ] = core.triangleAreas (meshNodes,self.surfaceTriangles) ;
+
+        end % function
+
     end % methods
 
     methods (Static)
