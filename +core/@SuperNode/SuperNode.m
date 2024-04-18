@@ -82,6 +82,21 @@ classdef SuperNode
 
         end
 
+        function area = totalSurfaceArea (self)
+        %
+        % area = totalSurfaceArea (self)
+        %
+        % Computes the total surface area of the surface triangles in this supernode.
+        %
+
+            arguments
+                self
+            end
+
+            area = sum (self.surfaceTriangleAreas) ;
+
+        end % function
+
     end % methods
 
     methods (Static)
