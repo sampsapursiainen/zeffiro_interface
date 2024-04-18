@@ -16,6 +16,7 @@ classdef SuperNode
         indInElements        (:,:) logical                      = [] % A logical array whose columns indicate which nodes in corresponding elements are within kwargs.radius of the supernode center.
         surfaceTriangles     (3,:) uint32 { mustBePositive }    = [] % The surface of the volume defined by elements.
         surfaceTriangleAreas (1,:) double { mustBeNonnegative } = [] % Areas of the surface triangles.
+        totalSurfaceArea     (1,1) double  { mustBeNonnegative } = 0 % The total area of the surface triangles.
     end % properties
 
     methods
@@ -35,6 +36,7 @@ classdef SuperNode
                 kwargs.indInElements = []
                 kwargs.surfaceTriangles = []
                 kwargs.surfaceTriangleAreas = []
+                kwargs.totalSurfaceArea = 0
             end
 
             fieldNames = string ( fieldnames (kwargs) ) ;
@@ -82,9 +84,9 @@ classdef SuperNode
 
         end
 
-        function area = totalSurfaceArea (self)
+        function self = computeTotalSurfaceArea (self)
         %
-        % area = totalSurfaceArea (self)
+        % area = computeTotalSurfaceArea (self)
         %
         % Computes the total surface area of the surface triangles in this supernode.
         %
@@ -93,7 +95,7 @@ classdef SuperNode
                 self
             end
 
-            area = sum (self.surfaceTriangleAreas) ;
+            self.totalSurfaceArea = sum (self.surfaceTriangleAreas) ;
 
         end % function
 
@@ -186,6 +188,8 @@ classdef SuperNode
                 superNodes (ii) . surfaceTriangles = surfTri ;
 
                 [superNodes(ii).surfaceTriangleAreas, ~] = core.triangleAreas (meshNodes,surfTri) ;
+
+                superNodes (ii) = superNodes (ii) . computeTotalSurfaceArea ;
 
             end % for
 
