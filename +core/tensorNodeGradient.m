@@ -52,10 +52,6 @@ end
 
     Ntet = size (tetra,1) ;
 
-    % Adjust tensor size and orientation, if given as a vector (isotropic constant conductivity).
-
-    tensor = core.reshapeTensor (tensor) ;
-
     % Check tensor size.
 
     Nten = size (tensor,2) ;
