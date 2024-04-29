@@ -74,6 +74,16 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
         kwargs.useGPU                 (1,1) logical = true
     end % arguments
 
+    disp ("Peeling source positions…")
+
+    [ ~, ~, ~, deepTetraI ] = core.peelSourcePositions (nodes, tetra, grayMatterI, kwargs.peelingRadius) ;
+
+    assert ( kwargs.sourceN <= numel (deepTetraI), "You cannot request more sources than there are unpeeled active tetra. The number of unpeeled active tetra is " + numel (deepTetraI) + "." ) ;
+
+    disp ("Positioning sources…")
+
+    [ sourcePos, sourceTetI ] = core.positionSources ( nodes', tetra (deepTetraI,:)', kwargs.sourceN ) ;
+
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
 
     superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=kwargs.attachSensorsTo) ;
@@ -158,10 +168,6 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     imL = imSC * transpose ( imTM ) ;
 
-    disp ("Peeling source positions…")
-
-    [ ~, ~, ~, deepTetraI ] = core.peelSourcePositions (nodes, tetra, grayMatterI, kwargs.peelingRadius) ;
-
     disp ("Generating face-intersecting dipoles.")
 
     [stensilFI, signsFI, ~, sourceDirectionsFI, sourceLocationsFI, ~] = core.faceIntersectingDipoles ( nodes, tetra , deepTetraI ) ;
@@ -171,8 +177,6 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
     [stensilEW, signsEW, ~, sourceDirectionsEW, sourceLocationsEW, ~] = core.edgewiseDipoles ( nodes, tetra , deepTetraI ) ;
 
     disp ("Building interpolation matrix G...")
-
-    sourcePos = core.positionSources ( nodes', tetra (deepTetraI,:)', kwargs.sourceN ) ;
 
     G = core.hdivInterpolation ( ...
         deepTetraI, ...
