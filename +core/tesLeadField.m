@@ -60,7 +60,14 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
         kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
         kwargs.useGPU          (1,1) logical = true
+        kwargs.sourceN         (1,1) double { mustBePositive } = 1000
     end % arguments
+
+    disp ("Positioning sources…")
+
+    [ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
+
+    volumeCurrentI = volumeCurrentI (sourceTetI) ;
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
 
