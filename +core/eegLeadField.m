@@ -82,7 +82,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp ("Positioning sources…")
 
-    [ sourcePos, sourceTetI ] = core.positionSources ( nodes', tetra (deepTetraI,:)', kwargs.sourceN ) ;
+    [ sourcePos, ~ ] = core.positionSources ( nodes', tetra (deepTetraI,:)', kwargs.sourceN ) ;
 
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
 
