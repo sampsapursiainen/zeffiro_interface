@@ -1,4 +1,4 @@
-function sourcePos = positionSources ( nodes, elements, sourceN )
+function [sourcePos, sourceTetI] = positionSources ( nodes, elements, sourceN )
 %
 % sourcePos = positionSources ( nodes, elements, sourceN )
 %
@@ -37,6 +37,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
     % because MATLAB is asenine about types.
 
     sourceN = double (sourceN) ;
+
+
 
     % Number of elements.
 
@@ -95,6 +97,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
     tetI = 1 : step : Ne ;
 
+    sourceTetI = repelem(tetI,1,sNperE) ;
+
     sourcePos = pagemtimes ( T (:,:,tetI), bcPos ) + lastVC (:,:,tetI) ;
 
     Nse = size (sourcePos,3) ;
@@ -116,6 +120,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
 
             sourcePos (:,Ns-sourceN+1:Ns) = [] ;
 
+            sourceTetI (Ns-sourceN+1:Ns) = [] ;
+
         elseif diffFromTarget < 0 && sourceN < Ne
 
             % We created less sources than was ordered and more are needed. Find
@@ -124,6 +130,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
             nonTetI = find ( not ( ismember (1:Ne, tetI) ) ) ;
 
             ntI = nonTetI (1 : abs(diffFromTarget)) ;
+
+            sourceTetI = cat ( 2, sourceTetI, ntI ) ;
 
             missingPos = pagemtimes ( T (:,:,ntI), bcPos ) + lastVC (:,:,ntI) ;
 
@@ -158,6 +166,8 @@ function sourcePos = positionSources ( nodes, elements, sourceN )
             step = ceil (Ne / absdft) ;
 
             range = 1 : step : Ne ;
+
+            sourceTetI = cat ( 2, sourceTetI, repelem (range,1,sNperE) ) ;
 
             missingPos = pagemtimes ( T (:,:,range), bcPos ) + lastVC (:,:,range) ;
 
