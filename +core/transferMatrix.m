@@ -66,7 +66,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         A (:,:) double { mustBeFinite }
         B (:,:) double { mustBeFinite }
         C (:,:) double { mustBeFinite }
-        kwargs.permutation    (:,1) double { mustBeInteger, mustBePositive } = 1 : size (A,1)
+        kwargs.permutation    (:,1) double { mustBeInteger, mustBePositive } = symamd (A)
         kwargs.preconditioner (:,1) double = 1 ./ full ( diag ( A ) )
         kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.useGPU         (1,1) logical = true
