@@ -142,7 +142,7 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     disp ("Computing resistivity matrix…") ;
 
-    reSchurC = (reSC - transpose (reB) * reTM) ;
+    reSchurC = (reC - transpose (reB) * reTM) ;
 
     reI = eye ( size (reSchurC) ) ;
 
@@ -152,7 +152,7 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     if nonEmptyImA
 
-        imSchurC = (imSC - transpose (imB) * imTM) ;
+        imSchurC = (imC - transpose (imB) * imTM) ;
 
         imI = eye ( size (imSchurC) ) ;
 
@@ -189,5 +189,9 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
     disp ("Constructing final L as a 3D array…") ;
 
     L = pagetranspose ( cat (3,reL,imL) );
+
+    mf = matfile ("newtesL.mat", Writable=true);
+
+    mf.L = L ;
 
 end % function
