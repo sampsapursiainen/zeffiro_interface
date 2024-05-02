@@ -67,8 +67,6 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     [ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
 
-    volumeCurrentI = volumeCurrentI (sourceTetI) ;
-
     disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
 
     superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=kwargs.attachSensorsTo) ;
@@ -125,13 +123,13 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    [ reTM, ~ ] = core.transferMatrix (reA,-reB,reC,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
+    [ reTM, ~ ] = core.transferMatrix (reA,reB,reC,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
 
     if nonEmptyImA
 
         disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-        [ imTM, ~ ] = core.transferMatrix (imA,-imB,imC,tolerances=kwargs.pcgTol, useGPU=kwargs.useGPU) ;
+        [ imTM, ~ ] = core.transferMatrix (imA,imB,imC,tolerances=kwargs.pcgTol, useGPU=kwargs.useGPU) ;
 
     else
 
@@ -173,7 +171,7 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     G = [ G1 ; G2 ; G3 ] ;
 
-    reL = G * reR ;
+    reL = - G * reR ;
 
     if isempty (imR)
 
@@ -181,16 +179,40 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     else
 
-        imL = G * imR ;
+        imL = - G * imR ;
 
     end
 
-    disp ("Constructing final L as a 3D array…") ;
+    if isempty (imL)
+        L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN ) ;
+    else
+        L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN, 2 ) ;
+    end
 
-    L = pagetranspose ( cat (3,reL,imL) );
+    disp ("Restricting lead field to actual source positions…")
 
-    mf = matfile ("newtesL.mat", Writable=true);
+    Nvc = numel (volumeCurrentI) ;
 
+    reL = transpose (reL) ;
+    imL = transpose (imL) ;
+
+    L (:,1:3:end,1) = reL (:,sourceTetI) ;
+    L (:,2:3:end,1) = reL (:,Nvc + sourceTetI) ;
+    L (:,3:3:end,1) = reL (:,2 * Nvc + sourceTetI) ;
+
+    if not ( isempty ( imL ) )
+
+        L (:,1:3:end,2) = imL (:,sourceTetI) ;
+        L (:,2:3:end,2) = imL (:,Nvc + sourceTetI) ;
+        L (:,3:3:end,2) = imL (:,2 * Nvc + sourceTetI) ;
+
+    end
+
+    mf = matfile ("newLtes.mat", Writable=true);
+
+    mf.G1 = G1 ;
+    mf.G2 = G2;
+    mf.G3 = G3;
     mf.L = L ;
 
 end % function
