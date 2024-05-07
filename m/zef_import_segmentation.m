@@ -94,8 +94,8 @@ if not(isequal(file_name,0))
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
                 end
-                if not(isempty(filename))
-                    filename = [folder_name filesep foldername filesep filename];
+                if not(isempty(foldername))
+                    filename = [foldername filesep filename];
                 end
                 if ismember('filetype',ini_cell(i,:))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filetype'),1)];
@@ -220,8 +220,8 @@ if not(isequal(file_name,0))
                 else
                     atlas_colortable_filename = '';
                 end
-                if not(isempty(atlas_colortable_filename))
-                    atlas_colortable_filename = [folder_name filesep foldername filesep atlas_colortable_filename];
+                if not(isempty(foldername))
+                    atlas_colortable_filename = [foldername filesep atlas_colortable_filename];
                 end
 
                 if find(ismember(ini_cell(i,:),'atlas_points_filename'))
@@ -231,8 +231,8 @@ if not(isequal(file_name,0))
                 else
                     atlas_points_filename = '';
                 end
-                if not(isempty(atlas_points_filename))
-                    atlas_points_filename = [folder_name filesep foldername filesep atlas_points_filename];
+                if not(isempty(foldername))
+                    atlas_points_filename = [foldername filesep atlas_points_filename];
                 end
 
                 if find(ismember(ini_cell(i,:),'atlas_merge'))
@@ -378,8 +378,8 @@ if not(isequal(file_name,0))
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
                 end
-                if not(isempty(filename))
-                    filename = [folder_name filesep foldername filesep filename];
+                if not(isempty(foldername))
+                    filename = [foldername filesep filename];
                 end
                 if ismember('filetype',ini_cell(i,:))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'filetype'),1)];
@@ -441,7 +441,7 @@ if not(isequal(file_name,0))
                         find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     sensor_taglist_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)+1});
-                    sensor_taglist_filename = fullfile(folder_name, foldername, sensor_taglist_filename);
+                    sensor_taglist_filename = fullfile(foldername, sensor_taglist_filename);
                     sensor_taglist_cell = readcell(sensor_taglist_filename)';
                 else
                     sensor_taglist_cell = [];
@@ -456,7 +456,9 @@ if not(isequal(file_name,0))
                 eval(['zef.' sensor_tag '_imaging_method_name = ''' modality ''';']);
                 eval(['zef.' sensor_tag '_name_list = sensor_taglist_cell ;']);
                 zef.file = filename;
-                zef.file_path = folder_name;
+                if not(isempty(foldername))
+                zef.file_path = foldername;
+                end
                 %         assignin('base','zef',zef_data);
                 %         eval('zef_assign_data;');
                 %         clear zef_data;
@@ -501,8 +503,8 @@ if not(isequal(file_name,0))
                         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                         foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
                     end
-                    if not(isempty(filename))
-                        filename = [folder_name filesep foldername filesep filename];
+                    if not(isempty(foldername))
+                        filename = [foldername filesep filename];
                     end
                     zef = zef_import_mat_struct(zef,filename);
                 end
@@ -518,10 +520,10 @@ if not(isequal(file_name,0))
                         ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                         foldername = (ini_cell{i,find(ismember(ini_cell(i,:),'foldername'),1)+1});
                     end
-                    if not(isempty(filename))
-                        filename = [folder_name filesep foldername filesep filename];
+                    if not(isempty(foldername))
+                        filename = [foldername filesep filename];
                     end
-                    eval(['run(''' filename  ''');']);
+                    eval(['evalc(''' filename  ''');']);
                 end
 
             end

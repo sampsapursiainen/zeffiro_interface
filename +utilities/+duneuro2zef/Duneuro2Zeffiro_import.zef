@@ -1,19 +1,19 @@
-type,script,filename,Duneuro2Zeffiro_convert
-type,sensors,name,Coils,filename,data/converted/MEG_sensors.mat,filetype,mat
+type,script,filename,utilities.duneuro2zef.Duneuro2Zeffiro_convert
+type,sensors,name,Coils,filename,MEG_sensors.mat,foldername,data/converted/,filetype,mat
 type,sensors,name,Electrodes,filename,data/converted/EEG_sensors.mat,filetype,mat
-type,struct,filename,data/converted/tetra_mesh.mat,filetype,mat
-type,struct,filename,data/converted/source_space.mat,filetype,mat
-type,struct,filename,data/converted/L_MEG.mat,filetype,mat
-type,struct,filename,data/converted/MEG_measurements.mat,filetype,mat
-type,struct,filename,data/converted/resection_points.mat,filetype,mat
-type,script,filename,MEG_to_databank
-type,struct,filename,data/converted/L_EEG.mat,filetype,mat
-type,struct,filename,data/converted/EEG_measurements.mat,filetype,mat
-type,script,filename,EEG_to_databank
+type,struct,filename,tetra_mesh.mat,foldername,data/converted/,filetype,mat
+type,struct,filename,source_space.mat,foldername,data/converted/,filetype,mat
+type,struct,filename,L_MEG.mat,foldername,data/converted/,filetype,mat
+type,struct,filename,MEG_measurements.mat,foldername,data/converted/,filetype,mat
+type,struct,filename,resection_points.mat,foldername,data/converted/,filetype,mat
+type,script,filename,utilities.duneuro2zef.MEG_to_databank
+type,struct,filename,L_EEG.mat,foldername,data/converted/,filetype,mat
+type,struct,filename,EEG_measurements.mat,foldername,data/converted/,filetype,mat
+type,script,filename,utilities.duneuro2zef.EEG_to_databank
 type,segmentation,name,Scalp
 type,segmentation,name,Compact bone
 type,segmentation,name,Spongious bone
 type,segmentation,name,CSF
 type,segmentation,name,Grey matter
 type,segmentation,name,White matter
-type,script,filename,Duneuro2Zeffiro_settings
+type,script,filename,utilities.duneuro2zef.Duneuro2Zeffiro_settings

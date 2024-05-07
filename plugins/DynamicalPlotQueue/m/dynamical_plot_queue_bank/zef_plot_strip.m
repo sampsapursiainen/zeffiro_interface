@@ -5,13 +5,20 @@ if nargin == 0;
     strip_struct = evalin('caller','zef.strip_struct');
 end
 
-[x y z] = sphere(20);
-r = 0.25;
+for i = 1:size(strip_struct.electrode,1)
+
+    if i == 1 || i == 8
+        r = 0.75
+    else
+        r = 0.35
+    end
+
+    [x y z] = sphere(20);
+
 x = r*x;
 y = r*y;
 z = r*z;
 
-for i = 1:size(strip_struct.electrode,1)
     h_s = surf(strip_struct.electrode(i,1)+x,strip_struct.electrode(i,2)+y,strip_struct.electrode(i,3)+z);
     h_s.EdgeColor = 'none';
     h_s.Tag = 'additional: electrode strip';
@@ -27,11 +34,11 @@ axes(h_axes);
 
 
 hold on
-tri = strip_struct.faces;
+tri = strip_struct.faces{1};
 
-x = strip_struct.vertices(:,1);
-y = strip_struct.vertices(:,2);
-z = strip_struct.vertices(:,3);
+x = strip_struct.vertices{1}(:,1);
+y = strip_struct.vertices{1}(:,2);
+z = strip_struct.vertices{1}(:,3);
 
 
 h_t = trisurf(tri,x,y,z);

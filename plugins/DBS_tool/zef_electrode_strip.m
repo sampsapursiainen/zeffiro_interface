@@ -23,8 +23,6 @@ j = 1;
 n_rot = 360/strip_struct.ele_sep;
 
 
-
-
 for k = 1 : 8
 
     if mod(k,2) == 0
@@ -52,8 +50,6 @@ for k = 1 : 8
     end
 
 end
-
-
 
 %hold on
 electrode_data = zeros(40,6);
@@ -86,15 +82,9 @@ TR = triangulation(tri,[x(:) y(:) z(:)]);
 
 tri = freeBoundary(TR);
 
-
-
 p.vertices = [x(:),y(:),z(:)];
 
 p.faces = tri;
-
-
-
-
 
 p = reducepatch(p,n_cylinder_edges);
 

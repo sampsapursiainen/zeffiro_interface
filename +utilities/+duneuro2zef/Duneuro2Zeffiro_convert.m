@@ -1,4 +1,4 @@
-zef_start_dataBank;
+zef = zef_start_dataBank(zef);
 load data/exported/mesh.mat;
 mesh.labels = max(mesh.labels) + 1 - mesh.labels;
 [tetra,domain_labels] = zef_hexa_to_tetra(mesh.elements,mesh.labels);
@@ -6,7 +6,8 @@ nodes = mesh.nodes;
 brain_ind = find(domain_labels == 2);
 save data/converted/tetra_mesh.mat tetra domain_labels nodes brain_ind
 clear mesh nodes tetra domain_labels brain_ind
-load data/exported/sp_vol_rgv_N85540.mat source_grid;
+%load data/exported/sp_vol_rgv_N85540.mat source_grid;
+load data/exported/sp_vol_rgv_N16752.mat source_grid;
 source_positions = source_grid;
 save data/converted/source_space.mat source_positions;
 clear source_grid source_positions;
@@ -51,4 +52,3 @@ directions = sensors.grad.chanori;
 imaging_method_name = 'MEG magnetometer';
 save data/converted/MEG_sensors.mat points directions affine_transform imaging_method_name;
 clear sensors points affine_transform;
-

@@ -215,7 +215,7 @@ else
 h_axes = findobj(allchild(get(o,'Parent')),'Tag','axes1');
 end 
 
-imagesc(h_axes,flipud(imread('zeffiro_interface_compass.png')));
+imagesc(h_axes,flipud(imread('zeffiro_interface_compass.png', 'BackgroundColor', [0.94 0.94 0.94])));
 set(h_axes,'YDir','normal');
 axis(h_axes,'auto');
 h_axes.YLim = [0 1961];
