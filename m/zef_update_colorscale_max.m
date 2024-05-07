@@ -37,5 +37,6 @@ else
 end
 
 h.CLim = clim_vec;
+zef_update_contour(zef);
 
 end
