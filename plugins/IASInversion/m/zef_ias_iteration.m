@@ -78,24 +78,24 @@ for f_ind = 1 : number_of_frames
     end;
 
     if ismember(source_direction_mode,[1,2])
-        z_aux = zeros(size(L,2),1);
+        z_aux = zeros(size(L_aux,2),1);
     end
     if source_direction_mode == 3
-        z_aux = zeros(3*size(L,2),1);
+        z_aux = zeros(3*size(L_aux,2),1);
     end
-    z_vec = ones(size(L,2),1);
+    z_vec = zeros(size(L_aux,2),1);
 
     if eval('zef.inv_hyperprior') == 1
         if length(theta0) > 1  || length(beta) > 1
             theta = theta0./(beta-1);
         else
-            theta = (theta0./(beta-1))*ones(size(L,2),1);
+            theta = (theta0./(beta-1))*ones(size(L_aux,2),1);
         end
     elseif eval('zef.inv_hyperprior') == 2
         if length(theta0) > 1  || length(beta) > 1
             theta = theta0.*beta;
         else
-            theta = (theta0.*beta)*ones(size(L,2),1);
+            theta = (theta0.*beta)*ones(size(L_aux,2),1);
         end
     end
 
@@ -122,7 +122,7 @@ for f_ind = 1 : number_of_frames
         d_sqrt = sqrt(theta);
         if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
             d_sqrt = gpuArray(d_sqrt);
-        end
+        end     
         L = L_aux .* repmat( d_sqrt' , size(L_aux,1), 1);
         L = d_sqrt.*( L' * inv( L * L' + S_mat ) );
 
