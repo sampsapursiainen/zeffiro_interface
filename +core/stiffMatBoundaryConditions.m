@@ -1,6 +1,6 @@
-function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwargs )
+function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
 %
-% A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwargs )
+% A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
 %
 % Modifies the stiffness matrix A to take the effects of electrodes into
 % account.
@@ -10,11 +10,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwarg
 % - A (:,:)
 %
 %   The stiffness matrix being modified.
-%
-% - Znum
-%
-%   The numerator in the expression Z / (conj(Z) * Z), where Z is an impedance
-%   vector. If the impedances are real, this should equal 1.
 %
 % - impedances (:,1)
 %
@@ -37,7 +32,6 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwarg
 
     arguments
         A                    (:,:) double { mustBeFinite }
-        Znum                 (:,1) double { mustBeNonNan }
         impedances           (:,1) double { mustBeNonNan }
         superNodes           (1,:) core.SuperNode
         kwargs.onDC          (1,1) double { mustBeFinite } = 1 / 6
@@ -58,13 +52,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwarg
 
     % Compute impedance coefficients.
 
-    if isreal ( impedances )
-        Zden = impedances ;
-    else
-        Zden = conj ( impedances ) .* impedances ;
-    end
-
-    Zcoeff = Znum ./ Zden ;
+    Zcoeff = 1 ./ impedances ;
 
     % Apply boundary condition coefficients to on-diagonal and off-diagonal
     % coefficients. Cursor is used in saving indices to the preallocated
@@ -146,7 +134,7 @@ function A = stiffMatBoundaryConditions ( A, Znum, impedances, superNodes, kwarg
 
     Addend = sparse ( Arows, Acols, Avals, nN, nN ) ;
 
-    A = A + Addend + transpose (Addend) ;
+    A = A + Addend + ctranspose (Addend) ;
 
 end % function
 
