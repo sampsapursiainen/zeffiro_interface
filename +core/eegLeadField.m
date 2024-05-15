@@ -92,81 +92,37 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     Z = electrodes.impedances ;
 
-    reZ = real (Z) ;
-
-    imZ = imag (Z) ;
-
-    % Handle the real case.
-
-    reZ (imZ == 0) = 1 ;
-
-    imZ (imZ == 0) = 1 ;
-
     disp("Computing volumes of tetra…")
 
     tetV = core.tetraVolume (nodes,tetra,true) ;
 
-    disp("Computing stiffness matrix components reA and imA…")
+    disp("Computing stiffness matrix components A and A…")
 
     conductivity = core.reshapeTensor (conductivity) ;
 
-    [ reA, imA ] = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
 
-    nonEmptyImA = nnz (imA) > 0 ;
+    disp("Applying boundary conditions to A…")
 
-    disp("Applying boundary conditions to reA…")
-
-    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodes ) ;
-
-    if nonEmptyImA
-
-        disp("Applying boundary conditions to imA…")
-
-        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodes ) ;
-
-    end
+    A = core.stiffMatBoundaryConditions ( A, Z, superNodes ) ;
 
     mf = matfile("newA.mat",Writable=true);
 
-    mf.reAbc = reA ;
-    mf.imAbc = imA ;
+    disp("Computing electrode potential matrix B…")
 
-    disp("Computing electrode potential matrix B for real and imaginary parts…")
-
-    reB = core.potentialMat ( superNodes, reZ, Z, size (nodes,1) );
-
-    imB = core.potentialMat ( superNodes, imZ, Z, size (nodes,1) );
+    B = core.potentialMat ( superNodes, Z, size (nodes,1) );
 
     disp("Computing electrode voltage matrix C…")
 
-    reC = core.voltageMat (reZ,Z);
+    C = core.voltageMat (Z);
 
-    imC = core.voltageMat (imZ,Z);
+    disp("Computing transfer matrix and Schur complement. This will take a while.")
 
-    disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
-
-    [ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=kwargs.pcgTol,useGPU=true) ;
-
-    if nonEmptyImA
-
-        disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
-
-        [ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=kwargs.pcgTol, useGPU=true) ;
-
-    else
-
-        imTM = [] ;
-        imSC = [] ;
-
-    end
+    [ TM, SC ] = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=true) ;
 
     disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
 
-    reL = reSC * transpose ( reTM ) ;
-
-    disp("Computing imaginary lead field as the product of Schur complement and transpose of transfer matrix…")
-
-    imL = imSC * transpose ( imTM ) ;
+    L = SC * transpose ( TM ) ;
 
     disp ("Generating face-intersecting dipoles.")
 
@@ -194,30 +150,12 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp ("Applying G to the real an imaginary parts of the lead field.") ;
 
-    reLG = reL * G ;
-
-    if isempty (imL)
-
-        imLG = [] ;
-
-    else
-
-        imLG = imL * G ;
-
-    end
+    LG = L * G ;
 
     disp ("Setting zero potential level as the column means of the lead field components.")
 
-    reLGmean = mean (reLG,1) ;
+    LGmean = mean (LG,1) ;
 
-    imLGmean = mean (imLG,1) ;
-
-    reLGM = reLG - reLGmean ;
-
-    imLGM = imLG - imLGmean ;
-
-    disp ("constructing final L as a 3D array.") ;
-
-    L = cat (3,reLGM, imLGM) ;
+    reLGM = LG - LGmean ;
 
 end % function

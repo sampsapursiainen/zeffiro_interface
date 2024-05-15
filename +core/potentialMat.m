@@ -1,6 +1,6 @@
-function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
+function B = potentialMat ( superNodes, impedances, nN, kwargs )
 %
-% B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
+% B = potentialMat ( superNodes, impedances, nN, kwargs )
 %
 % Builds a sparse electrode potential matrix B, which maps potentials from a
 % given set of electrodes to finite element nodes. In EEG and tES literature,
@@ -15,12 +15,6 @@ function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 % - superNodes
 %
 %   The supernodes indicating the contact surface between the mesh and the electrodes.
-%
-% - Znum
-%
-%   The numerator of the impedance coefficient. If impedances are real, this
-%   should be one, otherwise this should be the real or imaginary part of the
-%   impedance.
 %
 % - impedances
 %
@@ -41,7 +35,6 @@ function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 
     arguments
         superNodes           (1,:) core.SuperNode
-        Znum                 (:,1) double { mustBeFinite }
         impedances           (:,1) double { mustBeNonNan }
         nN                   (1,1) uint32 { mustBePositive }
         kwargs.psiIntegral   (1,1) double { mustBePositive, mustBeFinite } = 1 / 3
@@ -54,24 +47,18 @@ function B = potentialMat ( superNodes, Znum, impedances, nN, kwargs )
 
     % Impedance coefficient denominator.
 
-    if isreal ( impedances )
-        Zden = impedances ;
-    else
-        Zden = conj ( impedances ) .* impedances ;
-    end
-
     % Disallow zero impedances by setting them to unity.
 
-    Zden ( Zden == 0 ) = 1 ;
+    impedances ( impedances == 0 ) = 1 ;
 
     % Compute the impedance coefficient of the matrix ∫ ψi dS, taking into
     % account that the impedances might be infinite, or areas 0.
 
-    Zcoeff = Znum ./ Zden ;
+    Zcoeff = 1 ./ impedances ;
 
     % Also handle infinite impedances according to (Agsten 2018).
 
-    Zcoeff ( isinf (Zden) ) = 1 ;
+    Zcoeff ( isinf (impedances) ) = 1 ;
 
     % Iterate over the electrode triangles and place the integrals multiplied
     % by the Zcoeffs into the proper node--electrode indices.

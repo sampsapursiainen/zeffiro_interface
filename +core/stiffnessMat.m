@@ -1,6 +1,6 @@
-function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
+function A = stiffnessMat(nodes, tetra, tetraV, tensor)
 %
-% [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
+% reA = stiffnessMat(nodes, tetra, tetraV, tensor)
 %
 % Computes the stiffness matrix A of a given finite element system. If the
 % given tensor is complex, computes the real and imaginary parts reA and imA of
@@ -51,8 +51,7 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     % Preallocate output.
 
-    reA = spalloc (Nn,Nn,0) ;
-    imA = spalloc (Nn,Nn,0) ;
+    A = spalloc (Nn,Nn,0) ;
 
     n_of_tetra_faces = 4;
 
@@ -60,21 +59,9 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
     % ∇ψⱼ ⋅ (𝑇∇ψᵢ) multiplied by tetraV elements d𝑉 like this corresponds to
     % integration.
 
-    real_integrand = zeros ( 1, size ( tetra, 1 ) ) ;
-
-    real_tensor = real ( tensor ) ;
+    integrand = zeros ( 1, size ( tetra, 1 ) ) ;
 
     % If tissues have a capacitance, we also have an imaginary part in our stiffness matrix.
-
-    tensorIsNotReal = not ( isreal ( tensor ) ) ;
-
-    if tensorIsNotReal
-        imag_integrand = zeros ( 1, size ( tetra, 1 ) ) ;
-        imag_tensor = imag ( tensor ) ;
-    else
-        imag_integrand = [] ;
-        imag_tensor = [] ;
-    end
 
     % Start integration.
 
@@ -124,44 +111,27 @@ function [ reA, imA ] = stiffnessMat(nodes, tetra, tetraV, tensor)
                     tensor_coeff = ( grad_1(k_1,:) .* grad_2(k_2,:) + grad_1(k_2,:) .* grad_2(k_1,:) ) ./ (9 * tetraV);
                 end
 
-                real_integrand = real_integrand + real_tensor(k,:) .* tensor_coeff ;
-
-                if tensorIsNotReal
-                    imag_integrand = imag_integrand + imag_tensor(k,:) .* tensor_coeff ;
-                end
+                integrand = integrand + tensor(k,:) .* tensor_coeff ;
 
             end
 
             % Construct a part of 𝐴 by mapping the indices of the tetra to the
             % real integrand.
 
-            reA_part = sparse(tetra(:,i),tetra(:,j), real_integrand',Nn,Nn);
+            A_part = sparse(tetra(:,i),tetra(:,j), integrand',Nn,Nn);
 
             % Sum the integrand to 𝐴 iteratively. A is symmetric, and hence we
             % operate differently if we are on the diagonal.
 
             if i == j
-                reA = reA + reA_part;
+                A = A + A_part;
             else
-                reA = reA + reA_part + reA_part';
-            end % if
-
-            if tensorIsNotReal
-
-                imA_part = sparse(tetra(:,i),tetra(:,j), imag_integrand',Nn,Nn);
-
-                if i == j
-                    imA = imA + imA_part;
-                else
-                    imA = imA + imA_part + imA_part';
-                end % if
-
+                A = A + A_part + ctranspose (A_part) ;
             end % if
 
             % Reset integrand vectors for the next round.
 
-            real_integrand (:) = 0 ;
-            imag_integrand (:) = 0 ;
+            integrand (:) = 0 ;
 
 
         end % for

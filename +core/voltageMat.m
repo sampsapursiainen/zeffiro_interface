@@ -1,6 +1,6 @@
-function C = voltageMat ( Znum, impedances )
+function C = voltageMat ( impedances )
 %
-% C = pemVoltageMat ( Znum, impedances )
+% C = pemVoltageMat ( impedances )
 %
 % Builds a sparse electrode voltage matrix C, which contains the ungrounded
 % voltages of a given set of point electrodes (PEM) to finite element nodes. In
@@ -12,18 +12,12 @@ function C = voltageMat ( Znum, impedances )
 %
 % Inputs:
 %
-% - Znum
-%
-%   The numerator in the expression Z / (conj(Z) * Z), if the input impedances
-%   are complex. If the impedances are real, this should equal 1.
-%
 % - impedances
 %
 %   The impedances of the electrodes.
 %
 
     arguments
-        Znum (:,1) double { mustBeNonNan }
         impedances (:,1) double { mustBeNonNan }
     end
 
@@ -31,21 +25,15 @@ function C = voltageMat ( Znum, impedances )
 
     eN = numel ( impedances ) ;
 
-    if isreal ( impedances )
-        Zden = impedances ;
-    else
-        Zden = conj(impedances) .* impedances ;
-    end
-
     % Disallow zero impedances by setting them to unity.
 
-    Zden ( Zden == 0 ) = 1 ;
+    impedances ( impedances == 0 ) = 1 ;
 
-    Zcoeff = Znum ./ Zden ;
+    Zcoeff = 1 ./ impedances ;
 
     % Also handle infinite impedances according to (Agsten 2018).
 
-    Zcoeff ( isinf (Zden) ) = 1 ;
+    Zcoeff ( isinf (impedances) ) = 1 ;
 
     C = sparse ( 1 : eN, 1 : eN, Zcoeff, eN, eN ) ;
 

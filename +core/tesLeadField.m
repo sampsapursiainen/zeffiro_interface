@@ -75,16 +75,6 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     Z = electrodes.impedances ;
 
-    reZ = real (Z) ;
-
-    imZ = imag (Z) ;
-
-    % Handle the real case.
-
-    reZ (imZ == 0) = 1 ;
-
-    imZ (imZ == 0) = 1 ;
-
     disp("Computing volumes of tetra…")
 
     tetV = core.tetraVolume (nodes,tetra,true) ;
@@ -93,75 +83,33 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     conductivity = core.reshapeTensor (conductivity) ;
 
-    [ reA, imA ] = core.stiffnessMat (nodes,tetra,tetV,conductivity);
-
-    nonEmptyImA = nnz (imA) > 0 ;
+    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
 
     disp("Applying boundary conditions to reA…")
 
-    reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodes ) ;
-
-    if nonEmptyImA
-
-        disp("Applying boundary conditions to imA…")
-
-        imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodes ) ;
-
-    end
+    A = core.stiffMatBoundaryConditions ( A, Z, superNodes ) ;
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-    reB = core.potentialMat ( superNodes, reZ, Z, size (nodes,1) );
-
-    imB = core.potentialMat ( superNodes, imZ, Z, size (nodes,1) );
+    B = core.potentialMat ( superNodes, Z, size (nodes,1) );
 
     disp("Computing electrode voltage matrix C…")
 
-    reC = core.voltageMat (reZ,Z);
-
-    imC = core.voltageMat (imZ,Z);
+    C = core.voltageMat (Z);
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    [ reTM, ~ ] = core.transferMatrix (reA,reB,reC,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
-
-    if nonEmptyImA
-
-        disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
-
-        [ imTM, ~ ] = core.transferMatrix (imA,imB,imC,tolerances=kwargs.pcgTol, useGPU=kwargs.useGPU) ;
-
-    else
-
-        imTM = [] ;
-
-    end
+    [ TM, ~ ] = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
 
     disp ("Computing resistivity matrix…") ;
 
-    reSchurC = (reC - transpose (reB) * reTM) ;
+    SchurC = (C - ctranspose (B) * TM) ;
 
-    reI = eye ( size (reSchurC) ) ;
+    I = eye ( size (SchurC) ) ;
 
-    invReSchurC = reSchurC \ reI ;
+    invSchurC = SchurC \ I ;
 
-    reR = reTM * invReSchurC ;
-
-    if nonEmptyImA
-
-        imSchurC = (imC - transpose (imB) * imTM) ;
-
-        imI = eye ( size (imSchurC) ) ;
-
-        invImSchurC = imSchurC \ imI ;
-
-        imR = imTM * invImSchurC ;
-
-    else
-
-        imR = [] ;
-
-    end
+    R = TM * invSchurC ;
 
     disp ("Computing volume currents σ∇ψ…")
 
@@ -171,42 +119,19 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 
     G = [ G1 ; G2 ; G3 ] ;
 
-    reL = - G * reR ;
+    fullL = - G * R ;
 
-    if isempty (imR)
-
-        imL = [] ;
-
-    else
-
-        imL = - G * imR ;
-
-    end
-
-    if isempty (imL)
-        L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN ) ;
-    else
-        L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN, 2 ) ;
-    end
+    L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN ) ;
 
     disp ("Restricting lead field to actual source positions…")
 
     Nvc = numel (volumeCurrentI) ;
 
-    reL = transpose (reL) ;
-    imL = transpose (imL) ;
+    fullL = transpose (fullL) ;
 
-    L (:,1:3:end,1) = reL (:,sourceTetI) ;
-    L (:,2:3:end,1) = reL (:,Nvc + sourceTetI) ;
-    L (:,3:3:end,1) = reL (:,2 * Nvc + sourceTetI) ;
-
-    if not ( isempty ( imL ) )
-
-        L (:,1:3:end,2) = imL (:,sourceTetI) ;
-        L (:,2:3:end,2) = imL (:,Nvc + sourceTetI) ;
-        L (:,3:3:end,2) = imL (:,2 * Nvc + sourceTetI) ;
-
-    end
+    L (:,1:3:end,:) = fullL (:,sourceTetI) ;
+    L (:,2:3:end,:) = fullL (:,Nvc + sourceTetI) ;
+    L (:,3:3:end,:) = fullL (:,2 * Nvc + sourceTetI) ;
 
     mf = matfile ("newLtes.mat", Writable=true);
 
