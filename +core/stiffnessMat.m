@@ -137,6 +137,4 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
 
     A = A + ctranspose (A) ;
 
-    A = A - diag ( diag ( A ) ) ;
-
 end % function
