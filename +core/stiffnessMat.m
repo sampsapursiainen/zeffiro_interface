@@ -113,29 +113,30 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
 
                 integrand = integrand + tensor(k,:) .* tensor_coeff ;
 
-            end
+            end % for
 
             % Construct a part of 𝐴 by mapping the indices of the tetra to the
-            % real integrand.
+            % integrand.
 
-            A_part = sparse(tetra(:,i),tetra(:,j), integrand',Nn,Nn);
+            A_part = sparse (tetra(:,i),tetra(:,j), integrand,Nn,Nn);
 
-            % Sum the integrand to 𝐴 iteratively. A is symmetric, and hence we
+            % Sum the integrand to 𝐴 iteratively. A is Hermitian, and hence we
             % operate differently if we are on the diagonal.
 
-            if i == j
-                A = A + A_part;
-            else
-                A = A + A_part + ctranspose (A_part) ;
-            end % if
+            A = A + A_part ;
 
             % Reset integrand vectors for the next round.
 
             integrand (:) = 0 ;
 
-
         end % for
 
     end % for
+
+    % Make sure A is Hermitian as in A == A^H.
+
+    A = A + ctranspose (A) ;
+
+    A = A - diag ( diag ( A ) ) ;
 
 end % function
