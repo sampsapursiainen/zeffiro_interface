@@ -120,10 +120,13 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
 
             A_part = sparse (tetra(:,i),tetra(:,j), integrand,Nn,Nn);
 
-            % Sum the integrand to 𝐴 iteratively. A is Hermitian, and hence we
-            % operate differently if we are on the diagonal.
+            % Sum the integrand to 𝐴 iteratively.
 
             A = A + A_part ;
+
+            if not (i == j)
+                A = A + ctranspose (A_part) ;
+            end
 
             % Reset integrand vectors for the next round.
 
@@ -132,9 +135,5 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
         end % for
 
     end % for
-
-    % Make sure A is Hermitian as in A == A^H.
-
-    A = A + ctranspose (A) ;
 
 end % function
