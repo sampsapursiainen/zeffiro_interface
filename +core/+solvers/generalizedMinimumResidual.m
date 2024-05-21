@@ -79,7 +79,7 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
 
         rhs = cat (1, resNorm, zeros (Hcol,1) ) ;
 
-        lsqSol = lsqminnorm ( H, rhs ) ;
+        lsqSol = lsqminnorm ( H (1:Hcol+1,1:Hcol), rhs ) ;
 
         x = UR (:,1:Hcol) * lsqSol + x0 ;
 
