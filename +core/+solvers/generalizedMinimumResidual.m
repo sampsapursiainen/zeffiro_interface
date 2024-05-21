@@ -23,15 +23,16 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
 %
 %   A tolerance value for the solution.
 %
+% - kwargs.maxiters = size (A,1)
+%
 
     arguments
         A  (:,:) { mustBeFinite }
         x0 (:,1) { mustBeFinite }
         b  (:,1) { mustBeFinite }
         kwargs.tolerance (1,1) double { mustBePositive } = 1e-5
+        kwargs.maxiters (1,1) double { mustBeInteger, mustBePositive } = size (A,1)
     end
-
-    x = x0 ;
 
     [Nrows, Ncols] = size (A) ;
 
@@ -43,13 +44,13 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
 
     unitResidual = residual / resNorm ;
 
-    UR = zeros (Nrows, 1) ;
+    UR = unitResidual ;
 
-    for Hcol = 1 : Nrows
+    H = zeros (Nrows,1) ;
+
+    for Hcol = 1 : kwargs.maxiters
 
         Aur = A * unitResidual ;
-
-        H = zeros (Hcol+1,Hcol) ;
 
         % NOTE: we're allocating more space for storing unit residuals in UR
         % during every iteration, but a good pre-allocation strategy for this
@@ -58,13 +59,15 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
 
         UR (:,Hcol) = unitResidual ;
 
+        % Perform Gram--Schmidt orthogonalization of Krylov space.
+
         for Hrow = 1 : Hcol
 
             unitResDotAur = dot ( UR (:,Hrow), Aur ) ;
 
             H (Hrow, Hcol) = unitResDotAur ;
 
-            Aur = Aur - unitResDotAur * unitRes ;
+            Aur = Aur - unitResDotAur * UR (:,Hrow) ;
 
         end % for Hrow
 
@@ -74,7 +77,9 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
 
         H (Hcol+1,Hcol) = AurNorm ;
 
-        lsqSol = lsqminnorm ( H, cat (1, resNorm, zeros (Hcol,1) ) ) ;
+        rhs = cat (1, resNorm, zeros (Hcol,1) ) ;
+
+        lsqSol = lsqminnorm ( H, rhs ) ;
 
         x = UR (:,1:Hcol) * lsqSol + x0 ;
 
@@ -87,5 +92,7 @@ function x = generalizedMinimumResidual (A,x0,b,kwargs)
         unitResidual = Aur / AurNorm ;
 
     end % for Hcol
+
+    error ("GMRES did not converge after " + kwargs.maxiters + " iterations with a tolerance of " + kwargs.tolerance + "…")
 
 end % function
