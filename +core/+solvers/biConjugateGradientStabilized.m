@@ -1,4 +1,4 @@
-function solution = biConjugateGradientStabilized (A, x0, b, kwargs)
+function x = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
 % solution = biConjugateGradientStabilized ()
 %
@@ -38,7 +38,7 @@ function solution = biConjugateGradientStabilized (A, x0, b, kwargs)
 
     residual = b - A * x0 ;
 
-    arbvec = vecnorm (residual) * randn ( size (residual) ) ;
+    arbvec = randn ( size (residual) ) ;
 
     orthogonality = dot (residual, arbvec) ;
 
@@ -48,15 +48,15 @@ function solution = biConjugateGradientStabilized (A, x0, b, kwargs)
 
     for ii = 1 : kwargs.maxiters
 
-        Ad = A * stepdir ;
+        Adir = A * stepdir ;
 
-        stepsize = orthogonality / dot ( arbvec, Ad ) ;
+        stepsize = orthogonality / dot ( arbvec, Adir ) ;
 
-        xcandidate = x + stepsize * Ad ;
+        xcandidate = x + stepsize * stepdir ;
 
-        rejection = residual - stepsize * Ad ;
+        rejection = residual - stepsize * Adir ;
 
-        if vecnorm (xcandidate) <= kwargs.tolerance
+        if vecnorm (rejection) <= kwargs.tolerance
 
             x = xcandidate ;
 
@@ -82,7 +82,7 @@ function solution = biConjugateGradientStabilized (A, x0, b, kwargs)
 
         newstepsize = neworthogonality * stepsize / orthogonality / rejstepsize ;
 
-        stepdir = residual + newstepsize * ( stepdir - rejstepsize * rejection ) ;
+        stepdir = residual + newstepsize * ( stepdir - rejstepsize * Adir ) ;
 
         orthogonality = neworthogonality ;
 
