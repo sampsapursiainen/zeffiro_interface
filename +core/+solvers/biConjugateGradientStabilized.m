@@ -1,6 +1,6 @@
 function x = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
-% solution = biConjugateGradientStabilized ()
+% solution = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
 % Solves an unsymmetric linear system A x = b with the BiCGSTAB method, or the
 % combined bi-conjugate gradient and GMRES method.
