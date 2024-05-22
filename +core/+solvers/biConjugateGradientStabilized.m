@@ -1,4 +1,4 @@
-function x = biConjugateGradientStabilized (A, x0, b, kwargs)
+function [x,relresnorm] = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
 % solution = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
@@ -36,6 +36,8 @@ function x = biConjugateGradientStabilized (A, x0, b, kwargs)
         kwargs.tolerance (1,1) double { mustBePositive, mustBeFinite } = 1e-5
     end
 
+    bnorm = vecnorm (b) ;
+
     residual = b - A * x0 ;
 
     arbvec = randn ( size (residual) ) ;
@@ -56,7 +58,11 @@ function x = biConjugateGradientStabilized (A, x0, b, kwargs)
 
         rejection = residual - stepsize * Adir ;
 
-        if vecnorm (rejection) <= kwargs.tolerance
+        rejnorm = vecnorm (rejection) ;
+
+        relresnorm = rejnorm / bnorm ;
+
+        if relresnorm <= kwargs.tolerance
 
             x = xcandidate ;
 
@@ -72,7 +78,11 @@ function x = biConjugateGradientStabilized (A, x0, b, kwargs)
 
         residual = rejection - rejstepsize * Arej ;
 
-        if vecnorm (residual) <= kwargs.tolerance
+        resnorm = vecnorm (residual) ;
+
+        relresnorm = resnorm / bnorm ;
+
+        if relresnorm <= kwargs.tolerance
 
             return ;
 
