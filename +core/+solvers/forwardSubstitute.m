@@ -25,7 +25,7 @@ function x = forwardSubstitute (L,b)
 
         if row == 1
 
-            x (row) = b (row)
+            x (row) = b (row) ;
 
         else
 
