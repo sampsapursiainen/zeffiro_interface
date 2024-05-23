@@ -19,7 +19,7 @@ function x = backwardSubstitute (U,b)
 
     assert ( numel (b) == Nrows, "The size of the first argument U needs to match that of the second argument b." )
 
-    x = zeros (Nrows,1)
+    x = zeros (Nrows,1) ;
 
     for row = Nrows : -1 : 1
 
