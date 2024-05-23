@@ -24,10 +24,14 @@ function x = forwardSubstitute (L,b)
     for row = 1 : Nrows
 
         if row == 1
+
             x (row) = b (row)
+
         else
+
             x (row) = b (row) - sum ( L (row,1:row-1) .* x (1:row-1) ) ;
-        end
+
+        end % if
 
     end % for row
 
