@@ -132,7 +132,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        [ x(:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, b, x, tolerance=tolerance, preconditioner=preconditioner, maxiters=kwargs.maxiters ) ;
+        [ x(:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, x, b, tolerance=tolerance, preconditioner=preconditioner, maxiters=kwargs.maxiters ) ;
 
         if relResNorm > tolerance
 
