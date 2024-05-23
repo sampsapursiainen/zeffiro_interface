@@ -1,4 +1,4 @@
-function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startPoint, kwargs)
+function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, startPoint, b, kwargs)
 %
 % [ solution, relResNorm, ii ] = preconditionedConjugateGradient (A, b, start_point, kwargs)
 %
@@ -26,8 +26,8 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, b, startP
 
     arguments
         A                     (:,:)
-        b                     (:,1)
         startPoint            (:,1)
+        b                     (:,1)
         kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
         kwargs.preconditioner (:,:) = 1 ./ full ( diag ( A ) )
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
