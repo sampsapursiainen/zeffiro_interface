@@ -9,6 +9,10 @@ function prec = jacobi ( A )
         A (:,:)
     end
 
-    prec = diag ( diag ( A ) ) \ eye ( size ( A ) ) ;
+    invDiag = 1 ./ diag ( A ) ;
+
+    N = numel (invDiag) ;
+
+    prec = sparse ( 1:N, 1:N, invDiag, N, N ) ;
 
 end % function
