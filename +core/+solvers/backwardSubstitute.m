@@ -31,8 +31,8 @@ function x = backwardSubstitute (U,b)
 
             x (row) = b (row) - sum ( U (row,row+1:end) .* x (row+1:end) ) ;
 
-        end
+        end % if
 
-    end % function
+    end % for row
 
 end % function
