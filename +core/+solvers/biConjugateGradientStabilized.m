@@ -27,6 +27,10 @@ function [x,relresnorm,ii] = biConjugateGradientStabilized (A, x0, b, kwargs)
 %
 %   The tolerance of the solver.
 %
+% - kwargs.preconditioner
+%
+%   A preconditioner to speed up convergence.
+%
 
     arguments
         A  (:,:) { mustBeFinite }
@@ -34,6 +38,7 @@ function [x,relresnorm,ii] = biConjugateGradientStabilized (A, x0, b, kwargs)
         b  (:,1) { mustBeFinite }
         kwargs.maxiters (1,1) double { mustBeInteger } = size (A,1)
         kwargs.tolerance (1,1) double { mustBePositive, mustBeFinite } = 1e-5
+        kwargs.preconditioner (:,:) { mustBeFinite } = speye(size(A))
     end
 
     bnorm = vecnorm (b) ;
