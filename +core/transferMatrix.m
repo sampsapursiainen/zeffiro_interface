@@ -71,6 +71,7 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
         kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.useGPU         (1,1) logical = true
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
+        kwargs.solver (1,1) function_handle = @core.solvers.biConjugateGradientStabilized
     end
 
     disp (newline + "Building a transfer matrix T = A \ B:" + newline) ;
@@ -132,11 +133,11 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 
         % Open the door, get on the floor, everybody do the dinosaur. Or use PCG iteration.
 
-        [ x(:), relResNorm, iters ] = core.solvers.preconditionedConjugateGradient ( A, x, b, tolerance=tolerance, preconditioner=preconditioner, maxiters=kwargs.maxiters ) ;
+        [ x(:), relResNorm, iters ] = kwargs.solver ( A, x, b, tolerance=tolerance, preconditioner=preconditioner, maxiters=kwargs.maxiters ) ;
 
         if relResNorm > tolerance
 
-            error ( "PCG iteration did not converge after the theoretical maximum number of iterations " + iters + ". The relative residual norm was " + gather (relResNorm) + "." ) ;
+            error ( "Solver did not converge after the theoretical maximum number of iterations " + iters + ". The relative residual norm was " + gather (relResNorm) + "." ) ;
 
         end
 
