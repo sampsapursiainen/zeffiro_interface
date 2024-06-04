@@ -129,12 +129,20 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 
     % Apply boundary conditions to M.
 
-    Addend = sparse ( Mrows, Mcols, Mvals, N, N ) ;
+    for ii = 1 : numel (Mrows)
 
-    M = M + Addend + ctranspose (Addend) ;
+        ri = Mrows (ii) ;
+
+        ci = Mcols (ii) ;
+
+        vi = Mvals (ii) ;
+
+        M = M + sparse (ri,ci,vi,N,N) ;
+
+    end % for ii
 
 end % function
-%
+
 %% Helper functions
 
 function [Mrows, Mcols, Mvals] = preallocateEntries (snN,superNodes, areaThreshold)
