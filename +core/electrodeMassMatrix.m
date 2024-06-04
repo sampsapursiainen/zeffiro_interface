@@ -27,8 +27,8 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 %
 
     arguments
-        N          (1,1) double { mustBePositive, mustBeInteger }
-        superNodes (:,1) SuperNode
+        N                    (1,1) double { mustBePositive, mustBeInteger }
+        superNodes           (:,1) SuperNode
         kwargs.areaThreshold (1,1) double { mustBePositive, mustBeFinite, mustBeReal }
     end
 
@@ -71,10 +71,14 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
         if useOnlyCenter
 
             nodeI = superNodes (snI) . centralNodeI ;
+            totalArea = 1 ;
+            triArea = 1 ;
 
         else
 
             nodeI = superNodes (snI) . surfaceTriangles ;
+            totalArea = totalArea ;
+            triArea = superNodes (snI) . surfaceTriangleAreas ;
 
         end % if
 
@@ -93,7 +97,7 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 
                 Mcols (range) = nodeI ;
 
-                Mvals (range) = iiCoeff ;
+                Mvals (range) = iiCoeff .* triArea ;
 
             else
 
@@ -106,9 +110,9 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
                     Mcols (range) = nodeI (jj,:) ;
 
                     if ii == jj
-                        Mvals (range) = iiCoeff ;
+                        Mvals (range) = iiCoeff .* triArea ;
                     else
-                        Mvals (range) = ijCoeff ;
+                        Mvals (range) = ijCoeff .* triArea ;
                     end
 
                     cursor = cursor + rangeLen + 1 ;
