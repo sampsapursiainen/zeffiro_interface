@@ -28,8 +28,8 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 
     arguments
         N                    (1,1) double { mustBePositive, mustBeInteger }
-        superNodes           (:,1) SuperNode
-        kwargs.areaThreshold (1,1) double { mustBePositive, mustBeFinite, mustBeReal }
+        superNodes           (:,1) core.SuperNode
+        kwargs.areaThreshold (1,1) double { mustBePositive, mustBeFinite, mustBeReal } = eps
     end
 
     % Values of the mass matrix elements when i == j and when i ~= j. Prove
