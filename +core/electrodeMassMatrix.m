@@ -19,6 +19,10 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 %
 %   The contact surfaces between the FE mesh and the electrodes.
 %
+% - kwargs.areaThreshold = eps
+%
+%   The threshold, below which an electrode will be interpreted as a point electrode.
+%
 % Outputs:
 %
 % - M
