@@ -1,4 +1,4 @@
-function M = electrodeMassMatrix (N, superNodes, kwargs)
+function Ms = electrodeMassMatrix (N, superNodes, kwargs)
 %
 % M = electrodeMassMatrix (N, superNodes, kwargs)
 %
@@ -57,9 +57,9 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
     % coefficients. Cursor is used in saving indices to the preallocated
     % vectors.
 
-    M = spalloc ( N,N, numel (Mvals) ) ;
-
     cursor = 1 ;
+
+    Ms = cell (1,snN) ;
 
     for snI = 1 : snN
 
@@ -129,21 +129,9 @@ function M = electrodeMassMatrix (N, superNodes, kwargs)
 
         end % for ii
 
+        Ms {snI} = sparse ( Mrows(range), Mcols(range), Mvals(range), N, N ) ;
+
     end % for snI
-
-    % Apply boundary conditions to M.
-
-    for ii = 1 : numel (Mrows)
-
-        ri = Mrows (ii) ;
-
-        ci = Mcols (ii) ;
-
-        vi = Mvals (ii) ;
-
-        M = M + sparse (ri,ci,vi,N,N) ;
-
-    end % for ii
 
 end % function
 
