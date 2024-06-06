@@ -1,6 +1,6 @@
-function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+function [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
-% L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+% [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -50,6 +50,14 @@ function L = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivi
 %   this will contain 2 pages: the first contains a lead field corresponding to
 %   the real part and the second page will correspond to the imaginary part of
 %   Z.
+%
+% - R
+%
+%  A resistivity matrix.
+%
+% - G1, G2, G3
+%
+%  The x-, y- and z-components of a volume current matrix G = -σ∇u.
 %
     arguments
         nodes                  (:,3) double { mustBeFinite }
