@@ -42,6 +42,8 @@ function B = electrodePsiIntegral (Nn,superNodes,kwargs)
 
     % Place integral values scaled by areas into the output matrix.
 
+    B = sparse (Nn, Ne) ;
+
     for snI = uint32 (1 : Ne)
 
         % Find out the nodes that this supernode is made of and its area. If
