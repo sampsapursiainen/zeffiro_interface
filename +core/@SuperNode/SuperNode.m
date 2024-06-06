@@ -119,6 +119,8 @@ classdef SuperNode
                 kwargs.attachNodesTo (1,1) string { mustBeMember(kwargs.attachNodesTo,["surface","volume"]) } = "volume"
             end
 
+            disp ( newline + "Constructing mesh (" + kwargs.attachNodesTo + ") SuperNodes... ")
+
             % Extract array sizes.
 
             superNodeN = size (superNodePos,2) ;
@@ -168,6 +170,8 @@ classdef SuperNode
             % Compute and set properties for all supernodes.
 
             for ii = 1 : superNodeN
+
+                disp ( "  ... node " + ii ) ;
 
                 nI = centralNodeIs (ii) ;
 
