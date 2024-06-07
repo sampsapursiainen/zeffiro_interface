@@ -23,8 +23,8 @@ function diffB = dBdZ (Bint, Z, eA)
 
     arguments
         Bint (:,:) double { mustBeFinite }
-        Z    (1,:) double { mustBeNonNan }
-        eA   (1,:) double { mustBeNonnegative, mustBeFinite }
+        Z    (1,1) double { mustBeNonNan }
+        eA   (1,1) double { mustBeNonnegative, mustBeFinite }
     end
 
     diffB = - intB / Z ^ 2 / eA ;
