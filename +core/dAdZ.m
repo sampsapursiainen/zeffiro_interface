@@ -25,7 +25,7 @@ function diffA = dAdZ (M,Z,eA)
 
     arguments
         M  (:,:) double { mustBeNumeric }
-        Z  (1,:) double
+        Z  (1,:) double { mustBeNonNan }
         eA (1,:) double { mustBeNonnegative, mustBeFinite }
     end
 
