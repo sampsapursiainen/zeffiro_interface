@@ -27,6 +27,6 @@ function diffB = dBdZ (Bint, Z, eA)
         eA   (1,1) double { mustBeNonnegative, mustBeFinite }
     end
 
-    diffB = - intB / Z ^ 2 / eA ;
+    diffB = - Bint / Z ^ 2 / eA ;
 
 end % function
