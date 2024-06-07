@@ -342,7 +342,6 @@ for i = 1 : n_time
 
             friction_vec = 2*Q_1'*g_u_g_mu_1 + 2*Q_2'*g_u_g_mu_2 + 2*Q_3'*g_u_g_mu_3;
 
-
             b(i_node_ind) = b(i_node_ind) + friction_vec(i_node_ind);
 
         end

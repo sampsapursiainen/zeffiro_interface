@@ -78,13 +78,19 @@ zef.nse_field.sphere_x = str2num(zef.nse_field.h_sphere_x.Value);
 zef.nse_field.sphere_y = str2num(zef.nse_field.h_sphere_y.Value);
 zef.nse_field.sphere_z = str2num(zef.nse_field.h_sphere_z.Value);
 
-
 zef.nse_field.roi_radius = str2num(zef.nse_field.h_roi_radius.Value);
 zef.nse_field.roi_x = str2num(zef.nse_field.h_roi_x.Value);
 zef.nse_field.roi_y = str2num(zef.nse_field.h_roi_y.Value);
 zef.nse_field.roi_z = str2num(zef.nse_field.h_roi_z.Value);
 
 zef.nse_field.n_frames = zef.nse_field.h_n_frames.Value;
+
+zef.nse_field.neural_drive = zef.nse_field.h_neural_drive.Value;
+zef.nse_field.nvc_flow_based_elimination = zef.nse_field.h_nvc_flow_based_elimination.Value;
+zef.nse_field.nvc_signal_decay_rate = zef.nse_field.h_nvc_signal_decay_rate.Value;
+zef.nse_field.nvc_mollification = zef.nse_field.h_nvc_mollification.Value;
+zef.nse_field.relative_blood_oxygenation = zef.nse_field.h_relative_blood_oxygenation.Value;
+zef.nse_field.oxygen_consumption_rate = zef.nse_field.h_oxygen_consumption_rate.Value;
 
 end
 

@@ -437,8 +437,7 @@ if not(isequal(file_name,0))
                 end
 
                 if find(ismember(ini_cell(i,:),'sensor_taglist_filename'))
-                    ini_cell_ind = [ini_cell_ind
-                        find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     sensor_taglist_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)+1});
                     sensor_taglist_filename = fullfile(foldername, sensor_taglist_filename);

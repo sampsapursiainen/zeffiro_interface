@@ -64,13 +64,25 @@ zef.nse_field.h_roi_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_roi_z = zef_data.h_roi_z;
 zef.nse_field.h_roi_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
-
 zef.nse_field.h_dir_v_x = zef_data.h_dir_v_x;
 zef.nse_field.h_dir_v_x.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_dir_v_y = zef_data.h_dir_v_y;
 zef.nse_field.h_dir_v_y.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 zef.nse_field.h_dir_v_z = zef_data.h_dir_v_z;
 zef.nse_field.h_dir_v_z.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+
+zef.nse_field.h_neural_drive = zef_data.h_neural_drive;
+zef.nse_field.h_neural_drive.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_nvc_flow_based_elimination = zef_data.h_nvc_flow_based_elimination;
+zef.nse_field.h_nvc_flow_based_elimination.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_nvc_signal_decay_rate = zef_data.h_nvc_signal_decay_rate;
+zef.nse_field.h_nvc_signal_decay_rate.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_nvc_mollification = zef_data.h_nvc_mollification;
+zef.nse_field.h_nvc_mollification.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_relative_blood_oxygenation = zef_data.h_relative_blood_oxygenation;
+zef.nse_field.h_relative_blood_oxygenation.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
+zef.nse_field.h_oxygen_consumption_rate = zef_data.h_oxygen_consumption_rate;
+zef.nse_field.h_oxygen_consumption_rate.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
 
 zef.nse_field.h_gravity_amplitude = zef_data.h_gravity_amplitude;
 zef.nse_field.h_gravity_amplitude.ValueChangedFcn = 'zef = zef_nse_tool_update(zef);';
@@ -239,6 +251,13 @@ zef.nse_field.h_p_wave_weight.Value = zef.nse_field.p_wave_weight;
 zef.nse_field.h_t_wave_weight.Value = zef.nse_field.t_wave_weight;
 zef.nse_field.h_d_wave_weight.Value = zef.nse_field.d_wave_weight;
 
+zef.nse_field.h_neural_drive.Value = zef.nse_field.neural_drive;
+zef.nse_field.h_nvc_flow_based_elimination.Value = zef.nse_field.nvc_flow_based_elimination;
+zef.nse_field.h_nvc_signal_decay_rate.Value = zef.nse_field.nvc_signal_decay_rate;
+zef.nse_field.h_nvc_mollification.Value = zef.nse_field.nvc_mollification;
+zef.nse_field.h_relative_blood_oxygenation.Value = zef.nse_field.relative_blood_oxygenation;
+zef.nse_field.h_oxygen_consumption_rate.Value = zef.nse_field.oxygen_consumption_rate;
+
 zef.nse_field.h_n_frames.Value = zef.nse_field.n_frames;
 
 zef.nse_field.h_viscosity_relaxation_time.Value = zef.nse_field.viscosity_relaxation_time;
@@ -267,11 +286,11 @@ zef.nse_field.h_conductivity_model.Items = {'Archie''s law','Hashin-Shtrikman up
 zef.nse_field.h_conductivity_model.ItemsData = [1 : length(zef.nse_field.h_conductivity_model.Items)];
 zef.nse_field.h_conductivity_model.Value = zef.nse_field.conductivity_model;
 
-zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Arteries)','Viscosity (Arteries)','Concentration (Microcirculation)','Mean pressure (Arteries)','Maximum pressure (Arteries)','STD pressure (Arteries)','Mean velocity (Arteries)','Maximum velocity (Arteries)','STD velocity (Arteries)','Mean viscosity (Arteries)','Maximum viscosity (Arteries)','STD viscosity (Arteries)','Mean concentration (Microcirculation)','Maximum concentration (Microcirculation)','STD concentration (Microcirculation)'};
+zef.nse_field.h_reconstruction_type.Items = {'Pressure (Arteries)','Velocity (Arteries)','Viscosity (Arteries)','Concentration (Microcirculation)','Deoxygenized hemoglobin concentration (Microcirculation)', 'Mean pressure (Arteries)','Maximum pressure (Arteries)','STD pressure (Arteries)','Mean velocity (Arteries)','Maximum velocity (Arteries)','STD velocity (Arteries)','Mean viscosity (Arteries)','Maximum viscosity (Arteries)','STD viscosity (Arteries)','Mean concentration (Microcirculation)','Maximum concentration (Microcirculation)','STD concentration (Microcirculation)'};
 zef.nse_field.h_reconstruction_type.ItemsData = [1 : length(zef.nse_field.h_reconstruction_type.Items)];
 zef.nse_field.h_reconstruction_type.Value = zef.nse_field.reconstruction_type;
 
-zef.nse_field.h_solver_type.Items = {'Poisson','Poisson & microcirculation','Dynamic Stokes','Dynamic Stokes & microcirculation', 'Dynamic Navier-Stokes','Dynamic Navier-Stokes & microcirculation'};
+zef.nse_field.h_solver_type.Items = {'Poisson','Poisson & microcirculation','Poisson, microcirculation & haemodynamic response', 'Dynamic Stokes','Dynamic Stokes & microcirculation', 'Dynamic Navier-Stokes','Dynamic Navier-Stokes & microcirculation'};
 zef.nse_field.h_solver_type.ItemsData = [1 : length(zef.nse_field.h_solver_type.Items)];
 zef.nse_field.h_solver_type.Value = zef.nse_field.solver_type;
 
@@ -288,7 +307,6 @@ zef.nse_field.h_plot_roi.ButtonPushedFcn = 'zef_nse_plot_roi;';
 zef.nse_field.h_apply_roi.ButtonPushedFcn = 'zef_nse_apply_roi';
 zef.nse_field.h_apply_source_coordinates.ButtonPushedFcn = 'zef_nse_apply_source';
 zef.nse_field.h_apply_dir_v.ButtonPushedFcn = 'zef_nse_dir_v_node;';
-
 
 zef.nse_field.h_plot_graph.ButtonPushedFcn = 'zef_nse_plot_graph;';
 

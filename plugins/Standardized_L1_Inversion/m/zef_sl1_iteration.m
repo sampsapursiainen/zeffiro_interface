@@ -53,6 +53,15 @@ end
 
     [beta, theta0] = zef_find_ig_hyperprior((snr_val-pm_val)/2,2*eval('zef.inv_hyperprior_tail_length_db'),L,size(L,2),eval('zef.sl1_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
 
+        options = optimoptions('quadprog');
+        options = optimoptions(options, 'OptimalityTolerance', 1e-6);
+        options = optimoptions(options, 'ConstraintTolerance', 1e-6);
+        options = optimoptions(options, 'StepTolerance', 1e-6);
+        options = optimoptions(options, 'MaxIterations', ceil(2*sqrt(size(L,2))));
+        options_quad = optimoptions(options, 'Algorithm', 'interior-point-convex');
+
+        options_lin = optimoptions('linprog');
+
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
     L = gpuArray(L);
 end
@@ -98,19 +107,14 @@ for f_ind = 1 : number_of_frames
 
         theta = (theta0+abs(z_vec))./beta;
 
-        options = optimoptions('quadprog');
-        options = optimoptions(options, 'OptimalityTolerance', 1e-6);
-        options = optimoptions(options, 'ConstraintTolerance', 1e-6);
-        options = optimoptions(options, 'StepTolerance', 1e-6);
-        options = optimoptions(options, 'MaxIterations', ceil(2*sqrt(size(L,2))));
-        options = optimoptions(options, 'Algorithm', 'interior-point-convex');
-
-        z_vec = zef_l2_l1_optimizer(L, f, std_lhood.^2./theta, options);
+        z_vec = zef_l2_l1_optimizer(L, f, std_lhood.^2./theta, options_quad);
 
       if isequal(sl1_type,2)
           p_vec = 0.5*abs(z_vec).*theta;
           R = (p_vec.*L')*(inv(L*(p_vec.*L') + std_lhood.^2.*eye(size(L,1)))*L);
           z_vec = sqrt(1./diag(R)).*z_vec;
+      elseif isequal(sl1_type,3)
+          z_vec = z_vec./(max(abs(L))');
       end 
 
          if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0

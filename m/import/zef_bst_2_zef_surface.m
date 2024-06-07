@@ -23,7 +23,7 @@ end
 
 if isempty(subject)
     surface = bst_get('ProtocolSubjects').Subject.Surface;
-    surface_file = []
+    surface_file = [];
 elseif isempty(surface_ind_aux)
     surface = bst_get('ProtocolSubjects').Subject(subject).Surface;
     surface_file = [];
@@ -50,6 +50,9 @@ if not(isempty(surface_file))
     if isfield(surface_data,'Faces')
         faces = surface_data.Faces;
     end
+
+
+end
 
 
 end

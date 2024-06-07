@@ -4,6 +4,10 @@ sensor_counter = 0;
 sensor_num = 0;
 istudy = [];
 sensor_type = [];
+sensor_positions = [];
+sensor_orientations = [];
+sensor_ind = [];
+sensor_tag_cell = cell(0);
 
 if not(isempty(varargin))
     sensor_type = varargin{1};
@@ -18,9 +22,10 @@ else
     file_name = [bst_get('ProtocolInfo').STUDIES filesep bst_get('Study').Channel.FileName];
 end
 
+[file_path_aux, file_name_aux, file_extension_aux] = fileparts(file_name);
+if not(isempty(file_extension_aux))
 channel_data = load(file_name);
 
-sensor_orientations = [];
 for i = 1 : length(channel_data.Channel)
 
     if ismember(channel_data.Channel(i).Type,sensor_type) | isempty(sensor_type)
@@ -42,5 +47,7 @@ end
 
 sensor_ind = sensor_ind(:);
 sensor_tag_cell = sensor_tag_cell(:);
+
+end
 
 end
