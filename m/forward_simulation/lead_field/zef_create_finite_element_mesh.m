@@ -2,7 +2,7 @@ function zef = zef_create_finite_element_mesh(zef)
 
 if nargin == 0
     zef = evalin('base','zef');
-end
+end 
 
 if zef.downsample_surfaces == 1
     zef = zef_downsample_surfaces(zef);
