@@ -1,6 +1,6 @@
 function diffB = dBdZ (Bint, Z, eA)
 %
-% diffB = dBdZ ()
+% diffB = dBdZ (Bint, Z, eA)
 %
 % Computes the derivative of the matrix
 %
