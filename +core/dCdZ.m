@@ -12,7 +12,7 @@ function out = dCdZ (Z,eI,L)
 %
 % - Z
 %
-%   The impedance of the electrodes corresponding to M.
+%   The impedance of the electrode under observation.
 %
 % - eI
 %
