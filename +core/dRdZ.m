@@ -121,6 +121,6 @@ function D = dRdZ ( A, dAdZ, R, dBdZ, invS, dSdZ, kwargs )
 
     end % for col
 
-    D = - Ta + Tb + R * dSdZ * invS ;
+    D = - Ta + Tb - R * dSdZ * invS ;
 
 end % function
