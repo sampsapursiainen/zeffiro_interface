@@ -106,8 +106,6 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     A = core.stiffMatBoundaryConditions ( A, Z, superNodes ) ;
 
-    mf = matfile("newA.mat",Writable=true);
-
     disp("Computing electrode potential matrix B…")
 
     B = core.potentialMat ( superNodes, Z, size (nodes,1) );
@@ -118,9 +116,11 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Computing transfer matrix and Schur complement. This will take a while.")
 
-    [ TM, SC ] = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=true) ;
+    TM = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=true) ;
 
-    disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
+    SC = ctranspose (B) * TM - C ;
+
+    disp("Computing lead field as the product of Schur complement and transpose of transfer matrix…")
 
     L = SC * transpose ( TM ) ;
 
@@ -156,6 +156,10 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     LGmean = mean (LG,1) ;
 
-    reLGM = LG - LGmean ;
+    L = LG - LGmean ;
+
+    mf = matfile("newLeeg.mat",Writable=true);
+
+    mf.L = L ;
 
 end % function
