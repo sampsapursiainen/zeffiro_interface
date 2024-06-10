@@ -62,19 +62,21 @@ function Bs = electrodePsiIntegral (Nn,superNodes,kwargs)
 
             nodeI = superNodeCenter ;
             triArea = 1 ;
+            totalArea = 1 ;
             maxVertexI = 1 ;
 
         else
 
             nodeI = superNodes (snI) . surfaceTriangles ;
             triArea = superNodes (snI) . surfaceTriangleAreas ;
+            totalArea = superNodes (snI) . totalSurfaceArea ;
             maxVertexI = 3 ;
 
         end % if isPointElectrode
 
         % Distribute the impedance to the node positions in B.
 
-        entry = psiIntegral .* triArea ;
+        entry = psiIntegral .* triArea ./ totalArea ;
 
         for vi = 1 : maxVertexI
 
