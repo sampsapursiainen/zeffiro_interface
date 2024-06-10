@@ -63,6 +63,8 @@ function Ms = electrodeMassMatrix (N, superNodes, kwargs)
 
     for snI = 1 : snN
 
+        Ms {snI} = sparse (N,N) ;
+
         % Find out the nodes that the surface of this supernode is made of and
         % its area. If the area of the supernode is too small, it is
         % interpreted as a point electrode and only the supernode center will
@@ -85,6 +87,8 @@ function Ms = electrodeMassMatrix (N, superNodes, kwargs)
             triArea = superNodes (snI) . surfaceTriangleAreas ;
 
         end % if
+
+        snCursor = cursor ;
 
         rangeLen = size (nodeI,2) - 1 ;
 
@@ -129,7 +133,9 @@ function Ms = electrodeMassMatrix (N, superNodes, kwargs)
 
         end % for ii
 
-        Ms {snI} = sparse ( Mrows(range), Mcols(range), Mvals(range), N, N ) ;
+        snRange = snCursor : range (1) - 1 ;
+
+        Ms {snI} = Ms {snI} + sparse ( Mrows (snRange), Mcols (snRange), Mvals (snRange), N, N ) ;
 
     end % for snI
 
