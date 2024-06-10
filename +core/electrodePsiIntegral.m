@@ -1,6 +1,6 @@
-function B = electrodePsiIntegral (Nn,superNodes,kwargs)
+function Bs = electrodePsiIntegral (Nn,superNodes,kwargs)
 %
-% B = electrodePsiIntegral (Nn,superNodes,kwargs)
+% Bs = electrodePsiIntegral (Nn,superNodes,kwargs)
 %
 % Assembles a matrix of integrals
 %
@@ -42,9 +42,11 @@ function B = electrodePsiIntegral (Nn,superNodes,kwargs)
 
     % Place integral values scaled by areas into the output matrix.
 
-    B = sparse (Nn, Ne) ;
+    Bs = cell (Ne,1) ;
 
     for snI = uint32 (1 : Ne)
+
+        Bs {snI} = sparse (Nn, Ne) ;
 
         % Find out the nodes that this supernode is made of and its area. If
         % the area of the supernode is too small, it is interpreted as a point
@@ -78,7 +80,7 @@ function B = electrodePsiIntegral (Nn,superNodes,kwargs)
 
             vertexI = nodeI (vi,:) ;
 
-            B = B + sparse ( vertexI, snI, entry, Nn, Ne) ;
+            Bs {snI} = Bs {snI} + sparse ( vertexI, snI, entry, Nn, Ne) ;
 
         end % for vi
 
