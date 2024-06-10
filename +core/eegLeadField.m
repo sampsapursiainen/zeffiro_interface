@@ -116,7 +116,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Computing transfer matrix and Schur complement. This will take a while.")
 
-    TM = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=true) ;
+    TM = core.transferMatrix (A,B,tolerances=kwargs.pcgTol,useGPU=true) ;
 
     SC = ctranspose (B) * TM - C ;
 

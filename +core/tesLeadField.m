@@ -107,7 +107,7 @@ function [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, elect
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    TM = core.transferMatrix (A,B,C,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
+    TM = core.transferMatrix (A,B,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
 
     disp ("Computing resistivity matrix…") ;
 

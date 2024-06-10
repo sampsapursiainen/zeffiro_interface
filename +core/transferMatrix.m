@@ -1,4 +1,4 @@
-function T = transferMatrix ( A, B, C, kwargs )
+function T = transferMatrix ( A, B, kwargs )
 %
 % T = transferMatrix ( A, B, C, kwargs )
 %
@@ -59,7 +59,6 @@ function T = transferMatrix ( A, B, C, kwargs )
     arguments
         A (:,:) double { mustBeFinite }
         B (:,:) double { mustBeFinite }
-        C (:,:) double { mustBeFinite }
         kwargs.permutation    (:,1) double { mustBeInteger, mustBePositive } = symamd (A)
         kwargs.preconditioner (:,1) double = 1 ./ full ( diag ( A ) )
         kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
@@ -77,8 +76,6 @@ function T = transferMatrix ( A, B, C, kwargs )
     n_of_electrodes = size ( B, 2 ) ;
 
     T = zeros ( n_of_fem_nodes, n_of_electrodes );
-
-    S = zeros (n_of_electrodes);
 
     % Permute stiffness matrix A if a preconditioner requires it. Also
     % construct an inverse permutation so that the final result can be
@@ -138,8 +135,6 @@ function T = transferMatrix ( A, B, C, kwargs )
         x (:) = x (invperm) ;
 
         T (:,i) = x ;
-
-        S (:,i) = B' * x - C (:,i) ;
 
     end % for
 
