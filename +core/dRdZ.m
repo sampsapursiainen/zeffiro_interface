@@ -111,7 +111,7 @@ function D = dRdZ ( A, dAdZ, R, dBdZ, invS, dSdZ, kwargs )
 
         if relResNormB > tolerance
 
-            error ( "Solver for dBdZ * R did not converge after the theoretical maximum number of iterations " + itersB + ". The relative residual norm was " + gather (relResNorm) + "." ) ;
+            error ( "Solver for dBdZ * invS did not converge after the theoretical maximum number of iterations " + itersB + ". The relative residual norm was " + gather (relResNorm) + "." ) ;
 
         end
 
