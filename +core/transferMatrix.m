@@ -1,14 +1,12 @@
-function [T, S] = transferMatrix ( A, B, C, kwargs )
+function T = transferMatrix ( A, B, C, kwargs )
 %
-% [T, S] = transferMatrix ( A, B, C, kwargs )
+% T = transferMatrix ( A, B, C, kwargs )
 %
 % Builds a transfer matrix T that maps measurements from sensors to FE mesh
 % nodes, from a given stiffness matrix A, and sensor matrices B and C from a
 % discretized system
 %
-%   [ A B ; B' C ] * [ u v ] = [ x y ]
-%
-% Also returns the Schur complement S of A.
+%   [ A B ; B' C ] * [ u ; v ] = [ x ; y ]
 %
 % Input:
 %
@@ -56,10 +54,6 @@ function [T, S] = transferMatrix ( A, B, C, kwargs )
 % - T
 %
 %   A transfer matrix that maps potentials from sensors to finite element nodes.
-%
-% - S
-%
-%   The Schur complement of T.
 %
 
     arguments
