@@ -42,8 +42,8 @@ function D = dRdZ ( A, dAdZ, R, dBdZ, invS, dSdZ, kwargs )
         dSdZ (:,:) { mustBeNumeric, mustBeFinite }
         kwargs.useGPU (1,1) logical = true
         kwargs.solverTol (1,1) double { mustBePositive, mustBeFinite } = 1e-8
-        kwargs.TdAdZRsolver (1,1) function_handle = @core.biConjugateGradientStabilized
-        kwargs.TdBdZinvSsolver (1,1) function_handle = @core.biConjugateGradientStabilized
+        kwargs.TdAdZRsolver (1,1) function_handle = @core.solvers.biConjugateGradientStabilized
+        kwargs.TdBdZinvSsolver (1,1) function_handle = @core.solvers.biConjugateGradientStabilized
     end
 
     disp ("Computing dRdZ…") ;
