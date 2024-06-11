@@ -319,8 +319,10 @@ if not(isequal(file_name,0))
                         if isequal(lower(surface_name_aux),lower(tag))
                             surface_found = 1;
                             [vertices_aux, faces_aux] = zef_bst_2_zef_surface(subject,surface_ind_aux);
+                            if str2num(invert)
+                            faces_aux = faces_aux(:,[1 3 2]);
+                            end
                             zef = zef_merge_surface_mesh(zef,compartment_tag,faces_aux,vertices_aux,merge);
-                            eval(['zef.' compartment_tag '_scaling = 1000;']);
                             if not(isempty(atlas))
                                 if isempty(atlas_tag)
                                     atlas_tag = atlas;
@@ -481,7 +483,6 @@ if not(isequal(file_name,0))
                     [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors(tag);
                     if isequal(modality,'EEG')
                         eval(['zef.' sensor_tag '_points = sensor_positions;']);
-                        eval(['zef.' sensor_tag '_scaling = 1000;']);
                     end
 
 

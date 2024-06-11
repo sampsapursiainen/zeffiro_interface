@@ -47,7 +47,6 @@ zef.h_zeffiro = figure(...
     'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
     'ScreenPixelsPerInchMode','manual' );
 
-
 zef.h_zeffiro.Units = 'normalized';
 
 zef.h_zeffiro.ContextMenu = uicontextmenu(zef.h_zeffiro);

@@ -3,41 +3,41 @@ classdef zef_mesh_tool_app_exported < matlab.apps.AppBase
     % Properties that correspond to app components
     properties (Access = public)
         h_mesh_tool                   matlab.ui.Figure
-        h_pushbutton21                matlab.ui.control.Button
-        h_run_forward_simulation      matlab.ui.control.Button
-        h_interpolate                 matlab.ui.control.Button
-        h_field_downsampling          matlab.ui.control.Button
-        h_surface_downsampling        matlab.ui.control.Button
-        h_checkbox_mesh_smoothing_on  matlab.ui.control.CheckBox
-        h_refinement_on               matlab.ui.control.CheckBox
-        h_source_interpolation_on     matlab.ui.control.CheckBox
-        h_downsample_surfaces         matlab.ui.control.CheckBox
-        SurfacetrianglesmaxLabel      matlab.ui.control.Label
-        CuttingplanecoeffEditFieldLabel_4  matlab.ui.control.Label
-        CuttingplanecoeffEditFieldLabel_5  matlab.ui.control.Label
-        CuttingplanecoeffEditFieldLabel_6  matlab.ui.control.Label
-        CuttingplanecoeffEditFieldLabel_7  matlab.ui.control.Label
-        UnitLabel                     matlab.ui.control.Label
-        h_popupmenu6                  matlab.ui.control.DropDown
-        DirectionsDropDownLabel       matlab.ui.control.Label
-        h_popupmenu2                  matlab.ui.control.DropDown
-        CuttingplanecoeffEditFieldLabel_8  matlab.ui.control.Label
-        h_edit65                      matlab.ui.control.NumericEditField
-        h_edit_meshing_accuracy       matlab.ui.control.NumericEditField
-        h_smoothing_strength          matlab.ui.control.NumericEditField
-        h_edit76                      matlab.ui.control.NumericEditField
-        h_edit75                      matlab.ui.control.NumericEditField
-        h_max_surface_face_count      matlab.ui.control.NumericEditField
-        h_pushbutton23                matlab.ui.control.Button
-        h_pushbutton34                matlab.ui.control.Button
-        InflatingiterationsLabel      matlab.ui.control.Label
-        CuttingplanecoeffEditFieldLabel_9  matlab.ui.control.Label
-        h_inflate_strength            matlab.ui.control.NumericEditField
-        h_inflate_n_iterations        matlab.ui.control.NumericEditField
-        h_forward_simulation_table    matlab.ui.control.Table
-        h_save_forward_simulation_profile  matlab.ui.control.Button
-        h_forward_simulation_script   matlab.ui.control.TextArea
         h_forward_simulation_update_from_profile  matlab.ui.control.Button
+        h_forward_simulation_script   matlab.ui.control.TextArea
+        h_save_forward_simulation_profile  matlab.ui.control.Button
+        h_forward_simulation_table    matlab.ui.control.Table
+        h_inflate_n_iterations        matlab.ui.control.NumericEditField
+        h_inflate_strength            matlab.ui.control.NumericEditField
+        CuttingplanecoeffEditFieldLabel_9  matlab.ui.control.Label
+        InflatingiterationsLabel      matlab.ui.control.Label
+        h_pushbutton34                matlab.ui.control.Button
+        h_pushbutton23                matlab.ui.control.Button
+        h_max_surface_face_count      matlab.ui.control.NumericEditField
+        h_edit75                      matlab.ui.control.NumericEditField
+        h_edit76                      matlab.ui.control.NumericEditField
+        h_smoothing_strength          matlab.ui.control.NumericEditField
+        h_edit_meshing_accuracy       matlab.ui.control.NumericEditField
+        h_edit65                      matlab.ui.control.NumericEditField
+        CuttingplanecoeffEditFieldLabel_8  matlab.ui.control.Label
+        h_popupmenu2                  matlab.ui.control.DropDown
+        DirectionsDropDownLabel       matlab.ui.control.Label
+        h_popupmenu6                  matlab.ui.control.DropDown
+        UnitLabel                     matlab.ui.control.Label
+        CuttingplanecoeffEditFieldLabel_7  matlab.ui.control.Label
+        CuttingplanecoeffEditFieldLabel_6  matlab.ui.control.Label
+        CuttingplanecoeffEditFieldLabel_5  matlab.ui.control.Label
+        CuttingplanecoeffEditFieldLabel_4  matlab.ui.control.Label
+        SurfacetrianglesmaxLabel      matlab.ui.control.Label
+        h_downsample_surfaces         matlab.ui.control.CheckBox
+        h_source_interpolation_on     matlab.ui.control.CheckBox
+        h_refinement_on               matlab.ui.control.CheckBox
+        h_checkbox_mesh_smoothing_on  matlab.ui.control.CheckBox
+        h_surface_downsampling        matlab.ui.control.Button
+        h_field_downsampling          matlab.ui.control.Button
+        h_interpolate                 matlab.ui.control.Button
+        h_run_forward_simulation      matlab.ui.control.Button
+        h_pushbutton21                matlab.ui.control.Button
         h_menu_forward_simulation_table_context  matlab.ui.container.ContextMenu
         h_menu_forward_simulation_table_add  matlab.ui.container.Menu
         h_menu_forward_simulation_table_delete  matlab.ui.container.Menu
@@ -96,7 +96,7 @@ classdef zef_mesh_tool_app_exported < matlab.apps.AppBase
 
             % Create h_downsample_surfaces
             app.h_downsample_surfaces = uicheckbox(app.h_mesh_tool);
-            app.h_downsample_surfaces.Text = 'Downsample surf.';
+            app.h_downsample_surfaces.Text = 'Resample surf.';
             app.h_downsample_surfaces.Position = [192 198 163 22];
 
             % Create SurfacetrianglesmaxLabel
@@ -225,9 +225,6 @@ classdef zef_mesh_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_forward_simulation_table_context
             app.h_menu_forward_simulation_table_context = uicontextmenu(app.h_mesh_tool);
-            
-            % Assign app.h_menu_forward_simulation_table_context
-            app.h_forward_simulation_table.ContextMenu = app.h_menu_forward_simulation_table_context;
 
             % Create h_menu_forward_simulation_table_add
             app.h_menu_forward_simulation_table_add = uimenu(app.h_menu_forward_simulation_table_context);
@@ -236,6 +233,9 @@ classdef zef_mesh_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_forward_simulation_table_delete
             app.h_menu_forward_simulation_table_delete = uimenu(app.h_menu_forward_simulation_table_context);
             app.h_menu_forward_simulation_table_delete.Text = 'Delete';
+            
+            % Assign app.h_menu_forward_simulation_table_context
+            app.h_forward_simulation_table.ContextMenu = app.h_menu_forward_simulation_table_context;
 
             % Show the figure after all components are created
             app.h_mesh_tool.Visible = 'off';

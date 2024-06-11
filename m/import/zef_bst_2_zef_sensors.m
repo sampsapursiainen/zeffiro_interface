@@ -8,6 +8,7 @@ sensor_positions = [];
 sensor_orientations = [];
 sensor_ind = [];
 sensor_tag_cell = cell(0);
+scaling_constant = 1000;
 
 if not(isempty(varargin))
     sensor_type = varargin{1};
@@ -44,6 +45,8 @@ for i = 1 : length(channel_data.Channel)
     end
 
 end
+
+sensor_positions = scaling_constant*sensor_positions;
 
 sensor_ind = sensor_ind(:);
 sensor_tag_cell = sensor_tag_cell(:);
