@@ -1,6 +1,6 @@
-function diffB = dBdZ (Bint, Z, eA)
+function diffB = dBdZ (Bint, Z)
 %
-% diffB = dBdZ (Bint, Z, eA)
+% diffB = dBdZ (Bint, Z)
 %
 % Computes the derivative of the matrix
 %
@@ -24,9 +24,8 @@ function diffB = dBdZ (Bint, Z, eA)
     arguments
         Bint (:,:) double { mustBeFinite }
         Z    (1,1) double { mustBeNonNan }
-        eA   (1,1) double { mustBeNonnegative, mustBeFinite }
     end
 
-    diffB = - Bint / Z ^ 2 / eA ;
+    diffB = - Bint / Z ^ 2 ;
 
 end % function
