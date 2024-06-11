@@ -12,7 +12,7 @@ function X = invAY (A, Y, kwargs)
         kwargs.useGPU    (1,1) logical = true
     end
 
-    [ Nr, Nc ] = size (A) ;
+    [ Nr, Nc ] = size (Y) ;
 
     [ ~, cols ] = find (Y) ;
 
