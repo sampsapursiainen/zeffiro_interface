@@ -112,7 +112,7 @@ function T = transferMatrix ( A, B, kwargs )
 
     for i = 1 : n_of_electrodes
 
-        disp ("  column " + i)
+        disp ("  column " + i + " / " + n_of_electrodes)
 
         b (:) = full ( B (:,i) ) ;
 
