@@ -9,7 +9,17 @@ volumeCurrentI = zef.brain_ind ;
 
 sourceN = 5000 ;
 
-conductivity = zef.sigma (:,1) ;
+eps0 = 8.8541878188e-12 ;
+
+epsr = 164060 ;
+
+epsabs = epsr * eps0 ;
+
+freq = 1000 ;
+
+angFreq = 2 * pi * freq ;
+
+conductivity = zef.sigma (:,1) - 1i * epsabs * angFreq  ;
 
 Z = 2e3 - 1i * 23.754469118 ;
 
