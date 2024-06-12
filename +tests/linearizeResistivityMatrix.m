@@ -65,7 +65,7 @@ newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedan
 
 disp ("Plotting differences…")
 
-Rdiff = abs ( newR - newRlin ) ;
+Rdiff = abs ( newR - newRLin ) ;
 
 fig = figure (1) ;
 
