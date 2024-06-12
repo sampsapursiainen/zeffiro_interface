@@ -1,10 +1,10 @@
-function Bs = electrodePsiIntegral (Nn,superNodes,kwargs)
+function Bs = electrodeBasisFnMean (Nn,superNodes,kwargs)
 %
-% Bs = electrodePsiIntegral (Nn,superNodes,kwargs)
+% Bs = electrodeBasisFnMean (Nn,superNodes,kwargs)
 %
 % Assembles a matrix of integrals
 %
-%   ∫ ψᵢ dS
+%   ∫_(eℓ) ψᵢ dS / |eℓ|
 %
 % over each electrode--mesh contact surface, represented by the surface
 % triangles of the given supernodes.
