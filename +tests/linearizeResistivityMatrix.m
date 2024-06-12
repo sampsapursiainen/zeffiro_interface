@@ -128,6 +128,6 @@ function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, co
 
     invS = S \ I ;
 
-    R = TM * invSchurC ;
+    R = T * invS ;
 
 end % function
