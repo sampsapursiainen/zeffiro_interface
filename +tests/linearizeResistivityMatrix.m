@@ -1,0 +1,123 @@
+
+nodes = zef.nodes ;
+
+tetra = zef.tetra ;
+
+tetV = core.tetraVolume (nodes, tetra,true) ;
+
+volumeCurrentI = zef.brain_ind ;
+
+sourceN = 5000 ;
+
+conductivity = zef.sigma (:,1) ;
+
+Z = 2e3 - 1i * 23.754469118 ;
+
+electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Z, outerRadii=1e-3 ) ;
+
+disp ("Positioning sources…")
+
+[ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', sourceN ) ;
+
+attachSensorsTo = "surface" ;
+
+disp("Attaching sensors to the head " + attachSensorsTo + "…")
+
+superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=attachSensorsTo) ;
+
+[ A, B, C, T, S, invS, R ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes) ;
+
+disp ("Computing derivative of R…")
+
+Ms = core.electrodeMassMatrix ( size (A,1), superNodes ) ;
+
+Bs = core.electrodeBasisFnMean ( size (A,1), superNodes ) ;
+
+col = 100 ;
+
+dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
+
+invAdAdZ = core.invAY (A,dAdZ) ;
+
+dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
+
+invAdBdZ = core.invAY (A,dBdZ) ;
+
+dCdZ = core.dCdZ ( Z(col), col, numel(superNodes) ) ;
+
+dCHdZ = core.dCHdZ ( Z(col), col, numel(superNodes) ) ;
+
+dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, TM, B, invAdAdZ, invAdBdZ ) ;
+
+dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invSchurC, dSdZ ) ;
+
+disp ("Computing new R with linearization…")
+
+dZ = 10 ;
+
+newRLin = R + dRdZ * dZ ;
+
+disp ("Computing new R with updated impedances…")
+
+newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=[electrodes.impedances(1:col-1) ; Z+dZ ; electrodes.impedances(col+1:end)], outerRadii=1e-3 ) ;
+
+[ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
+
+disp ("Plotting differences…")
+
+Rdiff = abs ( newR - newRlin ) ;
+
+fig = figure (1) ;
+
+colormap ("hot") ;
+
+imagesc(Rdiff) ;
+
+colorbar ;
+
+figure (1)
+
+%% Helper functions.
+
+function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes)
+%
+% [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, volumeCurrentI, electrodes, superNodes)
+%
+
+    disp("Initializing impedances for sensors…")
+
+    Z = electrodes.impedances ;
+
+    disp("Computing stiffness matrix components reA and imA…")
+
+    conductivity = core.reshapeTensor (conductivity) ;
+
+    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+
+    disp("Applying boundary conditions to reA…")
+
+    A = core.stiffMatBoundaryConditions ( A, Z, superNodes ) ;
+
+    disp("Computing electrode potential matrix B for real and imaginary parts…")
+
+    B = core.potentialMat ( superNodes, Z, size (nodes,1) );
+
+    disp("Computing electrode voltage matrix C…")
+
+    C = core.voltageMat (Z);
+
+    disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
+
+    T = core.transferMatrix (A,B,tolerances=1e-10,useGPU=true) ;
+
+    disp ("Computing resistivity matrix R…") ;
+
+    S = (C - ctranspose (B) * T) ;
+
+    I = eye ( size (S) ) ;
+
+    invS = S \ I ;
+
+    R = TM * invSchurC ;
+
+end % function
