@@ -52,40 +52,66 @@ invAdAdZ = core.invAY (A,dAdZ) ;
 dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
 
 invAdBdZ = core.invAY (A,dBdZ) ;
+%%
+dCdZ = core.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
 
-dCdZ = core.dCdZ ( Z(col), col, numel(superNodes) ) ;
+dCHdZ = core.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
 
-dCHdZ = core.dCHdZ ( Z(col), col, numel(superNodes) ) ;
+dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
 
-dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, TM, B, invAdAdZ, invAdBdZ ) ;
-
-dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invSchurC, dSdZ ) ;
+dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
 disp ("Computing new R with linearization…")
 
-dZ = 10 ;
+dZs = [ - 1e1i, - 1e2i, - 1e3i, 1e1, 1e2, 1e3, ] ;
+%%
+for ii = 4 : numel (dZs)
 
-newRLin = R + dRdZ * dZ ;
+    dZ = dZs (ii) ;
 
-disp ("Computing new R with updated impedances…")
+    newRLin = R + dRdZ * dZ ;
 
-newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=[electrodes.impedances(1:col-1) ; Z+dZ ; electrodes.impedances(col+1:end)], outerRadii=1e-3 ) ;
+    if isreal (dZ)
+        fileName = "dZ=" + dZ + "Ω_f=" + freq + "Hz.mat" ;
+    else
+        fileName = "dZ=" + imag(dZ) + "iΩ_f=" + freq + "Hz.mat" ;
+    end
 
-[ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
+    disp ( newline + fileName ) ;
 
-disp ("Plotting differences…")
+    mf = matfile (fileName, Writable=true) ;
 
-Rdiff = abs ( newR - newRLin ) ;
+    disp ("Computing new R with updated impedances…")
 
-fig = figure (1) ;
+    newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=[electrodes.impedances(1:col-1) ; Z+dZ ; electrodes.impedances(col+1:end)], outerRadii=1e-3 ) ;
 
-colormap ("hot") ;
+    [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
-imagesc(Rdiff) ;
+    mf.newRLin = newRLin ;
 
-colorbar ;
+    mf.newR = newR ;
 
-figure (1)
+    disp ("Plotting differences…")
+
+    Rdiff = abs ( newR - newRLin ) ;
+
+    fig = figure (ii) ;
+
+    title ("dZ=" + dZ) ;
+
+    xlabel ("rows") ;
+
+    ylabel ("cols") ;
+
+    colormap ("hot") ;
+
+    imagesc(Rdiff) ;
+
+    colorbar ;
+
+    figure (ii)
+
+end % for
 
 %% Helper functions.
 
