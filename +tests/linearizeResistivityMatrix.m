@@ -63,19 +63,31 @@ dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
 disp ("Computing new R with linearization…")
 
-dZs = [ - 1e1i, - 1e2i, - 1e3i, 1e1, 1e2, 1e3, ] ;
-%%
-for ii = 4 : numel (dZs)
+dAngFreqs = [ 40, 80, 160, 320, 620 ] ;
 
-    dZ = dZs (ii) ;
+linAngFreqs = angFreq + dAngFreqs ;
+
+capacitance = 1 ;
+
+inductance = 0 ;
+
+%%
+
+for ii = 1 : numel (dAngFreqs)
+
+    iiAngFreq = linAngFreqs (ii) ;
+
+    dAngFreq = dAngFreqs (ii) ;
+
+    Zcol = electrodes.impedances (col) ;
+
+    Zii = core.impedanceFromRwLC ( real (Zcol), iiAngFreq, inductance, capacitance ) ;
+
+    dZ = Zii - Zcol ;
 
     newRLin = R + dRdZ * dZ ;
 
-    if isreal (dZ)
-        fileName = "dZ=" + dZ + "Ω_f=" + freq + "Hz.mat" ;
-    else
-        fileName = "dZ=" + imag(dZ) + "iΩ_f=" + freq + "Hz.mat" ;
-    end
+    fileName = "linRdω=" + dAngFreq + "Hz.mat" ;
 
     disp ( newline + fileName ) ;
 
@@ -105,7 +117,7 @@ for ii = 4 : numel (dZs)
 
     colormap ("hot") ;
 
-    imagesc(Rdiff) ;
+    imagesc(log10(Rdiff)) ;
 
     colorbar ;
 
