@@ -21,7 +21,13 @@ angFreq = 2 * pi * freq ;
 
 conductivity = zef.sigma (:,1) - 1i * epsabs * angFreq  ;
 
-Z = 2e3 - 1i * 23.754469118 ;
+% C = 1.66 to 6.65 μF
+
+capacitance = 1.66e-6 ;
+
+inductance = 0 ;
+
+Z = core.impedanceFromRwLC (2e3,1000,inductance,capacitance) ;
 
 electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Z, outerRadii=1e-3 ) ;
 
@@ -34,6 +40,8 @@ attachSensorsTo = "surface" ;
 disp("Attaching sensors to the head " + attachSensorsTo + "…")
 
 superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=attachSensorsTo) ;
+
+%%
 
 [ A, B, C, T, S, invS, R ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes) ;
 
@@ -52,7 +60,9 @@ invAdAdZ = core.invAY (A,dAdZ) ;
 dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
 
 invAdBdZ = core.invAY (A,dBdZ) ;
+
 %%
+
 dCdZ = core.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
 
 dCHdZ = core.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
@@ -66,10 +76,6 @@ disp ("Computing new R with linearization…")
 dAngFreqs = [ 40, 80, 160, 320, 620 ] ;
 
 linAngFreqs = angFreq + dAngFreqs ;
-
-capacitance = 1 ;
-
-inductance = 0 ;
 
 %%
 
@@ -156,7 +162,7 @@ function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, co
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-    T = core.transferMatrix (A,B,tolerances=1e-10,useGPU=true) ;
+    T = core.transferMatrix (A,B,tolerances=1e-7,useGPU=true) ;
 
     disp ("Computing resistivity matrix R…") ;
 
