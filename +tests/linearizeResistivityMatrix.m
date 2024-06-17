@@ -73,7 +73,7 @@ dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
 disp ("Computing new R with linearization…")
 
-dAngFreqs = [ 40, 80, 160, 320, 620 ] ;
+dAngFreqs = [ 100, 500, 1000 ] .* 2 * pi ;
 
 linAngFreqs = angFreq + dAngFreqs ;
 
