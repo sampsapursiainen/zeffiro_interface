@@ -81,13 +81,13 @@ linAngFreqs = angFreq + dAngFreqs ;
 
 disp ("Generating file names…") ;
 
-matFiles = strings ( 1, numel (dAngFreqs) ) ;
+fileNames = strings ( 1, numel (dAngFreqs) ) ;
 
 for ii = 1 : numel (dAngFreqs)
 
     dAngFreq = dAngFreqs (ii) ;
 
-    fileName = "linRdω=" + dAngFreq + "Hz.mat" ;
+    fileNames (ii) = "linRdω=" + dAngFreq + "Hz.mat" ;
 
 end % for ii
 
