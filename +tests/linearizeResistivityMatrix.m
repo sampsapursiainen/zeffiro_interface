@@ -137,17 +137,15 @@ for ii = 1 : numel (dAngFreqs)
 
     newLLin = - G * newRLin ;
 
-    disp ("Interspersing x-, y- and z-components…") ;
-
     disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
     mf.newRLin = newRLin ;
 
     mf.newR = newR ;
 
-    mf.newLLin = newRLin ;
+    mf.newLLin = newLLin ;
 
-    mf.newL = newR ;
+    mf.newL = newL ;
 
     disp ("Plotting differences…")
 
@@ -161,9 +159,43 @@ for ii = 1 : numel (dAngFreqs)
 
     ylabel ("cols") ;
 
-    colormap ("hot") ;
+    colormap ("jet") ;
 
     imagesc(log10(Rdiff)) ;
+
+    colorbar ;
+
+    figure (ii)
+
+end % for
+
+%%
+
+disp ("Picturing differences between computed and linearized lead fields…") ;
+
+for ii = 1 : numel (fileNames)
+
+    fileName = fileNames (ii) ;
+
+    mf = matfile (fileName) ;
+
+    newL = mf.newL ;
+
+    newLLin = mf.newLLin ;
+
+    Ldiff = abs ( newLLin - newL ) ;
+
+    fig = figure (ii) ;
+
+    title ("dω=" + dZ) ;
+
+    xlabel ("rows") ;
+
+    ylabel ("cols") ;
+
+    colormap ("jet") ;
+
+    imagesc(log10(Ldiff)) ;
 
     colorbar ;
 
