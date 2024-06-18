@@ -99,7 +99,7 @@ disp ("Computing volume currents…") ;
 
 disp ("Interspersing volume current matrix xyz-components…") ;
 
-G = transpose ( reshape ( [ G1 ; G2 ; G3 ], size (G1,1), [] ) ) ;
+G = transpose ( reshape ( [ G1'; G2'; G3' ], size (G1',1), 3 * size (G1',2) ) ) ;
 
 %%
 
