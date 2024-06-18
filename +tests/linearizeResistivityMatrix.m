@@ -79,6 +79,32 @@ linAngFreqs = angFreq + dAngFreqs ;
 
 %%
 
+disp ("Generating file names…") ;
+
+matFiles = strings ( 1, numel (dAngFreqs) ) ;
+
+for ii = 1 : numel (dAngFreqs)
+
+    dAngFreq = dAngFreqs (ii) ;
+
+    fileName = "linRdω=" + dAngFreq + "Hz.mat" ;
+
+end % for ii
+
+%%
+
+disp ("Computing volume currents…") ;
+
+[G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, core.reshapeTensor (conductivity), volumeCurrentI) ;
+
+disp ("Interspersing volume current matrix xyz-components…") ;
+
+G = transpose ( reshape ( [ G1 ; G2 ; G3 ], size (G1,1), [] ) ) ;
+
+%%
+
+disp ("Comparing computed and linearized resistivity matrices in a loop…")
+
 for ii = 1 : numel (dAngFreqs)
 
     iiAngFreq = linAngFreqs (ii) ;
@@ -93,7 +119,7 @@ for ii = 1 : numel (dAngFreqs)
 
     newRLin = R + dRdZ * dZ ;
 
-    fileName = "linRdω=" + dAngFreq + "Hz.mat" ;
+    fileName = fileNames (ii) ;
 
     disp ( newline + fileName ) ;
 
@@ -105,9 +131,23 @@ for ii = 1 : numel (dAngFreqs)
 
     [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
+    disp ("Computing lead fields…") ;
+
+    newL = - G * newR ;
+
+    newLLin = - G * newRLin ;
+
+    disp ("Interspersing x-, y- and z-components…") ;
+
+    disp ("Saving new Rs and Ls to file " + fileName + "…") ;
+
     mf.newRLin = newRLin ;
 
     mf.newR = newR ;
+
+    mf.newLLin = newRLin ;
+
+    mf.newL = newR ;
 
     disp ("Plotting differences…")
 
