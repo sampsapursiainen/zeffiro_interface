@@ -51,7 +51,7 @@ Ms = core.electrodeMassMatrix ( size (A,1), superNodes ) ;
 
 Bs = core.electrodeBasisFnMean ( size (A,1), superNodes ) ;
 
-col = 100 ;
+col = 2 ;
 
 dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
 
