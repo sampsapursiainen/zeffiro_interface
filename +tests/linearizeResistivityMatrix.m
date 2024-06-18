@@ -99,7 +99,7 @@ disp ("Computing volume currents…") ;
 
 disp ("Interspersing volume current matrix xyz-components…") ;
 
-G = transpose ( reshape ( [ G1'; G2'; G3' ], size (G1',1), 3 * size (G1',2) ) ) ;
+G = [ G1 ; G2 ; G3 ] ;
 
 %%
 
@@ -119,7 +119,7 @@ for ii = 1 : numel (dAngFreqs)
 
     newRLin = R + dRdZ * dZ ;
 
-    fileName = fileNames (ii) ;
+    fileName = "interspersed" + fileNames (ii) ;
 
     disp ( newline + fileName ) ;
 
@@ -135,7 +135,23 @@ for ii = 1 : numel (dAngFreqs)
 
     newL = - G * newR ;
 
+    newLcopy = newL ;
+
     newLLin = - G * newRLin ;
+
+    newLLinCopy = newLLin ;
+
+    disp ("Interspersing lead field xyz-components…") ;
+
+    Nvc = numel (volumeCurrentI) ;
+
+    newL (1:3:end,:) = newLcopy (1:Nvc,:) ;
+    newL (2:3:end,:) = newLcopy (Nvc+1:2*Nvc,:) ;
+    newL (3:3:end,:) = newLcopy (2*Nvc+1:3*Nvc,:) ;
+
+    newLLin (1:3:end,:) = newLLinCopy (1:Nvc,:) ;
+    newLLin (2:3:end,:) = newLLinCopy (Nvc+1:2*Nvc,:) ;
+    newLLin (3:3:end,:) = newLLinCopy (2*Nvc+1:3*Nvc,:) ;
 
     disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
@@ -175,7 +191,7 @@ disp ("Picturing differences between computed and linearized lead fields…") ;
 
 for ii = 1 : numel (fileNames)
 
-    fileName = fileNames (ii) ;
+    fileName = "interspersed" + fileNames (ii) ;
 
     mf = matfile (fileName) ;
 
