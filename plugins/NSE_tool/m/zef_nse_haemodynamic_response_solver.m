@@ -23,6 +23,8 @@ nse_field.bv_vessels_2 = cell(0);
 nse_field.bv_vessels_3 = cell(0);
 nse_field.mu_vessels = cell(0);
 nse_field.bf_capillaries = cell(0);
+nse_field.bf_capillaries_background = cell(0); 
+
 
 h_waitbar = zef_waitbar(0,3,'NSE solver: pressure');
 
@@ -86,9 +88,11 @@ mvd_mean_vec_3 = mvd_mean_vec_1./mvd_mean_vec_2;
 mvd_mean_vec_3(isnan(mvd_mean_vec_3)) = 0;
 mvd_mean_vec_3(isinf(mvd_mean_vec_3)) = 0;
 
-mc_vec_0 = mc_vec_0 + 0.25 * mvd_mean_vec_3 * (nse_field.capillary_diameter/2)^2;
+mc_vec_0 = mc_vec_0 + 0.25 * mvd_mean_vec_3 * pi * (capillary_fraction*(nse_field.capillary_diameter/2)^2 + arteriole_fraction*(nse_field.arteriole_diameter/2)^2+venule_fraction*(nse_field.venule_diameter/2)^2);
 
 end
+
+nse_field.bf_capillaries_background{1} = mc_vec_0;
 
 b_node_ind = zef_surface_mesh(v_1_tetra);
 b_node_ind = unique(b_node_ind);
@@ -289,10 +293,10 @@ end
     eps_var = ((4*pi).^(1/3).*3.^(2/3).*diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*max(volume).^(1/3)));
    
     K_0 = (diffusion_coefficient/mvd_volume_mean)*K_2 ;
-    K_3 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2 + nu_val*C_2;
+    K_3 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2 - nu_val*C_2;
     K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2;
-   mc_vec = zeros(size(v_2_nodes,1),1);
-   q_vec = zeros(size(v_2_nodes,1),1);
+    mc_vec = zeros(size(v_2_nodes,1),1);
+    q_vec = zeros(size(v_2_nodes,1),1);
 
     if nse_field.use_gpu
         mc_vec = gpuArray(mc_vec);
@@ -324,12 +328,10 @@ end
      K_2 = delta_t*K_2 + C_2;
      K_3 = delta_t*K_3 + C_2;
 
-
 nse_field.bp_vessels{1} = abs(nse_field.bp_vessels{1});
 nse_field.mu_vessels{1} = nse_field.mu*ones(size(nse_field.bp_vessels{1}));
 
 zef_waitbar(3,3,h_waitbar,'NSE solver');
-
 
 i_aux = 0;
 
@@ -348,12 +350,12 @@ for i = 1 : n_time
 
    if nse_field.use_gpu
                     mc_vec = pcg_iteration_gpu(K_2, C_2*mc_vec + delta_t*u + delta_t*d_balloon*mc_vec_0.*w_5, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
-                    q_vec = pcg_iteration_gpu(K_3, C_2*q_vec + delta_t*h_val*u + delta_t*h_val*nu_val*(mc_vec_0+mc_vec).*w_4+ (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
+                    q_vec = pcg_iteration_gpu(K_3, C_2*q_vec + delta_t*h_val*u + delta_t*h_val*nu_val*(mc_vec_0+mc_vec).*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
                 else
-                    mc_vec = pcg_iteration(K_2, C_2*mc_vec + delta_t*u + delta_t*d_balloon*mc_vec_0.*w_5, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
-                     %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t*(1./(mc_vec_0+mc_vec)).*u + delta_t*h_val*nu_val*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - 0*delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3); 
-                     %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*h_val.*u + delta_t*h_val*nu_val.*(mc_vec+mc_vec_0).*w_4 + C_2*(q_vec_old - q_vec) - delta_t.*K_0*q_vec, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
-   q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*h_val.*u + delta_t*h_val*nu_val.*(mc_vec+mc_vec_0).*w_4, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
+   mc_vec = pcg_iteration(K_2, C_2*mc_vec + delta_t*u + delta_t*d_balloon*mc_vec_0.*w_5, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
+   %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t*(1./(mc_vec_0+mc_vec)).*u + delta_t*h_val*nu_val*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - 0*delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3); 
+   %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*h_val.*u + delta_t*h_val*nu_val.*(mc_vec+mc_vec_0).*w_4 + C_2*(q_vec_old - q_vec) - delta_t.*K_0*q_vec, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
+   q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*(1-h_val).*u - delta_t*nu_val.*h_val*(mc_vec+mc_vec_0).*w_4, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
    end
 
    %q_vec_old = q_vec; 
@@ -364,8 +366,10 @@ for i = 1 : n_time
         nse_field.bf_capillaries{i_aux} = gather(mc_vec);
         nse_field.dh_capillaries{i_aux} = gather(q_vec);
 
-nse_field.bf_capillaries{i_aux} = min(1,abs(nse_field.bf_capillaries{i_aux}));
-nse_field.dh_capillaries{i_aux} = min(1,abs(nse_field.dh_capillaries{i_aux}));
+nse_field.bf_capillaries{i_aux} = min(1,(nse_field.bf_capillaries{i_aux}+mc_vec_0));
+nse_field.dh_capillaries{i_aux} = min(1,(nse_field.dh_capillaries{i_aux}+(1-h_val).*mc_vec_0));
+nse_field.bf_capillaries{i_aux} = max(-1, nse_field.bf_capillaries{i_aux});
+nse_field.dh_capillaries{i_aux} = max(-1, nse_field.dh_capillaries{i_aux});
 
                     end
 

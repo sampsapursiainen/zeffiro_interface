@@ -20,13 +20,14 @@ delete(h_arrow);
 
 [X,Y,Z]  = sphere(100);
 
-if not(isempty(nse_field.bv_vessels_1))
-[~,dir_vec] = zef_nse_mean_velocity_roi(zef,nse_field);
-end
-
 h_surf = surf(nse_field.roi_radius*X + nse_field.roi_x, nse_field.roi_radius*Y + nse_field.roi_y, nse_field.roi_radius*Z + nse_field.roi_z); 
+
+
+if and(not(isempty(nse_field.bv_vessels_1)),ismember(nse_field.reconstruction_type,nse_field.reconstruction_type_list{1}))
+[~,dir_vec] = zef_nse_mean_velocity_roi(zef,nse_field);
 h_arrow = zef_plot_3D_arrow(nse_field.roi_x,nse_field.roi_y,nse_field.roi_z,-dir_vec(1),-dir_vec(2),-dir_vec(3),2.*nse_field.roi_radius,2,'r');
 set(h_arrow,'Tag','additional: mean velocity in roi');
+end
 
 set(h_surf,'FaceColor',[0.5 0.5 0.5]);
 set(h_surf,'EdgeColor','none');

@@ -151,5 +151,49 @@ if zef.nse_field.graph_type == 20
      zef_nse_plot_histogram(zef,plot_vec(:),'Pressure (mmHg)');
 end
 
+if zef.nse_field.graph_type == 21
+    [roi_ind_1, roi_ind_2] = zef_nse_roi_ind(zef, nse_field);
+    plot_vec_1 = zeros(length(nse_field.bf_capillaries),1);
+    aux_val_3 = 0;
+     for i = 1 : length(nse_field.bf_capillaries)
+   aux_val_1 = (mean(nse_field.bf_capillaries{i}(roi_ind_2)));
+    aux_val_2 =  (mean(nse_field.bf_capillaries{i}(roi_ind_1)));
+     plot_vec_1(i) = aux_val_1;
+    aux_val_3 = max(aux_val_3,aux_val_2);
+     end
+   scale_val = (aux_val_3-plot_vec_1(end))/(max(plot_vec_1)-plot_vec_1(end));
+plot_vec_1 = scale_val*(plot_vec_1/plot_vec_1(end) - 1);
+    zef_nse_plot_full(zef,zef.nse_field,plot_vec_1,'Concentration (relative)');
+end
+
+if zef.nse_field.graph_type == 22
+    [roi_ind_1, roi_ind_2] = zef_nse_roi_ind(zef, nse_field);
+
+    plot_vec_1 = zeros(length(nse_field.bf_capillaries),1);
+    aux_val_3 = 0;
+    for i = 1 : length(nse_field.bf_capillaries)
+    aux_val_1 = mean(nse_field.bf_capillaries{i}(roi_ind_2)-nse_field.dh_capillaries{i}(roi_ind_2));
+    aux_val_2 = mean(nse_field.bf_capillaries{i}(roi_ind_1)-nse_field.dh_capillaries{i}(roi_ind_1));
+    plot_vec_1(i) = aux_val_1;
+    aux_val_3 = max(aux_val_3,aux_val_2);
+    end
+%plot_vec_1 = (aux_val_3*plot_vec_1/max(plot_vec_1)) - aux_val_4+1;
+scale_val = (aux_val_3-plot_vec_1(end))/(max(plot_vec_1)-plot_vec_1(end));
+plot_vec_1 = scale_val*(plot_vec_1/plot_vec_1(end) - 1);
+
+plot_vec_2 = zeros(length(nse_field.dh_capillaries),1);
+     aux_val_3 = 0;
+for i = 1 : length(nse_field.dh_capillaries)
+    aux_val_1 = mean((nse_field.dh_capillaries{i}(roi_ind_2)));
+    aux_val_2 = mean((nse_field.dh_capillaries{i}(roi_ind_1)));
+    plot_vec_2(i) = aux_val_1;
+    aux_val_3 = max(aux_val_3,aux_val_2);
+    end
+scale_val = (aux_val_3-plot_vec_2(end))/(max(plot_vec_2)-plot_vec_2(end));
+plot_vec_2 = scale_val*(plot_vec_2/plot_vec_2(end) - 1);
+%plot_vec_1 = zeros(size(plot_vec_2));
+zef_nse_plot_full(zef,zef.nse_field,[plot_vec_1 plot_vec_2] ,'Oxy/deoxy hemoglobin (relative)');
+end
+
 
 end
