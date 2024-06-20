@@ -13,9 +13,10 @@ function out = paramFromZefCompartments (zef,paramName)
     end
 
     % The compartment tags cell array is flipped in relation to the listing
-    % seen in the segmentation tool, so we flip it here as well.
+    % seen in the segmentation tool, so we flip it here as well. Also remove
+    % the PML box from the list of compartments.
 
-    cTags = flip (zef.compartment_tags) ;
+    cTags = flip ( zef.compartment_tags (1:end-1) ) ;
 
     nTags = numel (cTags) ;
 
