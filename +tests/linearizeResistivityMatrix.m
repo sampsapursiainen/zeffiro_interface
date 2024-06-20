@@ -11,9 +11,7 @@ sourceN = 5000 ;
 
 eps0 = 8.8541878188e-12 ;
 
-epsr = 164060 ;
-
-epsabs = epsr * eps0 ;
+epsabs = zef.epsilon .* eps0 ;
 
 freq = 1000 ;
 
@@ -73,7 +71,7 @@ dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
 disp ("Computing new R with linearization…")
 
-dAngFreqs = [ 100, 500, 1000 ] .* 2 * pi ;
+dAngFreqs = [ 1, 3, 9, 27, 81, 243, 729, 2187 ] .* 2 * pi ;
 
 linAngFreqs = angFreq + dAngFreqs ;
 
@@ -199,7 +197,7 @@ for ii = 1 : numel (fileNames)
 
     newLLin = mf.newLLin ;
 
-    Ldiff = abs ( newLLin - newL ) ;
+    Ldiff = abs ( newLLin' - newL' ) ;
 
     fig = figure (ii) ;
 
