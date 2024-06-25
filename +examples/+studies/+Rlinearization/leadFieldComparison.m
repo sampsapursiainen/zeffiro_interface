@@ -16,13 +16,21 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
         kwargs.figHandle (1,1) int32 { mustBePositive } = 100
     end
 
+    disp ("Loading reference lead field " + refFileName + " from disk...") ;
+
     refFile = matfile (refFileName) ;
 
+    disp ("Transposing reference lead field...")
+
     refL = transpose (refFile.L) ;
+
+    disp ("Reading data file names from " + dataFolderName + "...") ;
 
     dataFolderStructs = dir (dataFolderName) ;
 
     dataFileNames = arrayfun ( @(entry) string (entry.name), dataFolderStructs ) ;
+
+    disp ("Generating figure, axes and their cleanup object...")
 
     fig = figure (kwargs.figHandle) ;
 
@@ -30,9 +38,15 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
 
     cleanupObj = onCleanup( @() cleanupFn (fig) );
 
-    for ii = 1 : numel (dataFileNames)
+    disp ("Starting data analysis...")
+
+    aN = numel (dataFileNames) ;
+
+    for ii = 1 : aN
 
         dataFileName = dataFileNames (ii) ;
+
+        disp ("File " + dataFileName + "(" + ii + " / " + aN + ")") ;
 
         rDD = performComparison (refL, dataFileName) ;
 
@@ -59,6 +73,8 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
         cla (ax) ;
 
     end % for
+
+    disp ("Done")
 
 end % function
 
