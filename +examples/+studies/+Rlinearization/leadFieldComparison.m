@@ -58,7 +58,7 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         xlabel(ax,"Volume current xyz-coordinates") ;
 
-        ylabel ("electrode") ;
+        ylabel (ax,"electrode") ;
 
         histogram ( ax, relDiffDisp, kwargs.numBins ) ;
 
