@@ -13,6 +13,7 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
         lowerQ (1,1) double { mustBeInRange(lowerQ, 0, 1) } = 0.10
         upperQ (1,1) double { mustBeGreaterThan(upperQ,lowerQ), mustBeLessThanOrEqual(upperQ,1) } = 0.90
         kwargs.numBins (1,1) int32 { mustBePositive } = 30
+        kwargs.figHandle (1,1) int32 { mustBePositive } = 100
     end
 
     refFile = matfile (refFileName) ;
@@ -23,7 +24,7 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
 
     dataFileNames = arrayfun ( @(entry) string (entry.name), dataFolderStructs ) ;
 
-    fig = figure (100) ;
+    fig = figure (kwargs.figHandle) ;
 
     ax = axes (fig) ;
 
@@ -37,15 +38,25 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
 
         relDiffDisp = rDD ( rDD >= quantile (rDD,lowerQ) & rDD <= quantile (rDD,upperQ) ) ;
 
+        disp ("Plotting histogram...")
+
         title (ax, dataFileName) ;
 
-        xlabel(ax,"volume current xyz") ;
+        xlabel(ax,"Volume current xyz-coordinates") ;
 
         ylabel ("electrode") ;
 
-        histogram (ax,relDiffDisp,kwargs.numBins)
+        histogram ( ax, relDiffDisp, kwargs.numBins ) ;
 
-        savefig(fullfile(outFolderName,dataFileName + ".fig"))
+        outFilePath = fullfile ( outFolderName, dataFileName + ".fig" ) ;
+
+        disp ("Saving figure to " + outFilePath) ;
+
+        savefig(fig, outFilePath) ;
+
+        disp  ("Clearing axes for next round...")
+
+        cla (ax) ;
 
     end % for
 
@@ -60,15 +71,25 @@ function relDiffDiff = performComparison (refL, dataFileName)
         dataFileName (1,1) string { mustBeFile }
     end
 
+    disp ("Opening file " + dataFileName + "...") ;
+
     dataFile = matfile (dataFileName) ;
+
+    disp ("Loading and transposing newL...")
 
     newL = transpose (dataFile.newL) ;
 
+    disp ("Loading and transposing newLLin...")
+
     newLLin = transpose (dataFile.newLLin) ;
+
+    disp ("Computing differences between reference L...")
 
     refDiff = newL - refL ;
 
     linDiff = newLLin - refL ;
+
+    disp ("Computing relative difference of differences...") ;
 
     relDiffDiff = tests.relativeDifference (linDiff, refDiff) ;
 
