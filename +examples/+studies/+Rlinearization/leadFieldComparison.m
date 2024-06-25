@@ -1,19 +1,19 @@
-function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upperQ,kwargs)
+function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,upperQ,kwargs)
 %
-% leadFieldComparison(dataFolderName,refFileName,outFolderName)
+% leadFieldComparison(dataFilePattern,refFileName,outFolderName)
 %
 % Computes relative differences between Lnew - Lref and Llin - Lref,
 % where the lead fields are stored in specific files.
 %
 
     arguments
-        dataFolderName (1,1) string { mustBeFolder }
+        dataFilePattern (1,1) string
         refFileName (1,1) string { mustBeFile }
         outFolderName (1,1) string { mustBeFolder }
         lowerQ (1,1) double { mustBeInRange(lowerQ, 0, 1) } = 0.10
         upperQ (1,1) double { mustBeGreaterThan(upperQ,lowerQ), mustBeLessThanOrEqual(upperQ,1) } = 0.90
         kwargs.numBins (1,1) int32 { mustBePositive } = 30
-        kwargs.figHandle (1,1) int32 { mustBePositive } = 100
+        kwargs.figHandle (1,1) double { mustBeInteger, mustBePositive } = 100
     end
 
     disp ("Loading reference lead field " + refFileName + " from disk...") ;
@@ -24,9 +24,9 @@ function leadFieldComparison(dataFolderName,refFileName,outFolderName,lowerQ,upp
 
     refL = transpose (refFile.L) ;
 
-    disp ("Reading data file names from " + dataFolderName + "...") ;
+    disp ("Reading data file names from " + dataFilePattern + "...") ;
 
-    dataFolderStructs = dir (dataFolderName) ;
+    dataFolderStructs = dir (dataFilePattern) ;
 
     dataFileNames = arrayfun ( @(entry) string (entry.name), dataFolderStructs ) ;
 
