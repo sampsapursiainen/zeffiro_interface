@@ -34,7 +34,11 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
     fig = figure (kwargs.figHandle) ;
 
-    ax = axes (fig) ;
+    tiledlayout (fig,2,1) ;
+
+    realAx = nexttile ;
+
+    imagAx = nexttile ;
 
     cleanupObj = onCleanup( @() cleanupFn (fig) );
 
@@ -48,19 +52,29 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp ("File " + dataFileName + "(" + ii + " / " + aN + ")") ;
 
-        rDD = performComparison (refL, dataFileName) ;
+        [ realDiff, imagDiff ] = performComparison (refL, dataFileName) ;
 
-        relDiffDisp = rDD ( rDD >= quantile (rDD,lowerQ) & rDD <= quantile (rDD,upperQ) ) ;
+        realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
+
+        imagDiffDisp = imagDiff ( imagDiff >= quantile (imagDiff,lowerQ) & imagDiff <= quantile (imagDiff,upperQ) ) ;
 
         disp ("Plotting histogram...")
 
-        title (ax, dataFileName) ;
+        title (realAx, "real" + dataFileName) ;
 
-        xlabel(ax,"Volume current xyz-coordinates") ;
+        title (imagAx, "imag" + dataFileName) ;
 
-        ylabel (ax,"electrode") ;
+        xlabel (realAx,"Volume current xyz-coordinates") ;
 
-        histogram ( ax, relDiffDisp, kwargs.numBins ) ;
+        ylabel (realAx,"electrode") ;
+
+        xlabel (imagAx,"Volume current xyz-coordinates") ;
+
+        ylabel (imagAx,"electrode") ;
+
+        histogram ( realAx, realDiffDisp, kwargs.numBins ) ;
+
+        histogram ( imagAx, imagDiffDisp, kwargs.numBins ) ;
 
         outFilePath = fullfile ( outFolderName, dataFileName + ".fig" ) ;
 
@@ -70,7 +84,9 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp  ("Clearing axes for next round...")
 
-        cla (ax) ;
+        cla (realAx) ;
+
+        cla (imagAx) ;
 
     end % for
 
@@ -80,7 +96,7 @@ end % function
 
 %% Helper functions.
 
-function relDiffDiff = performComparison (refL, dataFileName)
+function [ realDiff, imagDiff ] = performComparison (refL, dataFileName)
 
     arguments
         refL (:,:) double { mustBeFinite }
@@ -107,7 +123,9 @@ function relDiffDiff = performComparison (refL, dataFileName)
 
     disp ("Computing relative difference of differences...") ;
 
-    relDiffDiff = tests.relativeError (linDiff, refDiff) ;
+    realDiff = tests.relativeError (real(linDiff), real(refDiff)) ;
+
+    imagDiff = tests.relativeError (imag(linDiff), imag(refDiff)) ;
 
 end % function
 
