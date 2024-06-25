@@ -107,7 +107,7 @@ function relDiffDiff = performComparison (refL, dataFileName)
 
     disp ("Computing relative difference of differences...") ;
 
-    relDiffDiff = tests.relativeDifference (linDiff, refDiff) ;
+    relDiffDiff = tests.relativeError (linDiff, refDiff) ;
 
 end % function
 
