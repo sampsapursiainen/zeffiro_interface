@@ -68,15 +68,15 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp ("Saving figure to " + outFilePath) ;
 
-        title (realAx, "real " + dataFileName ) ;
+        title (realAx, "real " + dataFileName, Interpreter="none" ) ;
 
-        title (imagAx, "imag " + dataFileName ) ;
+        title (imagAx, "imag " + dataFileName, Interpreter="none" ) ;
 
-        ylabel (realAx,"samples") ;
+        xlabel (imagAx,"( (LLin - Lref) - (Lnew - Lref) ) / (Lnew - Lref)", Interpreter="none") ;
 
-        xlabel (imagAx,"quantile") ;
+        ylabel (realAx,"samples", Interpreter="none") ;
 
-        ylabel (imagAx,"samples") ;
+        ylabel (imagAx,"samples", Interpreter="none") ;
 
         savefig(fig, outFilePath) ;
 
