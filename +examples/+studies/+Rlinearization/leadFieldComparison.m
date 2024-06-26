@@ -60,25 +60,23 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp ("Plotting histogram...")
 
-        title (realAx, "real" + dataFileName) ;
+        histogram ( realAx, realDiffDisp, kwargs.numBins, FaceColor=[0, 0.4470, 0.7410] ) ;
 
-        title (imagAx, "imag" + dataFileName) ;
-
-        xlabel (realAx,"Volume current xyz-coordinates") ;
-
-        ylabel (realAx,"electrode") ;
-
-        xlabel (imagAx,"Volume current xyz-coordinates") ;
-
-        ylabel (imagAx,"electrode") ;
-
-        histogram ( realAx, realDiffDisp, kwargs.numBins ) ;
-
-        histogram ( imagAx, imagDiffDisp, kwargs.numBins ) ;
+        histogram ( imagAx, imagDiffDisp, kwargs.numBins, FaceColor=[0.6350, 0.0780, 0.1840] ) ;
 
         outFilePath = fullfile ( outFolderName, dataFileName + ".fig" ) ;
 
         disp ("Saving figure to " + outFilePath) ;
+
+        title (realAx, "real " + dataFileName ) ;
+
+        title (imagAx, "imag " + dataFileName ) ;
+
+        ylabel (realAx,"samples") ;
+
+        xlabel (imagAx,"quantile") ;
+
+        ylabel (imagAx,"samples") ;
 
         savefig(fig, outFilePath) ;
 
