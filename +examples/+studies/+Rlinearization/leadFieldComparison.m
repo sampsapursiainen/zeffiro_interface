@@ -70,7 +70,7 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp ("Saving figure to " + outFilePath) ;
 
-        title (realAx, "real " + fname, Interpreter="none" ) ;
+        title (realAx, fname, Interpreter="none" ) ;
 
         xlabel (imagAx,"( (LLin - Lref) - (Lnew - Lref) ) / (Lnew - Lref)", Interpreter="none") ;
 
