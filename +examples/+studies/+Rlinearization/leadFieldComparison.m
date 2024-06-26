@@ -50,6 +50,8 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         dataFileName = dataFileNames (ii) ;
 
+        [ ~, fname, ~ ] = fileparts (dataFileName) ;
+
         disp ("File " + dataFileName + "(" + ii + " / " + aN + ")") ;
 
         [ realDiff, imagDiff ] = performComparison (refL, dataFileName) ;
@@ -64,19 +66,17 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         histogram ( imagAx, imagDiffDisp, kwargs.numBins, FaceColor=[0.6350, 0.0780, 0.1840] ) ;
 
-        outFilePath = fullfile ( outFolderName, dataFileName + ".fig" ) ;
+        outFilePath = fullfile ( outFolderName, fname + ".fig" ) ;
 
         disp ("Saving figure to " + outFilePath) ;
 
-        title (realAx, "real " + dataFileName, Interpreter="none" ) ;
-
-        title (imagAx, "imag " + dataFileName, Interpreter="none" ) ;
+        title (realAx, "real " + fname, Interpreter="none" ) ;
 
         xlabel (imagAx,"( (LLin - Lref) - (Lnew - Lref) ) / (Lnew - Lref)", Interpreter="none") ;
 
-        ylabel (realAx,"samples", Interpreter="none") ;
+        ylabel (realAx,"real samples", Interpreter="none") ;
 
-        ylabel (imagAx,"samples", Interpreter="none") ;
+        ylabel (imagAx,"imag samples", Interpreter="none") ;
 
         savefig(fig, outFilePath) ;
 
