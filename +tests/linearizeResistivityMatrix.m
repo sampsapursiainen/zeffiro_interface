@@ -83,7 +83,7 @@ for eI = 1 : numel (electrodeI)
 
     disp ("Computing new R with linearization…")
 
-    dFreqs = [ 1, 3, 9, 27, 81, 243, 729, 2187 ] ;
+    dFreqs = [ 10, 100, 500 ] ;
 
     dAngFreqs = dFreqs .* 2 * pi ;
 
