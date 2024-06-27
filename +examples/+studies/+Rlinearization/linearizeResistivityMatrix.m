@@ -120,7 +120,7 @@ Ndf = numel ( dFreqs ) ;
 
 %%
 
-disp ("Computing derivative of R…")
+disp ("Starting linearization of R...") ;
 
 for eI = 1 : size (electrodeI,2)
 
@@ -158,13 +158,13 @@ for eI = 1 : size (electrodeI,2)
 
         linR = R ;
 
-        disp ( "linR = R") ;
+        disp ( newline + "linR = R") ;
 
         for jj = 1 : numel (cols)
 
             col = cols (jj) ;
 
-            disp ("  + dR/dZ" + col + " * dZ" + col + "...")
+            disp ( newline + "  + dR/dZ" + col + " * dZ" + col + "...")
 
             dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
 
@@ -204,9 +204,9 @@ for eI = 1 : size (electrodeI,2)
 
         newLcopy = newL ;
 
-        newLLin = - G * newRLin ;
+        linL = - G * linR ;
 
-        newLLinCopy = newLLin ;
+        linLcopy = linL ;
 
         disp ("Interspersing lead field xyz-components…") ;
 
@@ -216,9 +216,9 @@ for eI = 1 : size (electrodeI,2)
         newL (2:3:end,:) = newLcopy (Nvc+1:2*Nvc,:) ;
         newL (3:3:end,:) = newLcopy (2*Nvc+1:3*Nvc,:) ;
 
-        newLLin (1:3:end,:) = newLLinCopy (1:Nvc,:) ;
-        newLLin (2:3:end,:) = newLLinCopy (Nvc+1:2*Nvc,:) ;
-        newLLin (3:3:end,:) = newLLinCopy (2*Nvc+1:3*Nvc,:) ;
+        linL (1:3:end,:) = linLcopy (1:Nvc,:) ;
+        linL (2:3:end,:) = linLcopy (Nvc+1:2*Nvc,:) ;
+        linL (3:3:end,:) = linLcopy (2*Nvc+1:3*Nvc,:) ;
 
         disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
