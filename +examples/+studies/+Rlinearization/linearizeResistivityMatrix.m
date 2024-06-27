@@ -1,4 +1,4 @@
-tic
+
 nodes = zef.nodes ;
 
 tetra = zef.tetra ;
@@ -7,7 +7,7 @@ tetV = core.tetraVolume (nodes, tetra,true) ;
 
 volumeCurrentI = zef.brain_ind ;
 
-electrodeI = [ 4 , 8 ; 3 , 7 ]' ;
+electrodeI = transpose ( [ 4 , 8 ; 3 , 7 ] ) ; % Connected interference electrodes as columns.
 
 Nec = numel (electrodeI) ;
 
@@ -17,9 +17,9 @@ eps0 = 8.8541878188e-12 ;
 
 epsabs = zef.epsilon .* eps0 ;
 
-freq = 1000 ;
+startFreq = 1000 ;
 
-angFreq = 2 * pi * freq ;
+angFreq = 2 * pi * startFreq ;
 
 conductivity = zef.sigma (:,1) - 1i * epsabs * angFreq  ;
 
@@ -29,14 +29,17 @@ capacitance = 3.5e-6 ;
 
 inductance = 0 ;
 
-Z = core.impedanceFromRwLC (2e3,1000,inductance,capacitance) ;
+Ne = size (zef.sensors,1) ;
 
-electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Z, outerRadii=1e-3 ) ;
+Zs = core.impedanceFromRwLC (2e3*ones(Ne,1),1000,inductance,capacitance) ;
+
+electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Zs, outerRadii=1e-3 ) ;
 
 disp ("Positioning sources…")
 
 [ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', sourceN ) ;
 
+%%
 attachSensorsTo = "surface" ;
 
 disp("Attaching sensors to the head " + attachSensorsTo + "…")
@@ -51,43 +54,79 @@ G = [ G1 ; G2 ; G3 ] ;
 
 %%
 
+disp ("Computing initial matrices depending on Z...")
+
 [ A, B, C, T, S, invS, R ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes) ;
 
-disp ("Computing derivative of R…")
+%%
+
+disp ("Computing initial lead field...") ;
+
+L = - G * R ;
+
+Lcopy = L ;
+
+disp ("Interspersing lead field xyz-components…") ;
+
+Nvc = numel (volumeCurrentI) ;
+
+L (1:3:end,:) = Lcopy (1:Nvc,:) ;
+L (2:3:end,:) = Lcopy (Nvc+1:2*Nvc,:) ;
+L (3:3:end,:) = Lcopy (2*Nvc+1:3*Nvc,:) ;
+
+%%
+
+disp ("Saving initial matrices to their own files...")
+
+Afile = matfile ("A.mat",Writable=true) ;
+Bfile = matfile ("B.mat",Writable=true) ;
+Cfile = matfile ("C.mat",Writable=true) ;
+Tfile = matfile ("T.mat",Writable=true) ;
+Sfile = matfile ("S.mat",Writable=true) ;
+invSfile = matfile ("invS.mat",Writable=true) ;
+Rfile = matfile ("R.mat",Writable=true) ;
+Lfile = matfile ("L.mat",Writable=true) ;
+
+disp ("A...")
+Afile.A = A ;
+disp ("B...")
+Bfile.B = B ;
+disp ("C...")
+Cfile.C = C ;
+disp ("T...")
+Tfile.T = T ;
+disp ("S...")
+Sfile.S = S ;
+disp ("inv S...")
+invSfile.invS = invS ;
+disp ("R...")
+Rfile.R = R ;
+disp ("L...")
+Lfile.L = L ;
+
+%%
 
 Ms = core.electrodeMassMatrix ( size (A,1), superNodes ) ;
 
 Bs = core.electrodeBasisFnMean ( size (A,1), superNodes ) ;
 
-for eI = 1 : numel (electrodeI)
+dFreqs = [ 10, 100, 500 ] ;
 
-    col = electrodeI (eI) ;
+dAngFreqs = dFreqs .* 2 * pi ;
 
-    dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
+newAngFreqs = angFreq + dAngFreqs ;
 
-    invAdAdZ = core.invAY (A,dAdZ) ;
+Ndf = numel ( dFreqs ) ;
 
-    dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
+%%
 
-    invAdBdZ = core.invAY (A,dBdZ) ;
+disp ("Computing derivative of R…")
 
-    %%
+for eI = 1 : size (electrodeI,2)
 
-    dCdZ = core.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
+    cols = electrodeI (:,eI) ;
 
-    dCHdZ = core.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
-
-    dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
-
-    dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
-
-    disp ("Computing new R with linearization…")
-
-    dFreqs = [ 10, 100, 500 ] ;
-
-    dAngFreqs = dFreqs .* 2 * pi ;
-
-    linAngFreqs = angFreq + dAngFreqs ;
+    eleIndStr = strjoin(string(cols),",") ;
 
     %%
 
@@ -95,41 +134,67 @@ for eI = 1 : numel (electrodeI)
 
     fileNames = strings ( 1, numel (dAngFreqs) ) ;
 
-    for ii = 1 : numel (dAngFreqs)
+    for ii = 1 : Ndf
 
         dFreq = dFreqs (ii) ;
 
-        fileNames (ii) = "linR_ele=" + col + "_df=" + dFreq + "Hz.mat" ;
+        fileNames (ii) = "linR-ele=" + eleIndStr + "-df=" + dFreq + "Hz.mat" ;
 
     end % for ii
 
     %%
 
-    disp ("Comparing computed and linearized resistivity matrices in a loop…")
+    disp ("Computing new R for electrodes " + eleIndStr + " via linearization...")
 
-    for ii = 1 : numel (dAngFreqs)
-
-        iiAngFreq = linAngFreqs (ii) ;
-
-        dAngFreq = dAngFreqs (ii) ;
-
-        Zcol = electrodes.impedances (col) ;
-
-        Zii = core.impedanceFromRwLC ( real (Zcol), iiAngFreq, inductance, capacitance ) ;
-
-        dZ = Zii - Zcol ;
-
-        newRLin = R + dRdZ * dZ ;
+    for ii = 1 : Ndf
 
         fileName = fileNames (ii) ;
 
         disp ( newline + fileName ) ;
 
-        mf = matfile (fileName, Writable=true) ;
+        iiAngFreq = newAngFreqs (ii) ;
 
-        disp ("Computing new R with updated impedances…")
+        mf = matfile ( fileName, Writable=true ) ;
 
-        newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=[electrodes.impedances(1:col-1) ; Z+dZ ; electrodes.impedances(col+1:end)], outerRadii=1e-3 ) ;
+        linR = R ;
+
+        disp ( "linR = R") ;
+
+        for jj = 1 : numel (cols)
+
+            col = cols (jj) ;
+
+            disp ("  + dR/dZ" + col + " * dZ" + col + "...")
+
+            dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
+
+            invAdAdZ = core.invAY (A,dAdZ) ;
+
+            dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
+
+            invAdBdZ = core.invAY (A,dBdZ) ;
+
+            dCdZ = core.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
+
+            dCHdZ = core.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
+
+            dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
+
+            dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
+
+            newZs = Zs ;
+
+            newZs (cols) = core.impedanceFromRwLC ( real ( Zs (cols) ), iiAngFreq, inductance, capacitance ) ;
+
+            dZ = newZs (col) - Zs (col) ;
+
+            linR = linR + dRdZ * dZ ;
+
+        end % for jj
+
+        disp ("Computing new R directly with updated impedances…")
+
+        newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=newZs, outerRadii=1e-3 ) ;
 
         [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
@@ -157,72 +222,18 @@ for eI = 1 : numel (electrodeI)
 
         disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
-        mf.newRLin = newRLin ;
+        mf.linR = linR ;
 
         mf.newR = newR ;
 
-        mf.newLLin = newLLin ;
+        mf.linL = linL ;
 
         mf.newL = newL ;
 
-        % disp ("Plotting differences…")
-
-        % Rdiff = abs ( newR - newRLin ) ;
-
-        % fig = figure (ii) ;
-
-        % title ("dZ=" + dZ) ;
-
-        % xlabel ("rows") ;
-
-        % ylabel ("cols") ;
-
-        % colormap ("jet") ;
-
-        % imagesc(log10(Rdiff)) ;
-
-        % colorbar ;
-
-        % figure (ii)
-
     end % for
 
-    %%
-
-    % disp ("Picturing differences between computed and linearized lead fields…") ;
-
-    % for ii = 1 : numel (fileNames)
-
-    %     fileName = fileNames (ii) ;
-
-    %     mf = matfile (fileName) ;
-
-    %     newL = mf.newL ;
-
-    %     newLLin = mf.newLLin ;
-
-    %     Ldiff = abs ( newLLin' - newL' ) ;
-
-    %     fig = figure (ii) ;
-
-    %     title ("dω=" + dZ) ;
-
-    %     xlabel ("rows") ;
-
-    %     ylabel ("cols") ;
-
-    %     colormap ("jet") ;
-
-    %     imagesc(log10(Ldiff)) ;
-
-    %     colorbar ;
-
-    %     figure (ii)
-
-    % end % for
-
 end % for eI
-toc
+
 %% Helper functions.
 
 function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes)
@@ -265,21 +276,5 @@ function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, co
     invS = S \ I ;
 
     R = T * invS ;
-
-end % function
-
-function out = cellSum (cellArray)
-%
-% Sums together (for example) sparse arrays stored in a cell array.
-%
-    Nc = numel (cellArray) ;
-
-    out = cellArray {1} ;
-
-    for ii = 2 : Nc
-
-        out = out + cellArray {ii} ;
-
-    end % for
 
 end % function
