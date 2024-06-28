@@ -14,6 +14,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
         upperQ (1,1) double { mustBeGreaterThan(upperQ,lowerQ), mustBeLessThanOrEqual(upperQ,1) } = 0.90
         kwargs.numBins (1,1) int32 { mustBePositive } = 30
         kwargs.figHandle (1,1) double { mustBeInteger, mustBePositive } = 100
+        kwargs.initLName (1,1) string = "L"
         kwargs.refLName (1,1) string = "newL"
         kwargs.linLName (1,1) string = "linL"
     end
@@ -22,9 +23,9 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     dataFile = matfile (dataFileName) ;
 
-    disp ("Transposing reference lead field...")
+    disp ("Loading and transposing initial lead field...")
 
-    refL = transpose (dataFile.L) ;
+    refL = transpose ( dataFile.(initLName) ) ;
 
     disp ("Reading data file names from " + dataFilePattern + "...") ;
 
