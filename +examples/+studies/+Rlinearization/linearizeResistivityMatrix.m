@@ -3,6 +3,8 @@ nodes = zef.nodes / 1000 ;
 
 tetra = zef.tetra ;
 
+elePos = zef.sensors(:,1:3)' / 1e3 ;
+
 tetV = core.tetraVolume (nodes, tetra,true) ;
 
 volumeCurrentI = zef.brain_ind ;
@@ -33,7 +35,7 @@ Ne = size (zef.sensors,1) ;
 
 Zs = core.impedanceFromRwLC (2e3*ones(Ne,1),angFreq,inductance,capacitance) ;
 
-electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Zs, outerRadii=1e-3 ) ;
+electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=1e-3 ) ;
 
 disp ("Positioning sources…")
 
@@ -44,7 +46,7 @@ attachSensorsTo = "surface" ;
 
 disp("Attaching sensors to the head " + attachSensorsTo + "…")
 
-superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=attachSensorsTo) ;
+superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',elePos,nodeRadii=electrodes.outerRadii,attachNodesTo=attachSensorsTo) ;
 
 disp ("Computing volume currents…") ;
 
@@ -194,7 +196,7 @@ for eI = 1 : size (electrodeI,2)
 
         disp ("Computing new R directly with updated impedances…")
 
-        newElectrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=newZs, outerRadii=1e-3 ) ;
+        newElectrodes = core.ElectrodeSet ( positions=elePos, impedances=newZs, outerRadii=1e-3 ) ;
 
         [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
