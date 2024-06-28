@@ -1,6 +1,6 @@
-function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,upperQ,kwargs)
+function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,upperQ,kwargs)
 %
-% leadFieldComparison(dataFilePattern,refFileName,outFolderName)
+% leadFieldComparison(dataFilePattern,dataFileName,outFolderName)
 %
 % Computes relative differences between Lnew - Lref and Llin - Lref,
 % where the lead fields are stored in specific files.
@@ -8,21 +8,23 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
     arguments
         dataFilePattern (1,1) string
-        refFileName (1,1) string { mustBeFile }
+        dataFileName (1,1) string { mustBeFile }
         outFolderName (1,1) string { mustBeFolder }
         lowerQ (1,1) double { mustBeInRange(lowerQ, 0, 1) } = 0.10
         upperQ (1,1) double { mustBeGreaterThan(upperQ,lowerQ), mustBeLessThanOrEqual(upperQ,1) } = 0.90
         kwargs.numBins (1,1) int32 { mustBePositive } = 30
         kwargs.figHandle (1,1) double { mustBeInteger, mustBePositive } = 100
+        kwargs.refLName (1,1) string = "newL"
+        kwargs.linLName (1,1) string = "linL"
     end
 
-    disp ("Loading reference lead field " + refFileName + " from disk...") ;
+    disp ("Loading reference lead field " + dataFileName + " from disk...") ;
 
-    refFile = matfile (refFileName) ;
+    dataFile = matfile (dataFileName) ;
 
     disp ("Transposing reference lead field...")
 
-    refL = transpose (refFile.L) ;
+    refL = transpose (dataFile.L) ;
 
     disp ("Reading data file names from " + dataFilePattern + "...") ;
 
@@ -54,7 +56,7 @@ function leadFieldComparison(dataFilePattern,refFileName,outFolderName,lowerQ,up
 
         disp ("File " + dataFileName + "(" + ii + " / " + aN + ")") ;
 
-        [ realDiff, imagDiff ] = performComparison (refL, dataFileName) ;
+        [ realDiff, imagDiff ] = performComparison (refL, dataFileName,kwargs.refLName,kwargs.linLName) ;
 
         realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
 
@@ -94,30 +96,36 @@ end % function
 
 %% Helper functions.
 
-function [ realDiff, imagDiff ] = performComparison (refL, dataFileName)
+function [ realDiff, imagDiff ] = performComparison (origL, dataFileName, refLName, linLName)
 
     arguments
-        refL (:,:) double { mustBeFinite }
+        origL (:,:) double { mustBeFinite }
         dataFileName (1,1) string { mustBeFile }
+        refLName (1,1) string
+        linLName (1,1) string
     end
 
     disp ("Opening file " + dataFileName + "...") ;
 
     dataFile = matfile (dataFileName) ;
 
-    disp ("Loading and transposing newL...")
+    disp ("Loading and transposing " + refLName + "...")
 
-    newL = transpose (dataFile.newL) ;
+    refL = dataFile.(refLName) ;
 
-    disp ("Loading and transposing newLLin...")
+    refL = transpose (refL) ;
 
-    newLLin = transpose (dataFile.newLLin) ;
+    disp ("Loading and transposing " + linLName + "...")
+
+    linL = dataFile.(linLName) ;
+
+    linL = transpose (linL) ;
 
     disp ("Computing differences between reference L...")
 
-    refDiff = newL - refL ;
+    refDiff = refL - origL ;
 
-    linDiff = newLLin - refL ;
+    linDiff = linL - origL ;
 
     disp ("Computing relative difference of differences...") ;
 
