@@ -1,5 +1,5 @@
 
-nodes = zef.nodes ;
+nodes = zef.nodes / 1000 ;
 
 tetra = zef.tetra ;
 
@@ -31,7 +31,7 @@ inductance = 0 ;
 
 Ne = size (zef.sensors,1) ;
 
-Zs = core.impedanceFromRwLC (2e3*ones(Ne,1),1000,inductance,capacitance) ;
+Zs = core.impedanceFromRwLC (2e3*ones(Ne,1),angFreq,inductance,capacitance) ;
 
 electrodes = core.ElectrodeSet ( positions=zef.sensors(:,1:3)' / 1e3, impedances=Zs, outerRadii=1e-3 ) ;
 
@@ -160,6 +160,8 @@ for eI = 1 : size (electrodeI,2)
 
         disp ( newline + "linR = R") ;
 
+        newZs = Zs ;
+
         for jj = 1 : numel (cols)
 
             col = cols (jj) ;
@@ -182,9 +184,7 @@ for eI = 1 : size (electrodeI,2)
 
             dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
-            newZs = Zs ;
-
-            newZs (cols) = core.impedanceFromRwLC ( real ( Zs (cols) ), iiAngFreq, inductance, capacitance ) ;
+            newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, capacitance ) ;
 
             dZ = newZs (col) - Zs (col) ;
 
