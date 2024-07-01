@@ -25,7 +25,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     disp ("Loading and transposing initial lead field...")
 
-    refL = transpose ( dataFile.(initLName) ) ;
+    refL = transpose ( dataFile.(kwargs.initLName) ) ;
 
     disp ("Reading data file names from " + dataFilePattern + "...") ;
 
