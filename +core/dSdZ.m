@@ -21,7 +21,7 @@ function DS = dSdZ ( dCdZ, dCHdZ, Be, T, B, invAdAdZ, invAdBdZ )
 
     cB = ctranspose (B) ;
 
-    DS = dCdZ + dCHdZ * transpose (Be) * T - cB * invAdAdZ * T - cB * invAdBdZ ;
+    DS = dCdZ + dCHdZ * transpose (Be) * T - cB * invAdAdZ * T + cB * invAdBdZ ;
 
 
 end % function
