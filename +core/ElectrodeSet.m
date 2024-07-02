@@ -146,6 +146,17 @@ classdef ElectrodeSet < core.Sensor
 
         end % function
 
+        function self = withImpedances (self, impedances)
+        %
+        % self = withImpedances (self, impedances)
+        %
+        % Sets the impedances of self to given values.
+        %
+
+            self.impedances = impedances ;
+
+        end % function
+
     end % methods
 
 end % classdef
