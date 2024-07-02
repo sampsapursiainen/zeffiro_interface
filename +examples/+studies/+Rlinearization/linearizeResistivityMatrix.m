@@ -170,7 +170,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
                 dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
 
-                dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
+                dRdZ = core.dRdZ ( invAdAdZ, linR, invAdBdZ, invS, dSdZ ) ;
 
                 newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, capacitance ) ;
 
