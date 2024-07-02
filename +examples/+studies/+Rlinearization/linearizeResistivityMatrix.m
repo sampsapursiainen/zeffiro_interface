@@ -182,7 +182,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("Computing new R directly with updated impedances…")
 
-            newElectrodes = core.ElectrodeSet ( positions=elePos, impedances=newZs, outerRadii=1e-3 ) ;
+            newElectrodes = electrodes.withImpedances (newZs) ;
 
             [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
