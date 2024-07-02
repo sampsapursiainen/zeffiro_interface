@@ -1,6 +1,6 @@
-function linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsilon,electrodeI,startFreq,capacitance)
+function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, electrodeI, startFreq, capacitance)
 %
-% linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsilon,electrodeI,startFreq,capacitance)
+% linearizeResistivityMatrix(nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, electrodeI, startFreq, capacitance)
 %
 % Runs a simulation where a resistivity matrix is first computed, then modified
 % via its linearization and compared to another directly computed resistivity
@@ -16,6 +16,7 @@ function linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsi
         volumeCurrentI (:,1) double { mustBeInteger, mustBePositive, mustBeFinite }
         sigma (:,:) double { mustBeFinite }
         epsilon (:,:) double { mustBeFinite }
+        superNodes (:,1) core.SuperNode
         electrodeI (:,:) double { mustBeInteger, mustBePositive, mustBeFinite } = transpose ( [ 4 , 8 ; 3 , 7 ] )
         startFreq (1,1) double { mustBePositive, mustBeFinite } = 1000
         capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
@@ -42,11 +43,6 @@ function linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsi
     electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=1e-3 ) ;
 
     %%
-    attachSensorsTo = "surface" ;
-
-    disp("Attaching sensors to the head " + attachSensorsTo + "…")
-
-    superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',elePos,nodeRadii=electrodes.outerRadii,attachNodesTo=attachSensorsTo) ;
 
     disp ("Computing volume currents…") ;
 
