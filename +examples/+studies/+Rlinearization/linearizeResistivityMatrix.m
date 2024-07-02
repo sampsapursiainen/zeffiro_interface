@@ -64,17 +64,7 @@ function linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsi
 
     disp ("Computing initial lead field...") ;
 
-    L = - G * R ;
-
-    Lcopy = L ;
-
-    disp ("Interspersing lead field xyz-components…") ;
-
-    Nvc = numel (volumeCurrentI) ;
-
-    L (1:3:end,:) = Lcopy (1:Nvc,:) ;
-    L (2:3:end,:) = Lcopy (Nvc+1:2*Nvc,:) ;
-    L (3:3:end,:) = Lcopy (2*Nvc+1:3*Nvc,:) ;
+    L = intersperseRowsXYZ (- G * R) ;
 
     %%
 
@@ -202,25 +192,9 @@ function linearizeResistivityMatrix(nodes,tetra,elePos,volumeCurrentI,sigma,epsi
 
             disp ("Computing lead fields…") ;
 
-            newL = - G * newR ;
+            newL = intersperseRowsXYZ (- G * newR) ;
 
-            newLcopy = newL ;
-
-            linL = - G * linR ;
-
-            linLcopy = linL ;
-
-            disp ("Interspersing lead field xyz-components…") ;
-
-            Nvc = numel (volumeCurrentI) ;
-
-            newL (1:3:end,:) = newLcopy (1:Nvc,:) ;
-            newL (2:3:end,:) = newLcopy (Nvc+1:2*Nvc,:) ;
-            newL (3:3:end,:) = newLcopy (2*Nvc+1:3*Nvc,:) ;
-
-            linL (1:3:end,:) = linLcopy (1:Nvc,:) ;
-            linL (2:3:end,:) = linLcopy (Nvc+1:2*Nvc,:) ;
-            linL (3:3:end,:) = linLcopy (2*Nvc+1:3*Nvc,:) ;
+            linL = intersperseRowsXYZ (- G * linR) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
@@ -280,5 +254,17 @@ function [A, B, C, T, S, invS, R] = matricesDependingOnZ (nodes, tetra, tetV, co
     invS = S \ I ;
 
     R = T * invS ;
+
+end % function
+
+function M = intersperseRowsXYZ(M)
+
+    Mcopy = M ;
+
+    N = size (M,1) / 3 ;
+
+    M (1:3:end,:) = Mcopy (1:N,:) ;
+    M (2:3:end,:) = Mcopy (N+1:2*N,:) ;
+    M (3:3:end,:) = Mcopy (2*N+1:3*N,:) ;
 
 end % function
