@@ -13,6 +13,7 @@ if nargin < 4
 end
 
 h_tool = findall(groot,'ZefTool',tool_script);
+screen_size_aux = get(0,'screensize');
 
 if not(isempty(h_tool))
     if zef.use_display
@@ -83,6 +84,17 @@ else
 
     for i = 1 : length(h_groot_children)
 
+        width_aux = relative_size*zef.h_zeffiro_menu.Position(3);
+        height_aux = relative_size*h_groot_children(i).Position(4)*zef.h_zeffiro_menu.Position(3)/h_groot_children(i).Position(3);
+        vertical_aux = zef.h_zeffiro_menu.Position(2)+zef.h_zeffiro_menu.Position(4)-height_aux;
+        if vertical_aux < 0 
+        relative_size = relative_size*(vertical_aux + height_aux)/height_aux;
+        end
+
+    end
+
+    for i = 1 : length(h_groot_children)
+
         set(h_groot_children(i),'DeleteFcn',['zef_closereq(''' tool_script ''');'])
 
         h_groot_children(i).Units = zef.h_zeffiro_menu.Units;
@@ -92,15 +104,15 @@ else
         vertical_aux = zef.h_zeffiro_menu.Position(2)+zef.h_zeffiro_menu.Position(4)-height_aux;
         horizontal_aux = zef.h_zeffiro_menu.Position(1)+zef.h_zeffiro_menu.Position(3)-width_aux;
 
+        if not(isempty(findobj(h_groot_children(i),'-property','Resize')))
+        h_groot_children(i).Resize = 'on';
+        end
+
         if isempty(findall(h_groot_children(i),'Type','uitable','-or','Type','uipanel'))
             zef_set_size_change_function(h_groot_children(i),1,scale_positions);
         else
             zef_set_size_change_function(h_groot_children(i),2,scale_positions);
         end
-        
-          if not(isempty(findobj(h_groot_children(i),'-property','Resize')))
-            h_groot_children(i).Resize = 'on';
-          end
 
         set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
         set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -110,26 +122,9 @@ else
         end
         h_groot_children(i).ZefTool = tool_script;
      
-     if horizontal_aux < 0 
-     
-         scaling_factor = width_aux/(width_aux + horizontal_aux); 
-         horizontal_aux = 0; 
-         width_aux = scaling_factor*width_aux; 
-         height_aux = scaling_factor*height_aux; 
-     
-     end
-     
-         if vertical_aux < 0 
-     
-         scaling_factor = height_aux/(height_aux + vertical_aux); 
-         vertical_aux = 0; 
-         width_aux = scaling_factor*width_aux; 
-         height_aux = scaling_factor*height_aux; 
-     
-         end
-     
-              h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
-     
+        position_aux = h_groot_children(i).Position;
+        h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+
     end
 
 end

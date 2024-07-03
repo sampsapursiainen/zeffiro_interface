@@ -160,8 +160,8 @@ for f_ind = 1 : number_of_frames
                 [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,zef.inv_hyperprior_tail_length_db,L_aux,source_count,normalize_data,balance_spatially,zef.inv_hyperprior_weight);
 
                 %_ Set parameters to exponentially conditional distribution _
-                beta = 2*beta + 3;
-                theta0 = 2*theta0;
+                %beta = 2*beta + 3;
+                %theta0 = 2*theta0;
                 if q == 1
                     theta0 = sqrt(theta0);
                 end
