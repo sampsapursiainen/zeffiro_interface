@@ -1,6 +1,6 @@
-function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, electrodeI, startFreq, capacitance)
+function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, kwargs)
 %
-% linearizeResistivityMatrix(nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, electrodeI, startFreq, capacitance)
+% linearizeResistivityMatrix(nodes, tetra, elePos, volumeCurrentI, sigma, epsilon, superNodes, kwargs)
 %
 % Runs a simulation where a resistivity matrix is first computed, then modified
 % via its linearization and compared to another directly computed resistivity
@@ -17,9 +17,10 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         sigma (:,:) double { mustBeFinite }
         epsilon (:,:) double { mustBeFinite }
         superNodes (:,1) core.SuperNode
-        electrodeI (:,:) double { mustBeInteger, mustBePositive, mustBeFinite } = transpose ( [ 4 , 8 ; 3 , 7 ] )
-        startFreq (1,1) double { mustBePositive, mustBeFinite } = 1000
-        capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
+        kwargs.electrodeI (:,:) double { mustBeInteger, mustBePositive, mustBeFinite } = transpose ( [ 4 , 8 ; 3 , 7 ] )
+        kwargs.startFreq (1,1) double { mustBePositive, mustBeFinite } = 1000
+        kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000]
+        kwargs.capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
     end
 
     tetV = core.tetraVolume (nodes, tetra,true) ;
@@ -28,7 +29,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     epsabs = epsilon .* eps0 ;
 
-    angFreq = 2 * pi * startFreq ;
+    angFreq = 2 * pi * kwargs.startFreq ;
 
     conductivity = sigma (:,1) - 1i * epsabs * angFreq  ;
 
@@ -38,7 +39,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     Ne = size (elePos,2) ;
 
-    Zs = core.impedanceFromRwLC (2e3*ones(Ne,1),angFreq,inductance,capacitance) ;
+    Zs = core.impedanceFromRwLC (2e3*ones(Ne,1), angFreq, inductance, kwargs.capacitance) ;
 
     electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=1e-3 ) ;
 
@@ -98,21 +99,19 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     Bs = core.electrodeBasisFnMean ( size (A,1), superNodes ) ;
 
-    dFreqs = [ 10, 100, 500 ] ;
-
-    dAngFreqs = dFreqs .* 2 * pi ;
+    dAngFreqs = kwargs.dFreqs .* 2 * pi ;
 
     newAngFreqs = angFreq + dAngFreqs ;
 
-    Ndf = numel ( dFreqs ) ;
+    Ndf = numel ( kwargs.dFreqs ) ;
 
     %%
 
     disp ("Starting linearization of R...") ;
 
-    for eI = 1 : size (electrodeI,2)
+    for eI = 1 : size (kwargs.electrodeI,2)
 
-        cols = electrodeI (:,eI) ;
+        cols = kwargs.electrodeI (:,eI) ;
 
         eleIndStr = strjoin(string(cols),",") ;
 
@@ -124,9 +123,9 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
         for ii = 1 : Ndf
 
-            dFreq = dFreqs (ii) ;
+            dFreq = kwargs.dFreqs (ii) ;
 
-            fileNames (ii) = "linR-ele=" + eleIndStr + "-df=" + dFreq + "Hz.mat" ;
+            fileNames (ii) = "ele=" + eleIndStr + "-df=" + dFreq + "Hz.mat" ;
 
         end % for ii
 
@@ -172,11 +171,11 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
                 dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
-                newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, capacitance ) ;
+                newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, kwargs.capacitance ) ;
 
                 dZ = newZs (col) - Zs (col) ;
 
-                linR = linR + dRdZ * dZ ;
+                linR = linR + conj(dRdZ) * dZ ;
 
             end % for jj
 
@@ -194,13 +193,29 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
+            disp ("linR...")
+
             mf.linR = linR ;
 
-            mf.newR = newR ;
+            disp ("refR...")
+
+            mf.newR = refR ;
+
+            disp ("linL...")
 
             mf.linL = linL ;
 
+            disp ("refL...")
+
             mf.newL = newL ;
+
+            disp ("Frequencies and electrodes...")
+
+            mf.startFreq = kwargs.startFreq ;
+
+            mf.dFreqs = kwargs.dFreqs ;
+
+            mf.electrodeI = kwargs.electrodeI ;
 
         end % for ii
 
