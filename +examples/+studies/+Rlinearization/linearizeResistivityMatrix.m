@@ -175,7 +175,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
                 dZ = newZs (col) - Zs (col) ;
 
-                linR = linR + conj(dRdZ) * dZ ;
+                linR = linR + dRdZ * dZ ;
 
             end % for jj
 
