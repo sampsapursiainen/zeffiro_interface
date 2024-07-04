@@ -19,7 +19,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         superNodes (:,1) core.SuperNode
         kwargs.electrodeI (:,:) double { mustBeInteger, mustBePositive, mustBeFinite } = transpose ( [ 4 , 8 ; 3 , 7 ] )
         kwargs.startFreq (1,1) double { mustBePositive, mustBeFinite } = 1000
-        kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000]
+        kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000,10000]
         kwargs.capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
     end
 
@@ -183,11 +183,11 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newElectrodes = electrodes.withImpedances (newZs) ;
 
-            [ ~, ~, ~, ~, ~, ~, newR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
+            [ ~, ~, ~, ~, ~, ~, refR ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, newElectrodes, superNodes) ;
 
             disp ("Computing lead fields…") ;
 
-            newL = intersperseRowsXYZ (- G * newR) ;
+            refL = intersperseRowsXYZ (- G * refR) ;
 
             linL = intersperseRowsXYZ (- G * linR) ;
 
@@ -199,7 +199,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("refR...")
 
-            mf.newR = refR ;
+            mf.refR = refR ;
 
             disp ("linL...")
 
@@ -207,7 +207,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("refL...")
 
-            mf.newL = newL ;
+            mf.refL = refL ;
 
             disp ("Frequencies and electrodes...")
 
