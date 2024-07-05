@@ -32,7 +32,11 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     dataFolderStructs = dir (dataFilePattern) ;
 
+    dataFileDirs = arrayfun ( @(entry) string (entry.folder), dataFolderStructs ) ;
+
     dataFileNames = arrayfun ( @(entry) string (entry.name), dataFolderStructs ) ;
+
+    dataFilePaths = fullfile ( dataFileDirs, dataFileNames ) ;
 
     disp ("Generating figure, axes and their cleanup object...")
 
@@ -54,7 +58,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     for ii = 1 : aN
 
-        dataFileName = dataFileNames (ii) ;
+        dataFileName = dataFilePaths (ii)
 
         [ ~, fname, ~ ] = fileparts (dataFileName) ;
 
