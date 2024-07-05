@@ -50,7 +50,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     aN = numel (dataFileNames) ;
 
-    xString = string ( char (kwargs.comparisonFn) ) ;
+    cmpFnStr = string ( char (kwargs.comparisonFn) ) ;
 
     for ii = 1 : aN
 
@@ -72,19 +72,23 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
         histogram ( imagAx, imagDiffDisp, kwargs.numBins, FaceColor=[0.6350, 0.0780, 0.1840] ) ;
 
-        outFilePath = fullfile ( outFolderName, fname + ".fig" ) ;
+        figFilePath = fullfile ( outFolderName, fname + "-" + cmpFnStr + ".fig" ) ;
 
-        disp ("Saving figure to " + outFilePath) ;
+        pdfFilePath = fullfile ( outFolderName, fname + "-" + cmpFnStr + ".pdf" ) ;
+
+        disp ("Saving figure to " + figFilePath) ;
 
         title (realAx, fname, Interpreter="none" ) ;
 
-        xlabel (imagAx, xString, Interpreter="none") ;
+        xlabel (imagAx, cmpFnStr, Interpreter="none") ;
 
         ylabel (realAx,"real samples", Interpreter="none") ;
 
         ylabel (imagAx,"imag samples", Interpreter="none") ;
 
-        savefig(fig, outFilePath) ;
+        savefig (fig, figFilePath) ;
+
+        exportgraphics (fig,pdfFilePath) ;
 
         disp  ("Clearing axes for next round...")
 
