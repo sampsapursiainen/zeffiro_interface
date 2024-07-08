@@ -64,7 +64,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
         disp ("File " + dataFileName + " (" + ii + " / " + aN + ")") ;
 
-        [ realDiff, imagDiff ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn) ;
+        [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn) ;
 
         realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
 
@@ -84,7 +84,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
         disp ("Saving figure to " + figFilePath) ;
 
-        title (realAx, fname, Interpreter="none" ) ;
+        title (realAx, "$\mathrm{d}f="+ dFreqs + "\,\mathrm{Hz}$, $\ell\in\{"+ strjoin ( string (electrodeI), ", ") +"\}$", Interpreter="latex" ) ;
 
         xlabel (imagAx, cmpFnStr, Interpreter="none") ;
 
@@ -110,7 +110,7 @@ end % function
 
 %% Helper functions.
 
-function [ realDiff, imagDiff ] = performComparison (origL, dataFileName, refLName, linLName, comparisonFn)
+function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, dataFileName, refLName, linLName, comparisonFn)
 
     arguments
         origL (:,:) double { mustBeFinite }
@@ -123,6 +123,10 @@ function [ realDiff, imagDiff ] = performComparison (origL, dataFileName, refLNa
     disp ("Opening file " + dataFileName + "...") ;
 
     dataFile = matfile (dataFileName) ;
+
+    dFreqs = dataFile.dFreqs ;
+
+    electrodeI = dataFile.electrodeI ;
 
     disp ("Loading and transposing " + refLName + "...")
 
