@@ -26,7 +26,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     disp ("Loading and transposing initial lead field...")
 
-    refL = transpose ( dataFile.(kwargs.initLName) ) ;
+    L = transpose ( dataFile.(kwargs.initLName) ) ;
 
     disp ("Reading data file names from " + dataFilePattern + "...") ;
 
@@ -58,13 +58,13 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     for ii = 1 : aN
 
-        dataFileName = dataFilePaths (ii)
+        dataFileName = dataFilePaths (ii) ;
 
         [ ~, fname, ~ ] = fileparts (dataFileName) ;
 
-        disp ("File " + dataFileName + "(" + ii + " / " + aN + ")") ;
+        disp ("File " + dataFileName + " (" + ii + " / " + aN + ")") ;
 
-        [ realDiff, imagDiff ] = performComparison (refL, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn) ;
+        [ realDiff, imagDiff ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn) ;
 
         realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
 
