@@ -213,9 +213,9 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             mf.startFreq = kwargs.startFreq ;
 
-            mf.dFreqs = kwargs.dFreqs ;
+            mf.dFreqs = kwargs.dFreqs [ii] ;
 
-            mf.electrodeI = kwargs.electrodeI ;
+            mf.electrodeI = kwargs.electrodeI [cols] ;
 
         end % for ii
 
