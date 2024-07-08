@@ -76,9 +76,11 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
         histogram ( imagAx, imagDiffDisp, kwargs.numBins, FaceColor=[0.6350, 0.0780, 0.1840] ) ;
 
-        figFilePath = fullfile ( outFolderName, fname + "-" + cmpFnStr + ".fig" ) ;
+        outFileStart = fname + "-" + cmpFnStr + "-lowerQ=" + lowerQ + "-upperQ=" + upperQ ;
 
-        pdfFilePath = fullfile ( outFolderName, fname + "-" + cmpFnStr + ".pdf" ) ;
+        figFilePath = fullfile ( outFolderName, outFileStart + ".fig" ) ;
+
+        pdfFilePath = fullfile ( outFolderName, outFileStart + ".pdf" ) ;
 
         disp ("Saving figure to " + figFilePath) ;
 
