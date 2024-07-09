@@ -18,6 +18,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
         kwargs.refLName (1,1) string = "refL"
         kwargs.linLName (1,1) string = "linL"
         kwargs.comparisonFn (1,1) function_handle = @tests.relativeError
+        kwargs.leadFieldColumns (1,:) double { mustBeInteger, mustBePositive } = []
     end
 
     disp ("Loading reference lead field " + dataFileName + " from disk...") ;
@@ -26,7 +27,11 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
     disp ("Loading and transposing initial lead field...")
 
-    L = transpose ( dataFile.(kwargs.initLName) ) ;
+    L = dataFile.(kwargs.initLName) ;
+
+    L = selectColumns (L,kwargs.leadFieldColumns) ;
+
+    L = transpose ( L ) ;
 
     disp ("Reading data file names from " + dataFilePattern + "...") ;
 
@@ -64,7 +69,7 @@ function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,u
 
         disp ("File " + dataFileName + " (" + ii + " / " + aN + ")") ;
 
-        [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn) ;
+        [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn,kwargs.leadFieldColumns) ;
 
         realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
 
@@ -110,7 +115,7 @@ end % function
 
 %% Helper functions.
 
-function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, dataFileName, refLName, linLName, comparisonFn)
+function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, dataFileName, refLName, linLName, comparisonFn, leadFieldColumns)
 
     arguments
         origL (:,:) double { mustBeFinite }
@@ -118,6 +123,7 @@ function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, 
         refLName (1,1) string
         linLName (1,1) string
         comparisonFn (1,1) function_handle
+        leadFieldColumns (1,:) double
     end
 
     disp ("Opening file " + dataFileName + "...") ;
@@ -132,11 +138,15 @@ function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, 
 
     refL = dataFile.(refLName) ;
 
+    refL = selectColumns (refL,leadFieldColumns) ;
+
     refL = transpose (refL) ;
 
     disp ("Loading and transposing " + linLName + "...")
 
     linL = dataFile.(linLName) ;
+
+    linL = selectColumns (linL,leadFieldColumns) ;
 
     linL = transpose (linL) ;
 
@@ -151,6 +161,22 @@ function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, 
     realDiff = comparisonFn (real(linDiff), real(refDiff)) ;
 
     imagDiff = comparisonFn (imag(linDiff), imag(refDiff)) ;
+
+end % function
+
+function filteredM = selectColumns (M,columns)
+
+    if isempty (columns)
+
+        filteredM = M ;
+
+    else
+
+        disp ("Selecting columns " + strjoin ( string (columns), ", " ) + " from lead field..." )
+
+        filteredM = M (:,columns) ;
+
+    end % if
 
 end % function
 
