@@ -22,7 +22,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000,10000]
         kwargs.capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
         kwargs.solverTol (1,1) double { mustBePositive, mustBeFinite } = 1e-9
-        kwargs.sourceTetraI (1,1) double { mustBePositive } = numel (volumeCurrentI)
+        kwargs.sourceTetraI (1,1) double { mustBePositive } = 1 : numel (volumeCurrentI)
     end
 
     tetV = core.tetraVolume (nodes, tetra,true) ;
