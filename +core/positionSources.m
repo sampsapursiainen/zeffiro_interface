@@ -2,9 +2,11 @@ function [sourcePos, sourceTetI] = positionSources ( nodes, elements, sourceN )
 %
 % sourcePos = positionSources ( nodes, elements, sourceN )
 %
-% Places sources evenly into a set of given active elements. If there are less
-% sources than elements, some elements are skipped and the sources are placed
-% only into some.
+% Places sources evenly into a set of given active elements, returning the
+% source positions and which source is in which input element. If there are
+% less sources than elements, some elements are skipped and the sources are
+% placed only into some. If there are more source than elements, some elements
+% will contain multiple sources.
 %
 % Inputs:
 %
@@ -37,8 +39,6 @@ function [sourcePos, sourceTetI] = positionSources ( nodes, elements, sourceN )
     % because MATLAB is asenine about types.
 
     sourceN = double (sourceN) ;
-
-
 
     % Number of elements.
 
