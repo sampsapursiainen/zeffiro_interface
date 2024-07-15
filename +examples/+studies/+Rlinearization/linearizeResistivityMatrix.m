@@ -21,6 +21,8 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         kwargs.startFreq (1,1) double { mustBePositive, mustBeFinite } = 1000
         kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000,10000]
         kwargs.capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
+        kwargs.solverTol (1,1) double { mustBePositive, mustBeFinite } = 1e-9
+        kwargs.sourceTetraI (1,1) double { mustBePositive } = numel (volumeCurrentI)
     end
 
     tetV = core.tetraVolume (nodes, tetra,true) ;
@@ -104,6 +106,20 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
     newAngFreqs = angFreq + dAngFreqs ;
 
     Ndf = numel ( kwargs.dFreqs ) ;
+
+    % Count numbers of source indices in output lead field.
+
+    uniqueSourceTetraI = unique ( sourceTetraI ) ;
+
+    ustN = numel (uniqueSourceTetraI) ;
+
+    sourcesPerTetra = zeros ( ustN ) ;
+
+    for ii = 1 : ustN
+
+        sourcesPerTetra (ii) = sum ( sourceTetraI == uniqueSourceTetraI (ii) ) ;
+
+    end % for
 
     %%
 
@@ -277,5 +293,45 @@ function M = intersperseRowsXYZ(M)
     M (1:3:end,:) = Mcopy (1:N,:) ;
     M (2:3:end,:) = Mcopy (N+1:2*N,:) ;
     M (3:3:end,:) = Mcopy (2*N+1:3*N,:) ;
+
+end % function
+
+function M = intersperseColsXYZ(M)
+
+    Mcopy = M ;
+
+    N = size (M,1) / 3 ;
+
+    M (:,1:3:end) = Mcopy (:,1:N) ;
+    M (:,2:3:end) = Mcopy (:,N+1:2*N) ;
+    M (:,3:3:end) = Mcopy (:,2*N+1:3*N) ;
+
+end % function
+
+function L = parcellateLeadField (L, uniqueSourceTetraI, sourcesPerTetra)
+%
+% L = parcellateLeadField (L, uniqueSourceTetraI, sourcesPerTetra)
+%
+% Restricts a given lead field to a given set of source positions and
+% normalizes its rows based on how many sources were placed into each active
+% element.
+%
+    arguments
+        L (:,:) double { mustBeFinite }
+        uniqueSourceTetraI (1,:) double { mustBePositive, mustBeInteger }
+        sourcesPerTetra (1,:) double { mustBePositive, mustBeInteger }
+    end
+
+    % Restrict lead field to the wanted source positions.
+
+    ustI = uniqueSourceTetraI ;
+
+    restrI = intersperseRowsXYZ ( [ ustI ; (ustI+1) ; (ustI+2) ] ) ;
+
+    L = L (restrI,:) ;
+
+    % Normalize the rows based on how many sources there are in each active element.
+
+    L = L ./ repelem ( sourcesPerTetra, 3, 1 ) ;
 
 end % function
