@@ -113,9 +113,9 @@ function visualizeData (dataFilePattern, dataFieldNames,outFolderName,lowerQ,upp
 
             cla (ax) ;
 
-        end % jj
+        end % for jj
 
-    end % for
+    end % for ii
 
     disp ("Done")
 
