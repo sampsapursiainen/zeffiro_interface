@@ -7,31 +7,31 @@ type,segmentation,name,Grey matter,merge,0,filename,./data/segmentations/multico
 type,segmentation,name,Grey matter,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.pial.asc,parameter_name,sigma,parameter_value,0.33,activity,1,atlas_colortable_filename,./data/segmentations/multicompartment_head_project/color_table_rh_36.mat,atlas_points_filename,./data/segmentations/multicompartment_head_project/rh_labels_36.asc
 type,segmentation,name,White matter,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.wm.asc,parameter_name,sigma,parameter_value,0.14,activity,3
 type,segmentation,name,White matter,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.wm.asc,parameter_name,sigma,parameter_value,0.14,activity,3
-type,segmentation,name,Cerebellum cortex,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_CerebellumCortex.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Cerebellum cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_CerebellumCortex.asc,parameter_name,sigma,parameter_value, 0.33, activity,2
-type,segmentation,name,Cerebellum WM,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
-type,segmentation,name,Cerebellum WM,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14
-type,segmentation,name,Brainstem,filename,./data/segmentations/multicompartment_head_project/Brainstem.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Cingulate cortex,merge,0,filename,./data/segmentations/multicompartment_head_project/CC_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Mid_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Mid_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Cingulate cortex,merge,1,filename,merge,1,./data/segmentations/multicompartment_head_project/CC_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
-type,segmentation,name,Ventral DC,merge,0,filename,./data/segmentations/multicompartment_head_project/LVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Ventral DC,merge,1,filename,./data/segmentations/multicompartment_head_project/RVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Amygdala,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Amygdala,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Thalamus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Thalamus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Caudate,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Caudate,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Accumbens,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Accumbens,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Putamen,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Putamen,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Hippocampus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1
-type,segmentation,name,Hippocampus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1
-type,segmentation,name,Pallidum,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Pallidum,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Ventricle,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0
-type,segmentation,name,Ventricle,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0
+type,segmentation,name,Cerebellum cortex,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_CerebellumCortex.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Cerebellum cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_CerebellumCortex.asc,parameter_name,sigma,parameter_value, 0.33, activity,2,inflate,200
+type,segmentation,name,Cerebellum WM,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14,inflate,200
+type,segmentation,name,Cerebellum WM,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_CerebellumWM.asc,parameter_name,sigma,parameter_value,0.14,inflate,200
+type,segmentation,name,Brainstem,filename,./data/segmentations/multicompartment_head_project/Brainstem.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Cingulate cortex,merge,0,filename,./data/segmentations/multicompartment_head_project/CC_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0,inflate,200
+type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Mid_posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0,inflate,200
+type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0,inflate,200
+type,segmentation,name,Cingulate cortex,merge,1,filename,./data/segmentations/multicompartment_head_project/CC_Mid_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0,inflate,200
+type,segmentation,name,Cingulate cortex,merge,1,filename,merge,1,./data/segmentations/multicompartment_head_project/CC_Anterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0,inflate,200
+type,segmentation,name,Ventral DC,merge,0,filename,./data/segmentations/multicompartment_head_project/LVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Ventral DC,merge,1,filename,./data/segmentations/multicompartment_head_project/RVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Amygdala,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Amygdala,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Thalamus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Thalamus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Caudate,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Caudate,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Accumbens,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Accumbens,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Putamen,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Putamen,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Hippocampus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1,inflate,200
+type,segmentation,name,Hippocampus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1,inflate,200
+type,segmentation,name,Pallidum,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Pallidum,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Ventricle,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0,inflate,200
+type,segmentation,name,Ventricle,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0,inflate,200
