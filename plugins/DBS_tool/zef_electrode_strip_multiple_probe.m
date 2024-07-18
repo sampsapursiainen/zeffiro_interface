@@ -71,7 +71,7 @@ strip_struct.electrode_data = electrode_data;
 cylinder_radius = 0.635;
 mesh_resolution =0.25;
 n_refinements = 6;
-length = 20;
+length = 80;
 probe = struct;
 probe.radius = strip_struct.radius;
 
@@ -81,7 +81,7 @@ for n=1:strip_struct.probe_num
     cylinder_edge_size = mesh_resolution/2^n_refinements;
     n_cylinder_edges = cylinder_radius*2*pi/cylinder_edge_size;
 
-    [x y z]=cylinder(probe.radius,1000);
+    [x y z] = cylinder(probe.radius,1000);
 
     z = z*length;
     tri = delaunay(x(:),y(:),z(:));

@@ -11,6 +11,7 @@ sensors = eval('zef.sensors');
 i = 0;
 sigma_vec = [];
 priority_vec = [];
+labeling_priority_vec = [];
 submesh_cell = cell(0);
 aux_active_compartment_ind = [];
 compartment_tags = eval('zef.compartment_tags');
@@ -24,6 +25,11 @@ for k = 1 : length(compartment_tags)
     var_4 = ['zef.' compartment_tags{k} '_name'];
     var_5 = ['zef.' compartment_tags{k} '_sources'];
 
+    labeling_priority_val = 0;
+    if isfield(zef,[compartment_tags{k} '_labeling_priority'])
+      labeling_priority_val = zef.([compartment_tags{k} '_labeling_priority']);
+    end
+
     on_val = eval(var_0);
     sigma_val = eval(var_1);
     priority_val = eval(var_2);
@@ -33,6 +39,7 @@ for k = 1 : length(compartment_tags)
 
         sigma_vec(i,1) = sigma_val;
         priority_vec(i,1) = priority_val;
+        labeling_priority_vec(i,1) = labeling_priority_val;
         submesh_cell{i} = eval(var_3);
         name_tags{i} = eval(var_4);
 
@@ -53,6 +60,7 @@ for k = 1 : length(reuna_p)
 end
 
 priority_vec_aux_segmentation = zeros(n_compartments,1);
+labeling_priority_vec_aux_segmentation = zeros(n_compartments,1);
 compartment_counter = 0;
 submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
@@ -63,12 +71,16 @@ for i = 1 :  length(reuna_p)
 
         compartment_counter = compartment_counter + 1;
         priority_vec_aux_segmentation(compartment_counter) = priority_vec(i);
+        labeling_priority_vec_aux_segmentation(compartment_counter) = labeling_priority_vec(i);
         submesh_ind_1(compartment_counter) = i;
         submesh_ind_2(compartment_counter) = k;
 
     end
 end
 
+
+priority_vec_aux_segmentation = priority_vec_aux_segmentation + max(labeling_priority_vec_aux_segmentation);
+priority_vec_aux_segmentation(find(labeling_priority_vec_aux_segmentation)) = labeling_priority_vec_aux_segmentation(find(labeling_priority_vec_aux_segmentation));
 priority_vec_aux = max(submesh_ind_1) +1 - submesh_ind_1;
 
 

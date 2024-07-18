@@ -8,9 +8,9 @@ end
 for i = 1:size(strip_struct.electrode,1)
 
     if i == 1 || i == 8
-        r = 0.75
+        r = 0.75;
     else
-        r = 0.35
+        r = 0.35;
     end
 
     [x y z] = sphere(20);
@@ -40,11 +40,9 @@ x = strip_struct.vertices{1}(:,1);
 y = strip_struct.vertices{1}(:,2);
 z = strip_struct.vertices{1}(:,3);
 
-
 h_t = trisurf(tri,x,y,z);
 h_t.EdgeColor = 'none';
 h_t.Tag = 'additional: electrode strip';
 h_t.FaceColor = [0.6 0.6 0.6];
 
-hold off
 end

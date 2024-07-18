@@ -44,7 +44,8 @@ field_cell_default =  {{'on', '1'       }
     {'y_correction', '0'}
     {'x_correction', '0'}
     {'affine_transform','{[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]}'}
-    {'transform_name','{''Transform 1''}'}};
+    {'transform_name','{''Transform 1''}'}
+{'labeling_priority','0'}};
 
 if n_compartments < size(color_default,1)
     field_cell_default{2}{2} = mat2str(color_default(n_compartments+1,:));

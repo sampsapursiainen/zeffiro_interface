@@ -149,6 +149,13 @@ if not(isequal(file_name,0))
                 else
                     visible = '1';
                 end
+                if find(ismember(ini_cell(i,:),'labeling_priority'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'labeling_priority'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    labeling_priority = (ini_cell{i,find(ismember(ini_cell(i,:),'labeling_priority'),1)+1});
+                else
+                    labeling_priority = '';
+                end
                 if find(ismember(ini_cell(i,:),'subject'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'subject'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -286,6 +293,9 @@ if not(isequal(file_name,0))
                 eval(['zef.' compartment_tag '_sources = ' activity ';']);
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
+                if not(isempty(labeling_priority))
+               zef.([compartment_tag '_labeling_priority']) =  labeling_priority;
+                end
                 zef.surface_mesh_type = filetype;
                 zef.file = filename;
                 zef.file_path = folder_name;
