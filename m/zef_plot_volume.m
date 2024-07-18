@@ -600,7 +600,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
             end
 
-            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                 reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
             end
 
@@ -865,7 +865,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
             %reconstruction = reconstruction./max(abs(reconstruction(:)));
         end
 
-        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
             reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
         end
 

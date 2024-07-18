@@ -37,7 +37,7 @@ elseif isequal(type,3)
     end
 
 elseif isequal(type,4)
-
+    
     for i = 1 : size(nse_field.bf_capillaries,2)
 
         aux_vec = zef_nse_threshold_distribution(nse_field.bf_capillaries{i}(:),nse_field.min_reconstruction_quantile,nse_field.max_reconstruction_quantile);

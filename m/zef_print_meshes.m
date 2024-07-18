@@ -659,7 +659,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
             end
 
-            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                 reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
             end
 
@@ -986,7 +986,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
             %reconstruction = reconstruction./max(abs(reconstruction(:)));
         end
 
-        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
             reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
         end
 
@@ -1864,7 +1864,7 @@ else
                                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
                             end
 
-                            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+                            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                                 reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                             end
 
@@ -2290,7 +2290,7 @@ else
                             %reconstruction = reconstruction./max(abs(reconstruction(:)));
                         end
 
-                        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+                        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                             reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                         end
 

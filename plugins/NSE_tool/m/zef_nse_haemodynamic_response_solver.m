@@ -293,7 +293,7 @@ end
     eps_var = ((4*pi).^(1/3).*3.^(2/3).*diffusion_coefficient.*nse_field.pressure_decay_in_arterioles./(mvd_volume_mean.*arteriole_length.*max(volume).^(1/3)));
    
     K_0 = (diffusion_coefficient/mvd_volume_mean)*K_2 ;
-    K_3 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2 - nu_val*C_2;
+    K_3 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2 + nu_val*C_2;
     K_2 = (diffusion_coefficient/mvd_volume_mean)*K_2 + eps_var*M_2;
     mc_vec = zeros(size(v_2_nodes,1),1);
     q_vec = zeros(size(v_2_nodes,1),1);
@@ -350,12 +350,12 @@ for i = 1 : n_time
 
    if nse_field.use_gpu
                     mc_vec = pcg_iteration_gpu(K_2, C_2*mc_vec + delta_t*u + delta_t*d_balloon*mc_vec_0.*w_5, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
-                    q_vec = pcg_iteration_gpu(K_3, C_2*q_vec + delta_t*h_val*u + delta_t*h_val*nu_val*(mc_vec_0+mc_vec).*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
+                    q_vec = pcg_iteration_gpu(K_3, C_2*q_vec + delta_t*(1-h_val)*u + delta_t*(1-h_val)*nu_val*(mc_vec_0+mc_vec).*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
                 else
    mc_vec = pcg_iteration(K_2, C_2*mc_vec + delta_t*u + delta_t*d_balloon*mc_vec_0.*w_5, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_2);
    %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t*(1./(mc_vec_0+mc_vec)).*u + delta_t*h_val*nu_val*w_4 + (q_vec./(mc_vec_0+mc_vec)).*((C_2*(mc_vec_old - mc_vec)) - 0*delta_t*K_0*(mc_vec_old+mc_vec_0)), nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3); 
    %q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*h_val.*u + delta_t*h_val*nu_val.*(mc_vec+mc_vec_0).*w_4 + C_2*(q_vec_old - q_vec) - delta_t.*K_0*q_vec, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
-   q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*(1-h_val).*u - delta_t*nu_val.*h_val*(mc_vec+mc_vec_0).*w_4, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
+   q_vec = pcg_iteration(K_3, C_2*q_vec + delta_t.*(1-h_val).*u + delta_t*nu_val.*h_val*(mc_vec+mc_vec_0).*w_4, nse_field.pcg_tol, nse_field.pcg_maxit, DM_K_3);
    end
 
    %q_vec_old = q_vec; 

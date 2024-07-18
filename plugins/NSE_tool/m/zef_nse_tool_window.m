@@ -283,7 +283,7 @@ zef.nse_field.h_viscosity_model.Items = {'Constant','Power law','Carreau-Yasuda'
 zef.nse_field.h_viscosity_model.ItemsData = [1 : length(zef.nse_field.h_viscosity_model.Items)];
 zef.nse_field.h_viscosity_model.Value = zef.nse_field.viscosity_model;
 
-zef.nse_field.h_graph_type.Items = {'Pressure (full)','Pressure (epoch)','Pressure (full seperated)','Pressure (epoch forward separation)','Pressure (epoch backward separation)','Pressure histogram', 'Velocity (full)', 'Velocity (epoch)', 'Velocity (full seperated)','Velocity (epoch forward separation)','Velocity (epoch backward separation)','Velocity histogram', 'Viscosity (full)','Viscosity (epoch)' ,'Viscosity histogram','Perfusion (full)', 'Perfusion (epoch)', 'Perfusion histogram', 'Pulse function','Pulse histogram','Volumetric concentration','Oxy/Deoxy hemoglobin'};
+zef.nse_field.h_graph_type.Items = {'Pressure (full)','Pressure (epoch)','Pressure (full seperated)','Pressure (epoch forward separation)','Pressure (epoch backward separation)','Pressure histogram', 'Velocity (full)', 'Velocity (epoch)', 'Velocity (full seperated)','Velocity (epoch forward separation)','Velocity (epoch backward separation)','Velocity histogram', 'Viscosity (full)','Viscosity (epoch)' ,'Viscosity histogram','Perfusion (full)', 'Perfusion (epoch)', 'Perfusion histogram', 'Pulse function','Pulse histogram','Volumetric concentration','Oxy/Deoxy hemoglobin','Oxy/Deoxy hemoglobin peak radius'};
 zef.nse_field.h_graph_type.ItemsData = [1 : length(zef.nse_field.h_graph_type.Items)];
 zef.nse_field.h_graph_type.Value = zef.nse_field.graph_type;
 

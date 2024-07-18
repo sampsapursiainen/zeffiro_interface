@@ -1,7 +1,11 @@
-function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles)
+function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles,varargin)
 
 N = size(nodes,1);
-smoothing_steps_surf = eval('zef.inflate_n_iterations');
+if not(isempty(varargin))
+smoothing_steps_surf = varargin{1};
+else
+    smoothing_steps_surf = eval('zef.inflate_n_iterations');
+end
 smoothing_param = eval('zef.inflate_strength');
 
 A = sparse(N, N, 0);
