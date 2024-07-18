@@ -1,6 +1,6 @@
 function outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %
-% A = parcellateArray ( A, elementI, sourcesPerElement )
+% A = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %
 % This function reduces the size of a given array A by summing the
 % contributions from all rows of A into a subset of the rows representing a set
@@ -15,9 +15,9 @@ function outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %
 % - elementI
 %
-%   An index mapping rowI ↦ eleI, where rowI is a row index of A and eleI is
-%   the index of the active element that the contribution from that row should
-%   map to.
+%   An index mapping rowI ↦ eleI, where rowI is a row or columns index of A
+%   (see kwargs.axis) and eleI is the index of the active element that the
+%   contribution from that row should map to.
 %
 % - sourcePerElement
 %
