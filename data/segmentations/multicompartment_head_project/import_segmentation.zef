@@ -21,8 +21,6 @@ type,segmentation,name,Ventral DC,merge,0,filename,./data/segmentations/multicom
 type,segmentation,name,Ventral DC,merge,1,filename,./data/segmentations/multicompartment_head_project/RVentral_DC.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Amygdala,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Amygdala,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.Amygdala.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
-type,segmentation,name,Thalamus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
-type,segmentation,name,Thalamus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Caudate,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Caudate,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Accumbens,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
@@ -35,3 +33,5 @@ type,segmentation,name,Pallidum,merge,0,filename,./data/segmentations/multicompa
 type,segmentation,name,Pallidum,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.pallidum.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
 type,segmentation,name,Ventricle,merge,0,filename,./data/segmentations/multicompartment_head_project/lh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0,inflate,200
 type,segmentation,name,Ventricle,merge,1,filename,./data/segmentations/multicompartment_head_project/rh_Lateral-Ventricle.asc,parameter_name,sigma,parameter_value,0.33,activity,0,inflate,200
+type,segmentation,name,Thalamus,merge,0,filename,./data/segmentations/multicompartment_head_project/lh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
+type,segmentation,name,Thalamus,merge,1,filename,./data/segmentations/multicompartment_head_project/rh.thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2,inflate,200
