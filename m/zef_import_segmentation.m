@@ -294,7 +294,7 @@ if not(isequal(file_name,0))
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
                 if not(isempty(labeling_priority))
-               zef.([compartment_tag '_labeling_priority']) =  labeling_priority;
+               zef.([compartment_tag '_labeling_priority']) =  str2num(labeling_priority);
                 end
                 zef.surface_mesh_type = filetype;
                 zef.file = filename;

@@ -82,5 +82,3 @@ end
 priority_vec_aux_segmentation = priority_vec_aux_segmentation + max(labeling_priority_vec_aux_segmentation);
 priority_vec_aux_segmentation(find(labeling_priority_vec_aux_segmentation)) = labeling_priority_vec_aux_segmentation(find(labeling_priority_vec_aux_segmentation));
 priority_vec_aux = max(submesh_ind_1) +1 - submesh_ind_1;
-
-
