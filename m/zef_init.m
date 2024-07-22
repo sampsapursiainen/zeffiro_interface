@@ -202,6 +202,8 @@ zef_data.contour_set_text = '0.1:0.2:0.9';
 zef_data.contour_n_smoothing = 2;
 zef_data.contour_line_width = 1;
 
+zef_data.strip_tool = struct;
+zef_data.strip_tool.strip_current_id = 1;
 zef_data.cp_on       = 0;
 zef_data.cp_a        = 1;
 zef_data.cp_b        = 0;

@@ -1,8 +1,11 @@
-function [nodes,tetra,J] = zef_get_submesh(nodes,tetra,I)
+function [nodes,simplexes,J] = zef_get_submesh(nodes,simplexes,I)
 
-tetra = tetra(I,:);
-[J, ~, I_aux] = unique(tetra);
-tetra(1:numel(tetra)) = I_aux;
+if nargin == 3
+simplexes = simplexes(I,:);
+end
+
+[J, ~, I_aux] = unique(simplexes);
+simplexes(1:numel(simplexes)) = I_aux;
 nodes = nodes(J,:);
 
 end

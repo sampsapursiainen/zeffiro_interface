@@ -230,8 +230,10 @@ if eval('zef.refinement_on')
             zef_waitbar(0,1,h,'Volume refinement.');
 
             for i = 1 : n_refinement
+
                 [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments));
                 zef_waitbar(i,n_refinement,h,'Volume refinement.');
+
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];

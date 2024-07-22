@@ -90,7 +90,7 @@ compartment_counter = 0;
 submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
-for i = 1 :  eval('length(zef.reuna_p)')
+for i = 1 : length(zef.reuna_p)
     for k = 1 : max(1,length(submesh_cell{i}))
 
         compartment_counter = compartment_counter + 1;
@@ -144,12 +144,14 @@ end
 
 if eval('zef.refinement_volume_on_2');
     zef_waitbar(0,1,h,'Volume refinement.');
-    n_refinement = eval('zef.refinement_volume_number_2');
-    refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
+    n_refinement = zef.refinement_volume_number_2;
+    refinement_compartments_aux = zef.refinement_volume_compartments_2;
 
     refinement_compartments = [];
     if ismember(-1,refinement_compartments_aux)
-        [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
+    [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
+    refinement_compartments = zef_compartment_to_subcompartment(zef,refinement_compartments);
+    refinement_compartments = refinement_compartments(:);
     end
 
     refinement_compartments_aux = zef_compartment_to_subcompartment(zef,setdiff(refinement_compartments_aux,-1));

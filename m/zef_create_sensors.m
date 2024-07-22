@@ -1,4 +1,4 @@
-function zef = zef_create_sensors(zef, sensor_tag,field_cell_update)
+function zef = zef_create_sensors(zef,sensor_tag,field_cell_update)
 
 if isequal(sensor_tag,'s') || isequal(sensor_tag,'s1')
     eval(['zef.current_sensors =''' sensor_tag ''';']);
@@ -29,7 +29,8 @@ field_cell_default =  {{'on', '1'}
     {'name_list','[]'}
     {'visible_list','[]'}
     {'names_visible','1'}
-    {'color_table','[]'}};
+    {'color_table','[]'}
+{'boundary_cell','cell(0)'}};
 
 for i = 1 : length(field_cell_default)
 
