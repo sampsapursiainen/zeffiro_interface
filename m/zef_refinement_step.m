@@ -28,8 +28,8 @@ if eval('zef.refinement_on')
             refinement_type = zef.refinement_surface_compartments_2;
             surface_refinement_mode = zef.refinement_surface_mode_2;
         elseif refinement_flag == 3
-            refinement_type = zef.refinement_surface_compartments_2;
-            surface_refinement_mode = zef.refinement_surface_mode_2;
+            refinement_type = zef.refinement_surface_compartments_3;
+            surface_refinement_mode = zef.refinement_surface_mode_3;
         end
 
         if length(n_surface_refinement) > 1
