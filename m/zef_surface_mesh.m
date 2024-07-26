@@ -51,6 +51,7 @@ node_ind = [];
 node_pair = [];
 face_ind = [];
 
+
 tetra = uint32(tetra);
 
 
@@ -82,7 +83,8 @@ if evalin('caller', 'exist(''zef'', ''var'' )')
     end
 end
 
-
+I_global = [];
+tetra_diff = [];
 if not(isempty(I))
     I_global = [1 : size(tetra,1)]';
     if nargout > 4
@@ -156,7 +158,11 @@ if not(isempty(nodes))
 end
 
 if and(nargout > 3, nargin > 1)
+    if not(isempty(I_global))
     tetra_ind_global = I_global(tetra_ind);
+    else
+        tetra_ind_global = [];
+    end
 end
 
 if nargout > 4
@@ -164,8 +170,6 @@ if nargout > 4
 end
 
 if and(nargout > 4, nargin > 2)
-
-
 
     if use_gpu
         surface_triangles_aux = gpuArray(surface_triangles_aux);

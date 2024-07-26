@@ -37,7 +37,7 @@ sigma_vec = [];
 priority_vec = [];
 pml_vec = [];
 aux_active_compartment_ind = [];
-submesh_cell = cell(0);
+submesh_cell = zef.reuna_submesh_ind;
 
 for k = 1 : length(compartment_tags)
 
@@ -61,7 +61,6 @@ for k = 1 : length(compartment_tags)
 
         sigma_vec(i,1) = sigma_val;
         priority_vec(i,1) = priority_val;
-        submesh_cell{i} = eval(var_3);
         aux_compartment_ind(k) = i;
         if not(isequal(eval(var_4),-1))
             pml_vec(i,1) = 0 ;
@@ -77,11 +76,9 @@ end
 
 pml_ind_aux = find(pml_vec,1);
 
-reuna_p = eval('zef.reuna_p');
-reuna_t = eval('zef.reuna_t');
 
 n_compartments = 0;
-for k = 1 : eval('length(zef.reuna_p)')
+for k = 1 : length(zef.reuna_p)
     n_compartments = n_compartments + max(1,length(submesh_cell{k}));
 end
 
@@ -102,8 +99,8 @@ for i = 1 : length(zef.reuna_p)
 end
 
 domain_labels = double(zef.domain_labels_with_subdomains);
-[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
-priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
+% [priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+% priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 
 nodes = zef.nodes;
 tetra_aux = zef.tetra;
@@ -183,9 +180,10 @@ if optimizer_flag == 1
 end
 
 domain_labels_with_subdomains = domain_labels;
-[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
-priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
-[domain_labels] = submesh_ind_1(domain_labels(priority_ind));
+%[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+%priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
+%[domain_labels] = submesh_ind_1(domain_labels(priority_ind));
+[domain_labels] = submesh_ind_1(domain_labels);
 active_compartment_ind = zef_find_active_compartment_ind(zef,domain_labels);
 submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(active_compartment_ind);

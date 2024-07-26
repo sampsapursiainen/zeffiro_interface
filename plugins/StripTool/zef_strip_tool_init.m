@@ -54,4 +54,29 @@ else
 zef.strip_tool.h_strip_impedance.String = num2str(struct_aux.strip_impedance);
 end
 
+if not(isfield(struct_aux,'strip_length'))
+zef.strip_tool.h_strip_length.String = num2str(80); 
+else
+zef.strip_tool.h_strip_length.String = num2str(struct_aux.strip_length);
+end
+
+if not(isfield(struct_aux,'strip_n_sectors'))
+zef.strip_tool.h_strip_n_sectors.String = num2str(20); 
+else
+zef.strip_tool.h_strip_n_sectors.String = num2str(struct_aux.strip_n_sectors);
+end
+
+if not(isfield(struct_aux,'strip_conductivity'))
+struct_aux.strip_conductivity = 1e-15; 
+end
+
+if not(isfield(struct_aux,'strip_angle'))
+zef.strip_tool.h_strip_angle.String = num2str(0); 
+else
+zef.strip_tool.h_strip_angle.String = num2str(struct_aux.strip_angle);
+end
+
+zef.([zef.current_sensors '_strip_cell']){zef.strip_tool.current_strip} = struct_aux;
+
+
 
