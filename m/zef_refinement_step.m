@@ -306,14 +306,14 @@ if eval('zef.refinement_on')
         tetra(I,:) = tetra(I,[2 1 3 4]);
         clear tilavuus I;
 
-    end
-
-    zef_waitbar(1,1,h,'Surface refinement.');
-
     tetra_vec = sum(ismember(tetra,J_c),2);
     J = find(tetra_vec);
     J_c = unique(tetra(J,:));
     tetra_vec = sum(ismember(tetra,J_c),2);
+
+    end
+
+    zef_waitbar(1,1,h,'Surface refinement.');
 
     tetra_aux = tetra;
 
