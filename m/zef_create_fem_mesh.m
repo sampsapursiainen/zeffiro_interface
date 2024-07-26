@@ -173,7 +173,11 @@ refinement_volume_compartments = zef.refinement_volume_compartments;
 labeling_stage = 'meshing';
 end
 
+if isequal(labeling_loop_ind_aux,1)
+refinement_flag = 3;
+elseif isequal(labeling_loop_ind_aux,2)
 refinement_flag = 1;
+end
 
 labeling_flag = 1;
 zef_mesh_labeling_step;
