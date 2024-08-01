@@ -1,4 +1,4 @@
-zef.h_compartment_table.ColumnName(1:zef.compartment_table_size) =     {'ID','On','Name','Visible','Surface nodes','Surface triangles','Merge','Invert normal','Activity' };
+zef.h_compartment_table.ColumnName(1:zef.compartment_table_size) =     {'Index','On','Name','Visible','Surface nodes','Surface triangles','Merge','Invert normal','Activity' };
 zef.h_compartment_table.ColumnEditable(1:zef.compartment_table_size) = logical([1 1 1 1 0 0 1 1 1]);
 zef.h_compartment_table.ColumnEditable(zef.compartment_table_size:end) = true;
 zef.h_compartment_table.ColumnFormat(1:zef.compartment_table_size) = {'numeric','logical','char','logical','numeric','numeric','logical','logical',zef.compartment_activity};
