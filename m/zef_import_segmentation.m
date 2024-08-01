@@ -128,6 +128,13 @@ if not(isequal(file_name,0))
                 else
                     invert = '0';
                 end
+                if find(ismember(ini_cell(i,:),'scaling'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'scaling'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    scaling = (ini_cell{i,find(ismember(ini_cell(i,:),'scaling'),1)+1});
+                else
+                    scaling = '1';
+                end
                 if find(ismember(ini_cell(i,:),'activity'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'activity'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -290,6 +297,7 @@ if not(isequal(file_name,0))
                 end
                 eval(['zef.' compartment_tag '_name = ''' name ''';']);
                 eval(['zef.' compartment_tag '_affine_transform = {' affine_transform '};']);
+                eval(['zef.' compartment_tag '_scaling = ' scaling ';']);
                 eval(['zef.' compartment_tag '_sources = ' activity ';']);
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
@@ -450,6 +458,14 @@ if not(isequal(file_name,0))
                     affine_transform = mat2str(eye(4));
                 end
 
+                 if find(ismember(ini_cell(i,:),'scaling'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'scaling'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    scaling = ini_cell{i,find(ismember(ini_cell(i,:),'scaling'),1)+1};
+                else
+                    scaling = '1';
+                end
+
                 if find(ismember(ini_cell(i,:),'tag'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -481,6 +497,7 @@ if not(isequal(file_name,0))
                 eval(['zef.' sensor_tag '_name = ''' name ''';']);
                 eval(['zef.' sensor_tag '_on = ' on  ';']);
                 eval(['zef.' sensor_tag '_visible = ' visible ';']);
+                eval(['zef.' sensor_tag '_scaling = ' scaling ';']);
                 eval(['zef.' sensor_tag '_affine_transform = {' affine_transform '};']);
                 eval(['zef.' sensor_tag '_imaging_method_name = ''' modality ''';']);
                 eval(['zef.' sensor_tag '_name_list = sensor_taglist_cell ;']);
