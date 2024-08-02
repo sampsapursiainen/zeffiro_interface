@@ -223,7 +223,7 @@ end
 
 % Prevent starting of Zeffiro, if there is an existing value of zef.
 
-if not(args.zeffiro_restart) && evalin("base","exist('zef', 'var');")
+if not(args.zeffiro_restart) && evalin("caller","exist('zef', 'var');")
 
     error( ...
         "It looks like another instance of Zeffiro Interface is already open." ...
