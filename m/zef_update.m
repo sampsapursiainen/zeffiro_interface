@@ -14,10 +14,13 @@ if isfield(zef,'h_zeffiro_window_main')
         zef.aux_field_3 = [];
         zef.aux_field_4 = [];
 
+if length(zef.compartment_tags) > 0
+
         if not(isempty(zef.aux_field_1))
             for zef_i = 1 : size(zef.aux_field_1,1)
 
                 zef_j = length(zef.compartment_tags) - zef_i + 1;
+
                 if not(isnan(zef.aux_field_1{zef_i,1}))
                     eval(['zef.' zef.compartment_tags{zef_j}, '_priority = ' num2str(zef.aux_field_1{zef_i,1}) ';']);
                     zef.aux_field_2(zef_j) = 1;
@@ -58,6 +61,10 @@ if isfield(zef,'h_zeffiro_window_main')
             zef.h_compartment_table.Data = zef.aux_field_1(find(zef.aux_field_3),:);
 
         end
+
+end
+
+        zef = zef_update_compartment_table_data(zef);
 
         %sensors start
 
@@ -114,8 +121,6 @@ if isfield(zef,'h_zeffiro_window_main')
         end
 
         %sensors end
-
-        zef = zef_update_compartment_table_data(zef);
 
         if isfield(zef,'h_zeffiro_menu')
             if isvalid(zef.h_zeffiro_menu)

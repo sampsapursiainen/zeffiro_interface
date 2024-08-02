@@ -16,6 +16,7 @@ cell_aux{i}.compartment_tag{2} = zef.compartment_tags{1};
 zef.([zef.compartment_tags{1} '_name']) =  ['Encapsulation, ID: ' num2str(cell_aux{i}.strip_id) ', Tag: ' cell_aux{i}.strip_tag ', Model: ' zef.strip_tool.h_strip_model.String{cell_aux{i}.strip_model} ];
 zef.([zef.compartment_tags{1} '_triangles']) = strip_struct.triangles{2};
 zef.([zef.compartment_tags{1} '_points']) = points{2};
+zef = zef_update_compartment_table_data(zef);
 
 end
 
@@ -24,9 +25,13 @@ cell_aux{i}.compartment_tag{1} = zef.compartment_tags{1};
 zef.([zef.compartment_tags{1} '_name']) =  ['Strip, ID: ' num2str(cell_aux{i}.strip_id) ', Tag: ' cell_aux{i}.strip_tag ', Model: ' zef.strip_tool.h_strip_model.String{cell_aux{i}.strip_model} ];
 zef.([zef.compartment_tags{1} '_triangles']) = strip_struct.triangles{1};
 zef.([zef.compartment_tags{1} '_points']) = points{1};
+zef = zef_update_compartment_table_data(zef);
 
-zef.([zef.current_sensors '_strip_cell']) = cell_aux{i};
+cell_aux{i}.strip_status = 'Embedded';
 
-zef = zef_update(zef);
+zef.([zef.current_sensors '_strip_cell']) = cell_aux;
+
+zef = zef_strip_tool_init(zef);
+zef = zef_strip_tool_update(zef);
 
 end

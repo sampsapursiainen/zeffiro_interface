@@ -125,7 +125,65 @@ else
 zef.strip_tool.h_strip_angle.String = num2str(struct_aux.strip_angle);
 end
 
+if isfield(struct_aux,'strip_status')
+    if isequal(struct_aux.strip_status,'Embedded')
+       zef.strip_tool.h_tip_point_1.Enable = 'off';
+                        zef.strip_tool.h_tip_point_2.Enable = 'off';
+                        zef.strip_tool.h_tip_point_3.Enable = 'off';
+                 zef.strip_tool.h_orientation_axis_1.Enable = 'off';
+                 zef.strip_tool.h_orientation_axis_2.Enable = 'off';
+                 zef.strip_tool.h_orientation_axis_3.Enable = 'off';
+                        zef.strip_tool.h_strip_model.Enable = 'off';
+                          zef.strip_tool.h_strip_tag.Enable = 'off';
+                   zef.strip_tool.h_strip_impedance.Enable = 'off';
+                    zef.strip_tool.h_strip_n_sectors.Enable = 'off';
+                       zef.strip_tool.h_strip_length.Enable = 'off';
+                    zef.strip_tool.h_embed.Enable = 'off';
+                        zef.strip_tool.h_strip_angle.Enable = 'off';
+                 zef.strip_tool.h_strip_conductivity.Enable = 'off';
+              zef.strip_tool.h_encapsulation_shift_1.Enable = 'off';
+              zef.strip_tool.h_encapsulation_shift_2.Enable = 'off';
+              zef.strip_tool.h_encapsulation_shift_3.Enable = 'off';
+                   zef.strip_tool.h_encapsulation_on.Enable = 'off';
+   zef.strip_tool.h_encapsulation_orientation_axis_1.Enable = 'off';
+   zef.strip_tool.h_encapsulation_orientation_axis_2.Enable = 'off';
+   zef.strip_tool.h_encapsulation_orientation_axis_3.Enable = 'off';
+         zef.strip_tool.h_encapsulation_conductivity.Enable = 'off';
+               zef.strip_tool.h_encapsulation_length.Enable = 'off';
+            zef.strip_tool.h_encapsulation_thickness.Enable = 'off';
+                         zef.strip_tool.h_strip_mode.Enable = 'off';
+    else
+       zef.strip_tool.h_tip_point_1.Enable = 'on';
+                        zef.strip_tool.h_tip_point_2.Enable = 'on';
+                        zef.strip_tool.h_tip_point_3.Enable = 'on';
+                 zef.strip_tool.h_orientation_axis_1.Enable = 'on';
+                 zef.strip_tool.h_orientation_axis_2.Enable = 'on';
+                 zef.strip_tool.h_orientation_axis_3.Enable = 'on';
+                        zef.strip_tool.h_strip_model.Enable = 'on';
+                          zef.strip_tool.h_strip_tag.Enable = 'on';
+                   zef.strip_tool.h_strip_impedance.Enable = 'on';
+                    zef.strip_tool.h_strip_n_sectors.Enable = 'on';
+                       zef.strip_tool.h_strip_length.Enable = 'on';
+                    zef.strip_tool.h_embed.Enable = 'on';
+                        zef.strip_tool.h_strip_angle.Enable = 'on';
+                 zef.strip_tool.h_strip_conductivity.Enable = 'on';
+              zef.strip_tool.h_encapsulation_shift_1.Enable = 'on';
+              zef.strip_tool.h_encapsulation_shift_2.Enable = 'on';
+              zef.strip_tool.h_encapsulation_shift_3.Enable = 'on';
+                   zef.strip_tool.h_encapsulation_on.Enable = 'on';
+   zef.strip_tool.h_encapsulation_orientation_axis_1.Enable = 'on';
+   zef.strip_tool.h_encapsulation_orientation_axis_2.Enable = 'on';
+   zef.strip_tool.h_encapsulation_orientation_axis_3.Enable = 'on';
+         zef.strip_tool.h_encapsulation_conductivity.Enable = 'on';
+               zef.strip_tool.h_encapsulation_length.Enable = 'on';
+            zef.strip_tool.h_encapsulation_thickness.Enable = 'on';
+                         zef.strip_tool.h_strip_mode.Enable = 'on';
+    end
+end
+
 zef.([zef.current_sensors '_strip_cell']){zef.strip_tool.current_strip} = struct_aux;
+
+end
 
 
 

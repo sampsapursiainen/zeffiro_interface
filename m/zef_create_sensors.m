@@ -30,7 +30,7 @@ field_cell_default =  {{'on', '1'}
     {'visible_list','[]'}
     {'names_visible','1'}
     {'color_table','[]'}
-{'boundary_cell','cell(0)'}};
+{'functions','cell(0)'}};
 
 for i = 1 : length(field_cell_default)
 

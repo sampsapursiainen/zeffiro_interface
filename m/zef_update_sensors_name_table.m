@@ -30,6 +30,26 @@ end
 if not(isempty(eval(['zef.' zef.current_sensors '_points'])))
     eval(['zef.' zef.current_sensors '_points = ' 'zef.' zef.current_sensors '_points([' num2str(zef.aux_field_2) '],:);']);
 end
+
+if isfield(zef,[zef.current_sensors '_functions'])
+zef.([zef.current_sensors '_functions_aux']) = cell(1,size(zef.([zef.current_sensors '_points']),1));
+zef.([zef.current_sensors '_functions_aux_ind']) = setdiff([1:size(zef.([zef.current_sensors '_functions']),1)],find(cellfun(@isempty, zef.([zef.current_sensors '_functions']))));
+zef.([zef.current_sensors '_functions_aux'])(zef.([zef.current_sensors '_functions_aux_ind'])) = zef.([zef.current_sensors '_functions'])(zef.([zef.current_sensors '_functions_aux_ind']));
+zef.([zef.current_sensors '_functions']) = zef.([zef.current_sensors '_functions_aux']);
+zef = rmfield(zef,[zef.current_sensors '_functions_aux']);
+zef = rmfield(zef,[zef.current_sensors '_functions_aux_ind']);
+end
+
+if not(isempty(eval(['zef.' zef.current_sensors '_points'])))
+    eval(['zef.' zef.current_sensors '_points = ' 'zef.' zef.current_sensors '_points([' num2str(zef.aux_field_2) '],:);']);
+end
+
+if isfield(zef,[zef.current_sensors '_functions'])
+if not(isempty(zef.([zef.current_sensors '_functions'])))
+    zef.([zef.current_sensors '_functions']) = zef.([zef.current_sensors '_functions'])(zef.aux_field_2);
+end
+end
+
 if not(isempty(eval(['zef.' zef.current_sensors '_directions'])))
     eval(['zef.' zef.current_sensors '_directions = ' 'zef.' zef.current_sensors '_directions([' num2str(zef.aux_field_2) '],:);']);
 end
@@ -50,4 +70,4 @@ if not(isempty(find(eval(['zef.' zef.current_sensors '_visible_list']))))
     end
 end
 
-zef_update
+zef = zef_update(zef);
