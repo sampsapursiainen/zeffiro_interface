@@ -190,8 +190,6 @@ submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
 
-    keyboard
-
    %I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));
     I_2 = zeros(size(tetra,1),1);
