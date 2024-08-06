@@ -23,10 +23,9 @@ if not(isempty(h_strip_encapsulation))
 end
 
 hold on
-h_strip = trimesh(strip_struct.triangles{1},points{1}(:,1),points{1}(:,2),points{1}(:,3));
-h_strip.FaceColor = [0 1 1];
-h_strip.EdgeColor = 'none';
-h_strip.Tag = 'additional: strip';
+
+triangle_ind = [1:size(strip_struct.triangles{1},1)];
+
 
 if strip_struct.encapsulation_on
 
@@ -39,13 +38,19 @@ end
 
 for i = 1 : strip_struct.strip_n_contacts
 
-[triangles] = zef_get_strip_contacts(i,strip_struct,zef);
-h_strip_contact = trimesh(triangles,points{1}(:,1),points{1}(:,2),points{1}(:,3));
+[contacts, ~, triangle_ind_aux] = zef_get_strip_contacts(i,strip_struct,zef);
+h_strip_contact = trimesh(contacts(:,2:4),points{1}(:,1),points{1}(:,2),points{1}(:,3));
 h_strip_contact.FaceColor = [0 0 0];
 h_strip_contact.EdgeColor = 'none';
 h_strip_contact.Tag = 'additional: strip contact';
+triangle_ind = setdiff(triangle_ind, triangle_ind_aux);
 
 end
+
+h_strip = trimesh(strip_struct.triangles{1}(triangle_ind,:),points{1}(:,1),points{1}(:,2),points{1}(:,3));
+h_strip.FaceColor = [0 1 1];
+h_strip.EdgeColor = 'none';
+h_strip.Tag = 'additional: strip';
 
 hold off
 

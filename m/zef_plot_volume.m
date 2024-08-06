@@ -106,7 +106,6 @@ sphere_scale = aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
-surface_triangles = eval('zef.surface_triangles');
 nodes = eval('zef.nodes');
 
 if size(sensors,2) == 6 & ismember(eval('zef.imaging_method'), [1 4 5])

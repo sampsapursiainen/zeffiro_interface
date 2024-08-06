@@ -144,7 +144,7 @@ for k = 1 : length(compartment_tags)
     s_data_aux = [];
 
     if ismember(eval('zef.imaging_method'),1)
-        f_handle = eval('zef.create_patch_sensor');
+        f_handle = zef.create_patch_sensor;
         if not(isempty(f_handle))
             s_points = f_handle(zef,s_points);
         end

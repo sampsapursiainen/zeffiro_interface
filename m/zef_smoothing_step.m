@@ -177,17 +177,28 @@ if eval('zef.mesh_smoothing_on')
             end
         end
 
-        I_sensors = find(not(ismember(domain_labels,find(pml_vec,1))));
-        surface_triangles = zef_surface_mesh(tetra(I_sensors,:));
-        [sensors_attached_volume] = zef_attach_sensors_volume(zef,sensors,'mesh',nodes,tetra,surface_triangles);
-        L = zef_electrode_struct(sensors_attached_volume);
-        electrode_is_point = eval('zef.sensors');
-        if not(isempty(L))
-            if size(electrode_is_point,2) == 3
+zef_waitbar(0,1,h,'Surface triangles.');
+unique_domain_labels = unique(submesh_ind_1(domain_labels));
+n_unique_domain_labels = length(unique_domain_labels);
+surface_triangles = cell(0);
+for zef_j = 1 : n_unique_domain_labels - 1
+    zef_waitbar(zef_j,n_unique_domain_labels,h,'Surface triangles.');
+I_aux = find(submesh_ind_1(domain_labels) <= unique_domain_labels(zef_j));
+surface_triangles{unique_domain_labels(zef_j)} = double(zef_surface_mesh(tetra(I_aux,:)));
+end
+
+        electrode_is_point = zef.sensors;
+  if size(electrode_is_point,2) == 3
                 electrode_is_point = zeros(size(electrode_is_point,1),1);
             else
                 electrode_is_point = find(electrode_is_point(:,4)==0);
             end
+
+            if length(electrode_is_point) < size(zef.sensors,1)
+                bypass_functions = 1;
+        [sensors_attached_volume] = zef_attach_sensors_volume(zef,sensors,'mesh',nodes,tetra,surface_triangles, bypass_functions);
+        L = zef_electrode_struct(sensors_attached_volume);
+        if not(isempty(L))
            zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
             C = [];
             for electrode_ind = 1 : length(L)
@@ -236,6 +247,7 @@ if eval('zef.mesh_smoothing_on')
                 end
             end
         end
+            end
 
         if smoothing_steps_vol(smoothing_repetition_ind) > 0
             if smoothing_steps_vol(smoothing_repetition_ind) < 1

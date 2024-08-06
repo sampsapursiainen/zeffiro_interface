@@ -2,7 +2,7 @@ function strip_struct = zef_create_strip(strip_struct)
 
 strip_struct = zef_get_strip_parameters(strip_struct);
 [triangles{1}, points{1}] = zef_simple_cylinder_generator(strip_struct.strip_radius,strip_struct.strip_n_sectors,strip_struct.strip_length);
-[triangles{2}, points{2}] = zef_simple_cylinder_generator(strip_struct.strip_radius+strip_struct.encapsulation_thickness,strip_struct.strip_n_sectors,strip_struct.encapsulation_length);
+[triangles{2}, points{2}] = zef_simple_cylinder_generator(strip_struct.strip_radius+strip_struct.encapsulation_thickness,strip_struct.strip_n_sectors,strip_struct.encapsulation_length+2*strip_struct.encapsulation_thickness);
 points{1}(:,3) = points{1}(:,3) + strip_struct.strip_length/2;
 points{2}(:,3) = points{2}(:,3) + strip_struct.strip_length/2 - strip_struct.encapsulation_thickness;
 strip_struct.points = points;

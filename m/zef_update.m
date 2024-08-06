@@ -10,6 +10,10 @@ if isfield(zef,'h_zeffiro_window_main')
     if isvalid(zef.h_zeffiro_window_main)
 
         zef.aux_field_1 = zef.h_compartment_table.Data;
+        if not(isempty(zef.aux_field_1))
+        not_isnan_row = find(not(cellfun(@isnan,zef.h_compartment_table.Data(:,1))));
+        zef.aux_field_1 = zef.aux_field_1(not_isnan_row,:);
+        end
         zef.aux_field_2 = zeros(size(zef.aux_field_1,1),1);
         zef.aux_field_3 = [];
         zef.aux_field_4 = [];

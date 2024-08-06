@@ -203,8 +203,15 @@ I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));
     nodes = nodes(unique_vec_1,:);
 end
 
-I_aux = find(not(ismember(domain_labels,find(pml_vec,1))));
-surface_triangles = zef_surface_mesh(tetra(I_aux,:));
+zef_waitbar(0,1,h,'Surface triangles.');
+unique_domain_labels = unique(domain_labels);
+n_unique_domain_labels = length(unique_domain_labels);
+surface_triangles = cell(0);
+for zef_j = 1 : n_unique_domain_labels
+    zef_waitbar(zef_j,n_unique_domain_labels,h,'Surface triangles.');
+I_aux = find(domain_labels <= unique_domain_labels(zef_j));
+surface_triangles{unique_domain_labels(zef_j)} = double(zef_surface_mesh(tetra(I_aux,:)));
+end
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
@@ -228,7 +235,7 @@ zef.active_compartment_ind = double(active_compartment_ind);
 zef.non_source_ind = double(non_source_ind);
 zef.nodes = nodes;
 zef.tetra = double(tetra);
-zef.surface_triangles = double(surface_triangles);
+zef.surface_triangles = surface_triangles;
 zef.submesh_ind = double(submesh_ind);
 zef.condition_number = condition_number;
 
