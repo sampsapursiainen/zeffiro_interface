@@ -9,6 +9,8 @@ if nargin < 5
 end
 
 contacts = [];
+sensor_info = struct;
+triangle_ind = [];
 sensor_info.strip_id = strip_struct.strip_id;
 sensor_info.compartment_index = [];
 if isfield(strip_struct,'compartment_tag')

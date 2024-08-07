@@ -9,7 +9,7 @@ domain_type = 'sensor_info';
 if isfield(zef, zef.([zef.current_sensors '_get_functions']))
 for i_ind = 1 : length(zef.([zef.current_sensors '_get_functions']))
     h_function_aux = zef.([zef.current_sensors '_get_functions']){i_ind}; 
-    [~, sensor_info] = feval(h_function_aux, domain_type);
+    [~, sensor_info] = zef_sensor_get_function_eval(h_function_aux, zef, domain_type);
     if isequal(strip_id, sensor_info.strip_id)
     zef.([zef.current_sensors '_get_functions'])(i_ind) = cell(1);
     end

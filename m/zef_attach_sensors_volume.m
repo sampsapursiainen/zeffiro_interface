@@ -46,7 +46,7 @@ sensors_attached_volume_functions = cell(0);
 if isfield(zef,[zef.current_sensors '_get_functions'])
     I_get_functions = find(cellfun(@isempty,zef.([zef.current_sensors '_get_functions']))==0);
     for i_ind = 1 : length(I_get_functions)
-      sensors_attached_volume_functions{i_ind} = feval(zef.([zef.current_sensors '_get_functions']){I_get_functions(i_ind)},attach_type);
+      sensors_attached_volume_functions{i_ind} = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){I_get_functions(i_ind)},zef,attach_type);
     end
 end
 end
@@ -90,6 +90,8 @@ if ismember(zef.imaging_method,[1,4,5])
         else
             surface_ind = find(not(ismember(sensors(:,5),0)));
             deep_ind = setdiff(find(ismember(sensors(:,4),0)),surface_ind);
+        surface_ind = setdiff(surface_ind, I_get_functions);
+         deep_ind = setdiff(deep_ind, I_get_functions);
         end
         sensors_attached_volume = sensors;
         for i = 1 : length(deep_ind)

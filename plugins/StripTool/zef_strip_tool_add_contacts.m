@@ -30,7 +30,7 @@ zef = zef_init_sensors_name_table(zef);
 
 current_strip_string = num2str(zef.strip_tool.current_strip);
 for i = 1 : size(points_2,1)
-zef.([zef.current_sensors '_get_functions']){i+size(points_1,1)} = @(domain_type)evalin('caller',['zef_get_strip_contacts(' num2str(i) ',zef.' zef.current_sensors '_strip_cell{' current_strip_string '},zef,''' domain_type ''',' num2str(size(points_1,1)+1) ');']);
+zef.([zef.current_sensors '_get_functions']){i+size(points_1,1)} = ['zef_get_strip_contacts(' num2str(i) ',project_struct.' zef.current_sensors '_strip_cell{' current_strip_string '}, project_struct, domain_type,' num2str(size(points_1,1)+1) ');'];
 end
 
 end

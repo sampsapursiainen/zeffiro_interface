@@ -1692,7 +1692,7 @@ surface_index_aux = length(reuna_p);
                     if isfield(zef,[zef.current_sensors '_get_functions'])
                     if length(zef.([zef.current_sensors '_get_functions'])) >= unique_sensors_aux_1(i)
                         if not(isempty(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}))
-                            [~, sensor_info] = zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}('sensor_info');
+                            [~, sensor_info] = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}, zef,'sensor_info');
                             surface_index_aux = sensor_info.compartment_index; 
                         end
                     end
