@@ -319,7 +319,7 @@ for k = 1 : length(compartment_tags)
     eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_points = reuna_p{box_ind};']);
     eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_triangles = reuna_t{box_ind};']);
     eval(['zef.' compartment_tags{reuna_type{box_ind,3}} '_submesh_ind = size(reuna_t{box_ind},1);']);
-
+    reuna_submesh_ind{box_ind} = size(reuna_t{box_ind},1);
 end
 
 end
