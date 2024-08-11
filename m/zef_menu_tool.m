@@ -202,7 +202,7 @@ zef.h_zeffiro_menu.ZefUseLog = zef.use_log;
 if not(isprop(zef.h_zeffiro_menu,'ZefWaitbarSize'))
     addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');
 end
-zef.h_zeffiro_menu.ZefWaitbarSize(1) = 1.5*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3);
+zef.h_zeffiro_menu.ZefWaitbarSize(1) = 1*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3);
 zef.h_zeffiro_menu.ZefWaitbarSize(2) = 0.7*zef.h_zeffiro_menu.ZefWaitbarSize(1);
 
 if not(isprop(zef.h_zeffiro_menu,'ZefTaskId'))
