@@ -64,14 +64,9 @@ if isempty(zef.h_segmentation_tool_toggle.UserData)
     zef.h_set_position.ButtonPushedFcn = 'zef_set_position(zef);';
 
     zef.h_segmentation_tool_toggle.UserData = 1;
-    eval(zef.h_segmentation_tool_toggle.ButtonPushedFcn);
+    %eval(zef.h_segmentation_tool_toggle.ButtonPushedFcn);
     %zef.h_zeffiro_window_main.Position = zef.segmentation_tool_default_position;
-    relative_size = 1;
-width_aux = relative_size*zef.segmentation_tool_default_position(3);
-        height_aux = 1.15*zef.segmentation_tool_default_position(3);
-        vertical_aux = zef.segmentation_tool_default_position(2)+zef.segmentation_tool_default_position(4)-height_aux;
-        horizontal_aux = zef.segmentation_tool_default_position(1)+zef.segmentation_tool_default_position(3)-width_aux;
-        zef.h_zeffiro_window_main.Position = [horizontal_aux vertical_aux width_aux height_aux]; 
+
 end
 
 set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
@@ -87,3 +82,10 @@ zef = zef_update(zef);
 
 zef.h_zeffiro_window_main.CloseRequestFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
 zef.h_zeffiro_window_main.DeleteFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
+
+    relative_size = 1;
+width_aux = relative_size*zef.segmentation_tool_default_position(3);
+        height_aux = 1.15*zef.segmentation_tool_default_position(3);
+        vertical_aux = zef.segmentation_tool_default_position(2)+zef.segmentation_tool_default_position(4)-height_aux;
+        horizontal_aux = zef.segmentation_tool_default_position(1)+zef.segmentation_tool_default_position(3)-width_aux;
+        zef.h_zeffiro_window_main.Position = [horizontal_aux vertical_aux width_aux height_aux]; 

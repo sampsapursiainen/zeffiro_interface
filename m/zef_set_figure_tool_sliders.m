@@ -34,6 +34,7 @@ if eval('isfield(zef,''h_axes1'');')
             h_axes = findobj(zef.h_update_colormap.Parent.Children,'Tag','axes1');
             axis(h_axes,'auto');
             axis(h_axes,'tight');
+            axis(h_axes,'equal');
             
         else
 
