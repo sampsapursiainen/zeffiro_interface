@@ -7,8 +7,6 @@ end
 set(groot,'defaultFigureVisible','off')
 zef_data = zef_segmentation_tool_app_exported;
 %zef_data.h_zeffiro_window_main.Visible = zef.use_display;
-zef.h_zeffiro_window_main.CloseRequestFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
-zef.h_zeffiro_window_main.DeleteFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
 
 set(groot,'defaultFigureVisible','on')
 zef.fieldnames = fieldnames(zef_data);
@@ -59,7 +57,7 @@ set(zef.h_zeffiro_window_main,'AutoResizeChildren','off');
 zef_set_size_change_function(zef.h_zeffiro_window_main,2);
 zef.h_windows_open = findall(groot, 'Type','figure','-regexp','Name','ZEFFIRO Interface:*','-not','Name','ZEFFIRO Interface: Segmentation tool');
 
-set(zef.h_zeffiro_window_main,'DeleteFcn','zef_closereq;');
+%set(zef.h_zeffiro_window_main,'DeleteFcn','zef_closereq;');
 
 if isempty(zef.h_segmentation_tool_toggle.UserData)
     zef.h_segmentation_tool_toggle.ButtonPushedFcn = 'zef_segmentation_tool_toggle(zef,zef.h_segmentation_tool_toggle);';
@@ -86,3 +84,6 @@ zef.h_zeffiro_window_main.ZefTool = mfilename;
 zef = zef_build_compartment_table(zef);
 
 zef = zef_update(zef);
+
+zef.h_zeffiro_window_main.CloseRequestFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
+zef.h_zeffiro_window_main.DeleteFcn = 'zef.h_zeffiro_window_main.Visible=''off'';';
