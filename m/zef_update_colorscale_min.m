@@ -33,4 +33,6 @@ clim_vec = h.CLim;
 clim_vec(1) = clim_vec(1)*10^(slider_value_new);
 h.CLim = clim_vec;
 
+zef_update_contour(zef);
+
 end

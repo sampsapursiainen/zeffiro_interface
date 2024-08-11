@@ -12,12 +12,11 @@ if not(hold_val)
     hold(h_axes,'on');
 end
 
-h_sphere = findobj(h_axes.Children,'Tag','additional:nse_sphere');
+h_sphere = findobj(h_axes.Children,'Tag','additional: nse_sphere');
 delete(h_sphere);
 
 h_arrow = findobj(h_axes.Children,'Tag','additional: mean velocity in roi');
 delete(h_arrow);
-
 
 [X,Y,Z]  = sphere(100);
 
@@ -26,13 +25,13 @@ if not(isempty(nse_field.bv_vessels_1))
 end
 
 h_surf = surf(nse_field.roi_radius*X + nse_field.roi_x, nse_field.roi_radius*Y + nse_field.roi_y, nse_field.roi_radius*Z + nse_field.roi_z); 
-   h_arrow = zef_plot_3D_arrow(nse_field.roi_x,nse_field.roi_y,nse_field.roi_z,dir_vec(1),dir_vec(2),dir_vec(3),3*nse_field.roi_radius,2,'r');
-    set(h_arrow,'Tag','additional: mean velocity in roi');
+h_arrow = zef_plot_3D_arrow(nse_field.roi_x,nse_field.roi_y,nse_field.roi_z,-dir_vec(1),-dir_vec(2),-dir_vec(3),2.*nse_field.roi_radius,2,'r');
+set(h_arrow,'Tag','additional: mean velocity in roi');
 
 set(h_surf,'FaceColor',[0.5 0.5 0.5]);
 set(h_surf,'EdgeColor','none');
 set(h_surf,'FaceAlpha',0.5);
-set(h_surf,'Tag','additional:nse_sphere');
+set(h_surf,'Tag','additional: nse_sphere');
 
 
 if not(hold_val)

@@ -33,8 +33,8 @@ else
         time_val = now;
         for i = 1 : length(I)
             try
-                aux_var = load(zef.project_matfile,zeffiro_variable_data{I(i),2});
-                zef.(zeffiro_variable_data{I(i),2}) = aux_var.(zeffiro_variable_data{I(i),2});
+                aux_var = load(zef.project_matfile,zef.zeffiro_variable_data{I(i),2});
+                zef.(zef.zeffiro_variable_data{I(i),2}) = aux_var.(zef.zeffiro_variable_data{I(i),2});
                 zef.zeffiro_variable_data{I(i),3} = time_val;
             catch
                 J(end+1) = I(i);

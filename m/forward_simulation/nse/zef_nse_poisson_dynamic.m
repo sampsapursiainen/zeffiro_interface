@@ -74,6 +74,11 @@ I = find(param_aux(t_ind));
 area_arteries = sum(area(I));
 param_aux_integral_mean = param_aux_integral_mean/area_arteries;
 
+param_aux_ones = zeros(size(param_aux));
+param_aux_ones(t_ind) = 1;
+w_3 = zef_surface_scalar_vector_F(v_1_nodes, v_1_tetra, param_aux_ones);
+sum_w_3 = sum(w_3);
+
 gravity_amplitude = nse_field.gravity_amplitude;
 gravity_x = nse_field.gravity_x;
 gravity_y = nse_field.gravity_y;
@@ -109,6 +114,10 @@ c_vec = zef_volume_scalar_vector_F(v_1_nodes, v_1_tetra);
 Q_1_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_1;
 Q_2_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_2;
 Q_3_v1 = spdiags(1./c_vec,0,size(v_1_nodes,1),size(v_1_nodes,1))*Q_3;
+
+Q_1_v12 = Q_1_v1;
+Q_2_v12 = Q_2_v1;
+Q_3_v12 = Q_3_v1;
 
 Q_1_v2 = Q_1_v1(:,i_node_ind);
 Q_2_v2 = Q_2_v1(:,i_node_ind);
@@ -268,15 +277,15 @@ else
 end
 
 KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
-
+ 
 for i = 1 : n_time
 
     pressure_aux = (p + pressure_reference + p_hydrostatic)/hgmm_conversion;
-    total_flow_aux = sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1)/(ml_min_conversion);
+    total_flow_aux = (sum(((p + pressure_reference)/hgmm_conversion).*w_3)/sum_w_3)*nse_field.total_flow/nse_field.pressure;
     zef_waitbar(i,n_time,h_waitbar,['NSE solver: compute, total flow (ml/min): ' sprintf('%0.3g',total_flow_aux) ', 90 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.9)) ', 10 % pressure quantile (Hgmm): ' sprintf('%0.3g',quantile(pressure_aux,0.1)) '.']);
 
     y_0 = y(i);
-
+    
     for quadrature_step_ind = 1 : n_q_steps
 
         if nse_field.nse_type == 2
@@ -311,8 +320,10 @@ for i = 1 : n_time
         if quadrature_step_ind == 1
             if i == 1
                 b = D_1 * (M_1 * (D_1 * (p_1  + source_vec * (y_0 - 2*y_1))));
+
             else
-                b = D_1 * (M_1 * (D_1 * (2*p_1 - p_2  + source_vec * (y_0 - 2*y_1 + y_2))));
+               b = D_1 * (M_1 * (D_1 * (2*p_1 - p_2  + source_vec * (y_0 - 2*y_1 + y_2))));
+
             end
 
             g_mu_1 = Q_1_v1*mu_vec(i_node_ind);
@@ -364,6 +375,8 @@ for i = 1 : n_time
 
             p_2 = p_1;
             p_1 = p;
+            max(p_1);
+            min(p_1);
             y_2 = y_1;
             y_1 = y_0;
 
@@ -411,7 +424,7 @@ for i = 1 : n_time
                 bp_vessels_aux(nse_field.bp_vessel_node_ind) =  abs(p + pressure_reference);
                 bf_vessels_to_capillaries = bp_vessels_aux(nse_field.bf_capillary_node_ind);
                 I_boundary = find(bf_vessels_to_capillaries);
-                total_flow_estimate= sum(sqrt(u_1.^2 + u_2.^2 + u_3.^2).*w_1);
+                total_flow_estimate = (sum(((p + pressure_reference)/hgmm_conversion).*w_3)/sum_w_3)*nse_field.total_flow/nse_field.pressure;
                 r = total_flow_estimate*bf_vessels_to_capillaries./sum(pressure_reference.*w_2(I_boundary));
 
                 if nse_field.use_gpu
@@ -487,29 +500,82 @@ for i = 1 : n_time
         end
     end
 
+
+        u_1_2 = zeros(size(K_1,1),1);
+        u_1_2(i_node_ind,1) = u_1;
+        u_2_2 = zeros(size(K_1,1),1);
+        u_2_2(i_node_ind,1) = u_2;
+        u_3_2 = zeros(size(K_1,1),1);
+        u_3_2(i_node_ind,1) = u_3;
+%         collect1{i}=gather(u_1_2);
+%         collect2{i}=gather(u_2_2);
+%         collect3{i}=gather(u_3_2);
+       % trace_strain_rate2 = rateofshear(adj1,dist1,u_1_2,u_2_2,u_3_2);
+%        trace_strain_rate = Q_1_v12*u_1_2;
+        trace_strain_rate = 4.*(Q_1_v12*u_1_2).^2 + 4.*(Q_2_v12*u_2_2).^2 + 4.*(Q_3_v12*u_3_2).^2 + 2.*(Q_2_v12*u_1_2+Q_1_v12*u_2_2).^2 +...
+            2.*(Q_3_v12*u_1_2+Q_1_v12*u_3_2).^2+2.*(Q_3_v12*u_2_2+Q_2_v12*u_3_2).^2;
+        trace_strain_rate = sqrt((1/2).*trace_strain_rate);
+% if i >= n_time*0.5
     if nse_field.viscosity_model == 2
 
-        trace_strain_rate = abs(Q_1_v2*u_1) + abs(Q_2_v2*u_2) + abs(Q_3_v2*u_3);
+%         trace_strain_rate = abs(Q_1_v2*u_1) + abs(Q_2_v2*u_2) + abs(Q_3_v2*u_3);
         mu_vec = nse_field.mu*trace_strain_rate.^(nse_field.viscosity_exponent-1);
 
     elseif nse_field.viscosity_model == 3
 
-        trace_strain_rate = abs(Q_1_v2*u_1) + abs(Q_2_v2*u_2) + abs(Q_3_v2*u_3);
+%         trace_strain_rate = abs(Q_1_v2*u_1) + abs(Q_2_v2*u_2) + abs(Q_3_v2*u_3);
         mu_vec = nse_field.mu + nse_field.viscosity_delta.*(1 + (nse_field.viscosity_relaxation_time*trace_strain_rate).^nse_field.viscosity_transition).^((nse_field.viscosity_exponent-1)./nse_field.viscosity_transition);
 
-    end
 
-    if ismember(nse_field.viscosity_model,[2 3])
+    elseif nse_field.viscosity_model == 4
+
+         C1 = 0.00797;
+         C2 = 0.0608;
+         C3 = 0.00499;
+         C4 = 14.585;
+         Hem = 40;
+         TPMA = 25.9;
+         mu_vec = 0.1*C1*exp(C2*Hem)*exp(C4*(TPMA/(Hem^2))).*trace_strain_rate.^-(C3*Hem);
+         mu_vec(mu_vec>0.056) = 0.056;
+         mu_vec(mu_vec<0.00345) = 0.00345;
+      elseif nse_field.viscosity_model == 5
+
+         lambda_g = zeros(size(K_1,1),1);
+         n_g = zeros(size(K_1,1),1);
+%          trace_strain_rate2 = abs(Q_1_v2*u_1) + abs(Q_2_v2*u_2) + abs(Q_3_v2*u_3);
+%          trace_strain_rate = rateofshear(kk,u_1_2,u_2_2,u_3_2);
+         lambda_g(trace_strain_rate>0.01) = 0.0345 + 0.25.*exp(-(1+trace_strain_rate(trace_strain_rate>0.01)./50).*exp(-3.*(trace_strain_rate(trace_strain_rate>0.01)).^-1));
+         n_g(trace_strain_rate>0.01) = 1 - 0.45.*exp(-(1+trace_strain_rate(trace_strain_rate>0.01)./50).*exp(-4.*(trace_strain_rate(trace_strain_rate>0.01)).^-1));
+         mu_vec(trace_strain_rate>0.01) = 0.1*lambda_g(trace_strain_rate>0.01).*trace_strain_rate(trace_strain_rate>0.01).^(n_g(trace_strain_rate>0.01)-1);
+         mu_vec(trace_strain_rate<=0.01)=0.056;
+         mu_vec(mu_vec>0.056) = 0.056;
+         mu_vec(mu_vec<0.00345)=0.00345;
+
+    elseif nse_field.viscosity_model == 6
+        mu_vec(trace_strain_rate>0.4e-3) = (sqrt(0.0012*((1-0.35)^(-5/2))) + sqrt(0.01*((0.625*0.35)^3)./trace_strain_rate(trace_strain_rate>0.4e-3))).^2;
+        mu_vec(mu_vec>0.056) = 0.056;
+        mu_vec(mu_vec<0.00345)=0.00345;
+    end
+% end
+
+
+    if ismember(nse_field.viscosity_model,[2 3 4 5 6])%2 3 4 5 6
 
         if nse_field.viscosity_smoothing > 0
             if nse_field.use_gpu
                 mu_vec = pcg_iteration_gpu(S_mu,I_mu*mu_vec,nse_field.pcg_tol,nse_field.pcg_maxit,DM_S_mu);
+                strain_rate2 = pcg_iteration_gpu(S_mu,I_mu*trace_strain_rate,nse_field.pcg_tol,nse_field.pcg_maxit,DM_S_mu);
             else
                 mu_vec = pcg_iteration(S_mu,I_mu*mu_vec,nse_field.pcg_tol,nse_field.pcg_maxit,DM_S_mu);
+                strain_rate2 = pcg_iteration(S_mu,I_mu*trace_strain_rate,nse_field.pcg_tol,nse_field.pcg_maxit,DM_S_mu);
             end
+        else
+            strain_rate2 = trace_strain_rate;
         end
         D_1 = spdiags(sqrt(mu_vec),0,size(M_1,1),size(M_1,2));
         KDMD = @(x) zef_KDMD(x,K_1,M_1,D_1,nse_field.use_gpu);
+    else
+        strain_rate2 = trace_strain_rate;
 
     end
 
@@ -517,6 +583,7 @@ for i = 1 : n_time
 
         i_aux = i_aux + 1;
 
+        nse_field.shearrate1{i_aux} = zeros(size(K_1,1),1);
         nse_field.bp_vessels{i_aux} = zeros(size(K_1,1),1);
         nse_field.mu_vessels{i_aux} = zeros(size(K_1,1),1);
         nse_field.bv_vessels_1{i_aux} = zeros(size(K_1,1),1);
@@ -526,6 +593,7 @@ for i = 1 : n_time
         nse_field.bv_vessels_2{i_aux}(i_node_ind) = gather(u_2);
         nse_field.bv_vessels_3{i_aux}(i_node_ind) = gather(u_3);
         nse_field.bp_vessels{i_aux} = gather(p)/hgmm_conversion + gather(p_hydrostatic)/hgmm_conversion + gather(pressure_reference)/hgmm_conversion;
+        nse_field.shearrate1{i_aux} = gather(strain_rate2);
         nse_field.mu_vessels{i_aux} = gather(mu_vec);
         if nse_field.microcirculation_model
             nse_field.bf_capillaries{i_aux} = gather(mc_vec);

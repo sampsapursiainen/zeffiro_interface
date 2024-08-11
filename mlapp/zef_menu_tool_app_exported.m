@@ -348,7 +348,7 @@ classdef zef_menu_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_gaussian_prior_options
             app.h_menu_gaussian_prior_options = uimenu(app.h_menu_settings);
-            app.h_menu_gaussian_prior_options.Text = 'Gaussian prior options';
+            app.h_menu_gaussian_prior_options.Text = 'Hierarchical prior options';
 
             % Create h_menu_system_settings
             app.h_menu_system_settings = uimenu(app.h_menu_settings);
