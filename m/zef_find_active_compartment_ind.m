@@ -9,9 +9,7 @@ i = 0;
 
 for k = 1 : length(zef.compartment_tags)
 
-    var_0 = ['zef.'  zef.compartment_tags{k} '_on'];
-
-    on_val = eval(var_0);
+    on_val = zef.([zef.compartment_tags{k} '_on']);
 
     if on_val
         i = i + 1;
@@ -24,7 +22,7 @@ end
 brain_ind = [];
 brain_compartments = [];
 for k = 1 : length(zef.compartment_tags)
-    if ismember(eval(['zef.' zef.compartment_tags{k} '_sources']),[1 2])
+    if ismember(zef.([zef.compartment_tags{k} '_sources']),[1 2])
         if not(aux_compartment_ind(k)==0)
             brain_compartments(end+1) = aux_compartment_ind(k);
             [brain_ind]= [brain_ind ; find(domain_labels==aux_compartment_ind(k))];

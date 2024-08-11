@@ -35,7 +35,7 @@ elseif evalin('base','zef.inv_hyperprior') == 2
     mean_val = sqrt(b*1e4*a);
 end
 tail_val = mean_val.*10.^(max(1,tail_length)/20);
-amplitude_val = 10.^(-(pm_val + amplitude_db)/20);
+amplitude_val = 10.^(-pm_val/20);
 
 h_loglog = loglog(evalin('base','zef.h_axes1'),sqrt(t),plot_vec,'k');
 set(h_loglog,'linewidth',2);
@@ -61,7 +61,7 @@ set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-');
 [min_val,min_ind] = min(abs(sqrt(t)-tail_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);
 set(h_line,'color',0.7*[1 1 1],'linewidth',2,'linestyle','-.');
-[min_val,min_ind] = min(abs(sqrt(t)-pm_val));
+[min_val,min_ind] = min(abs(sqrt(t)-amplitude_val));
 h_line = line(evalin('base','zef.h_axes1'),x_lim_vec,[plot_vec(min_ind) plot_vec(min_ind)]);
 set(h_line,'color',[0 0 0],'linewidth',2,'linestyle',':');
 hold(evalin('base','zef.h_axes1'),'off');

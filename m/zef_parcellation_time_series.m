@@ -7,7 +7,6 @@ void = [];
 length_reconstruction_cell = 1;
 
 number_of_frames = evalin('base','zef.number_of_frames');
-surface_triangles = evalin('base','zef.surface_triangles');
 nodes = evalin('base','zef.nodes');
 
 s_i_ind = evalin('base','zef.source_interpolation_ind{2}');

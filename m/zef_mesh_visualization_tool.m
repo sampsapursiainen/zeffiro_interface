@@ -5,7 +5,7 @@ if isfield(zef,'h_mesh_visualization_tool')
 end
 
 zef_data = zef_mesh_visualization_tool_app_exported;
-zef_data.h_mesh_visualization_tool.Visible = zef.use_display;
+%zef_data.h_mesh_visualization_tool.Visible = zef.use_display;
 
 zef.fieldnames = fieldnames(zef_data);
 for zef_i = 1:length(zef.fieldnames)
@@ -127,22 +127,28 @@ zef_set_size_change_function(zef.h_mesh_visualization_tool,2);
 
 clear zef_data;
 
-if zef.h_segmentation_tool_toggle == 1
+% if zef.h_segmentation_tool_toggle == 1
+% 
+%     zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*0.505*zef.segmentation_tool_default_position(3), ...
+%         zef.segmentation_tool_default_position(2),...
+%         0.5*0.505*zef.segmentation_tool_default_position(3),...
+%         zef.segmentation_tool_default_position(4)];
+% 
+% else
+% 
+%     zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*zef.segmentation_tool_default_position(3), ...
+%         zef.segmentation_tool_default_position(2),...
+%         0.5*zef.segmentation_tool_default_position(3),...
+%         zef.segmentation_tool_default_position(4)];
+% 
+% end
 
-    zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*0.505*zef.segmentation_tool_default_position(3), ...
-        zef.segmentation_tool_default_position(2),...
-        0.5*0.505*zef.segmentation_tool_default_position(3),...
-        zef.segmentation_tool_default_position(4)];
-
-else
-
-    zef.h_mesh_visualization_tool.Position = [zef.segmentation_tool_default_position(1) + 1.75*zef.segmentation_tool_default_position(3), ...
-        zef.segmentation_tool_default_position(2),...
-        0.5*zef.segmentation_tool_default_position(3),...
-        zef.segmentation_tool_default_position(4)];
-
-end
-
+relative_size = 0.55;
+width_aux = relative_size*zef.segmentation_tool_default_position(3);
+        height_aux = 1.15*zef.segmentation_tool_default_position(3);
+        vertical_aux = zef.segmentation_tool_default_position(2)+zef.segmentation_tool_default_position(4)-height_aux;
+        horizontal_aux = zef.segmentation_tool_default_position(1)+zef.segmentation_tool_default_position(3)-width_aux;
+        zef.h_mesh_visualization_tool.Position = [horizontal_aux vertical_aux width_aux height_aux]; 
 
 set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
@@ -152,3 +158,7 @@ if not(ismember('ZefTool',properties(zef.h_mesh_visualization_tool)))
     addprop(zef.h_mesh_visualization_tool,'ZefTool');
 end
 zef.h_mesh_visualization_tool.ZefTool = mfilename;
+
+zef.h_mesh_visualization_tool.CloseRequestFcn = 'zef.h_mesh_visualization_tool.Visible=''off'';';
+zef.h_mesh_visualization_tool.DeleteFcn = 'zef.h_mesh_visualization_tool.Visible=''off'';';
+

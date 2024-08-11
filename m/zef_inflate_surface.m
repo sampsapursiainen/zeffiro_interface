@@ -1,10 +1,17 @@
-function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles)
+function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles,varargin)
 
 N = size(nodes,1);
+if not(isempty(varargin))
+smoothing_steps_surf = varargin{1};
+else
 smoothing_steps_surf = eval('zef.inflate_n_iterations');
+end
 smoothing_param = eval('zef.inflate_strength');
 
 A = sparse(N, N, 0);
+diag_ind_aux = unique(surface_triangles);
+diag_aux = ones(N,1);
+diag_aux(diag_ind_aux) = 0;
 
 for i = 1 : 3
     for j = i+1 : 3
@@ -19,6 +26,7 @@ for i = 1 : 3
 end
 
 clear A_part;
+A = A + spdiags(diag_aux,0,N,N);
 A = spones(A);
 sum_A = full(sum(A))';
 sum_A = sum_A(:,[1 1 1]);

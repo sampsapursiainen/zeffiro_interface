@@ -551,8 +551,17 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 unique_sensors_aux_1 = unique(sensors(:,1));
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
+                    surface_index_aux = length(reuna_p);
+                    if isfield(zef,[zef.current_sensors '_get_functions'])
+                    if length(zef.([zef.current_sensors '_get_functions'])) >= unique_sensors_aux_1(i)
+                        if not(isempty(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}))
+                            [~, sensor_info] = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}, zef,'sensor_info');
+                            surface_index_aux = sensor_info.compartment_index;
+                        end
+                    end
+                    end
                     unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
-                    [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{end},sensors(unique_sensors_aux_2,2:4));
+                    [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{surface_index_aux},sensors(unique_sensors_aux_2,2:4));
                     h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));
                     set(h(i),'facecolor',sensors_color_table(unique_sensors_aux_1(i),:));
                     set(h(i),'Tag','sensor');
@@ -693,7 +702,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
                             end
 
-                            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+                            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                                 reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                             end
 
@@ -1001,7 +1010,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                             %reconstruction = reconstruction./max(abs(reconstruction(:)));
                         end
 
-                        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+                        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                             reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),zef.smooth_field_steps);
                         end
 

@@ -2,20 +2,35 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 
-if zef.h_segmentation_tool_toggle == 1
+%if zef.h_segmentation_tool_toggle == 1
 
-    zef.size_temp = [zef.segmentation_tool_default_position(1) + 0.505*zef.segmentation_tool_default_position(3), ...
-        zef.segmentation_tool_default_position(2),...
-        0.75*0.505*zef.segmentation_tool_default_position(3),...
-        0.75*zef.segmentation_tool_default_position(4)];
+ %   zef.size_temp = [zef.segmentation_tool_default_position(1) + 0.505*zef.segmentation_tool_default_position(3), ...
+ %       zef.segmentation_tool_default_position(2),...
+ %       0.75*0.505*zef.segmentation_tool_default_position(3),...
+ %       0.75*zef.segmentation_tool_default_position(4)];
 
+%else
+
+  %  zef.size_temp = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
+   %     zef.segmentation_tool_default_position(2),...
+    %    0.75*zef.segmentation_tool_default_position(3),...
+     %   0.6*zef.segmentation_tool_default_position(4)];
+
+%end
+
+relative_size = 1;
+if isfield(zef,'h_zeffiro_menu')
+width_aux = relative_size*zef.h_zeffiro_menu.Position(3);
+        height_aux = 0.925*zef.h_zeffiro_menu.Position(3);
+        vertical_aux = zef.h_zeffiro_menu.Position(2)+zef.h_zeffiro_menu.Position(4)-height_aux;
+        horizontal_aux = zef.h_zeffiro_menu.Position(1)+zef.h_zeffiro_menu.Position(3)-width_aux;
+        zef.size_temp = [horizontal_aux vertical_aux width_aux height_aux];
 else
-
-    zef.size_temp = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
-        zef.segmentation_tool_default_position(2),...
-        0.75*zef.segmentation_tool_default_position(3),...
-        0.6*zef.segmentation_tool_default_position(4)];
-
+width_aux = relative_size*zef.segmentation_tool_default_position(3);
+        height_aux = 0.925*zef.segmentation_tool_default_position(3);
+        vertical_aux = zef.segmentation_tool_default_position(2)+zef.segmentation_tool_default_position(4)-height_aux;
+        horizontal_aux = zef.segmentation_tool_default_position(1)+zef.segmentation_tool_default_position(3)-width_aux;
+        zef.size_temp = [horizontal_aux vertical_aux width_aux height_aux];    
 end
 
 zef.h_zeffiro = figure(...
@@ -46,7 +61,6 @@ zef.h_zeffiro = figure(...
     'PaperType',get(0,'defaultfigurePaperType'),...
     'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
     'ScreenPixelsPerInchMode','manual' );
-
 
 zef.h_zeffiro.Units = 'normalized';
 
@@ -153,7 +167,7 @@ uicontrol(...
     'Position',[0.45 0.23 0.20 0.03],...
     'Children',[],'FontSize',0.461256944444443);
 
-uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Copyright © 2018- Sampsa Pursiainen & ZI Development Team. See: https://github.com/sampsapursiainen/zeffiro_interface','HorizontalAlignment','left','Position',[0.03 0.005 0.6 0.02],'Tag','copyright_text');
+uicontrol('Style','text','Parent',zef.h_zeffiro,'Units','normalized','String','Copyright © 2018- Sampsa Pursiainen & ZI Development Team. See: https://github.com/sampsapursiainen/zeffiro_interface','HorizontalAlignment','left','Position',[0.03 0.005 0.8 0.025],'Tag','copyright_text');
 
 zef = zef_update_fig_details(zef);
 
@@ -206,6 +220,10 @@ zef_set_size_change_function(zef.h_zeffiro,1,[],['{''rightColorbar'',''leftColor
 zef = rmfield(zef,'size_temp');
 
 zef_logoplot;
+
+zef.h_zeffiro.Visible = zef.use_display;
+set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 function zef_logoplot(o,e,h)
 

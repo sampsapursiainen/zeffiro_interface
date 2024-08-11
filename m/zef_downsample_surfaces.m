@@ -6,12 +6,16 @@ end
 
 zef.h = zef_waitbar(0,1,'Resampling surfaces.');
 zef.temp_time = now;
+relative_resolution_vec = zef_find_relative_resolution(zef);
 zef.number_of_compartments = length(zef.compartment_tags);
+active_compartment_ind = 0;
 
 for zef_k = 1 : zef.number_of_compartments
     zef.temp_var_0 = zef.compartment_tags{zef_k};
+    zef.temp_patch_data.scaling = eval(['zef.' zef.temp_var_0 '_scaling;']);
 
     if eval(['zef.' zef.temp_var_0 '_on'])
+        active_compartment_ind = active_compartment_ind + 1;
         if eval(['isfield(zef,"' zef.temp_var_0 '_points_original_surface_mesh")'])
             if eval(['not(isempty(zef.' zef.temp_var_0 '_points_original_surface_mesh))'])
                 zef.temp_patch_data.vertices_all = eval(['zef.' zef.temp_var_0 '_points_original_surface_mesh;']);
@@ -49,10 +53,10 @@ for zef_k = 1 : zef.number_of_compartments
                 zef.temp_patch_data.vertice_ind_aux(zef.temp_patch_data.unique_faces_ind) = [1:length(zef.temp_patch_data.unique_faces_ind)];
                 zef.temp_patch_data.faces = zef.temp_patch_data.vertice_ind_aux(zef.temp_patch_data.faces);
                 zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all(zef.temp_patch_data.unique_faces_ind,:);
-                zef.temp_patch_data_aux = zef_set_surface_resolution(zef,zef.temp_patch_data,zef.max_surface_face_count);
+                zef.temp_patch_data_aux = zef_set_surface_resolution(zef,zef.temp_patch_data,zef.max_surface_face_count*relative_resolution_vec(active_compartment_ind));
                 zef.temp_patch_data_aux.vertices = zef_smooth_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces,1e-2,1);
                 if eval(['zef.' zef.temp_var_0 '_sources'])
-                    if isempty(zef.temp_patch_data_aux.vertices) || isempty(zef.temp_patch_data_aux.vertices) || zef.bypass_inflate
+                    if isempty(zef.temp_patch_data_aux.vertices) || zef.bypass_inflate
                         zef.temp_patch_data_aux.vertices_inflated = [];
                     else
                         [zef.temp_patch_data_aux.vertices_inflated] = zef_inflate_surface(zef,zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);
@@ -67,7 +71,7 @@ for zef_k = 1 : zef.number_of_compartments
         else
             zef.temp_patch_data.faces = zef.temp_patch_data.faces_all;
             zef.temp_patch_data.vertices = zef.temp_patch_data.vertices_all;
-            zef.temp_patch_data_aux = zef_set_surface_resolution(zef,zef.temp_patch_data,zef.max_surface_face_count);
+            zef.temp_patch_data_aux = zef_set_surface_resolution(zef,zef.temp_patch_data,zef.max_surface_face_count*relative_resolution_vec(active_compartment_ind));
             zef.temp_patch_data_aux.vertices = zef_smooth_surface(zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces,1e-2,1);
             if eval(['zef.' zef.temp_var_0 '_sources']) > 0
                 zef.temp_patch_data_aux.vertices_inflated = zef_inflate_surface(zef,zef.temp_patch_data_aux.vertices,zef.temp_patch_data_aux.faces);

@@ -280,5 +280,28 @@ if not(isfield(zef.nse_field,'conductivity_statistic'))
 zef.nse_field.conductivity_statistic = 1;
 end
 
+if not(isfield(zef.nse_field,'neural_drive'))
+    zef.nse_field.neural_drive = 1;
+end
+
+if not(isfield(zef.nse_field,'nvc_flow_based_elimination'))
+    zef.nse_field.nvc_flow_based_elimination = 0.41;
+end
+
+if not(isfield(zef.nse_field,'nvc_signal_decay_rate'))
+    zef.nse_field.nvc_signal_decay_rate = 0.65;
+end
+
+if not(isfield(zef.nse_field,'nvc_mollification'))
+    zef.nse_field.nvc_mollification = 0.5;
+end
+
+if not(isfield(zef.nse_field,'relative_blood_oxygenation'))
+    zef.nse_field.relative_blood_oxygenation = 0.8;
+end
+
+if not(isfield(zef.nse_field,'oxygen_consumption_rate'))
+    zef.nse_field.oxygen_consumption_rate = 0.4;
+end
 
 end

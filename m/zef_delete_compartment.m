@@ -1,17 +1,31 @@
-function zef = zef_delete_compartment(zef)
+function zef = zef_delete_compartment(zef,compartments_selected)
+
+if nargin < 2
+    compartments_selected = [];
+end
 
 if nargin == 0
     zef = evalin('base','zef');
 end
 
-table_data = eval('zef.h_compartment_table.Data');
-compartments_selected =  eval('zef.compartments_selected');
+table_data = zef.h_compartment_table.Data;
+
+if isempty(compartments_selected)
+compartments_selected =  zef.compartments_selected;
+end
 
 for i = 1 : length(compartments_selected)
     if not(table_data{compartments_selected(i),2})
-        eval(['zef.h_compartment_table.Data{' num2str(table_data{compartments_selected(i),1}) '} = NaN;'])
+       zef.h_compartment_table.Data{compartments_selected(i),1} = NaN;
     end
 end
+
+combination_fun = @(x,y)[x y]; 
+fieldnames_list = fieldnames(zef)'; 
+tag_list = fliplr(zef.compartment_tags);
+tag_list = cellfun(combination_fun, tag_list(compartments_selected), repmat({'_'},1,length(compartments_selected)), 'UniformOutput', false);
+fieldnames_list = fieldnames_list(find(startsWith(fieldnames_list, tag_list)));
+zef = rmfield(zef, fieldnames_list);
 
 zef = zef_update(zef);
 

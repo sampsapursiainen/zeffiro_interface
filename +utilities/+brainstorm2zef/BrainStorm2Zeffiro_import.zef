@@ -1,8 +1,0 @@
-type,sensors,name,Electrodes,modality,EEG,tag,EEG,database,bst
-type,segmentation,name,Scalp,database,bst,tag,Scalp,parameter_name,sigma,parameter_value,0.33
-type,segmentation,name,Skull,database,bst,tag,Skull,parameter_name,sigma,parameter_value,0.0064
-type,segmentation,name,CSF,database,bst,tag,CSF,parameter_name,sigma,parameter_value,1.79
-type,segmentation,name,Gray,activity,1,database,bst,tag,Gray,parameter_name,parameter_value,0.33
-type,segmentation,name,Parcellation,on,0,activity,1,database,bst,atlas,Desikan-Killiany,atlas_compartment,Gray,tag,cortex_280284V
-type,segmentation,name,White,activity,3,database,bst,tag,White,parameter_name,sigma,parameter_value,0.14
-type,script,filename,bst_import_settings.m

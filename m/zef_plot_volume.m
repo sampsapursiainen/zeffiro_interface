@@ -106,7 +106,6 @@ sphere_scale = aux_scale_val;
 X_s = sphere_scale*X_s;
 Y_s = sphere_scale*Y_s;
 Z_s = sphere_scale*Z_s;
-surface_triangles = eval('zef.surface_triangles');
 nodes = eval('zef.nodes');
 
 if size(sensors,2) == 6 & ismember(eval('zef.imaging_method'), [1 4 5])
@@ -600,7 +599,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 %reconstruction = reconstruction./max(abs(reconstruction(:)));
             end
 
-            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+            if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
                 reconstruction = zef_smooth_field(surface_triangles(I_3,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
             end
 
@@ -865,7 +864,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
             %reconstruction = reconstruction./max(abs(reconstruction(:)));
         end
 
-        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 7])
+        if ismember(eval('zef.reconstruction_type'), [2 3 4 5 6 7])
             reconstruction = zef_smooth_field(surface_triangles(I_3_rec,:), reconstruction, size(nodes,1),zef.smooth_field_steps);
         end
 

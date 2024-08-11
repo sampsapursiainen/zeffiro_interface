@@ -37,7 +37,7 @@ sigma_vec = [];
 priority_vec = [];
 pml_vec = [];
 aux_active_compartment_ind = [];
-submesh_cell = cell(0);
+submesh_cell = zef.reuna_submesh_ind;
 
 for k = 1 : length(compartment_tags)
 
@@ -61,7 +61,6 @@ for k = 1 : length(compartment_tags)
 
         sigma_vec(i,1) = sigma_val;
         priority_vec(i,1) = priority_val;
-        submesh_cell{i} = eval(var_3);
         aux_compartment_ind(k) = i;
         if not(isequal(eval(var_4),-1))
             pml_vec(i,1) = 0 ;
@@ -77,11 +76,9 @@ end
 
 pml_ind_aux = find(pml_vec,1);
 
-reuna_p = eval('zef.reuna_p');
-reuna_t = eval('zef.reuna_t');
 
 n_compartments = 0;
-for k = 1 : eval('length(zef.reuna_p)')
+for k = 1 : length(zef.reuna_p)
     n_compartments = n_compartments + max(1,length(submesh_cell{k}));
 end
 
@@ -90,7 +87,7 @@ compartment_counter = 0;
 submesh_ind_1 = ones(n_compartments,1);
 submesh_ind_2 = ones(n_compartments,1);
 
-for i = 1 :  eval('length(zef.reuna_p)')
+for i = 1 : length(zef.reuna_p)
     for k = 1 : max(1,length(submesh_cell{i}))
 
         compartment_counter = compartment_counter + 1;
@@ -102,8 +99,8 @@ for i = 1 :  eval('length(zef.reuna_p)')
 end
 
 domain_labels = double(zef.domain_labels_with_subdomains);
-[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
-priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
+% [priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+% priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
 
 nodes = zef.nodes;
 tetra_aux = zef.tetra;
@@ -144,12 +141,14 @@ end
 
 if eval('zef.refinement_volume_on_2');
     zef_waitbar(0,1,h,'Volume refinement.');
-    n_refinement = eval('zef.refinement_volume_number_2');
-    refinement_compartments_aux = eval('zef.refinement_volume_compartments_2');
+    n_refinement = zef.refinement_volume_number_2;
+    refinement_compartments_aux = zef.refinement_volume_compartments_2;
 
     refinement_compartments = [];
     if ismember(-1,refinement_compartments_aux)
-        [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
+    [~, refinement_compartments] = zef_find_active_compartment_ind(zef,submesh_ind_1(zef.domain_labels));
+    refinement_compartments = zef_compartment_to_subcompartment(zef,refinement_compartments);
+    refinement_compartments = refinement_compartments(:);
     end
 
     refinement_compartments_aux = zef_compartment_to_subcompartment(zef,setdiff(refinement_compartments_aux,-1));
@@ -181,16 +180,18 @@ if optimizer_flag == 1
 end
 
 domain_labels_with_subdomains = domain_labels;
-[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
-priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
-[domain_labels] = submesh_ind_1(domain_labels(priority_ind));
+%[priority_val, priority_ind] = min(priority_vec_aux(domain_labels),[],2);
+%priority_ind = sub2ind(size(domain_labels),[1:size(domain_labels,1)]',priority_ind);
+%[domain_labels] = submesh_ind_1(domain_labels(priority_ind));
+[domain_labels] = submesh_ind_1(domain_labels);
 active_compartment_ind = zef_find_active_compartment_ind(zef,domain_labels);
 submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
 
-    I = find(not(ismember(domain_labels,find(pml_vec,1))));
+   %I = find(not(ismember(domain_labels,find(pml_vec,1))));
+I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));
     I_2 = zeros(size(tetra,1),1);
     I_2(I) = [1:length(I)];
     active_compartment_ind = I_2(active_compartment_ind);
@@ -202,8 +203,15 @@ if eval('zef.exclude_box')
     nodes = nodes(unique_vec_1,:);
 end
 
-I_aux = find(not(ismember(domain_labels,find(pml_vec,1))));
-surface_triangles = zef_surface_mesh(tetra(I_aux,:));
+zef_waitbar(0,1,h,'Surface triangles.');
+unique_domain_labels = unique(domain_labels);
+n_unique_domain_labels = length(unique_domain_labels);
+surface_triangles = cell(0);
+for zef_j = 1 : n_unique_domain_labels
+    zef_waitbar(zef_j,n_unique_domain_labels,h,'Surface triangles.');
+I_aux = find(domain_labels <= unique_domain_labels(zef_j));
+surface_triangles{unique_domain_labels(zef_j)} = double(zef_surface_mesh(tetra(I_aux,:)));
+end
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
@@ -227,7 +235,7 @@ zef.active_compartment_ind = double(active_compartment_ind);
 zef.non_source_ind = double(non_source_ind);
 zef.nodes = nodes;
 zef.tetra = double(tetra);
-zef.surface_triangles = double(surface_triangles);
+zef.surface_triangles = surface_triangles;
 zef.submesh_ind = double(submesh_ind);
 zef.condition_number = condition_number;
 

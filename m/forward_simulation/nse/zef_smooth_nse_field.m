@@ -47,4 +47,3 @@ elseif s_mode == 2
 
 end
 
-end

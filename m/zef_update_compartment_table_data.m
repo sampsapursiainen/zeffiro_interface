@@ -4,8 +4,9 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+zef.compartment_tags = fliplr(zef.compartment_tags);
 
-for zef_i = 1 : length(zef.compartment_tags)
+for zef_i = 1 : length(zef.compartment_tags) 
 
     zef_j = zef_i;
 
@@ -37,6 +38,8 @@ if size(zef.h_compartment_table.Data,2) > length(zef.h_compartment_table.ColumnW
     missing_entries = (size(zef.h_compartment_table.Data,2) - length(zef.h_compartment_table.ColumnWidth));
     zef.h_compartment_table.ColumnWidth = [zef.h_compartment_table.ColumnWidth repmat({'fit'},1,missing_entries)];
 end
+
+zef.compartment_tags = fliplr(zef.compartment_tags);
 
 if nargout == 0
     assignin('base','zef',zef);

@@ -1,5 +1,5 @@
 
-if refinement_flag == 1
+if ismember(refinement_flag, [1, 3])
     tetra_aux = tetra;
 end
 
@@ -9,6 +9,8 @@ if eval('zef.refinement_on')
         surface_refinement_on = eval('zef.refinement_surface_on');
     elseif refinement_flag == 2
         surface_refinement_on = eval('zef.refinement_surface_on_2');
+            elseif refinement_flag == 3
+        surface_refinement_on = eval('zef.refinement_surface_on_3');
     end
 
     if surface_refinement_on
@@ -25,6 +27,9 @@ if eval('zef.refinement_on')
         elseif refinement_flag == 2
             refinement_type = zef.refinement_surface_compartments_2;
             surface_refinement_mode = zef.refinement_surface_mode_2;
+        elseif refinement_flag == 3
+            refinement_type = zef.refinement_surface_compartments_3;
+            surface_refinement_mode = zef.refinement_surface_mode_3;
         end
 
         if length(n_surface_refinement) > 1
@@ -301,14 +306,14 @@ if eval('zef.refinement_on')
         tetra(I,:) = tetra(I,[2 1 3 4]);
         clear tilavuus I;
 
-    end
-
-    zef_waitbar(1,1,h,'Surface refinement.');
-
     tetra_vec = sum(ismember(tetra,J_c),2);
     J = find(tetra_vec);
     J_c = unique(tetra(J,:));
     tetra_vec = sum(ismember(tetra,J_c),2);
+
+    end
+
+    zef_waitbar(1,1,h,'Surface refinement.');
 
     tetra_aux = tetra;
 

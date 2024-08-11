@@ -59,14 +59,22 @@ if zef.mlapp == 1
 else
     zef.h_zeffiro_window_main = open('zef_segmentation_tool.fig');
 end
-set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
-set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 zef_figure_tool;
 zef_mesh_tool;
 zef_mesh_visualization_tool;
 zef_menu_tool;
+
 zef = zef_update(zef);
+
+set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_zeffiro_window_main.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_mesh_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
+set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontUnits'),'FontUnits','pixels')
+set(findobj(zef.h_mesh_visualization_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
 if nargout == 0
     assignin('base','zef',zef);

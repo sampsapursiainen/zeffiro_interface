@@ -128,6 +128,13 @@ if not(isequal(file_name,0))
                 else
                     invert = '0';
                 end
+                if find(ismember(ini_cell(i,:),'scaling'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'scaling'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    scaling = (ini_cell{i,find(ismember(ini_cell(i,:),'scaling'),1)+1});
+                else
+                    scaling = '1';
+                end
                 if find(ismember(ini_cell(i,:),'activity'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'activity'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -149,6 +156,13 @@ if not(isequal(file_name,0))
                 else
                     visible = '1';
                 end
+                if find(ismember(ini_cell(i,:),'labeling_priority'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'labeling_priority'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    labeling_priority = (ini_cell{i,find(ismember(ini_cell(i,:),'labeling_priority'),1)+1});
+                else
+                    labeling_priority = '';
+                end
                 if find(ismember(ini_cell(i,:),'subject'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'subject'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -162,6 +176,14 @@ if not(isequal(file_name,0))
                     database = (ini_cell{i,find(ismember(ini_cell(i,:),'database'),1)+1});
                 else
                     database = '';
+                end
+                if find(ismember(ini_cell(i,:),'inflate'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'inflate'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    n_inflation_steps = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'inflate'),1)+1});
+                   inflate_surface = 1; 
+                else 
+                    inflate_surface = 0;
                 end
                 if find(ismember(ini_cell(i,:),'tag'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
@@ -275,9 +297,13 @@ if not(isequal(file_name,0))
                 end
                 eval(['zef.' compartment_tag '_name = ''' name ''';']);
                 eval(['zef.' compartment_tag '_affine_transform = {' affine_transform '};']);
+                eval(['zef.' compartment_tag '_scaling = ' scaling ';']);
                 eval(['zef.' compartment_tag '_sources = ' activity ';']);
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
+                if not(isempty(labeling_priority))
+               zef.([compartment_tag '_labeling_priority']) =  str2num(labeling_priority);
+                end
                 zef.surface_mesh_type = filetype;
                 zef.file = filename;
                 zef.file_path = folder_name;
@@ -293,8 +319,18 @@ if not(isequal(file_name,0))
 
                 if not(isempty(filename))
                     if not(ismember(filetype,{'mat',''}))
-                        [aux_points,aux_triangles] = zef_get_mesh(zef,filename, compartment_tag, filetype,'full');
-                        zef = zef_merge_surface_mesh(zef, compartment_tag,aux_triangles,aux_points,merge);
+                        [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(zef,filename, compartment_tag, filetype,'full');
+                        if inflate_surface 
+                        if length(aux_submesh_ind) < 2    
+                        [aux_points] = zef_inflate_surface(zef,aux_points, aux_triangles,n_inflation_steps);
+                        elseif length(aux_submesh_ind) >= 2 
+                           [aux_points] = zef_inflate_surface(zef,aux_points, aux_triangles(aux_submesh_ind(end-1)+1:aux_submesh_ind(end),:),n_inflation_steps);
+                        end
+                        end
+                        eval(['zef.' compartment_tag '_points = aux_points;']); 
+                        eval(['zef.' compartment_tag '_triangles = aux_triangles;']); 
+                        eval(['zef.' compartment_tag '_submesh_ind = aux_submesh_ind;']); 
+                      % zef = zef_merge_surface_mesh(zef,compartment_tag,aux_triangles,aux_points,merge);
                     elseif isequal(filetype,'mat')
                         zef = zef_import_mat_struct(zef, filename,[compartment_tag '_']);
                     end
@@ -319,8 +355,10 @@ if not(isequal(file_name,0))
                         if isequal(lower(surface_name_aux),lower(tag))
                             surface_found = 1;
                             [vertices_aux, faces_aux] = zef_bst_2_zef_surface(subject,surface_ind_aux);
+                            if str2num(invert)
+                            faces_aux = faces_aux(:,[1 3 2]);
+                            end
                             zef = zef_merge_surface_mesh(zef,compartment_tag,faces_aux,vertices_aux,merge);
-                            eval(['zef.' compartment_tag '_scaling = 1000;']);
                             if not(isempty(atlas))
                                 if isempty(atlas_tag)
                                     atlas_tag = atlas;
@@ -420,6 +458,14 @@ if not(isequal(file_name,0))
                     affine_transform = mat2str(eye(4));
                 end
 
+                 if find(ismember(ini_cell(i,:),'scaling'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'scaling'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    scaling = ini_cell{i,find(ismember(ini_cell(i,:),'scaling'),1)+1};
+                else
+                    scaling = '1';
+                end
+
                 if find(ismember(ini_cell(i,:),'tag'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'tag'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
@@ -437,8 +483,7 @@ if not(isequal(file_name,0))
                 end
 
                 if find(ismember(ini_cell(i,:),'sensor_taglist_filename'))
-                    ini_cell_ind = [ini_cell_ind
-                        find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     sensor_taglist_filename = (ini_cell{i,find(ismember(ini_cell(i,:),'sensor_taglist_filename'),1)+1});
                     sensor_taglist_filename = fullfile(foldername, sensor_taglist_filename);
@@ -452,6 +497,7 @@ if not(isequal(file_name,0))
                 eval(['zef.' sensor_tag '_name = ''' name ''';']);
                 eval(['zef.' sensor_tag '_on = ' on  ';']);
                 eval(['zef.' sensor_tag '_visible = ' visible ';']);
+                eval(['zef.' sensor_tag '_scaling = ' scaling ';']);
                 eval(['zef.' sensor_tag '_affine_transform = {' affine_transform '};']);
                 eval(['zef.' sensor_tag '_imaging_method_name = ''' modality ''';']);
                 eval(['zef.' sensor_tag '_name_list = sensor_taglist_cell ;']);
@@ -482,7 +528,6 @@ if not(isequal(file_name,0))
                     [sensor_positions, sensor_orientations, sensor_ind, sensor_tag_cell] = zef_bst_2_zef_sensors(tag);
                     if isequal(modality,'EEG')
                         eval(['zef.' sensor_tag '_points = sensor_positions;']);
-                        eval(['zef.' sensor_tag '_scaling = 1000;']);
                     end
 
 

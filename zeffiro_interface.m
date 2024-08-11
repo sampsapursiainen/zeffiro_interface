@@ -236,9 +236,11 @@ if not(args.zeffiro_restart) && evalin("base","exist('zef', 'var');")
 
 end
 
-addpath(fullfile("m"))
+addpath([fileparts(mfilename('fullpath')) filesep 'm']);
 
 zef_close_all();
+
+addpath([fileparts(mfilename('fullpath'))]);
 
 %% Set zef fields based on name–value arguments.
 
