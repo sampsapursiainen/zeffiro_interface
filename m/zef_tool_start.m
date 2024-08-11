@@ -116,9 +116,6 @@ else
             zef_set_size_change_function(h_groot_children(i),2,scale_positions);
         end
 
-        set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
-        set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
-
         if not(ismember('ZefTool',properties(h_groot_children(i))))
             addprop(h_groot_children(i),'ZefTool');
         end
@@ -126,6 +123,9 @@ else
      
         position_aux = h_groot_children(i).Position;
         h_groot_children(i).Position = [horizontal_aux vertical_aux width_aux height_aux];
+
+        set(findobj(h_groot_children(i).Children,'-property','FontUnits'),'FontUnits','pixels');
+        set(findobj(h_groot_children(i).Children,'-property','FontSize'),'FontSize',zef.font_size);
 
     end
 
