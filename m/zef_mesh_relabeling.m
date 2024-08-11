@@ -105,8 +105,6 @@ end
 
     compartment_counter = 0;
 
-
-
 for i_labeling =  1 : length(zef.reuna_p)-1
     for k_labeling =  1 : length(zef.reuna_submesh_ind{i_labeling})
 

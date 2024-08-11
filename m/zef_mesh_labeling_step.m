@@ -6,12 +6,12 @@ if isequal(labeling_flag,1)
     %Initialize labeling.
     %***********************************************************
 
-    [I,unique_domain_labels] = zef_solid_angle_labeling(zef, label_ind, nodes, h);
+    [node_labels,unique_domain_labels] = zef_solid_angle_labeling(zef, label_ind, nodes, h);
 
-    I_1 = find(sum(sign(I(label_ind)),2)>=size(label_ind,2));
-    tetra = tetra(I_1,:);
-    label_ind = label_ind(I_1,:);
-    domain_labels = I(label_ind);
+    I = find(sum(sign(node_labels(label_ind)),2)>=size(label_ind,2));
+    tetra = tetra(I,:);
+    label_ind = label_ind(I,:);
+    domain_labels = node_labels(label_ind);
 
     [unique_vec_1, ~, unique_vec_3] = unique(tetra);
     tetra = reshape(unique_vec_3,size(tetra));

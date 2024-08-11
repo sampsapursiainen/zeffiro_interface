@@ -70,8 +70,8 @@ set(zef.h_menu_merge_lead_field                      ,'MenuSelectedFcn','merge_l
 set(zef.h_menu_butterfly_plot                        ,'MenuSelectedFcn','zef_butterfly_plot;zef = zef_update(zef);');
 set(zef.h_menu_find_synthetic_source                 ,'MenuSelectedFcn','find_synthetic_source;zef = zef_update(zef);');
 set(zef.h_menu_generate_eit_data                     ,'MenuSelectedFcn','find_synthetic_eit_data;zef = zef_update(zef);');
-set(zef.h_menu_mesh_tool                             ,'MenuSelectedFcn','zef_mesh_tool;zef = zef_update(zef);');
-set(zef.h_menu_mesh_visualization_tool               ,'MenuSelectedFcn','zef_mesh_visualization_tool;zef = zef_update(zef);');
+set(zef.h_menu_mesh_tool                             ,'MenuSelectedFcn','zef.h_mesh_tool = zef_window_visible(zef,zef.h_mesh_tool);');
+set(zef.h_menu_mesh_visualization_tool               ,'MenuSelectedFcn','zef.h_mesh_visualization_tool = zef_window_visible(zef,zef.h_mesh_visualization_tool);');
 set(zef.h_menu_figure_tool                           ,'MenuSelectedFcn','zef_figure_tool;zef = zef_update(zef);');
 set(zef.h_menu_parcellation_tool                     ,'MenuSelectedFcn','zef_parcellation_tool;zef = zef_update(zef);');
 set(zef.h_menu_options                               ,'MenuSelectedFcn','zef_open_forward_and_inverse_options;zef = zef_update(zef);');
@@ -96,7 +96,7 @@ set(zef.h_menu_close_tools                           ,'MenuSelectedFcn','zef_arr
 set(zef.h_menu_close_figures                         ,'MenuSelectedFcn','zef_arrange_windows(''close'',''figs'',''all'');zef = zef_update(zef);');
 set(zef.h_menu_documentation                         ,'MenuSelectedFcn','web(''https://github.com/sampsapursiainen/zeffiro_interface/wiki'');zef = zef_update(zef);');
 set(zef.h_menu_about                                 ,'MenuSelectedFcn','msgbox([{''Application: ZEFFIRO Forward and inverse interface for complex geometries.''};{[]}; {[''Version: '' num2str(zef.current_version)]} ;{[]}; {''Copyright: © 2018- Sampsa Pursiainen.''} ;{[]};{[]}; {''Created using:''} ;{[]}; {''MATLAB. © 1984- The MathWorks, Inc.''};{[]};{[]}],''ZEFFIRO Interface: About'');');
-set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef_segmentation_tool;');
+set(zef.h_menu_segmentation_tool                   ,'MenuSelectedFcn','zef.h_zeffiro_window_main = zef_window_visible(zef,zef.h_zeffiro_window_main);');
 set(zef.h_menu_parameter_profile                  ,'MenuSelectedFcn','zef_open_parameter_profile;');
 set(zef.h_menu_segmentation_profile                  ,'MenuSelectedFcn','zef_open_segmentation_profile;');
 set(zef.h_menu_init_profile                  ,'MenuSelectedFcn','zef_open_init_profile;');
@@ -137,21 +137,23 @@ zef = rmfield(zef,'menu_accelerator_vec');
 
 zef_set_size_change_function(zef.h_zeffiro_menu,1);
 
-if zef.h_segmentation_tool_toggle == 1
+% if zef.h_segmentation_tool_toggle == 1
+% 
+zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
+         zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
+         zef.segmentation_tool_default_position(3),...
+         0];
+% 
+% else
+% 
+%     zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
+%         zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
+%         2.25*zef.segmentation_tool_default_position(3),...
+%         0];
+% 
+% end
 
-    zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
-        zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
-        2.25*0.505*zef.segmentation_tool_default_position(3),...
-        0];
 
-else
-
-    zef.h_zeffiro_menu.Position = [zef.segmentation_tool_default_position(1), ...
-        zef.segmentation_tool_default_position(2) + zef.segmentation_tool_default_position(4),...
-        2.25*zef.segmentation_tool_default_position(3),...
-        0];
-
-end
 
 
 

@@ -5,8 +5,11 @@ if isfield(zef,'h_mesh_tool')
 end
 
 zef_data = zef_mesh_tool_app_exported;
-zef_data.h_mesh_tool.Visible=zef.use_display;
+%zef_data.h_mesh_tool.Visible=zef.use_display;
 zef = zef_assign_data(zef, zef_data);
+
+zef.h_mesh_tool.CloseRequestFcn = 'zef.h_mesh_tool.Visible=''off'';';
+zef.h_mesh_tool.DeleteFcn = 'zef.h_mesh_tool.Visible=''off'';';
 
 set(zef.h_menu_forward_simulation_table_add,'MenuSelectedFcn','zef.h_forward_simulation_table.Data{end+1,1} = []; zef.h_forward_simulation_table.Data = [zef.h_forward_simulation_table.Data(1:zef.forward_simulation_selected(1),:) ; zef.h_forward_simulation_table.Data(end,:) ; zef.h_forward_simulation_table.Data(zef.forward_simulation_selected(1)+1:end-1,:)];');
 set(zef.h_menu_forward_simulation_table_delete,'MenuSelectedFcn','zef.h_forward_simulation_table.Data = zef.h_forward_simulation_table.Data(find(not(ismember([1:size(zef.h_forward_simulation_table.Data,1)],zef.forward_simulation_selected))),:);');
@@ -79,26 +82,33 @@ set(zef.h_inflate_strength,'ValueChangedFcn','zef_update_mesh_tool;');
 set(zef.h_mesh_tool,'DeleteFcn','zef_closereq;');
 
 zef.h_mesh_tool.Units = 'normalized';
-zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
+%zef.h_mesh_tool.Position(1:2) = [0.2 0.2];
 zef.h_mesh_tool.Units = 'pixels';
 set(zef.h_mesh_tool,'AutoResizeChildren','off');
 zef_set_size_change_function(zef.h_mesh_tool,2)
 
-if zef.h_segmentation_tool_toggle == 1
+%if zef.h_segmentation_tool_toggle == 1
 
-    zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1)+ 0.505*zef.segmentation_tool_default_position(3) , ...
-        zef.segmentation_tool_default_position(2)+0.75*zef.segmentation_tool_default_position(4),...
-        0.75*0.505*zef.segmentation_tool_default_position(3),...
-        0.4*zef.segmentation_tool_default_position(4)];
+    %zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1)+ 0.505*zef.segmentation_tool_default_position(3) , ...
+     %   zef.segmentation_tool_default_position(2)+0.75*zef.segmentation_tool_default_position(4),...
+      %  0.75*0.505*zef.segmentation_tool_default_position(3),...
+      %  0.4*zef.segmentation_tool_default_position(4)];
 
-else
+%else
 
-    zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
-        zef.segmentation_tool_default_position(2)+0.6*zef.segmentation_tool_default_position(4),...
-        0.75*zef.segmentation_tool_default_position(3),...
-        0.4*zef.segmentation_tool_default_position(4)];
+ %   zef.h_mesh_tool.Position = [zef.segmentation_tool_default_position(1) + zef.segmentation_tool_default_position(3), ...
+  %      zef.segmentation_tool_default_position(2)+0.6*zef.segmentation_tool_default_position(4),...
+   %     0.75*zef.segmentation_tool_default_position(3),...
+   %     0.4*zef.segmentation_tool_default_position(4)];
 
-end
+%end
+
+relative_size = 0.8;
+width_aux = relative_size*zef.segmentation_tool_default_position(3);
+        height_aux = 0.5*zef.segmentation_tool_default_position(3);
+        vertical_aux = zef.segmentation_tool_default_position(2)+zef.segmentation_tool_default_position(4)-height_aux;
+        horizontal_aux = zef.segmentation_tool_default_position(1)+zef.segmentation_tool_default_position(3)-width_aux;
+        zef.h_mesh_tool.Position = [horizontal_aux vertical_aux width_aux height_aux]; 
 
 set(findobj(zef.h_mesh_tool.Children,'-property','FontSize'),'FontSize',zef.font_size);
 

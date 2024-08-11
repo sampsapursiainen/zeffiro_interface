@@ -221,7 +221,6 @@ if eval('zef.refinement_on')
                     zef_refinement_step;
 
                     if eval('zef.mesh_relabeling')
-
                         pml_ind = [];
                         if isequal(labeling_stage,'meshing')
                         label_ind = uint32(tetra);

@@ -1,11 +1,13 @@
 function [zef] = zef_tool_start(zef,tool_script,relative_size,scale_positions)
 
 if nargin < 3
-    relative_size = 1/3;
+    relative_size = 1/2;
+else
+    relative_size = 2*relative_size;
 end
 
 if isempty(relative_size)
-    relative_size = 1/3;
+    relative_size = 1/2;
 end
 
 if nargin < 4
