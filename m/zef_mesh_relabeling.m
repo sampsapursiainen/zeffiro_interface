@@ -23,55 +23,29 @@ non_associated_labels = zeros(size(domain_labels));
 label_vec = unique_domain_labels;
 domain_labels_original = domain_labels;
 
-% for i_labeling =  1 : length(zef.reuna_p)-1
-%     for k_labeling =  1 : length(zef.reuna_submesh_ind{i_labeling})
-% 
-% compartment_counter = compartment_counter + 1;
-% domain_label_ind = find(ismember(unique_domain_labels,compartment_counter));
-% 
-% if domain_label_ind
-% 
-%                    if k_labeling == 1
-%                         reuna_t_aux = zef.reuna_t{i_labeling}(1:zef.reuna_submesh_ind{i_labeling},:);
-%                    else
-%                         reuna_t_aux = zef.reuna_t{i_labeling}(zef.reuna_submesh_ind{i_labeling}(k_labeling-1)+1: zef.reuna_submesh_ind{i_labeling}(k_labeling),:);
-%                    end
-% 
-%                 tetra_ind_aux = 0;
-%                 test_ind = -ones(size(nodes,1),1);
-% 
-%                 while not(isempty(tetra_ind_aux))
-%                     I_1 = find(domain_labels <= compartment_counter);
-%                     [I_2] = zef_surface_mesh(tetra(I_1,:));
-%                     I_1 = setdiff([1:size(domain_labels,1)]',I_1);
-%                     [I_2, ~] = find(ismember(tetra(I_1,:),I_2));
-%                     relabeling_pool(I_1(I_2)) = 1;
-% 
-%                 end
-% end
-%     end
-% end
-% 
-% 
-%    relabeling_pool_ind = find(relabeling_pool);
-%                 [nodes_aux, tetra_aux] = zef_get_submesh(nodes, tetra, relabeling_pool_ind);
-%                 [label_ind_aux] = zef_solid_angle_labeling(zef, tetra_aux, nodes_aux, h);
-%                 domain_labels(relabeling_pool_ind) = zef_choose_domain_labels(zef,label_ind_aux(tetra_aux));
-% 
-% I = zeros(size(nodes,1), 1);
-% I_2 = [1 : length(I)]';
-% 
-% compartment_counter = 0;
-% relabeling_pool = zeros(size(domain_labels));
+if use_labeling_priority
+[~, labeling_priority_vec] = zef_choose_domain_labels(zef, [], use_labeling_priority)
+end
 
     compartment_counter = 0;
+    if use_labeling_priority
+    label_counter = 0;
+    end
 
 for i_labeling =  1 : length(zef.reuna_p)-1
     for k_labeling =  1 : length(zef.reuna_submesh_ind{i_labeling})
 
+        if use_labeling_priority
+            label_counter = label_counter + 1;
+            compartment_counter = labeling_priority_vec(label_counter);
+            compartment_counter_next = labeling_priority_vec(label_counter+1);
+        else
 compartment_counter = compartment_counter + 1;
+compartment_counter_next = compartment_counter + 2;
+        end
 domain_label_ind = find(ismember(unique_domain_labels,compartment_counter));
 domain_label_ind_2 = find(ismember(unique_domain_labels,compartment_counter+1));
+
 
 if domain_label_ind
 
@@ -85,13 +59,15 @@ if zef.extensive_relabeling
 
                 tetra_ind_aux = 0;
                 test_ind = -ones(size(nodes,1),1);
+                test_ind_2 = -ones(size(nodes,1),1);
 
  while not(isempty(tetra_ind_aux))
-                    I_1 = find(domain_labels == compartment_counter+1);
-                    I_8 = find(domain_labels <= compartment_counter);
+     
+                    I_1 = find(domain_labels == compartment_counter_next);
                     [I_2] = zef_surface_mesh(tetra(I_1,:));
-                    I_1 = setdiff(I_8,I_1);
-                    [I_2, ~] = find(ismember(tetra(I_1,:),I_2));
+                    I_1 = find(domain_labels <= compartment_counter);
+                    boundary_node_count = sum(ismember(tetra(I_1,:),I_2));
+                    [I_2, ~] = find(boundary_node_count);
                     I_3 = tetra(I_1(I_2),:);
                     [I_4,~,I_5] = unique(I_3);
                     I_6 = find(test_ind(I_4) < 0);
@@ -99,7 +75,7 @@ if zef.extensive_relabeling
                     test_ind(I_4(I_6)) = 0;
                     test_ind(I_4(I_6(I_7))) = 1;
                     I_5 = reshape(test_ind(I_4(I_5)),size(I_3));
-                    tetra_ind_aux = I_1(I_2(find(sum(I_5,2)<4)));
+                    tetra_ind_aux = I_1(I_2(find(sum(I_5,2)-boundary_node_count(I_2)<0)));
                     domain_labels(tetra_ind_aux) = min(n_compartments, unique_domain_labels(domain_label_ind_2));
  end
 

@@ -17,15 +17,11 @@ if isequal(labeling_flag,1)
     tetra = reshape(unique_vec_3,size(tetra));
     nodes = nodes(unique_vec_1,:);
 
-    if isequal(labeling_stage,'preliminary')
-        use_labeling_priority = 1;
-    elseif isequal(labeling_stage,'meshing')
         if zef.priority_mode == 1
             use_labeling_priority = 0;
         elseif zef.priority_mode >= 2
             use_labeling_priority = 1;
         end
-    end
 
     domain_labels = zef_choose_domain_labels(zef,domain_labels,use_labeling_priority);
 
@@ -34,15 +30,12 @@ elseif isequal(labeling_flag,2)
     %Re-labeling.
     %**************************************************************
 
- if isequal(labeling_stage,'preliminary')
-        use_labeling_priority = 1;
-    elseif isequal(labeling_stage,'meshing')
         if zef.priority_mode <= 2
             use_labeling_priority = 0;
         elseif zef.priority_mode == 3
             use_labeling_priority = 1;
         end
-    end
+
 [domain_labels] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, use_labeling_priority, h);
 
 end

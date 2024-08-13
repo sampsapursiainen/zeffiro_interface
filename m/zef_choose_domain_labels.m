@@ -1,4 +1,4 @@
-function domain_labels = zef_choose_domain_labels(zef, label_array, use_labeling_priority, ordinal_index)
+function [domain_labels, labeling_priority_vec] = zef_choose_domain_labels(zef, label_array, use_labeling_priority, ordinal_index)
 
 if nargin < 3
     priority_mode = 1; 
@@ -7,6 +7,8 @@ end
 if nargin < 4
     ordinal_index = 1; 
 end
+
+domain_labels = [];
 
 submesh_vec = cell2mat(zef.reuna_submesh_ind);
 n_compartments = length(submesh_vec);
@@ -35,6 +37,7 @@ else
 labeling_priority_vec = priority_vec;
 end
 
+if not(isempty(label_array))
 n_labels = size(label_array,1);
 ind_vec_aux = [1:n_labels]';
 labeling_priority_vec = labeling_priority_vec(label_array);
@@ -45,5 +48,8 @@ end
 [priority_val priority_ind] = min(labeling_priority_vec,[],2);
 priority_ind = sub2ind(size(label_array),[1:size(label_array,1)]',priority_ind);
 [domain_labels] = label_array(priority_ind);
+end
+
+[~, labeling_priority_vec] = sort(labeling_priority_vec);
 
 end

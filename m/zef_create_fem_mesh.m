@@ -144,40 +144,14 @@ end
 
 clear X Y Z;
 
-if zef.refinement_surface_on_3
-loop_start_ind = 1;
-else
-    loop_start_ind = 2;
-end
-
-for labeling_loop_ind_aux = loop_start_ind : 2
-
-if isequal(labeling_loop_ind_aux,1)
-refinement_surface_on = zef.refinement_surface_on_3;
-n_surface_refinement = zef.refinement_surface_number_3;
-refinement_surface_compartments = zef.refinement_surface_compartments_3;
-refinement_volume_on = zef.refinement_volume_on_3;
-n_volume_refinement = zef.refinement_volume_number_3;
-refinement_volume_compartments = zef.refinement_volume_compartments_3;
-labeling_stage = 'preliminary';
-elseif isequal(labeling_loop_ind_aux,2)
-if zef.refinement_surface_on_3
-label_ind = uint32(tetra);
-end
 refinement_surface_on = zef.refinement_surface_on;
 n_surface_refinement = zef.refinement_surface_number;
 refinement_surface_compartments = zef.refinement_surface_compartments;
 refinement_volume_on = zef.refinement_volume_on;
 n_volume_refinement = zef.refinement_volume_number;
 refinement_volume_compartments = zef.refinement_volume_compartments;
-labeling_stage = 'meshing';
-end
 
-if isequal(labeling_loop_ind_aux,1)
-refinement_flag = 3;
-elseif isequal(labeling_loop_ind_aux,2)
 refinement_flag = 1;
-end
 
 labeling_flag = 1;
 zef_mesh_labeling_step;
@@ -204,11 +178,9 @@ if eval('zef.refinement_on')
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
-                    if isequal(labeling_stage,'meshing')
                     label_ind = uint32(tetra);
                     labeling_flag = 2;
                     zef_mesh_labeling_step;
-                    end
 
                 end
             end
@@ -222,11 +194,9 @@ if eval('zef.refinement_on')
 
                     if eval('zef.mesh_relabeling')
                         pml_ind = [];
-                        if isequal(labeling_stage,'meshing')
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
                         zef_mesh_labeling_step;
-                    end
 
                     end
                 end
@@ -237,11 +207,9 @@ else
 
     if eval('zef.mesh_relabeling')
     pml_ind = [];
-    if isequal(labeling_stage,'meshing')
     label_ind = uint32(tetra);
     labeling_flag = 2;
     zef_mesh_labeling_step;
-    end
 
     end
 
@@ -273,11 +241,9 @@ if eval('zef.refinement_on')
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
-                    if isequal(labeling_stage,'meshing')
                     label_ind = uint32(tetra);
                     labeling_flag = 2;
                     zef_mesh_labeling_step;
-                    end
 
 
                 end
@@ -295,11 +261,9 @@ if eval('zef.refinement_on')
                     if eval('zef.mesh_relabeling')
 
                         pml_ind = [];
-                         if isequal(labeling_stage,'meshing')
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
                         zef_mesh_labeling_step;
-                         end
 
                     end
 
@@ -383,7 +347,6 @@ end
 
 end
 
-end
 
 zef.nodes = nodes;
 zef.tetra = double(tetra);
