@@ -75,7 +75,7 @@ if zef.extensive_relabeling
                     tetra_ind_aux = I_1(I_2(find(sum(I_5,2) < 4)));
                     domain_labels(tetra_ind_aux) = min(n_compartments, compartment_counter_next);
                     non_associated_labels(tetra_ind_aux) = non_associated_labels(tetra_ind_aux) + 1;
-tetra_ind_aux = relabeling_pool;
+                    tetra_ind_aux = relabeling_pool;
  end
 end
 

@@ -48,7 +48,7 @@ end
 %     %Re-labeling (adaptive).
 %     %**************************************************************
 %     pml_counter = 0;
-%     max_compartments = max(domain_labels);
+%     max_comparetments = max(domain_labels);
 % compartment_counter = 0; 
 % 
 %     unique_domain_labels = unique(domain_labels);

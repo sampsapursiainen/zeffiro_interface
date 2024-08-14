@@ -39,7 +39,7 @@ end
 if isequal(zef.segmentation_tool_default_position,[0 0 0 0])
     h_groot = groot;
     screen_size = h_groot.ScreenSize;
-    zef.segmentation_tool_default_position = [screen_size(3)/25 screen_size(4)/8 4*screen_size(3)/9 3*screen_size(4)/4];
+    zef.segmentation_tool_default_position = [screen_size(3)/25 screen_size(4)/8 4*screen_size(3)/9 5*screen_size(4)/6];
 end
 
 if nargout == 0
