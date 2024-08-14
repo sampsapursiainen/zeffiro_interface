@@ -40,16 +40,18 @@ end
 if not(isempty(label_array))
 n_labels = size(label_array,1);
 ind_vec_aux = [1:n_labels]';
-labeling_priority_vec = labeling_priority_vec(label_array);
+labeling_priority_vec_aux = labeling_priority_vec(label_array);
 for i = 1 : ordinal_index-1
-[priority_val priority_ind] = min(labeling_priority_vec,[],2);
-labelin_priority_vec(ind_vec_aux + (priority_ind-1)*n_labels) = NaN; 
+[priority_val priority_ind] = min(labeling_priority_vec_aux,[],2);
+labelin_priority_vec_aux(ind_vec_aux + (priority_ind-1)*n_labels) = NaN; 
 end
-[priority_val priority_ind] = min(labeling_priority_vec,[],2);
+[priority_val priority_ind] = min(labeling_priority_vec_aux,[],2);
 priority_ind = sub2ind(size(label_array),[1:size(label_array,1)]',priority_ind);
 [domain_labels] = label_array(priority_ind);
 end
 
+
 [~, labeling_priority_vec] = sort(labeling_priority_vec);
+labeling_priority_vec(labeling_priority_vec) = [1:length(labeling_priority_vec)];
 
 end
