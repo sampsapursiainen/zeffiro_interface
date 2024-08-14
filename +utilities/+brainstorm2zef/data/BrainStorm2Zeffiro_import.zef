@@ -1,0 +1,6 @@
+type,segmentation,name,Scalp,database,bst,tag,head,parameter_name,sigma,parameter_value,0.33,invert,1
+type,segmentation,name,Skull,database,bst,tag,outerskull,parameter_name,sigma,parameter_value,0.0064,invert,1
+type,segmentation,name,CSF,database,bst,tag,innerskull,parameter_name,sigma,parameter_value,1.79,invert,1
+type,segmentation,name,Gray,activity,1,database,bst,tag,cortex_15002V,parameter_name,parameter_value,0.33,invert,1
+type,segmentation,name,White,activity,3,database,bst,tag,subcortical,parameter_name,sigma,parameter_value,0.14,invert,1
+type,script,filename,utilities.brainstorm2zef.m.zef_bst_import_settings   
