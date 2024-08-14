@@ -23,7 +23,8 @@ label_vec = unique_domain_labels;
 domain_labels_original = domain_labels;
 
 if use_labeling_priority
-[~, labeling_priority_vec] = zef_choose_domain_labels(zef, [], use_labeling_priority)
+[~, labeling_priority_vec] = zef_choose_domain_labels(zef, [], use_labeling_priority);
+[~, labeling_priority_vec_aux] = sort(labeling_priority_vec,'descend');
 end
 
     compartment_counter = 0;
@@ -33,19 +34,19 @@ end
 
     test_ind = -ones(size(nodes,1),1);
 
-for i_labeling =  1 : length(zef.reuna_p)-1
+for i_labeling =  1 : length(zef.reuna_p)
     for k_labeling =  1 : length(zef.reuna_submesh_ind{i_labeling})
 
         if use_labeling_priority
             label_counter = label_counter + 1;
-            compartment_counter = labeling_priority_vec(label_counter);
-            compartment_counter_next = labeling_priority_vec(label_counter+1);
+            compartment_counter = labeling_priority_vec_aux(label_counter);
+            compartment_counter_next = labeling_priority_vec_aux(label_counter+1);
         else
 compartment_counter = compartment_counter + 1;
 compartment_counter_next = compartment_counter + 1;
         end
 
-%if domain_label_ind
+        if not(isequal(compartment_counter,n_compartments))
 
                    if k_labeling == 1
                         reuna_t_aux = zef.reuna_t{i_labeling}(1:zef.reuna_submesh_ind{i_labeling},:);
@@ -125,7 +126,8 @@ end
                         else 
                             I_3 = [];
                         end
-                    end        
+                    end 
+    end
                 end
 
 end
@@ -135,8 +137,3 @@ domain_labels(I_8) = domain_labels_original(I_8);
 domain_labels = min(n_compartments, domain_labels);
 
 end
-
-
-
-
-

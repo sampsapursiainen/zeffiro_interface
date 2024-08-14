@@ -1,10 +1,9 @@
 
-if eval('zef.mesh_smoothing_on')
+if zef.mesh_smoothing_on
 
     length_waitbar = 4+length(priority_vec);
 
-    %nodes = eval('zef.nodes_raw');
-    sensors = eval('zef.sensors');
+    sensors = zef.sensors;
 
     smoothing_param = zef.smoothing_strength;
     smoothing_steps_surf = zef.smoothing_steps_surf;
@@ -69,8 +68,6 @@ if eval('zef.mesh_smoothing_on')
 
         zef_waitbar((2+length(priority_vec))/length_waitbar,h,'Smoothing operators.');
 
-        %eval('zef.tetra_raw');
-
         smoothing_ok = 0;
 
         A = sparse(N, N, 0);
@@ -132,23 +129,6 @@ if eval('zef.mesh_smoothing_on')
         taubin_lambda = 1;
         taubin_mu = -1;
 
-        %if eval('zef.use_gpu')==1 && eval('zef.gpu_count') > 0
-        %if mod(smoothing_repetition_ind,2)==0
-        %%A = gpuArray(A);
-        %A_K = gpuArray(A_K);
-        %sum_A = gpuArray(sum_A);
-        %K = gpuArray(K);
-        %end
-        %if smoothing_steps_vol(smoothing_repetition_ind) > 0
-        %B = gpuArray(B);
-        %sum_B = gpuArray(sum_B);
-        %end
-        %end
-
-        %if eval('zef.use_gpu')==1 && eval('zef.gpu_count') > 0
-        %nodes = gpuArray(nodes);
-        %end
-
         if smoothing_steps_surf(smoothing_repetition_ind) > 0
             if smoothing_steps_surf(smoothing_repetition_ind) < 1
                 convergence_criterion = Inf;
@@ -157,7 +137,6 @@ if eval('zef.mesh_smoothing_on')
             end
             iter_ind_aux = 0;
             while convergence_criterion > smoothing_steps_surf(smoothing_repetition_ind)
-                %nodes_old = nodes;
                 iter_ind_aux = iter_ind_aux + 1;
                 nodes_aux = A_K*nodes(K,:);
                 nodes_aux = nodes_aux./sum_A;
@@ -288,44 +267,14 @@ end
         optimizer_flag = -1;
         while optimizer_flag < 0 && optimizer_counter <= zef.mesh_optimization_repetitions
             optimizer_counter = optimizer_counter + 1;
-
             [nodes,optimizer_flag] = zef_fix_negatives(zef,nodes, tetra);
             if optimizer_flag == 1
-                [tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
+            [tetra, optimizer_flag] = zef_tetra_turn(zef,nodes, tetra, thresh_val);
             end
-            %     if optimizer_flag == -1
-            % if smoothing_steps_vol(smoothing_repetition_ind) > 0
-            % if smoothing_steps_vol(smoothing_repetition_ind) < 1
-            %     convergence_criterion = Inf;
-            % else
-            %      convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2;
-            % end
-            % iter_ind_aux = 0;
-            % while convergence_criterion > smoothing_steps_vol(smoothing_repetition_ind)
-            % iter_ind_aux = iter_ind_aux + 1;
-            %     nodes_aux = B*nodes;
-            % nodes_aux = nodes_aux./sum_B;
-            % nodes_aux_1 = (nodes_aux -nodes);
-            % nodes = nodes + smoothing_param*taubin_lambda*nodes_aux_1;
-            % nodes_aux = B*nodes;
-            % nodes_aux = nodes_aux./sum_B;
-            % nodes_aux_2 = (nodes_aux -nodes);
-            % if not(isempty(outer_surface_nodes_aux))
-            %     nodes_aux(outer_surface_nodes_aux,:) = 0;
-            % end
-            % nodes = nodes + smoothing_param*taubin_mu*nodes_aux_2;
-            % if smoothing_steps_vol(smoothing_repetition_ind) < 1
-            % convergence_criterion = norm(nodes_aux_2-nodes_aux_1,'fro')/norm(nodes_aux_1);
-            % else
-            %  convergence_criterion = smoothing_steps_vol(smoothing_repetition_ind).^2/iter_ind_aux;
-            % end
-            % zef_waitbar(smoothing_steps_vol(smoothing_repetition_ind)/convergence_criterion,h,'Volume smoothing.');
-            % end
-            % end
-            %     end
+          
         end
 
-        if optimizer_flag == -1;
+        if optimizer_flag == -1
             smoothing_ok = 0;
         else
             smoothing_ok = 1;
@@ -334,15 +283,6 @@ end
         if smoothing_ok == 0
             error('Mesh smoothing failed.');
         end
-
-        % if eval('zef.mesh_relabeling')
-        %
-        % pml_ind = [];
-        % label_ind = uint32(tetra);
-        % labeling_flag = 2;
-        % zef_mesh_labeling_step;
-        %
-        % end
 
         tetra_aux = tetra;
 
