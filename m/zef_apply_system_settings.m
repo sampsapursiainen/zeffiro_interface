@@ -42,6 +42,10 @@ if isequal(zef.segmentation_tool_default_position,[0 0 0 0])
     zef.segmentation_tool_default_position = [screen_size(3)/25 screen_size(4)/8 4*screen_size(3)/9 5*screen_size(4)/6];
 end
 
+if zef.parallel_processes > maxNumCompThreads
+zef.parallel_processes = maxNumCompThreads;
+end
+
 if nargout == 0
     assignin('base','zef',zef);
 end

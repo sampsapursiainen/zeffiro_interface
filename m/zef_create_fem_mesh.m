@@ -144,6 +144,17 @@ end
 
 clear X Y Z;
 
+n_parallel = zef.parallel_processes;
+    if isempty(gcp('nocreate'))
+        parpool(n_parallel);
+    else
+        h_pool = gcp;
+        if not(isequal(h_pool.NumWorkers,n_parallel))
+            delete(h_pool)
+            parpool(n_parallel);
+        end
+    end
+
 refinement_surface_on = zef.refinement_surface_on;
 n_surface_refinement = zef.refinement_surface_number;
 refinement_surface_compartments = zef.refinement_surface_compartments;
