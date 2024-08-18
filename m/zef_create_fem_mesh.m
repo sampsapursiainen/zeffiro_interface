@@ -358,6 +358,15 @@ end
 
 end
 
+if isequal(zef.priority_mode,3)
+    if zef.mesh_relabeling
+    pml_ind = [];
+    label_ind = uint32(tetra);
+    labeling_flag = 3;
+    zef_mesh_labeling_step;
+    end
+end
+
 
 zef.nodes = nodes;
 zef.tetra = double(tetra);

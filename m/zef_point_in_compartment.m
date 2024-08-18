@@ -1,5 +1,3 @@
-%Copyright © 2018- Sampsa Pursiainen & ZI Development Team
-%See: https://github.com/sampsapursiainen/zeffiro_interface
 function [I] = zef_point_in_compartment(zef,reuna_p,reuna_t,nodes,varargin)
 
 if isempty(zef)

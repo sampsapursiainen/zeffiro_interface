@@ -38,6 +38,14 @@ elseif isequal(labeling_flag,2)
 
 [domain_labels] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, use_labeling_priority, h);
 
+elseif isequal(labeling_flag,3)
+    %**************************************************************
+    %Re-labeling.
+    %**************************************************************
+
+            use_labeling_priority = 0;
+[domain_labels] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, use_labeling_priority, h);
+
 end
 
 
