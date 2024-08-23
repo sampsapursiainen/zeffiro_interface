@@ -53,33 +53,37 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     G = [ G1 ; G2 ; G3 ] ;
 
-    %% Count numbers of source indices in output lead field.
+    % disp( "Count numbers of source indices in output lead field." ) ;
 
-    uniqueSourceTetraI = unique ( sourceTetraI ) ;
+    % uniqueSourceTetraI = unique ( kwargs.sourceTetraI ) ;
 
-    ustN = numel (uniqueSourceTetraI) ;
+    % ustN = numel (uniqueSourceTetraI) ;
 
-    sourcesPerTetra = zeros ( ustN ) ;
+    % sourcesPerTetra = zeros ( ustN,1 ) ;
 
-    for ii = 1 : ustN
+    % for ii = 1 : ustN
 
-        sourcesPerTetra (ii) = sum ( sourceTetraI == uniqueSourceTetraI (ii) ) ;
+    %     sourcesPerTetra (ii) = sum ( kwargs.sourceTetraI == uniqueSourceTetraI (ii) ) ;
 
-    end % for
+    % end % for
 
     %%
 
     disp ("Computing initial matrices depending on Z...")
 
+    tic ;
+
     [ A, B, C, T, S, invS, R ] = matricesDependingOnZ (nodes, tetra, tetV, conductivity, electrodes, superNodes) ;
+
+    toc ;
+
+    keyboard
 
     %%
 
     disp ("Computing initial lead field...") ;
 
     L = intersperseRowsXYZ (- G * R) ;
-
-    L = parcellateLeadField (L, uniqueSourceTetraI, sourcesPerTetra) ;
 
     %%
 
@@ -207,11 +211,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             refL = intersperseRowsXYZ (- G * refR) ;
 
-            refL = parcellateLeadField ( refL, uniqueSourceTetraI, sourcesPerTetra ) ;
-
             linL = intersperseRowsXYZ (- G * linR) ;
-
-            linL = parcellateLeadField ( linL, uniqueSourceTetraI, sourcesPerTetra ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
@@ -237,7 +237,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             mf.dFreqs = kwargs.dFreqs (ii) ;
 
-            mf.electrodeI = kwargs.electrodeI (cols) ;
+            mf.electrodeI = cols ;
 
         end % for ii
 
