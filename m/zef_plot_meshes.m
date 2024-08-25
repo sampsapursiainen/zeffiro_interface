@@ -7,6 +7,13 @@ zef = evalin('base','zef');
 f_ind = 1;
 cdata_counter = 1;
 
+if isfield(zef,[zef.current_sensors '_get_functions'])
+zef = zef_fix_sensors_get_functions_array_size(zef);
+sensors_get_functions = zef.([zef.current_sensors '_get_functions']);
+else
+sensors_get_functions = cell(1,size(zef.sensors,1));
+end
+
 cdata_info.frame_start = eval('zef.frame_start');
 cdata_info.frame_stop = eval('zef.frame_stop');
 cdata_info.frame_step = eval('zef.frame_step');
@@ -282,6 +289,7 @@ if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
     sensors_name = sensors_name(sensors_visible);
     sensors_color_table = sensors_color_table(sensors_visible,:);
+    sensors_get_functions = sensors_get_functions(sensors_visible);
 end
 %April 2021
 [X_s, Y_s, Z_s] = sphere(20);
@@ -387,6 +395,7 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
         sensors = sensors(aux_ind_1,:);
         if not(isempty(sensors_visible))
             sensors_visible = sensors_visible(aux_ind_1,:);
+            sensors_get_functions = sensors_get_functions(aux_ind_1);
         end
         if not(isempty(sensors_color_table))
             sensors_color_table = sensors_color_table(aux_ind_1,:);
@@ -395,6 +404,7 @@ if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
     elseif eval('zef.cp_mode') == 2
         aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
         sensors = sensors(aux_ind_1,:);
+        sensors_get_functions = sensors_get_functions(aux_ind_1);
         if not(isempty(sensors_visible))
             sensors_visible = sensors_visible(aux_ind_1,:);
         end
@@ -466,7 +476,7 @@ elseif submesh_num > 0
             end
         end
     end
-end
+    end
 
 aux_ind_1 = [];
 aux_ind_2 = cell(1,length(reuna_t));
@@ -487,13 +497,13 @@ end
 %April 2021
 
 if eval('zef.attach_electrodes') && electrode_model == 1
-    sensors = zef_attach_sensors_volume(zef,sensors,'geometry');
+    sensors = zef_attach_sensors_volume(zef,sensors,'geometry',sensors_get_functions);
 elseif eval('zef.attach_electrodes') && electrode_model == 2
-    sensors_aux = zef_attach_sensors_volume(zef,sensors,'geometry');
+    sensors_aux = zef_attach_sensors_volume(zef,sensors,'geometry',sensors_get_functions);
     sensors_point_like_index = find(sensors_aux(:,4)==0);
     sensors_point_like = zeros(length(sensors_point_like_index),3);
     %April 2021
-    sensors_name_points = zef_attach_sensors_volume(zef,sensors,'points');
+    sensors_name_points = zef_attach_sensors_volume(zef,sensors,'points',sensors_get_functions);
     sensors_point_like_id = find(sensors(:,4)==0);
     %April 2021
     for spl_ind = 1 : length(sensors_point_like_index)
@@ -552,14 +562,10 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
                     surface_index_aux = length(reuna_p);
-                    if isfield(zef,[zef.current_sensors '_get_functions'])
-                    if length(zef.([zef.current_sensors '_get_functions'])) >= unique_sensors_aux_1(i)
-                        if not(isempty(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}))
-                            [~, sensor_info] = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}, zef,'sensor_info');
+                        if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
+                            [~, sensor_info] = zef_sensor_get_function_eval(sensors_get_functions{unique_sensors_aux_1(i)}, zef,'sensor_info');
                             surface_index_aux = sensor_info.compartment_index;
                         end
-                    end
-                    end
                     unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
                     [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{surface_index_aux},sensors(unique_sensors_aux_2,2:4));
                     h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));

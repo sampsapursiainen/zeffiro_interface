@@ -238,7 +238,7 @@ progress_value = double ( progress_ratio );
 progress_value = min(1,progress_value(:));
 progress_value = max(0,progress_value(:));
 
-visible_value = h_zeffiro_menu.Visible;
+visible_value = or(h_zeffiro_menu.Visible,h_zeffiro_menu.ZefAlwaysShowWaitbar);
 font_size = h_zeffiro_menu.ZefFontSize;
 verbose_mode = h_zeffiro_menu.ZefVerboseMode;
 use_waitbar = h_zeffiro_menu.ZefUseWaitbar;
@@ -267,7 +267,7 @@ if plan_of_action == INITIALIZING
 
     task_id = task_id + 1;
 
-    h_waitbar = init_figure(position_vec, visible_value, task_id, h_waitbar);
+    h_waitbar = init_figure(position_vec, 0, task_id, h_waitbar);
 
     h_zeffiro_menu.ZefTaskId = h_zeffiro_menu.ZefTaskId + 1;
 
@@ -288,6 +288,7 @@ if plan_of_action == INITIALIZING
     end
 
     progress_bar_text = varargin{end};
+
 
 elseif plan_of_action == PROGRESSING
 
@@ -328,15 +329,21 @@ if plan_of_action == INITIALIZING
 
     h_caller_file_name = uicontrol('Tag','caller_file_name','Style','text','FontWeight','bold','Parent',h_waitbar,'Units','normalized','String',caller_file_name,'HorizontalAlignment','center','Position',[0.1 0.78 0.8 0.15]);
 
-    uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.70 0.8 0.15]);
+    h_text_1 = uicontrol('Tag','progress_bar_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.70 0.8 0.15]);
 
-    uicontrol('Tag','progress_bar_ready_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.02 0.8 0.08]);
+    h_text_2 = uicontrol('Tag','progress_bar_ready_text','Style','text','Parent',h_waitbar,'Units','normalized','String',progress_bar_text,'HorizontalAlignment','center','Position',[0.1 0.02 0.8 0.08]);
 
-    uicontrol('Tag','auxiliary_text_1','Style','text','Parent',h_waitbar,'Units','normalized','String','Workspace size (MB)','HorizontalAlignment','center','Position',[0.15 0.1 0.2 0.15]);
+    h_text_3 = uicontrol('Tag','auxiliary_text_1','Style','text','Parent',h_waitbar,'Units','normalized','String','Workspace size (MB)','HorizontalAlignment','center','Position',[0.08 0.1 0.2 0.15]);
 
-    uicontrol('Tag','auxiliary_text_2','Style','text','Parent',h_waitbar,'Units','normalized','String','Time (s)','HorizontalAlignment','center','Position',[0.4 0.1 0.2 0.15]);
+    h_text_4 = uicontrol('Tag','auxiliary_text_2','Style','text','Parent',h_waitbar,'Units','normalized','String','Time (s)','HorizontalAlignment','center','Position',[0.28 0.1 0.2 0.15]);
 
-    uicontrol('Tag','auxiliary_text_3','Style','text','Parent',h_waitbar,'Units','normalized','String','CPU usage (%)','HorizontalAlignment','center','Position',[0.65 0.1 0.2 0.15]);
+    h_text_5 = uicontrol('Tag','auxiliary_text_3','Style','text','Parent',h_waitbar,'Units','normalized','String','CPU usage (%)','HorizontalAlignment','center','Position',[0.48 0.1 0.2 0.15]);
+
+    uistack(h_text_1,'bottom');
+    uistack(h_text_2,'bottom');
+    uistack(h_text_3,'bottom');
+    uistack(h_text_4,'bottom');
+    uistack(h_text_5,'bottom');
 
     font_size = h_zeffiro_menu.ZefFontSize;
 
@@ -351,9 +358,9 @@ end
 if plan_of_action == INITIALIZING
 
     h_axes = axes(h_waitbar,'Position',[0.1 0.50 0.8 0.25]);
-    h_axes_2 = axes(h_waitbar,'Position',[0.15 0.3 0.2 0.17]);
-    h_axes_3 = axes(h_waitbar,'Position',[0.4 0.3 0.2 0.17]);
-    h_axes_4 = axes(h_waitbar,'Position',[0.65 0.3 0.2 0.17]);
+    h_axes_2 = axes(h_waitbar,'Position',[0.08 0.3 0.2 0.17]);
+    h_axes_3 = axes(h_waitbar,'Position',[0.28 0.3 0.2 0.17]);
+    h_axes_4 = axes(h_waitbar,'Position',[0.48 0.3 0.2 0.17]);
 
 else
 
@@ -381,6 +388,10 @@ h_axes_3.Tag= 'progress_bar_auxiliary_axes_2';
 h_axes_4.Visible = 'off';
 h_axes_4.Tag= 'progress_bar_auxiliary_axes_3';
 
+set(h_axes,'Layer', 'Bottom');
+set(h_axes_2,'Layer', 'Bottom');
+set(h_axes_3,'Layer', 'Bottom');
+set(h_axes_4,'Layer', 'Bottom');
 
 h_waitbar.Colormap = [[ 0 1 1]; [ 0.145   0.624    0.631]];
 
@@ -422,8 +433,8 @@ if h_waitbar.Visible
 
     h_bar = barh(h_axes,[progress_value 1-progress_value; 0 0],'barlayout','stacked','showbaseline','off','edgecolor','none');
 
-    h_bar(1).FaceColor = [ 0 1 1];
-    h_bar(2).FaceColor = [ 0.145   0.624    0.631];
+    h_bar(1).FaceColor = [0 1 1];
+    h_bar(2).FaceColor = [0.145   0.624    0.631];
     h_axes.Visible = 'off';
     uistack(h_text,'top');
     uistack(h_text_ready,'top');
@@ -513,6 +524,27 @@ if detail_condition
 
 end % if
 
+if plan_of_action == INITIALIZING
+
+
+    h_axes = findobj(h_waitbar.Children,'Tag','waitbar_axes_1');
+
+    if isempty(h_axes)
+            h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.60 0.26 0.35 0.25],'FontSize',0.587962962962963,'Tag','waitbar_axes_1');
+        imagesc(h_axes,imread('zeffiro_interface_compass.png', 'BackgroundColor', [0.94 0.94 0.94]));
+        axis(h_axes,'equal');
+
+         h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.01 0.01 0.98 0.98],'FontSize',0.587962962962963,'Tag','waitbar_axes_2');
+        imagesc(h_axes,imread('zeffiro_mesh_symbol.png', 'BackgroundColor', [0.94 0.94 0.94]));
+        axis(h_axes,'equal');
+        alpha(h_axes,0.1);
+         set(h_axes,'Layer', 'Top');
+
+    end
+
+        h_waitbar.Visible = visible_value;
+end
+
 fclose(fid);
 
 end % function
@@ -569,6 +601,7 @@ if not(isempty(fig))
             'InvertHardcopy',get(0,'defaultfigureInvertHardcopy'),...
             'ScreenPixelsPerInchMode','manual' ...
             );
+
 
         fig.CloseRequestFcn = 'set(gcbo,''Visible'',''off'');';
         fig.DeleteFcn = 'set(gcbo,''Visible'',''off'');';

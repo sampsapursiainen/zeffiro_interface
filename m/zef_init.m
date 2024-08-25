@@ -66,8 +66,9 @@ zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.mlapp = 1;
 zef_data.zeffiro_restart = 0;
-zef_data.zeffiro_verbose_mode = 1;
-zef_data.use_waitbar= 1;
+zef_data.verbose_mode = 1;
+zef_data.use_waitbar = 1;
+zef_data.always_show_waitbar = 0;
 
 %%% Here begins initialization variables
 zef_data.sensor_explosion_parameter_1 = 3;
@@ -318,7 +319,13 @@ zef_data.mesh_labeling_approach = 1;
 zef_data.current_log_file = '';
 
 
-zef = zef_data;
+zef.fieldnames = fieldnames(zef_data);
+
+for zef_i = 1 : length(zef.fieldnames)
+    if not(isfield(zef,zef.fieldnames{zef_i}))
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    end
+end
 
 clear zef_i zef_data;
 

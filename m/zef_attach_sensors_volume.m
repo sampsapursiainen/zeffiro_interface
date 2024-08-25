@@ -9,27 +9,38 @@ end
 attach_type = 'mesh';
 bypass_functions = 0;
 
+if not(bypass_functions)
+zef = zef_fix_sensors_get_functions_array_size(zef);
+sensors_get_functions = zef.([zef.current_sensors '_get_functions']);
+sensors_attached_get_functions = cell(0);
+end
+
 if not(isempty(varargin))
     if length(varargin) > 0
         attach_type = varargin{1};
         if length(varargin) > 1
             if not(isempty(varargin{2}))
-            zef.nodes = varargin{2};
+            sensors_get_functions = varargin{2};
             end
         end
         if length(varargin) > 2
             if not(isempty(varargin{3}))
-            zef.tetra = varargin{3};
+            zef.nodes = varargin{3};
             end
         end
         if length(varargin) > 3
             if not(isempty(varargin{4}))
-            zef.surface_triangles = varargin{4};
+            zef.tetra = varargin{4};
             end
         end
         if length(varargin) > 4
             if not(isempty(varargin{5}))
-            bypass_functions = varargin{5};
+            zef.surface_triangles = varargin{5};
+            end
+        end
+        if length(varargin) > 5
+            if not(isempty(varargin{6}))
+            bypass_functions = varargin{6};
             end
         end
     end
@@ -40,15 +51,12 @@ zef.surface_triangles = {zef.surface_triangles};
 end
 
 %*****************************
-if not(bypass_functions)
-I_get_functions = [];
-sensors_attached_volume_functions = cell(0);
-if isfield(zef,[zef.current_sensors '_get_functions'])
-    I_get_functions = find(cellfun(@isempty,zef.([zef.current_sensors '_get_functions']))==0);
+if not(bypass_functions)  
+    I_get_functions = find(cellfun(@isempty,sensors_get_functions)==0);
     for i_ind = 1 : length(I_get_functions)
-      sensors_attached_volume_functions{i_ind} = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){I_get_functions(i_ind)},zef,attach_type);
+        sensors_attached_get_functions{i_ind} = zef_sensor_get_function_eval(sensors_get_functions{I_get_functions(i_ind)},zef,attach_type);
+      sensors_attached_get_functions{i_ind} = [I_get_functions(i_ind)*ones(size(sensors_attached_get_functions{i_ind},1),1) sensors_attached_get_functions{i_ind}];
     end
-end
 end
 %*****************************
 
@@ -131,7 +139,7 @@ i_ind = 0;
         for i = 1 : size(sensors,1)
             if ismember(i,I_get_functions)
                 i_ind = i_ind + 1; 
-                sensors_aux = [sensors_aux; sensors_attached_volume_functions{i_ind}];
+                sensors_aux = [sensors_aux; sensors_attached_get_functions{i_ind}];
             else
             if sensors(i,4) == 0 && sensors(i,5) == 0
 

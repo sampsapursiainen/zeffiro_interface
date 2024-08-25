@@ -187,7 +187,12 @@ zef.h_zeffiro_menu.ZefTool = mfilename;
 if not(isprop(zef.h_zeffiro_menu,'ZefVerboseMode'))
     addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
 end
-zef.h_zeffiro_menu.ZefVerboseMode = zef.zeffiro_verbose_mode;
+zef.h_zeffiro_menu.ZefVerboseMode = zef.verbose_mode;
+
+if not(isprop(zef.h_zeffiro_menu,'ZefAlwaysShowWaitbar'))
+    addprop(zef.h_zeffiro_menu,'ZefAlwaysShowWaitbar');
+end
+zef.h_zeffiro_menu.ZefAlwaysShowWaitbar = zef.always_show_waitbar;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefUseWaitbar'))
     addprop(zef.h_zeffiro_menu,'ZefUseWaitbar');

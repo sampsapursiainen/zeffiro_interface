@@ -7,6 +7,13 @@ zef = evalin('base','zef');
 f_ind = 1;
 cdata_counter = 1;
 
+if isfield(zef,[zef.current_sensors '_get_functions'])
+zef = zef_fix_sensors_get_functions_array_size(zef);
+sensors_get_functions = zef.([zef.current_sensors '_get_functions']);
+else
+sensors_get_functions = cell(1,size(zef.sensors,1));
+end
+
 cdata_info.frame_start = eval('zef.frame_start');
 cdata_info.frame_stop = eval('zef.frame_stop');
 cdata_info.frame_step = eval('zef.frame_step');
@@ -98,6 +105,7 @@ if not(isempty(sensors_visible))
     sensors = sensors(sensors_visible,:);
     sensors_name = sensors_name(sensors_visible);
     sensors_color_table = sensors_color_table(sensors_visible,:);
+    sensors_get_functions = sensors_get_functions(sensors_visible);
 end
 %April 2021
 
@@ -150,12 +158,14 @@ if eval(['zef.' sensor_tag '_visible'])
             sensors_visible = sensors_visible(aux_ind,:);
             sensors_color_table = sensors_color_table(aux_ind,:);
             sensors_name = sensors_name(aux_ind);
+            sensors_get_functions = sensors_get_functions(aux_ind);
         elseif eval('zef.cp_mode') == 2
             aux_ind = setdiff([1:size(sensors,1)]',aux_ind);
             sensors = sensors(aux_ind,:);
             sensors_visible = sensors_visible(aux_ind,:);
             sensors_color_table = sensors_color_table(aux_ind,:);
             sensors_name = sensors_name(aux_ind);
+            sensors_get_functions = sensors_get_functions(aux_ind);
         end
     end
     aux_ind = [];
@@ -168,14 +178,14 @@ if eval(['zef.' sensor_tag '_visible'])
     %April 2021
 
     if electrode_model == 1 & eval('zef.attach_electrodes') & ismember(eval('zef.imaging_method'),[1 4 5])
-        sensors = zef_attach_sensors_volume(zef,sensors);
+        sensors = zef_attach_sensors_volume(zef,sensors,'mesh',sensors_get_functions);
     elseif electrode_model==2 & eval('zef.attach_electrodes') & ismember(eval('zef.imaging_method'),[1 4 5])
-        sensors = zef_attach_sensors_volume(zef,sensors);
+        sensors = zef_attach_sensors_volume(zef,sensors,'mesh',sensors_get_functions);
         sensors_point_like_index = find(sensors(:,4)==0);
         unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
         sensors_point_like = zeros(length(unique_sensors_point_like),3);
         %April 2021
-        sensors_name_points = zef_attach_sensors_volume(zef,sensors_aux,'points');
+        sensors_name_points = zef_attach_sensors_volume(zef,sensors_aux,'points',sensors_get_functions);
         sensors_point_like_id = sensors(find(sensors(:,4)==0),1);
         %April 2021
         for spl_ind = 1 : length(unique_sensors_point_like)

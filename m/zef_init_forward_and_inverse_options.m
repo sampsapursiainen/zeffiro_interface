@@ -176,6 +176,14 @@ if not(isfield(zef,'mesh_optimization_parameter'));
     zef.mesh_optimization_parameter = 1E-5;
 end;
 
-if not(isfield(zef,'mesh_labeling_approach'));
-    zef.mesh_labeling_approach = 1;
+if not(isfield(zef,'mesh_optimization_parameter'));
+    zef.mesh_optimization_parameter = 1E-5;
+end;
+
+if not(isfield(zef,'extensive_relabeling'));
+    zef.extensive_relabeling = 0;
+end;
+
+if not(isfield(zef,'priority_mode'));
+    zef.priority_mode= 1;
 end;

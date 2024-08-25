@@ -164,6 +164,11 @@ function zef = zeffiro_interface(args)
 %                                   If this is true, the setup of submodules
 %                                   will be skipped.
 %
+%   'always_show_waitbar'           <logical> (default = true)
+%
+%                                   If this is true, the waitbar is shown
+%                                   also when other windows are suppressed.
+%
 %   NOTE: the value behind the name "run_script" is run using the Matlab
 %   function eval, meaning one should be absolutely sure that the script
 %   contents come from a trusted source.
@@ -207,7 +212,7 @@ arguments
 
     args.parallel_processes (1,1) double {mustBePositive, mustBeInteger};
 
-    args.verbose_mode (1,1) logical;
+    args.verbose_mode (1,1) logical; 
 
     args.use_waitbar (1,1) logical;
 
@@ -218,6 +223,8 @@ arguments
     args.submodules = string([])
 
     args.skip_submodules (1,1) logical = false
+
+    args.always_show_waitbar (1,1) logical = false
 
 end
 

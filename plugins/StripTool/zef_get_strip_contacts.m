@@ -5,7 +5,7 @@ if nargin < 4
 end
 
 if nargin < 5
-    global_index = contact_index;
+    global_index = [];
 end
 
 contacts = [];
@@ -141,7 +141,9 @@ end
 
 triangle_ind = find(sum(ismember(strip_struct.triangles{1},point_ind),2)==3);
 contacts = triangles(triangle_ind,:);
+if not(isempty(global_index))
 contacts = [global_index(ones(size(contacts,1),1),1) contacts];
+end
 
 %triangles = zef_triangles_2_sensor_boundary(zef,strip_struct.compartment_tag,triangles);
 end

@@ -20,8 +20,12 @@ zef.h_refinement_volume_compartments.Items = {'Active compartments', zef.aux_fie
 zef.h_refinement_volume_compartments_2.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_adaptive_refinement_compartments.Items = {'Active compartments', zef.aux_field{:}};
 zef.h_refinement_surface_compartments.Items = {'Active compartments', zef.aux_field{:}};
+zef.h_labeling_priority_order.Items = zef.aux_field(:);
 zef = rmfield(zef,'aux_field');
 zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers;
+zef.h_extensive_relabeling.Value = zef.extensive_relabeling;
+zef.h_priority_mode.Items = {'Not in use','Only in initial labeling','In both initial labeling and re-labeling'};
+zef.h_priority_mode.ItemsData = 1:length(zef.h_priority_mode.Items);
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;
@@ -42,7 +46,6 @@ else
     zef.h_as_opt_5.Value = -1;
 end
 
-
 zef.h_refinement_volume_compartments.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments.Items)-1];
 zef.h_refinement_volume_compartments.Multiselect = 'on';
 if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_compartments.ItemsData)
@@ -50,6 +53,10 @@ if max(zef.refinement_volume_compartments) <= length(zef.h_refinement_volume_com
 else
     zef.h_refinement_volume_compartments.Value = -1;
 end
+
+zef.h_labeling_priority_order.ItemsData = [1:length(zef.h_labeling_priority_order.Items)];
+zef.h_labeling_priority_order.Multiselect = 'off';
+zef = zef_update_labeling_priority(zef);
 
 zef.h_refinement_volume_compartments_2.ItemsData = [-1 1:length(zef.h_refinement_volume_compartments_2.Items)-1];
 zef.h_refinement_volume_compartments_2.Multiselect = 'on';
@@ -81,6 +88,11 @@ zef.h_refinement_surface_mode.ItemsData = [1:length(zef.h_refinement_surface_mod
 zef.h_refinement_surface_mode_2.ItemsData = [1:length(zef.h_refinement_surface_mode_2.Items)];
 zef.h_refinement_surface_mode.Value = zef.refinement_surface_mode;
 zef.h_refinement_surface_mode_2.Value = zef.refinement_surface_mode_2;
+
+zef.h_menu_move_one_step_up_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''one step up'');';
+zef.h_menu_move_one_step_down_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''one step down'');';
+zef.h_menu_move_to_bottom_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''top'');';
+zef.h_menu_move_to_bottom_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''bottom'');';
 
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;
 zef.h_refinement_volume_number.Value = num2str(zef.refinement_volume_number);
@@ -133,6 +145,7 @@ zef.h_mesh_optimization_parameter.Value = num2str(zef.mesh_optimization_paramete
 zef.h_mesh_labeling_approach.Value =  zef.mesh_labeling_approach;
 zef.h_smoothing_steps_ele.Value =  num2str(zef.smoothing_steps_ele);
 zef.h_source_space_creation_iterations.Value =  num2str(zef.source_space_creation_iterations);
+zef.h_priority_mode.Value = zef.priority_mode;
 
 zef.h_normalize_lead_field.Value =  num2str(zef.normalize_lead_field);
 

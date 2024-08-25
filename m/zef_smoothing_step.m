@@ -175,7 +175,7 @@ end
 
             if length(electrode_is_point) < size(zef.sensors,1)
                 bypass_functions = 1;
-        [sensors_attached_volume] = zef_attach_sensors_volume(zef,sensors,'mesh',nodes,tetra,surface_triangles, bypass_functions);
+        [sensors_attached_volume] = zef_attach_sensors_volume(zef,sensors,'mesh',{},nodes,tetra,surface_triangles, bypass_functions);
         L = zef_electrode_struct(sensors_attached_volume);
         if not(isempty(L))
            zef_waitbar((4+length(priority_vec)+((smoothing_steps_surf(smoothing_repetition_ind)+1)/(smoothing_steps_surf(smoothing_repetition_ind) + 1 + smoothing_steps_vol(smoothing_repetition_ind)))*20)/length_waitbar,h,'Mesh smoothing.');
