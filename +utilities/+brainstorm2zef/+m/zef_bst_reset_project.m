@@ -3,7 +3,7 @@ function zef_bst_reset_project
 h_parent = get(gcbo,'Parent');
 addpath(h_parent.folder_name);
 h_text_1 = findobj(h_parent.Children,'Tag','setup_file');
-
+'moi'
 [folder_name,file_name] = fileparts(h_text_1.String);
 
 project_file_name = [folder_name filesep file_name '.mat'];
