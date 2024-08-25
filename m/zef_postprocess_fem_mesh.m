@@ -7,7 +7,7 @@ if nargin==0
 end
 
 if isempty(zef)
-    zef = evalin('base','zef');
+    zef = evalin('base','zef'); 
 end
 
 h = zef_waitbar(0,1,'Mesh post-processing');
