@@ -7,7 +7,7 @@ if nargin==0
 end
 
 if isempty(zef)
-    zef = evalin('base','zef'); 
+    zef = evalin('base','zef');
 end
 
 h = zef_waitbar(0,1,'Mesh post-processing');
@@ -189,7 +189,7 @@ submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
-
+ 
    %I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));
     I_2 = zeros(size(tetra,1),1);
