@@ -530,7 +530,7 @@ if plan_of_action == INITIALIZING
     h_axes = findobj(h_waitbar.Children,'Tag','waitbar_axes_1');
 
     if isempty(h_axes)
-            h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.63 0.275 0.315 0.225],'FontSize',0.587962962962963,'Tag','waitbar_axes_1');
+            h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.63 0.272 0.315 0.225],'FontSize',0.587962962962963,'Tag','waitbar_axes_1');
         imagesc(h_axes,imread('zeffiro_symbol_compass.png', 'BackgroundColor', [0.94 0.94 0.94]));
         axis(h_axes,'equal');
 
