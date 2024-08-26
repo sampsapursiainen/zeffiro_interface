@@ -530,12 +530,12 @@ if plan_of_action == INITIALIZING
     h_axes = findobj(h_waitbar.Children,'Tag','waitbar_axes_1');
 
     if isempty(h_axes)
-            h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.60 0.26 0.35 0.25],'FontSize',0.587962962962963,'Tag','waitbar_axes_1');
-        imagesc(h_axes,imread('zeffiro_interface_compass.png', 'BackgroundColor', [0.94 0.94 0.94]));
+            h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.63 0.275 0.315 0.225],'FontSize',0.587962962962963,'Tag','waitbar_axes_1');
+        imagesc(h_axes,imread('zeffiro_symbol_compass.png', 'BackgroundColor', [0.94 0.94 0.94]));
         axis(h_axes,'equal');
 
          h_axes = uiaxes('Parent',h_waitbar,'visible','off','Units','normalized','Position',[0.01 0.01 0.98 0.98],'FontSize',0.587962962962963,'Tag','waitbar_axes_2');
-        imagesc(h_axes,imread('zeffiro_mesh_symbol.png', 'BackgroundColor', [0.94 0.94 0.94]));
+        imagesc(h_axes,imread('zeffiro_symbol_mesh.png', 'BackgroundColor', [0.94 0.94 0.94]));
         axis(h_axes,'equal');
         alpha(h_axes,0.1);
          set(h_axes,'Layer', 'Top');

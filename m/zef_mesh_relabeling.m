@@ -1,4 +1,4 @@
-function   [domain_labels, label_vec] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, use_labeling_priority, h)
+function   [domain_labels, distance_vec, label_vec] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, distance_vec, use_labeling_priority, h)
 
 if nargin < 5
     priority_mode = zef.priority_mode; 
@@ -9,7 +9,7 @@ h = zef_waitbar(0,'Mesh re-labeling.')
 close_waitbar = true;
 else
 close_waitbar = false;
-end 
+end
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
@@ -25,9 +25,6 @@ domain_labels_original = domain_labels;
 if use_labeling_priority
     tetra_labels = domain_labels(:,[1 1 1 1]);
 end
-
-
-    compartment_counter = 0;
 
     test_ind = -ones(size(nodes,1),1);
 
@@ -60,9 +57,10 @@ if zef.extensive_relabeling
                     I_3 = tetra(I_1(I_2),:);
                     [I_4,~,I_5] = unique(I_3);
                     I_6 = find(test_ind(I_4) < 0);
-                    I_7 = zef_point_in_compartment(zef,zef.reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
+                    [I_7,distance_vec_aux] = zef_point_in_compartment(zef,zef.reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
                     test_ind(I_4(I_6)) = 0;
                     test_ind(I_4(I_6(I_7))) = 1;
+                    distance_vec(I_4(I_6(I_7))) = distance_vec_aux;
                     if use_labeling_priority
                         I_8 = find(ismember(tetra,I_4(I_6(I_7))));
                         tetra_labels(I_8) = compartment_counter; 
@@ -88,9 +86,10 @@ end
                     I_3 = tetra(I_1(I_2),:);
                     [I_4,~,I_5] = unique(I_3);
                     I_6 = find(test_ind(I_4) < 0);
-                    I_7 = zef_point_in_compartment(zef,zef.reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
+                    [I_7,distance_vec_aux] = zef_point_in_compartment(zef,zef.reuna_p{i_labeling},reuna_t_aux,nodes(I_4(I_6),:),[compartment_counter n_compartments]);
                     test_ind(I_4(I_6)) = 0;
                     test_ind(I_4(I_6(I_7))) = 1;
+                    distance_vec(I_4(I_6(I_7))) = distance_vec_aux;
                     I_5 = reshape(test_ind(I_4(I_5)),size(I_3));
                     tetra_ind_aux = I_1(I_2(find(sum(I_5,2) >= 4)));
                     if use_labeling_priority
@@ -99,7 +98,7 @@ end
                         tetra_labels_aux(mod(I_8-1,size(tetra_labels,1))+1) = 1;
                     end
                     domain_labels(tetra_ind_aux) = min(n_compartments, compartment_counter);
-                end
+                end 
 
                     if use_labeling_priority
                         domain_labels = zef_choose_domain_labels(zef, tetra_labels, use_labeling_priority); 

@@ -121,7 +121,7 @@ if eval('zef.refinement_on')
         clear tetra_ind_aux;
         edge_ind(:,1:2) = sort(edge_ind(:,1:2),2);
         edge_ind = sortrows(edge_ind,[1 2 5]);
-        clear edge_ind_2 nodes_new;
+        clear edge_ind_2 nodes_new distance_vec_new;
         new_node_ind = 0;
         current_edge = [0 0];
 
@@ -149,9 +149,12 @@ if eval('zef.refinement_on')
         clear edge_val_aux;
         edge_ind_2 = edge_ind_2(2:end,:);
         nodes_new = (1/2)*(nodes(edge_ind(edge_ind_2,1),:) + nodes(edge_ind(edge_ind_2,2),:));
+        distance_vec_new = (1/2)*(distance_vec(edge_ind(edge_ind_2,1),:) + distance_vec(edge_ind(edge_ind_2,2),:));
+
         size_nodes = size(nodes,1);
         nodes = [nodes ; nodes_new];
-        clear edge_ind_2 nodes_new;
+        distance_vec = [distance_vec ; distance_vec_new];
+        clear edge_ind_2 nodes_new distance_vec_new;
 
         zef_waitbar(5,length_waitbar,h,'Surface refinement.');
 
@@ -290,7 +293,7 @@ if eval('zef.refinement_on')
         end
 
         tetra = [tetra ; tetra_new];
-        domain_labels = [domain_labels ; (domain_labels_new)];
+        domain_labels = [domain_labels ; domain_labels_new];
 
         clear tetra_new_ind tetra_new_out;
 

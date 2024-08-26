@@ -1,4 +1,4 @@
-function [I] = zef_point_in_compartment(zef,reuna_p,reuna_t,nodes,varargin)
+function [I,dist_vec] = zef_point_in_compartment(zef,reuna_p,reuna_t,nodes,varargin)
 
 if isempty(zef)
     zef = evalin('base','zef');
@@ -54,8 +54,6 @@ aux_vec_2 = reuna_p(reuna_t(:,2),:)'-reuna_p(reuna_t(:,1),:)';
 aux_vec_3 = reuna_p(reuna_t(:,3),:)'-reuna_p(reuna_t(:,1),:)';
 aux_vec_4 = cross(aux_vec_2,aux_vec_3)/2;
 
-ind_vec = zeros(size(nodes,1),1);
-
 I = find(nodes(:,1) <= max_x & nodes(:,1) >= min_x & nodes(:,2) <= max_y & nodes(:,2) >= min_y & nodes(:,3) <= max_z & nodes(:,3) >= min_z & nodes_norm_vec <= max_norm);
 
 length_I = length(I);
@@ -63,6 +61,7 @@ length_I = length(I);
 tic;
 ones_vec = ones(length(aux_vec_1),1);
 ind_vec_aux = zeros(length_I,1);
+dist_vec = zeros(length_I,1);
 nodes_aux = nodes(I,:)';
 
 %%%%%%%%%%%%%%%%GPU part%%%%%%%%%%%%%%%%%%%
@@ -76,6 +75,7 @@ if use_gpu == 1 & eval('zef.gpu_count') > 0
     aux_vec_4 = gpuArray(aux_vec_4);
     ones_vec = gpuArray(ones_vec);
     ind_vec_aux = gpuArray(ind_vec_aux);
+    dist_vec = gpuArray(dist_vec);
 
     par_num = eval('zef.parallel_vectors');
     bar_ind = ceil(length_I/(50*par_num));
@@ -90,9 +90,11 @@ if use_gpu == 1 & eval('zef.gpu_count') > 0
         aux_vec_5 = aux_vec_1(:,:,ones(1,length(block_ind))) - aux_vec(:,ones_vec,:);
         aux_vec_2 = sum(aux_vec_5.*aux_vec_4(:,:,ones(1,length(block_ind))));
         aux_vec_3 = sqrt(sum(aux_vec_5.*aux_vec_5));
+        aux_vec_7 = sqrt(min(aux_vec_3,[],2));
         aux_vec_3 = (aux_vec_3.*aux_vec_3).*aux_vec_3;
         aux_vec_6 = sum(aux_vec_2./aux_vec_3)/(4*pi);
         ind_vec_aux(block_ind) = aux_vec_6(:);
+        dist_vec(block_ind) = aux_vec_7(:);
         time_val = toc;
 
         if not(isempty(compartment_info))
@@ -118,10 +120,12 @@ else
 
     tic;
     sub_cell_aux_2 = cell(0);
+    sub_cell_aux_4 = cell(0);
     for restart_ind = 1 : n_restarts
         sub_length = sub_ind_aux_1(restart_ind+1)-sub_ind_aux_1(restart_ind);
         par_size = ceil(sub_length/par_num);
         sub_cell_aux_1 = cell(0);
+        sub_cell_aux_3 = cell(0);
         sub_ind_aux_2 =  [1 : par_size : sub_length];
         parfor j = 1 : length(sub_ind_aux_2)
             i = sub_ind_aux_2(j);
@@ -134,12 +138,15 @@ else
             aux_vec_5 = aux_vec_1(:,:,ones(1,length(block_ind))) - aux_vec(:,ones_vec,:);
             aux_vec_2 = sum(aux_vec_5.*aux_vec_4(:,:,ones(1,length(block_ind))));
             aux_vec_3 = sqrt(sum(aux_vec_5.*aux_vec_5));
+            aux_vec_7 = sqrt(min(aux_vec_3,[],2));
             aux_vec_3 = (aux_vec_3.*aux_vec_3).*aux_vec_3;
             aux_vec_6 = sum(aux_vec_2./aux_vec_3)/(4*pi);
             sub_cell_aux_1{j} = aux_vec_6(:);
+            sub_cell_aux_3{j} = aux_vec_7(:);
         end
 
         sub_cell_aux_2{restart_ind} = sub_cell_aux_1;
+        sub_cell_aux_4{restart_ind} = sub_cell_aux_3;
 
         time_val = toc;
 
@@ -156,6 +163,7 @@ else
         for i = 1 : length(sub_cell_aux_2{restart_ind})
             length_sub_cell = length(sub_cell_aux_2{restart_ind}{i});
             ind_vec_aux(ind_inc+1:ind_inc+length_sub_cell) = sub_cell_aux_2{restart_ind}{i};
+            dist_vec(ind_inc+1:ind_inc+length_sub_cell) = sub_cell_aux_4{restart_ind}{i};
             ind_inc = ind_inc + length_sub_cell;
         end
     end
@@ -168,7 +176,10 @@ else
 
 end
 
-ind_vec(I) = gather(ind_vec_aux);
-I = find(ind_vec > eval('zef.meshing_threshold'));
+
+J = find(gather(ind_vec_aux) > eval('zef.meshing_threshold'));
+I = I(J);
+dist_vec = gather(dist_vec);
+dist_vec = dist_vec(J);
 
 end

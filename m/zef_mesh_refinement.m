@@ -1,6 +1,6 @@
 %Copyright © 2021- Sampsa Pursiainen & GPU-ToRRe-3D Development Team
 %See: https://github.com/sampsapursiainen/GPU-Torre-3D
-function [nodes,tetra,domain_labels_aux,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels_aux,varargin)
+function [nodes,tetra,domain_labels_aux,distance_vec,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels_aux,distance_vec, varargin)
 
 if isempty(zef)
     zef = evalin('base',zef);
@@ -13,6 +13,7 @@ tetra_ref_ind = [];
 tetra_aux = tetra;
 tetra_interp_vec = [1 : size(tetra,1)]';
 nodes_aux = nodes;
+distance_vec_aux = distance_vec;
 domain_labels_aux_2 = domain_labels_aux;
 tetra_interp_vec_2 = tetra_interp_vec;
 
@@ -93,7 +94,7 @@ if not(isempty(compartment_ind))
         clear tetra_ind_aux;
         edge_ind(:,1:2) = sort(edge_ind(:,1:2),2);
         edge_ind = sortrows(edge_ind,[1 2 5]);
-        clear edge_ind_2 nodes_new;
+        clear edge_ind_2 nodes_new distance_vec_new;
         new_node_ind = 0;
         current_edge = [0 0];
 
@@ -117,9 +118,11 @@ if not(isempty(compartment_ind))
         clear edge_val_aux;
         edge_ind_2 = edge_ind_2(2:end,:);
         nodes_new = (1/2)*(nodes(edge_ind(edge_ind_2,1),:) + nodes(edge_ind(edge_ind_2,2),:));
+        distance_vec_new = (1/2)*(distance_vec(edge_ind(edge_ind_2,1),:) + distance_vec(edge_ind(edge_ind_2,2),:));
         size_nodes = size(nodes,1);
         nodes = [nodes ; nodes_new];
-        clear edge_ind_2 nodes_new;
+        distance_vec = [distance_vec ; distance_vec_new];
+        clear edge_ind_2 nodes_new distance_vec_new;
 
         I =find(edge_ind(:,4));
         edge_ind(I,4) = edge_ind(I,4) + size_nodes;
@@ -278,6 +281,7 @@ if not(isempty(compartment_ind))
 
         tetra_aux_2 = tetra;
         nodes_aux_2 = nodes;
+        distance_vec_aux_2 = distance_vec;
         domain_labels_aux_2_2 = domain_labels_aux;
         tetra_interp_vec_2_2 = tetra_interp_vec;
 
@@ -307,10 +311,12 @@ if not(isempty(compartment_ind))
         domain_labels_aux = domain_labels_aux_2(I,:);
         tetra_interp_vec = tetra_interp_vec_2(I);
         nodes = nodes_aux;
+        distance_vec = distance_vec_aux;
 
         [unique_vec_1, ~, unique_vec_3] = unique(tetra);
         tetra = reshape(unique_vec_3,size(tetra));
         nodes = nodes(unique_vec_1,:);
+        distance_vec = distance_vec(unique_vec_1,:);
 
         tetra_sort = [tetra(:,[1 2]);
             tetra(:,[2 3]);
@@ -326,6 +332,7 @@ if not(isempty(compartment_ind))
 
         edges_ind = edges_ind + size(nodes,1);
         nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))];
+        distance_vec = [distance_vec ; 0.5*(distance_vec(edges(:,1),:) + distance_vec(edges(:,2),:))];
 
         interp_vec = repmat([1:size(tetra,1)]',8,1);
         domain_labels_aux = domain_labels_aux(interp_vec);
@@ -346,10 +353,12 @@ if not(isempty(compartment_ind))
 
         tetra = [tetra; size(nodes,1) + tetra_aux_2];
         nodes = [nodes ; nodes_aux_2];
+        distance_vec = [distance_vec; distance_vec_aux_2];
         domain_labels_aux = [domain_labels_aux ; domain_labels_aux_2_2];
         tetra_interp_vec = [tetra_interp_vec; tetra_interp_vec_2_2];
         [~, unique_vec_2, unique_vec_3] = unique(round(nodes,eps_val),'rows');
         nodes = nodes(unique_vec_2,:);
+        distance_vec = distance_vec(unique_vec_2,:);
         tetra = unique_vec_3(tetra);
 
     end
@@ -371,6 +380,7 @@ else
 
     edges_ind = edges_ind + size(nodes,1);
     nodes = [nodes ; 0.5*(nodes(edges(:,1),:) + nodes(edges(:,2),:))];
+    distance_vec = [distance_vec ; 0.5*(distance_vec(edges(:,1),:) + distance_vec(edges(:,2),:))];
 
     tetra_interp_vec = repmat([1:size(tetra,1)]',8,1);
     domain_labels_aux = domain_labels_aux(tetra_interp_vec);
