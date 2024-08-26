@@ -101,7 +101,7 @@ zef.([zef.compartment_tags{1} '_submesh_ind']) = size(surface_struct.Faces,1);
 zef = zef_build_compartment_table(zef);
 end
 
-zef.refinement_on = 1;
+zef.refinement_on = 1; 
 zef.mesh_smoothing_on = zef_bst.mesh_smoothing_on;
 zef.distance_smoothing_on = zef_bst.distance_smoothing_on;
 zef.refinement_surface_on = zef_bst.refine_surface_on;
