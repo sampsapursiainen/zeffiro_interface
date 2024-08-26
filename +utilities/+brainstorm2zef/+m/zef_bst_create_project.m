@@ -85,7 +85,7 @@ end
 
     if isempty(zef_bst.surface_mesh_types)
    ref_vec_surf = [1:length(zef_bst.surface_mesh_files) ];
-ref_vec_vol = [1:length(zef_bst.surface_mesh_files) ];
+ref_vec_vol = [];
     end
 end
 
@@ -102,7 +102,7 @@ zef = zef_build_compartment_table(zef);
 end
 
 zef.refinement_on = 1;
-zef.mesh_smoothing_on = 1;
+zef.mesh_smoothing_on = zef_bst.smoothing_on;
 zef.refinement_surface_on = zef_bst.refine_surface_on;
 zef.refinement_volume_on = zef_bst.refine_volume_on;
 zef.refinement_surface_number = zef_bst.refine_surface_number;
