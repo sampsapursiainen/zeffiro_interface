@@ -1,6 +1,6 @@
 function zef = zeffiro_interface(args)
 
-%
+% 
 % zeffiro_interface
 %
 % This fuction starts Zeffiro Interface. It can be run with a variable number
