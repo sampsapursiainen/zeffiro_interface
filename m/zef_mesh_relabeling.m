@@ -9,7 +9,7 @@ h = zef_waitbar(0,'Mesh re-labeling.')
 close_waitbar = true;
 else
 close_waitbar = false;
-end
+end 
 
 I = zeros(size(nodes,1), 1);
 I_2 = [1 : length(I)]';
