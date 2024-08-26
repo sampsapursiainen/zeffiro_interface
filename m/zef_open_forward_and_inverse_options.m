@@ -26,6 +26,9 @@ zef.h_reduce_labeling_outliers.Value = zef.reduce_labeling_outliers;
 zef.h_extensive_relabeling.Value = zef.extensive_relabeling;
 zef.h_priority_mode.Items = {'Not in use','Only in initial labeling','In both initial labeling and re-labeling'};
 zef.h_priority_mode.ItemsData = 1:length(zef.h_priority_mode.Items);
+zef.h_smoothing_steps_dist.Value = num2str(zef.smoothing_steps_dist);
+zef.h_distance_smoothing_exp.Value = num2str(zef.distance_smoothing_exp);
+zef.h_distance_smoothing_on.Value = zef.distance_smoothing_on;
 
 zef.h_as_opt_1.ItemsData = [1:length(zef.h_as_opt_1.Items)];
 zef.h_as_opt_1.Value = zef.preconditioner;

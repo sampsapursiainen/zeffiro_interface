@@ -165,6 +165,7 @@ zef_data.axes_visible= 0;
 zef_data.n_sources= 10000;
 zef_data.mesh_resolution= 3;
 zef_data.attach_electrodes= 1;
+zef_data.reuna_distance_vec = [];
 
 zef_data.source_direction_mode = 2;
 
@@ -317,7 +318,10 @@ zef_data.mesh_optimization_repetitions = 10;
 zef_data.mesh_optimization_parameter = 1E-5;
 zef_data.mesh_labeling_approach = 1;
 zef_data.current_log_file = '';
-
+zef_data.distance_smoothing_exp = 0.01;
+zef_data.distance_smoothing_on = 1;
+zef_data.smoothing_steps_dist = 0.9;
+zef_data.reuna_submesh_ind = cell(0);
 
 zef.fieldnames = fieldnames(zef_data);
 

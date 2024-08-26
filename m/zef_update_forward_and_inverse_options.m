@@ -34,6 +34,11 @@ zef.lead_field_filter_quantile = str2num(get(zef.h_lead_field_filter_quantile,'V
 zef.extensive_relabeling = zef.h_extensive_relabeling.Value;
 zef.priority_mode = zef.h_priority_mode.Value;
 
+zef.smoothing_steps_dist = str2num(zef.h_smoothing_steps_dist.Value);
+zef.distance_smoothing_exp = str2num(zef.h_distance_smoothing_exp.Value);
+zef.distance_smoothing_on = zef.h_distance_smoothing_on.Value;
+
+
 zef.adaptive_refinement_on = get(zef.h_adaptive_refinement_on,'Value');
 zef.adaptive_refinement_k_param = str2num(get(zef.h_adaptive_refinement_k_param,'Value'));
 zef.adaptive_refinement_thresh_val = str2num(get(zef.h_adaptive_refinement_thresh_val,'Value'));

@@ -187,3 +187,15 @@ end;
 if not(isfield(zef,'priority_mode'));
     zef.priority_mode= 1;
 end;
+
+if not(isfield(zef,'distance_smoothing_on'));
+    zef.distance_smoothing_on = 0;
+end;
+
+if not(isfield(zef,'distance_smoothing_exp'));
+    zef.distance_smoothing_exp = 0.01;
+end;
+
+if not(isfield(zef,'smoothing_steps_dist'));
+    zef.smoothing_steps_dist = 0.9;
+end;
