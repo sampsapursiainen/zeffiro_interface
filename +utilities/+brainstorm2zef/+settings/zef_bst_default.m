@@ -73,7 +73,7 @@
 %                               of consecutive volume refinements (logical 
 %                               1 or 0).
 %
-% zef_bst.refine_volume_on = 1;
+% zef_bst.refine_volume_on = 0;
 %
 %                               This parameter determines whether surfaces
 %                               of Zeffiro's tetrahedral mesh are refined 
