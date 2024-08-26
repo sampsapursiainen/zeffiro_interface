@@ -26,4 +26,4 @@ zef_bst.extensive_relabeling = 0;
 zef_bst.priority_mode = 1;
 zef_bst.labeling_priority = [];
 zef_bst.mesh_smoothing_on = 1;
-zef_bst.distance_smoothing_on = 1;
+zef_bst.distance_smoothing_on = 0;
