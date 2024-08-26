@@ -102,7 +102,8 @@ zef = zef_build_compartment_table(zef);
 end
 
 zef.refinement_on = 1;
-zef.mesh_smoothing_on = zef_bst.smoothing_on;
+zef.mesh_smoothing_on = zef_bst.mesh_smoothing_on;
+zef.distance_smoothing_on = zef_bst.distance_smoothing_on;
 zef.refinement_surface_on = zef_bst.refine_surface_on;
 zef.refinement_volume_on = zef_bst.refine_volume_on;
 zef.refinement_surface_number = zef_bst.refine_surface_number;
