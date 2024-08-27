@@ -6,6 +6,12 @@ function [ absFilePaths, dirs, names, suffixes ] = fileParts (filePattern)
 % files, specified via a string pattern recognized by the MATLAB function dir.
 %
 
+    arguments
+
+        filePattern (1,1) string
+
+    end
+
     dataFolderStructs = dir (filePattern) ;
 
     dataFileDirs = arrayfun ( @(entry) string (entry.folder), dataFolderStructs ) ;
