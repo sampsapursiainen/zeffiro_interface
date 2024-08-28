@@ -286,14 +286,14 @@ S_tes = ( (eye(L)-(1/L)*ones(L,L)) ) * (inv(C) * (J+(B'*R_tes))) * J;
 
 if isfield(zef,'redo_eit_dec')
     if eval('zef.redo_eit_dec') == 1
-        [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+        [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind,zef.n_sources);
     else
         dof_ind   = eval('zef.dof_ind');
         dof_count = eval('zef.dof_count');
         dof_positions = eval('zef.source_positions');
     end
 else
-    [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
+    [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind,zef.n_sources);
 end
 
 R_tes_1 = -Grad_1*R_tes;
