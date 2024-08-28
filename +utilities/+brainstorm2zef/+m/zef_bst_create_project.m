@@ -14,16 +14,33 @@ end
 
 zef_bst = utilities.brainstorm2zef.m.zef_bst_get_settings(settings_file_name, zef_bst);
 
+if isfield(zef_bst,'subject_struct')
+    if length(fieldnames(zef_bst.subject_struct)) > 0
+        subject_struct = zef_bst.subject_struct;
+    else
 subject_struct = bst_get('Subject');
-subject_folder = bst_get('ProtocolInfo').SUBJECTS;
+    end
+else 
+subject_struct = bst_get('Subject');    
+end
 
-if not(isempty(zef_bst.surface_mesh_files))
+    if isfield(zef_bst,'subject_folder')
+if not(isempty(char(zef_bst.subject_folder)))   
+subject_folder = zef_bst.subject_folder;
+else
+subject_folder = bst_get('ProtocolInfo').SUBJECTS;
+end
+else
+subject_folder = bst_get('ProtocolInfo').SUBJECTS;
+    end
+
+
     for i = 1 : length(zef_bst.surface_mesh_files)
         if not(exist(zef_bst.surface_mesh_files{i},'file'))
           zef_bst.surface_mesh_files{i} = fullfile(subject_folder,zef_bst.surface_mesh_files{i}); 
         end
-    end
-end
+        end
+
 
 zeffiro_path = fileparts(which('zeffiro_interface'));
 
@@ -41,7 +58,7 @@ zef = zef_build_compartment_table(zef);
 h_waitbar = zef_waitbar(0,'Creating project.');
 
 mesh_file_ind = 0;
-zef_bst.surface_names = cell(0);
+surface_mesh_types = cell(0);
 
 if isempty(zef_bst.surface_mesh_files)
 
@@ -49,52 +66,66 @@ if isempty(zef_bst.surface_mesh_files)
 ref_vec_surf = [];
 ref_vec_vol = [];
 for i = 1 : length(zef_bst.surface_priority)
+    if (isfield(subject_struct,['i' zef_bst.surface_priority{i}]))
     aux_ind = subject_struct.(['i' zef_bst.surface_priority{i}]);
+    else
+    aux_ind = find(ismember({subject_struct.Surface.Comment},zef_bst.surface_priority{i}),1);
+    end
 if not(isempty(aux_ind))
    mesh_file_ind = mesh_file_ind + 1; 
    zef_bst.surface_mesh_files{mesh_file_ind} = [subject_folder filesep subject_struct.Surface(aux_ind).FileName];
-   zef_bst.surface_names{mesh_file_ind} = [subject_struct.Surface(aux_ind).SurfaceType ': ' subject_struct.Surface(aux_ind).Comment];
-zef_bst.surface_mesh_types{mesh_file_ind} = zef_bst.surface_priority{i};
+end
+end
+n_surface_meshes = mesh_file_ind;
+surface_mesh_order = [1:n_surface_meshes]';
+
+end
+
+n_surface_meshes = length(zef_bst.surface_mesh_files);
+surface_mesh_types = cell(1,n_surface_meshes);
+for i = 1 : n_surface_meshes
+[subject_struct, subject_index, surface_index] = bst_get('SurfaceFile', zef_bst.surface_mesh_files{i});
+surface_mesh_type = subject_struct.Surface(surface_index).Comment;
+if not(ismember(surface_mesh_type,zef_bst.surface_priority))
+surface_mesh_type = subject_struct.Surface(surface_index).SurfaceType;
+end
+surface_mesh_types{i} = surface_mesh_type;  
+end
+
+surface_mesh_order = zeros(n_surface_meshes,1);
+surface_counter = 0; 
+for i = 1 : length(zef_bst.surface_priority)
+I = find(ismember(surface_mesh_types,zef_bst.surface_priority{i}));
+n_found = length(I);
+surface_mesh_order(I) = [1:n_found]' + surface_counter;
+surface_counter = surface_counter + n_found; 
+end
+
+zef_bst.surface_mesh_files = zef_bst.surface_mesh_files(surface_mesh_order);
+surface_mesh_types = surface_mesh_types(surface_mesh_order);
+
+ref_vec_vol = [];
+ref_vec_surf = [];
+for i =  n_surface_meshes : -1 : 1
 if not(isempty(ref_vec_surf))
 ref_vec_surf = ref_vec_surf + 1;
 end
 if not(isempty(ref_vec_vol))
 ref_vec_vol = ref_vec_vol + 1;
 end
-   if ismember(zef_bst.surface_priority{i},zef_bst.refine_surface)
+if ismember(surface_mesh_types{i},zef_bst.refine_surface)
 ref_vec_surf = [1 ref_vec_surf]; 
    end
-      if ismember(zef_bst.surface_priority{i},zef_bst.refine_volume)
+if ismember(surface_mesh_types{i},zef_bst.refine_volume)
 ref_vec_vol = [1 ref_vec_vol]; 
 end
 end
 
-end
-
-else
-
-    n_surface_meshes = length(zef_bst.surface_mesh_files);
-    for i = 1 : n_surface_meshes
-[~, file_name_aux] = fileparts(zef_bst.surface_mesh_files{i});
-if isempty(zef_bst.surface_mesh_types)
-zef_bst.surface_names{i} = file_name_aux;
-else
-zef_bst.surface_names{i} = [zef_bst.surface_mesh_types{i} ': ' file_name_aux];    
-end
-    end
-
-    if isempty(zef_bst.surface_mesh_types)
-   ref_vec_surf = [1:length(zef_bst.surface_mesh_files) ];
-ref_vec_vol = [];
-    end
-end
-
-n_surface_meshes = length(zef_bst.surface_mesh_files);
 for i = 1 : n_surface_meshes
 zef_waitbar(i/n_surface_meshes,h_waitbar,'Creating project.');
 surface_struct = load(zef_bst.surface_mesh_files{i});
 zef = zef_add_compartment(zef);
-zef.([zef.compartment_tags{1} '_name']) = zef_bst.surface_names{i};
+zef.([zef.compartment_tags{1} '_name']) = surface_mesh_types{i};
 zef.([zef.compartment_tags{1} '_points']) = zef_bst.unit_conversion*surface_struct.Vertices;
 zef.([zef.compartment_tags{1} '_triangles']) = surface_struct.Faces(:,[1 3 2]);
 zef.([zef.compartment_tags{1} '_submesh_ind']) = size(surface_struct.Faces,1);
