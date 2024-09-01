@@ -100,7 +100,7 @@
 %                               with respect to the tetrahedral mesh
 %                               resolution (double). 
 %
-% zef_bst.surface_priority = {'Scalp','OuterSkull','InnerSkull','Cortex','Other'};
+% zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other'};
 %
 %                               This cell array defines the priority of
 %                               surface types in labeling from outermost to the

@@ -43,7 +43,7 @@ end
 if isequal(zef.segmentation_tool_default_position,[0 0 0 0])
     h_groot = groot;
     screen_size = h_groot.ScreenSize;
-    zef.segmentation_tool_default_position = [screen_size(3)/25 screen_size(4)/25 4*screen_size(3)/9 5*screen_size(4)/6];
+    zef.segmentation_tool_default_position = [screen_size(3)/25 775*screen_size(4)/2250 8*screen_size(3)/27 5*screen_size(4)/9];
 end
 
 if zef.parallel_processes > maxNumCompThreads

@@ -68,12 +68,13 @@ end
 popmenu_1_value = find(ismember(run_script_list,'zef_bst_default_fem_mesh_create'),1);
 
 h_popmenu_1 = uicontrol('Style','popupmenu','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.40 0.365 0.55 0.1],'String',run_script_list,'Tag','run_script');
-h_popmenu_2 = uicontrol('Style','popupmenu','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.625 0.22 0.325 0.1],'String',{'Fresh start','Project-based'},'Tag','run_type');
+h_popmenu_2 = uicontrol('Style','popupmenu','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.625 0.22 0.325 0.1],'String',{'Fresh start','Import compartments','Use project'},'Tag','run_type');
+h_popmenu_3 = uicontrol('Style','popupmenu','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.375 0.77 0.25 0.15],'String',{'Use input files','Ignore input files'},'Tag','input_mode');
 
 h_popmenu_1.Value = popmenu_1_value;
 
 h_button_1 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.70 0.80 0.25 0.15],'String','Settings file','Callback','utilities.brainstorm2zef.m.zef_bst_settings_file;');
-h_button_3 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.375 0.05 0.25 0.15],'String','Create project','Callback','utilities.brainstorm2zef.m.zef_bst_create_project(utilities.brainstorm2zef.m.zef_bst_get_settings_file_name,utilities.brainstorm2zef.m.zef_bst_get_project_file_name,get(get(gcbo,''Parent''),''user_settings''));');
+h_button_3 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.375 0.05 0.25 0.15],'String','Create project','Callback','utilities.brainstorm2zef.m.zef_bst_create_project(utilities.brainstorm2zef.m.zef_bst_get_settings_file_name,utilities.brainstorm2zef.m.zef_bst_get_project_file_name,utilities.brainstorm2zef.m.zef_bst_get_run_type,utilities.brainstorm2zef.m.zef_bst_get_input_mode,get(get(gcbo,''Parent''),''user_settings''));');
 h_button_4 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.05 0.20 0.25 0.15],'String','Edit project','Callback','utilities.brainstorm2zef.m.zef_bst_edit_project(utilities.brainstorm2zef.m.zef_bst_get_project_file_name);');
 h_button_5 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.05 0.05 0.25 0.15],'String','Edit settings','Callback','edit(utilities.brainstorm2zef.m.zef_bst_get_settings_file_name);');
 h_button_7 = uicontrol('Style','pushbutton','Parent',h_fig,'Visible','on','Units','normalized','Position',[0.70 0.05 0.25 0.15],'String','Run','Callback','set(gcbo,''UserData'',1);','Tag','run_button');
@@ -112,8 +113,8 @@ end
 set(h_fig,'DeleteFcn','closereq;')
 set(h_fig,'CloseRequestFcn','closereq;')
 
-callback_1 = sprintf(['%s(%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],h_popmenu_2.Value);
-callback_2 = sprintf(['%s(%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],0);
+callback_1 = sprintf(['%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],h_popmenu_2.Value,h_popmenu_3.Value);
+callback_2 = sprintf(['%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],0,0);
 
 if get(h_button_7,'UserData')
 varargout = eval(callback_1);

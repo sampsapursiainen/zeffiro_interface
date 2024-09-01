@@ -26,7 +26,7 @@
 %
 %                               This cell array can contain the names of
 %                               individual surfaces in the respective order
-%                               with the surface_mesh_files (cell array).
+%                               with the compartment_files (cell array).
 %                               
 % zef_bst.mesh_resolution = 3;
 %
@@ -99,14 +99,14 @@
 %                               with respect to the tetrahedral mesh
 %                               resolution (double). 
 %
-% zef_bst.surface_priority = {'Scalp','OuterSkull','InnerSkull','Cortex','Other'};
+% zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other'};
 %
 %                               This cell array defines the priority of
 %                               surface types in labeling from outermost to the
 %                               innermost (cell array).
 %                                
 % zef_bst.use_gpu = 1;
-
+%
 %                               This parameter determines whether Zeffiro 
 %                               tries to use GPU acceleration (logical 0 or 1).
 %
@@ -122,7 +122,7 @@
 %                               number of parallel processes that Zeffiro tries to 
 %                               utilize if computing is purely performed in CPU. 
 %
-% zef_bst.surface_mesh_files = cell(0);
+% zef_bst.compartment_files = cell(0);
 %                               
 %                               This parameter (cell array) determines the
 %                               files of triangular head segmentation
@@ -188,8 +188,9 @@
 %                               
 
 zef_bst.mesh_resolution = 5;
-zef_bst.surface_priority = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
-zef_bst.refine_surface = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','subcortical'};
+%zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
+zef_bst.compartment_list = {'Tissues','Deskian-Killiany','Thalamus'};
+zef_bst.refine_surface = {'Tissues','Deskian-Killiany'};
 zef_bst.refine_surface_mode = 2; 
 zef_bst.use_gpu = 1;
 zef_bst.parallel_processes = 10;

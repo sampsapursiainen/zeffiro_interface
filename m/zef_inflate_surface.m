@@ -1,4 +1,4 @@
-function [nodes] = zef_inflate_surface(zef,nodes, surface_triangles,varargin)
+function [nodes] = zef_inflate_surface(zef,nodes,surface_triangles,varargin)
 
 N = size(nodes,1);
 if not(isempty(varargin))
