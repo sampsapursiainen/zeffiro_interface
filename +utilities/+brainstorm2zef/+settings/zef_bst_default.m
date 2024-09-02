@@ -187,7 +187,7 @@
 %                               Brainstorm's subject folder.
 %                               
 
-zef_bst.mesh_resolution = 10;
+zef_bst.mesh_resolution = 5;
 zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
 zef_bst.refine_surface = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
 %zef_bst.compartment_list = {'Tissues','Deskian-Killiany','Thalamus'};
