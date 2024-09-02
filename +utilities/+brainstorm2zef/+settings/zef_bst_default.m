@@ -187,11 +187,11 @@
 %                               Brainstorm's subject folder.
 %                               
 
-zef_bst.mesh_resolution = 1.5;
-%zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
-%zef_bst.refine_surface = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
-zef_bst.compartment_list = {'Tissues','Deskian-Killiany','Thalamus'};
-zef_bst.refine_surface = {'Tissues','Deskian-Killiany'};
+zef_bst.mesh_resolution = 5;
+zef_bst.compartment_list = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
+zef_bst.refine_surface = {'Scalp','OuterSkull','InnerSkull','Cortex','Other','white','subcortical'};
+%zef_bst.compartment_list = {'Tissues','Deskian-Killiany','Thalamus'};
+%zef_bst.refine_surface = {'Tissues','Deskian-Killiany'};
 zef_bst.refine_surface_mode = 2; 
 zef_bst.use_gpu = 1;
 zef_bst.parallel_processes = 10;
