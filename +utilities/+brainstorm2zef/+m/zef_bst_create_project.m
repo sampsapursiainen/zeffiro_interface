@@ -77,7 +77,7 @@ i_aux = find(ismember(surface_names_aux,compartment_settings{i,2}),1);
 if not(isempty(i_aux))
     ind_vec_aux(i) = 1;
 zef = zef_add_compartment(zef);
-zef.([zef.compartment_tags{1} '_name']) = compartment_settings{i,2};
+zef.([zef.compartment_tags{1} '_name']) = [compartment_settings{i,4} ' : ' compartment_settings{i,2}];
 zef.([zef.compartment_tags{1} '_points']) = surface_meshes(i_aux).Points;
 zef.([zef.compartment_tags{1} '_triangles']) = surface_meshes(i_aux).Triangles(:,[1 3 2]);
 zef.([zef.compartment_tags{1} '_submesh_ind']) = size(surface_meshes(i_aux).Triangles,1);
