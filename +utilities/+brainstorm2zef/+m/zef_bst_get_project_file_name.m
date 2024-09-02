@@ -7,6 +7,8 @@ end
 settings_file_name = h_parent.settings_file_name;
 folder_name = h_parent.folder_name;
 subfolder_name = h_parent.project_subfolder_name;
+[settings_file_path, settings_file_name] = fileparts(settings_file_name);
+settings_file_name = fullfile(settings_file_path,settings_file_name);
 file_name = fullfile(folder_name,subfolder_name,[settings_file_name '.mat']);
 
 end
