@@ -35,7 +35,7 @@ end
 
 items = cell(length(zef.compartment_tags),1);
 for i = 1 : length(zef.compartment_tags) 
-zef.([zef.compartment_tags{i} '_labeling_priority']) = labeling_priority_vec(i);
+zef.([zef.compartment_tags{labeling_priority_vec(i)} '_labeling_priority']) = i;
 items{i} = zef.([zef.compartment_tags{labeling_priority_vec(i)} '_name']);
 end
 
