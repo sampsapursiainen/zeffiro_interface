@@ -77,8 +77,6 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     toc ;
 
-    keyboard
-
     %%
 
     disp ("Computing initial lead field...") ;
