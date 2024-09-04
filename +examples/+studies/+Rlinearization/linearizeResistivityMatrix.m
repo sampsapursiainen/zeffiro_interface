@@ -191,7 +191,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
                 dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invS, dSdZ ) ;
 
-                newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, kwargs.capacitance ) ;
+                newZs (col) = core.impedanceFromRwLC ( newZs (col), iiAngFreq, inductance, kwargs.capacitance ) ;
 
                 dZ = newZs (col) - Zs (col) ;
 
