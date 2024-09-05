@@ -8,16 +8,30 @@ function Z = impedanceFromRwLC (R,w,L,C)
 %
 
     arguments
-        R (:,1) double { mustBeFinite }
-        w (:,1) double { mustBeFinite }
-        L (:,1) double { mustBeFinite }
-        C (:,1) double { mustBeNonNan }
+        R (:,1) double { mustBeFinite, mustBePositive }
+        w (:,1) double { mustBeFinite, mustBeNonnegative }
+        L (:,1) double { mustBeFinite, mustBeNonnegative }
+        C (:,1) double { mustBeNonNan, mustBeNonnegative }
     end
 
-    assert ( all (C ~= 0), "Received a zero in place of capacitance, division by zero error." ) ;
+    % Set initial impedance.
 
-    w (w == 0) = 1 ;
+    Z = R ;
 
-    Z = R + 1i .* ( w .* L - 1 ./ w ./ C ) ;
+    % Add inductive effects to it.
+
+    Z = R + 1i .* w .* L ;
+
+    % Record where frequencies and capacitances are non-zero.
+
+    nonZerowI = abs (w) > eps ;
+
+    nonZeroCI = abs (C) > eps ;
+
+    nonZerowCI = nonZerowI & nonZeroCI ;
+
+    % Take capacitance into account, if it and the corresponding frequency is non-zero.
+
+    Z (nonZerowCI) = Z (nonZerowCI) - 1i ./ w (nonZerowCI) ./ C (nonZerowCI) ;
 
 end % function
