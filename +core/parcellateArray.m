@@ -1,11 +1,12 @@
-function outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
+function outA = parcellateArray ( A, elementI, axis )
 %
-% outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
+% outA = parcellateArray ( A, elementI, axis )
 %
 % This function reduces the size of a given array A by summing the
-% contributions from all rows of A into a subset of the rows representing a set
-% of active elements, determined by elementI. The  results are then normalized
-% based on how many sources were placed into each of those active elements.
+% contributions from all rows or columns or age or ... of A into a subset of
+% the same axis, representing a set of active elements, determined by elementI.
+% The results are then normalized based on how many sources were placed into
+% each of those active elements.
 %
 % Inputs:
 %
@@ -19,66 +20,103 @@ function outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %   (see kwargs.axis) and eleI is the index of the active element that the
 %   contribution from that row should map to.
 %
-% - sourcePerElement
+% - axis
 %
-%   Amounts by which each entry in elementI is divided or normalized by after
-%   the aggregation.
-%
-% - kwargs.axis = 1
-%
-%   The axis along which the parcellation will be performed. Must be one of 1
-%   (rows) or 2 (columns).
+%   The axis along which the parcellation will be performed.
 %
 
     arguments
         A (:,:) double { mustBeFinite }
-        elementI (:,1) int32 { mustBePositive }
-        sourcesPerElement (:,1) double { mustBePositive, mustBeInteger }
-        kwargs.axis (1,1) double { mustBeMember(kwargs.axis, [1,2]) } = 1
+        elementI (:,1) double { mustBeInteger, mustBePositive }
+        axis (1,1) double { mustBeInteger, mustBePositive }
     end
 
-    % Compute a few sizes.
+    % Determine a few sizes.
 
-    eleN = numel ( unique (elementI) ) ;
+    sizeA = size (A) ;
 
-    [rowN, colN] = size (A) ;
+    dimN = numel (sizeA) ;
 
-    % Choose parcellation direction.
+    [ uEleI, uInI, uOutI ] = unique (elementI) ;
 
-    if kwargs.axis == 1
+    uEleN = numel (uEleI) ;
 
-        % Perform the integration along rows.
+    % Construct information on how many times each target element occurs within the output array.
 
-        outA = zeros (eleN,colN) ;
+    sourcesPerElement = zeros (1,uEleN) ;
 
-        for ii = 1 : rowN
+    for ii = 1 : uEleN
 
-            eleI = elementI (ii) ;
+        I = uEleI (ii) == elementI ;
 
-            outA (eleI,:) = outA (eleI,:) + A (ii,:) ;
+        N = sum ( I ) ;
 
-        end % for ii
+        sourcesPerElement (ii) = N ;
 
-    else
+    end % for ii
 
-        % Perform the integration along cols.
+    % Construct size of aggregated output array and the initialize output array.
 
-        outA = zeros (rowN,eleN) ;
+    outSize = zeros (1, dimN) ;
 
-        for ii = 1 : colN
+    for ii = 1 : dimN
 
-            eleI = elementI (ii) ;
+        if ii == axis
 
-            outA (:,eleI) = outA (:,eleI) + A (:,ii) ;
+            outSize (ii) = uEleN ;
 
-        end % for ii
+        else
 
-        sourcesPerElement = transpose (sourcesPerElement) ;
+            outSize (ii) = sizeA (ii) ;
 
-    end % if
+        end % if
 
-    % Perform integral normalization.
+    end % for ii
 
-    outA = outA ./ sourcesPerElement ;
+    outA = zeros (outSize) ;
+
+    % Construct cell arrays for reading from A and writing to outA.
+
+    readICells = cell (1,dimN) ;
+
+    writeICells = cell (1,dimN) ;
+
+    for ii = 1 : dimN
+
+        if ii == axis
+
+            readICells {ii} = [] ;
+
+        else
+
+            readICells {ii} = 1 : sizeA (ii) ;
+
+        end
+
+        writeICells {ii} = readICells {ii} ;
+
+    end % for ii
+
+    % Go over the element indices and aggregate values from input A into output
+    % A. Also normalize the result with respect to the number of "sources" per
+    % the target element.
+
+    eleN = numel (elementI) ;
+
+    axisN = sizeA (axis) ;
+
+    for ii = 1 : axisN
+
+        readICells {axis} = ii ;
+
+        writeICells {axis} = uOutI (ii) ;
+
+        outA (writeICells {:}) = outA (writeICells {:}) + A (readICells {:}) ;
+
+        sourceN = sourcesPerElement ( uOutI (ii) ) ;
+
+        outA (writeICells {:}) = outA (writeICells {:}) / sourceN ;
+
+    end % for ii
 
 end % function
