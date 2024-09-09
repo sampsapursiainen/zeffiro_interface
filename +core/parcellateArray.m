@@ -26,7 +26,7 @@ function outA = parcellateArray ( A, elementI, axis )
 %
 
     arguments
-        A (:,:) double { mustBeFinite }
+        A double { mustBeFinite }
         elementI (:,1) double { mustBeInteger, mustBePositive }
         axis (1,1) double { mustBeInteger, mustBePositive }
     end
@@ -37,7 +37,7 @@ function outA = parcellateArray ( A, elementI, axis )
 
     dimN = numel (sizeA) ;
 
-    [ uEleI, uInI, uOutI ] = unique (elementI) ;
+    [ uEleI, ~, uOutI ] = unique (elementI) ;
 
     uEleN = numel (uEleI) ;
 
@@ -51,7 +51,7 @@ function outA = parcellateArray ( A, elementI, axis )
 
         N = sum ( I ) ;
 
-        sourcesPerElement (ii) = N ;
+        sourcesPerElement ( ii ) = N ;
 
     end % for ii
 
@@ -101,8 +101,6 @@ function outA = parcellateArray ( A, elementI, axis )
     % A. Also normalize the result with respect to the number of "sources" per
     % the target element.
 
-    eleN = numel (elementI) ;
-
     axisN = sizeA (axis) ;
 
     for ii = 1 : axisN
@@ -111,11 +109,9 @@ function outA = parcellateArray ( A, elementI, axis )
 
         writeICells {axis} = uOutI (ii) ;
 
-        outA (writeICells {:}) = outA (writeICells {:}) + A (readICells {:}) ;
-
         sourceN = sourcesPerElement ( uOutI (ii) ) ;
 
-        outA (writeICells {:}) = outA (writeICells {:}) / sourceN ;
+        outA (writeICells {:}) = outA (writeICells {:}) + A (readICells {:}) / sourceN ;
 
     end % for ii
 
