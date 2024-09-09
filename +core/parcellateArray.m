@@ -1,6 +1,6 @@
 function outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %
-% A = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
+% outA = parcellateArray ( A, elementI, sourcesPerElement, kwargs )
 %
 % This function reduces the size of a given array A by summing the
 % contributions from all rows of A into a subset of the rows representing a set
