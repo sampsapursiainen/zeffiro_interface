@@ -61,7 +61,7 @@ function outA = intersperseArray (A, dim, groupsOf)
 
     end % for ii
 
-    % Start interspersion with MATLAB's black magic comma-separeted lists.
+    % Start interspersion with MATLAB's black magic comma-separated lists.
 
     outA = A ;
 
