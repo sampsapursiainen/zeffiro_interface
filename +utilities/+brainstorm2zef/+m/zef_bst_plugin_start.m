@@ -113,8 +113,8 @@ end
 set(h_fig,'DeleteFcn','closereq;')
 set(h_fig,'CloseRequestFcn','closereq;')
 
-callback_1 = sprintf(['%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],h_popmenu_2.Value,h_popmenu_3.Value);
-callback_2 = sprintf(['%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);'],['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],0,0);
+callback_1 = sprintf('%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);',['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],h_popmenu_2.Value,h_popmenu_3.Value);
+callback_2 = sprintf('%s(%d,%d,utilities.brainstorm2zef.m.zef_bst_get_settings_file_name(h_fig),utilities.brainstorm2zef.m.zef_bst_get_project_file_name(h_fig),zef_bst);',['utilities.brainstorm2zef.m.run_script_bank.' h_popmenu_1.String{h_popmenu_1.Value}],0,0);
 
 if get(h_button_7,'UserData')
 varargout = eval(callback_1);
