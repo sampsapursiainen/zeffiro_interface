@@ -68,7 +68,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     C = core.voltageMat (Zs);
 
-    T = core.transferMatrix (A,B,tolerances=kwargs.solverTol,useGPU=kwargs.useGPU) ;
+    T = core.transferMatrix (A,B,tolerances=kwargs.solverTol,useGPU=true) ;
 
     S = core.schurComplement (T, ctranspose(B), C) ;
 
@@ -202,7 +202,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newC = core.voltageMat (newZs);
 
-            newT = core.transferMatrix (newA,newB,tolerances=kwargs.solverTol,useGPU=kwargs.useGPU) ;
+            newT = core.transferMatrix (newA,newB,tolerances=kwargs.solverTol,useGPU=true) ;
 
             newS = core.schurComplement (newT, ctranspose(newB), newC) ;
 
