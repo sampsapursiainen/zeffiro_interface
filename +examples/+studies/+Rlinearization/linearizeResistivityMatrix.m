@@ -42,7 +42,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     % C = 1.66 to 6.65 μF
 
-    resistance = 2e3 ;
+    resistance = 2e3 * ones (numel(superNodes),1) ;
 
     inductance = 0 ;
 
