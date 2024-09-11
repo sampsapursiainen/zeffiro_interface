@@ -1,10 +1,14 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
 %
 % [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
 % Inputs:
+%
+% - A
+%
+%   The stiffness matrix of the FE mesh.
 %
 % - nodes
 %
@@ -72,6 +76,7 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI,
 %  The x-, y- and z-components of a volume current matrix G = -σ∇u.
 %
     arguments
+        A                      (:,:) double { mustBeFinite }
         nodes                  (:,3) double { mustBeFinite }
         tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
         tetV                   (:,1) double { mustBePositive, mustBeFinite }
@@ -88,16 +93,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI,
     disp("Initializing impedances for sensors…")
 
     Z = electrodes.impedances ;
-
-    disp("Computing stiffness matrix components reA and imA…")
-
-    conductivity = core.reshapeTensor (conductivity) ;
-
-    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
-
-    disp("Applying boundary conditions to reA…")
-
-    A = core.stiffMatBoundaryConditions ( A, Z, contactSurfaces ) ;
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 
