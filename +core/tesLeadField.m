@@ -1,6 +1,6 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -13,6 +13,10 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourc
 % - tetra
 %
 %   The surface tetra that the electrodes are attached to.
+%
+% - tetV
+%
+%   The volumes of the tetra.
 %
 % - volumeCurrentI
 %
@@ -70,6 +74,7 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourc
     arguments
         nodes                  (:,3) double { mustBeFinite }
         tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
+        tetV                   (:,1) double { mustBePositive, mustBeFinite }
         volumeCurrentI         (1,:) uint32 { mustBePositive }
         sourceTetI             (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
@@ -83,10 +88,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourc
     disp("Initializing impedances for sensors…")
 
     Z = electrodes.impedances ;
-
-    disp("Computing volumes of tetra…")
-
-    tetV = core.tetraVolume (nodes,tetra,true) ;
 
     disp("Computing stiffness matrix components reA and imA…")
 
