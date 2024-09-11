@@ -18,9 +18,17 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourc
 %
 %   Which elements in the head volume are considered active.
 %
+% - sourceTetI
+%
+%   The indices of volumeCurrentI, that actually contain volumetric currents.
+%
 % - electrodes
 %
 %   The electrodes the lead field will map potentials to.
+%
+% - contactSurfaces
+%
+%   The contact surfaces of the above electrodes.
 %
 % - conductivity
 %
