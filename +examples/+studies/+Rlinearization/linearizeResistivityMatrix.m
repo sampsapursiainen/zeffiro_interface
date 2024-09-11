@@ -50,13 +50,23 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=[superNodes.radius] ) ;
 
+    disp("Computing stiffness matrix A…")
+
+    conductivity = core.reshapeTensor (conductivity) ;
+
+    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+
+    disp("Applying boundary conditions to A…")
+
+    A = core.stiffMatBoundaryConditions ( A, Zs, superNodes ) ;
+
     %%
 
     disp ("Computing initial matrices depending on Z...")
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, superNodes, conductivity ) ;
+    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, superNodes, conductivity ) ;
 
     toc ;
 
@@ -168,7 +178,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newElectrodes = electrodes.withImpedances (newZs) ;
 
-            [refL, refR, ~, ~, ~] = core.tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, superNodes, conductivity ) ;
+            [refL, refR, ~, ~, ~] = core.tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, superNodes, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
