@@ -1,6 +1,6 @@
-function [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
-% [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -121,31 +121,28 @@ function [L, R, G1, G2, G3] = tesLeadField ( nodes, tetra, volumeCurrentI, elect
 
     disp ("Computing volume currents σ∇ψ…")
 
-    [G1, G2, G3] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
+    [Gx, Gy, Gz] = core.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
+
+    disp ("Resricting volume currents to source tetra...")
+
+    Gx = Gx (sourceTetI,:) ;
+
+    Gy = Gy (sourceTetI,:) ;
+
+    Gz = Gz (sourceTetI,:) ;
 
     disp ("Building lead field components…") ;
 
-    G = [ G1 ; G2 ; G3 ] ;
+    Lx = - Gx * R ;
 
-    fullL = - G * R ;
+    Ly = - Gy * R ;
 
-    L = zeros ( numel (electrodes.impedances), 3 * kwargs.sourceN ) ;
+    Lz = - Gz * R ;
 
-    disp ("Restricting lead field to actual source positions…")
+    disp ("Reordering rows of L in xyz order…") ;
 
-    Nvc = numel (volumeCurrentI) ;
+    L = core.intersperseArray ( [ Lx ; Ly ; Lz ], 1, 3) ;
 
-    fullL = transpose (fullL) ;
-
-    L (:,1:3:end,:) = fullL (:,sourceTetI) ;
-    L (:,2:3:end,:) = fullL (:,Nvc + sourceTetI) ;
-    L (:,3:3:end,:) = fullL (:,2 * Nvc + sourceTetI) ;
-
-    mf = matfile ("newLtes.mat", Writable=true);
-
-    mf.G1 = G1 ;
-    mf.G2 = G2;
-    mf.G3 = G3;
-    mf.L = L ;
+    L = transpose (L) ;
 
 end % function
