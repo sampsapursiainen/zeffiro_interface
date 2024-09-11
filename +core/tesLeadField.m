@@ -1,22 +1,18 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, electrodes, conductivity, kwargs )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, conductivity, kwargs )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
 % Inputs:
 %
-% - A
+% - T
 %
-%   The stiffness matrix of the FE mesh.
+%   A transfer matrix inv A * B of a system [ A B ; B' C ].
 %
-% - B
+% - S
 %
-%   An electrode mean potential matrix.
-%
-% - C
-%
-%   Contains the impedances of telectrodes on its diagonal.
+%   The Schur complement of A in the system [ A B ; B' C ].
 %
 % - nodes
 %
@@ -24,7 +20,7 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volume
 %
 % - tetra
 %
-%   The surface tetra that the electrodes are attached to.
+%   The tetra that the electrodes are attached to.
 %
 % - tetV
 %
@@ -38,10 +34,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volume
 %
 %   The indices of volumeCurrentI, that actually contain volumetric currents.
 %
-% - electrodes
-%
-%   The electrodes the lead field will map potentials to.
-%
 % - contactSurfaces
 %
 %   The contact surfaces of the above electrodes.
@@ -51,20 +43,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volume
 %   A 3D conductivity tensor, encoded wither as a 1×Ntetra vector in the
 %   isotrophiv case, or as a 6×Ntetra matrix in the anisotrophic case, with
 %   each column containing the values σxx, σyy, σzz, σxy, σxz and σyz.
-%
-% - kwargs.pcgTol
-%
-%   Relative residual tolerance of the PCG solver that is used to construct a transfer matrix.
-%
-% - kwargs.attachSensorsTo ∈ {"volume","surface"}
-%
-%   Whether to attach sensors to the entire volume, or just the surface of a
-%   head model.
-%
-% - kwargs.peelingRadius = 0
-%
-%   The distance from active compartment surfaces, within which source
-%   positions are not allowed.
 %
 % Outputs:
 %
@@ -84,38 +62,21 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volume
 %  The x-, y- and z-components of a volume current matrix G = -σ∇u.
 %
     arguments
-        A                      (:,:) double { mustBeFinite }
-        B                      (:,:) double { mustBeFinite }
-        C                      (:,:) double { mustBeFinite }
+        T                      (:,:) double { mustBeFinite }
+        S                      (:,:) double { mustBeFinite }
         nodes                  (:,3) double { mustBeFinite }
         tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
         tetV                   (:,1) double { mustBePositive, mustBeFinite }
         volumeCurrentI         (1,:) uint32 { mustBePositive }
         sourceTetI             (1,:) uint32 { mustBePositive }
-        electrodes             (:,1) core.ElectrodeSet
         conductivity           (:,:) double { mustBeFinite }
-        kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite } = 1e-6
-        kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
-        kwargs.useGPU          (1,1) logical = true
     end % arguments
 
-    disp("Initializing impedances for sensors…")
+    I = eye ( size (S) ) ;
 
-    Z = electrodes.impedances ;
+    invSchurC = S \ I ;
 
-    disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
-
-    TM = core.transferMatrix (A,B,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
-
-    disp ("Computing resistivity matrix…") ;
-
-    SchurC = (C - ctranspose (B) * TM) ;
-
-    I = eye ( size (SchurC) ) ;
-
-    invSchurC = SchurC \ I ;
-
-    R = TM * invSchurC ;
+    R = T * invSchurC ;
 
     disp ("Computing volume currents σ∇ψ…")
 

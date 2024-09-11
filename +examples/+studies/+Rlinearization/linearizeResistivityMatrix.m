@@ -68,13 +68,19 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     C = core.voltageMat (Zs);
 
+    T = core.transferMatrix (A,B,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
+
+    S = core.schurComplement (T, ctranspose(B), C) ;
+
+    invS = S \ eye ( size (S) ) ;
+
     %%
 
     disp ("Computing initial matrices depending on Z...")
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, conductivity ) ;
+    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
 
     toc ;
 
@@ -186,19 +192,21 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp("Applying boundary conditions to A…")
 
-            A = core.stiffMatBoundaryConditions ( iniA, newZs, superNodes ) ;
+            newA = core.stiffMatBoundaryConditions ( iniA, newZs, superNodes ) ;
 
             disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-            B = core.potentialMat ( superNodes, newZs, size (nodes,1) );
+            newB = core.potentialMat ( superNodes, newZs, size (nodes,1) );
 
             disp("Computing electrode impedance matrix C…")
 
-            C = core.voltageMat (newZs);
+            newC = core.voltageMat (newZs);
 
-            newElectrodes = electrodes.withImpedances (newZs) ;
+            newT = core.transferMatrix (newA,newB,tolerances=kwargs.pcgTol,useGPU=kwargs.useGPU) ;
 
-            [refL, refR, ~, ~, ~] = core.tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, conductivity ) ;
+            newS = core.schurComplement (newT, ctranspose(newB), newC) ;
+
+            [refL, refR, ~, ~, ~] = core.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
