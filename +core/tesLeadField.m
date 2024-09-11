@@ -1,4 +1,4 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
 %
 % [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, electrodes, conductivity, kwargs )
 %
@@ -55,7 +55,7 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, elect
 %
 %  A resistivity matrix.
 %
-% - G1, G2, G3
+% - Gx, Gy, Gz
 %
 %  The x-, y- and z-components of a volume current matrix G = -σ∇u.
 %
@@ -63,21 +63,14 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, elect
         nodes                  (:,3) double { mustBeFinite }
         tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
         volumeCurrentI         (1,:) uint32 { mustBePositive }
+        sourceTetI             (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
+        contactSurfaces        (:,1) core.SuperNode
         conductivity           (:,:) double { mustBeFinite }
         kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
         kwargs.useGPU          (1,1) logical = true
-        kwargs.sourceN         (1,1) double { mustBePositive } = 1000
     end % arguments
-
-    disp ("Positioning sources…")
-
-    [ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
-
-    disp("Attaching sensors to the head " + kwargs.attachSensorsTo + "…")
-
-    superNodes = core.SuperNode.fromMeshAndPos (nodes',tetra',electrodes.positions,nodeRadii=electrodes.outerRadii,attachNodesTo=kwargs.attachSensorsTo) ;
 
     disp("Initializing impedances for sensors…")
 
@@ -95,11 +88,11 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, volumeCurrentI, elect
 
     disp("Applying boundary conditions to reA…")
 
-    A = core.stiffMatBoundaryConditions ( A, Z, superNodes ) ;
+    A = core.stiffMatBoundaryConditions ( A, Z, contactSurfaces ) ;
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-    B = core.potentialMat ( superNodes, Z, size (nodes,1) );
+    B = core.potentialMat ( contactSurfaces, Z, size (nodes,1) );
 
     disp("Computing electrode voltage matrix C…")
 
