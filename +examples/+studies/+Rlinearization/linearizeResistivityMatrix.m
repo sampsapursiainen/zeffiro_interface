@@ -23,7 +23,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         kwargs.capacitance (1,1) double { mustBePositive, mustBeFinite } = 3.5e-6
         kwargs.solverTol (1,1) double { mustBePositive, mustBeFinite } = 1e-9
         kwargs.sourceTetraI (:,1) double { mustBePositive } = 1 : numel (volumeCurrentI)
-        kwargs.electrodeSize (:,1) double { mustBePositive, mustBeFinite } = 1e-3
+        kwargs.sourceN (1,1) double { mustBePositive, mustBeInteger } = 5000
     end
 
     disp ("Positioning sources…")
@@ -48,7 +48,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     Zs = core.impedanceFromRwLC ( resistance, angFreq, inductance, kwargs.capacitance ) ;
 
-    electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=kwargs.electrodeSize ) ;
+    electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=[superNodes.radius] ) ;
 
     %%
 
@@ -168,7 +168,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newElectrodes = electrodes.withImpedances (newZs) ;
 
-            [refL, refR, ~, ~, ~] = core.tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, superNodes, conductivity, sourceN = 5000 ) ;
+            [refL, refR, ~, ~, ~] = core.tesLeadField ( nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, superNodes, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
