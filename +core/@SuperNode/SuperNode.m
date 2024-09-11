@@ -171,7 +171,7 @@ classdef SuperNode
 
             for ii = 1 : superNodeN
 
-                disp ( "  ... node " + ii ) ;
+                disp ( "  ... node " + ii + " / " + superNodeN ) ;
 
                 nI = centralNodeIs (ii) ;
 
