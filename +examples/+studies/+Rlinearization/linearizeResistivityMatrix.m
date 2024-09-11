@@ -54,11 +54,19 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     conductivity = core.reshapeTensor (conductivity) ;
 
-    A = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+    iniA = core.stiffnessMat (nodes,tetra,tetV,conductivity);
 
     disp("Applying boundary conditions to A…")
 
-    A = core.stiffMatBoundaryConditions ( A, Zs, superNodes ) ;
+    A = core.stiffMatBoundaryConditions ( iniA, Zs, superNodes ) ;
+
+    disp("Computing electrode potential matrix B for real and imaginary parts…")
+
+    B = core.potentialMat ( superNodes, Zs, size (nodes,1) );
+
+    disp("Computing electrode impedance matrix C…")
+
+    C = core.voltageMat (Zs);
 
     %%
 
@@ -66,7 +74,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, superNodes, conductivity ) ;
+    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, conductivity ) ;
 
     toc ;
 
@@ -176,9 +184,21 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("Computing new R directly with updated impedances…")
 
+            disp("Applying boundary conditions to A…")
+
+            A = core.stiffMatBoundaryConditions ( iniA, newZs, superNodes ) ;
+
+            disp("Computing electrode potential matrix B for real and imaginary parts…")
+
+            B = core.potentialMat ( superNodes, newZs, size (nodes,1) );
+
+            disp("Computing electrode impedance matrix C…")
+
+            C = core.voltageMat (newZs);
+
             newElectrodes = electrodes.withImpedances (newZs) ;
 
-            [refL, refR, ~, ~, ~] = core.tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, superNodes, conductivity ) ;
+            [refL, refR, ~, ~, ~] = core.tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, newElectrodes, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 

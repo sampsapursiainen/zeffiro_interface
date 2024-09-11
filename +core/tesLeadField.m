@@ -1,4 +1,4 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( A, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( A, B, C, nodes, tetra, tetV, volumeCurrentI, sourceTetI, electrodes, contactSurfaces, conductivity, kwargs )
 %
 % [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, electrodes, conductivity, kwargs )
 %
@@ -9,6 +9,14 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, nodes, tetra, tetV, volumeCurren
 % - A
 %
 %   The stiffness matrix of the FE mesh.
+%
+% - B
+%
+%   An electrode mean potential matrix.
+%
+% - C
+%
+%   Contains the impedances of telectrodes on its diagonal.
 %
 % - nodes
 %
@@ -77,13 +85,14 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, nodes, tetra, tetV, volumeCurren
 %
     arguments
         A                      (:,:) double { mustBeFinite }
+        B                      (:,:) double { mustBeFinite }
+        C                      (:,:) double { mustBeFinite }
         nodes                  (:,3) double { mustBeFinite }
         tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
         tetV                   (:,1) double { mustBePositive, mustBeFinite }
         volumeCurrentI         (1,:) uint32 { mustBePositive }
         sourceTetI             (1,:) uint32 { mustBePositive }
         electrodes             (:,1) core.ElectrodeSet
-        contactSurfaces        (:,1) core.SuperNode
         conductivity           (:,:) double { mustBeFinite }
         kwargs.pcgTol          (1,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.attachSensorsTo (1,1) string { mustBeMember(kwargs.attachSensorsTo,["surface","volume"]) } = "volume"
@@ -93,14 +102,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( A, nodes, tetra, tetV, volumeCurren
     disp("Initializing impedances for sensors…")
 
     Z = electrodes.impedances ;
-
-    disp("Computing electrode potential matrix B for real and imaginary parts…")
-
-    B = core.potentialMat ( contactSurfaces, Z, size (nodes,1) );
-
-    disp("Computing electrode voltage matrix C…")
-
-    C = core.voltageMat (Z);
 
     disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
