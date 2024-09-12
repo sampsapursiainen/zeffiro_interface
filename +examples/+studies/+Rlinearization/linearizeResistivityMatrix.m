@@ -186,7 +186,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("Computing linearized lead field...")
 
-            linL = core.intersperseArray (- G * linR, 1, 3) ;
+            linL = transpose ( core.intersperseArray (- G * linR, 1, 3) ) ;
 
             disp ("Computing new R directly with updated impedances…")
 
