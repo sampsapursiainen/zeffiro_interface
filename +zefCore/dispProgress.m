@@ -7,7 +7,7 @@ function dispProgress (currentI, maxI, printInterval, kwargs)
 
     arguments
         currentI (1,1) double { mustBeInteger, mustBePositive }
-        maxI (1,1) double { mustBeInterger, mustBePositive, mustBeGreaterThanOrEqual(maxI,currentI) }
+        maxI (1,1) double { mustBeInteger, mustBePositive, mustBeGreaterThanOrEqual(maxI,currentI) }
         printInterval (1,1) double { mustBeInteger, mustBePositive } = ceil (maxI / 100)
         kwargs.indent (1,1) double { mustBeInteger, mustBeNonnegative } = 2
     end
