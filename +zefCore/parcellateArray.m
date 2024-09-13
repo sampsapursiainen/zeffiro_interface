@@ -105,6 +105,8 @@ function outA = parcellateArray ( A, elementI, axis )
 
     for ii = 1 : axisN
 
+        zefCore.dispProgress (ii, axisN) ;
+
         readICells {axis} = ii ;
 
         writeICells {axis} = uOutI (ii) ;
