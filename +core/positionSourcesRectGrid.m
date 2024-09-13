@@ -47,7 +47,7 @@ function [ sourcePos, outSourceN, g2lI, l2gI  ] = positionSourcesRectGrid (nodes
         nodes        (:,3) double { mustBeFinite }
         tetra        (:,4) int32  { mustBePositive }
         targetTetraI (:,1) int32  { mustBePositive }
-        sourceN      (1,1) uint32 { mustBePositive }
+        sourceN      (1,1) double { mustBePositive }
     end
 
     % Find tetrahedral centroids.
@@ -57,7 +57,7 @@ function [ sourcePos, outSourceN, g2lI, l2gI  ] = positionSourcesRectGrid (nodes
     centerPoints = centerPoints (targetTetraI,:) ;
 
     % Generate rectangular grid, whose resolution is scaled based on desired
-    % number of sources.
+    % number of sources via a lattice constant.
 
     minX = min (centerPoints(:,1));
     maxX = max (centerPoints(:,1));
