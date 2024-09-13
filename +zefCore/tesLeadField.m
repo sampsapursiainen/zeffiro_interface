@@ -1,6 +1,6 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity )
+function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( nodes, tetra, tetV, volumeCurrentI, conductivity, kwargs )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -30,9 +30,9 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
 %
 %   Which elements in the head volume are considered active.
 %
-% - sourceTetI
+% - aggregationI
 %
-%   The indices of volumeCurrentI, that actually contain volumetric currents.
+%   A mapping from global lead field column indices to the indices that should contain activity.
 %
 % - contactSurfaces
 %
@@ -62,14 +62,15 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
 %  The x-, y- and z-components of a volume current matrix G = -σ∇u.
 %
     arguments
-        T                      (:,:) double { mustBeFinite }
-        S                      (:,:) double { mustBeFinite }
-        nodes                  (:,3) double { mustBeFinite }
-        tetra                  (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
-        tetV                   (:,1) double { mustBePositive, mustBeFinite }
-        volumeCurrentI         (1,:) uint32 { mustBePositive }
-        sourceTetI             (1,:) uint32 { mustBePositive }
-        conductivity           (:,:) double { mustBeFinite }
+        T              (:,:) double { mustBeFinite }
+        S              (:,:) double { mustBeFinite }
+        nodes          (:,3) double { mustBeFinite }
+        tetra          (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
+        tetV           (:,1) double { mustBePositive, mustBeFinite }
+        volumeCurrentI (1,:) double { mustBePositive, mustBeInteger }
+        aggregationI   (1,:) double { mustBePositive, mustBeInteger }
+        aggregationN   (1,:) double { mustBePositive, mustBeInteger }
+        conductivity   (:,:) double { mustBeFinite }
     end % arguments
 
     I = eye ( size (S) ) ;
@@ -82,14 +83,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
 
     [Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
 
-    disp ("Resricting volume currents to source tetra...")
-
-    Gx = Gx (sourceTetI,:) ;
-
-    Gy = Gy (sourceTetI,:) ;
-
-    Gz = Gz (sourceTetI,:) ;
-
     disp ("Building lead field components…") ;
 
     Lx = - Gx * R ;
@@ -97,6 +90,20 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
     Ly = - Gy * R ;
 
     Lz = - Gz * R ;
+
+    disp ("Parcellating lead field components…") ;
+
+    disp (newline + "X:" + newline) ;
+
+    Lx = zefCore.parcellateArray ( Lx, aggregationI, aggregationN, 1 ) ;
+
+    disp (newline + "Y:" + newline) ;
+
+    Ly = zefCore.parcellateArray ( Ly, aggregationI, aggregationN, 1 ) ;
+
+    disp (newline + "Z:" + newline) ;
+
+    Lz = zefCore.parcellateArray ( Lz, aggregationI, aggregationN, 1 ) ;
 
     disp ("Reordering rows of L in xyz order…") ;
 

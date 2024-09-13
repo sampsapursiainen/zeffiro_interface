@@ -28,7 +28,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     disp ("Positioning sources…")
 
-    [ ~, sourceTetI ] = zefCore.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
+    [ sourcePos, aggregationN, aggregationI, individualI ] = zefCore.positionSourcesRectGrid ( nodes, tetra, volumeCurrentI, kwargs.sourceN ) ;
 
     tetV = zefCore.tetraVolume (nodes, tetra,true) ;
 
@@ -80,7 +80,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = zefCore.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
+    [Lini, Rini, Gx, Gy, Gz] = zefCore.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity ) ;
 
     toc ;
 
@@ -206,7 +206,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newS = zefCore.schurComplement (newT, ctranspose(newB), newC) ;
 
-            [refL, refR, ~, ~, ~] = zefCore.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
+            [refL, refR, ~, ~, ~] = zefCore.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
