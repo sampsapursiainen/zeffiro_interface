@@ -1,6 +1,6 @@
-function [ sourcePos, outSourceN, g2lI, l2gI  ] = positionSourcesRectGrid (nodes, tetra, targetTetraI, sourceN)
+function [ sourcePos, aggregationN, aggregationI, individualI  ] = positionSourcesRectGrid (nodes, tetra, targetTetraI, sourceN)
 %
-% [ sourcePos, outSourceN, g2lI, l2gI ] = positionSourcesRectGrid ( nodes, tetra, targetTetraI, sourceN )
+% [ sourcePos, aggregationN, aggregationI, individualI ] = positionSourcesRectGrid ( nodes, tetra, targetTetraI, sourceN )
 %
 % Generates a regular grid of source positions inside of elemental indices
 % targetTetraI, based on a desired number of sources.
@@ -29,19 +29,19 @@ function [ sourcePos, outSourceN, g2lI, l2gI  ] = positionSourcesRectGrid (nodes
 %
 %   The source positions in elements of targetTetraI.
 %
-% - outSourceN
+% - aggregationN
 %
 %   The numbers of sources that were generated inside of each element.
 %
-% - g2lI
+% - aggregationI
 %
 %   A mapping from global source indices to its local subset. Allows (for
 %   example) integrating or interpolating the effects of all generated source
 %   positions to a smaller amount of points within the source position set.
 %
-% - l2gI
+% - individualI
 %
-% The opposite of g2lI.
+% The opposite of aggregationI.
 %
     arguments
         nodes        (:,3) double { mustBeFinite }
@@ -101,15 +101,15 @@ function [ sourcePos, outSourceN, g2lI, l2gI  ] = positionSourcesRectGrid (nodes
 
     sourceElementIToBe (uniqueSourceElementI) = 1 : length (uniqueSourceElementI);
 
-    g2lI = sourceElementIToBe (sourceElementI) ;
+    aggregationI = sourceElementIToBe (sourceElementI) ;
 
     % Restrict outselves to the actual source positions that were located inside of the active elements.
 
     sourcePos = sourcePos (uniqueSourceElementI,:) ;
 
-    outSourceN = accumarray(uOutI,1) ;
+    aggregationN = accumarray (uOutI,1) ;
 
-    l2gI = uInI;
+    individualI = uInI;
 
 end % function
 
