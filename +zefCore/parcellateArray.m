@@ -1,10 +1,10 @@
-function outA = parcellateArray ( A, elementI, axis )
+function outA = parcellateArray ( A, aggregationI, aggregationN, axis )
 %
-% outA = parcellateArray ( A, elementI, axis )
+% outA = parcellateArray ( A, aggregationI, aggregationN, axis )
 %
 % This function reduces the size of a given array A by summing the
 % contributions from all rows or columns or age or ... of A into a subset of
-% the same axis, representing a set of active elements, determined by elementI.
+% the same axis, representing a set of active elements, determined by aggregationI.
 % The results are then normalized based on how many sources were placed into
 % each of those active elements.
 %
@@ -14,7 +14,7 @@ function outA = parcellateArray ( A, elementI, axis )
 %
 %   The array computed for all possible source positions.
 %
-% - elementI
+% - aggregationI
 %
 %   An index mapping rowI ↦ eleI, where rowI is a row or columns index of A
 %   (see kwargs.axis) and eleI is the index of the active element that the
@@ -27,7 +27,8 @@ function outA = parcellateArray ( A, elementI, axis )
 
     arguments
         A double { mustBeFinite }
-        elementI (:,1) double { mustBeInteger, mustBePositive }
+        aggregationI (:,1) double { mustBeInteger, mustBePositive }
+        aggregationN (:,1) double { mustBeInteger, mustBePositive }
         axis (1,1) double { mustBeInteger, mustBePositive }
     end
 
@@ -37,23 +38,9 @@ function outA = parcellateArray ( A, elementI, axis )
 
     dimN = numel (sizeA) ;
 
-    [ uEleI, ~, uOutI ] = unique (elementI) ;
+    [ uEleI, ~, uOutI ] = unique (aggregationI) ;
 
     uEleN = numel (uEleI) ;
-
-    % Construct information on how many times each target element occurs within the output array.
-
-    sourcesPerElement = zeros (1,uEleN) ;
-
-    for ii = 1 : uEleN
-
-        I = uEleI (ii) == elementI ;
-
-        N = sum ( I ) ;
-
-        sourcesPerElement ( ii ) = N ;
-
-    end % for ii
 
     % Construct size of aggregated output array and the initialize output array.
 
@@ -101,6 +88,8 @@ function outA = parcellateArray ( A, elementI, axis )
     % A. Also normalize the result with respect to the number of "sources" per
     % the target element.
 
+    disp ("Aggregating results into smaller array…") ;
+
     axisN = sizeA (axis) ;
 
     for ii = 1 : axisN
@@ -111,9 +100,19 @@ function outA = parcellateArray ( A, elementI, axis )
 
         writeICells {axis} = uOutI (ii) ;
 
-        sourceN = sourcesPerElement ( uOutI (ii) ) ;
+        outA (writeICells {:}) = outA (writeICells {:}) + A (readICells {:}) ;
 
-        outA (writeICells {:}) = outA (writeICells {:}) + A (readICells {:}) / sourceN ;
+    end % for ii
+
+    outAxisN = outSize (axis) ;
+
+    disp ("Normalizing aggregated results by aggregation counts…")
+
+    for ii = 1 : outAxisN
+
+        zefCore.dispProgress (ii, outAxisN) ;
+
+        outA (ii) = outA (ii) / aggregationN (ii) ;
 
     end % for ii
 
