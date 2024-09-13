@@ -6,7 +6,7 @@ function preconditionedConjugateGradient(kwargs)
         kwargs.testSize (1,1) double { mustBePositive, mustBeInteger } = 10
     end
 
-    testA = core.operators.randPosDefMat (kwargs.testSize) ;
+    testA = zefCore.operators.randPosDefMat (kwargs.testSize) ;
 
     testb = rand (kwargs.testSize,1) ;
 
@@ -14,7 +14,7 @@ function preconditionedConjugateGradient(kwargs)
 
     x0 = zeros (kwargs.testSize,1) ;
 
-    [ pcgx, relResNorm, iters ] = core.solvers.preconditionedConjugateGradient (testA, testb, x0, tolerance=kwargs.pcgTol) ;
+    [ pcgx, relResNorm, iters ] = zefCore.solvers.preconditionedConjugateGradient (testA, testb, x0, tolerance=kwargs.pcgTol) ;
 
     infnorm = vecnorm (pcgx - testx, Inf) ;
 

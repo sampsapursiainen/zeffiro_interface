@@ -22,18 +22,18 @@ surfN = N' ;
 
 disp("Attaching sensors to nodes in a global reference…")
 
-[~, superNodeCenters] = core.attachSensors(S,N',[]);
+[~, superNodeCenters] = zefCore.attachSensors(S,N',[]);
 
 disp ("Finding supernodes surrounding electrodes.") ;
 
-sNodes = core.superNodes (T',superNodeCenters) ;
+sNodes = zefCore.superNodes (T',superNodeCenters) ;
 
 disp("Computing surface triangle areas for supernodes…")
 
 sNodeA = zeros ( 1, numel (sNodes.surfTri) ) ;
 
 for ii = 1 : numel (sNodeA)
-    [triA, ~] = core.triangleAreas (N',sNodes.surfTri {ii}) ;
+    [triA, ~] = zefCore.triangleAreas (N',sNodes.surfTri {ii}) ;
     sNodeA (ii) = sum (triA) ;
 end
 
@@ -47,39 +47,39 @@ imZ = imag (Z) ;
 
 disp("Computing volumes of tetra…")
 
-tetV = core.tetraVolume (N,T,true) ;
+tetV = zefCore.tetraVolume (N,T,true) ;
 
 disp("Computing stiffness matrix components reA and imA…")
 
-[ reA, imA ] = core.stiffnessMat(N,T,tetV,sigma);
+[ reA, imA ] = zefCore.stiffnessMat(N,T,tetV,sigma);
 
 disp("Applying boundary conditions to reA…")
 
-reA = core.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
+reA = zefCore.stiffMatBoundaryConditions ( reA, reZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
 
 disp("Applying boundary conditions to imA…")
 
-imA = core.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
+imA = zefCore.stiffMatBoundaryConditions ( imA, imZ, Z, superNodeCenters, sNodes.surfTri, sNodeA ) ;
 
 disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-reB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, reZ, Z, size (N,1) );
+reB = zefCore.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, reZ, Z, size (N,1) );
 
-imB = core.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
+imB = zefCore.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, size (N,1) );
 
 disp("Computing electrode voltage matrix C…")
 
-reC = core.voltageMat (reZ,Z);
+reC = zefCore.voltageMat (reZ,Z);
 
-imC = core.voltageMat (imZ,Z);
+imC = zefCore.voltageMat (imZ,Z);
 
 disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 
-[ reTM, reSC ] = core.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
+[ reTM, reSC ] = zefCore.transferMatrix (reA,reB,reC,tolerances=1e-6,useGPU=true) ;
 
 disp("Computing transfer matrix and Schur complement for imaginary part. This will take another (long) while.")
 
-[ imTM, imSC ] = core.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
+[ imTM, imSC ] = zefCore.transferMatrix (imA,imB,imC,tolerances=1e-6, useGPU=true) ;
 
 disp("Computing real lead field as the product of Schur complement and transpose of transfer matrix…")
 
@@ -95,25 +95,25 @@ disp ("Peeling active brain layers.")
 
 grayMatterI = zef.brain_ind ;
 
-[ dN, ~, dT, deepTetraI ] = core.peelSourcePositions (N,T,grayMatterI,1 * powOfTen) ;
+[ dN, ~, dT, deepTetraI ] = zefCore.peelSourcePositions (N,T,grayMatterI,1 * powOfTen) ;
 
 %% Generate dipoles and source Positions, that the dipoles can be interpolated into.
 
 disp ("Generating face-intersecting dipoles.")
 
-[stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = core.faceIntersectingDipoles( N, T , deepTetraI ) ;
+[stensilFI, signsFI, sourceMomentsFI, sourceDirectionsFI, sourceLocationsFI, n_of_adj_tetraFI] = zefCore.faceIntersectingDipoles( N, T , deepTetraI ) ;
 
 disp ("Generating edgewise dipoles.")
 
-[stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = core.edgewiseDipoles( N, T , deepTetraI ) ;
+[stensilEW, signsEW, sourceMomentsEW, sourceDirectionsEW, sourceLocationsEW, n_of_adj_tetraEW] = zefCore.edgewiseDipoles( N, T , deepTetraI ) ;
 
 %% Add interpolation of dipoles to source positions.
 
 disp ("Building interpolation matrix G...")
 
-sourcePos = core.positionSources ( N', T (deepTetraI,:)', numel (deepTetraI) ) ;
+sourcePos = zefCore.positionSources ( N', T (deepTetraI,:)', numel (deepTetraI) ) ;
 
-G = core.hdivInterpolation ( ...
+G = zefCore.hdivInterpolation ( ...
     deepTetraI, ...
     transpose (sourcePos), ...
     "pbo", ...
