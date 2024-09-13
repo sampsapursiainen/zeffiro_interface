@@ -1,17 +1,17 @@
 col = 100 ;
 
-dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
+dAdZ = zefCore.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
 
-invAdAdZ = core.invAY (A,dAdZ) ;
+invAdAdZ = zefCore.invAY (A,dAdZ) ;
 
-dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
+dBdZ = zefCore.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
 
-invAdBdZ = core.invAY (A,dBdZ) ;
+invAdBdZ = zefCore.invAY (A,dBdZ) ;
 
-dCdZ = core.dCdZ ( Z(col), col, numel(superNodes) ) ;
+dCdZ = zefCore.dCdZ ( Z(col), col, numel(superNodes) ) ;
 
-dCHdZ = core.dCHdZ ( Z(col), col, numel(superNodes) ) ;
+dCHdZ = zefCore.dCHdZ ( Z(col), col, numel(superNodes) ) ;
 
-dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, TM, B, invAdAdZ, invAdBdZ ) ;
+dSdZ = zefCore.dSdZ ( dCdZ, dCHdZ, Bs{col}, TM, B, invAdAdZ, invAdBdZ ) ;
 
-dRdZ = core.dRdZ ( invAdAdZ, R, invAdBdZ, invSchurC, dSdZ ) ;
+dRdZ = zefCore.dRdZ ( invAdAdZ, R, invAdBdZ, invSchurC, dSdZ ) ;

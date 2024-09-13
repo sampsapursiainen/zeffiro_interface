@@ -16,7 +16,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
         volumeCurrentI (:,1) double { mustBeInteger, mustBePositive, mustBeFinite }
         sigma (:,:) double { mustBeFinite }
         epsilon (:,:) double { mustBeFinite }
-        superNodes (:,1) core.SuperNode
+        superNodes (:,1) zefCore.SuperNode
         kwargs.electrodeI (:,:) double { mustBeInteger, mustBePositive, mustBeFinite } = transpose ( [ 4 , 8 ; 3 , 7 ] )
         kwargs.startFreq (1,1) double { mustBeNonnegative, mustBeFinite } = 1000
         kwargs.dFreqs (1,:) double  { mustBePositive, mustBeFinite } = [1, 10, 100, 1000,10000]
@@ -28,9 +28,9 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     disp ("Positioning sources…")
 
-    [ ~, sourceTetI ] = core.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
+    [ ~, sourceTetI ] = zefCore.positionSources ( nodes', tetra (volumeCurrentI,:)', kwargs.sourceN ) ;
 
-    tetV = core.tetraVolume (nodes, tetra,true) ;
+    tetV = zefCore.tetraVolume (nodes, tetra,true) ;
 
     eps0 = 8.8541878188e-12 ;
 
@@ -46,31 +46,31 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     inductance = 0 ;
 
-    Zs = core.impedanceFromRwLC ( resistance, angFreq, inductance, kwargs.capacitance ) ;
+    Zs = zefCore.impedanceFromRwLC ( resistance, angFreq, inductance, kwargs.capacitance ) ;
 
-    electrodes = core.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=[superNodes.radius] ) ;
+    electrodes = zefCore.ElectrodeSet ( positions=elePos, impedances=Zs, outerRadii=[superNodes.radius] ) ;
 
     disp("Computing stiffness matrix A…")
 
-    conductivity = core.reshapeTensor (conductivity) ;
+    conductivity = zefCore.reshapeTensor (conductivity) ;
 
-    iniA = core.stiffnessMat (nodes,tetra,tetV,conductivity);
+    iniA = zefCore.stiffnessMat (nodes,tetra,tetV,conductivity);
 
     disp("Applying boundary conditions to A…")
 
-    A = core.stiffMatBoundaryConditions ( iniA, Zs, superNodes ) ;
+    A = zefCore.stiffMatBoundaryConditions ( iniA, Zs, superNodes ) ;
 
     disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-    B = core.potentialMat ( superNodes, Zs, size (nodes,1) );
+    B = zefCore.potentialMat ( superNodes, Zs, size (nodes,1) );
 
     disp("Computing electrode impedance matrix C…")
 
-    C = core.voltageMat (Zs);
+    C = zefCore.voltageMat (Zs);
 
-    T = core.transferMatrix (A,B,tolerances=kwargs.solverTol,useGPU=true) ;
+    T = zefCore.transferMatrix (A,B,tolerances=kwargs.solverTol,useGPU=true) ;
 
-    S = core.schurComplement (T, ctranspose(B), C) ;
+    S = zefCore.schurComplement (T, ctranspose(B), C) ;
 
     invS = S \ eye ( size (S) ) ;
 
@@ -80,7 +80,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = core.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
+    [Lini, Rini, Gx, Gy, Gz] = zefCore.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
 
     toc ;
 
@@ -100,9 +100,9 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     %%
 
-    Ms = core.electrodeMassMatrix ( size (A,1), superNodes ) ;
+    Ms = zefCore.electrodeMassMatrix ( size (A,1), superNodes ) ;
 
-    Bs = core.electrodeBasisFnMean ( size (A,1), superNodes ) ;
+    Bs = zefCore.electrodeBasisFnMean ( size (A,1), superNodes ) ;
 
     dAngFreqs = kwargs.dFreqs .* 2 * pi ;
 
@@ -160,23 +160,23 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
                 disp ( newline + "  + dR/dZ" + col + " * dZ" + col + "...")
 
-                dAdZ = core.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
+                dAdZ = zefCore.dAdZ ( Ms{col}, electrodes.impedances(col), superNodes(col).totalSurfaceArea ) ;
 
-                invAdAdZ = core.invAY (A,dAdZ) ;
+                invAdAdZ = zefCore.invAY (A,dAdZ) ;
 
-                dBdZ = core.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
+                dBdZ = zefCore.dBdZ ( Bs{col}, electrodes.impedances(col) ) ;
 
-                invAdBdZ = core.invAY (A,dBdZ) ;
+                invAdBdZ = zefCore.invAY (A,dBdZ) ;
 
-                dCdZ = core.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
+                dCdZ = zefCore.dCdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
 
-                dCHdZ = core.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
+                dCHdZ = zefCore.dCHdZ ( electrodes.impedances(col), col, numel(superNodes) ) ;
 
-                dSdZ = core.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
+                dSdZ = zefCore.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
 
-                dRdZ = core.dRdZ ( invAdAdZ, Rini, invAdBdZ, invS, dSdZ ) ;
+                dRdZ = zefCore.dRdZ ( invAdAdZ, Rini, invAdBdZ, invS, dSdZ ) ;
 
-                newZs (col) = core.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, kwargs.capacitance ) ;
+                newZs (col) = zefCore.impedanceFromRwLC ( real ( newZs (col) ), iiAngFreq, inductance, kwargs.capacitance ) ;
 
                 dZ = newZs (col) - Zs (col) ;
 
@@ -186,27 +186,27 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp ("Computing linearized lead field...")
 
-            linL = transpose ( core.intersperseArray (- G * linR, 1, 3) ) ;
+            linL = transpose ( zefCore.intersperseArray (- G * linR, 1, 3) ) ;
 
             disp ("Computing new R directly with updated impedances…")
 
             disp("Applying boundary conditions to A…")
 
-            newA = core.stiffMatBoundaryConditions ( iniA, newZs, superNodes ) ;
+            newA = zefCore.stiffMatBoundaryConditions ( iniA, newZs, superNodes ) ;
 
             disp("Computing electrode potential matrix B for real and imaginary parts…")
 
-            newB = core.potentialMat ( superNodes, newZs, size (nodes,1) );
+            newB = zefCore.potentialMat ( superNodes, newZs, size (nodes,1) );
 
             disp("Computing electrode impedance matrix C…")
 
-            newC = core.voltageMat (newZs);
+            newC = zefCore.voltageMat (newZs);
 
-            newT = core.transferMatrix (newA,newB,tolerances=kwargs.solverTol,useGPU=true) ;
+            newT = zefCore.transferMatrix (newA,newB,tolerances=kwargs.solverTol,useGPU=true) ;
 
-            newS = core.schurComplement (newT, ctranspose(newB), newC) ;
+            newS = zefCore.schurComplement (newT, ctranspose(newB), newC) ;
 
-            [refL, refR, ~, ~, ~] = core.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
+            [refL, refR, ~, ~, ~] = zefCore.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, sourceTetI, conductivity ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 

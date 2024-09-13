@@ -48,7 +48,7 @@ zef.fem_mesh_inflation_strength = str2num(get(zef.h_fem_mesh_inflation_strength,
 
 zef.surface_sources = get(zef.h_as_opt_6,'Value');
 zef.use_depth_electrodes = get(zef.h_use_depth_electrodes,'Value');
-zef.source_model = core.ZefSourceModel.from(get(zef.h_source_model,'Value'));
+zef.source_model = zefCore.ZefSourceModel.from(get(zef.h_source_model,'Value'));
 zef.use_gpu = get(zef.h_use_gpu,'Value');
 zef.gpu_num = str2num(get(zef.h_gpu_num,'Value'));
 zef.smoothing_steps_ele = str2num(get(zef.h_smoothing_steps_ele,'Value'));

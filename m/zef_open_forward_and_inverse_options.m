@@ -131,14 +131,14 @@ zef.h_adaptive_refinement_k_param.Value = num2str(zef.adaptive_refinement_k_para
 
 zef.h_as_opt_6.Value = zef.surface_sources;
 zef.h_use_depth_electrodes.Value = zef.use_depth_electrodes;
-zef.h_source_model.Items = arrayfun(@to_string, setdiff(core.ZefSourceModel.variants, core.ZefSourceModel.Error));
-zef.h_source_model.ItemsData = arrayfun(@core.ZefSourceModel.from, setdiff(core.ZefSourceModel.variants, core.ZefSourceModel.Error));
-zef.source_model = core.ZefSourceModel.from(zef.source_model);
-if eq(zef.source_model, core.ZefSourceModel.Error)
+zef.h_source_model.Items = arrayfun(@to_string, setdiff(zefCore.ZefSourceModel.variants, zefCore.ZefSourceModel.Error));
+zef.h_source_model.ItemsData = arrayfun(@zefCore.ZefSourceModel.from, setdiff(zefCore.ZefSourceModel.variants, zefCore.ZefSourceModel.Error));
+zef.source_model = zefCore.ZefSourceModel.from(zef.source_model);
+if eq(zef.source_model, zefCore.ZefSourceModel.Error)
     warning("Invalid source model. Setting it as H(div)");
-    zef.source_model = core.ZefSourceModel.Hdiv;
+    zef.source_model = zefCore.ZefSourceModel.Hdiv;
 end
-zef.h_source_model.Value = core.ZefSourceModel.from(zef.source_model);
+zef.h_source_model.Value = zefCore.ZefSourceModel.from(zef.source_model);
 zef.h_use_gpu.Value = zef.use_gpu;
 zef.h_gpu_num.Value = num2str(zef.gpu_num);
 zef.h_mesh_labeling_approach.ItemsData = [1:length(zef.h_mesh_labeling_approach.Items)];

@@ -142,7 +142,7 @@ function [ sensitivities_with_statistics, L ] = main ( ...
             ["pbo", "mpo", "none"] ...
         ) } = "pbo"
 
-        args.source_model (1,1) core.ZefSourceModel = core.ZefSourceModel.Hdiv
+        args.source_model (1,1) zefCore.ZefSourceModel = zefCore.ZefSourceModel.Hdiv
 
         args.build_reconstructions (1,1) logical = true
 

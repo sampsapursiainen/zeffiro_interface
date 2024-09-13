@@ -3,7 +3,7 @@ function randPosDefMat (kwargs)
         kwargs.testsize (1,1) double { mustBePositive, mustBeInteger } = 10
     end
 
-    testM = core.operators.randPosDefMat ( kwargs.testsize ) ;
+    testM = zefCore.operators.randPosDefMat ( kwargs.testsize ) ;
 
     eigvals = eig (testM) ;
 
