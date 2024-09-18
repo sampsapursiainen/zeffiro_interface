@@ -122,7 +122,7 @@ classdef Zef < handle
             arguments
                 self
                 I (:,:)
-                axis (1,1) char { mustBeMember(axis, 'xyz']) }
+                axis (1,1) char { mustBeMember(axis, 'xyz') }
             end
 
             nodeN = size (self.nodes, 1) ;
