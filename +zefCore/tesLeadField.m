@@ -1,6 +1,6 @@
-function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity )
+function [L, R] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -26,9 +26,9 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
 %
 %   The volumes of the tetra.
 %
-% - volumeCurrentI
+% - Gx, Gy, Gz
 %
-%   Which elements in the head volume are considered active.
+%   The x-, y- and z-components of the volume current in the possibly active part of the head.
 %
 % - aggregationI
 %
@@ -37,12 +37,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
 % - contactSurfaces
 %
 %   The contact surfaces of the above electrodes.
-%
-% - conductivity
-%
-%   A 3D conductivity tensor, encoded wither as a 1×Ntetra vector in the
-%   isotrophiv case, or as a 6×Ntetra matrix in the anisotrophic case, with
-%   each column containing the values σxx, σyy, σzz, σxy, σxz and σyz.
 %
 % Outputs:
 %
@@ -70,7 +64,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
         volumeCurrentI (1,:) double { mustBePositive, mustBeInteger }
         aggregationI   (1,:) double { mustBePositive, mustBeInteger }
         aggregationN   (1,:) double { mustBePositive, mustBeInteger }
-        conductivity   (:,:) double { mustBeFinite }
     end % arguments
 
     I = eye ( size (S) ) ;
@@ -78,10 +71,6 @@ function [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, volumeCur
     invSchurC = S \ I ;
 
     R = T * invSchurC ;
-
-    disp ("Computing volume currents σ∇ψ…")
-
-    [Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
 
     disp ("Building lead field components…") ;
 

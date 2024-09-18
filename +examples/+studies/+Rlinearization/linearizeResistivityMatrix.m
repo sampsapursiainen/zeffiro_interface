@@ -76,15 +76,19 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     %%
 
+    disp ("Computing volume currents σ∇ψ…")
+
+    [Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
+
+    G = [ Gx ; Gy ; Gz ] ;
+
     disp ("Computing initial matrices depending on Z...")
 
     tic ;
 
-    [Lini, Rini, Gx, Gy, Gz] = zefCore.tesLeadField ( T, S, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity ) ;
+    [Lini, Rini] = zefCore.tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN ) ;
 
     toc ;
-
-    G = [ Gx ; Gy ; Gz ] ;
 
     %%
 
@@ -206,7 +210,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             newS = zefCore.schurComplement (newT, ctranspose(newB), newC) ;
 
-            [refL, refR, ~, ~, ~] = zefCore.tesLeadField ( newT, newS, nodes, tetra, tetV, volumeCurrentI, aggregationI, aggregationN, conductivity ) ;
+            [refL, refR, ~, ~, ~] = zefCore.tesLeadField ( newT, newS, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN ) ;
 
             disp ("Saving new Rs and Ls to file " + fileName + "…") ;
 
