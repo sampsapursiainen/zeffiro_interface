@@ -6,19 +6,25 @@ classdef Zef < handle
 %
     properties
 
-        nodes (:,3) double { mustBeFinite } = []
+        eegL (:,:) double { mustBeFinite } = [] % An EEG lead field matrix.
 
-        tetra (:,4) double { mustBePositive, mustBeInteger } = []
+        filedTransferMat (1,1) matlab.io.MatFile = [] % A file handle to a transfer matrix stored on disk.
 
-        A (:,:) double { mustBeFinite } = sparse ([])
+        gmegL (:,:) double { mustBeFinite } = [] % A gMEG lead field matrix.
 
-        T (:,:) double { mustBeFinite } = []
+        megL (:,:) double { mustBeFinite } = [] % An MEG lead field matrix.
 
-        L (:,:) double { mustBeFinite } = []
+        nodes (:,3) double { mustBeFinite } = [] % Nodes in a finite element mesh.
 
-        sourcePos (:,3) double { mustBeFinite } = []
+        sourcePos (:,3) double { mustBeFinite } = [] % Positions of sources in an active volume.
 
-        sourceTetI (:,1) double { mustBePositive, mustBeInteger } = []
+        sourceTetI (:,1) double { mustBePositive, mustBeInteger } = [] % Indices of the tetra which function as possible source locations.
+
+        stiffnessMat (:,:) double { mustBeFinite } = sparse ([]) % A cached stiffness matrix.
+
+        tesL (:,:) double { mustBeFinite } = [] % An tES lead field matrix.
+
+        tetra (:,4) double { mustBePositive, mustBeInteger } = [] % Elements or quadruples of node indices in a finite element mesh.
 
     end % properties
 
@@ -32,13 +38,16 @@ classdef Zef < handle
         %
 
             arguments
+                kwargs.eegL = []
+                kwargs.filedTransferMat = []
+                kwargs.gmegL = []
+                kwargs.megL = []
                 kwargs.nodes = []
-                kwargs.tetra = []
-                kwargs.A = sparse ([])
-                kwargs.T = []
-                kwargs.L = []
                 kwargs.sourcePos = []
                 kwargs.sourceTetI = []
+                kwargs.stiffnessMat = sparse ([])
+                kwargs.tesL = []
+                kwargs.tetra = []
             end
 
             fieldNames = string ( fieldnames (kwargs) ) ;
