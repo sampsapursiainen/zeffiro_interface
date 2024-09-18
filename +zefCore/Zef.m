@@ -26,6 +26,12 @@ classdef Zef < handle
 
         tetra (:,4) double { mustBePositive, mustBeInteger } = [] % Elements or quadruples of node indices in a finite element mesh.
 
+        volCurrentX (:,:) double { mustBePositive } = [] % The x-components of volume currents in active regions of a mesh.
+
+        volCurrentY (:,:) double { mustBePositive } = [] % The y-components of volume currents in active regions of a mesh.
+
+        volCurrentZ (:,:) double { mustBePositive } = [] % The z-components of volume currents in active regions of a mesh.
+
     end % properties
 
     methods
@@ -105,18 +111,49 @@ classdef Zef < handle
 
         end % function
 
-        function T = transferMat (self)
+        function self = withVolCurrent (self, I, axis)
         %
-        % T = self.transferMat (self)
+        % self = self.transferMat (self, I, axis)
         %
-        % A getter for self.filedTransferMat, that returns the value of the contained transfer matrix.
+        % A setter for self.volCurrents, that ensures a correct size for the input matrix.
+        % Axis determines whether
         %
 
             arguments
                 self
+                I (:,:)
+                axis (1,1) char { mustBeMember(axis, 'xyz']) }
             end
 
-            T = self.filedTransferMat.T ;
+            nodeN = size (self.nodes, 1) ;
+
+            activeN = numel (self.sourceTetI) ;
+
+            [rowN, colN] = size (I) ;
+
+            assert ( rowN == activeN, "The number of rows in a volume current matrix needs to equal the number of active elements." ) ;
+
+            assert ( colN == nodeN, "The number of columns in a volume current matrix needs to equal the number of nodes in the respective mesh." ) ;
+
+            switch axis
+
+                case 'x'
+
+                    self.volCurrentX = I ;
+
+                case 'y'
+
+                    self.volCurrentY = I ;
+
+                case 'z'
+
+                    self.volCurrentZ = I ;
+
+                otherwise
+
+                    error ("Unknown Cartesian direction. Must be one of 1 (x), 2 (y) or 3 (z).") ;
+
+            end % switch
 
         end % function
 
