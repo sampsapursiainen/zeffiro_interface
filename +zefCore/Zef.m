@@ -26,11 +26,11 @@ classdef Zef < handle
 
         tetra (:,4) double { mustBePositive, mustBeInteger } = [] % Elements or quadruples of node indices in a finite element mesh.
 
-        volCurrentX (:,:) double { mustBePositive } = [] % The x-components of volume currents in active regions of a mesh.
+        volCurrentX (:,:) double { mustBeFinite } = [] % The x-components of volume currents in active regions of a mesh.
 
-        volCurrentY (:,:) double { mustBePositive } = [] % The y-components of volume currents in active regions of a mesh.
+        volCurrentY (:,:) double { mustBeFinite } = [] % The y-components of volume currents in active regions of a mesh.
 
-        volCurrentZ (:,:) double { mustBePositive } = [] % The z-components of volume currents in active regions of a mesh.
+        volCurrentZ (:,:) double { mustBeFinite } = [] % The z-components of volume currents in active regions of a mesh.
 
     end % properties
 
