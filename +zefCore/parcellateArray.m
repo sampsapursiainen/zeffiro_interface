@@ -20,6 +20,11 @@ function outA = parcellateArray ( A, aggregationI, aggregationN, axis )
 %   (see kwargs.axis) and eleI is the index of the active element that the
 %   contribution from that row should map to.
 %
+% - aggregationN
+%
+%   The number of times each cluster center appears in aggregationI. Used in
+%   normalizing the aggregated result.
+%
 % - axis
 %
 %   The axis along which the parcellation will be performed.
