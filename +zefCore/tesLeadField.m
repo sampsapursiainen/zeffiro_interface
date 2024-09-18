@@ -1,6 +1,6 @@
-function [L, R] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN )
+function [L, R] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregationI, aggregationN )
+% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -13,18 +13,6 @@ function [L, R] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregati
 % - S
 %
 %   The Schur complement of A in the system [ A B ; B' C ].
-%
-% - nodes
-%
-%   The finite element nodes.
-%
-% - tetra
-%
-%   The tetra that the electrodes are attached to.
-%
-% - tetV
-%
-%   The volumes of the tetra.
 %
 % - Gx, Gy, Gz
 %
@@ -51,19 +39,14 @@ function [L, R] = tesLeadField ( T, S, nodes, tetra, tetV, Gx, Gy, Gz, aggregati
 %
 %  A resistivity matrix.
 %
-% - Gx, Gy, Gz
-%
-%  The x-, y- and z-components of a volume current matrix G = -σ∇u.
-%
     arguments
-        T              (:,:) double { mustBeFinite }
-        S              (:,:) double { mustBeFinite }
-        nodes          (:,3) double { mustBeFinite }
-        tetra          (:,4) double { mustBePositive, mustBeInteger, mustBeFinite }
-        tetV           (:,1) double { mustBePositive, mustBeFinite }
-        volumeCurrentI (1,:) double { mustBePositive, mustBeInteger }
-        aggregationI   (1,:) double { mustBePositive, mustBeInteger }
-        aggregationN   (1,:) double { mustBePositive, mustBeInteger }
+        T            (:,:) double { mustBeFinite }
+        S            (:,:) double { mustBeFinite }
+        Gx           (:,:) double { mustBeFinite }
+        Gy           (:,:) double { mustBeFinite }
+        Gz           (:,:) double { mustBeFinite }
+        aggregationI (1,:) double { mustBePositive, mustBeInteger }
+        aggregationN (1,:) double { mustBePositive, mustBeInteger }
     end % arguments
 
     I = eye ( size (S) ) ;
