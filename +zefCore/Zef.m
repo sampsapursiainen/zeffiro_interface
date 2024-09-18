@@ -20,7 +20,7 @@ classdef Zef < handle
 
         sourceTetI (:,1) double { mustBePositive, mustBeInteger } = [] % Indices of the tetra which function as possible source locations.
 
-        stiffnessMat (:,:) double { mustBeFinite } = sparse ([]) % A cached stiffness matrix.
+        stiffnessMat (:,:) double { mustBeFinite, mustBeSparse } = sparse ([]) % A cached stiffness matrix.
 
         tesL (:,:) double { mustBeFinite } = [] % An tES lead field matrix.
 
