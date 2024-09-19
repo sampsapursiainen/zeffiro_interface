@@ -14,6 +14,7 @@ classdef ElectrodeSet < zefCore.Sensor
         frequencies (:,1) double { mustBeNonnegative } = []
         capacitances (:,1) double { mustBeNonnegative } = []
         inductances (:,1) double { mustBeNonnegative } = []
+        contactSurfaces (:,1) zefCore.SuperNode = zefCore.SuperNode.empty
     end
 
     methods
@@ -34,6 +35,7 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.frequencies = []
                 kwargs.capacitances= []
                 kwargs.inductances = []
+                kwargs.contactSurfaces = zefCore.SuperNode.empty
             end
 
             sensorN = size ( kwargs.positions, 2 ) ;
@@ -77,7 +79,12 @@ classdef ElectrodeSet < zefCore.Sensor
 
             assert ( ...
                 sizeAssertion ( kwargs.inductances ), ...
-                "The number of given inductancesmust match the number of sensor positions, or be a scalar." ...
+                "The number of given inductances must match the number of sensor positions, or be a scalar." ...
+            ) ;
+
+            assert ( ...
+                sizeAssertion ( kwargs.contactSurfaces ), ...
+                "The number of given contact surfaces must match the number of sensor positions, or be a scalar." ...
             ) ;
 
             fields = string ( fieldnames ( kwargs ) ) ;
