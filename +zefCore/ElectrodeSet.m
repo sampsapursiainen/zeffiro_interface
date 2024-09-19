@@ -195,7 +195,7 @@ classdef ElectrodeSet < zefCore.Sensor
 
             C = self.capacitances ;
 
-            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
+            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
 
         end % function
 
@@ -216,7 +216,7 @@ classdef ElectrodeSet < zefCore.Sensor
 
             C = self.capacitances ;
 
-            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
+            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
 
         end % function
 
@@ -237,7 +237,7 @@ classdef ElectrodeSet < zefCore.Sensor
 
             C = self.inductances ;
 
-            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
+            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
 
         end % function
 
