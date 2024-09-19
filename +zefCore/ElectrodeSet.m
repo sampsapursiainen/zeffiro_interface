@@ -11,6 +11,7 @@ classdef ElectrodeSet < zefCore.Sensor
         innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         impedances (:,1) double { mustBeNonNan } = []
+        frequencies (:,1) double { mustBeNonnegative } = []
     end
 
     methods
@@ -28,6 +29,7 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.innerRadii = 0
                 kwargs.outerRadii = 0
                 kwargs.impedances = []
+                kwargs.frequencies = []
             end
 
             sensorN = size ( kwargs.positions, 2 ) ;
@@ -57,6 +59,11 @@ classdef ElectrodeSet < zefCore.Sensor
             assert ( ...
                 sizeAssertion ( kwargs.impedances ), ...
                 "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
+            ) ;
+
+            assert ( ...
+                sizeAssertion ( kwargs.frequencies ), ...
+                "The number of given frequencies must match the number of sensor positions, or be a scalar." ...
             ) ;
 
             fields = string ( fieldnames ( kwargs ) ) ;
@@ -154,6 +161,17 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             self.impedances (:) = impedances ;
+
+        end % function
+
+        function self = withFrequencies (self, frequencies)
+        %
+        % self = withImpedances (self, frequencies)
+        %
+        % Sets the frequencies of self to given values.
+        %
+
+            self.frequencies (:) = frequencies ;
 
         end % function
 
