@@ -113,7 +113,7 @@ classdef ElectrodeSet < zefCore.Sensor
 
             L = self.inductances ;
 
-            recomputeZ = ( ~ isempty (C) || ~ isempty (L) ) && ~ isempty (w)
+            recomputeZ = ( ~ isempty (C) || ~ isempty (L) ) && ~ isempty (w) ;
 
             if recomputeZ
 
