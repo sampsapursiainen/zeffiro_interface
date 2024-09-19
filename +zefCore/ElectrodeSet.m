@@ -12,6 +12,8 @@ classdef ElectrodeSet < zefCore.Sensor
         outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         impedances (:,1) double { mustBeNonNan } = []
         frequencies (:,1) double { mustBeNonnegative } = []
+        capacitances (:,1) double { mustBeNonnegative } = []
+        inductances (:,1) double { mustBeNonnegative } = []
     end
 
     methods
@@ -64,6 +66,16 @@ classdef ElectrodeSet < zefCore.Sensor
             assert ( ...
                 sizeAssertion ( kwargs.frequencies ), ...
                 "The number of given frequencies must match the number of sensor positions, or be a scalar." ...
+            ) ;
+
+            assert ( ...
+                sizeAssertion ( kwargs.capacitances ), ...
+                "The number of given capacitances must match the number of sensor positions, or be a scalar." ...
+            ) ;
+
+            assert ( ...
+                sizeAssertion ( kwargs.inductances ), ...
+                "The number of given inductancesmust match the number of sensor positions, or be a scalar." ...
             ) ;
 
             fields = string ( fieldnames ( kwargs ) ) ;
@@ -172,6 +184,58 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             self.frequencies (:) = frequencies ;
+
+            R = real ( self.impedances ) ;
+
+            w = 2 * pi * self.frequencies ;
+
+            L = self.inductances ;
+
+            C = self.capacitances ;
+
+            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
+
+        end % function
+
+        function self = withCapacitances(self, capacitances)
+        %
+        % self = withCapacitances (self, capacitances)
+        %
+        % Sets the capacitances of self to given values.
+        %
+
+            self.capacitances (:) = capacitances ;
+
+            R = real ( self.impedances ) ;
+
+            w = 2 * pi * self.frequencies ;
+
+            L = self.inductances ;
+
+            C = self.capacitances ;
+
+            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
+
+        end % function
+
+        function self = withInductances(self, inductances)
+        %
+        % self = withInductances (self, inductances)
+        %
+        % Sets the inductances of self to given values.
+        %
+
+            self.inductances (:) = inductances ;
+
+            R = real ( self.impedances ) ;
+
+            w = 2 * pi * self.frequencies ;
+
+            L = self.inductances ;
+
+            C = self.inductances ;
+
+            self.impedances = zefCore.impedancesFromRwLC (R, w, L, C) ;
 
         end % function
 
