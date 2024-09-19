@@ -105,6 +105,22 @@ classdef ElectrodeSet < zefCore.Sensor
 
             end % for
 
+            R = real (self.impedances) ;
+
+            w = 2 * pi * self.frequencies ;
+
+            C = self.capacitances ;
+
+            L = self.inductances ;
+
+            recomputeZ = ( ~ isempty (C) || ~ isempty (L) ) && ~ isempty (w)
+
+            if recomputeZ
+
+                self.impedances = zefCore.impedanceFromRwLC (R,w,L,C) ;
+
+            end % if
+
         end % function
 
         function N = electrodeCount ( self )
