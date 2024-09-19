@@ -32,6 +32,8 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.outerRadii = 0
                 kwargs.impedances = []
                 kwargs.frequencies = []
+                kwargs.capacitances= []
+                kwargs.inductances = []
             end
 
             sensorN = size ( kwargs.positions, 2 ) ;
