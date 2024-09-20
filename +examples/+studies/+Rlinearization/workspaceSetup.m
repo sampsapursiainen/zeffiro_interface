@@ -12,9 +12,9 @@ superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodeP
 
 superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=1,attachNodesTo="surface") ;
 
-ee1 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,capacitances=3.5e-6,inductances=0,contactSurfaces=superNodes1,positions=[superNodes1.centralNodePos],impedances=2e3,frequencies=f1)
+ee1 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,capacitances=3.5e-6,inductances=0,contactSurfaces=superNodes1,positions=[superNodes1.centralNodePos],impedances=2e3,frequencies=f1) ;
 
-ee2 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,capacitances=3.5e-6,inductances=0,contactSurfaces=superNodes2,positions=[superNodes2.centralNodePos],impedances=2e3,frequencies=f2)
+ee2 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,capacitances=3.5e-6,inductances=0,contactSurfaces=superNodes2,positions=[superNodes2.centralNodePos],impedances=2e3,frequencies=f2) ;
 
 conductivity = zefCore.reshapeTensor (zef.sigma(:,1)) ;
 
