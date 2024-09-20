@@ -28,4 +28,4 @@ activeI = zef.brain_ind ;
 
 sourceN = 5000 ;
 
-[L1, L2] = examples.studies.Rlinearization.interferenceLeadFields (nodes, tetra, conductivity, permittivity, [ee1 , ee2], zef.brain_ind, sourceN) ;
+[L1, L2, R1, R2] = examples.studies.Rlinearization.interferenceLeadFields (nodes, tetra, conductivity, permittivity, [ee1 , ee2], zef.brain_ind, sourceN) ;
