@@ -35,7 +35,7 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
         tensor (6,:) double { mustBeFinite }
     end
 
-    disp ("Computing stiffness matrix A = ∫ σ∇ψi⋅∇ψj dΩ…" + newline) ;
+    disp (newline + "Computing stiffness matrix A = ∫ σ∇ψi⋅∇ψj dΩ…" + newline) ;
 
     % Abbreviations of matrix sizes.
 
