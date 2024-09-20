@@ -73,9 +73,9 @@ function [L1, L2] = interferenceLeadFields (nodes, tetra, conductivity, permitti
 
     T2 = zefCore.transferMatrix (A2,B2,tolerances=kwargs.solverTol,useGPU=true) ;
 
-    S1 = zefCore.schurComplement (T1, ctranspose(B1), C) ;
+    S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
-    S2 = zefCore.schurComplement (T2, ctranspose(B2), C) ;
+    S2 = zefCore.schurComplement (T2, ctranspose(B2), C2) ;
 
     invS1 = S1 \ eye ( size (S1) ) ;
 
