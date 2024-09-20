@@ -1,6 +1,6 @@
-function [L1, L2] = interferenceLeadFields (nodes, tetra, conductivity, permittivity, electrodePairs, activeI, sourceN, kwargs)
+function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, permittivity, electrodePairs, activeI, sourceN, kwargs)
 %
-% [L1, L2] = interferenceLeadFields (nodes, tetra, conductivity, permittivity, electrodePairs, sourceN, kwargs)
+% [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, permittivity, electrodePairs, sourceN, kwargs)
 %
 % Computes two lead fields for corresponding two pairs of tACS electrodes at
 % different frequencies.
@@ -87,8 +87,8 @@ function [L1, L2] = interferenceLeadFields (nodes, tetra, conductivity, permitti
 
     [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
-    L1 = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
+    [ L1, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
 
-    L2 = zefCore.tesLeadField ( T2, S2, Gx2, Gy2, Gz2, aggregationI, aggregationN ) ;
+    [ L2, R2 ] = zefCore.tesLeadField ( T2, S2, Gx2, Gy2, Gz2, aggregationI, aggregationN ) ;
 
 end % function
