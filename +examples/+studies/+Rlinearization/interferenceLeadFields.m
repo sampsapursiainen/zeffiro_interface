@@ -67,7 +67,7 @@ function [L1, L2] = interferenceLeadFields (nodes, tetra, conductivity, permitti
 
     C1 = zefCore.voltageMat (Z1s);
 
-    C2 = zefCore.voltageMat (Z1s);
+    C2 = zefCore.voltageMat (Z2s);
 
     T1 = zefCore.transferMatrix (A1,B1,tolerances=kwargs.solverTol,useGPU=true) ;
 
