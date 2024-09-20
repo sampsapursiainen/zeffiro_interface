@@ -23,7 +23,7 @@
 !zeffiro_interface.m
 !zeffiro_downloader.m
 !zeffiro_setup.m
-!+core/**/*.m
+!+zefCore/**/*.m
 !+examples/**/*.m
 !+tests/**/*.m
 !+utilities/**/*.m
