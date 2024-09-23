@@ -21,7 +21,6 @@ classdef ElectrodeSet < zefCore.Sensor
         frequencies (:,1) double { mustBeNonnegative } = []
         innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
-        positions  (3,:) double { mustBeFinite } = []
         wetResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
     end
 
@@ -42,11 +41,10 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.frequencies = []
                 kwargs.innerRadii = 0
                 kwargs.outerRadii = 0
-                kwargs.positions  = []
                 kwargs.wetResistances = []
             end
 
-            sensorN = size ( kwargs.positions, 2 ) ;
+            sensorN = numel ( kwargs.contactSurfaces ) ;
 
             sizeAssertion = @(arg) isscalar ( arg ) || numel ( arg ) == sensorN ;
 
@@ -84,6 +82,17 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             N = size ( self.positions, 2 ) ;
+
+        end % function
+
+        function P = positions (self)
+        %
+        % P = self.positions
+        %
+        % Returns the positions of the contact surfaces.
+        %
+
+            P = [ self.contactSurfaces.centralNodePos ] ;
 
         end % function
 
