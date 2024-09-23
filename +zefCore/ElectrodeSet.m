@@ -11,7 +11,7 @@ classdef ElectrodeSet < zefCore.Sensor
 %
 % Here E is the electrode voltage source, Rc and Cc are the double layer
 % capacitor resistance and capacitance, and Rw is the resistance of a wet
-% component such as electrolyte gel between the double layer and the skin.
+% component such as electrolyte gel between the double layer and the skin S.
 %
 
     properties
@@ -103,15 +103,7 @@ classdef ElectrodeSet < zefCore.Sensor
         % Computes the areas of the electrodes contained in this set.
         %
 
-            innerA = pi .* self.innerRadii .^ 2 ;
-
-            outerA = pi .* self.outerRadii .^ 2 ;
-
-            A = outerA - innerA ;
-
-            if isscalar ( A )
-                A = repmat ( A, self.electrodeCount, 1 ) ;
-            end
+            A = [ self.contactSurfaces.totalSurfaceArea ] ;
 
         end % function
 
