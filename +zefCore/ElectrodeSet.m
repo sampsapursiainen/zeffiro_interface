@@ -19,7 +19,7 @@ classdef ElectrodeSet < zefCore.Sensor
         contactSurfaces (:,1) zefCore.SuperNode = zefCore.SuperNode.empty
         doubleLayerResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
         frequencies (:,1) double { mustBeNonnegative } = []
-        wetResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
+        contactResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
     end
 
     methods
@@ -37,7 +37,7 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.contactSurfaces = zefCore.SuperNode.empty
                 kwargs.doubleLayerResistances = []
                 kwargs.frequencies = []
-                kwargs.wetResistances = []
+                kwargs.contactResistances = []
             end
 
             sensorN = numel ( kwargs.contactSurfaces ) ;
@@ -111,7 +111,7 @@ classdef ElectrodeSet < zefCore.Sensor
         % parameters of self.
         %
 
-            Rw = self.wetResistances ;
+            Rw = self.contactResistances ;
 
             f = self.frequencies ;
 
@@ -166,7 +166,7 @@ classdef ElectrodeSet < zefCore.Sensor
         % Sets the wet resistancies within self.
         %
 
-            self.wetResistances = R ;
+            self.contactResistances = R ;
 
         end % function
 
