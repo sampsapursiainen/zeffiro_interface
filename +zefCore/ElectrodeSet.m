@@ -19,8 +19,6 @@ classdef ElectrodeSet < zefCore.Sensor
         contactSurfaces (:,1) zefCore.SuperNode = zefCore.SuperNode.empty
         doubleLayerResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
         frequencies (:,1) double { mustBeNonnegative } = []
-        innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
-        outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         wetResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
     end
 
@@ -39,8 +37,6 @@ classdef ElectrodeSet < zefCore.Sensor
                 kwargs.contactSurfaces = zefCore.SuperNode.empty
                 kwargs.doubleLayerResistances = []
                 kwargs.frequencies = []
-                kwargs.innerRadii = 0
-                kwargs.outerRadii = 0
                 kwargs.wetResistances = []
             end
 
