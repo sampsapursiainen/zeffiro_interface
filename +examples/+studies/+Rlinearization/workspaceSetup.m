@@ -12,7 +12,7 @@ f1 = 1000 ;
 
 f2 = 1010 ;
 
-wetResistance = 400 ;
+contactResistance = 400 ;
 
 doubleLayerResistance = 15 ;
 
@@ -22,9 +22,9 @@ superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodeP
 
 superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=1,attachNodesTo="surface") ;
 
-ee1 = zefCore.ElectrodeSet (wetResistances=wetResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
+ee1 = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
 
-ee2 = zefCore.ElectrodeSet (wetResistances=wetResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes2,frequencies=f2) ;
+ee2 = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes2,frequencies=f2) ;
 
 conductivity = zefCore.reshapeTensor (zef.sigma(:,1)) ;
 
@@ -103,3 +103,15 @@ S2 = zefCore.schurComplement (T2, ctranspose(B2), C2) ;
 [ L1, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
 
 [ L2, R2 ] = zefCore.tesLeadField ( T2, S2, Gx2, Gy2, Gz2, aggregationI, aggregationN ) ;
+
+%% Linearization bit.
+
+dfs = [100,100]
+
+invS1 = S1 \ eye ( size (S1) ) ;
+
+invS2 = S2 \ eye ( size (S2) ) ;
+
+newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, ee1, dfs, 1:2) ;
+
+newR2 = zefCore.linearizeResistivityMatrix (R2, A2, B2, T2, invS2, ee2, dfs, 1:2) ;
