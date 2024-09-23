@@ -81,7 +81,7 @@ classdef ElectrodeSet < zefCore.Sensor
         % electrode positions there are.
         %
 
-            N = size ( self.positions, 2 ) ;
+            N = numel ( self.contactSurfaces ) ;
 
         end % function
 
@@ -131,13 +131,13 @@ classdef ElectrodeSet < zefCore.Sensor
         %
         % Z = effectiveImpedances ( self )
         %
-        % Computes the effective wetResistances, the wetResistances multiplied by
-        % electrode areas, of this electrode set.
+        % Computes the effective wetResistances, the wetResistances multiplied
+        % by electrode areas, of this electrode set.
         %
 
             As = self.areas ;
 
-            Zs = self.wetResistances ;
+            Zs = self.impedances ;
 
             Z = Zs .* As ;
 
@@ -215,6 +215,27 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             self.capacitances (:) = capacitances ;
+
+        end % function
+
+        function self = withPerturbedFrequencies (self, I, df)
+        %
+        % self = withPerturbedFrequencies (self, I, df)
+        %
+        % Modifies the frequencies of self at indices I by df.
+        %
+
+            arguments
+                self
+                I (:,1) double { mustBeInteger, mustBePositive }
+                df (:,1) double { mustBeReal, mustBeFinite }
+            end
+
+            eN = self.electrodeCount ;
+
+            assert ( all (I <= eN ), "Electrode index out of range." ) ;
+
+            self.frequencies (I) = self.frequencies (I) + df ;
 
         end % function
 
