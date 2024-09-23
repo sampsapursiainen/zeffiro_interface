@@ -1,6 +1,6 @@
-function Z = impedanceFromRwLC (R,w,L,C)
+function Z = impedanceSeries (R,w,L,C)
 %
-% Z = impedanceFromRwLC (R,w,L,C)
+% Z = impedanceSeries (R,w,L,C)
 %
 % Computes impedances from given resistance R, angular frequency w, impedance L
 % and capacitance C. Inputs can be vectors of identical length. If L is to be
