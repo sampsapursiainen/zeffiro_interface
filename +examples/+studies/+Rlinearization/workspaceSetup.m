@@ -58,9 +58,9 @@ Z1s = ee1.impedances ;
 
 Z2s = ee2.impedances ;
 
-contactSurf1 = electrodePairs(1).contactSurfaces ;
+contactSurf1 = ee1.contactSurfaces ;
 
-contactSurf2 = electrodePairs(2).contactSurfaces ;
+contactSurf2 = ee2.contactSurfaces ;
 
 iniA1 = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
 
