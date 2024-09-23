@@ -2,19 +2,27 @@ classdef ElectrodeSet < zefCore.Sensor
 %
 % ElectrodeSet < Sensor
 %
-% A type representing a set of active or a passive electrodes. Might be used in
-% EEG, EIT and tES tomography.
+% A type representing a set of active or a passive double layer electrodes, as
+% in electrodes whose ciruit diagram is as follows:
+%
+%      |- RC -|
+%   E -|      |- Rw -- S
+%      |- Cc -|
+%
+% Here E is the electrode voltage source, Rc and Cc are the double layer
+% capacitor resistance and capacitance, and Rw is the resistance of a wet
+% component such as electrolyte gel between the double layer and the skin.
 %
 
     properties
-        positions  (3,:) double { mustBeFinite } = []
+        capacitances (:,1) double { mustBeNonnegative } = []
+        contactSurfaces (:,1) zefCore.SuperNode = zefCore.SuperNode.empty
+        doubleLayerResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
+        frequencies (:,1) double { mustBeNonnegative } = []
         innerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
         outerRadii (:,1) double { mustBeNonnegative, mustBeFinite } = 0
-        impedances (:,1) double { mustBeNonNan } = []
-        frequencies (:,1) double { mustBeNonnegative } = []
-        capacitances (:,1) double { mustBeNonnegative } = []
-        inductances (:,1) double { mustBeNonnegative } = []
-        contactSurfaces (:,1) zefCore.SuperNode = zefCore.SuperNode.empty
+        positions  (3,:) double { mustBeFinite } = []
+        wetResistances (:,1) double { mustBeNonnegative, mustBeReal, mustBeFinite } = []
     end
 
     methods
@@ -28,64 +36,19 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             arguments
-                kwargs.positions  = []
+                kwargs.capacitances= []
+                kwargs.contactSurfaces = zefCore.SuperNode.empty
+                kwargs.doubleLayerResistances = []
+                kwargs.frequencies = []
                 kwargs.innerRadii = 0
                 kwargs.outerRadii = 0
-                kwargs.impedances = []
-                kwargs.frequencies = []
-                kwargs.capacitances= []
-                kwargs.inductances = []
-                kwargs.contactSurfaces = zefCore.SuperNode.empty
+                kwargs.positions  = []
+                kwargs.wetResistances = []
             end
 
             sensorN = size ( kwargs.positions, 2 ) ;
 
             sizeAssertion = @(arg) isscalar ( arg ) || numel ( arg ) == sensorN ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.impedances ), ...
-                "The number of given impedances must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.innerRadii ), ...
-                "The number of given inner radii must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.outerRadii ), ...
-                "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                all ( kwargs.innerRadii <= kwargs.outerRadii ), ...
-                "All of the given inner radii must be less than the given outer radii." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.impedances ), ...
-                "The number of given outer radii must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.frequencies ), ...
-                "The number of given frequencies must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.capacitances ), ...
-                "The number of given capacitances must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.inductances ), ...
-                "The number of given inductances must match the number of sensor positions, or be a scalar." ...
-            ) ;
-
-            assert ( ...
-                sizeAssertion ( kwargs.contactSurfaces ), ...
-                "The number of given contact surfaces must match the number of sensor positions, or be a scalar." ...
-            ) ;
 
             fields = string ( fieldnames ( kwargs ) ) ;
 
@@ -94,6 +57,11 @@ classdef ElectrodeSet < zefCore.Sensor
                 field = fields ( fni ) ;
 
                 fieldval = kwargs.(field) ;
+
+                assert ( ...
+                    sizeAssertion ( fieldval ), ...
+                    "The number of given " + field + " must match the number of sensor positions, or be a scalar." ...
+                ) ;
 
                 if isscalar ( fieldval )
 
@@ -104,22 +72,6 @@ classdef ElectrodeSet < zefCore.Sensor
                 self.(field) = fieldval ;
 
             end % for
-
-            R = real (self.impedances) ;
-
-            w = 2 * pi * self.frequencies ;
-
-            C = self.capacitances ;
-
-            L = self.inductances ;
-
-            recomputeZ = ( ~ isempty (C) || ~ isempty (L) ) && ~ isempty (w) ;
-
-            if recomputeZ
-
-                self.impedances = zefCore.impedanceFromRwLC (R,w,L,C) ;
-
-            end % if
 
         end % function
 
@@ -154,17 +106,37 @@ classdef ElectrodeSet < zefCore.Sensor
 
         end % function
 
+        function Z = impedances (self)
+        %
+        % Z = impedances (self)
+        %
+        % Computes and returns the impedances of the electrodes based on the
+        % parameters of self.
+        %
+
+            Rw = self.wetResistances ;
+
+            f = self.frequencies ;
+
+            C = self.capacitances ;
+
+            Rc = self.doubleLayerResistances ;
+
+            Z = zefCore.impedanceParallel (Rc, f, 0, C) + Rw ;
+
+        end % function
+
         function Z = effectiveImpedances ( self )
         %
         % Z = effectiveImpedances ( self )
         %
-        % Computes the effective impedances, the impedances multiplied by
+        % Computes the effective wetResistances, the wetResistances multiplied by
         % electrode areas, of this electrode set.
         %
 
             As = self.areas ;
 
-            Zs = self.impedances ;
+            Zs = self.wetResistances ;
 
             Z = Zs .* As ;
 
@@ -190,14 +162,36 @@ classdef ElectrodeSet < zefCore.Sensor
 
         end % function
 
-        function self = withImpedances (self, impedances)
+        function self = withImpedances (self, wetResistances)
         %
-        % self = withImpedances (self, impedances)
+        % self = withImpedances (self, wetResistances)
         %
-        % Sets the impedances of self to given values.
+        % Sets the wetResistances of self to given values.
         %
 
-            self.impedances (:) = impedances ;
+            self.wetResistances (:) = wetResistances ;
+
+        end % function
+
+        function self = withWetResistances (self,R)
+        %
+        % self = withWetResistances (self,R)
+        %
+        % Sets the wet resistancies within self.
+        %
+
+            self.wetResistances = R ;
+
+        end % function
+
+        function self = withDoubleLayerResistances (self,R)
+        %
+        % self = withDoubleLayerResistances (self,R)
+        %
+        % Sets the wet resistancies within self.
+        %
+
+            self.doubleLayerResistances = R ;
 
         end % function
 
@@ -210,16 +204,6 @@ classdef ElectrodeSet < zefCore.Sensor
 
             self.frequencies (:) = frequencies ;
 
-            R = real ( self.impedances ) ;
-
-            w = 2 * pi * self.frequencies ;
-
-            L = self.inductances ;
-
-            C = self.capacitances ;
-
-            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
-
         end % function
 
         function self = withCapacitances(self, capacitances)
@@ -230,37 +214,6 @@ classdef ElectrodeSet < zefCore.Sensor
         %
 
             self.capacitances (:) = capacitances ;
-
-            R = real ( self.impedances ) ;
-
-            w = 2 * pi * self.frequencies ;
-
-            L = self.inductances ;
-
-            C = self.capacitances ;
-
-            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
-
-        end % function
-
-        function self = withInductances(self, inductances)
-        %
-        % self = withInductances (self, inductances)
-        %
-        % Sets the inductances of self to given values.
-        %
-
-            self.inductances (:) = inductances ;
-
-            R = real ( self.impedances ) ;
-
-            w = 2 * pi * self.frequencies ;
-
-            L = self.inductances ;
-
-            C = self.inductances ;
-
-            self.impedances = zefCore.impedanceFromRwLC (R, w, L, C) ;
 
         end % function
 
