@@ -32,9 +32,9 @@ activeI = zef.brain_ind ;
 
 sourceN = 5000 ;
 
-f1s = electrodePairs(1).frequencies ;
+f1s = ee1.frequencies ;
 
-f2s = electrodePairs(2).frequencies ;
+f2s = ee2.frequencies ;
 
 assert (all ( f1s == f1s (1) ), "All frequencies of electrode pair 1 need to be the same.") ;
 
