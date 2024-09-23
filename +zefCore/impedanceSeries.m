@@ -1,37 +1,40 @@
-function Z = impedanceSeries (R,w,L,C)
+function Z = impedanceSeries (R,f,L,C)
 %
-% Z = impedanceSeries (R,w,L,C)
+% Z = impedanceSeries (R,f,L,C)
 %
-% Computes impedances from given resistance R, angular frequency w, impedance L
-% and capacitance C. Inputs can be vectors of identical length. If L is to be
-% ignored, set it to 0 and if C is to be ignored, set it to Inf.
+% Computes impedances of RLC circuits, from given resistance R, voltage
+% frequency f, impedance L and capacitance C. Inputs can be vectors of
+% identical length. Any f, L or C values set to 0 will have the reactive
+% components ignored.
 %
 
     arguments
         R (:,1) double { mustBeFinite, mustBePositive }
-        w (:,1) double { mustBeFinite, mustBeNonnegative }
+        f (:,1) double { mustBeFinite, mustBeNonnegative }
         L (:,1) double { mustBeFinite, mustBeNonnegative }
-        C (:,1) double { mustBeNonNan, mustBeNonnegative }
+        C (:,1) double { mustBeFinite, mustBeNonnegative }
     end
 
-    % Set initial impedance.
+    % Get rid of capacitive effects where capacitance or frequency was zero.
 
-    Z = R ;
+    zeroFI = abs (f) < eps  ;
 
-    % Add inductive effects to it.
+    zeroCI = abs (C) < eps;
 
-    Z = R + 1i .* w .* L ;
+    zeroFCI = zeroFI | zeroCI ;
 
-    % Record where frequencies and capacitances are non-zero.
+    fC = f ;
 
-    nonZerowI = abs (w) > eps ;
+    fC (zeroFCI) = Inf ;
 
-    nonZeroCI = abs (C) > eps ;
-
-    nonZerowCI = nonZerowI & nonZeroCI ;
+    C (zeroFCI) = Inf ;
 
     % Take capacitance into account, if it and the corresponding frequency is non-zero.
 
-    Z (nonZerowCI) = Z (nonZerowCI) - 1i ./ w (nonZerowCI) ./ C (nonZerowCI) ;
+    XL = 2i .* pi .* f .* L ;
+
+    XC = - 1i ./ 2 ./ pi ./ fC ./ C ;
+
+    Z = R + XL + XC ;
 
 end % function
