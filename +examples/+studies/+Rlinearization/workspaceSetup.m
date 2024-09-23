@@ -54,9 +54,9 @@ admittivity2 = conductivity + 1i * angFreq2 * permittivity ;
 
 tetraV = zefCore.tetraVolume (nodes, tetra, true) ;
 
-Z1s = electrodePairs(1).impedances ;
+Z1s = ee1.impedances ;
 
-Z2s = electrodePairs(2).impedances ;
+Z2s = ee2.impedances ;
 
 contactSurf1 = electrodePairs(1).contactSurfaces ;
 
@@ -78,9 +78,11 @@ C1 = zefCore.voltageMat (Z1s);
 
 C2 = zefCore.voltageMat (Z2s);
 
-T1 = zefCore.transferMatrix (A1,B1,tolerances=kwargs.solverTol,useGPU=true) ;
+solverTol = 1e-8 ;
 
-T2 = zefCore.transferMatrix (A2,B2,tolerances=kwargs.solverTol,useGPU=true) ;
+T1 = zefCore.transferMatrix (A1,B1,tolerances=solverTol,useGPU=true) ;
+
+T2 = zefCore.transferMatrix (A2,B2,tolerances=solverTol,useGPU=true) ;
 
 S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
