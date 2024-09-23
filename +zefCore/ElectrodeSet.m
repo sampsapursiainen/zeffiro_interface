@@ -127,8 +127,8 @@ classdef ElectrodeSet < zefCore.Sensor
         %
         % Z = effectiveImpedances ( self )
         %
-        % Computes the effective wetResistances, the wetResistances multiplied
-        % by electrode areas, of this electrode set.
+        % Computes the effective impedances, the impedances multiplied by
+        % electrode areas, of this electrode set.
         %
 
             As = self.areas ;
@@ -156,17 +156,6 @@ classdef ElectrodeSet < zefCore.Sensor
                 M = zefCore.ElectrodeModel.CEM ;
 
             end % if
-
-        end % function
-
-        function self = withImpedances (self, wetResistances)
-        %
-        % self = withImpedances (self, wetResistances)
-        %
-        % Sets the wetResistances of self to given values.
-        %
-
-            self.wetResistances (:) = wetResistances ;
 
         end % function
 
