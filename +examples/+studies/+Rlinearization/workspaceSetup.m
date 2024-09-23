@@ -12,13 +12,19 @@ f1 = 1000 ;
 
 f2 = 1010 ;
 
+wetResistance = 400 ;
+
+doubleLayerResistance = 15 ;
+
+capacitance = 1e-7 ;
+
 superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos1',nodeRadii=1,attachNodesTo="surface") ;
 
 superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=1,attachNodesTo="surface") ;
 
-ee1 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,wetResistances=400, doubleLayerResistances=15,capacitances=3.5e-6,contactSurfaces=superNodes1,frequencies=f1) ;
+ee1 = zefCore.ElectrodeSet (wetResistances=wetResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
 
-ee2 = zefCore.ElectrodeSet (innerRadii=0,outerRadii=1,wetResistances=400, doubleLayerResistances=15,capacitances=3.5e-6,contactSurfaces=superNodes2,frequencies=f2) ;
+ee2 = zefCore.ElectrodeSet (wetResistances=wetResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes2,frequencies=f2) ;
 
 conductivity = zefCore.reshapeTensor (zef.sigma(:,1)) ;
 
