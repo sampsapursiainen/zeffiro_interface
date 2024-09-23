@@ -29,8 +29,6 @@ function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, 
 
     f2 = f2s (end) ;
 
-    beatFrequency = abs ( f2 - f1 ) ;
-
     angFreq1 = 2 * pi * f1 ;
 
     angFreq2 = 2 * pi * f2 ;
@@ -45,17 +43,13 @@ function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, 
 
     Z2s = electrodePairs(2).impedances ;
 
-    Zs = [ Z1s(:) ; Z2s(:) ] ;
-
     contactSurf1 = electrodePairs(1).contactSurfaces ;
 
     contactSurf2 = electrodePairs(2).contactSurfaces ;
 
-    contactSurf = [contactSurf1 ; contactSurf2 ] ;
-
     iniA1 = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
 
-    iniA2 = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
+    iniA2 = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity2) ;
 
     A1 = zefCore.stiffMatBoundaryConditions (iniA1, Z1s, contactSurf1) ;
 
@@ -77,15 +71,11 @@ function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, 
 
     S2 = zefCore.schurComplement (T2, ctranspose(B2), C2) ;
 
-    invS1 = S1 \ eye ( size (S1) ) ;
-
-    invS2 = S2 \ eye ( size (S2) ) ;
-
     [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
     [Gx2, Gy2, Gz2] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
-    [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
+    [ ~, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
     [ L1, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
 
