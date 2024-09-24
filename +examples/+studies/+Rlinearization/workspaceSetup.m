@@ -18,9 +18,11 @@ doubleLayerResistance = 15 ;
 
 capacitance = 1e-7 ;
 
-superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos1',nodeRadii=1,attachNodesTo="surface") ;
+contactSurfaceRadii = 1 ;
 
-superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=1,attachNodesTo="surface") ;
+superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+
+superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
 ee1 = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
 
@@ -106,7 +108,7 @@ S2 = zefCore.schurComplement (T2, ctranspose(B2), C2) ;
 
 %% Linearization bit.
 
-dfs = [100,100]
+dfs = [100,100] ;
 
 invS1 = S1 \ eye ( size (S1) ) ;
 
