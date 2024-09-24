@@ -171,7 +171,7 @@ classdef SuperNode
 
             for ii = 1 : superNodeN
 
-                disp ( "  ... node " + ii + " / " + superNodeN ) ;
+                zefCore.dispProgress (ii, superNodeN) ;
 
                 nI = centralNodeIs (ii) ;
 
