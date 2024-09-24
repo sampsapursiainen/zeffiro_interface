@@ -12,13 +12,13 @@ f1 = 1000 ;
 
 f2 = 1010 ;
 
-contactResistance = 400 ;
+contactResistance = 270 ;
 
-doubleLayerResistance = 15 ;
+doubleLayerResistance = 1e4 ;
 
 capacitance = 1e-7 ;
 
-contactSurfaceRadii = 1 ;
+contactSurfaceRadii = 5 ;
 
 superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
