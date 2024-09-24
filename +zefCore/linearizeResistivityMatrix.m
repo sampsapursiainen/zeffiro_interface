@@ -78,7 +78,9 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
         disp ( newline + kwargs.indent + "+ dR/dZ" + col + " * dZ" + col + "...")
 
-        Z = newElectrodes.impedances (col) ;
+        Zs = newElectrodes.impedances ;
+
+        Z = Zs (col) ;
 
         contactSurface = contactSurfaces (col) ;
 
