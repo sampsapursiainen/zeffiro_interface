@@ -104,7 +104,11 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
         newElectrodes = newElectrodes.withPerturbedFrequencies (col,df) ;
 
-        dZ = newElectrodes.impedances (col) - electrodes.impedances (col) ;
+        newZs = newElectrodes.impedances ;
+
+        newZ = newZs (col) ;
+
+        dZ = newZ - Z ;
 
         newR = newR + dRdZ * dZ ;
 
