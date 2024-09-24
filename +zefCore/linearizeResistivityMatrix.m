@@ -64,7 +64,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
     Bs = zefCore.electrodeBasisFnMean ( size (A,1), contactSurfaces ) ;
 
-    electrodeN = numel (electrodes) ;
+    electrodeN = electrodes.electrodeCount ;
 
     modifiedN = numel (colI) ;
 
