@@ -98,7 +98,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
         dSdZ = zefCore.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
 
-        dRdZ = zefCore.dRdZ ( invAdAdZ, Rini, invAdBdZ, invS, dSdZ ) ;
+        dRdZ = zefCore.dRdZ ( invAdAdZ, iniR, invAdBdZ, invS, dSdZ ) ;
 
         df = dfs (ii) ;
 
