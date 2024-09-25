@@ -72,11 +72,13 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
     newElectrodes = electrodes ;
 
+    indent = strjoin ( repmat ( " ", 1, kwargs.indent ), "" ) ;
+
     for ii = 1 : modifiedN
 
         col = colI (ii) ;
 
-        disp ( newline + repmat (' ', 1, kwargs.indent) + "+ dR/dZ" + col + " * dZ" + col + "...")
+        disp ( newline + indent + "+ dR/dZ" + col + " * dZ" + col + "...") ;
 
         Zs = newElectrodes.impedances ;
 
