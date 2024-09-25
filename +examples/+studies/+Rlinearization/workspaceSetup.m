@@ -74,7 +74,9 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 %% Linearization bit.
 
-dfs = [ 0, 1e3 ] ;
+targetF = 1e5 ;
+
+dfs = [ 0, targetF - f1 ] ;
 
 invS1 = S1 \ eye ( size (S1) ) ;
 
