@@ -45,7 +45,7 @@ arguments
     sourceElementI (1,:) uint32 { mustBePositive }
 end
 
-    disp ("Computing σ∇ψi…")
+    disp ( newline + "Computing σ∇ψi…" + newline) ;
 
     Nrows = numel (sourceElementI) ;
     Ncols = size (nodes,1) ;
