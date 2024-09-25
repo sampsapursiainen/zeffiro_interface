@@ -67,7 +67,7 @@ function T = transferMatrix ( A, B, kwargs )
         kwargs.solver (1,1) function_handle = @zefCore.solvers.biConjugateGradientStabilized
     end
 
-    disp (newline + "Building a transfer matrix T = A \ B:" + newline) ;
+    disp (newline + "Building a transfer matrix T = A \ B:") ;
 
     % Preallocate output.
 
