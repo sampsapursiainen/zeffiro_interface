@@ -69,9 +69,9 @@ imB = zefCore.potentialMat ( superNodeCenters, sNodes.tetra, sNodeA, imZ, Z, siz
 
 disp("Computing electrode voltage matrix C…")
 
-reC = zefCore.voltageMat (reZ,Z);
+reC = zefCore.impedanceMat (reZ,Z);
 
-imC = zefCore.voltageMat (imZ,Z);
+imC = zefCore.impedanceMat (imZ,Z);
 
 disp("Computing transfer matrix and Schur complement for real part. This will take a (long) while.")
 

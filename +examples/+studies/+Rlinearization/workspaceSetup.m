@@ -4,7 +4,7 @@ projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
 
 zef = matfile (projectPath) ;
 
-electrodePos1 = zef.s2_points([23,27],:);
+electrodePos1 = zef.s2_points([23,34],:); % zef.s2_points([23,27],:);
 
 electrodePos2 = zef.s2_points([34,48],:);
 
@@ -58,7 +58,7 @@ A1 = zefCore.stiffMatBoundaryConditions (iniA1, Z1s, contactSurf1) ;
 
 B1 = zefCore.potentialMat ( contactSurf1, Z1s, size (nodes,1) );
 
-C1 = zefCore.voltageMat (Z1s);
+C1 = zefCore.impedanceMat (Z1s);
 
 solverTol = 1e-8 ;
 
@@ -74,8 +74,10 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 %% Linearization bit.
 
-dfs = [100,100] ;
+dfs = [ 0, 1e3 ] ;
 
 invS1 = S1 \ eye ( size (S1) ) ;
 
 newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, ee1, dfs, 1:2) ;
+
+save("base.mat", "-v7.3") ;

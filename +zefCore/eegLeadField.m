@@ -112,7 +112,7 @@ function L = eegLeadField ( nodes, tetra, grayMatterI, electrodes, conductivity,
 
     disp("Computing electrode voltage matrix C…")
 
-    C = zefCore.voltageMat (Z);
+    C = zefCore.impedanceMat (Z);
 
     disp("Computing transfer matrix and Schur complement. This will take a while.")
 
