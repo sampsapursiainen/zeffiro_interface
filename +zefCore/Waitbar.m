@@ -38,7 +38,14 @@ classdef Waitbar < handle
                 kwargs.maxIter = 1
                 kwargs.queue = parallel.pool.DataQueue
                 kwargs.fileID = 1
+                kwargs.printInterval = 0
             end
+
+            if kwargs.printInterval == 0
+
+                kwargs.printInterval = ceil ( kwargs.maxIter / 100 ) ;
+
+            end % if
 
             fieldNames = string ( fieldnames (kwargs) ) ;
 
@@ -53,8 +60,6 @@ classdef Waitbar < handle
             end % for
 
             self.currentIter = 0 ;
-
-            self.printInterval = ceil (self.maxIter / 100) ;
 
             % Attach listener to increment counter in self after every modification of self.queue.
 
