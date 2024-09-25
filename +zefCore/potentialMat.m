@@ -41,7 +41,7 @@ function B = potentialMat ( superNodes, impedances, nN, kwargs )
         kwargs.areaThreshold (1,1) double { mustBeNonnegative } = eps
     end
 
-    disp ("Computing potential matrix B…")
+    disp ( newline + "Computing potential matrix B…" ) ;
 
     eN = numel ( impedances ) ;
 
