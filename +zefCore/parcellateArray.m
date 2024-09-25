@@ -111,7 +111,7 @@ function outA = parcellateArray ( A, aggregationI, aggregationN, axis )
 
     outAxisN = outSize (axis) ;
 
-    disp ("Normalizing aggregated results by aggregation counts…")
+    disp ( newline + "Normalizing aggregated results by aggregation counts…")
 
     for ii = 1 : outAxisN
 
