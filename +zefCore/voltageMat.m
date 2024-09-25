@@ -21,7 +21,7 @@ function C = voltageMat ( impedances )
         impedances (:,1) double { mustBeNonNan }
     end
 
-    disp ("Computing voltage matrix C…")
+    disp ( newline + "Computing voltage matrix C…" ) ;
 
     eN = numel ( impedances ) ;
 
