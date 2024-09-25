@@ -22,7 +22,7 @@ doubleLayerResistance = 1e4 ;
 
 capacitance = 1e-7 ;
 
-contactSurfaceRadii = 5 ;
+contactSurfaceRadii = 5e-3 ;
 
 superNodes1 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
