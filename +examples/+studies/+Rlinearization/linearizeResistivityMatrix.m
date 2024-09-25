@@ -66,7 +66,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     disp("Computing electrode impedance matrix C…")
 
-    C = zefCore.voltageMat (Zs);
+    C = zefCore.impedanceMat (Zs);
 
     T = zefCore.transferMatrix (A,B,tolerances=kwargs.solverTol,useGPU=true) ;
 
@@ -204,7 +204,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
             disp("Computing electrode impedance matrix C…")
 
-            newC = zefCore.voltageMat (newZs);
+            newC = zefCore.impedanceMat (newZs);
 
             newT = zefCore.transferMatrix (newA,newB,tolerances=kwargs.solverTol,useGPU=true) ;
 

@@ -59,9 +59,9 @@ function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, 
 
     B2 = zefCore.potentialMat ( contactSurf2, Z2s, size (nodes,1) );
 
-    C1 = zefCore.voltageMat (Z1s);
+    C1 = zefCore.impedanceMat (Z1s);
 
-    C2 = zefCore.voltageMat (Z2s);
+    C2 = zefCore.impedanceMat (Z2s);
 
     T1 = zefCore.transferMatrix (A1,B1,tolerances=kwargs.solverTol,useGPU=true) ;
 
