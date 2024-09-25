@@ -80,4 +80,4 @@ invS1 = S1 \ eye ( size (S1) ) ;
 
 newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, ee1, dfs, 1:2) ;
 
-save("base.mat", "-v7.3") ;
+save("f=" + f1 + ".mat", "-v7.3") ;
