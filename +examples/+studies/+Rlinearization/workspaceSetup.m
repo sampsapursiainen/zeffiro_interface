@@ -4,9 +4,13 @@ projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
 
 zef = matfile (projectPath) ;
 
-electrodePos1 = zef.s2_points([23,34],:); % zef.s2_points([23,27],:);
+nodes = zef.nodes / 1e3 ;
 
-electrodePos2 = zef.s2_points([34,48],:);
+tetra = zef.tetra ;
+
+electrodePos1 = zef.s2_points([23,34],:) / 1e3 ; % zef.s2_points([23,27],:) / 1e3;
+
+electrodePos2 = zef.s2_points([34,48],:) / 1e3 ;
 
 f1 = 1000 ;
 
@@ -20,19 +24,17 @@ capacitance = 1e-7 ;
 
 contactSurfaceRadii = 5 ;
 
-superNodes1 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+superNodes1 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
-superNodes2 = zefCore.SuperNode.fromMeshAndPos (zef.nodes',zef.tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+superNodes2 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
 ee1 = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
 
 conductivity = zefCore.reshapeTensor (zef.sigma(:,1)) ;
 
-permittivity = zefCore.reshapeTensor (zef.epsilon(:,1)) ;
+eps0 = 8.8541878188e-12 ;
 
-nodes = zef.nodes ;
-
-tetra = zef.tetra ;
+permittivity = zefCore.reshapeTensor (zef.epsilon(:,1)) * eps0;
 
 activeI = zef.brain_ind ;
 
