@@ -1,14 +1,14 @@
-function dispProgress (currentI, maxI, printInterval, kwargs)
+function dispProgress (currentI, maxI, kwargs)
 %
-% dispProgress (currentI, maxI, printInterval=100, kwargs.indent=2)
+% dispProgress (maxI, currentI, kwargs)
 %
 % Can be used to display the progress of a loop.
 %
 
     arguments
         currentI (1,1) double { mustBeInteger, mustBePositive }
-        maxI (1,1) double { mustBeInteger, mustBePositive, mustBeGreaterThanOrEqual(maxI,currentI) }
-        printInterval (1,1) double { mustBeInteger, mustBePositive } = ceil (maxI / 100)
+        maxI (1,1) double { mustBeInteger, mustBePositive, mustBeGreaterThanOrEqual(maxI, currentI) }
+        kwargs.printInterval (1,1) double { mustBeInteger, mustBePositive } = ceil (maxI / 100)
         kwargs.indent (1,1) double { mustBeInteger, mustBeNonnegative } = 2
         kwargs.fileDescriptor (1,1) double { mustBeInteger, mustBeFinite } = 1
     end
@@ -19,7 +19,7 @@ function dispProgress (currentI, maxI, printInterval, kwargs)
 
     end % if
 
-    if currentI == 1 || currentI == maxI || mod ( currentI, printInterval ) == 0
+    if currentI == 1 || currentI == maxI || mod ( currentI, kwargs.printInterval ) == 0
 
         indent = strjoin ( repmat ( " ", 1, kwargs.indent ), "" ) ;
 
