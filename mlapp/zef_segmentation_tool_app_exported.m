@@ -33,6 +33,7 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
         h_menu_dat_points               matlab.ui.container.Menu
         h_menu_dat_triangles            matlab.ui.container.Menu
         h_menu_compartments_visibility  matlab.ui.container.Menu
+        h_menu_compartments_on          matlab.ui.container.Menu
         h_menu_sensors_table            matlab.ui.container.ContextMenu
         h_menu_lock_sensor_sets_on      matlab.ui.container.Menu
         h_menu_add_sensor_sets          matlab.ui.container.Menu
@@ -240,7 +241,11 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_compartments_visibility
             app.h_menu_compartments_visibility = uimenu(app.h_menu_compartment_table);
-            app.h_menu_compartments_visibility.Text = 'Toggle visibility';
+            app.h_menu_compartments_visibility.Text = 'Toggle visible';
+
+            % Create h_menu_compartments_on
+            app.h_menu_compartments_on = uimenu(app.h_menu_compartment_table);
+            app.h_menu_compartments_on.Text = 'Toggle on';
             
             % Assign app.h_menu_compartment_table
             app.h_compartment_table.ContextMenu = app.h_menu_compartment_table;
@@ -314,7 +319,7 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_menu_sensors_visibility
             app.h_menu_sensors_visibility = uimenu(app.h_menu_sensors_name_table);
-            app.h_menu_sensors_visibility.Text = 'Toggle visibility';
+            app.h_menu_sensors_visibility.Text = 'Toggle visible';
             
             % Assign app.h_menu_sensors_name_table
             app.h_sensors_name_table.ContextMenu = app.h_menu_sensors_name_table;
