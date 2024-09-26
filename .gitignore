@@ -75,6 +75,10 @@
 
 !profile/**/*.ini
 
+# Allow CSV files in te data folder.
+
+!data/**.csv
+
 # Allow TeΧ and font files under documentation folder.
 
 !documentation/**.tex
