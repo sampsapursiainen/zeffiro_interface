@@ -74,7 +74,7 @@
 
 # Allow CSV files in te data folder.
 
-!data/**.csv
+!data/**/*.csv
 
 # Allow TeΧ and font files under documentation folder.
 
