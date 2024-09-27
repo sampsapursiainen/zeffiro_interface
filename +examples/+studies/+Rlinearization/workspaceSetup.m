@@ -1,6 +1,6 @@
 % A script for retrieving values from zef and converting them to a suitable format.
 
-projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
+projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
 
 zef = matfile (projectPath) ;
 
@@ -76,7 +76,7 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 %% Linearization bit.
 
-targetF = 1e5 ;
+targetF = 1e5 + eps (1e5) + 1 ;
 
 stepSize = targetF - f1 ;
 
