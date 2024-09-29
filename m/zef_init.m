@@ -322,6 +322,7 @@ zef_data.distance_smoothing_exp = 0.01;
 zef_data.distance_smoothing_on = 1;
 zef_data.smoothing_steps_dist = 0.9;
 zef_data.reuna_submesh_ind = cell(0);
+zef_data.reuna_mesh_ind = [];
 
 zef.fieldnames = fieldnames(zef_data);
 

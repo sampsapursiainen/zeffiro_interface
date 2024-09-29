@@ -94,7 +94,7 @@ zef.h_refinement_surface_mode_2.Value = zef.refinement_surface_mode_2;
 
 zef.h_menu_move_one_step_up_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''one step up'');';
 zef.h_menu_move_one_step_down_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''one step down'');';
-zef.h_menu_move_to_bottom_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''top'');';
+zef.h_menu_move_to_top_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''top'');';
 zef.h_menu_move_to_bottom_in_labeling_priority.MenuSelectedFcn = 'zef = zef_update_labeling_priority(zef,''bottom'');';
 
 zef.h_refinement_volume_on.Value = zef.refinement_volume_on;

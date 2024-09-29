@@ -12,9 +12,9 @@ domain_labels = [];
 
 submesh_vec = cell2mat(zef.reuna_submesh_ind);
 n_subcompartments = length(submesh_vec);
-n_compartments = length(zef.compartment_tags);
+n_compartments = length(zef.reuna_mesh_ind);
 subcompartment_labeling_priority_vec = zeros(n_subcompartments,1);
-compartment_labeling_priority_vec = zeros(n_compartments,1);
+compartment_labeling_priority_vec = zeros(length(zef.reuna_mesh_ind),1);
 
 priority_vec = flipud([1:n_subcompartments]');
 priority_vec_compartments = flipud([1:n_compartments]');
@@ -25,12 +25,12 @@ counter_ind = 0;
 
 for i = 1 : length(zef.reuna_p)
 
-     compartment_labeling_priority_vec(i) = zef.([zef.compartment_tags{i} '_labeling_priority']);
+     compartment_labeling_priority_vec(i) = zef.([zef.compartment_tags{zef.reuna_mesh_ind(i)} '_labeling_priority']);
 
     for j = 1 : length(zef.reuna_submesh_ind{i})
 
      counter_ind = counter_ind + 1;
-      subcompartment_labeling_priority_vec(counter_ind) = zef.([zef.compartment_tags{i} '_labeling_priority']);
+      subcompartment_labeling_priority_vec(counter_ind) = zef.([zef.compartment_tags{zef.reuna_mesh_ind(i)} '_labeling_priority']);
 
     end
 end
@@ -53,7 +53,7 @@ ind_vec_aux = [1:n_labels]';
 labeling_priority_vec_aux = subcompartment_labeling_priority_vec(label_array);
 for i = 1 : ordinal_index-1
 [priority_val priority_ind] = min(labeling_priority_vec_aux,[],2);
-labelin_priority_vec_aux(ind_vec_aux + (priority_ind-1)*n_labels) = NaN; 
+labeling_priority_vec_aux(ind_vec_aux + (priority_ind-1)*n_labels) = NaN; 
 end
 [priority_val priority_ind] = min(labeling_priority_vec_aux,[],2);
 priority_ind = sub2ind(size(label_array),[1:size(label_array,1)]',priority_ind);
