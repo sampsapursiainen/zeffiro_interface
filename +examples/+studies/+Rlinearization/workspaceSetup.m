@@ -1,6 +1,8 @@
 % A script for retrieving values from zef and converting them to a suitable format.
 
-projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
+f1 = 100 ;
+
+projectPath = fullfile ("data", "head_for_R_linearization_f=" + f1 + "Hz.mat") ;
 
 zef = matfile (projectPath) ;
 
@@ -11,8 +13,6 @@ tetra = zef.tetra ;
 electrodePos1 = zef.s2_points([23,34],:) / 1e3 ; % zef.s2_points([23,27],:) / 1e3;
 
 electrodePos2 = zef.s2_points([34,48],:) / 1e3 ;
-
-f1 = 1000 ;
 
 f2 = 1010 ;
 
@@ -70,7 +70,7 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
-[ ~, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
+[ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
 [ L1, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
 
@@ -86,4 +86,4 @@ invS1 = S1 \ eye ( size (S1) ) ;
 
 newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, ee1, dfs, 1:2) ;
 
-save("f=" + f1 + ".mat", "-v7.3") ;
+save("f=" + f1 + "Hz.mat", "-v7.3") ;
