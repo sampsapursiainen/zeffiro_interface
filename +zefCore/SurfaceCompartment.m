@@ -42,6 +42,101 @@ classdef SurfaceCompartment
 
         end % function
 
+        function N = pointCount (self)
+        %
+        % N = pointCount (self)
+        %
+        % Returns the number of points within self.
+        %
+
+            N = size (self.points, 2) ;
+
+        end % function
+
+        function N = triangleCount (self)
+        %
+        % N = triangleCount (self)
+        %
+        % Returns the number of triangles within self.
+        %
+
+            N = size (self.triangles,2) ;
+
+        end % function
+
+        function self = mergeWith (self, otherCompartments)
+        %
+        % self = mergeWith (self, otherCompartments)
+        %
+        % Merges self with a set of given compartments.
+        %
+            arguments
+                self
+                otherCompartments (:,1) zefCore.SurfaceCompartment
+            end
+
+            % First count the space required for the new merged compartment.
+
+            triangleN = self.triangleCount ;
+
+            pointN = self.pointCount ;
+
+            cN = numel (otherCompartments) ;
+
+            for ii = 1 : cN
+
+                ci = otherCompartments (ii) ;
+
+                pointN = pointN + ci.pointCount ;
+
+                triangleN = triangleN + ci.triangleCount ;
+
+            end % for ii
+
+            % Preallocate arrays for writing and store data from self to output start.
+
+            points = zeros (3,pointN) ;
+
+            triangles = zeros (3,triangleN) ;
+
+            points (:,1:self.pointCount) = self.points ;
+
+            triangles (:,1:self.triangleCount) = self.triangles ;
+
+            % Write other compartment data into the arrays, keeping the
+            % triangle indices updated, as those of indivifual compartments
+            % refer to nodes within that compartment.
+
+            pointRangeStart = self.pointCount + 1 ;
+
+            triangleRangeStart = self.triangleCount + 1 ;
+
+            triangleUpdateI = self.triangleCount - 1 ;
+
+            for ii = 1 : cN
+
+                ci = otherCompartments (ii) ;
+
+                pointRangeEnd = pointRangeStart + ci.pointCount - 1 ;
+
+                triangleRangeEnd = triangleRangeStart + ci.triangleCount - 1 ;
+
+                points (:, pointRangeStart:pointRangeEnd) = ci.points ;
+
+                triangles (:, triangleRangeStart:triangleRangeEnd) = ci.triangles + pointRangeStart - 1 ;
+
+                pointRangeStart = pointRangeEnd + 1 ;
+
+                triangleRangeStart = triangleRangeEnd + 1 ;
+
+            end % for ii
+
+            % TODO: also merge parameters before calling constructor.
+
+            self = zefCore.SurfaceCompartment (name=self.name, points=points, triangles=triangles, parameters=struct) ;
+
+        end % function
+
     end % methods
 
     methods (Static)
