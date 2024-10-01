@@ -1,6 +1,6 @@
-classdef SurfaceCompartment
+classdef SurfaceMesh
 %
-% SurfaceCompartment
+% SurfaceMesh
 %
 % A class whose objects hold onto data related to a single compartment of a surface segmentation.
 %
@@ -9,14 +9,13 @@ classdef SurfaceCompartment
         name (1,1) string = "" % The name of this compartment
         points (3,:) double { mustBeFinite } = [] % The points that this surface consists of.
         triangles (3,:) double { mustBePositive, mustBeInteger } = [] % Triangular elements of this surface, that can be used to index into self.points.
-        parameters (1,1) struct = struct % The parameters related to this compartment in a struct.
     end % properties
 
     methods
 
-        function self = SurfaceCompartment (kwargs)
+        function self = SurfaceMesh (kwargs)
         %
-        % self = SurfaceCompartment (kwargs)
+        % self = SurfaceMesh (kwargs)
         %
         % A constructor of this class. All properties are given as keyword arguments.
         %
@@ -25,7 +24,6 @@ classdef SurfaceCompartment
                 kwargs.name = ""
                 kwargs.points = []
                 kwargs.triangles = []
-                kwargs.parameters = struct
             end
 
             fieldNames = string ( fieldnames (kwargs) ) ;
@@ -72,7 +70,7 @@ classdef SurfaceCompartment
         %
             arguments
                 self
-                otherCompartments (:,1) zefCore.SurfaceCompartment
+                otherCompartments (:,1) zefCore.SurfaceMesh
             end
 
             % First count the space required for the new merged compartment.
@@ -131,9 +129,7 @@ classdef SurfaceCompartment
 
             end % for ii
 
-            % TODO: also merge parameters before calling constructor.
-
-            self = zefCore.SurfaceCompartment (name=self.name, points=points, triangles=triangles, parameters=struct) ;
+            self = zefCore.SurfaceMesh (name=self.name, points=points, triangles=triangles) ;
 
         end % function
 
@@ -229,11 +225,9 @@ classdef SurfaceCompartment
 
             triangles = triangles + 1 ;
 
-            self = zefCore.SurfaceCompartment ( name = usedName, points=points,triangles=triangles ) ;
+            self = zefCore.SurfaceMesh ( name = usedName, points=points,triangles=triangles ) ;
 
         end % function
-
-        % TODO: implement things like reading surface compartments from files here.
 
     end % methods (Static)
 
