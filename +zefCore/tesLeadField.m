@@ -1,6 +1,6 @@
-function [L, R] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
+function [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
 %
-% [L, R, Gx, Gy, Gz] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
+% [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
 %
 % Computes an uninterpolated transcranial electrical stimulation (tES) lead field matrix.
 %
@@ -17,14 +17,6 @@ function [L, R] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
 % - Gx, Gy, Gz
 %
 %   The x-, y- and z-components of the volume current in the possibly active part of the head.
-%
-% - aggregationI
-%
-%   A mapping from global lead field column indices to the indices that should contain activity.
-%
-% - contactSurfaces
-%
-%   The contact surfaces of the above electrodes.
 %
 % Outputs:
 %
@@ -45,8 +37,6 @@ function [L, R] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
         Gx           (:,:) double { mustBeFinite }
         Gy           (:,:) double { mustBeFinite }
         Gz           (:,:) double { mustBeFinite }
-        aggregationI (1,:) double { mustBePositive, mustBeInteger }
-        aggregationN (1,:) double { mustBePositive, mustBeInteger }
     end % arguments
 
     I = eye ( size (S) ) ;
@@ -62,25 +52,5 @@ function [L, R] = tesLeadField ( T, S, Gx, Gy, Gz, aggregationI, aggregationN )
     Ly = - Gy * R ;
 
     Lz = - Gz * R ;
-
-    disp ("Parcellating lead field components…") ;
-
-    disp (newline + "X:" + newline) ;
-
-    Lx = zefCore.parcellateArray ( Lx, aggregationI, aggregationN, 1 ) ;
-
-    disp (newline + "Y:" + newline) ;
-
-    Ly = zefCore.parcellateArray ( Ly, aggregationI, aggregationN, 1 ) ;
-
-    disp (newline + "Z:" + newline) ;
-
-    Lz = zefCore.parcellateArray ( Lz, aggregationI, aggregationN, 1 ) ;
-
-    disp ("Reordering rows of L in xyz order…") ;
-
-    L = zefCore.intersperseArray ( [ Lx ; Ly ; Lz ], 1, 3) ;
-
-    L = transpose (L) ;
 
 end % function

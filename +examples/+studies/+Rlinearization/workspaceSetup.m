@@ -10,9 +10,9 @@ nodes = zef.nodes / 1e3 ;
 
 tetra = zef.tetra ;
 
-electrodePos1 = zef.s2_points([23,34],:) / 1e3 ; % zef.s2_points([23,27],:) / 1e3;
+electrodePos1 = zef.s2_points([41,42],:) / 1e3 ; % zef.s2_points([23,27],:) / 1e3;
 
-electrodePos2 = zef.s2_points([34,48],:) / 1e3 ;
+% electrodePos2 = zef.s2_points([34,48],:) / 1e3 ;
 
 f2 = 1010 ;
 
@@ -22,7 +22,7 @@ doubleLayerResistance = 1e4 ;
 
 capacitance = 1e-7 ;
 
-contactSurfaceRadii = 5e-3 ;
+contactSurfaceRadii = 0.5e-3 ;
 
 superNodes1 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
@@ -70,9 +70,19 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
+[ L1x, L1y, L1z, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1 ) ;
+
 [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
-[ L1, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1, aggregationI, aggregationN ) ;
+[ L1x, L1y, L1z ] = zefCore.parcellateLeadField (L1x, L1y, L1z, aggregationI, aggregationN, 1)
+
+disp ("Reordering rows of L in xyz order…") ;
+
+L = zefCore.intersperseArray ( [ Lx ; Ly ; Lz ], 1, 3) ;
+
+disp ("Transposing L...")
+
+L = transpose (L) ;
 
 %% Linearization bit.
 
