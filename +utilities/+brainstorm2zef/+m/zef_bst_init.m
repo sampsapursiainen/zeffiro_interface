@@ -33,3 +33,4 @@ zef_bst.electrical_conductivity = {'Scalp',0.34,'OuterSkull',0.0042,'InnerSkull'
 zef_bst.n_inflation_steps = 20;
 zef_bst.transform_cell = {'InitTransf'};
 zef_bst.dof_space = {'Scalp',0,'OuterSkull',0,'InnerSkull',0,'Cortex',2,'white',3,'subcortical',1};
+zef_bst.compartment_on_vec = [];

@@ -116,6 +116,9 @@ zef.max_surface_face_count = zef_bst.surface_mesh_density;
 
 run(zef_bst.import_settings);
 
+zef = zef_turn_compartment_onoff(zef,zef_bst.compartment_on_vec)
+zef = zef_process_meshes(zef);
+
 if not(isempty(zef_bst.labeling_priority))
 zef = zef_update_labeling_priority(zef,[],zef_bst.labeling_priority);
 end
