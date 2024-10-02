@@ -2,7 +2,7 @@
 
 f1 = 100 ;
 
-projectPath = fullfile ("data", "head_for_R_linearization_f=" + f1 + "Hz.mat") ;
+projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
 
 zef = matfile (projectPath) ;
 
@@ -26,7 +26,7 @@ contactSurfaceRadii = 0.5e-3 ;
 
 superNodes1 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
-superNodes2 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+% superNodes2 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
 ee1 = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
 
@@ -70,11 +70,11 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
-[ L1x, L1y, L1z, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1 ) ;
+[ Lx, Ly, Lz, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1 ) ;
 
 [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
-[ L1x, L1y, L1z ] = zefCore.parcellateLeadField (L1x, L1y, L1z, aggregationI, aggregationN, 1)
+[ Lx, Ly, Lz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
 
 disp ("Reordering rows of L in xyz order…") ;
 
