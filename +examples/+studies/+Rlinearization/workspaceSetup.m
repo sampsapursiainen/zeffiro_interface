@@ -74,15 +74,11 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
-[ Lx, Ly, Lz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
+[ pLx, pLy, pLz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
 
-disp ("Reordering rows of L in xyz order…") ;
+iL = zefCore.intersperseArray ( [ pLx ; pLy ; pLz ], 1, 3) ;
 
-L = zefCore.intersperseArray ( [ Lx ; Ly ; Lz ], 1, 3) ;
-
-disp ("Transposing L...")
-
-L = transpose (L) ;
+L = transpose (iL) ;
 
 %% Linearization bit.
 
