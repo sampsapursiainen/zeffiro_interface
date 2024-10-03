@@ -92,4 +92,4 @@ L = transpose (iL) ;
 %
 % newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, ee1, dfs, 1:2) ;
 
-save("f=" + f1 + "Hz.mat", "-v7.3") ;
+save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m.mat", "-v7.3") ;
