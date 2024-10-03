@@ -113,11 +113,31 @@ function outA = parcellateArray ( A, aggregationI, aggregationN, axis )
 
     disp ( newline + "Normalizing aggregated results by aggregation counts…")
 
+    % Also generate cell array for indexing during normalization.
+
+    normICells = cell (1,dimN) ;
+
+    for ii = 1 : dimN
+
+        if ii == axis
+
+            normICells {ii} = [] ;
+
+        else
+
+            normICells {ii} = 1 : outSize (ii) ;
+
+        end
+
+    end % for ii
+
     for ii = 1 : outAxisN
 
         zefCore.dispProgress (ii, outAxisN) ;
 
-        outA (ii) = outA (ii) / aggregationN (ii) ;
+        normICells {axis} = ii ;
+
+        outA (normICells {:}) = outA (normICells{:}) / aggregationN (ii) ;
 
     end % for ii
 
