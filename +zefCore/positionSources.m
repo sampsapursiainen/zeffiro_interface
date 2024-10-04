@@ -1,6 +1,6 @@
 function [sourcePos, sourceTetI] = positionSources ( nodes, elements, sourceN )
 %
-% sourcePos = positionSources ( nodes, elements, sourceN )
+% [sourcePos, sourceTetI] = positionSources ( nodes, elements, sourceN )
 %
 % Places sources evenly into a set of given active elements, returning the
 % source positions and which source is in which input element. If there are
