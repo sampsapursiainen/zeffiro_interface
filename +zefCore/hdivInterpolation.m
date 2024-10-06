@@ -103,8 +103,6 @@ end
 
 n_of_iterations = size (sourcePos, 1) ;
 
-print_interval = ceil (n_of_iterations / 100);
-
 % Initialize weight matrix.
 
 Ncols = 3 * size (sourcePos, 1);
