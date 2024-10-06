@@ -123,11 +123,7 @@ disp (newline + "Solving H(div) with " + p_optimization_system_type + "..." + ne
 
 for i = 1 : n_of_iterations
 
-    if i == 1 || mod (i,print_interval) == 0
-
-        disp ("  source " + i + " / " + n_of_iterations) ;
-
-    end % if
+    zefCore.dispProgress (i, n_of_iterations) M
 
     % Get global source index.
 
@@ -211,11 +207,7 @@ disp (newline + "Counting required number interpolation matrix entries..." + new
 
 for i = 1 : n_of_iterations
 
-    if i == 1 || mod (i,print_interval) == 0
-
-        disp ("  " + i + " / " + n_of_iterations) ;
-
-    end % if
+    zefCore.dispProgress (i, n_of_iterations) ;
 
     n_of_fi_vals = numel (fi_coeff_row_col_val{i, 3}) ;
     n_of_ew_vals = numel (ew_coeff_row_col_val{i, 3}) ;
@@ -248,11 +240,7 @@ disp (newline + "Generating interpolation matrix initialization vectors..." + ne
 
 for i = 1 : n_of_iterations
 
-    if i == 1 || mod (i,print_interval) == 0
-
-        disp ("  " + i + " / " + n_of_iterations) ;
-
-    end % if
+    zefCore.dispProgress (i, n_of_iterations) ;
 
     fi_row_inds = row_col_val_inds_fn (entry_counter_fi, fi_coeff_row_col_val, i, 1 ) ;
     fi_col_inds = row_col_val_inds_fn (entry_counter_fi, fi_coeff_row_col_val, i, 2 ) ;
