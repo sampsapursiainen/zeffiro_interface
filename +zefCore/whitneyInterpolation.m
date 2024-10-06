@@ -115,6 +115,8 @@ fi_coeff_row_col_val = cell(0);
 
 for i = 1 : n_of_iterations
 
+    zefCore.dispProgress (i, n_of_iterations) ;
+
     % Get global source index.
 
     source_ind = valid_source_inds(i);
@@ -215,6 +217,8 @@ entry_counter_fi = 0;
 
 for i = 1 : n_of_iterations
 
+    zefCore.dispProgress (i, n_of_iterations) ;
+
     n_of_fi_vals = numel(fi_coeff_row_col_val{i, 3});
 
     entry_counter_fi = entry_counter_fi + n_of_fi_vals;
@@ -235,6 +239,8 @@ K_fi = zeros(n_of_entries_fi,1);
 % Fill in the index and value vectors.
 
 for i = 1 : n_of_iterations
+
+    zefCore.dispProgress (i, n_of_iterations) ;
 
     fi_row_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 1);
     fi_col_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 2);
