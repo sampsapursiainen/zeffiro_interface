@@ -65,8 +65,6 @@ function B = potentialMat ( superNodes, impedances, nN, kwargs )
 
     B = sparse ( nN, eN ) ;
 
-    mf = matfile("newB.mat",Writable=true) ;
-
     for snI = uint32 (1 : eN)
 
         % Find out the nodes that this supernode is made of and its area. If
@@ -110,7 +108,5 @@ function B = potentialMat ( superNodes, impedances, nN, kwargs )
         end % for
 
     end % for
-
-    mf.B = B ;
 
 end % function
