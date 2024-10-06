@@ -123,7 +123,7 @@ disp (newline + "Solving H(div) with " + p_optimization_system_type + "..." + ne
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) M
+    zefCore.dispProgress (i, n_of_iterations) ;
 
     % Get global source index.
 
