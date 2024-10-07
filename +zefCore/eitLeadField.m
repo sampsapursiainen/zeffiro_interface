@@ -1,28 +1,41 @@
-function L = eitLeadField ( nodes, tetra, electrodes, triA, eA, e2nI, t2nI, A, params )
+function L = eitLeadField ( T, invS, dAds, currentPattern )
 %
-% L = eitLeadField ( nodes, tetra, gradiometers, triA, eA, e2nI, t2nI, A, params )
+% L = eitLeadField ( T, invS, dAds, currentPattern )
 %
-% Computes an uninterpolated gradiometric electrical impedance tomography lead field L.
+% Computes an uninterpolated gradiometric electrical impedance tomography lead field L
+% for the system [ A, B ; B' C ] * [ z ; v ] = [ - Gx ; I ]
+%
+% Inputs:
+%
+% - T
+%
+%   A transfer matrix A \ B of the above system .
+%
+% - invS
+%
+%   The inverse of a Schur complement of A of in the above system.
+%
+% - dAds
+%
+%   The derivative of the stiffness matrix A with respect to the volume
+%   conductivity.
+%
+% - currentPattern
+%
+%   The current pattern vector I of the above system.
 %
 % Outputs:
 %
 % - L
 %
-%   The EIT lead field. If the impedances Z of the electrodes were complex,
-%   this will contain 2 pages: the first contains a lead field corresponding to
-%   the real part and the second page will correspond to the imaginary part of
-%   Z.
+%   The EIT lead field.
 %
 
     arguments
-        nodes      (:,3) double { mustBeFinite }
-        tetra      (:,4) double { mustBePositive, mustBeInteger }
-        electrodes (:,1) zefCore.ElectrodeSet
-        triA       (:,1) double { mustBePositive }
-        e2nI       (:,1) double { mustBePositive, mustBeInteger }
-        t2nI       (:,1) double { mustBePositive, mustBeInteger }
-        A          (:,:) double { mustBeFinite }
-        params     (1,1) zefCore.LeadFieldParams = zefCore.LeadFieldParams
+        T (:,:) double { mustBeFinite }
+        invS (:,:) double { mustbeFinite }
+        dAds (:,10) double { mustBeFinite }
+        currentPattern (:,1) double { mustBeFinite }
     end
 
     L = [] ;
