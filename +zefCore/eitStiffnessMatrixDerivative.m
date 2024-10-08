@@ -6,6 +6,10 @@ function DA = eitStiffnessMatrixDerivative (nodes, tetra, tetraV, tensor, active
 % given tensor is complex, computes the real and imaginary parts reA and imA of
 % the stiffness matrix separately. If tensor is real, imA will be empty.
 %
+% The output is a set of row vectors, where each row represents an elementwise
+% symmetric derivative matrix of A. Elements 1, 5, 8 and 10 represent the
+% diagonal and the rest are true upper triangular part.
+%
 % Inputs:
 %
 % - nodes
