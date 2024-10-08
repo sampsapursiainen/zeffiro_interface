@@ -1,8 +1,8 @@
-function L = eitLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
+function dLds = eitLinearizedLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
 %
-% L = eitLeadField ( T, invS, dAds, R, currentPattern, nodeI )
+% dLds = eitLinearizedLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
 %
-% Computes an uninterpolated gradiometric electrical impedance tomography lead field L
+% Computes an uninterpolated gradiometric electrical impedance tomography lead field dLds
 % for the system [ A, B ; B' C ] * [ z ; v ] = [ - Gx ; I ].
 %
 % See https://doi.org/10.1007/s12021-019-09436-9 for details.
@@ -36,7 +36,7 @@ function L = eitLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
 %
 % Outputs:
 %
-% - L
+% - dLds
 %
 %   The EIT lead field.
 %
@@ -56,7 +56,7 @@ function L = eitLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
 
     activeN = numel (activeI) ;
 
-    L = zeros (cpN,activeN) ;
+    dLds = zeros (cpN,activeN) ;
 
     for ii = 1 : activeN
 
@@ -86,11 +86,9 @@ function L = eitLeadField ( T, dAds, R, currentPattern, activeI, nodeI )
 
         iiT = T (:, iiNodeI) ;
 
-        % L = - R * invS * transpose (B) * inv(A) * dAds * T * invS * currentPattern ;
-
         iiL = - R * iiT * iidAdsMat * transpose (iiT) * currentPattern ;
 
-        L (:,ii) = L (:,ii) + iiL (:);
+        dLds (:,ii) = dLds (:,ii) + iiL (:);
 
     end % for ii
 
