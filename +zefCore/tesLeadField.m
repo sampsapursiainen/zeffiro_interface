@@ -1,4 +1,4 @@
-function [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
+function [ Lx, Ly, Lz, R ] = tesLeadField ( R, Gx, Gy, Gz )
 %
 % [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
 %
@@ -6,13 +6,9 @@ function [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
 %
 % Inputs:
 %
-% - T
+% - R
 %
-%   A transfer matrix inv A * B of a system [ A B ; B' C ].
-%
-% - S
-%
-%   The Schur complement of A in the system [ A B ; B' C ].
+%   A resistivity matrix (see https://doi.org/10.1016/j.cmpb.2022.107084).
 %
 % - Gx, Gy, Gz
 %
@@ -20,30 +16,16 @@ function [ Lx, Ly, Lz, R ] = tesLeadField ( T, S, Gx, Gy, Gz )
 %
 % Outputs:
 %
-% - L
+% - Lx, Ly, Lz
 %
-%   The EEG lead field. If the impedances Z of the electrodes were complex,
-%   this will contain 2 pages: the first contains a lead field corresponding to
-%   the real part and the second page will correspond to the imaginary part of
-%   Z.
-%
-% - R
-%
-%  A resistivity matrix.
+%   The different components of the ES lead field.
 %
     arguments
-        T            (:,:) double { mustBeFinite }
-        S            (:,:) double { mustBeFinite }
-        Gx           (:,:) double { mustBeFinite }
-        Gy           (:,:) double { mustBeFinite }
-        Gz           (:,:) double { mustBeFinite }
+        R  (:,:) double { mustBeFinite }
+        Gx (:,:) double { mustBeFinite }
+        Gy (:,:) double { mustBeFinite }
+        Gz (:,:) double { mustBeFinite }
     end % arguments
-
-    I = eye ( size (S) ) ;
-
-    invSchurC = S \ I ;
-
-    R = T * invSchurC ;
 
     disp ("Building lead field components…") ;
 
