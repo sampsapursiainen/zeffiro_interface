@@ -52,7 +52,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, new
         T          (:,:) double { mustBeFinite }
         invS       (:,:) double { mustBeFinite }
         electrodes (1,1) zefCore.ElectrodeSet
-        newElectrodes        (:,1) double { mustBeFinite }
+        newElectrodes (1,1) zefCore.ElectrodeSet
         colI       (:,1) double { mustBePositive, mustBeInteger }
         kwargs.indent (1,1) double { mustBeNonnegative, mustBeInteger } = 2
     end
