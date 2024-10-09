@@ -52,35 +52,35 @@ admittivity1 = conductivity + 1i * angFreq1 * permittivity ;
 
 tetraV = zefCore.tetraVolume (nodes, tetra, true) ;
 
-Z1s = electrodes.impedances ;
+Zs = electrodes.impedances ;
 
 contactSurf1 = electrodes.contactSurfaces ;
 
-iniA1 = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
+iniA = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
 
-A1 = zefCore.stiffMatBoundaryConditions (iniA1, Z1s, contactSurf1) ;
+A = zefCore.stiffMatBoundaryConditions (iniA, Zs, contactSurf1) ;
 
-B1 = zefCore.potentialMat ( contactSurf1, Z1s, size (nodes,1) );
+B = zefCore.potentialMat ( contactSurf1, Zs, size (nodes,1) );
 
-C1 = zefCore.impedanceMat (Z1s);
+C = zefCore.impedanceMat (Zs);
 
 solverTol = 1e-8 ;
 
-T1 = zefCore.transferMatrix (A1,B1,tolerances=solverTol,useGPU=true) ;
+T = zefCore.transferMatrix (A,B,tolerances=solverTol,useGPU=true) ;
 
-S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
+S = zefCore.schurComplement (T, ctranspose(B), C) ;
 
-invS = S1 \ eye ( size (S1) ) ;
+invS = S \ eye ( size (S) ) ;
 
-R1 = zefCore.resistivityMatrix (T1, invS) ;
+R = zefCore.resistivityMatrix (T, invS) ;
 
-[Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
+[Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
-%%
+%% Initial lead field.
 
-[ Lx, Ly, Lz ] = zefCore.tesLeadField ( R1, Gx1, Gy1, Gz1 ) ;
+[ Lx, Ly, Lz ] = zefCore.tesLeadField ( R, Gx, Gy, Gz ) ;
 
-sourceN = 10000 ; % size(tetra,1) ;
+sourceN = 5000 ; % size(tetra,1) ;
 
 % [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
@@ -89,7 +89,9 @@ sourceN = 10000 ; % size(tetra,1) ;
 % [ pLx, pLy, pLz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
 
 pLx = Lx (elementI,:) ;
+
 pLy = Ly (elementI,:) ;
+
 pLz = Lz (elementI,:) ;
 
 % pSize = [size(sourcePos,1), 1] ;
@@ -113,16 +115,54 @@ L = transpose (iL) ;
 
 %% Linearization bit.
 
-newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS, electrodes, newElectrodes, 1:2) ;
+disp (newline + "Linearized lead field..." + newline) ;
 
-[newLx, newLy, newLz] = zefCore.tesLeadField (newR1, Gx1, Gxy1, Gz1) ;
+linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:2) ;
 
-newpLx = newLx (elementI,:) ;
-newpLy = newLy (elementI,:) ;
-newpLz = newLz (elementI,:) ;
+[linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
 
-newiL = zefCore.intersperseArray ( [ newpLx ; newpLy ; newpLz ], 1, 3) ;
+linpLx = linLx (elementI,:) ;
 
-newL = transpose (newiL) ;
+linpLy = linLy (elementI,:) ;
+
+linpLz = linLz (elementI,:) ;
+
+liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
+
+linL = transpose (liniL) ;
+
+%% Computing a reference lead field.
+
+disp (newline + "Reference lead field..." + newline)
+
+refZs = newElectrodes.impedances ;
+
+refA = zefCore.stiffMatBoundaryConditions (iniA, refZs, contactSurf1) ;
+
+refB = zefCore.potentialMat ( contactSurf1, refZs, size (nodes,1) );
+
+refC = zefCore.impedanceMat (refZs);
+
+refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true) ;
+
+refS = zefCore.schurComplement (refT, ctranspose(refB), refC) ;
+
+refInvS = refS \ eye ( size (refS) ) ;
+
+refR = zefCore.resistivityMatrix (refT, refInvS) ;
+
+[refLx, refLy, refLz] = zefCore.tesLeadField (refR, Gx, Gy, Gz) ;
+
+refpLx = refLx (elementI,:) ;
+
+refpLy = refLy (elementI,:) ;
+
+refpLz = refLz (elementI,:) ;
+
+refiL = zefCore.intersperseArray ( [ refpLx ; refpLy ; refpLz ], 1, 3) ;
+
+refL = transpose (refiL) ;
+
+%% Saving results to a file.
 
 save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω.mat", "-v7.3") ;
