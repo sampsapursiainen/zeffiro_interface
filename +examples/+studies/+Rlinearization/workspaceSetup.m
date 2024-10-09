@@ -70,23 +70,27 @@ T1 = zefCore.transferMatrix (A1,B1,tolerances=solverTol,useGPU=true) ;
 
 S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
+invS = S1 \ eye ( size (S1) ) ;
+
+R1 = zefCore.resistivityMatrix (T, invS) ;
+
 [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
 %%
 
-[ Lx, Ly, Lz, R1 ] = zefCore.tesLeadField ( T1, S1, Gx1, Gy1, Gz1 ) ;
+[ Lx, Ly, Lz ] = zefCore.tesLeadField ( R1, Gx1, Gy1, Gz1 ) ;
 
 sourceN = 10000 ; % size(tetra,1) ;
 
-[ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
+% [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
-% [ sourcePos, elementI] = zefCore.positionSources ( nodes', tetra(activeI,:)', sourceN ) ;
+[ sourcePos, elementI] = zefCore.positionSources ( nodes', tetra(activeI,:)', sourceN ) ;
 
-[ pLx, pLy, pLz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
+% [ pLx, pLy, pLz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
 
-% pLx = Lx (elementI,:) ;
-% pLy = Ly (elementI,:) ;
-% pLz = Lz (elementI,:) ;
+pLx = Lx (elementI,:) ;
+pLy = Ly (elementI,:) ;
+pLz = Lz (elementI,:) ;
 
 % pSize = [size(sourcePos,1), 1] ;
 %
@@ -109,8 +113,6 @@ L = transpose (iL) ;
 
 %% Linearization bit.
 
-invS1 = S1 \ eye ( size (S1) ) ;
-
-newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS1, electrodes, newElectrodes, 1:2) ;
+newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS, electrodes, newElectrodes, 1:2) ;
 
 save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω.mat", "-v7.3") ;
