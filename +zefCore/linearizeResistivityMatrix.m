@@ -87,6 +87,8 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, new
 
         contactSurface = contactSurfaces (col) ;
 
+        Z = oldZs (col) ;
+
         dAdZ = zefCore.dAdZ ( Ms{col}, Z, contactSurface.totalSurfaceArea ) ;
 
         invAdAdZ = zefCore.invAY (A,dAdZ) ;
