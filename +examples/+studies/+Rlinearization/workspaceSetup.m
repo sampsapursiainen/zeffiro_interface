@@ -115,4 +115,14 @@ L = transpose (iL) ;
 
 newR1 = zefCore.linearizeResistivityMatrix (R1, A1, B1, T1, invS, electrodes, newElectrodes, 1:2) ;
 
+[newLx, newLy, newLz] = zefCore.tesLeadField (newR1, Gx1, Gxy1, Gz1) ;
+
+newpLx = newLx (elementI,:) ;
+newpLy = newLy (elementI,:) ;
+newpLz = newLz (elementI,:) ;
+
+newiL = zefCore.intersperseArray ( [ newpLx ; newpLy ; newpLz ], 1, 3) ;
+
+newL = transpose (newiL) ;
+
 save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω.mat", "-v7.3") ;
