@@ -18,7 +18,7 @@ f2 = 1010 ;
 
 contactResistance = 270 ;
 
-newContactResistance = contactResistance + 1e3 ;
+newContactResistance = contactResistance + 5e3 ;
 
 doubleLayerResistance = 15 ;
 
@@ -162,6 +162,16 @@ refpLz = refLz (elementI,:) ;
 refiL = zefCore.intersperseArray ( [ refpLx ; refpLy ; refpLz ], 1, 3) ;
 
 refL = transpose (refiL) ;
+
+%% Compute lead field deviations.
+
+disp (newline + "Computing lead field deviations…") ;
+
+dlinLandL = linL - L ;
+
+drefLandL = refL - L ;
+
+dlinLandrefL = linL - refL ;
 
 %% Saving results to a file.
 
