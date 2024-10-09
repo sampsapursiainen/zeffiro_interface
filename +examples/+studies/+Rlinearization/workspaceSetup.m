@@ -72,7 +72,7 @@ S1 = zefCore.schurComplement (T1, ctranspose(B1), C1) ;
 
 invS = S1 \ eye ( size (S1) ) ;
 
-R1 = zefCore.resistivityMatrix (T, invS) ;
+R1 = zefCore.resistivityMatrix (T1, invS) ;
 
 [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
 
