@@ -1,6 +1,6 @@
-function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs, colI, kwargs)
+function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, newElectrodes, colI, kwargs)
 %
-% newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs, colI, kwargs)
+% newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, newElectrodes, colI, kwargs)
 %
 % Given an initial resistivity matrix iniR and a set of frequency perturbations df,
 % computes a new resistivity matrix newR via the linearization
@@ -33,9 +33,10 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 %
 %   A set of electrodes that iniR was computed with.
 %
-% - dfs
+% - newElectrodes
 %
-%   The frequencies that the electrode stimultion frequencies will be perturbed by.
+%   Electrodes with modified impedances, that work as the evaluation point for
+%   the linearization.
 %
 % - colI
 %
@@ -51,7 +52,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
         T          (:,:) double { mustBeFinite }
         invS       (:,:) double { mustBeFinite }
         electrodes (1,1) zefCore.ElectrodeSet
-        dfs        (:,1) double { mustBeFinite }
+        newElectrodes        (:,1) double { mustBeFinite }
         colI       (:,1) double { mustBePositive, mustBeInteger }
         kwargs.indent (1,1) double { mustBeNonnegative, mustBeInteger } = 2
     end
@@ -70,19 +71,19 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
     newR = iniR ;
 
-    newElectrodes = electrodes ;
-
     indent = strjoin ( repmat ( " ", 1, kwargs.indent ), "" ) ;
+
+    oldZs = electrodes.impedances ;
+
+    newZs = newElectrodes.impedances ;
+
+    dZs = newZs - oldZs ;
 
     for ii = 1 : modifiedN
 
         col = colI (ii) ;
 
         disp ( newline + indent + "+ dR/dZ" + col + " * dZ" + col + "...") ;
-
-        Zs = newElectrodes.impedances ;
-
-        Z = Zs (col) ;
 
         contactSurface = contactSurfaces (col) ;
 
@@ -102,15 +103,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, dfs
 
         dRdZ = zefCore.dRdZ ( invAdAdZ, iniR, invAdBdZ, invS, dSdZ ) ;
 
-        df = dfs (ii) ;
-
-        newElectrodes = newElectrodes.withPerturbedFrequencies (col,df) ;
-
-        newZs = newElectrodes.impedances ;
-
-        newZ = newZs (col) ;
-
-        dZ = newZ - Z ;
+        dZ = dZs (col) ;
 
         newR = newR + dRdZ * dZ ;
 
