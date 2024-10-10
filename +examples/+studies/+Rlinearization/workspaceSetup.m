@@ -26,13 +26,11 @@ capacitance = 1e-7 ;
 
 contactSurfaceRadii = 5e-3 ;
 
-superNodes1 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+contactSurfaces = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
-% superNodes2 = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos2',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=f1) ;
 
-electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
-
-newElectrodes = zefCore.ElectrodeSet (contactResistances=newContactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=superNodes1,frequencies=f1) ;
+newElectrodes = zefCore.ElectrodeSet (contactResistances=newContactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=f1) ;
 
 conductivity = zefCore.reshapeTensor (mf.sigma(:,1)) ;
 
