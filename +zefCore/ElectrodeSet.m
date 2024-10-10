@@ -119,7 +119,7 @@ classdef ElectrodeSet < zefCore.Sensor
 
             Rc = self.doubleLayerResistances ;
 
-            Z = 1 ./ ( 1 ./ Rc - 1 ./ ( 1i ./ 2 .* pi .* f .* C ) ) + Rw ; %zefCore.impedanceParallel (Rc, f, 0, C) + Rw ;
+            Z = zefCore.impedanceParallel (Rc, f, 0, C) + Rw ;
 
         end % function
 
