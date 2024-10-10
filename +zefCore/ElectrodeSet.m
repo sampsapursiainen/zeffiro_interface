@@ -5,13 +5,13 @@ classdef ElectrodeSet < zefCore.Sensor
 % A type representing a set of active or a passive double layer electrodes, as
 % in electrodes whose ciruit diagram is as follows:
 %
-%      |- Rc -|
-%   E -|      |- Rw - S
-%      |- Cc -|
+%      |- Rd -|
+%   E -|      |- Rc - S
+%      |- Cd -|
 %
-% Here E is the electrode voltage source, Rc and Cc are the double layer
-% capacitor resistance and capacitance, and Rw is the resistance of a wet
-% component such as electrolyte gel between the double layer and the skin S.
+% Here E is the electrode voltage source, Rd and Cd are the double layer
+% capacitor resistance and capacitance, and Rc is the contact resistance
+% between the double layer and the skin S.
 %
 
     properties
