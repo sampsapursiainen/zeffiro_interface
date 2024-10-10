@@ -1,6 +1,6 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
-f1 = 1e5 ;
+f1 = 100 ;
 
 projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
 
@@ -20,7 +20,7 @@ contactResistance = 270 ;
 
 newContactResistance = contactResistance + 5e3 ;
 
-doubleLayerResistance = 15 ;
+doubleLayerResistance = 1e4 ;
 
 capacitance = 1e-7 ;
 
