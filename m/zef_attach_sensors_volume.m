@@ -8,6 +8,7 @@ end
 
 attach_type = 'mesh';
 bypass_functions = 0;
+I_get_functions = [];
 
 if not(bypass_functions)
 zef = zef_fix_sensors_get_functions_array_size(zef);
