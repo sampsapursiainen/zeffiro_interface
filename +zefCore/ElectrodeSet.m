@@ -111,15 +111,7 @@ classdef ElectrodeSet < zefCore.Sensor
         % parameters of self.
         %
 
-            Rw = self.contactResistances ;
-
-            f = self.frequencies ;
-
-            C = self.capacitances ;
-
-            Rc = self.doubleLayerResistances ;
-
-            Z = zefCore.impedanceParallel (Rc, f, 0, C) + Rw ;
+            Z = zefCore.impedanceParallel (self.doubleLayerResistances, self.frequencies, 0, self.capacitances) + self.contactResistances ;
 
         end % function
 
