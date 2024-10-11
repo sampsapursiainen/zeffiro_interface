@@ -144,6 +144,7 @@ end
 
 clear X Y Z;
 
+if not(zef.use_gpu)
 n_parallel = zef.parallel_processes;
     if isempty(gcp('nocreate'))
         parpool(n_parallel);
@@ -154,6 +155,7 @@ n_parallel = zef.parallel_processes;
             parpool(n_parallel);
         end
     end
+end
 
 refinement_surface_on = zef.refinement_surface_on;
 n_surface_refinement = zef.refinement_surface_number;
