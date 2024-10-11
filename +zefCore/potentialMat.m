@@ -97,8 +97,6 @@ function B = potentialMat ( superNodes, impedances, nN, kwargs )
 
         entry = kwargs.psiIntegral * Zcoeff (snI) / totalArea .* triArea ;
 
-        mf.("entry"+snI) = entry ;
-
         for vi = 1 : maxVertexI
 
             vertexI = nodeI (vi,:) ;
