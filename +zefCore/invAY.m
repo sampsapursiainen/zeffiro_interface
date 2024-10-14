@@ -8,7 +8,7 @@ function X = invAY (A, Y, kwargs)
     arguments
         A (:,:)
         Y (:,:)
-        kwargs.tolerance (1,1) double { mustBeReal, mustBePositive, mustBeFinite } = 1e-10
+        kwargs.tolerance (1,1) double { mustBeReal, mustBePositive, mustBeFinite } = 1e-12
         kwargs.useGPU    (1,1) logical = true
     end
 
