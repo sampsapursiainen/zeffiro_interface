@@ -1,8 +1,10 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
-f1 = 100 ;
+f1 = 1e5 ;
 
-projectPath = fullfile ("data", "head_for_R_linearization.mat") ;
+sourceN = 5000 ; % size(tetra,1) ;
+
+projectPath = fullfile ("data", "head_for_R_linearization_f=100000Hz.mat") ;
 
 mf = matfile (projectPath) ;
 
@@ -62,7 +64,7 @@ B = zefCore.potentialMat ( contactSurf1, Zs, size (nodes,1) );
 
 C = zefCore.impedanceMat (Zs);
 
-solverTol = 1e-8 ;
+solverTol = 1e-12 ;
 
 T = zefCore.transferMatrix (A,B,tolerances=solverTol,useGPU=true) ;
 
@@ -77,8 +79,6 @@ R = zefCore.resistivityMatrix (T, invS) ;
 %% Initial lead field.
 
 [ Lx, Ly, Lz ] = zefCore.tesLeadField ( R, Gx, Gy, Gz ) ;
-
-sourceN = 5000 ; % size(tetra,1) ;
 
 % [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
