@@ -1,8 +1,10 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
+currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
+
 f1 = 1e5 ;
 
-sourceN = 5000 ; % size(tetra,1) ;
+sourceN = 1e4 ; % size(tetra,1) ;
 
 projectPath = fullfile ("data", "head_for_R_linearization_f=100000Hz.mat") ;
 
@@ -20,7 +22,7 @@ f2 = 1010 ;
 
 contactResistance = 270 ;
 
-newContactResistance = contactResistance + 5e3 ;
+newContactResistance = contactResistance + 1e3 ;
 
 doubleLayerResistance = 1e4 ;
 
@@ -173,4 +175,4 @@ dlinLandrefL = linL - refL ;
 
 %% Saving results to a file.
 
-save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω,Rd=" + doubleLayerResistance + "Ω,Cd=" + capacitance + "F,newRc=" + newContactResistance + "Ω.mat", "-v7.3") ;
+save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω,Rd=" + doubleLayerResistance + "Ω,Cd=" + capacitance + "F,newRc=" + newContactResistance + "Ω,time=" + currentTime + ".mat", "-v7.3") ;
