@@ -20,6 +20,7 @@ reconstruction_information.tag = 'Kalman';
 reconstruction_information.inv_time_1 = zef.inv_time_1;
 reconstruction_information.inv_time_2 = zef.inv_time_2;
 reconstruction_information.inv_time_3 = zef.inv_time_3;
+reconstruction_information.normalize_data = zef.normalize_data;
 reconstruction_information.sampling_freq = zef.inv_sampling_frequency;
 reconstruction_information.low_pass = zef.inv_high_cut_frequency;
 reconstruction_information.high_pass = zef.inv_low_cut_frequency;

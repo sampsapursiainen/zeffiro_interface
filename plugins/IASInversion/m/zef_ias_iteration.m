@@ -65,7 +65,7 @@ if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
     S_mat = gpuArray(S_mat);
 end
 
-[f_data] = zef_getFilteredData;
+[f_data] = zef_getFilteredData(zef);
 
 tic;
 
