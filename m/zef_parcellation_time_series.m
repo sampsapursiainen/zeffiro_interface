@@ -6,6 +6,10 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+if isempty(zef)
+    zef = evalin('base','zef');
+end
+
 length_reconstruction_cell = 1;
 
 number_of_frames = eval('zef.number_of_frames');
