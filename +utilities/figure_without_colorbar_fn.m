@@ -35,7 +35,7 @@ function figure_without_colorbar_fn(figtool, filename, filetypes, resolution)
 
         filename (1,1) string
 
-        filetypes (:,1) string { mustBeMember( filetypes, [".pdf", ".eps", ".png"] ) }
+        filetypes (:,1) string { mustBeMember( filetypes, [".pdf", ".eps", ".png", ".jpg"] ) }
 
         resolution (1,1) double { mustBePositive } = 400
 
