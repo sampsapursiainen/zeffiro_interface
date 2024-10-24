@@ -65,6 +65,17 @@ R = std_lhood^2 * eye(size(L,1));
 
 Q_Store = cell(0);
 
+if zef.use_gpu & gpuDeviceCount > 0
+try 
+m = gpuArray(m);
+P = gpuArray(P);
+A = gpuArray(A);
+Q = gpuArray(Q);
+L = gpuArray(L);
+R = gpuArray(R);
+end
+end
+
 %% KALMAN FILTER
 filter_type = zef.filter_type;
 smoothing = zef.kf_smoothing;
@@ -90,6 +101,8 @@ if (smoothing == 2)
     [~, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
     z_inverse = m_s_store;
 end
+
+z_inverse = cellfun(@(x) gather(x), z_inverse, 'UniformOutput', false);
 
 %% POSTPROCESSING
 [z] = zef_postProcessInverse(z_inverse, procFile);
