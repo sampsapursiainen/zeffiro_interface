@@ -16,10 +16,6 @@ function U = tesElectrodePotentialLosses (I,S)
         S (:,:) double { mustBeFinite }
     end
 
-    idMat = eye ( size (S) ) ;
-
-    invNegS = (- S) \ idMat ;
-
-    U = I * invNegS ;
+    U = - S * I ;
 
 end % function
