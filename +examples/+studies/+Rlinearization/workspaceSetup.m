@@ -4,6 +4,8 @@ currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
 
 currentTimeStr = string (currentTime) ;
 
+assumeCapacitiveTissue = false ;
+
 f1 = 1e5 ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
@@ -52,7 +54,15 @@ f1 = f1s (end) ;
 
 angFreq1 = 2 * pi * f1 ;
 
-admittivity = conductivity + 1i * angFreq1 * permittivity ;
+if assumeCapacitiveTissue
+
+    admittivity = conductivity + 1i * angFreq1 * permittivity ;
+
+else
+
+    admittivity = conductivity ;
+
+end % if
 
 tetraV = zefCore.tetraVolume (nodes, tetra, true) ;
 
