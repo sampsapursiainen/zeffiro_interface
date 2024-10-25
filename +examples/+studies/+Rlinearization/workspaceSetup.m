@@ -187,4 +187,4 @@ dlinLandrefL = linL - refL ;
 
 %% Saving results to a file.
 
-save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω,Rd=" + doubleLayerResistance + "Ω,Cd=" + capacitance + "F,newRc=" + newContactResistance + "Ω,time=" + currentTimeStr + ".mat", "-v7.3") ;
+save("f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω,Rd=" + doubleLayerResistance + "Ω,Cd=" + capacitance + "F,newRc=" + newContactResistance + "Ω,capacitiveTissue=" + assumeCapacitiveTissue + ",time=" + currentTimeStr + ".mat", "-v7.3") ;
