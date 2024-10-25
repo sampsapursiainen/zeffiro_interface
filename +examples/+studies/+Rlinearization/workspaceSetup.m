@@ -52,7 +52,7 @@ f1 = f1s (end) ;
 
 angFreq1 = 2 * pi * f1 ;
 
-admittivity1 = conductivity + 1i * angFreq1 * permittivity ;
+admittivity = conductivity + 1i * angFreq1 * permittivity ;
 
 tetraV = zefCore.tetraVolume (nodes, tetra, true) ;
 
@@ -60,7 +60,7 @@ Zs = electrodes.impedances ;
 
 contactSurf1 = electrodes.contactSurfaces ;
 
-iniA = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity1) ;
+iniA = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity) ;
 
 A = zefCore.stiffMatBoundaryConditions (iniA, Zs, contactSurf1) ;
 
@@ -78,7 +78,7 @@ invS = S \ eye ( size (S) ) ;
 
 R = zefCore.resistivityMatrix (T, invS) ;
 
-[Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
+[Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity, activeI) ;
 
 %% Initial lead field.
 
