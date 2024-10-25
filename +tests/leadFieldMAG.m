@@ -18,6 +18,6 @@ function MAG = leadFieldMAG (L1,L2)
 
     colNormL2 = vecnorm (L2) ;
 
-    MAG = vecnorm ( 1 - colNormL1 / colNormL2 ) ;
+    MAG = 1 - colNormL1 ./ colNormL2 ;
 
 end % function
