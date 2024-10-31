@@ -4,13 +4,13 @@ currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
 
 currentTimeStr = string (currentTime) ;
 
-assumeCapacitiveTissue = false ;
+assumeCapacitiveTissue = true ;
 
-f1 = 1e2 ;
+f1 = 1e3 ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
 
-projectPath = fullfile ("data", "head_for_R_linearization_f=100Hz.mat") ;
+projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
 
 mf = matfile (projectPath) ;
 
@@ -26,7 +26,7 @@ f2 = 1010 ;
 
 contactResistance = 270 ;
 
-newContactResistance = contactResistance + 1e3 ;
+newContactResistance = [contactResistance + 5e3, contactResistance ] ;
 
 doubleLayerResistance = 1e4 ;
 
