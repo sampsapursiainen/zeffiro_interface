@@ -6,19 +6,19 @@ currentTimeStr = string (currentTime) ;
 
 assumeCapacitiveTissue = false ;
 
-f1 = 1e5 ;
+f1 = 1e2 ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
 
-projectPath = fullfile ("data", "head_for_R_linearization_f=100000Hz.mat") ;
+projectPath = fullfile ("data", "head_for_R_linearization_f=100Hz.mat") ;
 
 mf = matfile (projectPath) ;
 
-nodes = mf.nodes / 1e3 ;
+nodes = mf.nodes ;
 
 tetra = mf.tetra ;
 
-electrodePos1 = mf.s2_points([41,42],:) / 1e3 ; % mf.s2_points([23,27],:) / 1e3;
+electrodePos = mf.s2_points([41,42],:) ; % mf.s2_points([23,27],:) / 1e3;
 
 % electrodePos2 = mf.s2_points([34,48],:) / 1e3 ;
 
@@ -26,15 +26,15 @@ f2 = 1010 ;
 
 contactResistance = 270 ;
 
-newContactResistance = contactResistance + 5e3 ;
+newContactResistance = contactResistance + 1e3 ;
 
 doubleLayerResistance = 1e4 ;
 
 capacitance = 1e-7 ;
 
-contactSurfaceRadii = 5e-3 ;
+contactSurfaceRadii = 5 ;
 
-contactSurfaces = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos1',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+contactSurfaces = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
 electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=f1) ;
 
