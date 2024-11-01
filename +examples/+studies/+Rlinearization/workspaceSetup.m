@@ -6,7 +6,7 @@ currentTimeStr = string (currentTime) ;
 
 assumeCapacitiveTissue = true ;
 
-f1 = 1e5 ;
+electrodeFreqs = 1e5 ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
 
@@ -36,9 +36,9 @@ contactSurfaceRadii = 5 ;
 
 contactSurfaces = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
 
-electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=f1) ;
+electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=electrodeFreqs) ;
 
-newElectrodes = zefCore.ElectrodeSet (contactResistances=newContactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=f1) ;
+newElectrodes = zefCore.ElectrodeSet (contactResistances=newContactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=electrodeFreqs) ;
 
 conductivity = zefCore.reshapeTensor (mf.sigma(:,1)) ;
 
@@ -50,9 +50,9 @@ activeI = mf.brain_ind ;
 
 f1s = electrodes.frequencies ;
 
-f1 = f1s (end) ;
+electrodeFreqs = f1s (end) ;
 
-angFreq1 = 2 * pi * f1 ;
+angFreq1 = 2 * pi * electrodeFreqs ;
 
 if assumeCapacitiveTissue
 
@@ -187,6 +187,35 @@ dlinLandrefL = linL - refL ;
 
 %% Saving results to a file.
 
-outFileName = "f=" + f1 + "Hz,r=" + contactSurfaceRadii + "m,Rc=" + contactResistance + "Ω,Rd=" + doubleLayerResistance + "Ω,Cd=" + capacitance + "F,newRc=" + join(string(newContactResistance),",") + "Ω,capacitiveTissue=" + assumeCapacitiveTissue + ",time=" + currentTimeStr + ".mat" ;
+freqNamePart = nameStringFn ("f", electrodeFreqs, "Hz");
+
+rNamePart = nameStringFn ("r", contactSurfaceRadii, "mm");
+
+RcNamePart = nameStringFn ("Rc", contactResistance, "Ω");
+
+newRcNamePart = nameStringFn ("newRc", newContactResistance, "Ω");
+
+RdNamePart = nameStringFn ("Rd", doubleLayerResistance, "Ω");
+
+CdNamePart = nameStringFn ("Cd", capacitance, "F");
+
+outFileName = join ( [freqNamePart, rNamePart, RcNamePart, newRcNamePart, RdNamePart, CdNamePart], "-") + "-capacitiveTissue=" + assumeCapacitiveTissue + "-time=" + currentTimeStr + ".mat" ;
 
 save(outFileName, "-v7.3") ;
+
+%% Helper functions
+
+function out = nameStringFn (quantityStr, values, unitStr, kwargs)
+
+    arguments
+        quantityStr (1,1) string
+        values (1,:) double
+        unitStr (1,1) string
+        kwargs.joinerStr (1,1) string = ","
+    end
+
+    valueStrs = string (values) ;
+
+    out = quantityStr + "=" + join ( valueStrs, kwargs.joinerStr ) + unitStr ;
+
+end % function
