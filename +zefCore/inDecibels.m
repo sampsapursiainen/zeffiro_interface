@@ -15,6 +15,6 @@ function dB = inDecibels (quantity,reference)
         reference { mustBeFinite, mustBePositive }
     end
 
-    dB = 20 * log10 (quantity / reference) ;
+    dB = 20 * log10 (quantity ./ reference) ;
 
 end % function
