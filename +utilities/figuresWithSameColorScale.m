@@ -70,7 +70,9 @@ function figuresWithSameColorScale(zef, zefFigureToolName, dataFilePaths, quanti
 
     % Plot the data in Zeffiro Figure Tool with the color limits set to the minima and maxima.
 
-    for jj = 1 : fileN
+    measureFnName = string ( char (measureFn) ) ;
+
+    for ii = 1 : fileN
 
         filePath = dataFilePaths (ii) ;
 
@@ -92,12 +94,12 @@ function figuresWithSameColorScale(zef, zefFigureToolName, dataFilePaths, quanti
 
         [~, fileName, ~] = fileparts (filePath) ;
 
-        outFileName = fileName + "-" + quantityName + kwargs.outFileExtension ;
+        outFileName = fileName + "-" + measureFnName +  "-x=" + quantityName + kwargs.outFileExtension ;
 
         disp ("Drawing image " + outFileName + "...")
 
         exportgraphics ( zefFigureTool, outFileName, resolution=kwargs.outFileResolution ) ;
 
-    end % for jj
+    end % for ii
 
 end % function
