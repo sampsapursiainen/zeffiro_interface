@@ -64,9 +64,9 @@ function figuresWithSameColorScale(zef, zefFigureToolName, dataFilePaths, quanti
 
     % Find axes and color bars in Zeffiro Figure Tool.
 
-    zefAxes = findobj ( zefFigureTool, "Type", "UIAxes" ) ;
+    zefAxes = zef.h_axes1 ;
 
-    cbars = findobj ( zefFigureTool, "Type", "colorbar" ) ;
+    % Generate own colorbar
 
     % Plot the data in Zeffiro Figure Tool with the color limits set to the minima and maxima.
 
@@ -88,19 +88,13 @@ function figuresWithSameColorScale(zef, zefFigureToolName, dataFilePaths, quanti
 
         clim (zefAxes, cLimits) ;
 
-        zefAxes.view = axisView ;
-
-        for bi = 1 : numel ( cbars )
-
-            cbar = cbars ( bi ) ;
-
-            cbar.CLim = cLimits ;
-
-        end % bi
+        zefAxes.View = axisView ;
 
         [~, fileName, ~] = fileparts (filePath) ;
 
-        outFileName = fileName + "-" + quantityName + outFileExtension ;
+        outFileName = fileName + "-" + quantityName + kwargs.outFileExtension ;
+
+        disp ("Drawing image " + outFileName + "...")
 
         exportgraphics ( zefFigureTool, outFileName, resolution=kwargs.outFileResolution ) ;
 
