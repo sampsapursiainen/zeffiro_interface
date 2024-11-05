@@ -4,6 +4,8 @@
 % electrode contact surfaces are present.
 %
 
+lineStyles = [ "-" , "--", ":", "-."  ] ;
+
 fs = 0 : 5 : 1e5 ;
 
 fN = numel (fs) ;
@@ -18,7 +20,11 @@ CS = repmat (contactSurfaces(1),1,fN) ;
 
 fig = figure (1) ;
 
+fig.WindowState = "maximized" ;
+
 ax = axes(fig) ;
+
+ii = 0 ;
 
 for rcI = 1 : numel (Rcs)
 
@@ -26,11 +32,15 @@ for rcI = 1 : numel (Rcs)
 
     for rdI = 1 : numel (Rds)
 
+        lineStyle = lineStyles ( mod ( ii, numel (lineStyles) ) + 1 ) ;
+
+        ii = ii + 1 ;
+
         Rd = Rds (rdI) ;
 
         electrodes = zefCore.ElectrodeSet(frequencies=fs, capacitances=Cd, contactResistances=Rc, doubleLayerResistances=Rd, contactSurfaces=CS) ;
 
-        plot ( fs, abs(electrodes.impedances), LineWidth=4) ;
+        plot ( fs, abs(electrodes.impedances), lineStyle, LineWidth=4) ;
 
         hold on ;
 
@@ -48,9 +58,11 @@ legendStrs = legendStrs + ", $R_\mathrm{d} = " + Rds + "\,\Omega$" ;
 
 plotLegend = legend (legendStrs, Interpreter="latex") ;
 
-fontsize (plotLegend, 17, "points")
+fontSize = 25 ;
 
-fontsize (ax, 17, "points")
+fontsize (plotLegend, fontSize, "points")
+
+fontsize (ax, fontSize, "points")
 
 ax.XScale = "log" ;
 
@@ -67,3 +79,5 @@ grid minor ;
 hold off ;
 
 exportgraphics(fig,"impedances.pdf",ContentType="vector") ;
+
+close(fig)
