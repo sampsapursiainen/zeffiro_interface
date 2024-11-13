@@ -27,7 +27,9 @@ nodes = mf.nodes ;
 
 tetra = mf.tetra ;
 
-electrodePos = mf.s2_points([ 5, 29, 6, 70],:) ;
+electrodePoints = mf.s2_points ;
+
+electrodePos = electrodePoints ([ 5, 29, 6, 70],:) ;
 
 contactResistance = 270 ;
 
