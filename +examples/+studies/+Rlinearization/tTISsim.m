@@ -17,6 +17,8 @@ electrodeFreqs = [
     baseElectrodeFreq+electrodeFreqsDelta ...
 ] ;
 
+electrodeN = numel (electrodeFreqs) ;
+
 sourceN = 1e4 ; % size(tetra,1) ;
 
 projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
@@ -39,7 +41,7 @@ newContactResistance = [
     contactResistance + contactResistanceDelta, ...
     contactResistance + contactResistanceDelta, ...
     contactResistance, ...
-    contactResistances ...
+    contactResistance ...
 ] ;
 
 doubleLayerResistance = 1e4 ;
@@ -143,7 +145,7 @@ L = transpose (iL) ;
 
 disp (newline + "Linearized lead field..." + newline) ;
 
-linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:2) ;
+linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:electrodeN) ;
 
 [linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
 
