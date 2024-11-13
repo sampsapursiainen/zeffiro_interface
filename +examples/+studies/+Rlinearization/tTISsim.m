@@ -1,0 +1,233 @@
+% A script for retrieving values from mf and converting them to a suitable format.
+
+currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
+
+currentTimeStr = string (currentTime) ;
+
+assumeCapacitiveTissue = true ;
+
+electrodeFreqsDelta = 10 ;
+
+baseElectrodeFreq = 1e3 ;
+
+electrodeFreqs = [
+    baseElectrodeFreq,
+    baseElectrodeFreq,
+    baseElectrodeFreq+electrodeFreqsDelta,
+    baseElectrodeFreq+electrodeFreqsDelta
+] ;
+
+sourceN = 1e4 ; % size(tetra,1) ;
+
+projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
+
+mf = matfile (projectPath) ;
+
+nodes = mf.nodes ;
+
+tetra = mf.tetra ;
+
+electrodePos = mf.s2_points([ 5, 29, 6, 70],:) ;
+
+contactResistance = 270 ;
+
+contactResistanceDelta = 1e3 ;
+
+newContactResistance = [
+    contactResistance + contactResistanceDelta,
+    contactResistance + contactResistanceDelta,
+    contactResistance,
+    contactResistances
+] ;
+
+doubleLayerResistance = 1e4 ;
+
+capacitance = 1e-7 ;
+
+contactSurfaceRadii = 5 ;
+
+contactSurfaces = zefCore.SuperNode.fromMeshAndPos (nodes',tetra',electrodePos',nodeRadii=contactSurfaceRadii, attachNodesTo="surface") ;
+
+electrodes = zefCore.ElectrodeSet (contactResistances=contactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=electrodeFreqs) ;
+
+newElectrodes = zefCore.ElectrodeSet (contactResistances=newContactResistance, doubleLayerResistances=doubleLayerResistance,capacitances=capacitance, contactSurfaces=contactSurfaces,frequencies=electrodeFreqs) ;
+
+conductivity = zefCore.reshapeTensor (mf.sigma(:,1)) ;
+
+eps0 = 8.8541878188e-12 ;
+
+permittivity = zefCore.reshapeTensor (mf.epsilon(:,1)) * eps0;
+
+activeI = mf.brain_ind ;
+
+f1s = electrodes.frequencies ;
+
+electrodeFreqs = f1s (end) ;
+
+angFreq1 = 2 * pi * electrodeFreqs ;
+
+if assumeCapacitiveTissue
+
+    admittivity = conductivity + 1i * angFreq1 * permittivity ;
+
+else
+
+    admittivity = conductivity ;
+
+end % if
+
+tetraV = zefCore.tetraVolume (nodes, tetra, true) ;
+
+Zs = electrodes.impedances ;
+
+contactSurf = electrodes.contactSurfaces ;
+
+iniA = zefCore.stiffnessMat (nodes, tetra, tetraV, admittivity) ;
+
+A = zefCore.stiffMatBoundaryConditions (iniA, Zs, contactSurf) ;
+
+B = zefCore.potentialMat ( contactSurf, Zs, size (nodes,1) );
+
+C = zefCore.impedanceMat (Zs);
+
+solverTol = 1e-12 ;
+
+T = zefCore.transferMatrix (A,B,tolerances=solverTol,useGPU=true) ;
+
+S = zefCore.schurComplement (T, ctranspose(B), C) ;
+
+invS = S \ eye ( size (S) ) ;
+
+R = zefCore.resistivityMatrix (T, invS) ;
+
+[Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity, activeI) ;
+
+%% Initial lead field.
+
+[ Lx, Ly, Lz ] = zefCore.tesLeadField ( R, Gx, Gy, Gz ) ;
+
+% [ sourcePos, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
+
+[ sourcePos, elementI] = zefCore.positionSources ( nodes', tetra(activeI,:)', sourceN ) ;
+
+% [ pLx, pLy, pLz ] = zefCore.parcellateLeadField (Lx, Ly, Lz, aggregationI, aggregationN, 1) ;
+
+pLx = Lx (elementI,:) ;
+
+pLy = Ly (elementI,:) ;
+
+pLz = Lz (elementI,:) ;
+
+% pSize = [size(sourcePos,1), 1] ;
+%
+% pLx = zeros (pSize(1),electrodes.electrodeCount) ;
+% pLy = zeros (pSize(1),electrodes.electrodeCount) ;
+% pLz = zeros (pSize(1),electrodes.electrodeCount) ;
+%
+% pLx(:,1) = accumarray ( aggregationI, Lx(:,1), pSize ) ./ aggregationN ;
+% pLx(:,2) = accumarray ( aggregationI, Lx(:,2), pSize ) ./ aggregationN ;
+%
+% pLy(:,1) = accumarray ( aggregationI, Ly(:,1), pSize ) ./ aggregationN ;
+% pLy(:,2) = accumarray ( aggregationI, Ly(:,2), pSize ) ./ aggregationN ;
+%
+% pLz(:,1) = accumarray ( aggregationI, Lz(:,1), pSize ) ./ aggregationN ;
+% pLz(:,2) = accumarray ( aggregationI, Lz(:,2), pSize ) ./ aggregationN ;
+
+iL = zefCore.intersperseArray ( [ pLx ; pLy ; pLz ], 1, 3) ;
+
+L = transpose (iL) ;
+
+%% Linearization bit.
+
+disp (newline + "Linearized lead field..." + newline) ;
+
+linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:2) ;
+
+[linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
+
+linpLx = linLx (elementI,:) ;
+
+linpLy = linLy (elementI,:) ;
+
+linpLz = linLz (elementI,:) ;
+
+liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
+
+linL = transpose (liniL) ;
+
+%% Computing a reference lead field.
+
+disp (newline + "Reference lead field..." + newline)
+
+refZs = newElectrodes.impedances ;
+
+refA = zefCore.stiffMatBoundaryConditions (iniA, refZs, contactSurf) ;
+
+refB = zefCore.potentialMat ( contactSurf, refZs, size (nodes,1) );
+
+refC = zefCore.impedanceMat (refZs);
+
+refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true) ;
+
+refS = zefCore.schurComplement (refT, ctranspose(refB), refC) ;
+
+refInvS = refS \ eye ( size (refS) ) ;
+
+refR = zefCore.resistivityMatrix (refT, refInvS) ;
+
+[refLx, refLy, refLz] = zefCore.tesLeadField (refR, Gx, Gy, Gz) ;
+
+refpLx = refLx (elementI,:) ;
+
+refpLy = refLy (elementI,:) ;
+
+refpLz = refLz (elementI,:) ;
+
+refiL = zefCore.intersperseArray ( [ refpLx ; refpLy ; refpLz ], 1, 3) ;
+
+refL = transpose (refiL) ;
+
+%% Compute lead field deviations.
+
+disp (newline + "Computing lead field deviations…") ;
+
+dlinLandL = linL - L ;
+
+drefLandL = refL - L ;
+
+dlinLandrefL = linL - refL ;
+
+%% Saving results to a file.
+
+freqNamePart = nameStringFn ("f", electrodeFreqs, "Hz");
+
+rNamePart = nameStringFn ("r", contactSurfaceRadii, "mm");
+
+RcNamePart = nameStringFn ("Rc", contactResistance, "Ω");
+
+newRcNamePart = nameStringFn ("newRc", newContactResistance, "Ω");
+
+RdNamePart = nameStringFn ("Rd", doubleLayerResistance, "Ω");
+
+CdNamePart = nameStringFn ("Cd", capacitance, "F");
+
+outFileName = "tTIS-" + join ( [freqNamePart, rNamePart, RcNamePart, newRcNamePart, RdNamePart, CdNamePart], "-") + "-capacitiveTissue=" + assumeCapacitiveTissue + "-time=" + currentTimeStr + ".mat" ;
+
+save(outFileName, "-v7.3") ;
+
+%% Helper functions
+
+function out = nameStringFn (quantityStr, values, unitStr, kwargs)
+
+    arguments
+        quantityStr (1,1) string
+        values (1,:) double
+        unitStr (1,1) string
+        kwargs.joinerStr (1,1) string = ","
+    end
+
+    valueStrs = string (values) ;
+
+    out = quantityStr + "=" + join ( valueStrs, kwargs.joinerStr ) + unitStr ;
+
+end % function
