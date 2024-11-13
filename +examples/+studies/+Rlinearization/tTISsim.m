@@ -1,6 +1,6 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
-currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
+currentTime = datetime("now",Format="yyyy-MM-dd-hh:mm") ;
 
 currentTimeStr = string (currentTime) ;
 
@@ -11,10 +11,10 @@ electrodeFreqsDelta = 10 ;
 baseElectrodeFreq = 1e3 ;
 
 electrodeFreqs = [
-    baseElectrodeFreq,
-    baseElectrodeFreq,
-    baseElectrodeFreq+electrodeFreqsDelta,
-    baseElectrodeFreq+electrodeFreqsDelta
+    baseElectrodeFreq, ...
+    baseElectrodeFreq, ...
+    baseElectrodeFreq+electrodeFreqsDelta, ...
+    baseElectrodeFreq+electrodeFreqsDelta ...
 ] ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
@@ -34,10 +34,10 @@ contactResistance = 270 ;
 contactResistanceDelta = 1e3 ;
 
 newContactResistance = [
-    contactResistance + contactResistanceDelta,
-    contactResistance + contactResistanceDelta,
-    contactResistance,
-    contactResistances
+    contactResistance + contactResistanceDelta, ...
+    contactResistance + contactResistanceDelta, ...
+    contactResistance, ...
+    contactResistances ...
 ] ;
 
 doubleLayerResistance = 1e4 ;
