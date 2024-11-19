@@ -49,6 +49,10 @@ function T = transferMatrix ( A, B, kwargs )
 %
 %   Determines whether to use a GPU when running the solver.
 %
+% - kwargs.solver = @zefCore.solvers.biConjugateGradientStabilized
+%
+%   A function handle to a matrix inverter, with a signature of kwargs.solver(A,x0,b,kwargs).
+%
 % Output:
 %
 % - T
