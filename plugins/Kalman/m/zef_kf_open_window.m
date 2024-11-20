@@ -89,6 +89,7 @@ clear zef_props zef_i
 
 %_ Functions _
 zef.KF.inv_snr.ValueChangedFcn = 'zef.inv_snr = str2num(zef.KF.inv_snr.Value);';
+zef.KF.kf_evolution_prior_mode.ValueChangedFcn = 'zef.kf_evolution_prior_mode = str2num(zef.KF.kf_evolution_prior_mode.Value);';
 zef.KF.normalize_data.ValueChangedFcn = 'zef.normalize_data = zef.KF.normalize_data.Value;';
 zef.KF.inv_sampling_frequency.ValueChangedFcn = 'zef.inv_sampling_frequency = str2num(zef.KF.inv_sampling_frequency.Value);';
 zef.KF.inv_low_cut_frequency.ValueChangedFcn = 'zef.inv_low_cut_frequency = str2num(zef.KF.inv_low_cut_frequency.Value);';

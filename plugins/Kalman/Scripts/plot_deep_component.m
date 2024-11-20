@@ -14,14 +14,14 @@ for frame = [21 31 51 61 101]
     zef.h_frame_start.Value = frame;
     zef_update_mesh_visualization_tool;
     zef_visualize_surfaces;
-
+    
     TuningParameters = {
-        'colormapselection',5
-        %                     'update_specular_slider',0.02
-        %                     'update_diffusion_slider',0.25
-        %                     'update_ambience_slider',0.94
-        %                      'update_contrast_slider',-0.25
-        'update_brightness_slider',0.25};
+                     'colormapselection',5
+%                     'update_specular_slider',0.02
+%                     'update_diffusion_slider',0.25
+%                     'update_ambience_slider',0.94
+%                      'update_contrast_slider',-0.25
+                    'update_brightness_slider',0.25};
     f = gcf;
     for j = 1:size(TuningParameters,1)
         h = findobj(f.Children,'Tag',TuningParameters{j,1});
@@ -56,7 +56,7 @@ for frame = [21 31 51 61 101]
     view(-90,40)
     print(f2,'-dpng','-r150',[file_full 'sideDeep' '.png'])
     savefig(f2, [file_full 'sideDeep' '.fig'])
-
+    
     close(f2)
     loop_indx = loop_indx + 1;
 end
