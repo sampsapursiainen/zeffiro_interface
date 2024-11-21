@@ -1,6 +1,6 @@
-function L = eegLeadField ( T, S, G, kwargs )
+function L = eegLeadField ( T, invS, G, kwargs )
 %
-% L = eegLeadField ( T, S, G, kwargs )
+% L = eegLeadField ( T, invS, G, kwargs )
 %
 % Computes an elecroencephalography (EEG) lead field matrix in a finite element context.
 %
@@ -10,9 +10,9 @@ function L = eegLeadField ( T, S, G, kwargs )
 %
 %   A transfer matrix A \ B of the system [ A B ; B' C ].
 %
-% - S
+% - invS
 %
-%   A Schur complement of A in the same system as T.
+%   An inverse of the Schur complement of A in the same system as T.
 %
 % - G
 %
@@ -38,14 +38,14 @@ function L = eegLeadField ( T, S, G, kwargs )
 %
     arguments
         T (:,:) double { mustBeFinite }
-        S (:,:) double { mustBeFinite }
+        invS (:,:) double { mustBeFinite }
         G (:,:) double { mustBeFinite }
         kwargs.zeroPotentialFn (1,1) function_handle = @mean
     end
 
     disp("Computing EEG lead field as the product of Schur complement and transpose of transfer matrix…")
 
-    L = S * transpose ( T ) ;
+    L = - invS * transpose ( T ) ;
 
     disp ("Interpolating L to source positions…")
 
