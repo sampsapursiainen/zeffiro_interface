@@ -1,6 +1,6 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
-currentTime = datetime("now",Format="yyyy-MM-dd-hh:mm") ;
+currentTime = datetime("now",Format="yyyy-MM-dd-hh-mm") ;
 
 currentTimeStr = string (currentTime) ;
 
