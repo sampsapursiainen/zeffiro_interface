@@ -6,7 +6,7 @@ currentTimeStr = string (currentTime) ;
 
 assumeCapacitiveTissue = true ;
 
-electrodeFreqsDelta = 10 ;
+electrodeFreqsDelta = 100 ;
 
 baseElectrodeFreq = 1e3 ;
 
@@ -35,7 +35,7 @@ electrodePos = electrodePoints ([ 5, 29, 6, 70],:) ;
 
 contactResistance = 270 ;
 
-contactResistanceDelta = 1e3 ;
+contactResistanceDelta = 5e3 ;
 
 newContactResistance = [
     contactResistance + contactResistanceDelta, ...
@@ -66,13 +66,13 @@ activeI = mf.brain_ind ;
 
 f1s = electrodes.frequencies ;
 
-electrodeFreqs = f1s (end) ;
+tissueFreq = f1s (end) ;
 
-angFreq1 = 2 * pi * electrodeFreqs ;
+tissueAngFreq = 2 * pi * tissueFreq ;
 
 if assumeCapacitiveTissue
 
-    admittivity = conductivity + 1i * angFreq1 * permittivity ;
+    admittivity = conductivity + 1i * tissueAngFreq * permittivity ;
 
 else
 
