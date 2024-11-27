@@ -81,6 +81,9 @@ elseif filter_type == 4
     H = L * sqrtm(P_old);
     W = inv(sqrtm(diag(diag(H'*inv(H*H' + R)*H))));
     z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
+elseif filter_type == 5
+   [P_store, z_inverse] = kalman_filter_sLORETA_EVO_DIAG_WEIGHT(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+
 
 end
 

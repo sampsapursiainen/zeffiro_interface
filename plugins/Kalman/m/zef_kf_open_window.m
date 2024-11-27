@@ -8,6 +8,9 @@ end
 
 zef.KF = zef_kf_app;
 
+zef.KF.filter_type.Items = {'Basic Kalman'  'EnKF'  'Standardized Kalman (sLORETA)'  'Kalman spatial sLORETA' 'Standardized Kalman (sLORETA) with diagonal evolution weighting'};
+zef.KF.filter_type.ItemsData = {'1'  '2'  '3'  '4' '5'};
+
 %_ Initial values _
 if isfield(zef,'inv_snr')
 zef.KF.inv_snr.Value = num2str(zef.inv_snr);
