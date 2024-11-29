@@ -50,9 +50,9 @@ activeI = mf.brain_ind ;
 
 f1s = electrodes.frequencies ;
 
-electrodeFreqs = f1s (end) ;
+domainFreq = f1s (end) ;
 
-angFreq1 = 2 * pi * electrodeFreqs ;
+angFreq1 = 2 * pi * domainFreq ;
 
 if assumeCapacitiveTissue
 
@@ -125,57 +125,57 @@ iL = zefCore.intersperseArray ( [ pLx ; pLy ; pLz ], 1, 3) ;
 
 L = transpose (iL) ;
 
-%% Linearization bit.
-
-disp (newline + "Linearized lead field..." + newline) ;
-
-linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:2) ;
-
-[linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
-
-linpLx = linLx (elementI,:) ;
-
-linpLy = linLy (elementI,:) ;
-
-linpLz = linLz (elementI,:) ;
-
-liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
-
-linL = transpose (liniL) ;
-
-%% Computing a reference lead field.
-
-disp (newline + "Reference lead field..." + newline)
-
-refZs = newElectrodes.impedances ;
-
-refA = zefCore.stiffMatBoundaryConditions (iniA, refZs, contactSurf1) ;
-
-refB = zefCore.potentialMat ( contactSurf1, refZs, size (nodes,1) );
-
-refC = zefCore.impedanceMat (refZs);
-
-refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true) ;
-
-refS = zefCore.schurComplement (refT, ctranspose(refB), refC) ;
-
-refInvS = refS \ eye ( size (refS) ) ;
-
-refR = zefCore.resistivityMatrix (refT, refInvS) ;
-
-[refLx, refLy, refLz] = zefCore.tesLeadField (refR, Gx, Gy, Gz) ;
-
-refpLx = refLx (elementI,:) ;
-
-refpLy = refLy (elementI,:) ;
-
-refpLz = refLz (elementI,:) ;
-
-refiL = zefCore.intersperseArray ( [ refpLx ; refpLy ; refpLz ], 1, 3) ;
-
-refL = transpose (refiL) ;
-
-%% Compute lead field deviations.
+% %% Linearization bit.
+%
+% disp (newline + "Linearized lead field..." + newline) ;
+%
+% linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:2) ;
+%
+% [linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
+%
+% linpLx = linLx (elementI,:) ;
+%
+% linpLy = linLy (elementI,:) ;
+%
+% linpLz = linLz (elementI,:) ;
+%
+% liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
+%
+% linL = transpose (liniL) ;
+%
+% %% Computing a reference lead field.
+%
+% disp (newline + "Reference lead field..." + newline)
+%
+% refZs = newElectrodes.impedances ;
+%
+% refA = zefCore.stiffMatBoundaryConditions (iniA, refZs, contactSurf1) ;
+%
+% refB = zefCore.potentialMat ( contactSurf1, refZs, size (nodes,1) );
+%
+% refC = zefCore.impedanceMat (refZs);
+%
+% refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true) ;
+%
+% refS = zefCore.schurComplement (refT, ctranspose(refB), refC) ;
+%
+% refInvS = refS \ eye ( size (refS) ) ;
+%
+% refR = zefCore.resistivityMatrix (refT, refInvS) ;
+%
+% [refLx, refLy, refLz] = zefCore.tesLeadField (refR, Gx, Gy, Gz) ;
+%
+% refpLx = refLx (elementI,:) ;
+%
+% refpLy = refLy (elementI,:) ;
+%
+% refpLz = refLz (elementI,:) ;
+%
+% refiL = zefCore.intersperseArray ( [ refpLx ; refpLy ; refpLz ], 1, 3) ;
+%
+% refL = transpose (refiL) ;
+%
+% %% Compute lead field deviations.
 
 disp (newline + "Computing lead field deviations…") ;
 
