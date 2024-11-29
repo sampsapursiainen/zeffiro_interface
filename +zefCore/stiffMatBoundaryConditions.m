@@ -134,7 +134,7 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
 
     Addend = sparse ( Arows, Acols, Avals, nN, nN ) ;
 
-    A = A + Addend + ctranspose (Addend) ;
+    A = A + Addend + transpose (Addend) ;
 
 end % function
 

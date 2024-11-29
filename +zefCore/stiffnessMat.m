@@ -125,7 +125,7 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
             A = A + A_part ;
 
             if not (i == j)
-                A = A + ctranspose (A_part) ;
+                A = A + transpose (A_part) ;
             end
 
             % Reset integrand vectors for the next round.
