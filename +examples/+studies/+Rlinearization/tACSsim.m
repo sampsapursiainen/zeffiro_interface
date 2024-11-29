@@ -1,6 +1,6 @@
 % A script for retrieving values from mf and converting them to a suitable format.
 
-currentTime = datetime("now",Format="yy-MM-dd-hh:mm") ;
+currentTime = datetime("now",Format="yy-MM-dd-hh-mm") ;
 
 currentTimeStr = string (currentTime) ;
 
@@ -176,14 +176,14 @@ L = transpose (iL) ;
 % refL = transpose (refiL) ;
 %
 % %% Compute lead field deviations.
-
-disp (newline + "Computing lead field deviations…") ;
-
-dlinLandL = linL - L ;
-
-drefLandL = refL - L ;
-
-dlinLandrefL = linL - refL ;
+%
+% disp (newline + "Computing lead field deviations…") ;
+%
+% dlinLandL = linL - L ;
+%
+% drefLandL = refL - L ;
+%
+% dlinLandrefL = linL - refL ;
 
 %% Saving results to a file.
 
@@ -199,7 +199,7 @@ RdNamePart = nameStringFn ("Rd", doubleLayerResistance, "Ω");
 
 CdNamePart = nameStringFn ("Cd", capacitance, "F");
 
-outFileName = join ( [freqNamePart, rNamePart, RcNamePart, newRcNamePart, RdNamePart, CdNamePart], "-") + "-capacitiveTissue=" + assumeCapacitiveTissue + "-time=" + currentTimeStr + ".mat" ;
+outFileName = join ( ["tACS", freqNamePart, rNamePart, RcNamePart, newRcNamePart, RdNamePart, CdNamePart], "-") + "-capacitiveTissue=" + assumeCapacitiveTissue + "-time=" + currentTimeStr + ".mat" ;
 
 save(outFileName, "-v7.3") ;
 
