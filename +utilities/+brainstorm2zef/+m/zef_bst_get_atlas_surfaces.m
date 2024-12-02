@@ -12,7 +12,7 @@ end
 atlas_surfaces = struct;
 
 [X, Y, Z] = meshgrid([0:size(atlas_struct.Cube,1)],[0:size(atlas_struct.Cube,2)],[0:size(atlas_struct.Cube,3)]);
-cube_labels = atlas_struct.Cube(:);
+%cube_labels = atlas_struct.Cube(:);
 n_cubes = prod(size(X)-1);
 
 size_xyz = size(X);
@@ -54,16 +54,18 @@ zef_waitbar(i_x/size(X,2),h_waitbar,['Atlas labels for ' atlas_struct.Comment '.
     end
 
     surface_ind = 0;
+    label_ind_vec = [];
     for i = 1 : size(atlas_struct.Labels,1)
  
      label_val = atlas_struct.Labels{i,1};
      if label_val > 0
      surface_ind = surface_ind + 1; 
      I = find(cube_labels == label_val);
+     label_ind_vec = [label_ind_vec label_val];
      [triangles_aux, nodes_aux] = zef_surface_mesh(tetra(I,:),nodes);
      [nodes_aux] = zef_inflate_surface(zef,nodes_aux,triangles_aux,n_inflation_steps);
      atlas_surfaces(surface_ind).Name = atlas_struct.Labels{i,2};
-      atlas_surfaces(surface_ind).Type = compartment_type;
+     atlas_surfaces(surface_ind).Type = compartment_type;
      atlas_surfaces(surface_ind).Color = atlas_struct.Labels{i,3}/255;
      if ismember('InitTransf',transform_cell)
      if not(isempty(atlas_struct.InitTransf))
@@ -74,8 +76,27 @@ zef_waitbar(i_x/size(X,2),h_waitbar,['Atlas labels for ' atlas_struct.Comment '.
      atlas_surfaces(surface_ind).Points = nodes_aux(:,1:3);
      atlas_surfaces(surface_ind).Triangles = triangles_aux(:,[1 3 2]);
      end
- 
+
     end
+
+     if not(isempty(label_ind_vec))
+     surface_ind = surface_ind + 1;
+     I = find(ismember(cube_labels, label_ind_vec));
+     
+     [triangles_aux, nodes_aux] = zef_surface_mesh(tetra(I,:),nodes);
+     [nodes_aux] = zef_inflate_surface(zef,nodes_aux,triangles_aux,n_inflation_steps);
+     atlas_surfaces(surface_ind).Name = [atlas_struct.Comment ' domain fill'];
+     atlas_surfaces(surface_ind).Type = compartment_type;
+     atlas_surfaces(surface_ind).Color = [0.05 0.05 0.05];
+     if ismember('InitTransf',transform_cell)
+     if not(isempty(atlas_struct.InitTransf))
+     A = atlas_struct.InitTransf{2}; 
+     nodes_aux = (A*[nodes_aux' ; ones(1,size(nodes_aux,1))])';
+     end
+     end
+     atlas_surfaces(surface_ind).Points = nodes_aux(:,1:3);
+     atlas_surfaces(surface_ind).Triangles = triangles_aux(:,[1 3 2]);
+     end
 
     close(h_waitbar);
 
