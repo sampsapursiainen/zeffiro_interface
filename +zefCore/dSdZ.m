@@ -20,6 +20,6 @@ function DS = dSdZ ( dCdZ, Be, T, B, invAdAdZ, invAdBdZ )
 
     cB = transpose (B) ;
 
-    DS = dCdZ + dCdZ * transpose (Be) * T - cB * invAdAdZ * T + cB * invAdBdZ ;
+    DS = dCdZ - dCdZ * transpose (Be) * T + cB * invAdAdZ * T - cB * invAdBdZ ;
 
 end % function
