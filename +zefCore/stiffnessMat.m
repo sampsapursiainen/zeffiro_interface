@@ -115,18 +115,33 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
 
             end % for
 
-            % Construct a part of 𝐴 by mapping the indices of the tetra to the
-            % integrand.
+            % Find the bits of A that are in the upper and lower triangles of
+            % A, and its diagonal. The suffixes B below refers to Boolean
+            % index.
 
-            A_part = sparse (tetra(:,i),tetra(:,j), integrand,Nn,Nn);
+            tetrai = tetra (:,i) ;
 
-            % Sum the integrand to 𝐴 iteratively.
+            tetraj = tetra (:,j) ;
 
-            A = A + A_part ;
+            upperTriB = tetrai < tetraj ;
 
-            if not (i == j)
-                A = A + transpose (A_part) ;
-            end
+            diagB = tetrai == tetraj ;
+
+            lowerTriB = tetrai > tetraj ;
+
+            % Since a real A needs to be symmetric and an imaginary A
+            % anti-symmetric in its imaginary part (Hermitian), we add whatever
+            % is in the upper triangle to the lower triangle, and vice versa.
+
+            A = A + sparse ( tetrai(diagB), tetraj(diagB), integrand(diagB), Nn, Nn) ;
+
+            A = A + sparse ( tetrai(upperTriB), tetraj(upperTriB), integrand(upperTriB), Nn, Nn) ;
+
+            A = A + sparse ( tetrai(lowerTriB), tetraj(lowerTriB), integrand(lowerTriB), Nn, Nn) ;
+
+            A = A + sparse ( tetraj(upperTriB), tetrai(upperTriB), integrand(upperTriB), Nn, Nn) ;
+
+            A = A + sparse ( tetraj(lowerTriB), tetrai(lowerTriB), integrand(lowerTriB), Nn, Nn) ;
 
             % Reset integrand vectors for the next round.
 
