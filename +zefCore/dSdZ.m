@@ -1,16 +1,17 @@
-function DS = dSdZ ( dCdZ, Be, T, B, invAdAdZ, invAdBdZ )
+function DS = dSdZ ( dCdZ, dCHdZ, Be, T, B, invAdAdZ, invAdBdZ )
 %
-% DS = dSdZ ( dCdZ, Be, T, B, invAdAdZ, invAdBdZ )
+% DS = dSdZ ( dCdZ, dCHdZ, Be, T, B, invAdAdZ, invAdBdZ )
 %
 % Computes the derivative of the Schur complement of A in a system
 %
-%   [ A, B ; B^T, C ] * [ u ; v ] = [ x ; y ]
+%   [ A, B ; B', C ] * [ u ; v ] = [ x ; y ]
 %
 % with respect to an impedance Z.
 %
 
     arguments
         dCdZ     (:,:)
+        dCHdZ    (:,:)
         Be       (:,:)
         T        (:,:)
         B        (:,:)
@@ -18,8 +19,9 @@ function DS = dSdZ ( dCdZ, Be, T, B, invAdAdZ, invAdBdZ )
         invAdBdZ (:,:)
     end
 
-    cB = transpose (B) ;
+    cB = ctranspose (B) ;
 
-    DS = dCdZ - dCdZ * transpose (Be) * T + cB * invAdAdZ * T - cB * invAdBdZ ;
+    DS = dCdZ + dCHdZ * transpose (Be) * T - cB * invAdAdZ * T + cB * invAdBdZ ;
+
 
 end % function
