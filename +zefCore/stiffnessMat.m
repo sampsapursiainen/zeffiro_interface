@@ -119,29 +119,29 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
             % A, and its diagonal. The suffixes B below refers to Boolean
             % index.
 
-            tetrai = tetra (:,i) ;
+            Arows = tetra (:,i) ;
 
-            tetraj = tetra (:,j) ;
+            Acols = tetra (:,j) ;
 
-            upperTriB = tetrai < tetraj ;
+            upperTriB = Arows < Acols ;
 
-            diagB = tetrai == tetraj ;
+            diagB = Arows == Acols ;
 
-            lowerTriB = tetrai > tetraj ;
+            lowerTriB = Arows > Acols ;
 
             % Since a real A needs to be symmetric and an imaginary A
             % anti-symmetric in its imaginary part (Hermitian), we add whatever
             % is in the upper triangle to the lower triangle, and vice versa.
 
-            A = A + sparse ( tetrai(diagB), tetraj(diagB), real(integrand(diagB)), Nn, Nn) ;
+            A = A + sparse ( Arows(diagB), Acols(diagB), real(integrand(diagB)), Nn, Nn) ;
 
-            A = A + sparse ( tetrai(upperTriB), tetraj(upperTriB), integrand(upperTriB), Nn, Nn) ;
+            A = A + sparse ( Arows(upperTriB), Acols(upperTriB), integrand(upperTriB), Nn, Nn) ;
 
-            A = A + sparse ( tetrai(lowerTriB), tetraj(lowerTriB), integrand(lowerTriB), Nn, Nn) ;
+            A = A + sparse ( Arows(lowerTriB), Acols(lowerTriB), integrand(lowerTriB), Nn, Nn) ;
 
-            A = A + sparse ( tetraj(upperTriB), tetrai(upperTriB), conj(integrand(upperTriB)), Nn, Nn) ;
+            A = A + sparse ( Acols(upperTriB), Arows(upperTriB), conj(integrand(upperTriB)), Nn, Nn) ;
 
-            A = A + sparse ( tetraj(lowerTriB), tetrai(lowerTriB), conj(integrand(lowerTriB)), Nn, Nn) ;
+            A = A + sparse ( Acols(lowerTriB), Arows(lowerTriB), conj(integrand(lowerTriB)), Nn, Nn) ;
 
             % Reset integrand vectors for the next round.
 
