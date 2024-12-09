@@ -113,10 +113,12 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
                     Acols (range) = nodeI (jj,:) ;
 
                     if ii == jj
-                        Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* triArea / totalArea ;
+                        integralC = kwargs.onDC ;
                     else
-                        Avals (range) = Zcoeff ( snI ) .* kwargs.offDC .* triArea / totalArea ;
+                        integralC = kwargs.offDC ;
                     end
+
+                    Avals (range) = Zcoeff ( snI ) .* integralC .* triArea / totalArea ;
 
                     cursor = cursor + rangeLen + 1 ;
 
