@@ -21,6 +21,10 @@ electrodeN = numel (electrodeFreqs) ;
 
 sourceN = 1e4 ; % size(tetra,1) ;
 
+solver = @zefCore.solvers.preconditionedConjugateGradient ;
+
+solverTol = 1e-12 ;
+
 projectPath = fullfile ("data", "head_for_R_linearization_f=1000Hz.mat") ;
 
 mf = matfile (projectPath) ;
@@ -94,9 +98,7 @@ B = zefCore.potentialMat ( contactSurf, Zs, size (nodes,1) );
 
 C = zefCore.impedanceMat (Zs);
 
-solverTol = 1e-12 ;
-
-T = zefCore.transferMatrix (A,B,tolerances=solverTol,useGPU=true) ;
+T = zefCore.transferMatrix (A,B,tolerances=solverTol,useGPU=true,solver=solver) ;
 
 S = zefCore.schurComplement (T, ctranspose(B), C) ;
 
@@ -141,23 +143,23 @@ iL = zefCore.intersperseArray ( [ pLx ; pLy ; pLz ], 1, 3) ;
 
 L = transpose (iL) ;
 
-%% Linearization bit.
-
-disp (newline + "Linearized lead field..." + newline) ;
-
-linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:electrodeN) ;
-
-[linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
-
-linpLx = linLx (elementI,:) ;
-
-linpLy = linLy (elementI,:) ;
-
-linpLz = linLz (elementI,:) ;
-
-liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
-
-linL = transpose (liniL) ;
+% %% Linearization bit.
+%
+% disp (newline + "Linearized lead field..." + newline) ;
+%
+% linR = zefCore.linearizeResistivityMatrix (R, A, B, T, invS, electrodes, newElectrodes, 1:electrodeN) ;
+%
+% [linLx, linLy, linLz] = zefCore.tesLeadField (linR, Gx, Gy, Gz) ;
+%
+% linpLx = linLx (elementI,:) ;
+%
+% linpLy = linLy (elementI,:) ;
+%
+% linpLz = linLz (elementI,:) ;
+%
+% liniL = zefCore.intersperseArray ( [ linpLx ; linpLy ; linpLz ], 1, 3) ;
+%
+% linL = transpose (liniL) ;
 
 %% Computing a reference lead field.
 
@@ -171,7 +173,7 @@ refB = zefCore.potentialMat ( contactSurf, refZs, size (nodes,1) );
 
 refC = zefCore.impedanceMat (refZs);
 
-refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true) ;
+refT = zefCore.transferMatrix (refA,refB,tolerances=solverTol,useGPU=true,solver=solver) ;
 
 refS = zefCore.schurComplement (refT, ctranspose(refB), refC) ;
 
