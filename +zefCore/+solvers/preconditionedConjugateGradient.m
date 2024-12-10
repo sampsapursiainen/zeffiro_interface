@@ -30,7 +30,7 @@ function [ pos, relResNorm, ii ] = preconditionedConjugateGradient (A, startPoin
         b                     (:,1)
         kwargs.tolerance      (1,1) { mustBePositive } = 1e-5
         kwargs.preconditioner (:,:) = 1 ./ full ( diag ( A ) )
-        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
+        kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = size (A,1)
     end
 
     Asize = size ( A, 1 ) ;
