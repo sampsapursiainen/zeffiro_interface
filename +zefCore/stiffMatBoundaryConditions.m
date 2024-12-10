@@ -132,11 +132,39 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
 
     end % for snI
 
+    % Get lower and upper triangles, and diagonal of ∂A.
+
+    diagBool = Arows == Acols ;
+
+    upperTriBool = Arows < Acols ;
+
+    lowerTriBool = Arows > Acols ;
+
+    diagVals = Avals (diagBool) ;
+
+    upperVals = Avals (upperTriBool) ;
+
+    lowerVals = Avals (lowerTriBool) ;
+
+    % Make sure diagonal is real, since A is supposed to be Hermitian.
+
+    Avals (diagBool) = sqrt ( conj (diagVals) .* diagVals  ) ;
+
+    % Formulate the boundary ∂A.
+
+    boundaryA = sparse ( Arows (diagBool), Acols (diagBool), Avals (diagBool), nN, nN ) ;
+
+    boundaryA = boundaryA + sparse ( Arows (lowerTriBool), Acols (lowerTriBool), Avals (lowerTriBool), nN, nN ) ;
+
+    boundaryA = boundaryA + sparse ( Arows (upperTriBool), Acols (upperTriBool), Avals (upperTriBool), nN, nN ) ;
+
+    boundaryA = boundaryA + sparse ( Acols (lowerTriBool), Arows (lowerTriBool), conj ( Avals (lowerTriBool) ) , nN, nN ) ;
+
+    boundaryA = boundaryA + sparse ( Acols (upperTriBool), Arows (upperTriBool), conj ( Avals (upperTriBool) ) , nN, nN ) ;
+
     % Apply boundary conditions to A.
 
-    Addend = sparse ( Arows, Acols, Avals, nN, nN ) ;
-
-    A = A + Addend + ctranspose (Addend) ;
+    A = A + boundaryA ;
 
 end % function
 
