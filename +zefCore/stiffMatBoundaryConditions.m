@@ -148,7 +148,7 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
 
     % Make sure diagonal is real, since A is supposed to be Hermitian.
 
-    Avals (diagBool) = sqrt ( conj (diagVals) .* diagVals  ) ;
+    Avals (diagBool) = real ( diagVals ) ;
 
     % Formulate the boundary ∂A.
 
