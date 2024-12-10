@@ -133,7 +133,7 @@ function A = stiffnessMat(nodes, tetra, tetraV, tensor)
             % anti-symmetric in its imaginary part (Hermitian), we add whatever
             % is in the upper triangle to the lower triangle, and vice versa.
 
-            A = A + sparse ( Arows(diagB), Acols(diagB), real(integrand(diagB)), Nn, Nn) ;
+            A = A + sparse ( Arows(diagB), Acols(diagB), sqrt ( conj ( integrand (diagB) ) .* integrand (diagB) ), Nn, Nn) ;
 
             A = A + sparse ( Arows(upperTriB), Acols(upperTriB), integrand(upperTriB), Nn, Nn) ;
 
