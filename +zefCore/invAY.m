@@ -10,6 +10,7 @@ function X = invAY (A, Y, kwargs)
         Y (:,:)
         kwargs.tolerance (1,1) double { mustBeReal, mustBePositive, mustBeFinite } = 1e-12
         kwargs.useGPU    (1,1) logical = true
+        kwargs.solver (1,1) function_handle = zefCore.solvers.preconditionedConjugateGradient
     end
 
     [ Nr, Nc ] = size (Y) ;
@@ -20,7 +21,7 @@ function X = invAY (A, Y, kwargs)
 
     rhs = Y (:,ucols) ;
 
-    T = zefCore.transferMatrix (A, rhs, tolerances=kwargs.tolerance,useGPU=kwargs.useGPU) ;
+    T = zefCore.transferMatrix (A, rhs, tolerances=kwargs.tolerance, useGPU=kwargs.useGPU, solver=kwargs.solver) ;
 
     X = sparse (Nr,Nc) ;
 

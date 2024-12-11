@@ -55,6 +55,7 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, new
         newElectrodes (1,1) zefCore.ElectrodeSet
         colI       (:,1) double { mustBePositive, mustBeInteger }
         kwargs.indent (1,1) double { mustBeNonnegative, mustBeInteger } = 2
+        kwargs.solver (1,1) function_handle = zefCore.solvers.preconditionedConjugateGradient
     end
 
     disp (newline + "Linearizing resistivity matrix. newR = newR" + newline) ;
@@ -91,11 +92,11 @@ function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, new
 
         dAdZ = zefCore.dAdZ ( Ms{col}, Z, contactSurface.totalSurfaceArea ) ;
 
-        invAdAdZ = zefCore.invAY (A,dAdZ) ;
+        invAdAdZ = zefCore.invAY (A, dAdZ, solver=kwargs.solver) ;
 
         dBdZ = zefCore.dBdZ ( Bs{col}, Z ) ;
 
-        invAdBdZ = zefCore.invAY (A,dBdZ) ;
+        invAdBdZ = zefCore.invAY (A, dBdZ, solver=kwargs.solver) ;
 
         dCdZ = zefCore.dCdZ ( Z, col, electrodeN ) ;
 
