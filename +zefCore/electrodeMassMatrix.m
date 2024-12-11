@@ -63,8 +63,6 @@ function Ms = electrodeMassMatrix (N, superNodes, kwargs)
 
     for snI = 1 : snN
 
-        Ms {snI} = sparse (N,N) ;
-
         % Find out the nodes that the surface of this supernode is made of and
         % its area. If the area of the supernode is too small, it is
         % interpreted as a point electrode and only the supernode center will
@@ -135,7 +133,39 @@ function Ms = electrodeMassMatrix (N, superNodes, kwargs)
 
         snRange = snCursor : range (1) - 1 ;
 
-        Ms {snI} = Ms {snI} + sparse ( Mrows (snRange), Mcols (snRange), Mvals (snRange), N, N ) ;
+        snMrows = Mrows (snRange) ;
+
+        snMcols = Mcols (snRange) ;
+
+        snMvals = Mvals (snRange) ;
+
+        diagBool = snMrows == snMcols ;
+
+        upperTriBool = snMrows < snMcols ;
+
+        lowerTriBool = snMrows > snMcols ;
+
+        diagVals = snMvals (diagBool) ;
+
+        % Make sure diagonal is real, since A is supposed to be Hermitian.
+
+        Mvals (diagBool) = real ( diagVals ) ;
+
+        % Formulate the boundary ∂A.
+
+        M = sparse (N,N) ;
+
+        M = M + sparse ( snMrows (diagBool), snMcols (diagBool), snMvals (diagBool), N, N ) ;
+
+        M = M + sparse ( snMrows (lowerTriBool), snMcols (lowerTriBool), snMvals (lowerTriBool), N, N ) ;
+
+        M = M + sparse ( snMrows (upperTriBool), snMcols (upperTriBool), snMvals (upperTriBool), N, N ) ;
+
+        M = M + sparse ( snMcols (lowerTriBool), snMrows (lowerTriBool), conj ( snMvals (lowerTriBool) ) , N, N ) ;
+
+        M = M + sparse ( snMcols (upperTriBool), snMrows (upperTriBool), conj ( snMvals (upperTriBool) ) , N, N ) ;
+
+        Ms {snI} = M ;
 
     end % for snI
 
