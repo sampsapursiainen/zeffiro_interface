@@ -68,7 +68,7 @@ function T = transferMatrix ( A, B, kwargs )
         kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.useGPU         (1,1) logical = true
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
-        kwargs.solver (1,1) function_handle = @zefCore.solvers.biConjugateGradientStabilized
+        kwargs.solver (1,1) function_handle = @zefCore.solvers.preconditionedConjugateGradient
     end
 
     disp (newline + "Building a transfer matrix T = A \ B:") ;
