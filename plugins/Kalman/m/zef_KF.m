@@ -55,7 +55,7 @@ if nargin > 1
 else
     zef_init_gaussian_prior_options;
     evolution_prior_db = zef.inv_evolution_prior;
-    q_value = find_evolution_prior(L, theta0, number_of_frames, evolution_prior_db);
+    q_value = find_evolution_prior(L, theta0, number_of_frames, evolution_prior_db, pm_val, snr_val);
     Q = q_value*eye(size(L,2));
 end
 reconstruction_information.Q = q_value;
