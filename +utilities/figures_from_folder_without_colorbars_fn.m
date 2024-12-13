@@ -66,7 +66,7 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
     % Go over the axes in each figure and find out the maximum color
     % range in each figure.
 
-    colorLims = [Inf, -Inf] ;
+    colorLims = [Inf; -Inf] ;
 
     if kwargs.useSameColorLims
 
@@ -76,13 +76,13 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
             allAxesInFigure = findall (fig, 'type', 'axes') ;
 
-            axisN = numel (allAxisInFigure) ;
+            axisN = numel (allAxesInFigure) ;
 
             for jj = 1 : axisN
 
                 axes = allAxesInFigure (jj) ;
 
-                axColorLim = axes.Clim ;
+                axColorLim = axes.CLim ;
 
                 if axColorLim (1) < colorLims (1)
 

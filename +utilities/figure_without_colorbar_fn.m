@@ -70,7 +70,7 @@ function figure_without_colorbar_fn(figtool, filename, filetypes, resolution, kw
 
     allAxesInFigure = findall (figtool, 'type', 'axes') ;
 
-    axisN = numel (allAxisInFigure) ;
+    axisN = numel (allAxesInFigure) ;
 
     [ ~, colorLimN ] = size (kwargs.colorLims) ;
 
@@ -80,11 +80,11 @@ function figure_without_colorbar_fn(figtool, filename, filetypes, resolution, kw
 
         if axisN > colorLimN && colorLimN == 1
 
-            axes.Clim = colorLimN (:,1) ;
+            axes.CLim = kwargs.colorLims (:,1) ;
 
         elseif axisN == colorLimN
 
-            axes.Clim = kwargs.colorLims (:,ii) ;
+            axes.CLim = kwargs.colorLims (:,ii) ;
 
         else
 
