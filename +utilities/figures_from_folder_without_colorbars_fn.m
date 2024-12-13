@@ -26,6 +26,12 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 %   Determines whether the figures should share the same most extensive color
 %   scale found within their axes.
 %
+% - kwargs.axisType = "UIAxes"
+%
+%   Allows a caller to specify which types of axes are sought in the figures.
+%   Just in case somebody goes and changes how the Zeffiro Interface Figure
+%   tool is constructed.
+%
 
     arguments
 
@@ -36,6 +42,8 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
         resolution (1,1) double { mustBePositive }
 
         kwargs.useSameColorLims (1,1) logical = false
+
+        kwargs.axisType (1,1) string = "UIAxes"
 
     end
 
@@ -74,7 +82,7 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
             fig = figArray (ii) ;
 
-            allAxesInFigure = findall (fig, 'type', 'axes') ;
+            allAxesInFigure = findall (fig, 'type', kwargs.axisType) ;
 
             axisN = numel (allAxesInFigure) ;
 
