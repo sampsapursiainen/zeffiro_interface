@@ -1,6 +1,6 @@
-function figures_from_folder_without_colorbars(folder, filetypes, resolution)
+function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution, kwargs)
 %
-% figures_from_folder_without_colorbars
+% figures_from_folder_without_colorbars(folder, filetypes, resolution, kwargs)
 %
 % Collects the figures from a given folder, disables their colorbars and saves
 % them using utilities.figure_without_colorbar_fn.
@@ -21,6 +21,11 @@ function figures_from_folder_without_colorbars(folder, filetypes, resolution)
 %   The resolution the images will be save in, if PNG is used as output
 %   format.
 %
+% - kwargs.useSameColorLims = false
+%
+%   Determines whether the figures should share the same most extensive color
+%   scale found within their axes.
+%
 
     arguments
 
@@ -30,27 +35,92 @@ function figures_from_folder_without_colorbars(folder, filetypes, resolution)
 
         resolution (1,1) double { mustBePositive }
 
+        kwargs.useSameColorLims (1,1) logical = false
+
     end
 
-    file_structs = dir ( fullfile ( folder, "**", "*.fig" ) ) ;
+    fileStructs = dir ( fullfile ( folder, "**", "*.fig" ) ) ;
 
-    for si = 1 : numel ( file_structs )
+    fileN = numel (fileStructs) ;
 
-        file_struct = file_structs ( si ) ;
+    % Collect figures and their cleanup objects into arrays .
 
-        file_path = fullfile ( folder_fn ( file_struct ), name_fn ( file_struct ) ) ;
+    figArray = gobjects (fileN,1) ;
 
-        [stem, name, ext] = fileparts ( file_path ) ;
+    cleanUpArray (fileN) = onCleanup (@nop) ;
 
-        path_without_ext = fullfile ( stem, name ) ;
+    for si = 1 : fileN
 
-        fig = openfig ( file_path ) ;
+        fileStruct = fileStructs ( si ) ;
 
-        cleanup_fn = @(ff) close (ff) ;
+        filePath = fullfile ( folder_fn ( fileStruct ), name_fn ( fileStruct ) ) ;
 
-        cleanup_obj = onCleanup ( @() cleanup_fn ( fig ) ) ;
+        figArray (si) = openfig ( filePath ) ;
 
-        utilities.figure_without_colorbar_fn ( fig, path_without_ext, filetypes, resolution ) ;
+        cleanUpFn = @(ff) close (ff) ;
+
+        cleanUpArray (si) = onCleanup ( @() cleanUpFn ( figArray (si) ) ) ;
+
+    end
+
+    % Go over the axes in each figure and find out the maximum color
+    % range in each figure.
+
+    colorLims = [Inf, -Inf] ;
+
+    if kwargs.useSameColorLims
+
+        for ii = 1 : fileN
+
+            fig = figArray (ii) ;
+
+            allAxesInFigure = findall (fig, 'type', 'axes') ;
+
+            axisN = numel (allAxisInFigure) ;
+
+            for jj = 1 : axisN
+
+                axes = allAxesInFigure (jj) ;
+
+                axColorLim = axes.Clim ;
+
+                if axColorLim (1) < colorLims (1)
+
+                    colorLims (1) = axColorLim (1) ;
+
+                end % if
+
+                if axColorLim (2) > colorLims (2)
+
+                    colorLims (2) = axColorLim (2) ;
+
+                end % if
+
+            end % for jj
+
+        end % for ii
+
+    end % if
+
+    if any ( isinf (colorLims) )
+
+        colorLims = [] ;
+
+    end % if
+
+    % Actually save figures.
+
+    for si = 1 : fileN
+
+        fileStruct = fileStructs ( si ) ;
+
+        filePath = fullfile ( folder_fn ( fileStruct ), name_fn ( fileStruct ) ) ;
+
+        [stem, name, ~] = fileparts ( filePath ) ;
+
+        pathWithoutExt = fullfile ( stem, name ) ;
+
+        utilities.figure_without_colorbar_fn ( figArray (si), pathWithoutExt, filetypes, resolution, colorLims=colorLims ) ;
 
     end
 
@@ -58,38 +128,38 @@ end % function
 
 %% Helper functions
 
-function name = name_fn(file_struct)
+function name = name_fn(fileStruct)
 
     arguments
 
-        file_struct (1,1) struct
+        fileStruct (1,1) struct
 
     end
 
-    if not ( isfield ( file_struct, "name" ) )
+    if not ( isfield ( fileStruct, "name" ) )
 
         error ( "The given file struct did not contain the field 'name'. Aborting..." ) ;
 
     end
 
-    name = string ( file_struct.name ) ;
+    name = string ( fileStruct.name ) ;
 
 end % function
 
-function folder = folder_fn(file_struct)
+function folder = folder_fn(fileStruct)
 
     arguments
 
-        file_struct (1,1) struct
+        fileStruct (1,1) struct
 
     end
 
-    if not ( isfield ( file_struct, "folder" ) )
+    if not ( isfield ( fileStruct, "folder" ) )
 
         error ( "The given file struct did not contain the field 'folder'. Aborting..." ) ;
 
     end
 
-    folder = string ( file_struct.folder ) ;
+    folder = string ( fileStruct.folder ) ;
 
 end % function
