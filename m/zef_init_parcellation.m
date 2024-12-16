@@ -32,6 +32,26 @@ if not(isfield(zef,'use_parcellation'));
     zef.use_parcellation = 0;
 end;
 
+if not(isfield(zef,'parcellation_roi_name'));
+    zef.parcellation_roi_name{1} = 'User-defined ROI';
+end;
+
+if not(isfield(zef,'parcellation_roi_center'));
+    zef.parcellation_roi_center = [0 0 0];
+end;
+
+if not(isfield(zef,'parcellation_roi_radius'));
+    zef.parcellation_roi_radius = 10;
+end;
+
+if not(isfield(zef,'parcellation_roi_color'));
+    zef.parcellation_roi_color = [0.56078 0.91373 1];
+end;
+
+if not(isfield(zef,'parcellation_roi_selected'));
+    zef.parcellation_roi_selected = 1;
+end;
+
 zef.time_series_tools_dir = fileparts(which('zef_time_series_plot.m'));
 zef.time_series_tools_name_list = cell(0);
 zef.time_series_tools_file_list = cell(0);
