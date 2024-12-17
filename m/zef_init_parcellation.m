@@ -68,9 +68,3 @@ for zef_i = 1 : length(zef.time_series_tools_file_list)
 end
 [zef.time_series_tools_name_list, zef.aux_field] = sort(zef.time_series_tools_name_list);
 zef.time_series_tools_file_list = zef.time_series_tools_file_list(zef.aux_field);
-
-if not(isempty(zef.time_series_tools_name_list))
-    set(zef.h_time_series_tools_list,'string',zef.time_series_tools_name_list,'Value',1);
-end
-
-zef = zef_update_parcellation(zef);
