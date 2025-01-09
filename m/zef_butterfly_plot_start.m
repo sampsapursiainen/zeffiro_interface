@@ -4,7 +4,7 @@ function zef = zef_butterfly_plot_start(zef)
 
 zef_butterfly_plot_app;
 
-set(zef.h_butterfly_plot,'Name','ZEFFIRO Interface: Butterfly_plot');
+set(zef.h_butterfly_plot,'Name','ZEFFIRO Interface: Butterfly plot');
 set(findobj(zef.h_butterfly_plot.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_butterfly_plot.Children,'-property','FontSize'),'FontSize',9);
 zef_init_butterfly_plot;
