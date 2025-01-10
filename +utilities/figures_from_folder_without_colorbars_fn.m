@@ -55,7 +55,7 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
     figArray = gobjects (fileN,1) ;
 
-    cleanUpArray (fileN) = onCleanup (@nop) ;
+    cleanUpArray (fileN) = onCleanup (@(x) []) ;
 
     for si = 1 : fileN
 
