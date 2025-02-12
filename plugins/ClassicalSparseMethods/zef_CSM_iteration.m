@@ -24,7 +24,7 @@ if method_type == 1
     reconstruction_information.tag = 'CSM/dSPM';
 elseif method_type == 2
     reconstruction_information.tag = 'CSM/sLORETA';
-elseif method_type == 4
+elseif method_type == 3
     reconstruction_information.tag = 'CSM/sLORETA-3D';
 elseif method_type == 4
     reconstruction_information.tag = 'CSM/SBL';
@@ -42,18 +42,16 @@ reconstruction_information.number_of_frames = evalin('base','zef.number_of_frame
 
 [L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
 
+z = cell(number_of_frames,1);
+f_data = zef_getFilteredData;
+size_f = size(f_data,2);
+f_data=cell2mat(arrayfun(@(x) zef_getTimeStep(f_data, x), 1:number_of_frames, 'UniformOutput', false));
 
-[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),evalin('base','zef.normalize_data'),0);
-
+theta0 = (1-std_lhood^2)*sum(f_data.^2,'all')/sum(L.^2,'all');
 
 if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
     L = gpuArray(L);
 end
-
-z = cell(number_of_frames,1);
-f_data = zef_getFilteredData;
-size_f = size(f_data,2);
-
 
 %_ Time Serie Loop _
 tic;
@@ -63,7 +61,7 @@ for f_ind = 1 : number_of_frames
         date_str = datestr(datevec(now+(number_of_frames/(f_ind-1) - 1)*time_val/86400)); %what does that do?
         waitbar(100,h,['Step ' int2str(f_ind) ' of ' int2str(number_of_frames) '. Ready: ' date_str '.' ]);
     end
-    f=zef_getTimeStep(f_data, f_ind);
+    f=f_data(:, f_ind);
     z_vec = nan(size(L,2),1);
 
     if evalin('base','zef.use_gpu') == 1 && gpuDeviceCount > 0
