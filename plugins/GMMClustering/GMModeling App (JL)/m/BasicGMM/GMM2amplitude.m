@@ -36,7 +36,10 @@ else
     if sum(amp<0)>0 || sum(amp>0)==0
         amp = sqrt(z(1:n_interp).^2+z((1:n_interp)+n_interp).^2+z((1:n_interp)+2*n_interp).^2);
     end
+    
+end
+
 
 end
 
-end
+
