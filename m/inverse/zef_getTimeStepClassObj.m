@@ -1,4 +1,4 @@
-function [f,t] = zef_getTimeStep(f_data, f_ind, zef)
+function [f,t] = zef_getTimeStepClassObj(f_data, f_ind, zef, ClassObj)
 %zef_getTimeStep gets the time windows and segments of f_data that are
 %specified in the zef.inv_time* parameters. f_ind gives the number of the given window (first, second, third ...)
 % if there is only one time step, f_data is returned.
@@ -13,24 +13,18 @@ end
 
 if isequal(zef.inv_data_mode,'filtered_temporal')
   
-if isfield(zef,'inv_time_3')
-    time_step = eval(['zef.inv_time_3']);
-else
-    time_step = Inf;
-end
+time_step = ClassObj.time_step;
 
-sampling_freq = eval(['zef.inv_sampling_frequency']);
+
+sampling_freq = ClassObj.sampling_frequency;
 
 size_Data=size(f_data,2);
 
-if not(isfield(zef,'inv_time_2'))
-zef.inv_time_2 = 0;
-end
 
 if size_Data>1
-    if eval(['zef.inv_time_2']) >=0 && eval(['zef.inv_time_1']) >= 0 && 1 + sampling_freq*eval(['zef.inv_time_1']) <= size_Data
-        t_ind = max(1, 1 + floor(sampling_freq*eval(['zef.inv_time_1'])+sampling_freq*(f_ind - 1)*time_step)) : ...
-            min(size_Data, 1 + floor(sampling_freq*(eval(['zef.inv_time_1']) + eval(['zef.inv_time_2']))+sampling_freq*(f_ind - 1)*time_step));
+    if ClassObj.time_window >=0 && ClassObj.time_start >= 0 && 1 + sampling_freq*ClassObj.time_start <= size_Data
+        t_ind = max(1, 1 + floor(sampling_freq*ClassObj.time_start + sampling_freq*(f_ind - 1)*time_step)) : ...
+            min(size_Data, 1 + floor(sampling_freq*(ClassObj.time_start + ClassObj.time_window)+sampling_freq*(f_ind - 1)*time_step));
         f = f_data(:, t_ind);
         t = (double(t_ind)-1)./sampling_freq;
     end
@@ -48,6 +42,10 @@ elseif isequal(zef.inv_data_mode,'raw')
     
    f = f_data(:,f_ind);
     
+end
+
+if size(f,2) > 1
+    f = mean(f,2);
 end
 
 end

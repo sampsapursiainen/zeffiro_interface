@@ -28,7 +28,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     % the waitbar, if there is an interruption with Ctrl + C or when this
     % function exits.
 
-    waitbar_title = "Building reconstructions with " + class(MethodClassObj) + ".";
+    waitbar_title = "Building reconstructions with " + erase(class(MethodClassObj),["inverse","Inverter","."]) + ".";
 
     waitbar_handle = zef_waitbar(0, waitbar_title);
 
@@ -47,13 +47,6 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     zef.reconstruction_information.source_direction_mode = zef.source_direction_mode;
     zef.reconstruction_information.source_directions = zef.source_directions;
 
-    %method specific information
-    props = properties(MethodClassObj);
-
-    for n = 1:length(props)
-        zef.reconstruction_information.(props{n}) = MethodClassObj.(props{n});
-    end
-
     [L,n_interp, procFile] = zef_processLeadfields(zef);
 
     if source_direction_mode == 1  || source_direction_mode == 2
@@ -64,7 +57,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
         L = L(:,s_reorder_ind);
     end
 
-    % Set up the source space of selected brain compartments:
+    % Set up the source space of active brain compartments:
 
     source_positions = zef.source_positions(procFile.s_ind_0,:);
 
@@ -78,9 +71,12 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     % with cell2mat without much extra effort. Many other softwares uses the
     % matrix format.
 
-    z_inverse = cell(zef.number_of_frames,1);
-
-    f_data = zef_getFilteredData(zef);
+    z_inverse = cell(1,MethodClassObj.number_of_frames);
+    f_data = zef_getFilteredDataClassObj(zef,MethodClassObj);
+    if ismethod(MethodClassObj,'initialize')
+        f_data_framed = cell2mat(arrayfun(@(x) zef_getTimeStepClassObj(f_data, x, zef, MethodClassObj), 1:MethodClassObj.number_of_frames, 'UniformOutput', false));
+        MethodClassObj = MethodClassObj.initialize(L, f_data_framed);
+    end
 
     tic;
 
@@ -88,7 +84,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
 
         time_val = toc;
 
-        f = zef_getTimeStep(f_data, f_ind, zef);
+        f = zef_getTimeStepClassObj(f_data, f_ind, zef, MethodClassObj);
 
         if zef.use_gpu && zef.gpu_count > 0
             f = gpuArray(f);
@@ -103,20 +99,20 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
         end
 
         zef_waitbar( ...
-            f_ind/zef.number_of_frames, ...
+            f_ind/MethodClassObj.number_of_frames, ...
             waitbar_handle, ...
             waitbar_title ...
                 + " Time step " ...
                 +  int2str(f_ind) ...
                 + " of " ...
-                + int2str(zef.number_of_frames) ...
+                + int2str(MethodClassObj.number_of_frames) ...
                 + "." ...
                 + date_str ...
         );
 
         % Build this frame's reconstruction.
 
-        z_vec = MethodClassObj.invert( ...
+        [z_vec, MethodClassObj] = MethodClassObj.invert( ...
             f, ...
             L, ...
             procFile, ...
@@ -126,10 +122,34 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
             "normalize_data", zef.normalize_data ...
         );
 
-        z_inverse{f_ind} = z_vec(s_back_ind);
+        z_inverse{f_ind} = z_vec;%(s_back_ind);
 
     end % for
 
-    zef.reconstruction = zef_postProcessInverse(z_inverse, procFile);
+    if ismethod(MethodClassObj,'smoother')
+        [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse);
+    end
+
+    if ismethod(MethodClassObj,'terminateComputation')
+        MethodClassObj = MethodClassObj.terminateComputation;
+    end
+
+    if MethodClassObj.normalize_reconstruction
+       z_vec = reshape(cell2mat(z_inverse).^2,3,procFile.n_interp,MethodClassObj.number_of_frames);
+       z_vec = squeeze(sum(z_vec,1));
+       normalization_factor = sqrt(max(z_vec,[],'all'));
+       z_vec = cell2mat(z_inverse)/normalization_factor;
+       z_inverse = mat2cell(z_vec,size(z_vec,1),ones(1,MethodClassObj.number_of_frames));
+    end
+    zef.reconstruction = zef_postProcessInverseClassObj(z_inverse, procFile);
+
+    %method specific reconstruction information
+    props = properties(MethodClassObj);
+
+    for n = 1:length(props)
+        if min(size(MethodClassObj.(props{n}))) < 2
+            zef.reconstruction_information.(props{n}) = MethodClassObj.(props{n});
+        end
+    end
 
 end % function

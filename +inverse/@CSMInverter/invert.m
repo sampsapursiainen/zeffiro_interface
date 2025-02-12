@@ -1,4 +1,5 @@
-function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_positions, opts)
+%% Copyright © 2025- Joonas Lahtinen 
+function [z_vec, self] = invert(self, f, L, procFile, source_direction_mode, source_positions, opts)
 
     %
     % invert
@@ -64,25 +65,22 @@ function [z_vec] = invert(self, f, L, procFile, source_direction_mode, source_po
     % waitbar, if there is an interruption with Ctrl + C or when this function
     % exits.
 
-    h = zef_waitbar(0,'CSM Reconstruction.');
-
-    cleanup_fn = @(wb) close(wb);
-
-    cleanup_obj = onCleanup(@() cleanup_fn(h));
+    if self.number_of_frames <= 1
+        h = zef_waitbar(0,'CSM Reconstruction.');
+        cleanup_fn = @(wb) close(wb);
+        cleanup_obj = onCleanup(@() cleanup_fn(h));
+    end
 
     % Get needed parameters from self and others.
 
     number_of_frames = self.number_of_frames;
-    snr_val = self.signal_to_noise_ratio;
     std_lhood = 10^(-self.signal_to_noise_ratio/20);
-    pm_val = self.inv_prior_over_measurement_db;
-    amplitude_db = self.inv_amplitude_db;
-    pm_val = pm_val - amplitude_db;
     n_interp = length(procFile.s_ind_0);
 
     % Then start inverting.
 
-    [theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),self.data_normalization_method,0);
+    theta0 = self.theta0;
+    %[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),self.data_normalization_method,0);
 
     if ismember(self.method_type, ["dSPM" ; "sLORETA" ; "sLORETA 3D"])
 

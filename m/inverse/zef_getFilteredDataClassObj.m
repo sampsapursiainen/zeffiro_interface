@@ -1,4 +1,4 @@
-function [f] = zef_getFilteredData(zef)
+function [f] = zef_getFilteredDataClassObj(zef,ClassObj)
 %zef_getFilteredData reads the datafrom zef.measurement and applies the
 %filter that are specified in zef.inv_low_cut_frequency and
 %zef.inv_low_cut_frequency at a sampling frequency of
@@ -9,27 +9,25 @@ if (nargin == 0)
 zef = evalin('base','zef');
 end 
 
-if isequal(zef.inv_data_mode,'filtered_temporal')
+if isequal(zef.inv_data_mode,'filtered_temporal') %what is this???
 
     f = eval('zef.measurements');
     
-high_pass = eval(['zef.inv_low_cut_frequency']);
-low_pass = eval(['zef.inv_high_cut_frequency']);
-sampling_freq = eval(['zef.inv_sampling_frequency']);
+high_pass = ClassObj.low_cut_frequency;
+low_pass = ClassObj.high_cut_frequency;
+sampling_freq = ClassObj.sampling_frequency;
 
-if isfield(zef,'normalize_data')
-switch eval('zef.normalize_data')
-    case 1
+switch ClassObj.data_normalization_method
+    case "maximum entry"
         data_norm = max(abs(f(:)));
-    case 2
+    case "maximum column norm"
         data_norm = max(sqrt(sum(abs(f).^2)));
-    case 3
+    case "average column norm"
         data_norm = sum(sqrt(sum(abs(f).^2)))/size(f,2);
     otherwise
         data_norm = 1;
 end
 f = f/data_norm;
-end
 
 filter_order = 3;
 if size(f,2) > 1 && low_pass > 0

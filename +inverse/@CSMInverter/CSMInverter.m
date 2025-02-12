@@ -1,10 +1,17 @@
-classdef CSMInverter < inverse.CommonInverseParameters
+%% Copyright © 2025- Joonas Lahtinen
+classdef CSMInverter < inverse.CommonInverseParameters & handle
 
     %
     % CSMInverter
     %
-    % A class which defines the properties needed by the MNE inversion method,
+    % A class which defines the properties needed by the Classical Sparse inversion methods (CSM),
     % and the method itself.
+    % The inverter consist four inversion methods:
+    % - dSPM (Dynamic statistical parametric mapping)
+    % - sLORETA (Standardized low-resolution brain electromagnetic
+    % tomography with independent oriental basis directions)
+    % - sLORETA 3D (sLORETA with correlated directions per source location)
+    % - SBL (Sparse Bayesian Learning)
     %
 
     properties
@@ -19,6 +26,11 @@ classdef CSMInverter < inverse.CommonInverseParameters
         %Iteration number for sparse Bayesian learning
         %
         SBL_number_of_iterations (1,1) int8 {mustBeNonnegative, mustBeInteger} = 1
+
+        %
+        % Prior variance
+        %
+        theta0 (1,1) {mustBeA(theta0,["double","gpuArray"])} = 1e-3
 
     end % properties
 
@@ -36,15 +48,15 @@ classdef CSMInverter < inverse.CommonInverseParameters
 
                 args.method_type = "dSPM"
 
-                args.SBL_number_of_iterations = 1;
+                args.theta0 = 1e-3
 
-                args.data_normalization_method = "maximum entry"
+                args.SBL_number_of_iterations = 1
+
+                args.normalize_reconstruction = false
+
+                args.data_normalization_method = "Maximum entry"
 
                 args.high_cut_frequency = 9
-
-                args.inv_amplitude_db = 20
-
-                args.inv_prior_over_measurement_db = 20
 
                 args.low_cut_frequency = 7
 
@@ -74,8 +86,7 @@ classdef CSMInverter < inverse.CommonInverseParameters
                 "time_window", args.time_window, ...
                 "time_step", args.time_step, ...
                 "signal_to_noise_ratio", args.signal_to_noise_ratio, ...
-                "inv_amplitude_db", args.inv_amplitude_db, ...
-                "inv_prior_over_measurement_db", args.inv_prior_over_measurement_db ...
+                "normalize_reconstruction", args.normalize_reconstruction...
             );
 
             % Initialize own fields.
@@ -84,12 +95,16 @@ classdef CSMInverter < inverse.CommonInverseParameters
 
             self.SBL_number_of_iterations = args.SBL_number_of_iterations;
 
+            self.theta0 = args.theta0;
+
         end
 
-        % Declare the inverse method defined in the file invert, in this same
+        % Declare the initialize and inverse method defined in the files invert and initialize in this same
         % folder.
+        
+        self = initialize(self)
 
-        reconstruction = invert(self, f, L, procFile, source_direction_mode)
+        [reconstruction, self] = invert(self, f, L, procFile, source_direction_mode)
 
     end % methods
 

@@ -1,4 +1,4 @@
-classdef CommonInverseParameters
+classdef (HandleCompatible) CommonInverseParameters < dynamicprops
 
     %
     % CommonInverseParameters
@@ -11,92 +11,102 @@ classdef CommonInverseParameters
         %
         % low_cut_frequency
         %
-        % TODO: description.
+        % Highpass passband edge frequency (Hz) used for the elliptic
+        % filter of order 3.
         %
-        low_cut_frequency (1,1) double { mustBePositive } = 7;
+        low_cut_frequency (1,1) double { mustBeNonnegative } = 7;
 
         %
         % high_cut_frequency
         %
-        % TODO: description.
+        % Lowpass passband edge frequency (Hz) used for the elliptic
+        % filter of order 3.
         %
-        high_cut_frequency (1,1) double { mustBePositive } = 9;
+        high_cut_frequency (1,1) double { mustBeNonnegative } = 9;
 
         %
         % data_normalization_method
         %
-        % TODO: description.
+        % Procedure type of data normalization. In ZI, the measurement data
+        % is considered as m x T matrix with m sensors and T time samples.
+        % Hence, all sensor outputs at the sample point t correspond to a
+        % column within this matrix. With that in mind, the normalization
+        % options are:
+        % - "Maximum entry" (maximum element of the data matrix)
+        % - "Maximum column norm" (maximum of columns' norms)
+        % - "Average column norm" (average of column norms)
+        % - "None"
         %
         data_normalization_method (1,1) string { mustBeMember( ...
             data_normalization_method, ...
-            [ "maximum entry", "maximum column norm", "average column norm", "none" ] ...
-        ) } = "maximum entry";
+            [ "Maximum entry", "Maximum column norm", "Average column norm", "None" ] ...
+        ) } = "Maximum entry";
 
         %
         % number_of_frames
         %
-        % TODO: description.
+        % Number of subsequent sampling points taken into account starting
+        % from the start_time time point.
         %
         number_of_frames (1,1) double { mustBeInteger, mustBePositive } = 1;
 
         %
-        % prior_mode
-        %
-        % TODO: description.
-        %
-        prior_mode (1,1) string { mustBeMember( ...
-            prior_mode, ...
-            [ "balanced", "constant" ] ...
-        ) } = "constant";
-
-        %
         % sampling_frequency
         %
-        % TODO: description.
+        % Sampling frequency of the given measurement data.
         %
         sampling_frequency (1,1) double { mustBeReal, mustBePositive } = 1025;
 
         %
         % time_start
         %
-        % TODO: description.
+        % Measurement data time point (in seconds) at which the inversion
+        % calculation is supposed to begin. Setting sampling_frequency
+        % accordingly is advisable.
         %
         time_start (1,1) double { mustBeReal, mustBeNonnegative } = 0;
 
         %
         % time_window
         %
-        % TODO: description.
+        % Time interval used in average smoothing of the measurement data.
         %
         time_window (1,1) double { mustBeReal, mustBeNonnegative } = 0;
 
         %
         % time_step
         %
-        % TODO: description.
+        % The time interval used as a step size when progressing the
+        % measurement data over time. Using 1-over-sampling frequency is
+        % advisable to take every data sample point into account.
         %
         time_step (1,1) double { mustBeReal, mustBePositive } = 1;
 
         %
         % signal_to_noise_ratio
         %
-        % TODO: description.
+        % Value describes the ratio of pure signal power with respect to
+        % the noise power. The value is in decibels (dB) units.
         %
         signal_to_noise_ratio (1,1) double { mustBeReal, mustBePositive } = 30;
 
         %
-        % inv_amplitude_db
+        % normalize reconstruction
         %
-        % TODO: description.
+        % Logical value describing, if the maximum reconstruction magnitude
+        % over discrete mesh-based source locations is normalized to one.
+        % In the case of time serial data, the reconstruction of each time
+        % steps is normalized by the maximum magnitude over the whole time
+        % series.
         %
-        inv_amplitude_db (1,1) double = 20;
+        normalize_reconstruction (1,1) logical = false;
 
         %
-        % inv_prior_over_measurement_db
+        % GMM
         %
-        % TODO: description.
+        % Gaussian mixture model structure
         %
-        inv_prior_over_measurement_db (1,1) double = 20;
+        GMM struct = struct;
 
     end % properties
 
@@ -177,11 +187,9 @@ classdef CommonInverseParameters
 
                 args.high_cut_frequency = 9;
 
-                args.data_normalization_method = "maximum entry";
+                args.data_normalization_method = "Maximum entry";
 
                 args.number_of_frames = 1;
-
-                args.prior_mode = "constant";
 
                 args.sampling_frequency = 1025;
 
@@ -193,9 +201,7 @@ classdef CommonInverseParameters
 
                 args.signal_to_noise_ratio = 30;
 
-                args.inv_amplitude_db = 20;
-
-                args.inv_prior_over_measurement_db = 20;
+                args.normalize_reconstruction = false;
 
             end % arguments
 
@@ -208,6 +214,70 @@ classdef CommonInverseParameters
             end
 
         end % function
+
+        function self = withPropertiesFromZef(self, zef)
+            % Function to load the inversion computing parameters from the
+            % zef structure.
+            % Usage: ClassObject.withPropertiesFromZef(zef);
+
+             arguments
+                 self (1,1) inverse.CommonInverseParameters
+                 zef (1,1) struct
+             end
+            ValidDataOptions = ...
+                [ "Maximum entry", "Maximum column norm", "Average column norm", "None" ];
+
+            self.low_cut_frequency = zef.inv_low_cut_frequency;
+            self.high_cut_frequency = zef.inv_high_cut_frequency;
+            self.data_normalization_method = ValidDataOptions(zef.normalize_data);
+            self.number_of_frames = zef.number_of_frames;
+            self.sampling_frequency = zef.inv_sampling_frequency;
+            self.time_start = zef.inv_time_1;
+            self.time_window = zef.inv_time_2;
+            self.time_step = zef.inv_time_3;
+            self.signal_to_noise_ratio = zef.inv_snr;
+            self.normalize_reconstruction = false;
+
+        end  % withPropertiesFromZef function
+
+        function self = computeGMM(self,args)
+            % Function to compute Gaussian mixture model for the given
+            % reconstruction
+            arguments
+                 self (1,1) inverse.CommonInverseParameters
+                 args.reconstruction (:,:) {mustBeA(args.reconstruction,["double","gpuArray","cell"])}
+                 args.zef (1,1) struct
+                 args.number_of_clusters (1,:) int8 = 3
+                 args.sought_estimate (1,1) string {mustBeMember(args.sought_estimate,["Location & orientation","Location"])} = "Location & orientation"
+                 args.covariance_type (1,1) string {mustBeMember(args.covariance_type,["full","diagonal"])} = "full"
+                 args.MaxIter (1,1) int8 = 1000
+                 args.reconstruction_threshold (1,1) double = 0.25
+                 args.regularization_parameter (1,1) double = 1e-2
+                 args.SharedCovariance (1,1) logical = false
+                 args.use_selected_parcellations (1,1) logical = false
+                 args.amplitude_estimation_type (1,1) string {mustBeMember(args.amplitude_estimation_type,["Point density", "Maximal likelihood", "Maximum a posteriori"])} = "Point density"
+                 args.model_selection_criterion (1,1) string {mustBeMember(args.model_selection_criterion,["Given number of components","Bayesian information criterion","L2 density error"])} = "Bayesian information criterion"
+                 args.initial_cluster_finding_approach (1,1) string {mustBeMember(args.initial_cluster_finding_approach,["k-means ++","Maximum probability","Maximum component-wise fit"])} = "Maximum component-wise fit"
+                 args.number_of_replicates (1,1) int8 = 1
+                 args.log_posterior_threshold_dB (1,1) double = 6
+                 args.reconstruction_smoothing_std (1,1) double = 0
+                 args.mixture_component_probability (1,1) double = 0.95;
+                 args.start_frame (:,:) int8 = int8([])
+                 args.stop_frame (:,:) int8 = int8([])
+            end
+            zef = args.zef;
+            reconstruction = args.reconstruction;
+            args = rmfield(args,'zef');
+            args = rmfield(args,'reconstruction');
+            argcell = namedargs2cell(args);
+            self = plugins.ClassGMM.ClassGMModeling(self,reconstruction,zef,argcell{:});
+        end %computeGMM function
+
+        function [self, zef] = computeInversionWithZI(self, zef)
+            % Function to automatically update the reconstruction
+            % information to the given zef structure.
+            [zef, self] = zef_process_inversion(zef,self);
+        end
 
     end % methods
 
@@ -282,7 +352,31 @@ classdef CommonInverseParameters
 
             end % for
 
-        end % function
+        end % isAnInverter function
+
+        function self = substituteCommonInverseParameters(self,ParameterClassObj)
+            % Function to substitute a common set of inverse parameters
+            % between inverters or inverter and CommonInverseParameters
+            % object. The method automatically rejects the parameters that
+            % do not belong to the object where the parameters are
+            % substituted.
+            % ---------------------  Inputs  ---------------------
+            % 1st argument: Class object where the parameters are substituted
+            % 2nd argument: Class object from which the parameters are
+            % taken.
+            arguments
+                self (1,1)
+                ParameterClassObj (1,1) inverse.CommonInverseParameters
+            end
+            commonProps = convertCharsToStrings(properties(ParameterClassObj));
+            commonProps(strcmp(commonProps,"REQUIRED_METHODS"))=[];
+            Props = convertCharsToStrings(properties(self));
+            commonProps = intersect(commonProps,Props);
+            for ii = 1 : numel (commonProps)
+                prop = commonProps(ii);
+                self.(prop) = ParameterClassObj.(prop);
+            end
+        end %substituteCommonInverseParameters function
 
     end % methods (Static)
 
