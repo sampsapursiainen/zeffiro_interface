@@ -31,7 +31,7 @@ zef_data.update_diffusion = 0.5;
 zef_data.update_specular = 0.1;
 zef_data.colorscale_min_slider = 0;
 zef_data.colorscale_max_slider = 0;
-zef_data.colormap_size = 2048;
+zef_data.colormap_size = 256;
 zef_data.colorscale_min_slider = 0;
 zef_data.colorscale_max_slider = 0;
 zef_data.colormap_items = {'Monterosso','Intensity I','Intensity II','Intensity III','Contrast I','Contrast II','Contrast III','Contrast IV','Contrast V','Blue brain I','Blue brain II','Blue brain III','Parcellation','Easter','Greyscale'};
@@ -66,8 +66,9 @@ zef_data.matlab_release = version('-release');
 zef_data.matlab_release = str2num(zef_data.matlab_release(1:4)) + double(zef_data.matlab_release(5))/128;
 zef_data.mlapp = 1;
 zef_data.zeffiro_restart = 0;
-zef_data.zeffiro_verbose_mode = 1;
-zef_data.use_waitbar= 1;
+zef_data.verbose_mode = 1;
+zef_data.use_waitbar = 1;
+zef_data.always_show_waitbar = 0;
 
 %%% Here begins initialization variables
 zef_data.sensor_explosion_parameter_1 = 3;
@@ -164,6 +165,7 @@ zef_data.axes_visible= 0;
 zef_data.n_sources= 10000;
 zef_data.mesh_resolution= 3;
 zef_data.attach_electrodes= 1;
+zef_data.reuna_distance_vec = [];
 
 zef_data.source_direction_mode = 2;
 
@@ -229,24 +231,24 @@ zef_data.refinement_on = 0;
 zef_data.refinement_volume_on = 0;
 zef_data.refinement_volume_number = 1;
 zef_data.refinement_volume_on_2 = 0;
-zef_data.refinement_volume_on_3 = 0;
+%zef_data.refinement_volume_on_3 = 0;
 zef_data.refinement_volume_number_2 = 1;
-zef_data.refinement_volume_number_3 = 1;
+%zef_data.refinement_volume_number_3 = 1;
 zef_data.refinement_surface_number = 1;
 zef_data.refinement_surface_number_2 = 1;
-zef_data.refinement_surface_number_3 = 1;
+%zef_data.refinement_surface_number_3 = 1;
 zef_data.refinement_surface_mode = 1;
 zef_data.refinement_surface_mode_2 = 1;
-zef_data.refinement_surface_mode_3 = 1;
+%zef_data.refinement_surface_mode_3 = 1;
 zef_data.refinement_surface_on = 0;
 zef_data.refinement_surface_on_2 = 0;
-zef_data.refinement_surface_on_3 = 0;
+%zef_data.refinement_surface_on_3 = 0;
 zef_data.refinement_volume_compartments = -1;
 zef_data.refinement_volume_compartments_2 = -1;
-zef_data.refinement_volume_compartments_3 = -1;
+%zef_data.refinement_volume_compartments_3 = -1;
 zef_data.refinement_surface_compartments = -1;
 zef_data.refinement_surface_compartments_2 = -1;
-zef_data.refinement_surface_compartments_3 = -1;
+%zef_data.refinement_surface_compartments_3 = -1;
 zef_data.surface_sources = 0;
 zef_data.visualization_type = 1;
 zef_data.source_interpolation_on = 0;
@@ -316,9 +318,19 @@ zef_data.mesh_optimization_repetitions = 10;
 zef_data.mesh_optimization_parameter = 1E-5;
 zef_data.mesh_labeling_approach = 1;
 zef_data.current_log_file = '';
+zef_data.distance_smoothing_exp = 0.01;
+zef_data.distance_smoothing_on = 1;
+zef_data.smoothing_steps_dist = 0.9;
+zef_data.reuna_submesh_ind = cell(0);
+zef_data.reuna_mesh_ind = [];
 
+zef.fieldnames = fieldnames(zef_data);
 
-zef = zef_data;
+for zef_i = 1 : length(zef.fieldnames)
+    if not(isfield(zef,zef.fieldnames{zef_i}))
+    zef.(zef.fieldnames{zef_i}) = zef_data.(zef.fieldnames{zef_i});
+    end
+end
 
 clear zef_i zef_data;
 

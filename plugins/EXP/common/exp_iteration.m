@@ -66,7 +66,7 @@ reconstruction_information.exp_multires_sparsity = multires_sparsity_factor;
 h = zef_waitbar(0,1,[reconstruction_information.tag,' MAP iteration.']);
 
 [L,n_interp, procFile] = zef_processLeadfields(zef);
-f_data = zef_getFilteredData;
+f_data = zef_getFilteredData(zef);
 S_mat = std_lhood^2*max(f_data.^2,[],'all')*eye(size(L,1));
 if zef.use_gpu == 1 && gpuDeviceCount > 0
     L = gpuArray(L);

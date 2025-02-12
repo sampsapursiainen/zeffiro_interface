@@ -4,6 +4,8 @@ color_vec = uisetcolor;
 item_ind = evalin('base','zef.h_compartment_visible_color.Value');
 compartment_tags = evalin('base','zef.compartment_tags');
 
+if not(isequal(color_vec,0))
+
 zef_j = 0;
 for zef_i = length(compartment_tags) : -1 : 1
     if evalin('base',['zef.' compartment_tags{zef_i} '_on']) && evalin('base',['zef.' compartment_tags{zef_i} '_visible'])
@@ -18,5 +20,7 @@ for zef_i = length(compartment_tags) : -1 : 1
 end
 
 evalin('base',['zef.' compartment_tags{item_ind} '_color = [' num2str(color_vec) '];']);
+
+end
 
 end

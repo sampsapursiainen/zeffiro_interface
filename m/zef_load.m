@@ -23,19 +23,21 @@ if not(isequal(file_name,0))
 
     matfile_whos = whos('-file',[path_name filesep file_name]);
     matfile_fieldnames = {matfile_whos.name}';
+    I_mf = [1:length(matfile_fieldnames)];
 
     if isequal(length(matfile_fieldnames),1)
         load([path_name filesep file_name]);
         save([path_name filesep file_name],'-struct','zef_data','-v7.3');
         matfile_whos = whos('-file',[path_name filesep file_name]);
         matfile_fieldnames = {matfile_whos.name}';
+        I_mf = [1:length(matfile_fieldnames)];
     end
 
     if ismember('zeffiro_variable_data',matfile_fieldnames)
         aux_struct = load([path_name filesep file_name],'zeffiro_variable_data');
         zeffiro_variable_data = aux_struct.('zeffiro_variable_data');
         if not(isempty(zeffiro_variable_data))
-            matfile_fieldnames = setdiff(matfile_fieldnames,zeffiro_variable_data(:,2));
+            [matfile_fieldnames, I_mf] = setdiff(matfile_fieldnames,zeffiro_variable_data(:,2));
         end
     end
 
@@ -44,15 +46,30 @@ if not(isequal(file_name,0))
     if zef.use_display
         figure(h_waitbar);
     end
-    for i = 1 : n_fields
-        aux_struct = load([path_name filesep file_name],matfile_fieldnames{i});
+    
+    field_sizes = cell2mat({matfile_whos(I_mf).bytes});
+    I_fs = find(field_sizes <= 1e8);
+    matfile_fieldnames_aux = matfile_fieldnames(I_fs);
+    matfile_fieldnames = setdiff(matfile_fieldnames, matfile_fieldnames_aux);
+    n_fields_2 = length(I_fs);
+    zef_data_aux = eval(['load(''' fullfile(path_name,file_name) ''',' strjoin(strcat('"',matfile_fieldnames_aux,'"'),',')  ');']);
+    fieldnames_zef_data_aux = fieldnames(zef_data_aux);
+    for i = 1 : n_fields_2
+        zef_data.(fieldnames_zef_data_aux{i}) = zef_data_aux.(fieldnames_zef_data_aux{i});
+          if isequal(mod(i,ceil(n_fields_2/100)),0)
+            zef_waitbar(i,n_fields_2,h_waitbar,['Loading <=100 MB fields: ' num2str(i) ' / ' num2str(n_fields_2) '.']);
+        end
+    end
+
+  n_fields_1 = length(matfile_fieldnames);
+    for i = 1 : n_fields_1
+        aux_struct = load(fullfile(path_name,file_name),matfile_fieldnames{i});
         zef_data.(matfile_fieldnames{i}) = aux_struct.(matfile_fieldnames{i});
-        if isequal(mod(i,ceil(n_fields/100)),0)
-            zef_waitbar(i,n_fields,h_waitbar,['Loading fields: ' num2str(i) ' / ' num2str(n_fields) '.']);
+        if isequal(mod(i,ceil(n_fields_1/100)),0)
+            zef_waitbar(i,n_fields_1,h_waitbar,['Loading >100 MB fields: ' num2str(i) ' / ' num2str(n_fields_1) '.']);
         end
     end
     close(h_waitbar);
-    zef_data = zef_remove_object_handles(zef_data);
     zef_remove_system_fields;
     zef_data.project_matfile = [path_name filesep file_name];
 
@@ -76,6 +93,7 @@ if not(isequal(file_name,0))
     zef = rmfield(zef,'fieldnames');
 
     zef = zef_apply_system_settings(zef);
+    zef_data = zef_remove_object_handles(zef_data);
 
     zef.save_file = zef_data.save_file;
     zef.save_file_path = zef_data.save_file_path;

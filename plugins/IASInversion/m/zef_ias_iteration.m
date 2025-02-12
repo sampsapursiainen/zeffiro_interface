@@ -1,6 +1,6 @@
 %Copyright © 2018- Sampsa Pursiainen & ZI Development Team
 %See: https://github.com/sampsapursiainen/zeffiro_interface
-function [z,reconstruction_information] = ias_iteration(zef)
+function [z,reconstruction_information] = zef_ias_iteration(zef)
 
 inverse_gamma_ind = [1:4];
 gamma_ind = [5:10];
@@ -36,7 +36,7 @@ reconstruction_information.ias_hyperprior = eval('zef.ias_hyperprior');
 reconstruction_information.snr_val = eval('zef.ias_snr');
 reconstruction_information.pm_val = eval('zef.inv_prior_over_measurement_db');
 
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+[L,n_interp, procFile] = zef_processLeadfields(zef);
 
 source_count = n_interp;
 if eval('zef.ias_normalize_data')==1;
@@ -65,7 +65,7 @@ if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
     S_mat = gpuArray(S_mat);
 end
 
-[f_data] = zef_getFilteredData;
+[f_data] = zef_getFilteredData(zef);
 
 tic;
 

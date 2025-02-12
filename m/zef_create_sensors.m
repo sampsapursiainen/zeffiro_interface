@@ -30,6 +30,9 @@ field_cell_default =  {{'on', '1'}
     {'visible_list','[]'}
     {'names_visible','1'}
     {'color_table','[]'}
+    {'electrode_impedance', '2000'}
+    {'electrode_inner_radius', '2'}
+    {'electrode_outer_radius', '5'}
 {'get_functions','cell(0)'}};
 
 for i = 1 : length(field_cell_default)

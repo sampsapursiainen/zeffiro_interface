@@ -2,52 +2,55 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
     % Properties that correspond to app components
     properties (Access = public)
-        h_zeffiro_window_main         matlab.ui.Figure
-        h_axes2                       matlab.ui.control.Image
-        h_compartment_table           matlab.ui.control.Table
-        h_sensors_table               matlab.ui.control.Table
-        h_transform_table             matlab.ui.control.Table
-        h_project_information         matlab.ui.control.ListBox
-        CompartmentsLabel             matlab.ui.control.Label
-        ProjectinformationLabel       matlab.ui.control.Label
-        SensorsetsLabel               matlab.ui.control.Label
-        TransformLabel                matlab.ui.control.Label
-        h_parameters_table            matlab.ui.control.Table
-        h_sensors_name_table          matlab.ui.control.Table
-        SensorsLabel_2                matlab.ui.control.Label
-        ParametersLabel               matlab.ui.control.Label
-        ProjectnotesTextAreaLabel     matlab.ui.control.Label
-        h_project_notes               matlab.ui.control.TextArea
-        ProjecttagEditFieldLabel      matlab.ui.control.Label
-        h_project_tag                 matlab.ui.control.EditField
-        ProfileDropDownLabel          matlab.ui.control.Label
-        h_profile_name                matlab.ui.control.DropDown
-        h_segmentation_tool_toggle    matlab.ui.control.Button
-        h_set_position                matlab.ui.control.Button
-        h_menu_compartment_table      matlab.ui.container.ContextMenu
-        h_menu_lock_on                matlab.ui.container.Menu
-        h_menu_add_compartment        matlab.ui.container.Menu
-        h_menu_delete_compartment     matlab.ui.container.Menu
+        h_zeffiro_window_main           matlab.ui.Figure
+        h_set_position                  matlab.ui.control.Button
+        h_segmentation_tool_toggle      matlab.ui.control.Button
+        h_profile_name                  matlab.ui.control.DropDown
+        ProfileDropDownLabel            matlab.ui.control.Label
+        h_project_tag                   matlab.ui.control.EditField
+        ProjecttagEditFieldLabel        matlab.ui.control.Label
+        h_project_notes                 matlab.ui.control.TextArea
+        ProjectnotesTextAreaLabel       matlab.ui.control.Label
+        ParametersLabel                 matlab.ui.control.Label
+        SensorsLabel_2                  matlab.ui.control.Label
+        h_sensors_name_table            matlab.ui.control.Table
+        h_parameters_table              matlab.ui.control.Table
+        TransformLabel                  matlab.ui.control.Label
+        SensorsetsLabel                 matlab.ui.control.Label
+        ProjectinformationLabel         matlab.ui.control.Label
+        CompartmentsLabel               matlab.ui.control.Label
+        h_project_information           matlab.ui.control.ListBox
+        h_transform_table               matlab.ui.control.Table
+        h_sensors_table                 matlab.ui.control.Table
+        h_compartment_table             matlab.ui.control.Table
+        h_axes2                         matlab.ui.control.Image
+        h_menu_compartment_table        matlab.ui.container.ContextMenu
+        h_menu_lock_on                  matlab.ui.container.Menu
+        h_menu_add_compartment          matlab.ui.container.Menu
+        h_menu_delete_compartment       matlab.ui.container.Menu
         h_menu_compartment_surface_mesh  matlab.ui.container.Menu
-        h_menu_stl                    matlab.ui.container.Menu
-        h_menu_dat_points             matlab.ui.container.Menu
-        h_menu_dat_triangles          matlab.ui.container.Menu
-        ContextMenu                   matlab.ui.container.ContextMenu
-        h_menu_lock_sensor_sets_on    matlab.ui.container.Menu
-        h_menu_add_sensor_sets        matlab.ui.container.Menu
-        h_menu_delete_sensor_sets     matlab.ui.container.Menu
-        ImportsensorsMenu             matlab.ui.container.Menu
-        h_menu_sensor_dat_points      matlab.ui.container.Menu
-        h_menu_sensor_dat_directions  matlab.ui.container.Menu
-        ContextMenu2                  matlab.ui.container.ContextMenu
-        h_menu_lock_transforms_on     matlab.ui.container.Menu
-        h_menu_add_transform          matlab.ui.container.Menu
-        h_menu_delete_transform       matlab.ui.container.Menu
-        ContextMenu3                  matlab.ui.container.ContextMenu
-        h_menu_lock_sensor_names_on   matlab.ui.container.Menu
-        h_menu_add_sensors            matlab.ui.container.Menu
-        h_menu_delete_sensors         matlab.ui.container.Menu
-        h_menu_import_sensor_names    matlab.ui.container.Menu
+        h_menu_stl                      matlab.ui.container.Menu
+        h_menu_dat_points               matlab.ui.container.Menu
+        h_menu_dat_triangles            matlab.ui.container.Menu
+        h_menu_compartments_visibility  matlab.ui.container.Menu
+        h_menu_compartments_on          matlab.ui.container.Menu
+        h_menu_sensors_table            matlab.ui.container.ContextMenu
+        h_menu_lock_sensor_sets_on      matlab.ui.container.Menu
+        h_menu_add_sensor_sets          matlab.ui.container.Menu
+        h_menu_delete_sensor_sets       matlab.ui.container.Menu
+        ImportsensorsMenu               matlab.ui.container.Menu
+        h_menu_sensor_dat_points        matlab.ui.container.Menu
+        h_menu_sensor_dat_directions    matlab.ui.container.Menu
+        h_menu_transform_table          matlab.ui.container.ContextMenu
+        h_menu_lock_transforms_on       matlab.ui.container.Menu
+        h_menu_add_transform            matlab.ui.container.Menu
+        h_menu_delete_transform         matlab.ui.container.Menu
+        h_menu_sensors_name_table       matlab.ui.container.ContextMenu
+        h_menu_lock_sensor_names_on     matlab.ui.container.Menu
+        h_menu_add_sensors              matlab.ui.container.Menu
+        h_menu_delete_sensors           matlab.ui.container.Menu
+        h_menu_import_sensor_names      matlab.ui.container.Menu
+        h_menu_sensors_visibility       matlab.ui.container.Menu
     end
 
     
@@ -82,7 +85,7 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_zeffiro_window_main and hide until all components are created
             app.h_zeffiro_window_main = uifigure('Visible', 'off');
-            app.h_zeffiro_window_main.Colormap = [0 0 0.5625;0 0 0.625;0 0 0.6875;0 0 0.75;0 0 0.8125;0 0 0.875;0 0 0.9375;0 0 1;0 0.0625 1;0 0.125 1;0 0.1875 1;0 0.25 1;0 0.3125 1;0 0.375 1;0 0.4375 1;0 0.5 1;0 0.5625 1;0 0.625 1;0 0.6875 1;0 0.75 1;0 0.8125 1;0 0.875 1;0 0.9375 1;0 1 1;0.0625 1 1;0.125 1 0.9375;0.1875 1 0.875;0.25 1 0.8125;0.3125 1 0.75;0.375 1 0.6875;0.4375 1 0.625;0.5 1 0.5625;0.5625 1 0.5;0.625 1 0.4375;0.6875 1 0.375;0.75 1 0.3125;0.8125 1 0.25;0.875 1 0.1875;0.9375 1 0.125;1 1 0.0625;1 1 0;1 0.9375 0;1 0.875 0;1 0.8125 0;1 0.75 0;1 0.6875 0;1 0.625 0;1 0.5625 0;1 0.5 0;1 0.4375 0;1 0.375 0;1 0.3125 0;1 0.25 0;1 0.1875 0;1 0.125 0;1 0.0625 0;1 0 0;0.9375 0 0;0.875 0 0;0.8125 0 0;0.75 0 0;0.6875 0 0;0.625 0 0;0.5625 0 0];
+            colormap(app.h_zeffiro_window_main, 'parula');
             app.h_zeffiro_window_main.Position = [42 157 1151 545];
             app.h_zeffiro_window_main.Name = 'ZEFFIRO Interface: Segmentation tool';
             app.h_zeffiro_window_main.Scrollable = 'on';
@@ -193,7 +196,7 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_profile_name
             app.h_profile_name = uidropdown(app.h_zeffiro_window_main);
-            app.h_profile_name.Position = [253 133 95 22];
+            app.h_profile_name.Position = [254 133 95 22];
 
             % Create h_segmentation_tool_toggle
             app.h_segmentation_tool_toggle = uibutton(app.h_zeffiro_window_main, 'push');
@@ -202,14 +205,11 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
 
             % Create h_set_position
             app.h_set_position = uibutton(app.h_zeffiro_window_main, 'push');
-            app.h_set_position.Position = [367 133 95 22];
+            app.h_set_position.Position = [366 133 95 22];
             app.h_set_position.Text = 'Set position';
 
             % Create h_menu_compartment_table
             app.h_menu_compartment_table = uicontextmenu(app.h_zeffiro_window_main);
-            
-            % Assign app.h_menu_compartment_table
-            app.h_compartment_table.ContextMenu = app.h_menu_compartment_table;
 
             % Create h_menu_lock_on
             app.h_menu_lock_on = uimenu(app.h_menu_compartment_table);
@@ -239,26 +239,34 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
             app.h_menu_dat_triangles = uimenu(app.h_menu_compartment_surface_mesh);
             app.h_menu_dat_triangles.Text = 'Triangles (DAT file)';
 
-            % Create ContextMenu
-            app.ContextMenu = uicontextmenu(app.h_zeffiro_window_main);
+            % Create h_menu_compartments_visibility
+            app.h_menu_compartments_visibility = uimenu(app.h_menu_compartment_table);
+            app.h_menu_compartments_visibility.Text = 'Toggle visible';
+
+            % Create h_menu_compartments_on
+            app.h_menu_compartments_on = uimenu(app.h_menu_compartment_table);
+            app.h_menu_compartments_on.Text = 'Toggle on';
             
-            % Assign app.ContextMenu
-            app.h_sensors_table.ContextMenu = app.ContextMenu;
+            % Assign app.h_menu_compartment_table
+            app.h_compartment_table.ContextMenu = app.h_menu_compartment_table;
+
+            % Create h_menu_sensors_table
+            app.h_menu_sensors_table = uicontextmenu(app.h_zeffiro_window_main);
 
             % Create h_menu_lock_sensor_sets_on
-            app.h_menu_lock_sensor_sets_on = uimenu(app.ContextMenu);
+            app.h_menu_lock_sensor_sets_on = uimenu(app.h_menu_sensors_table);
             app.h_menu_lock_sensor_sets_on.Text = 'Lock on';
 
             % Create h_menu_add_sensor_sets
-            app.h_menu_add_sensor_sets = uimenu(app.ContextMenu);
+            app.h_menu_add_sensor_sets = uimenu(app.h_menu_sensors_table);
             app.h_menu_add_sensor_sets.Text = 'Add sensor set';
 
             % Create h_menu_delete_sensor_sets
-            app.h_menu_delete_sensor_sets = uimenu(app.ContextMenu);
+            app.h_menu_delete_sensor_sets = uimenu(app.h_menu_sensors_table);
             app.h_menu_delete_sensor_sets.Text = 'Delete sensor set(s)';
 
             % Create ImportsensorsMenu
-            app.ImportsensorsMenu = uimenu(app.ContextMenu);
+            app.ImportsensorsMenu = uimenu(app.h_menu_sensors_table);
             app.ImportsensorsMenu.Text = 'Import sensors';
 
             % Create h_menu_sensor_dat_points
@@ -268,46 +276,53 @@ classdef zef_segmentation_tool_app_exported < matlab.apps.AppBase
             % Create h_menu_sensor_dat_directions
             app.h_menu_sensor_dat_directions = uimenu(app.ImportsensorsMenu);
             app.h_menu_sensor_dat_directions.Text = 'Directions (DAT file)';
-
-            % Create ContextMenu2
-            app.ContextMenu2 = uicontextmenu(app.h_zeffiro_window_main);
             
-            % Assign app.ContextMenu2
-            app.h_transform_table.ContextMenu = app.ContextMenu2;
+            % Assign app.h_menu_sensors_table
+            app.h_sensors_table.ContextMenu = app.h_menu_sensors_table;
+
+            % Create h_menu_transform_table
+            app.h_menu_transform_table = uicontextmenu(app.h_zeffiro_window_main);
 
             % Create h_menu_lock_transforms_on
-            app.h_menu_lock_transforms_on = uimenu(app.ContextMenu2);
+            app.h_menu_lock_transforms_on = uimenu(app.h_menu_transform_table);
             app.h_menu_lock_transforms_on.Text = 'Lock on';
 
             % Create h_menu_add_transform
-            app.h_menu_add_transform = uimenu(app.ContextMenu2);
+            app.h_menu_add_transform = uimenu(app.h_menu_transform_table);
             app.h_menu_add_transform.Text = 'Add transform';
 
             % Create h_menu_delete_transform
-            app.h_menu_delete_transform = uimenu(app.ContextMenu2);
+            app.h_menu_delete_transform = uimenu(app.h_menu_transform_table);
             app.h_menu_delete_transform.Text = 'Delete transform(s)';
-
-            % Create ContextMenu3
-            app.ContextMenu3 = uicontextmenu(app.h_zeffiro_window_main);
             
-            % Assign app.ContextMenu3
-            app.h_sensors_name_table.ContextMenu = app.ContextMenu3;
+            % Assign app.h_menu_transform_table
+            app.h_transform_table.ContextMenu = app.h_menu_transform_table;
+
+            % Create h_menu_sensors_name_table
+            app.h_menu_sensors_name_table = uicontextmenu(app.h_zeffiro_window_main);
 
             % Create h_menu_lock_sensor_names_on
-            app.h_menu_lock_sensor_names_on = uimenu(app.ContextMenu3);
+            app.h_menu_lock_sensor_names_on = uimenu(app.h_menu_sensors_name_table);
             app.h_menu_lock_sensor_names_on.Text = 'Lock on';
 
             % Create h_menu_add_sensors
-            app.h_menu_add_sensors = uimenu(app.ContextMenu3);
+            app.h_menu_add_sensors = uimenu(app.h_menu_sensors_name_table);
             app.h_menu_add_sensors.Text = 'Add sensor';
 
             % Create h_menu_delete_sensors
-            app.h_menu_delete_sensors = uimenu(app.ContextMenu3);
+            app.h_menu_delete_sensors = uimenu(app.h_menu_sensors_name_table);
             app.h_menu_delete_sensors.Text = 'Delete sensor(s)';
 
             % Create h_menu_import_sensor_names
-            app.h_menu_import_sensor_names = uimenu(app.ContextMenu3);
+            app.h_menu_import_sensor_names = uimenu(app.h_menu_sensors_name_table);
             app.h_menu_import_sensor_names.Text = 'Import sensor names (DAT file)';
+
+            % Create h_menu_sensors_visibility
+            app.h_menu_sensors_visibility = uimenu(app.h_menu_sensors_name_table);
+            app.h_menu_sensors_visibility.Text = 'Toggle visible';
+            
+            % Assign app.h_menu_sensors_name_table
+            app.h_sensors_name_table.ContextMenu = app.h_menu_sensors_name_table;
 
             % Show the figure after all components are created
             app.h_zeffiro_window_main.Visible = 'off';

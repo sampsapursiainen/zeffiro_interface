@@ -8,6 +8,9 @@ end
 
 zef.KF = zef_kf_app;
 
+zef.KF.filter_type.Items = {'Basic Kalman'  'EnKF'  'Standardized Kalman (sLORETA)'  'Kalman spatial sLORETA' 'Standardized Kalman (sLORETA) with diagonal evolution weighting'};
+zef.KF.filter_type.ItemsData = {'1'  '2'  '3'  '4' '5'};
+
 %_ Initial values _
 if isfield(zef,'inv_snr')
 zef.KF.inv_snr.Value = num2str(zef.inv_snr);
@@ -89,7 +92,6 @@ clear zef_props zef_i
 
 %_ Functions _
 zef.KF.inv_snr.ValueChangedFcn = 'zef.inv_snr = str2num(zef.KF.inv_snr.Value);';
-zef.KF.kf_evolution_prior_mode.ValueChangedFcn = 'zef.kf_evolution_prior_mode = str2num(zef.KF.kf_evolution_prior_mode.Value);';
 zef.KF.normalize_data.ValueChangedFcn = 'zef.normalize_data = zef.KF.normalize_data.Value;';
 zef.KF.inv_sampling_frequency.ValueChangedFcn = 'zef.inv_sampling_frequency = str2num(zef.KF.inv_sampling_frequency.Value);';
 zef.KF.inv_low_cut_frequency.ValueChangedFcn = 'zef.inv_low_cut_frequency = str2num(zef.KF.inv_low_cut_frequency.Value);';

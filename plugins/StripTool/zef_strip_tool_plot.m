@@ -39,7 +39,7 @@ end
 for i = 1 : strip_struct.strip_n_contacts
 
 [contacts, ~, triangle_ind_aux] = zef_get_strip_contacts(i,strip_struct,zef);
-h_strip_contact = trimesh(contacts(:,2:4),points{1}(:,1),points{1}(:,2),points{1}(:,3));
+h_strip_contact = trimesh(contacts(:,1:3),points{1}(:,1),points{1}(:,2),points{1}(:,3));
 h_strip_contact.FaceColor = [0 0 0];
 h_strip_contact.EdgeColor = 'none';
 h_strip_contact.Tag = 'additional: strip contact';

@@ -43,6 +43,6 @@ P_aux = zeros(size(P,1),1);
 P_aux(U) = [1:length(U)]';
 P = P(U,:);
 T = P_aux(T);
-T = T(:,[1 3 2]);
+T = T(:,[1 2 3]);
 
 end

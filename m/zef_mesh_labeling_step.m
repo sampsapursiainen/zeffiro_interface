@@ -6,44 +6,58 @@ if isequal(labeling_flag,1)
     %Initialize labeling.
     %***********************************************************
 
-    [node_labels,unique_domain_labels] = zef_solid_angle_labeling(zef, label_ind, nodes, h);
+    [node_labels,distance_vec] = zef_solid_angle_labeling(zef, label_ind, nodes, h);
 
     I = find(sum(sign(node_labels(label_ind)),2)>=size(label_ind,2));
     tetra = tetra(I,:);
     label_ind = label_ind(I,:);
     domain_labels = node_labels(label_ind);
+ 
+    if zef.distance_smoothing_on
+    [nodes] = zef_distance_smoothing(tetra, nodes, distance_vec, zef.distance_smoothing_exp, zef.smoothing_strength,zef.smoothing_steps_dist);
+    end
 
     [unique_vec_1, ~, unique_vec_3] = unique(tetra);
     tetra = reshape(unique_vec_3,size(tetra));
     nodes = nodes(unique_vec_1,:);
 
-    if isequal(labeling_stage,'preliminary')
-        use_labeling_priority = 1;
-    elseif isequal(labeling_stage,'meshing')
         if zef.priority_mode == 1
             use_labeling_priority = 0;
         elseif zef.priority_mode >= 2
             use_labeling_priority = 1;
         end
-    end
 
     domain_labels = zef_choose_domain_labels(zef,domain_labels,use_labeling_priority);
+
 
 elseif isequal(labeling_flag,2)
     %**************************************************************
     %Re-labeling.
     %**************************************************************
 
- if isequal(labeling_stage,'preliminary')
-        use_labeling_priority = 1;
-    elseif isequal(labeling_stage,'meshing')
         if zef.priority_mode <= 2
             use_labeling_priority = 0;
         elseif zef.priority_mode == 3
             use_labeling_priority = 1;
         end
-    end
-[domain_labels] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, use_labeling_priority, h);
+
+[domain_labels, distance_vec] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, distance_vec, use_labeling_priority, h);
+ 
+if zef.distance_smoothing_on
+    [nodes] = zef_distance_smoothing(tetra, nodes, distance_vec, zef.distance_smoothing_exp, zef.smoothing_strength, zef.smoothing_steps_dist);
+end
+
+elseif isequal(labeling_flag,3)
+    %**************************************************************
+    %Re-labeling.
+    %**************************************************************
+
+use_labeling_priority = 0;
+[domain_labels, distance_vec] = zef_mesh_relabeling(zef, tetra, nodes, domain_labels, distance_vec, use_labeling_priority, h);
+ 
+if zef.distance_smoothing_on
+    [nodes] = zef_distance_smoothing(tetra, nodes, distance_vec, zef.distance_smoothing_exp, zef.smoothing_strength,zef.smoothing_steps_dist);
+end
 
 end
 
@@ -55,7 +69,7 @@ end
 %     %Re-labeling (adaptive).
 %     %**************************************************************
 %     pml_counter = 0;
-%     max_compartments = max(domain_labels);
+%     max_comparetments = max(domain_labels);
 % compartment_counter = 0; 
 % 
 %     unique_domain_labels = unique(domain_labels);

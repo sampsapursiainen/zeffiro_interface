@@ -7,7 +7,15 @@ if nargin==0
 end
 
 set(zef.h_parcellation_name,'string',zef.parcellation_name);
-set(zef.h_parcellation_tolerance,'string',zef.parcellation_tolerance);
+set(zef.h_parcellation_tolerance,'string',num2str(zef.parcellation_tolerance));
+zef.h_parcellation_roi_name.String = zef.parcellation_roi_name{zef.parcellation_roi_selected};
+zef.h_parcellation_roi_center.String = num2str(zef.parcellation_roi_center(zef.parcellation_roi_selected,:));
+zef.h_parcellation_roi_radius.String = num2str(zef.parcellation_roi_radius(zef.parcellation_roi_selected));
+zef.h_parcellation_roi_color.String = num2str(zef.parcellation_roi_color(zef.parcellation_roi_selected,:));
+zef.h_parcellation_roi_color.BackgroundColor = zef.parcellation_roi_color(zef.parcellation_roi_selected,:);
+zef.h_parcellation_roi_list.Value = zef.parcellation_roi_selected;
+zef.h_parcellation_roi_list.String = zef.parcellation_roi_name;
+
 zef.parcellation_list = cell(0);
 
 zef_k = 0;
@@ -47,7 +55,7 @@ set(zef.h_parcellation_plot_type,'value',zef.parcellation_plot_type);
 set(zef.h_parcellation_segment,'string',zef.parcellation_segment);
 %set(zef.h_parcellation_merge,'value',zef.parcellation_merge);
 
-if zef.use_parcellation == 0;
+if zef.use_parcellation == 0
     set(zef.h_use_parcellation,'foregroundcolor',[0 0 0]);
     %set(zef.h_parcellation_list,'enable','on');
     set(zef.h_use_parcellation,'string','Activate');
@@ -63,15 +71,15 @@ if  isempty(eval('zef.parcellation_colortable'))
     set(zef.h_import_parcellation_colortable,'foregroundcolor',[1 0 0]);
 else
     set(zef.h_import_parcellation_colortable,'foregroundcolor',[0 0 0]);
-end;
+end
 
 if  isempty(eval('zef.parcellation_points'))
     set(zef.h_zef_import_parcellation_points,'foregroundcolor',[1 0 0]);
 else
     set(zef.h_zef_import_parcellation_points,'foregroundcolor',[0 0 0]);
-end;
+end
 
-if isempty(zef.parcellation_selected) && not(isempty(zef.parcellation_list))
+if (isempty(zef.parcellation_selected) && not(isempty(zef.parcellation_list)))
     set(zef.h_parcellation_list,'value',[1:length(get(zef.h_parcellation_list,'string'))]);
     zef.parcellation_selected = [1:length(get(zef.h_parcellation_list,'string'))];
 end
@@ -93,6 +101,8 @@ end
 if isfield(zef,'parcellation_status')
     zef = rmfield(zef,'parcellation_status');
 end
+
+zef.h_parcellation_list.Min = 0;
 
 if nargout == 0
     assignin('base','zef',zef);

@@ -5,6 +5,13 @@ function [void] = zef_print_meshes(~);
 zef = evalin('base','zef');
 f_ind = 1;
 
+if isfield(zef,[zef.current_sensors '_get_functions'])
+zef = zef_fix_sensors_get_functions_array_size(zef);
+sensors_get_functions = zef.([zef.current_sensors '_get_functions']);
+else
+sensors_get_functions = cell(1,size(zef.sensors,1));
+end
+
 if isequal(eval('zef.volumetric_distribution_mode'),1)
     volumetric_distribution = eval('zef.reconstruction');
 elseif isequal(eval('zef.volumetric_distribution_mode'),2)
@@ -127,6 +134,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
         sensors = sensors(sensors_visible,:);
         sensors_name = sensors_name(sensors_visible);
         sensors_color_table = sensors_color_table(sensors_visible,:);
+        sensors_get_functions = sensors_get_functions(sensors_visible);
     end
     %April 2021
 
@@ -179,12 +187,14 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
                 sensors_visible = sensors_visible(aux_ind,:);
                 sensors_color_table = sensors_color_table(aux_ind,:);
                 sensors_name = sensors_name(aux_ind);
+                sensors_get_functions = sensors_get_functions(aux_ind);
             elseif eval('zef.cp_mode') == 2
                 aux_ind = setdiff([1:size(sensors,1)]',aux_ind);
                 sensors = sensors(aux_ind,:);
                 sensors_visible = sensors_visible(aux_ind,:);
                 sensors_color_table = sensors_color_table(aux_ind,:);
                 sensors_name = sensors_name(aux_ind);
+                sensors_get_functions = sensors_get_functions(aux_ind);
             end
         end
         aux_ind = [];
@@ -197,14 +207,14 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
         %April 2021
 
         if electrode_model == 1 & eval('zef.attach_electrodes') & ismember(eval('zef.imaging_method'),[1 4 5])
-            sensors = zef_attach_sensors_volume(zef,sensors);
+            sensors = zef_attach_sensors_volume(zef,sensors,'mesh',sensors_get_functions);
         elseif electrode_model==2 & eval('zef.attach_electrodes') & ismember(eval('zef.imaging_method'),[1 4 5])
-            sensors = zef_attach_sensors_volume(zef,sensors);
+            sensors = zef_attach_sensors_volume(zef,sensors,'mesh',sensors_get_functions);
             sensors_point_like_index = find(sensors(:,4)==0);
             unique_sensors_point_like = unique(sensors(sensors_point_like_index,1));
             sensors_point_like = zeros(length(unique_sensors_point_like),3);
             %April 2021
-            sensors_name_points = zef_attach_sensors_volume(zef,sensors_aux,'points');
+            sensors_name_points = zef_attach_sensors_volume(zef,sensors_aux,'points',sensors_get_functions);
             sensors_point_like_id = find(sensors(:,4)==0);
             %April 2021
             for spl_ind = 1 : length(unique_sensors_point_like)
@@ -1422,6 +1432,7 @@ else
         sensors = sensors(sensors_visible,:);
         sensors_name = sensors_name(sensors_visible);
         sensors_color_table = sensors_color_table(sensors_visible,:);
+        sensors_get_functions = sensors_get_functions(sensors_visible);
     end
     %April 2021
 
@@ -1531,6 +1542,7 @@ else
     if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
         if eval('zef.cp_mode') == 1
             sensors = sensors(aux_ind_1,:);
+            sensors_get_functions = sensors_get_functions(aux_ind_1);
             if not(isempty(sensors_visible))
                 sensors_visible = sensors_visible(aux_ind_1,:);
             end
@@ -1541,6 +1553,7 @@ else
         elseif eval('zef.cp_mode') == 2
             aux_ind_1 = setdiff([1:size(sensors,1)]',aux_ind_1);
             sensors = sensors(aux_ind_1,:);
+            sensors_get_functions = sensors_get_functions(aux_ind_1);
             if not(isempty(sensors_visible))
                 sensors_visible = sensors_visible(aux_ind_1,:);
             end
@@ -1633,14 +1646,14 @@ else
     %April 2021
 
     if eval('zef.attach_electrodes') & electrode_model == 1
-        sensors = zef_attach_sensors_volume(zef,sensors,'geometry');
+        sensors = zef_attach_sensors_volume(zef,sensors,'geometry',sensors_get_functions);
     elseif eval('zef.attach_electrodes') & electrode_model == 2
-        sensors_aux = zef_attach_sensors_volume(zef,sensors,'geometry');
+        sensors_aux = zef_attach_sensors_volume(zef,sensors,'geometry',sensors_get_functions);
         sensors_point_like_index = find(sensors_aux(:,4)==0);
         sensors_point_like = zeros(length(sensors_point_like_index),3);
 
         %April 2021
-        sensors_name_points = zef_attach_sensors_volume(zef,sensors,'points');
+        sensors_name_points = zef_attach_sensors_volume(zef,sensors,'points',sensors_get_functions);
         sensors_point_like_id = find(sensors(:,4)==0);
         %April 2021
 
@@ -1689,14 +1702,10 @@ else
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
 surface_index_aux = length(reuna_p);
-                    if isfield(zef,[zef.current_sensors '_get_functions'])
-                    if length(zef.([zef.current_sensors '_get_functions'])) >= unique_sensors_aux_1(i)
-                        if not(isempty(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}))
-                            [~, sensor_info] = zef_sensor_get_function_eval(zef.([zef.current_sensors '_get_functions']){unique_sensors_aux_1(i)}, zef,'sensor_info');
-                            surface_index_aux = sensor_info.compartment_index; 
+if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
+                            [~, sensor_info] = zef_sensor_get_function_eval(sensors_get_functions{unique_sensors_aux_1(i)}, zef,'sensor_info');
+                            surface_index_aux = sensor_info.compartment_index;
                         end
-                    end
-                    end
                     unique_sensors_aux_2 = find(sensors(:,1)==unique_sensors_aux_1(i));
                     [min_n_aux, min_t_aux] = zef_minimal_mesh(reuna_p{surface_index_aux},sensors(unique_sensors_aux_2,2:4));
                   h(i) = trisurf(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3));

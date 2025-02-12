@@ -31,6 +31,7 @@ end
 for compartment_counter = 1 : compartment_length
 
     interior_ind = find(domain_labels<=compartment_counter);
+    if not(isempty(interior_ind))
     [~,~,~,~,~,~,node_list] = zef_surface_mesh(tetra,[],interior_ind);
 
     if not(isempty(node_list))
@@ -132,6 +133,7 @@ for compartment_counter = 1 : compartment_length
 
         %%%%%%%% CPU Version %%%%%%%%
 
+    end
     end
 end
 

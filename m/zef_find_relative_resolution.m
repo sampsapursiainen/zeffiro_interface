@@ -48,25 +48,25 @@ end
 
 end
 
-if zef.refinement_surface_on_3
-
-rel_num_vec_aux = zef.refinement_surface_number_3(:).*ones(length(zef.refinement_surface_compartments_3),1);
-
-for i = 1 : length(zef.refinement_surface_compartments_3)
-
-if isequal(zef.refinement_surface_compartments_3(i),-1)
-
-relative_resolution_vec(source_compartments) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(source_compartments);
-
-else
-
-relative_resolution_vec(zef.refinement_surface_compartments_3(i)) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(zef.refinement_surface_compartments_3(i));
-
-end
-
-end
-
-end
+% if zef.refinement_surface_on_3
+% 
+% rel_num_vec_aux = zef.refinement_surface_number_3(:).*ones(length(zef.refinement_surface_compartments_3),1);
+% 
+% for i = 1 : length(zef.refinement_surface_compartments_3)
+% 
+% if isequal(zef.refinement_surface_compartments_3(i),-1)
+% 
+% relative_resolution_vec(source_compartments) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(source_compartments);
+% 
+% else
+% 
+% relative_resolution_vec(zef.refinement_surface_compartments_3(i)) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(zef.refinement_surface_compartments_3(i));
+% 
+% end
+% 
+% end
+% 
+% end
 
 if zef.refinement_volume_on
 
@@ -108,25 +108,25 @@ end
 
 end
 
-if zef.refinement_volume_on_3
-
-rel_num_vec_aux = zef.refinement_volume_number_3(:).*ones(length(zef.refinement_volume_compartments_3),1);
-
-for i = 1 : length(zef.refinement_volume_compartments_3)
-
-if isequal(zef.refinement_volume_compartments_3(i),-1)
-
-relative_resolution_vec(source_compartments) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(source_compartments);
-
-else
-
-relative_resolution_vec(zef.refinement_volume_compartments_3(i)) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(zef.refinement_volume_compartments_3(i));
-
-end
-
-end
-
-end
+% if zef.refinement_volume_on_3
+% 
+% rel_num_vec_aux = zef.refinement_volume_number_3(:).*ones(length(zef.refinement_volume_compartments_3),1);
+% 
+% for i = 1 : length(zef.refinement_volume_compartments_3)
+% 
+% if isequal(zef.refinement_volume_compartments_3(i),-1)
+% 
+% relative_resolution_vec(source_compartments) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(source_compartments);
+% 
+% else
+% 
+% relative_resolution_vec(zef.refinement_volume_compartments_3(i)) = (4.^rel_num_vec_aux(i)).*relative_resolution_vec(zef.refinement_volume_compartments_3(i));
+% 
+% end
+% 
+% end
+% 
+% end
 
 end
 
