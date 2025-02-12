@@ -8,7 +8,7 @@ K = size(positions,1);
 
 %for q_value = logspace(-3,-13,11)
 for k = 1:K
-    ind{k} = sum((positions(k,:)-zef.source_positions).^2,2)<=ROI_radius^2;
+        ind{k} = sum((positions(k,:)-zef.source_positions).^2,2)<=ROI_radius^2;
 end
 for n = 1:length(measurements)
     zef.measurements = measurements{n};
@@ -20,7 +20,7 @@ for n = 1:length(measurements)
     for k = 1:K
         activity(k,:,n)=mean(z(ind{k},:),1);
     end
-    disp([num2str(n),' out of ' num2str(length(measurements))])
+disp([num2str(n),' out of ' num2str(length(measurements))])
 end
 
 t = zef.inv_time_1+(0:size(activity,2)-1)*zef.inv_time_3;
@@ -85,3 +85,4 @@ xline(0.159, '-', '0.159 ms')
 xline(0.184, '-', '0.184 ms')
 
 
+    

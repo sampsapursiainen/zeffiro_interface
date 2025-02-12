@@ -108,8 +108,12 @@ if isempty(zef.source_positions)
     error('ZI: No discretized sources found. Perhaps you forgot to calculate or load them...?')
 end
 %% waitbar
-if zef.use_waitbar == 1 && ~strcmpi(zef.ES_opt_method_list{zef.ES_opt_method},'Backpropagation')
-    wait_bar_temp = zef_waitbar(0,1,['ES Workbench']);
+zef.use_waitbar = 0;
+if zef.use_waitbar == 1
+    wait_bar_temp = zef_waitbar(...
+        [0 0], ...
+        sprintf(['Optimizer: ' zef_data.solver_package ', ' 'Algorithm: ' zef_data.opts.Algorithm ', Optimizing: i = %d, j = d%' '.'], 0, 0)...
+        );
 end
 %% The real task...
 zef.y_ES_interval = [];
