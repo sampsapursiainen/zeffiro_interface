@@ -30,6 +30,7 @@
 !m/**/*.m
 !plugins/**/*.m
 !scripts/**/*.m
+!+inverse/**
 
 # Allow PNG files in specific folders.
 
