@@ -260,7 +260,7 @@ if isequal(lower(direction_mode),'cartesian') || isequal(lower(direction_mode),'
     % Construct lead field with transfer matrix, Schur complement and
     % interpolation matrix G.
 
-    L_eeg = Schur_complement * T' * G;
+    L_eeg = Schur_complement \ (T' * G);
 
     % Set "correct" zero potential level. Corresponds to multiplying L_eeg with
     % restriction matrix R, seen in relevant articles such as
