@@ -74,7 +74,7 @@ elseif filter_type == 2
     n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
-    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,false);
 elseif filter_type == 4
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
