@@ -161,7 +161,7 @@ classdef KalmanInverter < inverse.CommonInverseParameters
 
                 args.number_of_noise_steps = 4
 
-                args.evolution_prior_db = -34
+                args.evolution_prior_db = 0
 
                 args.initial_prior_steering_db = 0
 
@@ -254,6 +254,11 @@ classdef KalmanInverter < inverse.CommonInverseParameters
         [reconstruction, self] = invert(self, f, L, procFile, source_direction_mode)
 
         [reconstruction, self] = smoother(self, z_inverse)
+
+        function self = terminateComputation(self)
+            evolution_var = findprop(self,'evolution_var');
+            delete(evolution_var);
+        end
 
     end % methods
 

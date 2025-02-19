@@ -32,7 +32,9 @@ function self = initialize(self,L,f_data)
     self.prev_step_posterior_cov = [];
     self.prev_step_reconstruction = [];
     self.evolution_cov = [];
-    self.evolution_var = [];
+    if not(isprop(self,'evolution_var'))
+        self.addprop('evolution_var');
+    end
     
     noise_p2 = 10^(-self.signal_to_noise_ratio/10);
 
@@ -41,8 +43,8 @@ function self = initialize(self,L,f_data)
     else
         self.noise_cov = size(L,1)*self.noise_cov/trace(self.noise_cov);
     end
-
-    self.theta0 = (1-noise_p2)*10.^(self.initial_prior_steering_db/10)*diag(mean(var(f_data(:,1:self.number_of_noise_steps),0,2))./repelem(sum(reshape(sum(L.^2),3,[])),3));
+    
+    self.theta0 = (1-noise_p2)*10.^(self.initial_prior_steering_db/10)*mean(var(f_data(:,1:self.number_of_noise_steps),0,2))./repelem(sum(reshape(sum(L.^2),3,[])),3);
 
     switch self.evolution_prior_model
         case "Sensitivity scaling"
@@ -72,9 +74,9 @@ function self = initialize(self,L,f_data)
         f = diff(f_data')';
         f = sum(f.^2,2)./sum(f_data.^2,2);         
         S = max(S.^2,noise_p2/(1-noise_p2));
-        self.evolution_cov =  (mean(f./S)*10^(self.evolution_prior_db/20))*eye(size(L,1));
+        self.evolution_cov =  (mean(f./S)*10^(self.evolution_prior_db/20))*eye(size(L,2));
     case "Reworked original"
-        self.evolution_cov = time_step*(svds(L,1).^(2)/sum(L(:).^2))*10^(self.evolution_prior_db/20)*eye(size(L,1));
+        self.evolution_cov = self.time_step*(svds(L,1).^(2)/sum(L(:).^2))*10^(self.evolution_prior_db/20)*eye(size(L,2));
     end
 
     if isempty(self.state_transition_model_A)

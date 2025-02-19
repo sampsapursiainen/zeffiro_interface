@@ -7,8 +7,10 @@ s_ind_1=transpose(3*procFile.s_ind_0-[2,1,0]);
 s_ind_1=s_ind_1(:);
 s_ind_2 = s_ind_1;  %1 and 2 have the same origin at the moment (07.02.25)
 s_ind_4 = procFile.s_ind_4;
-s_ind_5=transpose(3*procFile.s_ind_4-[2,1,0]);
-s_ind_5 = s_ind_5(:);
+if ismember(source_direction_mode,[2])
+    s_ind_5=transpose(3*procFile.s_ind_4-[2,1,0]);
+    s_ind_5 = s_ind_5(:);
+end
 sizeL2=procFile.sizeL2;
 
 z=cell(size(z_inverse));

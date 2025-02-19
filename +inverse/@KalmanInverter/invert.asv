@@ -63,17 +63,10 @@ function [z_vec, self] = invert(self, f, L, procFile, source_direction_mode, sou
 
 
     % Get needed parameters from self and others.
-
-    snr_val = self.signal_to_noise_ratio;
-    std_lhood = 10^(-self.signal_to_noise_ratio/20);
-    pm_val = self.inv_prior_over_measurement_db;
-    amplitude_db = self.inv_amplitude_db;
-    pm_val = pm_val - amplitude_db;
+    theta0 = self.theta0;
 
     % Then start inverting.
     %% CALCULATION STARTS HERE
-% m_0 = prior mean
-m = zeros(size(L,2), 1);
     
 %Prior covariance is saved in self.prev_step_posterior_cov
 if isempty(self.prev_step_posterior_cov)
