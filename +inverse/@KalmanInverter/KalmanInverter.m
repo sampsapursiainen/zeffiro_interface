@@ -59,10 +59,10 @@ classdef KalmanInverter < inverse.CommonInverseParameters
 
         %
         %evolution prior scaling parameter (in dB)
-        evolution_prior_db = -34
+        evolution_prior_db = 0
 
         %
-        %dB value for steering the intial prior
+        %dB value for steering the initial prior
         %
         initial_prior_steering_db = 0;
 
