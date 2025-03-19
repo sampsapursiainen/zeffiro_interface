@@ -1,6 +1,6 @@
 function [filteredField, filteredSourcePos] = quantileFilteredFieldFn (field, sourcePos, lowerQ, upperQ)
 %
-% [filteredField, filteredSourcePos] = quantileFilteredFieldFn (field, sourcePos, upperQ)
+% [filteredField, filteredSourcePos] = quantileFilteredFieldFn (field, sourcePos, lowerQ, upperQ)
 %
 % Restricts a given field below a certain quantile. Also selects the subset of
 % source positions that correspond to the filtered columns of the field.
