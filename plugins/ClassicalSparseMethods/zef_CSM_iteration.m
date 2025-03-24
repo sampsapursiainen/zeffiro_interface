@@ -97,7 +97,7 @@ for f_ind = 1 : number_of_frames
         elseif method_type == 2
             %__ sLORETA __
             %d = 1./sqrt(diag(P*L));
-            d = 1./sum(P.'.*L,1)';
+            d = 1./sqrt(sum(P.'.*L,1)');
             z_vec = d.*P*f/sqrt(theta0);
         else
             z_vec = P*f;
