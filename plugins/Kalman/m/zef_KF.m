@@ -13,6 +13,7 @@ number_of_frames = zef.number_of_frames;
 source_direction_mode = zef.source_direction_mode;
 source_directions = zef.source_directions;
 source_positions = zef.source_positions;
+standardization_exponent = zef.standardization_exponent;
 time_step = zef.inv_time_3;
 
 %% Reconstruction identifiers
@@ -74,16 +75,13 @@ elseif filter_type == 2
     n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
-    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
 elseif filter_type == 4
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
     H = L * sqrtm(P_old);
-    W = inv(sqrtm(diag(diag(H'*inv(H*H' + R)*H))));
+    W = inv((diag(diag(H'*inv(H*H' + R)*H))).^standardization_exponent);
     z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
-elseif filter_type == 5
-   [P_store, z_inverse] = kalman_filter_sLORETA_EVO_DIAG_WEIGHT(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
-
 
 end
 
