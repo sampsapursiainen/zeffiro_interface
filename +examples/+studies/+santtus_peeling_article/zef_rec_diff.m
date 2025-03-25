@@ -87,7 +87,9 @@ function [dist_vec, angle_vec, mag_vec, dispersion_vec] = zef_rec_diff( ...
 
             rec_component_ind = 3 * (i-1) + j;
 
-            z_ij = z{rec_component_ind};
+            z_ij = zeros(3*size(zef.source_positions,1),1);
+            z_ij_aux = z{rec_component_ind};
+            z_ij(1:length(z{rec_component_ind})) = z_ij_aux;
 
             reshaped_z_ij = reshape(z_ij, 3, size(zef.source_positions,1));
 

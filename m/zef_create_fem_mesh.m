@@ -144,40 +144,27 @@ end
 
 clear X Y Z;
 
-if zef.refinement_surface_on_3
-loop_start_ind = 1;
-else
-    loop_start_ind = 2;
+if not(zef.use_gpu)
+n_parallel = zef.parallel_processes;
+    if isempty(gcp('nocreate'))
+        parpool(n_parallel);
+    else
+        h_pool = gcp;
+        if not(isequal(h_pool.NumWorkers,n_parallel))
+            delete(h_pool)
+            parpool(n_parallel);
+        end
+    end
 end
 
-for labeling_loop_ind_aux = loop_start_ind : 2
-
-if isequal(labeling_loop_ind_aux,1)
-refinement_surface_on = zef.refinement_surface_on_3;
-n_surface_refinement = zef.refinement_surface_number_3;
-refinement_surface_compartments = zef.refinement_surface_compartments_3;
-refinement_volume_on = zef.refinement_volume_on_3;
-n_volume_refinement = zef.refinement_volume_number_3;
-refinement_volume_compartments = zef.refinement_volume_compartments_3;
-labeling_stage = 'preliminary';
-elseif isequal(labeling_loop_ind_aux,2)
-if zef.refinement_surface_on_3
-label_ind = uint32(tetra);
-end
 refinement_surface_on = zef.refinement_surface_on;
 n_surface_refinement = zef.refinement_surface_number;
 refinement_surface_compartments = zef.refinement_surface_compartments;
 refinement_volume_on = zef.refinement_volume_on;
 n_volume_refinement = zef.refinement_volume_number;
 refinement_volume_compartments = zef.refinement_volume_compartments;
-labeling_stage = 'meshing';
-end
 
-if isequal(labeling_loop_ind_aux,1)
-refinement_flag = 3;
-elseif isequal(labeling_loop_ind_aux,2)
 refinement_flag = 1;
-end
 
 labeling_flag = 1;
 zef_mesh_labeling_step;
@@ -204,11 +191,9 @@ if eval('zef.refinement_on')
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
-                    if isequal(labeling_stage,'meshing')
                     label_ind = uint32(tetra);
                     labeling_flag = 2;
                     zef_mesh_labeling_step;
-                    end
 
                 end
             end
@@ -222,11 +207,9 @@ if eval('zef.refinement_on')
 
                     if eval('zef.mesh_relabeling')
                         pml_ind = [];
-                        if isequal(labeling_stage,'meshing')
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
                         zef_mesh_labeling_step;
-                    end
 
                     end
                 end
@@ -237,11 +220,9 @@ else
 
     if eval('zef.mesh_relabeling')
     pml_ind = [];
-    if isequal(labeling_stage,'meshing')
     label_ind = uint32(tetra);
     labeling_flag = 2;
     zef_mesh_labeling_step;
-    end
 
     end
 
@@ -267,17 +248,15 @@ if eval('zef.refinement_on')
 
             for i = 1 : n_refinement
 
-                [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments));
+                [nodes,tetra,domain_labels,distance_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,distance_vec,zef_compartment_to_subcompartment(zef,refinement_compartments));
                 zef_waitbar(i,n_refinement,h,'Volume refinement.');
 
                 if eval('zef.mesh_relabeling')
 
                     pml_ind = [];
-                    if isequal(labeling_stage,'meshing')
                     label_ind = uint32(tetra);
                     labeling_flag = 2;
                     zef_mesh_labeling_step;
-                    end
 
 
                 end
@@ -290,16 +269,14 @@ if eval('zef.refinement_on')
             for j = 1 : length(n_refinement)
                 for i = 1 : n_refinement(j)
 
-                    [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments(j)));
+                    [nodes,tetra,domain_labels,distance_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,distance_vec,zef_compartment_to_subcompartment(zef,refinement_compartments(j)));
 
                     if eval('zef.mesh_relabeling')
 
                         pml_ind = [];
-                         if isequal(labeling_stage,'meshing')
                         label_ind = uint32(tetra);
                         labeling_flag = 2;
                         zef_mesh_labeling_step;
-                         end
 
                     end
 
@@ -336,7 +313,7 @@ end
                 k_param = eval('zef.adaptive_refinement_k_param');
                 thresh_val  = eval('zef.adaptive_refinement_thresh_val');
                 tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments, thresh_val, k_param, nodes, tetra,domain_labels,zef.reuna_p,zef.reuna_t);
-                [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments), tetra_refine_ind);
+                [nodes,tetra,domain_labels,distance_vec,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,distance_vec,zef_compartment_to_subcompartment(zef,refinement_compartments), tetra_refine_ind);
                 tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
                 zef_waitbar(i,n_refinement,h,'Adaptive volume refinement.');
                 if eval('zef.mesh_relabeling')
@@ -359,7 +336,7 @@ end
                     k_param = eval('zef.adaptive_refinement_k_param');
                     thresh_val  = eval('zef.adaptive_refinement_thresh_val');
                     tetra_refine_ind = zef_get_tetra_to_refine(refinement_compartments(j), thresh_val, k_param, nodes, tetra,domain_labels,zef.reuna_p,zef.reuna_t);
-                    [nodes,tetra,domain_labels,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,zef_compartment_to_subcompartment(zef,refinement_compartments(j)),tetra_refine_ind);
+                    [nodes,tetra,domain_labels,distance_vec,tetra_interp_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,distance_vec,zef_compartment_to_subcompartment(zef,refinement_compartments(j)),tetra_refine_ind);
                     tetra_refine_ind = find(ismember(tetra_interp_vec,tetra_refine_ind));
 
                     if eval('zef.mesh_relabeling')
@@ -383,13 +360,22 @@ end
 
 end
 
+if isequal(zef.priority_mode,3)
+    if zef.mesh_relabeling
+    pml_ind = [];
+    label_ind = uint32(tetra);
+    labeling_flag = 3;
+    zef_mesh_labeling_step;
+    end
 end
+
 
 zef.nodes = nodes;
 zef.tetra = double(tetra);
 zef.domain_labels = double(domain_labels);
 zef.name_tags = name_tags;
 zef.domain_labels_with_subdomains = double(domain_labels);
+zef.reuna_distance_vec = distance_vec;
 
 close(h);
 

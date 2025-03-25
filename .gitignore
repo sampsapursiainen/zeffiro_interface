@@ -30,6 +30,9 @@
 !m/**/*.m
 !plugins/**/*.m
 !scripts/**/*.m
+!+inverse/**
+!+plugins/**/*.m
+!+plugins/**/*.mlapp
 
 # Allow PNG files in specific folders.
 

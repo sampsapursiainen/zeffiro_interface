@@ -38,7 +38,7 @@ reconstruction_information.ias_hyperprior = eval('zef.ramus_hyperprior');
 reconstruction_information.snr_val = eval('zef.ramus_snr');
 reconstruction_information.pm_val = eval('zef.inv_prior_over_measurement_db');
 
-[L,n_interp, procFile] = zef_processLeadfields(source_direction_mode);
+[L,n_interp, procFile] = zef_processLeadfields(zef);
 
 if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
     L = gpuArray(L);

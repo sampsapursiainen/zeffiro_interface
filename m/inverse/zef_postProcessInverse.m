@@ -1,7 +1,6 @@
 function [z] = zef_postProcessInverse(z_inverse, procFile)
 %zef_postProcessInverse reorders the inverse output z_inverse to fit the
 %visibility options. The procFile is given by zef_processLeadfield
-
 source_direction_mode=procFile.source_direction_mode;
 source_directions=procFile.source_directions;
 s_ind_1=procFile.s_ind_1;
@@ -12,7 +11,7 @@ n_interp=procFile.n_interp;
 
 z=cell(size(z_inverse));
 for f_ind=1:length(z_inverse)
-    z_vec=z_inverse{f_ind};
+z_vec=z_inverse{f_ind};
 
     if ismember(source_direction_mode, [1,2])
         z_aux = zeros(sizeL2,1);
@@ -39,10 +38,10 @@ for f_ind=1:length(z_inverse)
         z_aux(s_ind_2) = z_vec;
     end
 
-    %    if number_of_frames > 1
-    z{f_ind} = z_aux;
-    %     else
-    %         z = z_aux;
-    %     end
+%    if number_of_frames > 1
+        z{f_ind} = z_aux;
+%     else
+%         z = z_aux;
+%     end
 
 end

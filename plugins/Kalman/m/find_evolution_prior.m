@@ -1,9 +1,7 @@
-function [q] = find_evolution_prior(L, theta0, time_step, evolution_prior_db)
+function [q] = find_evolution_prior(L, theta0, number_of_frames, evolution_prior_db, prior_over_measurement_db, snr)
 
 % q to evolution prior
-% db(q/time_step/(svds(L,1)^2 * theta0))
-
-q = time_step*svds(L,1).^(2)*10^(evolution_prior_db/20) * theta0;
+q = (1./number_of_frames)*10^(2*(evolution_prior_db)/20) * theta0;
 
 end
 

@@ -29,6 +29,11 @@ set(zef.h_menu_dat_points,'MenuSelectedFcn','zef.surface_mesh_type = ''points'';
 set(zef.h_menu_dat_triangles,'MenuSelectedFcn','zef.surface_mesh_type = ''triangles''; zef.file = 0;[zef.file zef.file_path] = uigetfile(''*.dat'');zef_get_surface_mesh;zef = zef_update(zef);');
 set(zef.h_menu_export_fem_mesh_as,'MenuSelectedFcn','zef_export_fem_mesh_as;');
 set(zef.h_menu_new_empty,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.new_empty_project = 1; zef_start_new_project;end;');
+set(zef.h_menu_compartments_visibility,'MenuSelectedFcn','zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),4) = mat2cell(abs(1 - cell2mat(zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),4))),ones(1,length(unique(zef.h_compartment_table.DisplaySelection(:,1)))));zef = zef_update(zef);');
+set(zef.h_menu_sensors_visibility,'MenuSelectedFcn','zef.h_sensors_name_table.Data(unique(zef.h_sensors_name_table.DisplaySelection(:,1)),3) = mat2cell(abs(1 - cell2mat(zef.h_sensors_name_table.Data(unique(zef.h_sensors_name_table.DisplaySelection(:,1)),3))),ones(1,length(unique(zef.h_sensors_name_table.DisplaySelection(:,1)))));zef = zef_update(zef);');
+set(zef.h_menu_compartments_visibility,'MenuSelectedFcn','zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),4) = mat2cell(abs(1 - cell2mat(zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),4))),ones(1,length(unique(zef.h_compartment_table.DisplaySelection(:,1)))));zef = zef_update(zef);');
+set(zef.h_menu_compartments_on,'MenuSelectedFcn','if not(zef.lock_on); zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),2) = mat2cell(abs(1 - cell2mat(zef.h_compartment_table.Data(unique(zef.h_compartment_table.DisplaySelection(:,1)),2))),ones(1,length(unique(zef.h_compartment_table.DisplaySelection(:,1)))));zef = zef_update(zef);end;');
+
 
 set(zef.h_menu_new,'MenuSelectedFcn','[zef.yesno] = questdlg(''Reset all?'',''Yes'',''No''); if isequal(zef.yesno,''Yes''); zef.new_empty_project = 0; zef_start_new_project;end;');
 set(zef.h_menu_open,'MenuSelectedFcn','zef_load;');
@@ -187,7 +192,12 @@ zef.h_zeffiro_menu.ZefTool = mfilename;
 if not(isprop(zef.h_zeffiro_menu,'ZefVerboseMode'))
     addprop(zef.h_zeffiro_menu,'ZefVerboseMode');
 end
-zef.h_zeffiro_menu.ZefVerboseMode = zef.zeffiro_verbose_mode;
+zef.h_zeffiro_menu.ZefVerboseMode = zef.verbose_mode;
+
+if not(isprop(zef.h_zeffiro_menu,'ZefAlwaysShowWaitbar'))
+    addprop(zef.h_zeffiro_menu,'ZefAlwaysShowWaitbar');
+end
+zef.h_zeffiro_menu.ZefAlwaysShowWaitbar = zef.always_show_waitbar;
 
 if not(isprop(zef.h_zeffiro_menu,'ZefUseWaitbar'))
     addprop(zef.h_zeffiro_menu,'ZefUseWaitbar');
@@ -202,7 +212,7 @@ zef.h_zeffiro_menu.ZefUseLog = zef.use_log;
 if not(isprop(zef.h_zeffiro_menu,'ZefWaitbarSize'))
     addprop(zef.h_zeffiro_menu,'ZefWaitbarSize');
 end
-zef.h_zeffiro_menu.ZefWaitbarSize(1) = 1.5*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3);
+zef.h_zeffiro_menu.ZefWaitbarSize(1) = 1*zef.segmentation_tool_default_position(3)/zef_eval_entry(get(groot,'ScreenSize'),3);
 zef.h_zeffiro_menu.ZefWaitbarSize(2) = 0.7*zef.h_zeffiro_menu.ZefWaitbarSize(1);
 
 if not(isprop(zef.h_zeffiro_menu,'ZefTaskId'))

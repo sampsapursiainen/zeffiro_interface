@@ -5,7 +5,7 @@ if nargin < 4
 end
 
 if nargin < 5
-    global_index = contact_index;
+    global_index = [];
 end
 
 contacts = [];
@@ -92,7 +92,7 @@ triangles_flag_aux = 1;
 end
 if not(triangles_flag_aux)
 I_aux = find(zef.domain_labels <= compartment_ind);
-triangles = zef_surface_mesh()
+triangles = zef_surface_mesh();
 end    
 [points_aux,triangles_aux] = zef_get_submesh(zef.nodes,triangles);
 strip_struct.points{1} = points_aux; 
@@ -135,13 +135,15 @@ point_ind = find(strip_struct.points{1}(:,3)>=0.75+0.75*(row_ind_aux-1) & strip_
 angle_aux = (2*pi/4)*mod(contact_index,4)+ (pi/4)*mod(row_ind_aux,2);
 [center_point_x_aux, center_point_y_aux] = pol2cart(angle_aux,strip_struct.strip_radius);
 center_point_aux = [center_point_x_aux; center_point_y_aux; 0.75 + 0.5*0.75 + 0.75*(row_ind_aux-1)];
-point_ind_aux = find(sqrt(sum((strip_struct.points{1}(point_ind,:)'-center_point_aux).^2))<=0.5*0.75)
+point_ind_aux = find(sqrt(sum((strip_struct.points{1}(point_ind,:)'-center_point_aux).^2))<=0.5*0.75);
 point_ind = point_ind(point_ind_aux);
 end
 
 triangle_ind = find(sum(ismember(strip_struct.triangles{1},point_ind),2)==3);
 contacts = triangles(triangle_ind,:);
+if not(isempty(global_index))
 contacts = [global_index(ones(size(contacts,1),1),1) contacts];
+end
 
 %triangles = zef_triangles_2_sensor_boundary(zef,strip_struct.compartment_tag,triangles);
 end

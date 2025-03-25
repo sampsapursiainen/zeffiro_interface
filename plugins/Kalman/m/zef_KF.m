@@ -13,6 +13,7 @@ number_of_frames = zef.number_of_frames;
 source_direction_mode = zef.source_direction_mode;
 source_directions = zef.source_directions;
 source_positions = zef.source_positions;
+standardization_exponent = zef.standardization_exponent;
 time_step = zef.inv_time_3;
 
 %% Reconstruction identifiers
@@ -20,6 +21,7 @@ reconstruction_information.tag = 'Kalman';
 reconstruction_information.inv_time_1 = zef.inv_time_1;
 reconstruction_information.inv_time_2 = zef.inv_time_2;
 reconstruction_information.inv_time_3 = zef.inv_time_3;
+reconstruction_information.normalize_data = zef.normalize_data;
 reconstruction_information.sampling_freq = zef.inv_sampling_frequency;
 reconstruction_information.low_pass = zef.inv_high_cut_frequency;
 reconstruction_information.high_pass = zef.inv_low_cut_frequency;
@@ -54,7 +56,7 @@ if nargin > 1
 else
     zef_init_gaussian_prior_options;
     evolution_prior_db = zef.inv_evolution_prior;
-    q_value = find_evolution_prior(L, theta0, time_step, evolution_prior_db);
+    q_value = find_evolution_prior(L, theta0, number_of_frames, evolution_prior_db, pm_val, snr_val);
     Q = q_value*eye(size(L,2));
 end
 reconstruction_information.Q = q_value;
@@ -73,12 +75,12 @@ elseif filter_type == 2
     n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
-    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
+    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
 elseif filter_type == 4
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
     H = L * sqrtm(P_old);
-    W = inv(sqrtm(diag(diag(H'*inv(H*H' + R)*H))));
+    W = inv((diag(diag(H'*inv(H*H' + R)*H))).^standardization_exponent);
     z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
 
 end

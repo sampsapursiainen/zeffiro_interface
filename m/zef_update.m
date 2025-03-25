@@ -11,7 +11,7 @@ if isfield(zef,'h_zeffiro_window_main')
 
         zef.aux_field_1 = zef.h_compartment_table.Data;
         if not(isempty(zef.aux_field_1))
-        not_isnan_row = find(not(cellfun(@isnan,zef.h_compartment_table.Data(:,1))));
+        not_isnan_row = find(not(cellfun(@isnan,zef.aux_field_1(:,1))));
         zef.aux_field_1 = zef.aux_field_1(not_isnan_row,:);
         end
         zef.aux_field_2 = zeros(size(zef.aux_field_1,1),1);
@@ -68,6 +68,12 @@ if length(zef.compartment_tags) > 0
 
 end
 
+ if not(isempty(zef.h_compartment_table.Data))
+        [~, I] = sort(cell2mat(zef.h_compartment_table.Data(:,1)));
+        zef.h_compartment_table.Data = zef.h_compartment_table.Data(I,:);
+        I = size(zef.h_compartment_table.Data,1) - I + 1;
+        zef.compartment_tags = zef.compartment_tags(flipud(I));
+ end
         zef = zef_update_compartment_table_data(zef);
 
         %sensors start

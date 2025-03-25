@@ -22,6 +22,7 @@ reuna_t = cell(0);
 reuna_p_inf = cell(0);
 reuna_submesh_ind = cell(0);
 reuna_type = cell(0);
+reuna_mesh_ind = [];
 
 compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
@@ -55,6 +56,7 @@ for k = 1 : length(compartment_tags)
         reuna_type{i,4} = compartment_tags{k};
         reuna_submesh_ind{i} = eval(var_11);
         mean_vec = repmat(mean(reuna_p{i},1),size(reuna_p{i},1),1);
+reuna_mesh_ind(i) = k;
 
         for t_ind = 1 : length(eval(var_1))
 
@@ -330,6 +332,7 @@ zef.reuna_t = reuna_t;
 zef.reuna_p_inf = reuna_p_inf;
 zef.reuna_submesh_ind = reuna_submesh_ind;
 zef.reuna_type = reuna_type;
+zef.reuna_mesh_ind = reuna_mesh_ind;
 
 if nargout == 0
     assignin('base','zef',zef);

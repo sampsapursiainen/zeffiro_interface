@@ -14,6 +14,7 @@ zef = zef_add_compartment(zef);
 strip_struct.compartment_tag{2} = zef.compartment_tags{1};
 zef.([zef.compartment_tags{1} '_name']) =  ['Encapsulation, ID: ' num2str(strip_struct.strip_id) ', Tag: ' strip_struct.strip_tag ', Model: ' zef.strip_tool.h_strip_model.String{strip_struct.strip_model} ];
 zef.([zef.compartment_tags{1} '_triangles']) = strip_struct.triangles{2};
+zef.([zef.compartment_tags{1} '_submesh_ind']) = size(strip_struct.triangles{2},1);
 zef.([zef.compartment_tags{1} '_points']) = points{2};
 zef.([zef.compartment_tags{1} '_sigma']) = strip_struct.encapsulation_conductivity;
 zef = zef_update_compartment_table_data(zef);
@@ -24,6 +25,7 @@ zef = zef_add_compartment(zef);
 strip_struct.compartment_tag{1} = zef.compartment_tags{1};
 zef.([zef.compartment_tags{1} '_name']) =  ['Strip, ID: ' num2str(strip_struct.strip_id) ', Tag: ' strip_struct.strip_tag ', Model: ' zef.strip_tool.h_strip_model.String{strip_struct.strip_model} ];
 zef.([zef.compartment_tags{1} '_triangles']) = strip_struct.triangles{1};
+zef.([zef.compartment_tags{1} '_submesh_ind']) = size(strip_struct.triangles{1},1);
 zef.([zef.compartment_tags{1} '_points']) = points{1};
 zef.([zef.compartment_tags{1} '_sigma']) = strip_struct.strip_conductivity;
 

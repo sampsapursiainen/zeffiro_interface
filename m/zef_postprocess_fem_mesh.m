@@ -38,6 +38,7 @@ priority_vec = [];
 pml_vec = [];
 aux_active_compartment_ind = [];
 submesh_cell = zef.reuna_submesh_ind;
+distance_vec = zef.reuna_distance_vec;
 
 for k = 1 : length(compartment_tags)
 
@@ -156,7 +157,7 @@ if eval('zef.refinement_volume_on_2');
 
     for i = 1 : n_refinement
 
-        [nodes,tetra,domain_labels] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,refinement_compartments);
+        [nodes,tetra,domain_labels,distance_vec] = zef_mesh_refinement(zef,nodes,tetra,domain_labels,distance_vec,refinement_compartments);
         zef_waitbar(i,n_refinement,h,'Volume refinement.');
 
     end
@@ -189,7 +190,7 @@ submesh_ind = submesh_ind_2(domain_labels);
 submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
-
+ 
    %I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));
     I_2 = zeros(size(tetra,1),1);
@@ -238,6 +239,7 @@ zef.tetra = double(tetra);
 zef.surface_triangles = surface_triangles;
 zef.submesh_ind = double(submesh_ind);
 zef.condition_number = condition_number;
+zef.reuna_distance_vec = distance_vec;
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
