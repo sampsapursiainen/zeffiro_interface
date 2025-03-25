@@ -8,8 +8,8 @@ end
 
 zef.KF = zef_kf_app;
 
-zef.KF.filter_type.Items = {'Basic Kalman'  'EnKF'  'Standardized Kalman (sLORETA)'  'Kalman spatial sLORETA'};
-zef.KF.filter_type.ItemsData = {'1'  '2'  '3'  '4' };
+zef.KF.filter_type.Items = {'No standardization'  'Spatiotemporal standardization'  'Spatial standardization'};
+zef.KF.filter_type.ItemsData = {'1'  '3'  '4' };
 
 zef.KF.standardization_exponent.Items = {'1/2'  '1' '3/2' '2'};
 zef.KF.standardization_exponent.ItemsData = {'1/2'  '1' '3/2' '2'};
