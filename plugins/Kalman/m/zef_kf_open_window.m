@@ -11,8 +11,8 @@ zef.KF = zef_kf_app;
 zef.KF.filter_type.Items = {'No standardization'  'Spatiotemporal standardization'  'Spatial standardization'};
 zef.KF.filter_type.ItemsData = {'1'  '3'  '4' };
 
-zef.KF.standardization_exponent.Items = {'1/2'  '1' '3/2' '2'};
-zef.KF.standardization_exponent.ItemsData = {'0.5'  '1' '1.5' '2'};
+zef.KF.standardization_exponent.Items = {'1/2' '1' '5/4' '3/2' '7/4' '2'};
+zef.KF.standardization_exponent.ItemsData = {'0.5'  '1' '1.25' '1.5' '1.75' '2'};
 
 %_ Initial values _
 if isfield(zef,'inv_snr')
