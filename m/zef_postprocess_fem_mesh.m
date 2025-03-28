@@ -186,8 +186,6 @@ domain_labels_with_subdomains = domain_labels;
 %[domain_labels] = submesh_ind_1(domain_labels(priority_ind));
 [domain_labels] = submesh_ind_1(domain_labels);
 active_compartment_ind = zef_find_active_compartment_ind(zef,domain_labels);
-submesh_ind = submesh_ind_2(domain_labels);
-submesh_ind = submesh_ind(active_compartment_ind);
 
 if eval('zef.exclude_box')
  
@@ -226,6 +224,8 @@ non_source_ind = find(tetra_vec > 2);
 clear tetra_vec;
 
 condition_number = zef_condition_number(nodes,tetra);
+[submesh_ind] = zef_find_subdomain_ind(domain_labels, domain_labels_with_subdomains);
+submesh_ind = submesh_ind(active_compartment_ind);
 
 close(h);
 

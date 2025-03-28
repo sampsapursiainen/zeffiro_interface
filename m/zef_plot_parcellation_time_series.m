@@ -144,3 +144,45 @@ if plot_mode == 3
     end
 
 end
+
+
+if plot_mode == 4
+    axes(evalin('base','zef.h_axes1'));
+    cla(evalin('base','zef.h_axes1'));
+    hold(evalin('base','zef.h_axes1'),'off');
+
+    % Boxplot: y_vals is a cell array, one entry per parcel
+    positions = 1:length(y_vals);
+    colors = parcellation_colormap(selected_list+1,:);
+    box_data = y_vals;  % cell array
+
+box_data_filtered = box_data(:);
+selected_labels = parcellation_list(selected_list);
+
+% Remove empty or invalid entries
+valid_idx = cellfun(@(x) isnumeric(x) && ~isempty(x), box_data_filtered);
+box_data_filtered = box_data_filtered(valid_idx);
+selected_labels = selected_labels(valid_idx);
+
+% Combine all values into a single vector
+all_vals = vertcat(box_data_filtered{:});
+
+% Create group indices
+group_vals = arrayfun(@(i) repmat(i, size(box_data_filtered{i},1), 1), 1:length(box_data_filtered), 'UniformOutput', false);
+group_vals = vertcat(group_vals{:});
+
+% Plot
+boxplot(all_vals, group_vals, 'Labels', selected_labels, ...
+    'Parent', evalin('base','zef.h_axes1'), ...
+    'Colors', [0 0 0], 'Symbol', '.', 'OutlierSize', 4);
+
+    % Set box colors
+    h = findobj(evalin('base','zef.h_axes1'),'Tag','Box');
+    for j = 1:length(h)
+        patch(get(h(j),'XData'), get(h(j),'YData'), colors(j,:), 'FaceAlpha', 0.4);
+    end
+
+    set(evalin('base','zef.h_axes1'), 'XTickLabelRotation', 45);
+    ylabel(evalin('base','zef.h_axes1'), 'Amplitude', 'Interpreter','none');
+    grid(evalin('base','zef.h_axes1'), 'on');
+end
