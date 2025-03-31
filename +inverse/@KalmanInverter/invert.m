@@ -97,7 +97,7 @@ if opts.use_gpu && gpuDeviceCount > 0
     self.prev_step_posterior_cov = gpuArray(self.prev_step_posterior_cov);
 end
 %% KALMAN FILTER
-if strcmp(self.method_type,"Basic Kalman filter")
+if strcmp(self.method_type,"Basic Kalman filter") || ((strcmp(self.method_type,"Standardized Kalman filter") || strcmp(self.method_type,"Approximated Standardized Kalman filter")) && strcmp(sel.fsmoother_type,"RTS"))
     % Prediction
     [x, P] = plugins.ClassKF.class_kf_predict(self);
     % Update
