@@ -1,8 +1,8 @@
-function [G1, G2, G3] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
+function [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
 %
-% [G1, G2, G3] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
+% [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
 %
-% Calculates a gradient field [G1,G2,G3] for a given set of nodes, tetra,
+% Calculates a gradient field [Gx,Gy,Gz] for a given set of nodes, tetra,
 % volume, volume current tensor, gradient field evaluation points.
 %
 % Inputs:
@@ -58,9 +58,9 @@ end
 
     assert ( Ntet == Nten, "The number of conductivities needs to match the number of tetra." ) ;
 
-    G1 = spalloc(Nrows,Ncols,0);
-    G2 = spalloc(Nrows,Ncols,0);
-    G3 = spalloc(Nrows,Ncols,0);
+    Gx = spalloc(Nrows,Ncols,0);
+    Gy = spalloc(Nrows,Ncols,0);
+    Gz = spalloc(Nrows,Ncols,0);
 
     ind_m = [ 2 3 4 ;
         3 4 1 ;
@@ -137,9 +137,9 @@ end
 
         end % for k
 
-        G1 = G1 + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_1,Nrows,Ncols);
-        G2 = G2 + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_2,Nrows,Ncols);
-        G3 = G3 + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_3,Nrows,Ncols);
+        Gx = Gx + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_1,Nrows,Ncols);
+        Gy = Gy + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_2,Nrows,Ncols);
+        Gz = Gz + sparse((1:Nrows)',tetra(sourceElementI,i), entry_vec_3,Nrows,Ncols);
 
     end % for i
 
