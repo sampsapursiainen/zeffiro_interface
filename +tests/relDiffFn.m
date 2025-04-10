@@ -4,7 +4,7 @@ function relDiff = relDiffFn(field1,field2, dbVal)
 %
 % Computes the relative difference
 %
-%   relDiff = abs(field1 - field2) / max(delta,abs(field2))
+%   relDiff = abs(field1 - field2) ./ max(delta,max(abs(field2))
 %
 % of two given fields, where
 %
@@ -22,6 +22,6 @@ function relDiff = relDiffFn(field1,field2, dbVal)
 
     delta = db2mag(dbVal) * max(abs(field2)) ;
 
-    relDiff = abs(field1 - field2) ./ max(delta,abs(field2)) ;
+    relDiff = abs(field1 - field2) ./ max(delta,max(abs(field2)) ;
 
 end % function
