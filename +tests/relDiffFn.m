@@ -22,6 +22,6 @@ function relDiff = relDiffFn(field1,field2, dbVal)
 
     delta = db2mag(dbVal) * max(abs(field2)) ;
 
-    relDiff = abs(field1 - field2) ./ max(delta,max(abs(field2)) ;
+    relDiff = abs(field1 - field2) ./ max(delta,max(abs(field2))) ;
 
 end % function
