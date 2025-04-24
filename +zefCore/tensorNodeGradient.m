@@ -2,8 +2,9 @@ function [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, source
 %
 % [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
 %
-% Calculates a gradient field [Gx,Gy,Gz] for a given set of nodes, tetra,
-% volume, volume current tensor, gradient field evaluation points.
+% Calculates the x-, y- and z-components of a gradient field nabla u in the form
+% of matrices [Gx,Gy,Gz] for a given set of nodes, tetra, volume, volume current
+% tensor, gradient field evaluation points.
 %
 % Inputs:
 %
@@ -48,6 +49,7 @@ end
     disp ( newline + "Computing σ∇ψi…" + newline) ;
 
     Nrows = numel (sourceElementI) ;
+
     Ncols = size (nodes,1) ;
 
     Ntet = size (tetra,1) ;
