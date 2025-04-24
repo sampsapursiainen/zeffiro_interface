@@ -71,9 +71,9 @@ function [L1, L2, R1, R2] = interferenceLeadFields (nodes, tetra, conductivity, 
 
     S2 = zefCore.schurComplement (T2, ctranspose(B2), C2) ;
 
-    [Gx1, Gy1, Gz1] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
+    [Gx1, Gy1, Gz1] = zefCore.conductanceDensity (nodes, tetra, tetraV, admittivity1, activeI) ;
 
-    [Gx2, Gy2, Gz2] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity1, activeI) ;
+    [Gx2, Gy2, Gz2] = zefCore.conductanceDensity (nodes, tetra, tetraV, admittivity1, activeI) ;
 
     [ ~, aggregationN, aggregationI, ~ ] = zefCore.positionSourcesRectGrid (nodes, tetra, activeI, sourceN) ;
 
