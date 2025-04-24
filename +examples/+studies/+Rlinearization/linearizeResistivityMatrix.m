@@ -78,7 +78,7 @@ function linearizeResistivityMatrix (nodes, tetra, elePos, volumeCurrentI, sigma
 
     disp ("Computing volume currents σ∇ψ…")
 
-    [Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
+    [Gx, Gy, Gz] = zefCore.conductanceDensity (nodes, tetra, tetV, conductivity, volumeCurrentI) ;
 
     G = [ Gx ; Gy ; Gz ] ;
 

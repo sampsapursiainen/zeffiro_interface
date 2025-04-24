@@ -92,7 +92,7 @@ invS = S \ eye ( size (S) ) ;
 
 R = zefCore.resistivityMatrix (T, invS) ;
 
-[Gx, Gy, Gz] = zefCore.tensorNodeGradient (nodes, tetra, tetraV, admittivity, activeI) ;
+[Gx, Gy, Gz] = zefCore.conductanceDensity (nodes, tetra, tetraV, admittivity, activeI) ;
 
 %% Initial lead field.
 
