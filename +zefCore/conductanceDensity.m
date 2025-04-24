@@ -1,10 +1,11 @@
-function [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
+function [Gx, Gy, Gz] = conductanceDensity (nodes, tetra, volume, tensor, sourceElementI)
 %
-% [Gx, Gy, Gz] = tensorNodeGradient (nodes, tetra, volume, tensor, sourceElementI)
+% [Gx, Gy, Gz] = conductanceDensity (nodes, tetra, volume, tensor, sourceElementI)
 %
-% Calculates the x-, y- and z-components of a gradient field nabla u in the form
-% of matrices [Gx,Gy,Gz] for a given set of nodes, tetra, volume, volume current
-% tensor, gradient field evaluation points.
+% Calculates the x-, y- and z-components of a volume conductance density Sigma
+% with units [Sigma] = siemens / meter ^ 2, in the form of matrices [Gx,Gy,Gz]
+% for a given set of nodes, tetra, volume, volume current tensor, gradient field
+% evaluation points.
 %
 % Inputs:
 %
