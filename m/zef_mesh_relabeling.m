@@ -39,7 +39,7 @@ end
         if not(isequal(compartment_counter,n_compartments))
 
                    if k_labeling == 1
-                        reuna_t_aux = zef.reuna_t{i_labeling}(1:zef.reuna_submesh_ind{i_labeling},:);
+                        reuna_t_aux = zef.reuna_t{i_labeling}(1:zef.reuna_submesh_ind{i_labeling}(k_labeling),:);
                    else
                         reuna_t_aux = zef.reuna_t{i_labeling}(zef.reuna_submesh_ind{i_labeling}(k_labeling-1)+1: zef.reuna_submesh_ind{i_labeling}(k_labeling),:);
                    end
