@@ -9,12 +9,19 @@ if not(hold_state)
     hold on;
 end
 
-z = z'/norm(z);
-x = 1/sqrt(z(1)^2+z(2)^2)* [z(2) -z(1) 0]';
+ %make sure z is column vector
+z = z(:)/norm(z);
+
+if isequal(abs(z),[0 0 1]')
+    x = [1 0 0]';
+else
+    x = 1/sqrt(z(1)^2+z(2)^2)* [z(2) -z(1) 0]';
+end
+
 y = cross(z,x);
 
 
-
+%rotation matrix
 T_ellipsoid_to_lab = [x y z];
 ellipsoid = T_ellipsoid_to_lab*[[a 0 0];[0 b 0];[0 0 c]]';
 

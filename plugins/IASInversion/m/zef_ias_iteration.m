@@ -132,7 +132,7 @@ for f_ind = 1 : number_of_frames
             sloreta_vec = sqrt(sum(L.*L_aux', 2));
             L = L./sloreta_vec(:,ones(size(L,2),1));
 
-        elseif isequal(ias_type,2)
+        elseif isequal(ias_type,3)
             % sLORETA
 
             if i == n_ias_map_iter
