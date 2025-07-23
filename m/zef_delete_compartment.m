@@ -20,13 +20,6 @@ for i = 1 : length(compartments_selected)
     end
 end
 
-combination_fun = @(x,y)[x y]; 
-fieldnames_list = fieldnames(zef)'; 
-tag_list = fliplr(zef.compartment_tags);
-tag_list = cellfun(combination_fun, tag_list(compartments_selected), repmat({'_'},1,length(compartments_selected)), 'UniformOutput', false);
-fieldnames_list = fieldnames_list(find(startsWith(fieldnames_list, tag_list)));
-zef = rmfield(zef, fieldnames_list);
-
 zef = zef_update(zef);
 
 if nargout == 0
