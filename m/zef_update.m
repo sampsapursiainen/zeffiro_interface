@@ -13,6 +13,9 @@ if isfield(zef,'h_zeffiro_window_main')
         if not(isempty(zef.aux_field_1))
         not_isnan_row = find(not(cellfun(@isnan,zef.aux_field_1(:,1))));
         zef.aux_field_1 = zef.aux_field_1(not_isnan_row,:);
+        zef.compartment_tags = fliplr(zef.compartment_tags);
+        zef.compartment_tags = zef.compartment_tags(not_isnan_row);
+        zef.compartment_tags = fliplr(zef.compartment_tags);
         end
         zef.aux_field_2 = zeros(size(zef.aux_field_1,1),1);
         zef.aux_field_3 = [];
