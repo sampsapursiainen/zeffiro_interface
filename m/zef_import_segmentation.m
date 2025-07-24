@@ -60,6 +60,7 @@ if not(isequal(file_name,0))
                 name = (ini_cell{i,find(ismember(ini_cell(i,:),'name'),1)+1});
             end
 
+            new_compartment = 0;
             if isequal(type,'box')
                 if isempty(name)
                     zef = zef_add_bounding_box(zef);
@@ -72,6 +73,7 @@ if not(isequal(file_name,0))
                         compartment_ind = find(ismember(compartment_data(:,3),name));
                         compartment_tag = compartment_tags{end-compartment_ind+1};
                     else
+                        new_compartment = 1;
                         domain_label_counter = domain_label_counter + 1;
                         zef = zef_add_compartment(zef);
                         compartment_tags = zef.compartment_tags;
@@ -350,11 +352,13 @@ if not(isequal(file_name,0))
                 end
 
                 if isempty(filename) && isempty(database)
-                    aux_tetra = zef.tetra;
+                   if new_compartment
+                   aux_tetra = zef.tetra;
                     aux_nodes = zef.nodes;
-                    aux_domain_labels = zef.domain_labels;
+                   aux_domain_labels = zef.domain_labels;
                     [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
                     zef = zef_merge_surface_mesh(zef,compartment_tag,aux_triangles,aux_points,merge);
+                   end
                 end
 
                 if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm')
