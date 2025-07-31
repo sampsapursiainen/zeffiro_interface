@@ -10,6 +10,12 @@ attach_type = 'mesh';
 bypass_functions = 0;
 I_get_functions = [];
 
+ if isfield(zef,[zef.current_sensors '_electrode_surface_index'])
+ electrode_surface_index = zef.([zef.current_sensors '_electrode_surface_index']);
+ else
+ electrode_surface_index = 1;
+ end
+
 if not(bypass_functions)
 zef = zef_fix_sensors_get_functions_array_size(zef);
 sensors_get_functions = zef.([zef.current_sensors '_get_functions']);
@@ -65,16 +71,16 @@ if ismember(zef.imaging_method,[1,4,5])
 
     %if ismember(attach_type,{'geometry','points'});
     if not(isequal(zef.reuna_type{end,1},-1))
-        geometry_triangles = zef.reuna_t{end};
-        geometry_nodes = zef.reuna_p{end};
+        geometry_triangles = zef.reuna_t{end-electrode_surface_index+1};
+        geometry_nodes = zef.reuna_p{end-electrode_surface_index+1};
     else
-        geometry_triangles = zef.reuna_t{end-1};
-        geometry_nodes = zef.reuna_p{end-1};
+        geometry_triangles = zef.reuna_t{end-electrode_surface_index};
+        geometry_nodes = zef.reuna_p{end-electrode_surface_index};
     end
 
     if not(iscell(zef.surface_triangles))
-            zef.surface_triangles = {zef.surface_triangles};
-        end
+        zef.surface_triangles = {zef.surface_triangles};
+    end
     use_depth_electrodes =zef.use_depth_electrodes;
 
     %if eval('zef.use_gpu')
@@ -119,11 +125,11 @@ if ismember(zef.imaging_method,[1,4,5])
                 geometry_nodes(geometry_triangles(:,2),:) + ...
                 geometry_nodes(geometry_triangles(:,3),:));
         else
-            center_points_aux = (1/3)*(zef.nodes(zef.surface_triangles{end}(:,1),:) + ...
-                zef.nodes(zef.surface_triangles{end}(:,2),:) + ...
-                zef.nodes(zef.surface_triangles{end}(:,3),:));
+            center_points_aux = (1/3)*(zef.nodes(zef.surface_triangles{end-electrode_surface_index+1}(:,1),:) + ...
+                zef.nodes(zef.surface_triangles{end-electrode_surface_index+1}(:,2),:) + ...
+                zef.nodes(zef.surface_triangles{end-electrode_surface_index+1}(:,3),:));
 
-            unique_surface_triangles = unique(zef.surface_triangles{end});
+            unique_surface_triangles = unique(zef.surface_triangles{end-electrode_surface_index+1});
             ele_nodes = zef.nodes(unique_surface_triangles,:);
 
             if not(isempty(find(sensors(:,4) == 0)))
@@ -193,7 +199,7 @@ i_ind = 0;
                     sensors(i,1:3) = ele_nodes(min_ind,:);
                     [dist_val] = (sqrt(sum((center_points_aux - repmat(sensors(i,1:3),size(center_points_aux,1),1)).^2,2)));
                     dist_ind = find(dist_val < sensors(i,4) & dist_val >= sensors(i,5));
-                    sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) zef.surface_triangles{end}(dist_ind,:)];
+                    sensors_aux = [sensors_aux ; i*ones(length(dist_ind),1) zef.surface_triangles{end-electrode_surface_index+1}(dist_ind,:)];
 
                 elseif isequal(attach_type,'geometry')
 
