@@ -15,6 +15,7 @@ zef.h_parcellation_roi_color.String = num2str(zef.parcellation_roi_color(zef.par
 zef.h_parcellation_roi_color.BackgroundColor = zef.parcellation_roi_color(zef.parcellation_roi_selected,:);
 zef.h_parcellation_roi_list.Value = zef.parcellation_roi_selected;
 zef.h_parcellation_roi_list.String = zef.parcellation_roi_name;
+zef.h_parcellation_time_series_mode.Value = zef.parcellation_time_series_mode;
 
 zef.parcellation_list = cell(0);
 

@@ -17,7 +17,7 @@ function [m, P, K, D] = kf_sL_update_approx(m,P,y,H,R)
     B = H * P;
     K = B*P_sqrtm_right;
     G = K' / (B * H' + R);
-    w_t = 1 ./ sum(G.' .* K, 1)';
+    w_t = 1 ./ sqrt(sum(G.' .* K, 1))';
     D = w_t .* P_sqrtm_right;
     % kf_update is the update step of kalman filter
     v = y-H*m;

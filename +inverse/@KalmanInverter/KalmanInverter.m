@@ -50,7 +50,7 @@ classdef KalmanInverter < inverse.CommonInverseParameters
         %
         %smoother type
         %
-        smoother_type (1,1) string { mustBeMember(smoother_type, ["None", "RTS"]) } = "None"
+        smoother_type (1,1) string { mustBeMember(smoother_type, ["None", "RTS", "Sample RTS"]) } = "None"
 
         %
         %state transition model of Kalman Filter (usually denoted A)
@@ -253,7 +253,7 @@ classdef KalmanInverter < inverse.CommonInverseParameters
 
         [reconstruction, self] = invert(self, f, L, procFile, source_direction_mode)
 
-        [reconstruction, self] = smoother(self, z_inverse)
+        [reconstruction, self] = smoother(self, z_inverse, L)
 
         function self = terminateComputation(self)
             evolution_var = findprop(self,'evolution_var');

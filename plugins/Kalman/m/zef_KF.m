@@ -75,7 +75,7 @@ elseif filter_type == 2
     n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
-    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
+    [P_store, D_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
 elseif filter_type == 4
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
@@ -88,8 +88,22 @@ end
 %% RTS SMOOTHING
 
 if (smoothing == 2)
-    [~, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
+    [~, m_s_store, ~] = RTS_smoother_nonstandardized(P_store, z_inverse, A, Q, number_of_frames);
     z_inverse = m_s_store;
+elseif smoothing == 3
+    if exist('D_store','var')
+        [~, z_inverse, ~] = RTS_smoother_standardized(P_store, D_store, z_inverse, A, Q, number_of_frames);
+    else
+        warning('The filtering is done with a method non-compatible with the selected smoother. Smoothing neglected.')
+    end
+elseif smoothing == 4
+    [~, z_inverse, ~] = RTS_smoother_normal2standardized(P_store, z_inverse, A, Q, L, R, standardization_exponent, number_of_frames);
+elseif smoothing == 5
+    if filter_type == 1
+        [~, z_inverse, ~] = RTS_smoother_standardized(P_store, cell(0), z_inverse, A, number_of_frames);
+    else
+        [~, z_inverse, ~] = sample_RTS_smoother(P_store, D_store, z_inverse, A, number_of_frames, filter_type);
+    end
 end
 
 %% POSTPROCESSING

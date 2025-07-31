@@ -110,7 +110,7 @@ if isequal(file_type,'stl')
         mesh_data_2 = stl_data.ConnectivityList;
 
         if invert_on
-            mesh_data_2 = mesh_data_1(:,[2 1 3]);
+            mesh_data_2 = mesh_data_2(:,[2 1 3]);
         end
     end
 
@@ -132,7 +132,7 @@ if isequal(file_type,'asc')
     aux_dim = aux_dim(1:2);
 
     point_data = zeros(aux_dim(1),3);
-    triangle_data = zeros(aux_dim(1),3);
+    triangle_data = zeros(aux_dim(2),3);
 
     fid = fopen(file_name_1);
     aux_data = textscan(fid,'%s',aux_dim(1),'delimiter','\n', 'headerlines',2);
@@ -173,7 +173,7 @@ if isequal(file_type,'asc')
         mesh_data_2 = triangle_data;
 
         if invert_on
-            mesh_data_2 = mesh_data_1(:,[2 1 3]);
+            mesh_data_2 = mesh_data_2(:,[2 1 3]);
         end
     end
 

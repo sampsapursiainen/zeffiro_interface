@@ -28,7 +28,10 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     % the waitbar, if there is an interruption with Ctrl + C or when this
     % function exits.
 
-    waitbar_title = "Building reconstructions with " + erase(class(MethodClassObj),["inverse","Inverter","."]) + ".";
+    zef.reconstruction_information = struct;
+    zef.reconstruction_information.tag = erase(class(MethodClassObj),["inverse","Inverter","."]);
+
+    waitbar_title = "Building reconstructions with " + zef.reconstruction_information.tag + ".";
 
     waitbar_handle = zef_waitbar(0, waitbar_title);
 
@@ -147,7 +150,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     props = properties(MethodClassObj);
 
     for n = 1:length(props)
-        if min(size(MethodClassObj.(props{n}))) < 2
+        if max(size(MethodClassObj.(props{n}))) < 2 && not(iscell(MethodClassObj.(props{n})))
             zef.reconstruction_information.(props{n}) = MethodClassObj.(props{n});
         end
     end

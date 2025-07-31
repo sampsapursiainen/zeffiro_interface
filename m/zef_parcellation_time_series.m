@@ -20,7 +20,11 @@ s_i_ind_2 =  eval('zef.source_interpolation_ind{1}');
 
 selected_list = eval('zef.parcellation_selected');
 p_i_ind = eval('zef.parcellation_interp_ind');
+if zef.parcellation_time_series_mode == 1
 time_series = zeros(length(selected_list), number_of_frames);
+elseif zef.parcellation_time_series_mode == 2
+time_series = cell(length(selected_list), number_of_frames);
+end
 
 h_waitbar = zef_waitbar(0,1,['Time series.']);
 
@@ -185,12 +189,13 @@ for k = 1 : length(compartment_tags)
                     reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
                 end
 
-                reconstruction = (max(reconstruction/max_abs_reconstruction,0));
+                %reconstruction = (max(reconstruction/max_abs_reconstruction,0));
 
                 p_counter = 0;
                 for p_ind = selected_list
                     p_counter = p_counter + 1;
                     if not(isempty(reconstruction(p_i_ind{p_ind}{2}{ab_ind})))
+                        if zef.parcellation_time_series_mode == 1
                         if eval('zef.parcellation_type') == 1
                             time_series(p_counter,f_ind_aux) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),1);
                         elseif eval('zef.parcellation_type') == 2
@@ -201,6 +206,9 @@ for k = 1 : length(compartment_tags)
                             time_series(p_counter,f_ind_aux) = quantile((reconstruction(p_i_ind{p_ind}{2}{ab_ind}).^(1/3)),eval('zef.parcellation_quantile'));
                         elseif eval('zef.parcellation_type') == 5;
                             time_series(p_counter,f_ind_aux) = mean(reconstruction(p_i_ind{p_ind}{2}{ab_ind}));
+                        end
+                        elseif zef.parcellation_time_series_mode == 2
+                             time_series{p_counter,f_ind_aux} = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
                         end
                     end
                 end
@@ -272,12 +280,13 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
             reconstruction = zef_smooth_field(reuna_t{i}, reconstruction, size(reuna_p{i}(:,1),1),3);
         end
 
-        reconstruction = (max(reconstruction/max_abs_reconstruction,0));
+        %reconstruction = (max(reconstruction/max_abs_reconstruction,0));
 
         p_counter = 0;
         for p_ind = selected_list
             p_counter = p_counter + 1;
             if not(isempty(reconstruction(p_i_ind{p_ind}{2}{ab_ind})))
+                if zef.parcellation_time_series_mode == 1
                 if eval('zef.parcellation_type') == 1
                     time_series(p_counter,f_ind_aux) = quantile(reconstruction(p_i_ind{p_ind}{2}{ab_ind}),1);
                 elseif eval('zef.parcellation_type') == 2
@@ -289,6 +298,9 @@ for f_ind = frame_start + frame_step : frame_step : frame_stop
                 elseif eval('zef.parcellation_type') == 5
                     time_series(p_counter,f_ind_aux) =mean(reconstruction(p_i_ind{p_ind}{2}{ab_ind}));
                 end
+                elseif zef.parcellation_time_series_mode == 2
+                    time_series(p_counter,f_ind_aux) = reconstruction(p_i_ind{p_ind}{2}{ab_ind});
+                end
             end
         end
 
@@ -298,8 +310,10 @@ end
 
 zef_waitbar(1,1,h_waitbar,['Step ' int2str(f_ind_aux) ' of ' int2str(number_of_frames) '.']);
 
+if zef.parcellation_time_series_mode == 1
 time_series(find(isnan(time_series))) = 0;
 time_series = time_series.^2;
+end
 close(h_waitbar);
 
 end

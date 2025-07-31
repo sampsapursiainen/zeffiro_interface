@@ -12,6 +12,10 @@ if not(isfield(zef,'parcellation_colortable'));
     zef.parcellation_colortable = cell(0);
 end;
 
+if not(isfield(zef,'parcellation_time_series_mode'));
+zef.parcellation_time_series_mode = 1;
+end
+
 if not(isfield(zef,'parcellation_segment'));
     zef.parcellation_segment = 'LH';
 end;
