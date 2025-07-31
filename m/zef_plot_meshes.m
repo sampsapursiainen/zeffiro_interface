@@ -550,6 +550,11 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 set(h,'facealpha',eval('zef.layer_transparency'));
             end
         elseif electrode_model == 2
+             if isfield(zef,[zef.current_sensors '_electrode_surface_index'])
+ electrode_surface_index = zef.([zef.current_sensors '_electrode_surface_index']);
+ else
+ electrode_surface_index = 1;
+ end
             %April 2021
             if eval(['zef.' eval('zef.current_sensors') '_names_visible'])
                 for i = 1 : size(sensors_name_points,1)
@@ -561,7 +566,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 unique_sensors_aux_1 = unique(sensors(:,1));
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
-                    surface_index_aux = length(reuna_p);
+                    surface_index_aux = length(reuna_p)-electrode_surface_index+1;
                         if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
                             [~, sensor_info] = zef_sensor_get_function_eval(sensors_get_functions{unique_sensors_aux_1(i)}, zef,'sensor_info');
                             surface_index_aux = sensor_info.compartment_index;
