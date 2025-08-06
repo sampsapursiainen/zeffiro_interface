@@ -35,10 +35,9 @@ for i = 1 : size(p,2)
     I = intersect(I_1,I_2);
 
     z = min(abs(s(I)));
+    distance_vec(i) = min(sqrt(sum((nodes - p(:,i*ones(1,size(nodes,2)))).^2)));
     if not(isempty(z))
-        distance_vec(i) = z;
-    else
-        distance_vec(i) = min(sqrt(sum((nodes - p(:,i*ones(1,size(nodes,2)))).^2)));
+        distance_vec(i) = min(z,distance_vec(i));
     end
 end
 
