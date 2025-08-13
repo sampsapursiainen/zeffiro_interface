@@ -7,9 +7,11 @@ if nargin == 0
 end
 
 zef.KF = zef_kf_app;
+zef.KF.filter_type.Items = {'No standardization'  'EnKF'  'Spatiotemporal standardization'  'Spatial standardization' 'Double block Kalman (sLORETA1)' 'Double block Kalman (sLORETA2)' 'Triple block Kalman (sLORETA1)' 'Triple block Kalman (sLORETA2)' 'Triple block Kalman (sLORETA3)'};
+zef.KF.filter_type.ItemsData = {'1' '2' '3' '4' '5' '6' '7' '8' '9'};
 
-zef.KF.filter_type.Items = {'No standardization'  'Spatiotemporal standardization'  'Spatial standardization'};
-zef.KF.filter_type.ItemsData = {'1'  '3'  '4' };
+zef.KF.kf_smoothing.Items = {'none'  'RTS'  '2Block RTS' '3Block RTS'};
+zef.KF.kf_smoothing.ItemsData = {'1' '2' '3' '4'};
 
 zef.KF.standardization_exponent.Items = {'1/2' '1' '5/4' '3/2' '7/4' '2'};
 zef.KF.standardization_exponent.ItemsData = {'0.5'  '1' '1.25' '1.5' '1.75' '2'};
@@ -18,72 +20,91 @@ zef.KF.standardization_exponent.ItemsData = {'0.5'  '1' '1.25' '1.5' '1.75' '2'}
 if isfield(zef,'inv_snr')
 zef.KF.inv_snr.Value = num2str(zef.inv_snr);
 else
+    zef.inv_snr = 30;
 zef.KF.inv_snr.Value = '30';
+end
+
+if isfield(zef,'kf_burn_in')
+    zef.KF.burn_in.Value=mun2str(zef.kf_burn_in);
+else
+    zef.kf_burn_in = 4;
+    zef.KF.burn_in.Value='4';
 end
 
 if isfield(zef,'standardization_exponent')
 zef.KF.standardization_exponent.Value = num2str(zef.standardization_exponent);
 else
+zef.standardization_exponent = 1;
 zef.KF.standardization_exponent.Value = zef.KF.standardization_exponent.ItemsData{2};
 end
 
 if isfield(zef,'inv_sampling_frequency')
 zef.KF.inv_sampling_frequency.Value = num2str(zef.inv_sampling_frequency);
 else
+    zef.inv_sampling_frequency = 1025;
 zef.KF.inv_sampling_frequency.Value = '1025';
 end
 
 if isfield(zef,'inv_low_cut_frequency')
 zef.KF.inv_low_cut_frequency.Value = num2str(zef.inv_low_cut_frequency);
 else
+    zef.inv_low_cut_frequency = 7;
 zef.KF.inv_low_cut_frequency.Value = '7';
 end
 
 if isfield(zef,'inv_high_cut_frequency')
 zef.KF.inv_high_cut_frequency.Value = num2str(zef.inv_high_cut_frequency);
 else
+    zef.inv_high_cut_frequency = 9;
 zef.KF.inv_high_cut_frequency.Value = '9';
 end
 
 if isfield(zef,'inv_time_1')
 zef.KF.inv_time_1.Value = num2str(zef.inv_time_1);
 else
+    zef.inv_time_1 = 0;
 zef.KF.inv_time_1.Value = '0';
 end
 
 if isfield(zef,'inv_time_2')
 zef.KF.inv_time_2.Value = num2str(zef.inv_time_2);    
 else
+    zef.inv_time_2 = 0;
     zef.KF.inv_time_2.Value = '0';
 end
 
 if isfield(zef,'number_of_frames')
 zef.KF.number_of_frames.Value = num2str(zef.number_of_frames);
 else
+    zef.number_of_frames = 0;
 zef.KF.number_of_frames.Value = '0';
 end
 
 if isfield(zef,'inv_time_3')
 zef.KF.inv_time_3.Value = num2str(zef.inv_time_3);
 else
+    zef.inv_time_3 = 0;
 zef.KF.inv_time_3.Value = '0';
 end
 
 if isfield(zef,'filter_type')
 zef.KF.filter_type.Value = num2str(zef.filter_type);
 else
+    zef.filter_type = 1;
 zef.KF.filter_type.Value = '1';
 end
 
 if isfield(zef,'number_of_ensembles')
 zef.KF.number_of_ensembles.Value = num2str(zef.number_of_ensembles);
 else
+    zef.number_of_ensembles = 100;
 zef.KF.number_of_ensembles.Value = '100';
 end
 
 if isfield(zef,'normalize_data')
 zef.KF.normalize_data.Value = num2str(zef.normalize_data);
 else
+    zef.normalize_data = 1;
 zef.KF.normalize_data.Value = 1;
 end
 
@@ -115,6 +136,7 @@ zef.KF.StartButton.ButtonPushedFcn = 'zef = zef_KF(zef);';
 zef.KF.ApplyButton.ButtonPushedFcn = 'zef_props = properties(zef.KF); for zef_i = 1:length(zef_props); if isprop(zef.KF.(zef_props{zef_i}),''Value''); zef.(zef_props{zef_i}) = str2num(zef.KF.(zef_props{zef_i}).Value); end; end; clear zef_props zef_i;';
 zef.KF.CloseButton.ButtonPushedFcn = 'delete(zef.KF);';
 zef.KF.filter_type.ValueChangedFcn = 'zef.filter_type = str2num(zef.KF.filter_type.Value);';
+zef.KF.burn_in.ValueChangedFcn = 'zef.kf_burn_in = str2num(zef.KF.burn_in.Value);';
 
 %set fonts
 set(findobj(zef.KF.UIFigure.Children,'-property','FontSize'),'FontSize',zef.font_size);
