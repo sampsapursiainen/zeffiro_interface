@@ -15,6 +15,7 @@ source_directions = zef.source_directions;
 source_positions = zef.source_positions;
 standardization_exponent = zef.standardization_exponent;
 time_step = zef.inv_time_3;
+burn_in = zef.kf_burn_in;
 
 %% Reconstruction identifiers
 reconstruction_information.tag = 'Kalman';
@@ -66,46 +67,74 @@ R = std_lhood^2 * eye(size(L,1));
 
 Q_Store = cell(0);
 
+invert_order=0;
+
 %% KALMAN FILTER
+if invert_order==1
+    timeSteps=flip(timeSteps);
+end
+sL=0;
 filter_type = zef.filter_type;
 smoothing = zef.kf_smoothing;
 if filter_type == 1
+    smoothing=min(smoothing,2);
+    sL=5;
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
 elseif filter_type == 2
+    smoothing=min(smoothing,1);
     n_ensembles = str2double(zef.KF.number_of_ensembles.Value);
     z_inverse = EnKF(m,A,P,Q,L,R,timeSteps,number_of_frames, n_ensembles);
 elseif filter_type == 3
-    [P_store, D_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
+    smoothing=min(smoothing,2);
+    sL=1;
+    [P_store, z_inverse] = kalman_filter_sLORETA(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,standardization_exponent);
 elseif filter_type == 4
+    sL=1;
+    smoothing=min(smoothing,2);
     [P_store, z_inverse] = kalman_filter(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing);
     P_old = eye(size(L,2)) * theta0;
     H = L * sqrtm(P_old);
     W = inv((diag(diag(H'*inv(H*H' + R)*H))).^standardization_exponent);
     z_inverse = cellfun(@(x) W*x, z_inverse, 'UniformOutput', false);
-
+elseif filter_type == 5
+    sL=1;
+    smoothing=min(smoothing,3);
+    [P_store, z_inverse] = double_kf_sL(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,sL,standardization_exponent,burn_in);
+elseif filter_type == 6
+    sL=2;
+    smoothing=min(smoothing,3);
+    [P_store, z_inverse] = double_kf_sL(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,sL,standardization_exponent,burn_in);
+elseif filter_type == 7
+    sL=1;
+    [P_store, z_inverse] = triple_kf_sL(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,sL,standardization_exponent,burn_in);
+elseif filter_type == 8
+    sL=2;
+    [P_store, z_inverse] = triple_kf_sL(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,sL,standardization_exponent,burn_in);
+elseif filter_type == 9
+    sL=3;
+    [P_store, z_inverse] = triple_kf_sL(m,P,A,Q,L,R,timeSteps, number_of_frames, smoothing,sL,standardization_exponent,burn_in);
 end
+
 
 %% RTS SMOOTHING
 
 if (smoothing == 2)
-    [~, m_s_store, ~] = RTS_smoother_nonstandardized(P_store, z_inverse, A, Q, number_of_frames);
+    [P_s_store, m_s_store, ~] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames);
     z_inverse = m_s_store;
-elseif smoothing == 3
-    if exist('D_store','var')
-        [~, z_inverse, ~] = RTS_smoother_standardized(P_store, D_store, z_inverse, A, Q, number_of_frames);
-    else
-        warning('The filtering is done with a method non-compatible with the selected smoother. Smoothing neglected.')
-    end
-elseif smoothing == 4
-    [~, z_inverse, ~] = RTS_smoother_normal2standardized(P_store, z_inverse, A, Q, L, R, standardization_exponent, number_of_frames);
-elseif smoothing == 5
-    if filter_type == 1
-        [~, z_inverse, ~] = RTS_smoother_standardized(P_store, cell(0), z_inverse, A, number_of_frames);
-    else
-        [~, z_inverse, ~] = sample_RTS_smoother(P_store, D_store, z_inverse, A, number_of_frames, filter_type);
-    end
+elseif (smoothing == 3)
+    [P_s_store, m_s_store, ~] = Block_RTS_smoother(P_store, z_inverse, A, Q, number_of_frames,2,sL);
+    z_inverse = m_s_store;
+elseif (smoothing == 4)
+    [P_s_store, m_s_store, ~] = Block_RTS_smoother(P_store, z_inverse, A, Q, number_of_frames,3,sL);
+    z_inverse = m_s_store;
 end
 
+if sL<smoothing-1
+    [z_inverse] = ext_sL(z_inverse,P_s_store,L,R, number_of_frames, smoothing, sL,standardization_exponent);
+end
+if invert_order==1
+    z_inverse=flip(z_inverse);
+end
 %% POSTPROCESSING
 [z] = zef_postProcessInverse(z_inverse, procFile);
 %normalize the reconstruction so that the highest value is equal to 1
