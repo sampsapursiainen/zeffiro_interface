@@ -17,7 +17,7 @@ pm_val = pm_val - amplitude_db;
 snr_val = eval('zef.inv_snr');
 mne_type = eval('zef.mne_type');
 mne_prior = eval('zef.mne_prior');
-mne_exponent = 0.7;                            %EXPONENT PARAMETER HERE!, JL
+mne_exponent = 0.6;                            %EXPONENT PARAMETER HERE!, JL
 std_lhood = 10^(-snr_val/20);
 
 zef.inv_sampling_frequency = zef.mne_sampling_frequency;
