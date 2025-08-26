@@ -17,6 +17,7 @@ pm_val = pm_val - amplitude_db;
 snr_val = eval('zef.inv_snr');
 mne_type = eval('zef.mne_type');
 mne_prior = eval('zef.mne_prior');
+mne_exponent = 0.7;                            %EXPONENT PARAMETER HERE!, JL
 std_lhood = 10^(-snr_val/20);
 
 zef.inv_sampling_frequency = zef.mne_sampling_frequency;
@@ -124,6 +125,14 @@ for f_ind = 1 : zef.number_of_frames
     else
         d_sqrt = sqrt(theta0);
     end
+
+    % wMNE as the weighting is done in regularization (source prior)
+    if isequal(mne_type,4)
+        aux_vec = repelem(sum(reshape(sum(L.^2,1),n_interp,[]),2),3);
+        d_sqrt = d_sqrt./(aux_vec.^(0.5*mne_exponent));
+    end
+    
+    
     if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
         d_sqrt = gpuArray(d_sqrt);
     end
@@ -141,7 +150,7 @@ for f_ind = 1 : zef.number_of_frames
 
         aux_vec = sqrt(sum(L_inv.*L', 2));
         L_inv = L_inv./aux_vec;
-
+        
     end
 
     z_vec = L_inv * f;
