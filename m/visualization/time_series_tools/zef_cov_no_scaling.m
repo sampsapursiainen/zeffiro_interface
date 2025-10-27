@@ -6,7 +6,7 @@ function [y_vals, plot_mode] = zef_cov_no_scaling(time_series)
 %The desctiption and argument definitions shown in ZI are listed below.
 %Description: Covariance, no scaling
 
-time_series = time_series./mean(time_series);
+% time_series = time_series./mean(time_series);
 y_vals = zeros(size(time_series,1), size(time_series,1));
 for i = 1 : size(time_series,1)
     for j = 1 : size(time_series,1)
