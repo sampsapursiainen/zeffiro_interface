@@ -331,7 +331,7 @@ function run(segmentation_output_folder, recon_all_output_folder, kwargs)
 
     % 3. Extracting the skull and other outer non-brain tissues.
 
-    orig_nu_path = fullfile(recon_all_output_folder, "mri", "orig_nu.mgz");
+    orig_nu_path = fullfile(recon_all_output_folder, "mri", "nu.mgz");
 
     if not ( isfile ( orig_nu_path ) )
 
