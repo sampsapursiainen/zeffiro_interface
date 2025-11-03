@@ -2,10 +2,10 @@ function run(segmentation_output_folder, recon_all_output_folder, kwargs)
 %
 % fs2zef.run (segmentation_output_folder, recon_all_output_folder, kwargs)
 %
-% Uses the external program FreeSurfer to generate a segmentation, that can
-% then be imported to Zeffiro interface. Optionally, a [FreeSurfer]
-% reconstruction can also be performed via the program [recon-all]. This
-% function is invoked with
+% Uses the external program FreeSurfer version 8.1.0 to generate a segmentation,
+% that can then be imported to Zeffiro interface. Optionally, a [FreeSurfer]
+% reconstruction can also be performed via the program [recon-all].
+% This function is invoked with
 %
 %   utilities.fs2zef.run(segmentation_output_folder, recon_all_output_folder , kwargs)
 %
