@@ -282,6 +282,10 @@ function run(segmentation_output_folder, recon_all_output_folder, kwargs)
 
     compartmentIds = asegCompartmentTable.(kwargs.compartmentIdColumnName) ;
 
+    compartmentVoxelNs = asegCompartmentTable("NVoxels") ;
+
+    compartmentVolumes = asegCompartmentTable("Volume_mm3") ;
+
     compartmentN = size(asegCompartmentTable,1) ;
 
     mri_input_path = fullfile(recon_all_output_folder, "mri", "aseg.mgz");
@@ -293,6 +297,16 @@ function run(segmentation_output_folder, recon_all_output_folder, kwargs)
     end
 
     for ii = 1 : compartmentN
+
+        compartmentVoxelN = compartmentVoxelNs(ii) ;
+
+        compartmentVolume = compartmentVolumes(ii) ;
+
+        if compartmentVoxelN == 0 || compartmentVolume == 0
+
+            continue
+
+        end % if
 
         compartmentID = compartmentIds(ii) ;
 
