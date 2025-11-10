@@ -10,6 +10,8 @@ if isempty(zef)
     zef = evalin('base','zef');
 end
 
+fileFolder = zef.file_path ;
+
 filename = '';
 compartment_tag = '';
 parcellation_merge = zef.parcellation_merge;
@@ -42,6 +44,8 @@ elseif isequal(file_type_aux,'.dat')
     file_type = 2;
 end
 
+filePath = fullfile(fileFolder,filename) ;
+
 if not(isempty(filename))
     if not(parcellation_merge)
         zef.parcellation_points = cell(0);
@@ -50,12 +54,12 @@ if not(isempty(filename))
     end
 
     if file_type == 1
-        zef_i = fopen(filename);
+        zef_i = fopen(filePath);
         zef_j = textscan(zef_i,'%s',1,'delimiter','\n', 'headerlines',1);
         zef_j = str2num(zef_j{1}{1});
         zef_j = zef_j(1);
 
-        zef_i = fopen(filename);
+        zef_i = fopen(filePath);
         zef_k = textscan(zef_i,'%s',zef_j,'delimiter','\n', 'headerlines',2);
 
         zef_k = cellfun(@(v) zef_import_asc(v,1,4),zef_k{1},'uniformoutput',false);
@@ -66,7 +70,7 @@ if not(isempty(filename))
     end
 
     if file_type == 2
-        [zef.parcellation_points{length(zef.parcellation_points)+1}] = load(filename);
+        [zef.parcellation_points{length(zef.parcellation_points)+1}] = load(filePath);
     end
 
 
@@ -88,4 +92,3 @@ if nargout == 0
 end
 
 end
-
