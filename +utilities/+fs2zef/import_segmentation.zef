@@ -10,8 +10,8 @@ type,segmentation,name,White matter,merge,1,filename,rh.wm.asc,parameter_name,si
 type,segmentation,name,Cerebellum cortex,merge,0,filename,Left-Cerebellum-Cortex.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Cerebellum cortex,merge,1,filename,Right-Cerebellum-Cortex.asc,parameter_name,sigma,parameter_value, 0.33, activity,2
 type,segmentation,name,Cerebellum WM,merge,0,filename,Left-Cerebellum-White-Matter.asc,parameter_name,sigma,parameter_value,0.14
-type,segmentation,name,Cerebellum WM,merge,1,filename,RightCerebellum-White-Matter.asc,parameter_name,sigma,parameter_value,0.14
-type,segmentation,name,Brainstem,filename,Brainstem.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Cerebellum WM,merge,1,filename,Right-Cerebellum-White-Matter.asc,parameter_name,sigma,parameter_value,0.14
+type,segmentation,name,Brainstem,filename,Brain-Stem.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Cingulate cortex,merge,0,filename,CC_Posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
 type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Mid_Posterior.asc,parameter_name,sigma,parameter_value,0.14,activity,0
 type,segmentation,name,Cingulate cortex,merge,1,filename,CC_Central.asc,parameter_name,sigma,parameter_value,0.14,activity,0
@@ -25,8 +25,8 @@ type,segmentation,name,Thalamus,merge,0,filename,Left-Thalamus.asc,parameter_nam
 type,segmentation,name,Thalamus,merge,1,filename,Right-Thalamus.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Caudate,merge,0,filename,Left-Caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Caudate,merge,1,filename,Right-Caudate.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Accumbens,merge,0,filename,Left-Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
-type,segmentation,name,Accumbens,merge,1,filename,Right-Accumbens.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Accumbens,merge,0,filename,Left-Accumbens-area.asc,parameter_name,sigma,parameter_value,0.33,activity,2
+type,segmentation,name,Accumbens,merge,1,filename,Right-Accumbens-area.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Putamen,merge,0,filename,Left-Putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Putamen,merge,1,filename,Right-Putamen.asc,parameter_name,sigma,parameter_value,0.33,activity,2
 type,segmentation,name,Hippocampus,merge,0,filename,Left-Hippocampus.asc,parameter_name,sigma,parameter_value,0.33,activity,1
