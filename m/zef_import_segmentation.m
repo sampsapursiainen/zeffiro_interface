@@ -333,8 +333,9 @@ if not(isequal(file_name,0))
                 end
 
                 if not(isempty(filename))
+                    filePath = fullfile(folder_name, filename) ;
                     if not(ismember(filetype,{'mat',''}))
-                        [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(zef,filename, compartment_tag, filetype,'full');
+                        [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(zef,filePath, compartment_tag, filetype,'full');
                         if inflate_surface
                         if length(aux_submesh_ind) < 2
                         [aux_points] = zef_inflate_surface(zef,aux_points, aux_triangles,n_inflation_steps);
@@ -347,7 +348,7 @@ if not(isequal(file_name,0))
                         eval(['zef.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
                       % zef = zef_merge_surface_mesh(zef,compartment_tag,aux_triangles,aux_points,merge);
                     elseif isequal(filetype,'mat')
-                        zef = zef_import_mat_struct(zef, filename,[compartment_tag '_']);
+                        zef = zef_import_mat_struct(zef, filePath,[compartment_tag '_']);
                     end
                 end
 
@@ -527,16 +528,17 @@ if not(isequal(file_name,0))
                 %         clear zef_data;
 
                 if not(isempty(filename))
+                    filePath = fullfile(folder_name, filename) ;
                     if isequal(filetype,'points')
-                        aux_field = zef_get_mesh(zef,filename,sensor_tag,'points');
+                        aux_field = zef_get_mesh(zef,filePath,sensor_tag,'points');
                         eval(['zef.' sensor_tag '_points = aux_field;']);
                     end
                     if isequal(filetype,'directions')
-                        aux_field = zef_get_mesh(zef,filename,sensor_tag,'triangles');
+                        aux_field = zef_get_mesh(zef,filePath,sensor_tag,'triangles');
                         eval(['zef.' sensor_tag '_directions = aux_field;']);
                     end
                     if isequal(filetype,'mat')
-                        zef = zef_import_mat_struct(zef, filename,[sensor_tag '_']);
+                        zef = zef_import_mat_struct(zef, filePath,[sensor_tag '_']);
                     end
                 end
 
