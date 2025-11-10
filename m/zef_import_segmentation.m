@@ -193,8 +193,8 @@ if not(isequal(file_name,0))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'inflate'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     n_inflation_steps = str2num(ini_cell{i,find(ismember(ini_cell(i,:),'inflate'),1)+1});
-                   inflate_surface = 1; 
-                else 
+                   inflate_surface = 1;
+                else
                     inflate_surface = 0;
                 end
                 if find(ismember(ini_cell(i,:),'tag'))
@@ -314,7 +314,7 @@ if not(isequal(file_name,0))
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
                 if not(isempty(color_vec))
-                eval(['zef.' compartment_tag '_color = ' color_vec ';']);       
+                eval(['zef.' compartment_tag '_color = ' color_vec ';']);
                 end
                 if not(isempty(labeling_priority))
                zef.([compartment_tag '_labeling_priority']) =  str2num(labeling_priority);
@@ -335,16 +335,16 @@ if not(isequal(file_name,0))
                 if not(isempty(filename))
                     if not(ismember(filetype,{'mat',''}))
                         [aux_points,aux_triangles,aux_submesh_ind] = zef_get_mesh(zef,filename, compartment_tag, filetype,'full');
-                        if inflate_surface 
-                        if length(aux_submesh_ind) < 2    
+                        if inflate_surface
+                        if length(aux_submesh_ind) < 2
                         [aux_points] = zef_inflate_surface(zef,aux_points, aux_triangles,n_inflation_steps);
-                        elseif length(aux_submesh_ind) >= 2 
+                        elseif length(aux_submesh_ind) >= 2
                            [aux_points] = zef_inflate_surface(zef,aux_points, aux_triangles(aux_submesh_ind(end-1)+1:aux_submesh_ind(end),:),n_inflation_steps);
                         end
                         end
-                        eval(['zef.' compartment_tag '_points = aux_points;']); 
-                        eval(['zef.' compartment_tag '_triangles = aux_triangles;']); 
-                        eval(['zef.' compartment_tag '_submesh_ind = aux_submesh_ind;']); 
+                        eval(['zef.' compartment_tag '_points = aux_points;']);
+                        eval(['zef.' compartment_tag '_triangles = aux_triangles;']);
+                        eval(['zef.' compartment_tag '_submesh_ind = aux_submesh_ind;']);
                       % zef = zef_merge_surface_mesh(zef,compartment_tag,aux_triangles,aux_points,merge);
                     elseif isequal(filetype,'mat')
                         zef = zef_import_mat_struct(zef, filename,[compartment_tag '_']);
