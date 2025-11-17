@@ -56,6 +56,8 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
     dateTime = datetime("now", Format=kwargs.dateTimeFormat) ;
 
+    dateTimeStr = string(dateTime)
+
     % Load mesh from SimNIBS-generated .msh file.
 
     meshStruct = utilities.simnibsToZef.meshLoadGmsh4(meshFile)
@@ -152,7 +154,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             if any(triangleMask)
 
-                trianglePath = fullfile(kwargs.outputFolder, name + ".triangles.stl") ;
+                trianglePath = fullfile(kwargs.outputFolder, name + "." + dateTimeStr + ".triangles.stl") ;
 
                 display("Writing triangles of " + name + " to " + trianglePath) ;
 
@@ -174,7 +176,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             if any(tetraMask)
 
-                tetraPath = fullfile(kwargs.outputFolder, name + ".tetra.mat") ;
+                tetraPath = fullfile(kwargs.outputFolder, name + "." + dateTimeStr + ".tetra.mat") ;
 
                 display("Writing tetra of " + name + " to " + tetraPath) ;
 
