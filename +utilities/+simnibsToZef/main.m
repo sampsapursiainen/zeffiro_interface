@@ -20,8 +20,9 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 %
 %   kwargs.outputFolder (1,1) string = ""
 %
-% If given as a non-empty string, the separate compartments are saved to separate STL files (in the case of triangles)
-% and MAT files in the case of tetrahedra.
+% If given as a non-empty string, a folder called simnibsToZef.dateTime is created inside of this folder,
+% and the separate compartments are saved to separate STL files (in the case of triangles) and MAT files
+% in the case of tetrahedra. The dateTime value in the folder name is the time when this function was called.
 %
 %   kwargs.dateTimeFormat (1,1) string = "yyyy-MM-dd-HH-mm-ss-SSS"
 %
@@ -56,11 +57,11 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
     dateTime = datetime("now", Format=kwargs.dateTimeFormat) ;
 
-    dateTimeStr = string(dateTime)
+    dateTimeStr = string(dateTime) ;
 
     % Load mesh from SimNIBS-generated .msh file.
 
-    meshStruct = utilities.simnibsToZef.meshLoadGmsh4(meshFile)
+    meshStruct = utilities.simnibsToZef.meshLoadGmsh4(meshFile) ;
 
     % Load tissue labels and names from tissue listing file.
 
@@ -136,13 +137,29 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
         nodeRange = 1 : size(meshNodes,1) ;
 
+        outputPathWithDateTime = fullfile(kwargs.outputFolder, "simnibsToZef." + dateTimeStr) ;
+
+        if writeToFiles
+
+            [status, message, messageID] = mkdir(outputPathWithDateTime) ;
+
+            if status ~= 1
+
+                warning("Creation of output folder (" + outputPathWithDateTime + ") failed with a warning message (" + message + "). Not writing files.")
+
+                writeToFiles = false ;
+
+            end % if
+
+        end % if
+
         for ii = 1 : numel(tissueLabels)
 
             if ~ writeToFiles
 
                 break
 
-            end
+            end % if
 
             triangleLabel = tissueLabels(ii) + 1000 ; % Don't ask why this 1000 is here. It's just how it is encoded.
 
@@ -154,7 +171,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             if any(triangleMask)
 
-                trianglePath = fullfile(kwargs.outputFolder, name + "." + dateTimeStr + ".triangles.stl") ;
+                trianglePath = fullfile(outputPathWithDateTime, name + ".triangles.stl") ;
 
                 display("Writing triangles of " + name + " to " + trianglePath) ;
 
@@ -176,7 +193,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             if any(tetraMask)
 
-                tetraPath = fullfile(kwargs.outputFolder, name + "." + dateTimeStr + ".tetra.mat") ;
+                tetraPath = fullfile(outputPathWithDateTime, name + ".tetra.mat") ;
 
                 display("Writing tetra of " + name + " to " + tetraPath) ;
 
