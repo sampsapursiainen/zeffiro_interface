@@ -173,7 +173,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
                 trianglePath = fullfile(outputPathWithDateTime, name + ".triangles.stl") ;
 
-                display("Writing triangles of " + name + " to " + trianglePath) ;
+                disp("Writing triangles of " + name + " to " + trianglePath) ;
 
                 relevantTriangles = meshTriangles(triangleMask,:) ;
 
@@ -195,7 +195,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
                 tetraPath = fullfile(outputPathWithDateTime, name + ".tetra.mat") ;
 
-                display("Writing tetra of " + name + " to " + tetraPath) ;
+                disp("Writing tetra of " + name + " to " + tetraPath) ;
 
                 tetraFile = matfile(tetraPath, Writable=true) ;
 
