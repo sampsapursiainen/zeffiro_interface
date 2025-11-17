@@ -31,11 +31,11 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 %
 %   kwargs.labelNameStr (1,1) string = "Label_Name:"
 %
-% The intended column name of the tissueTable column containing the compartment names.
+% The intended column name of tissueTable containing the compartment names.
 %
 %   kwargs.labelStr (1,1) string = "#No."
 %
-% The name of the number label column of the tissueTable column containing the compartment labels.
+% The name of the number label column of tissueTable containing the compartment labels.
 %
 %   kwargs.stlOutputFormat (1,1) string { mustBeMember(kwargs.stlOutputFormat, ["text", "binary"]) } = "binary"
 %
