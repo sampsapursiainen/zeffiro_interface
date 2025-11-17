@@ -135,8 +135,6 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
         meshTetraLabels = meshStruct.tetrahedron_regions ;
 
-        nodeRange = 1 : size(meshNodes,1) ;
-
         outputPathWithDateTime = fullfile(kwargs.outputFolder, "simnibsToZef." + dateTimeStr) ;
 
         if writeToFiles
@@ -145,7 +143,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             if status ~= 1
 
-                warning("Creation of output folder (" + outputPathWithDateTime + ") failed with a warning message (" + message + "). Not writing files.")
+                warning("Creation of output folder (" + outputPathWithDateTime + ") failed with a warning message (" + message + ") and message ID (" + messageID + "). Not writing files.")
 
                 writeToFiles = false ;
 
@@ -202,8 +200,6 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
                 relevantTetra = meshTetra(tetraMask,:) ;
 
                 relevantTetraNodes = meshNodes ; % TODO: make this reference only relevant nodes.
-
-                tetraTriangulation = triangulation(double(relevantTetra), meshNodes) ;
 
                 tetraFile.nodes = relevantTetraNodes ;
 
