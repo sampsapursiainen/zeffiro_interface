@@ -31,7 +31,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 %
 %   kwargs.labelNameStr (1,1) string = "Label_Name:"
 %
-% The intended column name of the tissuTable column containing the compartment names.
+% The intended column name of the tissueTable column containing the compartment names.
 %
 %   kwargs.labelStr (1,1) string = "#No."
 %
