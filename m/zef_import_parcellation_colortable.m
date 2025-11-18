@@ -14,6 +14,8 @@ if isempty(zef)
 
 end
 
+fileFolder = zef.file_path ;
+
 filename = '';
 
 compartment_tag = '';
@@ -56,9 +58,11 @@ if strlength(filename) == 0
 
 end
 
+filePath = fullfile(fileFolder, filename) ;
+
 if not ( strlength ( filename ) == 0 )
 
-    color_table_file_contents = load(filename);
+    color_table_file_contents = load(filePath);
 
     vertices = color_table_file_contents.vertices;
 
