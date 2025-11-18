@@ -42,6 +42,10 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 % The output format of the output surface triangulations. Binary is more compact, but slightly harder to parse
 % than the text (ASCII) form of STL files.
 %
+%   kwargs.subjectName (1,1) string = ""
+%
+% If this is given as a non-empty string, it is added to the output folder name for disambiguation purposes.
+%
 
     arguments
         meshFile (1,1) string { mustBeFile }
@@ -51,6 +55,7 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
         kwargs.labelNameStr (1,1) string = "Label_Name:"
         kwargs.labelStr (1,1) string = "#No."
         kwargs.stlOutputFormat (1,1) string { mustBeMember(kwargs.stlOutputFormat, ["text", "binary"]) } = "binary"
+        kwargs.subjectName (1,1) string = ""
     end % arguments
 
     % Save start time.
@@ -135,7 +140,17 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
         meshTetraLabels = meshStruct.tetrahedron_regions ;
 
-        outputPathWithDateTime = fullfile(kwargs.outputFolder, "simnibsToZef." + dateTimeStr) ;
+        if strtrim(kwargs.subjectName) == ""
+
+            subjectName = "" ;
+
+        else
+
+            subjectName = kwargs.subjectName + "." ;
+
+        end
+
+        outputPathWithDateTime = fullfile(kwargs.outputFolder, "simnibsToZef." + subjectName + dateTimeStr) ;
 
         if writeToFiles
 
