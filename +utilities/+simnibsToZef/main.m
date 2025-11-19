@@ -176,8 +176,6 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
             triangleLabel = tissueLabels(ii) + 1000 ; % Don't ask why this 1000 is here. It's just how it is encoded.
 
-            tetraLabel = tissueLabels(ii) ;
-
             name = tissueNames(ii) ;
 
             triangleMask = meshTriangleLabels == triangleLabel ;
@@ -199,30 +197,6 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
             else
 
                 warning("The compartment " + name + " did not contain any triangles. Not generating file.") ;
-
-            end % if
-
-            tetraMask = meshTetraLabels == tetraLabel ;
-
-            if any(tetraMask)
-
-                tetraPath = fullfile(outputPathWithDateTime, name + ".tetra.mat") ;
-
-                disp("Writing tetra of " + name + " to " + tetraPath) ;
-
-                tetraFile = matfile(tetraPath, Writable=true) ;
-
-                relevantTetra = meshTetra(tetraMask,:) ;
-
-                relevantTetraNodes = meshNodes ; % TODO: make this reference only relevant nodes.
-
-                tetraFile.nodes = relevantTetraNodes ;
-
-                tetraFile.tetra = relevantTetra ;
-
-            else
-
-                warning("The compartment " + name + " did not contain any tetrahedra. Not generating file.") ;
 
             end % if
 
