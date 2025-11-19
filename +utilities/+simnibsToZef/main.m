@@ -228,6 +228,50 @@ function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
 
         end % for
 
+        % Also write mesh as a whole instead of splitting it into separate files.
+
+        wholeMeshMatPath = fullfile(outputPathWithDateTime, "wholemesh.mat") ;
+
+        disp("Writing whole mesh to MAT file (" + wholeMeshMatPath + ")" ) ;
+
+        wholeTetraMeshMatFile = matfile(wholeMeshMatPath, Writable=true) ;
+
+        wholeTetraMeshMatFile.nodes = meshNodes ;
+
+        wholeTetraMeshMatFile.triangles = meshTriangles ;
+
+        wholeTetraMeshMatFile.triangleLabels = meshTriangleLabels ;
+
+        wholeTetraMeshMatFileFile.tetra = meshTetra ;
+
+        wholeTetraMeshMatFileFile.tetraLabels = meshTetraLabels ;
+
+        % HDF5 output.
+
+        wholeMeshHDF5Path = fullfile(outputPathWithDateTime, "wholemesh.hdf5") ;
+
+        disp("Writing whole mesh to HDF5 file (" + wholeMeshHDF5Path + ")" ) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/nodes', size(meshNodes)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/triangles', size(meshTriangles)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/triangleLabels', size(meshTriangleLabels)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/tetra', size(meshTetra)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/tetraLabels', size(meshTetraLabels)) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/nodes', meshNodes) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/triangles', meshTriangles) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/triangleLabels', meshTriangleLabels) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/tetra', meshTetra) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/tetraLabels', meshTetraLabels) ;
+
     end % if
 
 end % function
