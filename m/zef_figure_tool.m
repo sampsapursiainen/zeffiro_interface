@@ -250,4 +250,9 @@ h_axes.DataAspectRatioMode = 'auto';
 
 end
 
+zef.h_axes1.Units = 'normalized';
+drawnow
+pause(0.001)
+zef.h_axes1.Units = 'pixels';
+
 
