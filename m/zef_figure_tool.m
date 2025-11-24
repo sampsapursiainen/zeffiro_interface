@@ -225,6 +225,11 @@ zef.h_zeffiro.Visible = zef.use_display;
 set(findobj(zef.h_zeffiro.Children,'-property','FontUnits'),'FontUnits','pixels')
 set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_size);
 
+zef.h_axes1.Units = 'normalized';
+drawnow
+pause(0.001)
+zef.h_axes1.Units = 'pixels';
+
 function zef_logoplot(o,e,h)
 
 if nargin == 0
@@ -250,9 +255,5 @@ h_axes.DataAspectRatioMode = 'auto';
 
 end
 
-zef.h_axes1.Units = 'normalized';
-drawnow
-pause(0.001)
-zef.h_axes1.Units = 'pixels';
 
 
