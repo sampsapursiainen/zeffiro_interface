@@ -37,6 +37,9 @@
 !+zeffiro/
 !+zeffiro/*.m
 
+!+zeffiro/+duneuro/
+!+zeffiro/+duneuro/*.m
+
 # Allow PNG files in specific folders.
 
 !data/media/*.png
