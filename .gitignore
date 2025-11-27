@@ -34,6 +34,9 @@
 !+plugins/**/*.m
 !+plugins/**/*.mlapp
 
+!+zeffiro/
+!+zeffiro/*.m
+
 # Allow PNG files in specific folders.
 
 !data/media/*.png
