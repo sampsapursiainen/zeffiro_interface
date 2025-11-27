@@ -7,7 +7,7 @@ function outputTensor = transformTensorForDUNEuro(inputTensor)
 % 3 (diagonal), 6 (symmetric) or 9 (full matrix) are accepted,
 % in column-major order with the columns of the full tensor being
 % concatenated as a single vector for each element. Zeffiro stores its tensor
-% in the order Txx, Tyy, Tzz, Txy, Txz, Tyz, Tzz and hence this function
+% in the order Txx, Tyy, Tzz, Txy, Txz, Tyz and hence this function
 % shuffles the rows accordingly.
 %
 % The output tensor is always in column-major order, in
