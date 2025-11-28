@@ -12,8 +12,34 @@ function cfg = duneuroConfig(kwargs)
 %
 % for values related to the different source model configuration options.
 %
-% Note that DUNEuro seems to want even floating point numbers passed as character arrays (not strings),
+% Note that DUNEuro seems to want some floating point numbers passed as character arrays (not strings),
 % even if the documentation page talks of numeric types.
+%
+% Arguments:
+%
+%   nodes
+%
+% A 3 x n double-matrix containing the cartesian coordinates of the nodes, where n is the number of nodes.
+%
+%   elements
+%
+% A l x e uint64-matrix, where the j-th column contains the element indices forming the j-th element. l depends on the element geometry, a tetrahedron consists of l = 4 nodes, a hexahedron of l = 8 nodes. At the moment duneuro only supports meshes consisting of a single type of element. e denotes the number of elements.
+%
+%   labels
+%
+% A 1 x e uint64-matrix. Associates to every element a label from the set {0, 1, 2, ..., p}.
+%
+%   tensors
+%
+% A 9 x p double-matrix. Associates to every label a conductivity tensor. The matrix representing the conductivity tensor is interpreted to be stored column-wise.
+%
+%   electrodes
+%
+% A 3 x k double-matrix, where k is the number of electrodes. Each column corresponds to the cartesian coordinate of an electrode. Note that duneuro at the moment only supports the point electrode model.
+%
+%   kwargs
+%
+% Othe keyword arguments. See the links above for details.
 %
 
     arguments
