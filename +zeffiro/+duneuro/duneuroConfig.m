@@ -39,7 +39,7 @@ function cfg = duneuroConfig(kwargs)
 %
 %   kwargs
 %
-% Othe keyword arguments. See the links above for details.
+% Other keyword arguments. See the links above for details.
 %
 
     arguments
