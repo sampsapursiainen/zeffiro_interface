@@ -53,8 +53,6 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
     fileN = numel (fileStructs) ;
 
-    set(0,'defaultfigurecolor',[1 1 1])
-
     % Collect figures and their cleanup objects into arrays .
 
     figArray = gobjects (fileN,1) ;
