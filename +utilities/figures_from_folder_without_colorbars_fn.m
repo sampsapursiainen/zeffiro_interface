@@ -45,11 +45,15 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
         kwargs.axisType (1,1) string = "UIAxes"
 
+        kwargs.backgroundColor (1,3) double {mustBeFinite} = [1 1 1]
+
     end
 
     fileStructs = dir ( fullfile ( folder, "**", "*.fig" ) ) ;
 
     fileN = numel (fileStructs) ;
+
+    set(0,'defaultfigurecolor',[1 1 1])
 
     % Collect figures and their cleanup objects into arrays .
 
@@ -128,7 +132,7 @@ function figures_from_folder_without_colorbars_fn(folder, filetypes, resolution,
 
         pathWithoutExt = fullfile ( stem, name ) ;
 
-        utilities.figure_without_colorbar_fn ( figArray (si), pathWithoutExt, filetypes, resolution, colorLims=colorLims ) ;
+        utilities.figure_without_colorbar_fn ( figArray (si), pathWithoutExt, filetypes, resolution, colorLims=colorLims, backgroundColor=kwargs.backgroundColor ) ;
 
     end
 

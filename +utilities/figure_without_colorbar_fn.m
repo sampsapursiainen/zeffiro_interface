@@ -46,6 +46,8 @@ function figure_without_colorbar_fn(figtool, filename, filetypes, resolution, kw
 
         kwargs.colorLims (2,:) double { mustBeFinite } = []
 
+        kwargs.backgroundColor (1,3) double {mustBeFinite} = [1 1 1]
+
     end
 
     if strlength ( filename ) == 0
@@ -100,7 +102,7 @@ function figure_without_colorbar_fn(figtool, filename, filetypes, resolution, kw
 
         suffix = filetypes ( si ) ;
 
-        exportgraphics ( figtool, filename + suffix, "Resolution", resolution) ;
+        exportgraphics ( figtool, filename + suffix, "Resolution", resolution, BackgroundColor=kwargs.backgroundColor ) ;
 
     end
 
