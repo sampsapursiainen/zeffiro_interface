@@ -545,7 +545,11 @@ if plan_of_action == INITIALIZING
         h_waitbar.Visible = visible_value;
 end
 
-fclose(fid);
+% fclose(fid);
+
+if use_log
+    fclose(fid);
+end
 
 end % function
 
