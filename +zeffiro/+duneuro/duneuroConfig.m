@@ -1,6 +1,6 @@
-function cfg = duneuroConfig(kwargs)
+function [driverConfig, electrodeConfig] = duneuroConfig(kwargs)
 %
-%   cfg = duneuroConfig(kwargs)
+%   [driverConfig, electrodeConfig] = duneuroConfig(kwargs)
 %
 % Generates a DUNEuro configuration object struct. See
 %
@@ -47,6 +47,8 @@ function cfg = duneuroConfig(kwargs)
         kwargs.elements (:,:) uint64 = []
         kwargs.labels (1,:) uint64 = []
         kwargs.tensors (9,:) double { mustBeFinite } = []
+        kwargs.cfg_tensors_filename (1,:) char = []
+        kwargs.cfg_grid_filename (1,:) char = []
         kwargs.electrodes (3,:) double { mustBeFinite } = []
         kwargs.dipoles (6,:) double { mustBeFinite } = []
         kwargs.cfg_element_type (1,:) char { mustBeMember( kwargs.cfg_element_type, {'tetrahedron','hexahedron'} ) } = 'tetrahedron'
@@ -88,24 +90,39 @@ function cfg = duneuroConfig(kwargs)
         kwargs.whitney_restricted (1,:) char { mustBeMember(kwargs.whitney_restricted, {'True','False'}) } = 'True'
     end % arguments
 
-    cfg.type = kwargs.cfg_type ;
-    cfg.solver_type = kwargs.cfg_solver_type ;
-    cfg.element_type = kwargs.cfg_element_type ;
-    cfg.post_process = kwargs.cfg_post_process ;
-    cfg.subtract_mean = kwargs.cfg_subtract_mean ;
-    cfg.enable_experimental = kwargs.cfg_enable_experimental ;
-    cfg.verbosity = kwargs.cfg_verbosity ;
+    % Volume conductor input validation.
 
-    cfg.solver.reduction = kwargs.cfg_solver_reduction ;
-    cfg.solver.edge_norm_type = kwargs.cfg_solver_edge_norm_type ;
-    cfg.solver.penalty = kwargs.cfg_solver_penalty ;
-    cfg.solver.scheme = kwargs.cfg_solver_scheme ;
-    cfg.solver.weights = kwargs.cfg_solver_weights ;
+    if isempty(kwargs.nodes) || isempty(kwargs.tensors) || isempty(kwargs.elements) || isempty(kwargs.labels)
 
-    cfg.volume_conductor.grid.nodes = kwargs.nodes;
-    cfg.volume_conductor.grid.elements = kwargs.elements;
-    cfg.volume_conductor.tensors.labels = kwargs.labels;
-    cfg.volume_conductor.tensors.tensors = kwargs.tensors;
+        assert(isfile(kwargs.cfg_tensors_filename), "The tensor file (" + kwargs.cfg_tensors_filename + ") was not found or was not a file.")
+
+        assert(isfile(kwargs.cfg_grid_filename), "The grid file (" + kwargs.cfg_grid_filename + ") was not found or was not a file.")
+
+    end % if
+
+    % Driver creation.
+
+    driverConfig.type = kwargs.cfg_type ;
+    driverConfig.solver_type = kwargs.cfg_solver_type ;
+    driverConfig.element_type = kwargs.cfg_element_type ;
+    driverConfig.post_process = kwargs.cfg_post_process ;
+    driverConfig.subtract_mean = kwargs.cfg_subtract_mean ;
+    driverConfig.enable_experimental = kwargs.cfg_enable_experimental ;
+    driverConfig.verbosity = kwargs.cfg_verbosity ;
+
+    driverConfig.solver.reduction = kwargs.cfg_solver_reduction ;
+    driverConfig.solver.edge_norm_type = kwargs.cfg_solver_edge_norm_type ;
+    driverConfig.solver.penalty = kwargs.cfg_solver_penalty ;
+    driverConfig.solver.scheme = kwargs.cfg_solver_scheme ;
+    driverConfig.solver.weights = kwargs.cfg_solver_weights ;
+
+    driverConfig.volume_conductor.grid.nodes = kwargs.nodes;
+    driverConfig.volume_conductor.grid.elements = kwargs.elements;
+    driverConfig.volume_conductor.grid.filename = kwargs.cfg_grid_filename ;
+
+    driverConfig.volume_conductor.tensors.labels = kwargs.labels;
+    driverConfig.volume_conductor.tensors.tensors = kwargs.tensors;
+    driverConfig.volume_conductor.tensors.filename = kwargs.cfg_tensors_filename ;
 
     % Setting source model parameters.
 
@@ -141,28 +158,34 @@ function cfg = duneuroConfig(kwargs)
 
     if kwargs.source_model == "local_subtraction"
 
-      cfg.source_model = loc_sub_cfg ;
+      driverConfig.source_model = loc_sub_cfg ;
 
     elseif kwargs.source_model == "subtraction"
 
-      cfg.source_model = subtraction_cfg ;
+      driverConfig.source_model = subtraction_cfg ;
 
     elseif kwargs.source_model == "venant"
 
-      cfg.source_model = venant_cfg ;
+      driverConfig.source_model = venant_cfg ;
 
-    elseif cfg.source_model == "partial_integration"
+    elseif driverConfig.source_model == "partial_integration"
 
-      cfg.source_model == partial_integration_cfg ;
+      driverConfig.source_model == partial_integration_cfg ;
 
-    elseif cfg.source_model == "whitney"
+    elseif driverConfig.source_model == "whitney"
 
-      cfg.source_model = whitney_cfg ;
+      driverConfig.source_model = whitney_cfg ;
 
     else
 
       error("Unknown source model type " + kwargs.source_model + ".") ;
 
     end
+
+    % Set electrode configuration.
+
+    electrodeConfig.type = kwargs.electrode_cfg_type ;
+
+    electrodeConfig.codims = kwargs.electrode_cfg_codims ;
 
 end % function
