@@ -11,20 +11,20 @@ meshPath = fullfile(dataDir, "tet_volume_conductor.mat") ;
 
 dipolePath = fullfile(dataDir, "tet_dipole_superficial.mat") ;
 
-electrodePath = fullfile(dataDir, "tet_electrodes.mat") ;
+coilPath = fullfile(dataDir, "tet_meg_sensors.mat") ;
 
 meshFile = matfile(meshPath) ;
 
 dipoleFile = matfile(dipolePath) ;
 
-electrodeFile = matfile(electrodePath) ;
+coilFile = matfile(coilPath) ;
 
 dipoles = [dipoleFile.dipole_position' ; dipoleFile.dipole_moment' ] ;
 
-[driverConfig, electrodeConfig] = zeffiro.duneuro.duneuroConfig(nodes=meshFile.nodes, elements=meshFile.elements, labels=meshFile.labels, tensors=meshFile.tensors, dipoles=dipoles) ;
+[driverConfig, ~] = zeffiro.duneuro.duneuroConfig(nodes=meshFile.nodes, elements=meshFile.elements, labels=meshFile.labels, tensors=meshFile.tensors, dipoles=dipoles) ;
 
 driver = duneuro.duneuro_meeg(driverConfig) ;
 
-driver.set_electrodes(electrodeFile.electrodes,electrodeConfig) ;
+driver.set_coils_and_projections(coilFile.coils, coilFile.projections) ;
 
-eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
+megT = driver.compute_meg_transfer_matrix(driverConfig) ;
