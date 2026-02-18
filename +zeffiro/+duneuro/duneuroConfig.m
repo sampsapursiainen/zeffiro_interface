@@ -53,7 +53,10 @@ function [driverConfig, electrodeConfig] = duneuroConfig(kwargs)
         kwargs.dipoles (6,:) double { mustBeFinite } = []
         kwargs.cfg_element_type (1,:) char { mustBeMember( kwargs.cfg_element_type, {'tetrahedron','hexahedron'} ) } = 'tetrahedron'
         kwargs.cfg_enable_experimental (1,:) char { mustBeMember(kwargs.cfg_enable_experimental, {'True','False'} ) } = 'False'
+        kwargs.cfg_meg_intorderadd (1,:) char = '5'
+        kwargs.cfg_meg_type (1,:) char { mustBeMember(kwargs.cfg_meg_type, {'physical','numerical'}) } = 'physical'
         kwargs.cfg_post_process (1,:) char { mustBeMember(kwargs.cfg_post_process, {'True','False'} ) } = 'True'
+        kwargs.cfg_post_process_meg (1,:) char { mustBeMember(kwargs.cfg_post_process_meg, {'True','False'} ) } = 'True'
         kwargs.cfg_solver_edge_norm_type (1,:) char { mustBeMember( kwargs.cfg_solver_edge_norm_type, {'structured','face','cell','houston', 'fundamentalcell'} ) } = 'houston'
         kwargs.cfg_solver_penalty (1,:) char = '20'
         kwargs.cfg_solver_reduction (1,:) char = '1e-16'
@@ -106,9 +109,13 @@ function [driverConfig, electrodeConfig] = duneuroConfig(kwargs)
     driverConfig.solver_type = kwargs.cfg_solver_type ;
     driverConfig.element_type = kwargs.cfg_element_type ;
     driverConfig.post_process = kwargs.cfg_post_process ;
+    driverConfig.post_process_meg = kwargs.cfg_post_process_meg ;
     driverConfig.subtract_mean = kwargs.cfg_subtract_mean ;
     driverConfig.enable_experimental = kwargs.cfg_enable_experimental ;
     driverConfig.verbosity = kwargs.cfg_verbosity ;
+
+    driverConfig.meg.intorderadd = kwargs.cfg_meg_intorderadd ;
+    driverConfig.meg.type = kwargs.cfg_meg_type ;
 
     driverConfig.solver.reduction = kwargs.cfg_solver_reduction ;
     driverConfig.solver.edge_norm_type = kwargs.cfg_solver_edge_norm_type ;
