@@ -33,6 +33,12 @@ eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
 
 outputFileName = "duneuro.eegT." + string(currentTime) + ".mat" ;
 
+outputFilePath = fullfile(pwd, outputFileName) ;
+
+outputFile = matfile(outputFilePath, Writable=true) ;
+
+disp("Saving transfer matrix to file " + outputFilePath) ;
+
 outputFile = matfile(outputFileName, Writable=true) ;
 
 outputFile.eegT = eegT ;

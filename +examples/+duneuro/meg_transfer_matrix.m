@@ -33,6 +33,10 @@ megT = driver.compute_meg_transfer_matrix(driverConfig) ;
 
 outputFileName = "duneuro.megT." + string(currentTime) + ".mat" ;
 
-outputFile = matfile(outputFileName, Writable=true) ;
+outputFilePath = fullfile(pwd, outputFileName) ;
+
+outputFile = matfile(outputFilePath, Writable=true) ;
+
+disp("Saving transfer matrix to file " + outputFilePath) ;
 
 outputFile.eegT = megT ;
