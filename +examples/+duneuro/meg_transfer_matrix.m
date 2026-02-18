@@ -1,4 +1,6 @@
 
+currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
+
 HOME = getenv("HOME") ;
 
 Documents = fullfile(HOME, "Documents") ;
@@ -28,3 +30,9 @@ driver = duneuro.duneuro_meeg(driverConfig) ;
 driver.set_coils_and_projections(coilFile.coils, coilFile.projections) ;
 
 megT = driver.compute_meg_transfer_matrix(driverConfig) ;
+
+outputFileName = "duneuro.megT." + string(currentTime) + ".mat" ;
+
+outputFile = matfile(outputFileName, Writable=true) ;
+
+outputFile.eegT = megT ;

@@ -1,4 +1,6 @@
 
+currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
+
 HOME = getenv("HOME") ;
 
 Documents = fullfile(HOME, "Documents") ;
@@ -28,3 +30,9 @@ driver = duneuro.duneuro_meeg(driverConfig) ;
 driver.set_electrodes(electrodeFile.electrodes,electrodeConfig) ;
 
 eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
+
+outputFileName = "duneuro.eegT." + string(currentTime) + ".mat" ;
+
+outputFile = matfile(outputFileName, Writable=true) ;
+
+outputFile.eegT = eegT ;
