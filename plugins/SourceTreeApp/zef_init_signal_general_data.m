@@ -10,6 +10,7 @@ function gd = zef_init_signal_general_data()
     gd.numFeedbackLoops    = nv('numFeedbackLoops', 0);
     gd.blockDuration_s     = nv('blockDuration_s', 1.0);
     gd.plotLoopIndex    = nv('plotLoopIndex', 1.0);
+     gd.gainConversion    = nv('gainConversion', 0.01);
 
     %% --------------------------------------------------------------------
     %% External input parameters
