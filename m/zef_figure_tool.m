@@ -227,8 +227,9 @@ set(findobj(zef.h_zeffiro.Children,'-property','FontSize'),'FontSize',zef.font_s
 
 zef.h_axes1.Units = 'normalized';
 drawnow
-pause(0.001)
+pixpos = getpixelposition(zef.h_axes1);
 zef.h_axes1.Units = 'pixels';
+set(zef.h_axes1,'position',pixpos);
 
 function zef_logoplot(o,e,h)
 

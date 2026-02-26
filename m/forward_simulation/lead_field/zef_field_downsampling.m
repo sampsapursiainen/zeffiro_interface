@@ -30,7 +30,7 @@ if zef.n_sources < size(zef.source_positions,1)
     zef.rand_vec_aux = zef.rand_vec_aux(1:zef.n_sources);
     zef.source_positions = zef.source_positions(zef.rand_vec_aux,:);
 
-    if ismember(zef.source_direction_mode,2)
+    if ismember(zef.source_direction_mode,[1 2])
         zef.rand_vec_aux = 3*(zef.rand_vec_aux(:)'-1);
         zef.rand_vec_aux = [zef.rand_vec_aux + 1; zef.rand_vec_aux + 2; zef.rand_vec_aux + 3];
         zef.rand_vec_aux = zef.rand_vec_aux(:);
