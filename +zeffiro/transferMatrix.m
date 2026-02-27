@@ -49,7 +49,7 @@ function T = transferMatrix ( A, B, kwargs )
 %
 %   Determines whether to use a GPU when running the solver.
 %
-% - kwargs.solver = @zefCore.solvers.biConjugateGradientStabilized
+% - kwargs.solver = @zeffiro.solvers.biConjugateGradientStabilized
 %
 %   A function handle to a matrix inverter, with a signature of kwargs.solver(A,x0,b,kwargs).
 %
@@ -68,7 +68,7 @@ function T = transferMatrix ( A, B, kwargs )
         kwargs.tolerances     (:,1) double { mustBePositive, mustBeFinite } = 1e-6
         kwargs.useGPU         (1,1) logical = true
         kwargs.maxiters       (1,1) { mustBePositive, mustBeInteger, mustBeFinite } = ceil ( 1.5 * size (A,1) )
-        kwargs.solver (1,1) function_handle = @zefCore.solvers.preconditionedConjugateGradient
+        kwargs.solver (1,1) function_handle = @zeffiro.solvers.preconditionedConjugateGradient
     end
 
     disp (newline + "Building a transfer matrix T = A \ B:") ;
@@ -116,7 +116,7 @@ function T = transferMatrix ( A, B, kwargs )
 
     for i = 1 : n_of_electrodes
 
-        zefCore.dispProgress (i, n_of_electrodes) ;
+        zeffiro.dispProgress (i, n_of_electrodes) ;
 
         b (:) = full ( B (:,i) ) ;
 
