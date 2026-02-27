@@ -1,6 +1,6 @@
 function [dti_directions, dti_anisotropy] = dti_directions(dti_tensor)
 %
-%   [dti_directions, dti_anisotropy] = dti_directions(dti_tensor)
+%   [dti_directions, dti_anisotropy] = zeffiro.dti.dti_directions(dti_tensor)
 %
 % Compute principal diffusion directions and anisotropy from a DTI tensor.
 %
@@ -38,9 +38,9 @@ function [dti_directions, dti_anisotropy] = dti_directions(dti_tensor)
                 % Construct the 3x3 diffusion tensor matrix for the current voxel
 
                 D = [ ...
-                    dti_tensor(ix, iy, iz, 1), dti_tensor(ix, iy, iz, 4), dti_tensor(ix, iy, iz, 5); ...
-                    dti_tensor(ix, iy, iz, 4), dti_tensor(ix, iy, iz, 2), dti_tensor(ix, iy, iz, 6); ...
-                    dti_tensor(ix, iy, iz, 5), dti_tensor(ix, iy, iz, 6), dti_tensor(ix, iy, iz, 3) ];
+                    zeffiro.dti.dti_tensor(ix, iy, iz, 1), zeffiro.dti.dti_tensor(ix, iy, iz, 4), zeffiro.dti.dti_tensor(ix, iy, iz, 5); ...
+                    zeffiro.dti.dti_tensor(ix, iy, iz, 4), zeffiro.dti.dti_tensor(ix, iy, iz, 2), zeffiro.dti.dti_tensor(ix, iy, iz, 6); ...
+                    zeffiro.dti.dti_tensor(ix, iy, iz, 5), zeffiro.dti.dti_tensor(ix, iy, iz, 6), zeffiro.dti.dti_tensor(ix, iy, iz, 3) ];
 
                 % Skip if the tensor is empty
                 if all(D(:) == 0)
@@ -70,7 +70,7 @@ function [dti_directions, dti_anisotropy] = dti_directions(dti_tensor)
                 end
 
                 % Store the principal direction
-                dti_directions(ix, iy, iz, :) = v1;
+                zeffiro.dti.dti_directions(ix, iy, iz, :) = v1;
 
                 % Compute fractional anisotropy
                 l1 = evals(1);
@@ -84,9 +84,9 @@ function [dti_directions, dti_anisotropy] = dti_directions(dti_tensor)
                 den = l1^2 + l2^2 + l3^2;
 
                 if den > 0
-                    dti_anisotropy(ix, iy, iz) = sqrt(1.5 * num / den);
+                    zeffiro.dti.dti_anisotropy(ix, iy, iz) = sqrt(1.5 * num / den);
                 else
-                    dti_anisotropy(ix, iy, iz) = 0;
+                    zeffiro.dti.dti_anisotropy(ix, iy, iz) = 0;
                 end
 
             end % for

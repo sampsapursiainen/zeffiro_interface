@@ -1,6 +1,6 @@
 function dti_streamlines = dti_streamlines(dti_directions, dti_anisotropy, seed_point, roi_radius, n_dir, step_size, max_steps, fa_thresh)
 %
-% dti_streamlines = zeffiro.dti_streamlines(dti_directions, dti_anisotropy, seed_point, roi_radius, n_dir, step_size, max_steps, fa_thresh)
+% dti_streamlines = zeffiro.dti.dti_streamlines(dti_directions, dti_anisotropy, seed_point, roi_radius, n_dir, step_size, max_steps, fa_thresh)
 %
 % Trace streamlines from a seed point using principal diffusion directions and fractional anisotropy.
 %
@@ -130,9 +130,9 @@ function xyz = trace_streamline(seed_point, dti_directions, dti_anisotropy, step
 
         % Get the principal direction and FA at the current voxel
 
-        v = squeeze(dti_directions(ix, iy, iz, :)).';
+        v = squeeze(zeffiro.dti.dti_directions(ix, iy, iz, :)).';
 
-        fa = dti_anisotropy(ix, iy, iz);
+        fa = zeffiro.dti.dti_anisotropy(ix, iy, iz);
 
         % Check if the direction is valid and FA is above threshold
 

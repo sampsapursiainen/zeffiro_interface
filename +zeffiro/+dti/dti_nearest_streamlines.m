@@ -1,6 +1,6 @@
 function [sl_indices, sl_dists, sl_lengths] = dti_nearest_streamlines(points, dti_streamlines, roi_radius)
 %
-% [sl_indices, sl_dists, sl_lengths] = dti_nearest_streamlines(points, dti_streamlines, roi_radius)
+% [sl_indices, sl_dists, sl_lengths] = zeffiro.dti.dti_nearest_streamlines(points, dti_streamlines, roi_radius)
 %
 % Finds the nearest streamline points to a set of query points within a specified radius.
 %

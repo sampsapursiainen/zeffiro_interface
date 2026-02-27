@@ -1,6 +1,6 @@
 function dti_tensor = dti_tensor_condition(dti_tensor, scale_value)
 %
-%   dti_tensor = zeffiro.dti_tensor_condition(dti_tensor, scale_value)
+%   dti_tensor = zeffiro.dti.dti_tensor_condition(dti_tensor, scale_value)
 %
 % Scale and condition a given DTI tensor.
 %
@@ -34,9 +34,9 @@ function dti_tensor = dti_tensor_condition(dti_tensor, scale_value)
 
                 % Construct the 3x3 diffusion tensor matrix for the current voxel
 
-                D = [dti_tensor(ix, iy, iz, 1), dti_tensor(ix, iy, iz, 4), dti_tensor(ix, iy, iz, 5); ...
-                     dti_tensor(ix, iy, iz, 4), dti_tensor(ix, iy, iz, 2), dti_tensor(ix, iy, iz, 6); ...
-                     dti_tensor(ix, iy, iz, 5), dti_tensor(ix, iy, iz, 6), dti_tensor(ix, iy, iz, 3)];
+                D = [zeffiro.dti.dti_tensor(ix, iy, iz, 1), zeffiro.dti.dti_tensor(ix, iy, iz, 4), zeffiro.dti.dti_tensor(ix, iy, iz, 5); ...
+                     zeffiro.dti.dti_tensor(ix, iy, iz, 4), zeffiro.dti.dti_tensor(ix, iy, iz, 2), zeffiro.dti.dti_tensor(ix, iy, iz, 6); ...
+                     zeffiro.dti.dti_tensor(ix, iy, iz, 5), zeffiro.dti.dti_tensor(ix, iy, iz, 6), zeffiro.dti.dti_tensor(ix, iy, iz, 3)];
 
                 % Skip if the tensor is empty
 
@@ -70,12 +70,12 @@ function dti_tensor = dti_tensor_condition(dti_tensor, scale_value)
 
                 % Update the tensor components
 
-                dti_tensor(ix, iy, iz, 1) = D_new(1,1);
-                dti_tensor(ix, iy, iz, 2) = D_new(2,2);
-                dti_tensor(ix, iy, iz, 3) = D_new(3,3);
-                dti_tensor(ix, iy, iz, 4) = D_new(1,2);
-                dti_tensor(ix, iy, iz, 5) = D_new(1,3);
-                dti_tensor(ix, iy, iz, 6) = D_new(2,3);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 1) = D_new(1,1);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 2) = D_new(2,2);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 3) = D_new(3,3);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 4) = D_new(1,2);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 5) = D_new(1,3);
+                zeffiro.dti.dti_tensor(ix, iy, iz, 6) = D_new(2,3);
 
             end % for
 

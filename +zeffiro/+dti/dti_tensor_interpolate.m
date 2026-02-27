@@ -1,6 +1,6 @@
 function tensor_array = dti_tensor_interpolate(reference_points, dti_tensor, scale_value, roi_radius, mode)
 %
-% tensor_array = zeffiro.dti_tensor_interpolate(reference_points, dti_tensor, scale_value, roi_radius, mode)
+% tensor_array = zeffiro.dti.dti_tensor_interpolate(reference_points, dti_tensor, scale_value, roi_radius, mode)
 %
 % Interpolates diffusion tensor values at specified
 % reference points using either nearest-neighbor or
@@ -52,7 +52,7 @@ function tensor_array = dti_tensor_interpolate(reference_points, dti_tensor, sca
         % Interpolate based on the specified mode
         if strcmp(mode, 'nearest')
             % Nearest-neighbor interpolation: use the tensor at the nearest voxel
-            tensor_array(i, :) = squeeze(dti_tensor(ix, iy, iz, :)).';
+            tensor_array(i, :) = squeeze(zeffiro.dti.dti_tensor(ix, iy, iz, :)).';
 
         elseif strcmp(mode, 'radius_average')
             % Radius-averaged interpolation: average tensors within a spherical ROI
@@ -79,7 +79,7 @@ function tensor_array = dti_tensor_interpolate(reference_points, dti_tensor, sca
 
                         % Check if the voxel is within the spherical ROI
                         if dx*dx + dy*dy + dz*dz <= roi_radius^2
-                            acc = acc + squeeze(dti_tensor(xi, yi, zi, :)).';
+                            acc = acc + squeeze(zeffiro.dti.dti_tensor(xi, yi, zi, :)).';
                             count = count + 1;
                         end
                     end
@@ -91,7 +91,7 @@ function tensor_array = dti_tensor_interpolate(reference_points, dti_tensor, sca
                 tensor_array(i, :) = acc / count;
             else
                 % Fallback to nearest-neighbor if no voxels are found
-                tensor_array(i, :) = squeeze(dti_tensor(ix, iy, iz, :)).';
+                tensor_array(i, :) = squeeze(zeffiro.dti.dti_tensor(ix, iy, iz, :)).';
             end
 
         else

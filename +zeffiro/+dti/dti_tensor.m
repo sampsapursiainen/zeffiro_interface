@@ -1,6 +1,6 @@
 function [dti_tensor, lnS0] = dti_tensor(data_dir, bvec_file, bval_file, scale_value)
 %
-%   [dti_tensor, lnS0] = zeffiro.dti_tensor(data_dir, bvec_file, bval_file, scale_value)
+%   [dti_tensor, lnS0] = zeffiro.dti.dti_tensor(data_dir, bvec_file, bval_file, scale_value)
 %
 % Computes a Diffusion Tensor Imaging (DTI) tensor from DWI MRI data.
 %
@@ -130,7 +130,7 @@ function [dti_tensor, lnS0] = dti_tensor(data_dir, bvec_file, bval_file, scale_v
 
     % Apply scaling (e.g., for visualization or further analysis)
 
-    dti_tensor = zeffiro.dti_tensor_condition(dti_tensor, scale_value);
+    dti_tensor = zeffiro.dti.dti_tensor_condition(dti_tensor, scale_value);
 
 end % function
 
