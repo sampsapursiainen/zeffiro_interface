@@ -23,11 +23,19 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
 % The source model used by DUNEUro. We use the H(div) source model here to
 % match that of Zeffiro, but another good option is 'local_subtraction'.
 %
+%    kwargs.saveFilePrefix (1,1) string = ""
+%
+% If this is non-empty, the transfer matrix is also automatically saved to a file.
+% The current time and the used source model are appended to the file path prefix.
+%
     arguments
         kwargs.projectFilePath (1,1) string { mustBeFile }
         kwargs.electrodeFieldName (1,1) string = "s2_points"
         kwargs.sourceModel (1,:) char = 'whitney'
+        kwargs.saveFilePrefix (1,1) string = ""
     end
+
+    currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
 
     projectFileHandle = matfile(kwargs.projectFilePath) ;
 
@@ -67,5 +75,15 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
     driver.set_electrodes(electrodePositions,electrodeConfig) ;
 
     eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
+
+    if strlength(kwargs.saveFilePrefix) > 0
+
+        outputFilePath = kwargs.saveFilePrefix + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
+
+        saveFile = matfile(outputFilePath, Writable=true) ;
+
+        saveFile.eegT = eegT ;
+
+    end % if
 
 end % function
