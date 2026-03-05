@@ -37,29 +37,69 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
 
     currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
 
+    disp("Opening file handle...")
+
     projectFileHandle = matfile(kwargs.projectFilePath) ;
 
     % Note that we transpose everything loaded from the Zeffiro Project file,
     % because DUNEuro stores individual elements and such in column major order
     % due to CPU cache efficiency reasons.
 
+    disp("Loading mesh points...")
+
     meshPoints = transpose(projectFileHandle.nodes) ;
+
+    disp("Loading mesh elements...")
 
     elements = transpose(projectFileHandle.tetra) - 1 ; % Subtract 1 here because of DUNEuro's 0-based indexing.
 
+    disp("Loading mesh labels...")
+
     labels = transpose(projectFileHandle.domain_labels) ;
+
+    disp("Loading mesh conductivity...")
 
     conductivity = projectFileHandle.sigma ;
 
-    tensors = zeffiro.duneuro.transformTensorForDUNEuro(conductivity(:,3:end)) ;
+    disp("Checking conductivity size...")
+
+    [conductivityRowN, conductivityColN] = size(conductivity) ;
+
+    if conductivityColN == 8
+
+        conductivity = conductivity(:,3:end) ;
+
+    elseif conductivityColN == 2
+
+        conductivity = conductivity(:,1) ;
+
+    else
+
+        conductivity = conductivity ;
+
+    end
+
+    disp("Transforming Zeffiro conductivity to DUNEuro conductivity...")
+
+    tensors = zeffiro.duneuro.transformTensorForDUNEuro(conductivity) ;
+
+    disp("Loading source positions...")
 
     sourcePositions = transpose(projectFileHandle.source_positions) ;
 
+    disp("Setting Cartesian srouce sourceDirections...")
+
     sourceDirections = ones(size(sourcePositions)) ;
+
+    disp("Constructing dipoles...")
 
     dipoles = [ sourcePositions ; sourceDirections ] ;
 
+    disp("Loading electrode positions...")
+
     electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName)) ;
+
+    disp("Setting up DUNEuro driver configuration object...")
 
     [driverConfig, electrodeConfig] = duneuro.duneuroConfig( ...
         nodes=meshPoints, ...
@@ -70,9 +110,15 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
         source_model=kwargs.sourceModel ...
     ) ;
 
+    disp("Generating DUNEuro driver...")
+
     driver = duneuro.duneuro_meeg(driverConfig) ;
 
+    disp("Setting driver electrodes...")
+
     driver.set_electrodes(electrodePositions,electrodeConfig) ;
+
+    disp("Starting transfer matrix computation...")
 
     eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
 
@@ -80,10 +126,14 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
 
         outputFilePath = kwargs.saveFilePrefix + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
 
+        disp("Saving eegT to " + outputFilePath + "...")
+
         saveFile = matfile(outputFilePath, Writable=true) ;
 
         saveFile.eegT = eegT ;
 
     end % if
+
+    disp("Done.")
 
 end % function
