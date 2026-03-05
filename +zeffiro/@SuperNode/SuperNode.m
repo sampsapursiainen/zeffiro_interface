@@ -64,7 +64,7 @@ classdef SuperNode
                 meshNodes (3,:) double { mustBeFinite }
             end
 
-            [ self.surfaceTriangleAreas, ~ ] = zefCore.triangleAreas (meshNodes,self.surfaceTriangles) ;
+            [ self.surfaceTriangleAreas, ~ ] = zeffiro.triangleAreas (meshNodes,self.surfaceTriangles) ;
 
         end % function
 
@@ -80,7 +80,7 @@ classdef SuperNode
                 meshNodes (3,:) double { mustBeFinite }
             end
 
-            [self.centralNodePos, self.centralNodeI] = zefCore.attachSensors (self.centralNodePos,meshNodes,[]) ;
+            [self.centralNodePos, self.centralNodeI] = zeffiro.attachSensors (self.centralNodePos,meshNodes,[]) ;
 
         end
 
@@ -139,13 +139,13 @@ classdef SuperNode
 
             % Preallocate vector of objects with default property values.
 
-            superNodes (superNodeN) = zefCore.SuperNode ;
+            superNodes (superNodeN) = zeffiro.SuperNode ;
 
             % Find supernode centers.
 
             if kwargs.attachNodesTo == "volume"
 
-                [centralNodePos, centralNodeIs] = zefCore.attachSensors (superNodePos,meshNodes,[]);
+                [centralNodePos, centralNodeIs] = zeffiro.attachSensors (superNodePos,meshNodes,[]);
 
                 sNodeElements = meshElements ;
 
@@ -153,13 +153,13 @@ classdef SuperNode
 
                 % First find surface triangles and their coordinates.
 
-                surfTri = transpose ( zefCore.tetraSurfaceTriangles (meshElements') ) ;
+                surfTri = transpose ( zeffiro.tetraSurfaceTriangles (meshElements') ) ;
 
                 surfTriCoords = meshNodes (:,surfTri) ;
 
                 % Then attach supernodes to surface triangles and map the result to global node indices.
 
-                [centralNodePos, centralNodeIs] = zefCore.attachSensors (superNodePos, surfTriCoords, []);
+                [centralNodePos, centralNodeIs] = zeffiro.attachSensors (superNodePos, surfTriCoords, []);
 
                 centralNodeIs = surfTri (centralNodeIs) ;
 
@@ -171,7 +171,7 @@ classdef SuperNode
 
             for ii = 1 : superNodeN
 
-                zefCore.dispProgress (ii, superNodeN) ;
+                zeffiro.dispProgress (ii, superNodeN) ;
 
                 nI = centralNodeIs (ii) ;
 
@@ -183,7 +183,7 @@ classdef SuperNode
 
                 superNodes (ii) . radius = radius ;
 
-                [whichElements,surfTri,indInElements] = zefCore.superNode (sNodeElements,nI,radius=radius,nodes=meshNodes') ;
+                [whichElements,surfTri,indInElements] = zeffiro.superNode (sNodeElements,nI,radius=radius,nodes=meshNodes') ;
 
                 superNodes (ii) . indInElements = indInElements ;
 
@@ -191,7 +191,7 @@ classdef SuperNode
 
                 superNodes (ii) . surfaceTriangles = surfTri ;
 
-                [superNodes(ii).surfaceTriangleAreas, ~] = zefCore.triangleAreas (meshNodes,surfTri) ;
+                [superNodes(ii).surfaceTriangleAreas, ~] = zeffiro.triangleAreas (meshNodes,surfTri) ;
 
                 superNodes (ii) = superNodes (ii) . computeTotalSurfaceArea ;
 

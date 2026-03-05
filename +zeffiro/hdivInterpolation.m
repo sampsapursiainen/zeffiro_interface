@@ -121,7 +121,7 @@ disp (newline + "Solving H(div) with " + p_optimization_system_type + "..." + ne
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     % Get global source index.
 
@@ -154,7 +154,7 @@ for i = 1 : n_of_iterations
 
     if p_optimization_system_type == "pbo"
 
-        Coeff_mat = zefCore.pboSystem ( ...
+        Coeff_mat = zeffiro.pboSystem ( ...
             loc_mat, ...
             dir_mat, ...
             sourcePos (i,:), ...
@@ -163,7 +163,7 @@ for i = 1 : n_of_iterations
 
     elseif p_optimization_system_type == "mpo"
 
-        Coeff_mat = zefCore.mpoSystem ( ...
+        Coeff_mat = zeffiro.mpoSystem ( ...
             loc_mat, ...
             dir_mat, ...
             sourcePos (i,:), ...
@@ -205,7 +205,7 @@ disp (newline + "Counting required number interpolation matrix entries..." + new
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     n_of_fi_vals = numel (fi_coeff_row_col_val{i, 3}) ;
     n_of_ew_vals = numel (ew_coeff_row_col_val{i, 3}) ;
@@ -238,7 +238,7 @@ disp (newline + "Generating interpolation matrix initialization vectors..." + ne
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     fi_row_inds = row_col_val_inds_fn (entry_counter_fi, fi_coeff_row_col_val, i, 1 ) ;
     fi_col_inds = row_col_val_inds_fn (entry_counter_fi, fi_coeff_row_col_val, i, 2 ) ;

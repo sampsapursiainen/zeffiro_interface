@@ -77,7 +77,7 @@ G = [];
 
 % Dipoles and their adjacency and weight matrices T and G.
 
-[T_fi, G_fi, ~, fi_source_directions, fi_source_positions, ~] = zefCore.faceIntersectingDipoles ( ...
+[T_fi, G_fi, ~, fi_source_directions, fi_source_positions, ~] = zeffiro.faceIntersectingDipoles ( ...
     p_nodes, ...
     p_tetrahedra, ...
     p_brain_inds ...
@@ -91,7 +91,7 @@ valid_source_inds = p_intended_source_inds;
 
 source_tetra = p_tetrahedra ( valid_source_inds, : );
 
-interpolation_positions = zefCore.tetraCentroids ( p_nodes, source_tetra ) ;
+interpolation_positions = zeffiro.tetraCentroids ( p_nodes, source_tetra ) ;
 
 % Form initial values based on given nodes, tetrahedra and lead field.
 
@@ -113,7 +113,7 @@ fi_coeff_row_col_val = cell(0);
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     % Get global source index.
 
@@ -215,7 +215,7 @@ entry_counter_fi = 0;
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     n_of_fi_vals = numel(fi_coeff_row_col_val{i, 3});
 
@@ -238,7 +238,7 @@ K_fi = zeros(n_of_entries_fi,1);
 
 for i = 1 : n_of_iterations
 
-    zefCore.dispProgress (i, n_of_iterations) ;
+    zeffiro.dispProgress (i, n_of_iterations) ;
 
     fi_row_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 1);
     fi_col_inds = row_col_val_inds_fn(entry_counter_fi, fi_coeff_row_col_val, i, 2);
