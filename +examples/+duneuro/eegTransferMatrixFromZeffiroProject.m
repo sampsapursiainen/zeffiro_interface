@@ -1,6 +1,6 @@
-function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
+function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 %
-%   eegT = eegTransfetMatrixFromZeffiroProjectFile(kwargs)
+%   eegT = eegTransfetMatrixFromZeffiroProject(kwargs)
 %
 % Loads data from a given Zeffiro Project file and computes
 % an EEG transfer matrix using the duneuro-matlab library.
@@ -63,7 +63,7 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
 
     disp("Checking conductivity size...")
 
-    [conductivityRowN, conductivityColN] = size(conductivity) ;
+    [~, conductivityColN] = size(conductivity) ;
 
     if conductivityColN == 8
 
