@@ -1,6 +1,6 @@
-function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
+function [ newPos, newI ] = attachSensors ( sensorPositions, meshNodePositions, triangleIndices, kwargs )
 %
-% [ newPos, newI ] = attachSensors ( senPos, triPos, triInd, kwargs )
+% [ newPos, newI ] = attachSensors ( sensorPositions, triPos, triangleIndices, kwargs )
 %
 % Computes new positions for a given set of sensors, such that they are
 % attached to a given surface. Also returns the indices of the triangles that
@@ -9,17 +9,17 @@ function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
 %
 % Inputs:
 %
-% - sensors
+% - sensorPositions
 %
-%   A set of sensors with positions.
+%   A set of sensor positions.
 %
-% - nodePos
+% - meshNodePositions
 %
 %   The nodes that the electrodes are to be attached to.
 %
-% - triInd
+% - triangleIndices
 %
-%   Triples of indices indicating which nodePos belong to which triangles. This
+%   Triples of indices indicating which meshNodePositions belong to which triangles. This
 %   can be empty, if distances to some form of triangles are not needed, and
 %   all one cares about are the nodes.
 %
@@ -29,9 +29,9 @@ function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
 %
 
     arguments
-        senPos (3,:) double { mustBeFinite }
-        nodePos (3,:) double { mustBeFinite }
-        triInd (3,:) uint64 { mustBePositive }
+        sensorPositions (3,:) double { mustBeFinite }
+        meshNodePositions (3,:) double { mustBeFinite }
+        triangleIndices (3,:) uint64 { mustBePositive }
         kwargs.attachMode { mustBeMember( kwargs.attachMode, [ "nearestNode", "nearestTriangleCentroid" ] ) } = "nearestNode"
     end
 
@@ -39,11 +39,11 @@ function [ newPos, newI ] = attachSensors ( senPos, nodePos, triInd, kwargs )
 
     if kwargs.attachMode == "nearestNode"
 
-        [ newPos, newI ] = nearestNodeFn ( senPos, nodePos ) ;
+        [ newPos, newI ] = nearestNodeFn ( sensorPositions, meshNodePositions ) ;
 
     elseif kwargs.attachMode == "nearestTriangleCentroid"
 
-        [ newPos, newI ] = nearestTriCentroidFn ( senPos, nodePos, triInd ) ;
+        [ newPos, newI ] = nearestTriCentroidFn ( sensorPositions, meshNodePositions, triangleIndices ) ;
 
     else
 
@@ -55,22 +55,22 @@ end % function
 
 %% Helper functions
 
-function [ newPos, minI ] = nearestNodeFn ( senPos, nodePos )
+function [ newPos, minI ] = nearestNodeFn ( sensorPositions, meshNodePositions )
 %
 % Places the sensor positions at nearest mesh nodes.
 %
 
     % Compute matrix sizes.
 
-    Nn = size ( nodePos, 2 ) ;
+    Nn = size ( meshNodePositions, 2 ) ;
 
-    Ns = size ( senPos, 2 ) ;
+    Ns = size ( sensorPositions, 2 ) ;
 
     % Repeat matrices to compute differences in a vectorized manner.
 
-    repSenPos = repelem ( senPos, 1, Nn ) ;
+    repSenPos = repelem ( sensorPositions, 1, Nn ) ;
 
-    repNodePos = repmat ( nodePos, 1, Ns ) ;
+    repNodePos = repmat ( meshNodePositions, 1, Ns ) ;
 
     % Compute differences between node and sensor positions and their norms.
 
@@ -88,19 +88,19 @@ function [ newPos, minI ] = nearestNodeFn ( senPos, nodePos )
 
     minI = minI (:) ;
 
-    newPos = nodePos ( :, minI ) ;
+    newPos = meshNodePositions ( :, minI ) ;
 
 end % function
 
-function [ newPos, newI ] = nearestTriCentroidFn ( senPos, nodePos, triInd )
+function [ newPos, newI ] = nearestTriCentroidFn ( sensorPositions, meshNodePositions, triangleIndices )
 %
 % Places the sensor positions at the nearest centroids of triangles.
 %
 
     % Compute centroids and compute distances to them using them as the nodes.
 
-    [ C, ~, ~, ~ ] = zefCore.triangleCentroids ( nodePos, triInd ) ;
+    [ C, ~, ~, ~ ] = zefCore.triangleCentroids ( meshNodePositions, triangleIndices ) ;
 
-    [ newPos, newI ] = nearestNodeFn ( senPos, C, triInd ) ;
+    [ newPos, newI ] = nearestNodeFn ( sensorPositions, C, triangleIndices ) ;
 
 end % function
