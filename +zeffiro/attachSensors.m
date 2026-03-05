@@ -99,8 +99,8 @@ function [ newPos, newI ] = nearestTriCentroidFn ( sensorPositions, meshNodePosi
 
     % Compute centroids and compute distances to them using them as the nodes.
 
-    [ C, ~, ~, ~ ] = zefCore.triangleCentroids ( meshNodePositions, triangleIndices ) ;
+    [ C, ~, ~, ~ ] = zeffiro.triangleCentroids ( meshNodePositions, triangleIndices ) ;
 
-    [ newPos, newI ] = nearestNodeFn ( sensorPositions, C, triangleIndices ) ;
+    [ newPos, newI ] = nearestNodeFn ( sensorPositions, C ) ;
 
 end % function
