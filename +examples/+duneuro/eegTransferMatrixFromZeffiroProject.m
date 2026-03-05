@@ -1,6 +1,6 @@
 function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 %
-%   eegT = eegTransfetMatrixFromZeffiroProject(kwargs)
+%   eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 %
 % Loads data from a given Zeffiro Project file and computes
 % an EEG transfer matrix using the duneuro-matlab library.
