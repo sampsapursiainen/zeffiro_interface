@@ -69,6 +69,13 @@ function [zef, Y, info] = zef_simulate_measurements_from_outPub(zef, sourceTree,
         end
     end
 
+    measurement_scale_conversion = 1;
+        if isfield(zef,'source_tree_signal_parameters')
+           if isfield(zef.source_tree_signal_parameters,'gainConversion')
+            measurement_scale_conversion = zef.source_tree_signal_parameters.gainConversion.Value;
+        end
+        end
+
     % Build a fast map: path(char) -> meta struct with NodeData/UserData
     srcMap = zef_local_build_pathmap_from_sourceTree(sourceTree);
 
@@ -140,7 +147,7 @@ function [zef, Y, info] = zef_simulate_measurements_from_outPub(zef, sourceTree,
             continue;
         end
 
-        Gi = zef.L(:, cols);   % Kx3
+        Gi = measurement_scale_conversion*zef.L(:, cols);   % Kx3
         g  = Gi * ori(:);      % Kx1
 
         % --- Add contributions for selected passes, plot-like NaN handling ---
