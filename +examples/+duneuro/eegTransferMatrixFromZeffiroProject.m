@@ -18,9 +18,15 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
 %
 % A field name of the electrode positions stored in the project file.
 %
+%    kwargs.sourceModel (1,:) char = 'whitney'
+%
+% The source model used by DUNEUro. We use the H(div) source model here to
+% match that of Zeffiro, but another good option is 'local_subtraction'.
+%
     arguments
         kwargs.projectFilePath (1,1) string { mustBeFile }
         kwargs.electrodeFieldName (1,1) string = "s2_points"
+        kwargs.sourceModel (1,:) char = 'whitney'
     end
 
     projectFileHandle = matfile(kwargs.projectFilePath) ;
@@ -52,7 +58,8 @@ function eegT = eegTransferMatrixFromZeffiroProjectFile(kwargs)
         elements=elements, ...
         labels=labels, ...
         tensors=tensors, ...
-        dipoles=dipoles ...
+        dipoles=dipoles, ...
+        source_model=kwargs.sourceModel ...
     ) ;
 
     driver = duneuro.duneuro_meeg(driverConfig) ;
