@@ -87,7 +87,7 @@ function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 
     sourcePositions = transpose(projectFileHandle.source_positions) ;
 
-    disp("Setting Cartesian srouce sourceDirections...")
+    disp("Setting Cartesian source directions...")
 
     sourceDirections = ones(size(sourcePositions)) ;
 
