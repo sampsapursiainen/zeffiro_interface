@@ -76,12 +76,14 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
             nodeI = superNodes (snI) . centralNodeI ;
             totalArea = 1 ;
             triArea = 1 ;
+            vertexCount = 1 ;
 
         else
 
             nodeI = superNodes (snI) . surfaceTriangles ;
             totalArea = totalArea ;
             triArea = superNodes (snI) . surfaceTriangleAreas ;
+            vertexCount = 3 ;
 
         end % if
 
@@ -92,7 +94,7 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
         % Go over the combinations of basis functions ψi and ψj in the
         % triangles, or the combinations of vertices.
 
-        for ii = 1 : 3
+        for ii = 1 : vertexCount
 
             if useOnlyCenter
 
@@ -101,6 +103,8 @@ function A = stiffMatBoundaryConditions ( A, impedances, superNodes, kwargs )
                 Acols (range) = nodeI ;
 
                 Avals (range) = Zcoeff ( snI ) .* kwargs.onDC .* triArea / totalArea ;
+
+                cursor = cursor + rangeLen + 1 ;
 
             else
 
@@ -193,16 +197,20 @@ function [Arows, Acols, Avals] = preallocateEntries (snN,superNodes, areaThresho
 
             nodeI = superNodes (snI) . centralNodeI ;
 
+            vertexCount = 1 ;
+
         else
 
             nodeI = superNodes (snI) . surfaceTriangles ;
+
+            vertexCount = 3 ;
 
         end % if
 
         % Go over the combinations of basis functions ψi and ψj in the
         % triangles, or just use supernode center.
 
-        for ii = 1 : 3
+        for ii = 1 : vertexCount
 
             if useOnlyCenter
 

@@ -81,16 +81,21 @@ function [ elementsOut, surfTri, indInTetra ] = superNode (elements, centerNodeI
     % Then find the surface triangles of the supernode. If a mesh of triangles
     % was given instead of elements, the surface mesh is the set of qualifying
     % elements itself.
+    % If the search radius was zero, we return 0 triangles.
 
-    if Nv == 4
+    if Nv == 4 && kwargs.radius > 0
 
         surfTri = zeffiro.tetraSurfaceTriangles ( transpose ( elements (:,whichElements) ) ) ;
 
         surfTri = transpose (surfTri) ;
 
-    else
+    elseif Nv == 3 && kwargs.radius > 0
 
         surfTri = elementsOut ;
+
+    else
+
+        surfTri = [] ;
 
     end % if
 
