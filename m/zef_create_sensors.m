@@ -33,7 +33,8 @@ field_cell_default =  {{'on', '1'}
     {'electrode_impedance', '2000'}
     {'electrode_inner_radius', '2'}
     {'electrode_outer_radius', '5'}
-{'get_functions','cell(0)'}};
+{'get_functions','cell(0)'}
+ {'electrode_surface_index','1'}};
 
 for i = 1 : length(field_cell_default)
 

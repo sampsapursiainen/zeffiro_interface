@@ -120,8 +120,8 @@ if ismember(eval('zef.visualization_type'), [3])
                 reconstruction = sqrt(sum(reconstruction.^2))';
             end
             reconstruction = sum(reconstruction(s_i_ind_2),2)/size(s_i_ind_2,2);
-            max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
-            min_rec = min([min_rec ; (reconstruction(:))]);
+            max_abs_reconstruction = max([max_abs_reconstruction ; max(reconstruction,[],"all")]);
+            min_rec = min([min_rec ; min(reconstruction,[],"all")]);
             max_rec = max_abs_reconstruction;
 
         end
@@ -152,8 +152,8 @@ if ismember(eval('zef.visualization_type'), [3])
             reconstruction = sqrt(sum(reconstruction.^2))';
         end
         reconstruction = sum(reconstruction(s_i_ind_2),2)/size(s_i_ind_2,2);
-        max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
-        min_rec = min([min_rec ; (reconstruction(:))]);
+        max_abs_reconstruction = max([max_abs_reconstruction ; max(reconstruction,[],"all")]);
+        min_rec = min([min_rec ; min(reconstruction,[],"all")]);
         max_rec = max_abs_reconstruction;
         if not(ismember(eval('zef.reconstruction_type'), [6]))
             if eval('zef.inv_scale') == 1
@@ -199,8 +199,8 @@ if ismember(eval('zef.visualization_type'), [5])
         for f_ind = frame_start : frame_step : frame_stop
             reconstruction = (eval(['zef.top_reconstruction{' int2str(f_ind) '}']));
             reconstruction = reconstruction(:);
-            max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
-            min_rec = min([min_rec ; (reconstruction(:))]);
+            max_abs_reconstruction = max([max_abs_reconstruction ; max(reconstruction,[],'all')]);
+            min_rec = min([min_rec ; min(reconstruction,[],'all')]);
             max_rec = max_abs_reconstruction;
         end
     else
@@ -215,8 +215,8 @@ if ismember(eval('zef.visualization_type'), [5])
 
         reconstruction = eval('zef.top_reconstruction');
         reconstruction = reconstruction(:);
-        max_abs_reconstruction = max([max_abs_reconstruction ; (reconstruction(:))]);
-        min_rec = min([min_rec ; (reconstruction(:))]);
+        max_abs_reconstruction = max([max_abs_reconstruction ; max(reconstruction,[],'all')]);
+        min_rec = min([min_rec ; min(reconstruction,[],'all')]);
         max_rec = max_abs_reconstruction;
     end
 end
@@ -550,6 +550,11 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 set(h,'facealpha',eval('zef.layer_transparency'));
             end
         elseif electrode_model == 2
+             if isfield(zef,[zef.current_sensors '_electrode_surface_index'])
+ electrode_surface_index = zef.([zef.current_sensors '_electrode_surface_index']);
+ else
+ electrode_surface_index = 1;
+ end
             %April 2021
             if eval(['zef.' eval('zef.current_sensors') '_names_visible'])
                 for i = 1 : size(sensors_name_points,1)
@@ -561,7 +566,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                 unique_sensors_aux_1 = unique(sensors(:,1));
                 h = zeros(length(unique_sensors_aux_1),1);
                 for i = 1 : length(unique_sensors_aux_1)
-                    surface_index_aux = length(reuna_p);
+                    surface_index_aux = length(reuna_p)-electrode_surface_index+1;
                         if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
                             [~, sensor_info] = zef_sensor_get_function_eval(sensors_get_functions{unique_sensors_aux_1(i)}, zef,'sensor_info');
                             surface_index_aux = sensor_info.compartment_index;
@@ -717,8 +722,10 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                                     reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                                 elseif eval('zef.inv_scale') == 2
                                     reconstruction = (max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
+                                    min_rec = (max(min_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                                 elseif eval('zef.inv_scale') == 3
                                     reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
+                                    min_rec = (max(min_rec,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                                 end
                             end
 
@@ -1025,8 +1032,10 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                                 reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                             elseif eval('zef.inv_scale') == 2
                                 reconstruction = (max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
+                                min_rec = max(min_rec, max_abs_reconstruction/eval('zef.inv_dynamic_range'));
                             elseif eval('zef.inv_scale') == 3
                                 reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
+                                min_rec = (max(min_rec, max_abs_reconstruction/eval('zef.inv_dynamic_range')));
                             end
                         end
 

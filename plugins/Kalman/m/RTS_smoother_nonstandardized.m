@@ -1,10 +1,10 @@
-function [P_s_store, m_s_store, G_store] = RTS_smoother(P_store, z_inverse, A, Q, number_of_frames)
+function [P_s_store, m_s_store, G_store] = RTS_smoother_nonstandardized(P_store, z_inverse, A, Q, number_of_frames)
 P_s_store = cell(0);
 m_s_store = cell(0);
 G_store = cell(0);
 h = zef_waitbar(0,'Smoothing');
 for f_ind = number_of_frames:-1:1
-    zef_waitbar(1 - f_ind/number_of_frames,h, ['Smoothing ' int2str(number_of_frames -f_ind) ' of ' int2str(number_of_frames) '.']);
+    zef_waitbar(1 - f_ind/number_of_frames,h, ['Smoothing (non-standardized)' int2str(number_of_frames -f_ind) ' of ' int2str(number_of_frames) '.']);
 
     P = P_store{f_ind};
     m = z_inverse{f_ind};

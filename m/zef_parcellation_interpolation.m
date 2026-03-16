@@ -133,7 +133,6 @@ p_counter = 0;
 for p_ind = p_selected + 1
     p_counter = p_counter + 1;
 
-
     I_compartment = find(ismember(eval('zef.domain_labels'),p_compartment(p_ind-1,1:end-1)));
     brain_cortex_ind = find(ismember(brain_ind,I_compartment) & ismember(submesh_ind_vec,p_compartment(p_ind-1,end)));
     cortex_ind = brain_ind(brain_cortex_ind);

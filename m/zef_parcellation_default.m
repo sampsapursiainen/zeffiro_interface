@@ -8,7 +8,7 @@ c_ind = 0;
 
 submesh_ind = eval('zef.submesh_ind');
 if isempty(submesh_ind)
-    submesh_ind = ones(size(eval('zef.brain_ind')));
+    submesh_ind = ones(size(eval('zef.active_compartment_ind')));
 end
 
 if eval('zef.parcellation_merge')
@@ -35,7 +35,7 @@ sigma_vec = [];
 priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
-aux_brain_ind = [];
+aux_active_compartment_ind = [];
 compartment_tags = eval('zef.compartment_tags');
 for k = 1 : length(compartment_tags)
     var_0 = ['zef.' compartment_tags{k} '_on'];
@@ -50,7 +50,7 @@ for k = 1 : length(compartment_tags)
         c_str = compartment_tags{k};
 
         if ismember(eval(['zef.' c_str '_sources']),[1 2])
-            I = find(eval('zef.domain_labels(zef.brain_ind)')==i);
+            I = find(eval('zef.domain_labels(zef.active_compartment_ind)')==i);
             submesh_ind_aux = unique(submesh_ind(I));
             if isempty(submesh_ind_aux)
                 submesh_ind_aux = 1;

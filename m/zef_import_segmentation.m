@@ -60,6 +60,7 @@ if not(isequal(file_name,0))
                 name = (ini_cell{i,find(ismember(ini_cell(i,:),'name'),1)+1});
             end
 
+            new_compartment = 0;
             if isequal(type,'box')
                 if isempty(name)
                     zef = zef_add_bounding_box(zef);
@@ -72,6 +73,7 @@ if not(isequal(file_name,0))
                         compartment_ind = find(ismember(compartment_data(:,3),name));
                         compartment_tag = compartment_tags{end-compartment_ind+1};
                     else
+                        new_compartment = 1;
                         domain_label_counter = domain_label_counter + 1;
                         zef = zef_add_compartment(zef);
                         compartment_tags = zef.compartment_tags;
@@ -125,6 +127,9 @@ if not(isequal(file_name,0))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'invert'),1)];
                     ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
                     invert = (ini_cell{i,find(ismember(ini_cell(i,:),'invert'),1)+1});
+                    if isa(invert,'numeric')
+                    invert = num2str(invert);
+                    end
                 else
                     invert = '0';
                 end
@@ -155,6 +160,13 @@ if not(isequal(file_name,0))
                     visible = (ini_cell{i,find(ismember(ini_cell(i,:),'visible'),1)+1});
                 else
                     visible = '1';
+                end
+                if find(ismember(ini_cell(i,:),'color'))
+                    ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'color'),1)];
+                    ini_cell_ind = [ini_cell_ind ini_cell_ind(end)+1];
+                    color_vec = (ini_cell{i,find(ismember(ini_cell(i,:),'color'),1)+1});
+                else
+                    color_vec = [];
                 end
                 if find(ismember(ini_cell(i,:),'labeling_priority'))
                     ini_cell_ind = [ini_cell_ind find(ismember(ini_cell(i,:),'labeling_priority'),1)];
@@ -301,6 +313,9 @@ if not(isequal(file_name,0))
                 eval(['zef.' compartment_tag '_sources = ' activity ';']);
                 eval(['zef.' compartment_tag '_on = ' on  ';']);
                 eval(['zef.' compartment_tag '_visible = ' visible ';']);
+                if not(isempty(color_vec))
+                eval(['zef.' compartment_tag '_color = ' color_vec ';']);       
+                end
                 if not(isempty(labeling_priority))
                zef.([compartment_tag '_labeling_priority']) =  str2num(labeling_priority);
                 end
@@ -337,11 +352,13 @@ if not(isequal(file_name,0))
                 end
 
                 if isempty(filename) && isempty(database)
-                    aux_tetra = zef.tetra;
+                   if new_compartment
+                   aux_tetra = zef.tetra;
                     aux_nodes = zef.nodes;
-                    aux_domain_labels = zef.domain_labels;
+                   aux_domain_labels = zef.domain_labels;
                     [aux_triangles, aux_points] = zef_surface_mesh(aux_tetra(find(aux_domain_labels<=max(aux_domain_labels)-domain_label_counter+1),:),aux_nodes);
                     zef = zef_merge_surface_mesh(zef,compartment_tag,aux_triangles,aux_points,merge);
+                   end
                 end
 
                 if isequal(lower(database),'bst') || isequal(lower(database),'brainstorm')
