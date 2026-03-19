@@ -167,6 +167,95 @@ classdef Cylinders
 
         end % function
 
+        function out = moments(self)
+        %
+        %   out = moments(self)
+        %
+        % Computes the moments of the cylinders in this set as a cross product of the start and endpoint position vectors.
+        % This gives an idea of how much the cylinders are tilted and scaled with respect to a standard cylinder of identical
+        % radius pointing in z-direction.
+        %
+
+            arguments
+                self
+            end
+
+            out = cross(self.startPoints,self.endPoints) ;
+
+        end % function
+
+        function N = numel(self)
+        %
+        %   N = numel(self)
+        %
+        % Computes the number of cylinders in this set.
+        %
+
+            arguments
+                self
+            end
+
+            [~, N] = size(self.startPoints) ;
+
+        end % function
+
+        function tetraIndices = tetraCollisions(self,points,tetra)
+        %
+        %   tetraIndices = tetraCollisions(self,points,tetra)
+        %
+        % Determines which given tetra the cylinders in self are in contact with in a vectorized manner.
+        % Returns a Boolean matrix where the rows correspond cylinders|tetra and columns to cylinders|tetra.
+        %
+
+            arguments
+                self
+                points
+                tetra
+            end
+
+            % Extract matrix sizes.
+
+            [~, pointN] = size(points) ;
+
+            cylinderN = self.numel ;
+
+            % First assume that our cylinder is infinite and compute distances to center line.
+
+            repeatedDirections = repelem(self.directions, 1, pointN) ;
+
+            startPointDiffs = repmat(points, 1, cylinderN) - repelem(self.startPoints, 1, pointN) ;
+
+            distancesToCenterLine = vecnorm(cross(repeatedDirections, startPointDiffs)) ./ vecnorm(repeatedDirections) ;
+
+            repeatedRadii = repelem(self.radii,1,pointN) ;
+
+            indicesWithinInfiniteCylinder = distancesToCenterLine < repeatedRadii ;
+
+            % Then we discard all points which did not project onto the actual cylinder line segment.
+
+            indicesBeforeEndpoint = dot(startPointDiffs, -repeatedDirections) <= 0
+
+            % Finally do the same for points outside of the cylinder before its start point.
+
+            indicesAfterStartpoint = dot(startPointDiffs, repeatedDirections) <= 0
+
+            % Combine all restrictions to find out points within cylinders.
+
+            indicesWithinCylinders = indicesWithinInfiniteCylinder & indicesBeforeEndpoint & indicesAfterStartpoint ;
+
+            % Fold the index array such that the cylinderwise collisions with the points are in their respective columns.
+
+            indicesWithinCylinders = reshape(indicesWithinCylinders, cylinderN, pointN) ;
+
+            % TODO: compare this point-related columns of this index set with the tetra and check which node indices can be found.
+            % This is true if any points of a tetrahedron lie within a cylinder.
+            %
+            % tetraIndices = ... ;
+
+            error("Unimplemented!")
+
+        end % function
+
     end % methods
 
-end % class
+end % classdef
