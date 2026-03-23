@@ -28,13 +28,7 @@ function kernel = gaussianKernel(kwargs)
 
         axes{ii} = standardAxis ;
 
-        mean(axes{ii})
-
-        std(axes{ii})
-
     end % for
-
-    axes
 
     if axisN == 1
 
