@@ -34,8 +34,8 @@
 !+plugins/**/*.m
 !+plugins/**/*.mlapp
 
-!+zeffiro/
-!+zeffiro/*.m
+!+zeffiro/**/
+!+zeffiro/**/*.m
 
 !+zeffiro/+duneuro/
 !+zeffiro/+duneuro/*.m
