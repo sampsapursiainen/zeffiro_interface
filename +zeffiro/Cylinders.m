@@ -247,10 +247,13 @@ classdef Cylinders
 
             indicesWithinCylinders = reshape(indicesWithinCylinders, cylinderN, pointN) ;
 
-            % TODO: compare this point-related columns of this index set with the tetra and check which node indices can be found.
+            % TODO: compare the point-related columns of this index set with the tetra and check which node indices can be found.
             % This is true if any points of a tetrahedron lie within a cylinder.
             %
             % tetraIndices = ... ;
+
+            % TODO: also check whether the center line of the cylinder passes through a tetrahedron.
+            % For this we need to implement the collision algorithms from Daniel Lo's book Finite element mesh generation.
 
             error("Unimplemented!")
 
