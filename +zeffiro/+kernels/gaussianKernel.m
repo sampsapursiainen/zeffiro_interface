@@ -14,15 +14,21 @@ function kernel = gaussianKernel(kwargs)
 
     axisN = numel(kwargs.samples) ;
 
+    stepSizes = 2 * pi ./ kwargs.samples ;
+
     axes = cell(axisN,1) ;
 
     for ii = 1 : axisN
 
         samples = kwargs.samples(ii) ;
 
-        axes{ii} = (1 : samples) - dimensionMidpoints(ii) ;
+        stepSize = stepSizes(ii) ;
+
+        axes{ii} = (- pi : stepSize : pi) ; ... - dimensionMidpoints(ii) ;
 
     end % for
+
+    axes
 
     if axisN == 1
 
@@ -48,6 +54,10 @@ function kernel = gaussianKernel(kwargs)
 
     end
 
-    kernel = exp( - (X .^ 2) - (Y .^ 2) - (Z .^ 2) ) ;
+    kernel = exp( -  ( (X .^ 2) + (Y .^ 2) + (Z .^ 2) ) ./ 2 ) ;
+
+    scalingFactor = 1 ./ sqrt(2 * pi) ;
+
+    kernel = scalingFactor .* kernel ;
 
 end % function
