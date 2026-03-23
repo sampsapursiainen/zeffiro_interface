@@ -10,11 +10,7 @@ function kernel = gaussianKernel(kwargs)
         kwargs.samples (1,:) double { mustBePositive, mustBeInteger }
     end
 
-    dimensionMidpoints = (kwargs.samples) / 2 + 1 / 2 ;
-
     axisN = numel(kwargs.samples) ;
-
-    stepSizes = 2 * pi ./ (kwargs.samples - 1) ;
 
     axes = cell(axisN,1) ;
 
@@ -22,9 +18,19 @@ function kernel = gaussianKernel(kwargs)
 
         samples = kwargs.samples(ii) ;
 
-        stepSize = stepSizes(ii) ;
+        axis = 1 : samples ;
 
-        axes{ii} = (- pi : stepSize : pi) ; ... - dimensionMidpoints(ii) ;
+        axisMean = mean(axis) ;
+
+        axisStd = std(axis) ;
+
+        standardAxis = (axis - axisMean) / axisStd ;
+
+        axes{ii} = standardAxis ;
+
+        mean(axes{ii})
+
+        std(axes{ii})
 
     end % for
 
