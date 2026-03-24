@@ -1,8 +1,8 @@
 function out = convolveField(field, kernel, kwargs)
 %
-%   out = convolveField(field, kernel)
+%   out = convolveField(field, kernel, kwargs)
 %
-% Reshapes a given field such that it can be convolved with a given kernel and then runs the convolution.
+% Convolves a given signal with a given kernel.
 % The resulting convolution is also divided by sum(kernel) to maintain the units and scale of the output field.
 % The output is the same size as field by default.
 %
@@ -26,6 +26,8 @@ function out = convolveField(field, kernel, kwargs)
         kernel double { mustBeFinite }
         kwargs.convolutionShape (1,1) string = "same"
     end
+
+
 
     scalingFactor = sum(kernel, "all") ;
 
