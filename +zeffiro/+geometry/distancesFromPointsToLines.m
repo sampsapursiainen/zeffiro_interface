@@ -30,23 +30,23 @@ function distances = distancesFromPointsToLines(points, lines)
 
     % Compute combinations of distances from points to lines and projetion scaling factors.
 
-    fromLineStartsToPoints = repelem(points,1,lineN) - repmat(lineStartPoints,1,pointN) ;
+    fromLineStartsToPoints = repmat(points,1,lineN) - repelem(lineStartPoints,1,pointN) ;
 
-    projectionScalingFactors = dot(fromLineStartsToPoints, repmat(unitLineDirections,1,pointN)) ;
+    projectionScalingFactors = dot(fromLineStartsToPoints, repelem(unitLineDirections,1,pointN)) ;
 
     % Determine which distances to use based on sign of projection onto line.
 
     beforeStartPointsMask = projectionScalingFactors < 0 ;
 
-    afterEndPointsMask = projectionScalingFactors > repelem(lineDirectionNorms,1,pointN) ;
+    afterEndPointsMask = projectionScalingFactors > repmat(lineDirectionNorms,1,pointN) ;
 
     withinLineSegmentsMask = not(beforeStartPointsMask | afterEndPointsMask) ;
 
     % Generate output distance matrix.
 
-    distances = zeros(pointN, lineN) ;
+    distances = inf(pointN, lineN) ;
 
-    rejections = fromLineStartsToPoints - repmat(unitLineDirections,1,pointN) .* projectionScalingFactors ;
+    rejections = fromLineStartsToPoints - projectionScalingFactors .* repelem(unitLineDirections,1,pointN) ;
 
     rejectionNorms = vecnorm(rejections) ;
 
@@ -56,7 +56,7 @@ function distances = distancesFromPointsToLines(points, lines)
 
     distances(beforeStartPointsMask) = fromLineStartsToPointsNorms(beforeStartPointsMask) ;
 
-    fromLineEndsToPoints = repelem(points,1,lineN) - repmat(lineEndPoints,1,pointN) ;
+    fromLineEndsToPoints = repmat(points,1,lineN) - repelem(lineEndPoints,1,pointN) ;
 
     fromLineEndsToPointsNorms = vecnorm(fromLineEndsToPoints) ;
 
