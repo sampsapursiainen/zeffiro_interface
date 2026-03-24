@@ -19,13 +19,13 @@ function distances = distancesFromPointsToTriangles(points,triangles)
 
     % Names for the 3 different vertives of each triangle.
 
-    As = repmat(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN) ;
+    As = repelem(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN) ;
 
-    Bs = repmat(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN) ;
+    Bs = repelem(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN) ;
 
-    Cs = repmat(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN) ;
+    Cs = repelem(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN) ;
 
-    Ps = repelem(points, 1, triangleN) ;
+    Ps = repmat(points, 1, triangleN) ;
 
     % Plane-defining line segments.
 
@@ -47,7 +47,7 @@ function distances = distancesFromPointsToTriangles(points,triangles)
 
     APs = Ps - As ;
 
-    projectionScalingFactors = dot(APs, unitNormals) ;
+    projectionScalingFactors = dot(APs, unitNormals, 1) ;
 
     AQs = APs - projectionScalingFactors .* unitNormals ;
 
