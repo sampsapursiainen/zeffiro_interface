@@ -23,7 +23,7 @@
 !zeffiro_interface.m
 !zeffiro_downloader.m
 !zeffiro_setup.m
-!+core/**/*.m
+!+zefCore/**/*.m
 !+examples/**/*.m
 !+tests/**/*.m
 !+utilities/**/*.m
@@ -80,6 +80,10 @@
 # Allow Zeffiro profile files in specific folders.
 
 !profile/**/*.ini
+
+# Allow CSV files in te data folder.
+
+!data/**/*.csv
 
 # Allow TeΧ and font files under documentation folder.
 

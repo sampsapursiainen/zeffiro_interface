@@ -1,0 +1,115 @@
+function newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, newElectrodes, colI, kwargs)
+%
+% newR = linearizeResistivityMatrix (iniR, A, B, T, invS, electrodes, newElectrodes, colI, kwargs)
+%
+% Given an initial resistivity matrix iniR and a set of frequency perturbations df,
+% computes a new resistivity matrix newR via the linearization
+%
+%   newR = iniR + sum ( ∂R/∂Z * dZ )
+%
+% Inputs:
+%
+% - iniR
+%
+%   The initial value of the resistivity matrix being linearized.
+%
+% - A
+%
+%   Stiffness matrix of the related finite element mesh.
+%
+% - B
+%
+%   The basis function mean potential matrix divided by the respective electrode impedances.
+%
+% - T
+%
+%   A transfer matrix inv A * B.
+%
+% - invS
+%
+%   The inverse of a Schur complement of A in the system [ A, B, B', C ].
+%
+% - electrodes
+%
+%   A set of electrodes that iniR was computed with.
+%
+% - newElectrodes
+%
+%   Electrodes with modified impedances, that work as the evaluation point for
+%   the linearization.
+%
+% - colI
+%
+%   The indices subset of the columns of iniR that will be differentiated with
+%   respect to.
+%
+%
+
+    arguments
+        iniR
+        A          (:,:) double { mustBeFinite }
+        B          (:,:) double { mustBeFinite }
+        T          (:,:) double { mustBeFinite }
+        invS       (:,:) double { mustBeFinite }
+        electrodes (1,1) zefCore.ElectrodeSet
+        newElectrodes (1,1) zefCore.ElectrodeSet
+        colI       (:,1) double { mustBePositive, mustBeInteger }
+        kwargs.indent (1,1) double { mustBeNonnegative, mustBeInteger } = 2
+        kwargs.solver (1,1) function_handle = zefCore.solvers.preconditionedConjugateGradient
+    end
+
+    disp (newline + "Linearizing resistivity matrix. newR = newR" + newline) ;
+
+    contactSurfaces = electrodes.contactSurfaces ;
+
+    Ms = zefCore.electrodeMassMatrix ( size (A,1), contactSurfaces ) ;
+
+    Bs = zefCore.electrodeBasisFnMean ( size (A,1), contactSurfaces ) ;
+
+    electrodeN = electrodes.electrodeCount ;
+
+    modifiedN = numel (colI) ;
+
+    newR = iniR ;
+
+    indent = strjoin ( repmat ( " ", 1, kwargs.indent ), "" ) ;
+
+    oldZs = electrodes.impedances ;
+
+    newZs = newElectrodes.impedances ;
+
+    dZs = newZs - oldZs ;
+
+    for ii = 1 : modifiedN
+
+        col = colI (ii) ;
+
+        disp ( newline + indent + "+ dR/dZ" + col + " * dZ" + col + "...") ;
+
+        contactSurface = contactSurfaces (col) ;
+
+        Z = oldZs (col) ;
+
+        dAdZ = zefCore.dAdZ ( Ms{col}, Z, contactSurface.totalSurfaceArea ) ;
+
+        invAdAdZ = zefCore.invAY (A, dAdZ, solver=kwargs.solver) ;
+
+        dBdZ = zefCore.dBdZ ( Bs{col}, Z ) ;
+
+        invAdBdZ = zefCore.invAY (A, dBdZ, solver=kwargs.solver) ;
+
+        dCdZ = zefCore.dCdZ ( Z, col, electrodeN ) ;
+
+        dCHdZ = zefCore.dCHdZ ( Z, col, electrodeN ) ;
+
+        dSdZ = zefCore.dSdZ ( dCdZ, dCHdZ, Bs{col}, T, B, invAdAdZ, invAdBdZ ) ;
+
+        dRdZ = zefCore.dRdZ ( invAdAdZ, iniR, invAdBdZ, invS, dSdZ ) ;
+
+        dZ = dZs (col) ;
+
+        newR = newR + dRdZ * dZ ;
+
+    end % for jj
+
+end % function

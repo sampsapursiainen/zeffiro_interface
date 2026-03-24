@@ -31,7 +31,7 @@ arguments
     in_interpolation_matrix
     in_schur_complement
     in_electrode_model { mustBeText, mustBeMember(in_electrode_model, {'CEM', 'PEM'}) }
-    in_source_model { mustBeA(in_source_model, ["core.ZefSourceModel"]) }
+    in_source_model { mustBeA(in_source_model, ["zefCore.ZefSourceModel"]) }
 end
 
 out_reduced_interpolation_matrix = in_interpolation_matrix;
@@ -42,7 +42,7 @@ if strcmp(in_electrode_model,'CEM')
 
     switch in_source_model
 
-        case { core.ZefSourceModel.Whitney, core.ZefSourceModel.Hdiv }
+        case { zefCore.ZefSourceModel.Whitney, zefCore.ZefSourceModel.Hdiv }
 
             inv_schur_complement = in_schur_complement \ eye(schur_size);
 
@@ -52,14 +52,14 @@ if strcmp(in_electrode_model,'CEM')
                 in_interpolation_matrix ...
                 ;
 
-        case core.ZefSourceModel.StVenant
+        case zefCore.ZefSourceModel.StVenant
 
             % Do nothing. TODO: check whether St. Venant should also
             % trigger the reduction.
 
         otherwise
 
-            error("Unknown source model. Should be one of core.ZefSourceModel.{Whitney, Hdiv, StVenant}");
+            error("Unknown source model. Should be one of zefCore.ZefSourceModel.{Whitney, Hdiv, StVenant}");
 
     end
 end

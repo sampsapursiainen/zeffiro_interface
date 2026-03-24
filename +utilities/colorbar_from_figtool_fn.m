@@ -1,6 +1,6 @@
-function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, kwargs)
+function colorbar_from_figtool_fn (figtool, filename_without_suffix, filetypes, kwargs)
 %
-% colorbar_from_figtool_fn
+% colorbar_from_figtool_fn (figtool, filename_without_suffix, filetypes, kwargs)
 %
 % Takes in a handle to a Zeffiro Interface Figure tool (possibly saved to a
 % Matlab .fig file), extracts the colobar from it and saves it to files with
@@ -46,7 +46,7 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
         figtool (1,1) matlab.ui.Figure
 
-        filename_without_suffix (1,1) string { mustBeValidVariableName }
+        filename_without_suffix (1,1) string
 
         filetypes (:,1) string { mustBeMember(filetypes, [".png", ".pdf", ".eps"]) }
 
@@ -56,7 +56,7 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
         kwargs.resolution (1,1) double { mustBePositive } = 400
 
-        kwargs.decplaces (1,1) double { mustBeInteger, mustBeNonnegative } = 1
+        kwargs.decplaces (1,1) double { mustBeInteger } = 1
 
     end
 
@@ -101,8 +101,9 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
     cb.Ticks = lowerlim : delta : upperlim ;
 
-    cb.TickLabels = round ( cb.Ticks, kwargs.decplaces ) ;
-
+    if kwargs.decplaces >= 0
+        cb.TickLabels = round ( cb.Ticks, kwargs.decplaces ) ;
+    end
     % Set colorbar fontsize.
 
     cb.FontSize = kwargs.fontsize ;
@@ -143,7 +144,7 @@ function colorbar_from_figtool_fn(figtool, filename_without_suffix, filetypes, k
 
         suffix = filetypes ( si ) ;
 
-        exportgraphics(fig, filename_without_suffix + suffix, "Resolution", kwargs.resolution);
+        exportgraphics(fig, filename_without_suffix + ".colorbar" + suffix, "Resolution", kwargs.resolution);
 
     end
 

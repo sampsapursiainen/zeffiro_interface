@@ -1,0 +1,186 @@
+function leadFieldComparison(dataFilePattern,dataFileName,outFolderName,lowerQ,upperQ,kwargs)
+%
+% leadFieldComparison(dataFilePattern,dataFileName,outFolderName)
+%
+% Computes relative differences between Lnew - Lref and Llin - Lref,
+% where the lead fields are stored in specific files.
+%
+
+    arguments
+        dataFilePattern (1,1) string
+        dataFileName (1,1) string { mustBeFile }
+        outFolderName (1,1) string { mustBeFolder }
+        lowerQ (1,1) double { mustBeInRange(lowerQ, 0, 1) } = 0.10
+        upperQ (1,1) double { mustBeGreaterThan(upperQ,lowerQ), mustBeLessThanOrEqual(upperQ,1) } = 0.90
+        kwargs.numBins (1,1) int32 { mustBePositive } = 50
+        kwargs.figHandle (1,1) double { mustBeInteger, mustBePositive } = 100
+        kwargs.initLName (1,1) string = "L"
+        kwargs.refLName (1,1) string = "refL"
+        kwargs.linLName (1,1) string = "linL"
+        kwargs.comparisonFn (1,1) function_handle = @tests.relativeError
+        kwargs.leadFieldColumns (1,:) double { mustBeInteger, mustBePositive } = []
+    end
+
+    disp ("Loading reference lead field " + dataFileName + " from disk...") ;
+
+    dataFile = matfile (dataFileName) ;
+
+    disp ("Loading and transposing initial lead field...")
+
+    L = dataFile.(kwargs.initLName) ;
+
+    L = selectColumns (L,kwargs.leadFieldColumns) ;
+
+    L = transpose ( L ) ;
+
+    disp ("Reading data file names from " + dataFilePattern + "...") ;
+
+    dataFolderStructs = dir (dataFilePattern) ;
+
+    dataFileDirs = arrayfun ( @(entry) string (entry.folder), dataFolderStructs ) ;
+
+    dataFileNames = arrayfun ( @(entry) string (entry.name), dataFolderStructs ) ;
+
+    dataFilePaths = fullfile ( dataFileDirs, dataFileNames ) ;
+
+    disp ("Generating figure, axes and their cleanup object...")
+
+    fig = figure (kwargs.figHandle) ;
+
+    tiledlayout (fig,2,1) ;
+
+    realAx = nexttile ;
+
+    imagAx = nexttile ;
+
+    cleanupObj = onCleanup( @() cleanupFn (fig) );
+
+    disp ("Starting data analysis...")
+
+    aN = numel (dataFileNames) ;
+
+    cmpFnStr = string ( char (kwargs.comparisonFn) ) ;
+
+    for ii = 1 : aN
+
+        dataFileName = dataFilePaths (ii) ;
+
+        [ ~, fname, ~ ] = fileparts (dataFileName) ;
+
+        disp ("File " + dataFileName + " (" + ii + " / " + aN + ")") ;
+
+        [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison ( L, dataFileName,kwargs.refLName,kwargs.linLName,kwargs.comparisonFn,kwargs.leadFieldColumns) ;
+
+        realDiffDisp = realDiff ( realDiff >= quantile (realDiff,lowerQ) & realDiff <= quantile (realDiff,upperQ) ) ;
+
+        imagDiffDisp = imagDiff ( imagDiff >= quantile (imagDiff,lowerQ) & imagDiff <= quantile (imagDiff,upperQ) ) ;
+
+        disp ("Plotting histogram...")
+
+        histogram ( realAx, realDiffDisp, kwargs.numBins, FaceColor=[0, 0.4470, 0.7410] ) ;
+
+        histogram ( imagAx, imagDiffDisp, kwargs.numBins, FaceColor=[0.6350, 0.0780, 0.1840] ) ;
+
+        outFileStart = fname + "-" + cmpFnStr + "-lowerQ=" + lowerQ + "-upperQ=" + upperQ + "-cols=" + strjoin ( string( kwargs.leadFieldColumns ), "," ) ;
+
+        figFilePath = fullfile ( outFolderName, outFileStart + ".fig" ) ;
+
+        pdfFilePath = fullfile ( outFolderName, outFileStart + ".pdf" ) ;
+
+        disp ("Saving figure to " + figFilePath) ;
+
+        title (realAx, "$\mathrm{d}f="+ dFreqs + "\,\mathrm{Hz}$, $\ell\in\{"+ strjoin ( string (electrodeI), ", ") +"\}$", Interpreter="latex" ) ;
+
+        xlabel (imagAx, cmpFnStr, Interpreter="none") ;
+
+        ylabel (realAx,"real samples", Interpreter="none") ;
+
+        ylabel (imagAx,"imag samples", Interpreter="none") ;
+
+        savefig (fig, figFilePath) ;
+
+        exportgraphics (fig,pdfFilePath) ;
+
+        disp  ("Clearing axes for next round...")
+
+        cla (realAx) ;
+
+        cla (imagAx) ;
+
+    end % for
+
+    disp ("Done")
+
+end % function
+
+%% Helper functions.
+
+function [ realDiff, imagDiff, dFreqs, electrodeI ] = performComparison (origL, dataFileName, refLName, linLName, comparisonFn, leadFieldColumns)
+
+    arguments
+        origL (:,:) double { mustBeFinite }
+        dataFileName (1,1) string { mustBeFile }
+        refLName (1,1) string
+        linLName (1,1) string
+        comparisonFn (1,1) function_handle
+        leadFieldColumns (1,:) double
+    end
+
+    disp ("Opening file " + dataFileName + "...") ;
+
+    dataFile = matfile (dataFileName) ;
+
+    dFreqs = dataFile.dFreqs ;
+
+    electrodeI = dataFile.electrodeI ;
+
+    disp ("Loading and transposing " + refLName + "...")
+
+    refL = dataFile.(refLName) ;
+
+    refL = selectColumns (refL,leadFieldColumns) ;
+
+    refL = transpose (refL) ;
+
+    disp ("Loading and transposing " + linLName + "...")
+
+    linL = dataFile.(linLName) ;
+
+    linL = selectColumns (linL,leadFieldColumns) ;
+
+    linL = transpose (linL) ;
+
+    disp ("Computing differences between reference L...")
+
+    refDiff = refL - origL ;
+
+    linDiff = linL - origL ;
+
+    disp ("Computing relative difference of differences...") ;
+
+    realDiff = comparisonFn (real(linDiff), real(refDiff)) ;
+
+    imagDiff = comparisonFn (imag(linDiff), imag(refDiff)) ;
+
+end % function
+
+function filteredM = selectColumns (M,columns)
+
+    if isempty (columns)
+
+        filteredM = M ;
+
+    else
+
+        disp ("Selecting columns " + strjoin ( string (columns), ", " ) + " from lead field..." )
+
+        filteredM = M (:,columns) ;
+
+    end % if
+
+end % function
+
+function cleanupFn (fig)
+    disp('Closing figure...')
+    close(fig)
+end % function

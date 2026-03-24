@@ -71,7 +71,7 @@ function project_struct = lead_field_example ( kwargs, mesh_kwargs, lead_field_k
         lead_field_kwargs.solver_tolerance (1,1) double { mustBePositive } = 1e-8
         lead_field_kwargs.source_direction_mode (1,1) double { mustBeMember ( lead_field_kwargs.source_direction_mode, [1, 2, 3] ) } = 1
         lead_field_kwargs.source_interpolation_on (1,1) logical = true
-        lead_field_kwargs.source_model (1,1) core.ZefSourceModel = core.ZefSourceModel.Hdiv
+        lead_field_kwargs.source_model (1,1) zefCore.ZefSourceModel = zefCore.ZefSourceModel.Hdiv
         lead_field_kwargs.source_space_creation_iterations (1,1) double { mustBeInteger, mustBePositive } = 10
         lead_field_kwargs.use_depth_electrodes (1,1) logical = false
     end
