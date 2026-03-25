@@ -7,19 +7,32 @@ function distancesFromPointsToTriangles
 
     points = [0 0 0 ; 1 0 0 ; -1 0 0 ; 1 1 0 ; -1 -1 0]'
 
-    triangles = [0 0 0 ; 1 0 0 ; 0 1 0]' ;
+    % Test for 2D triangle array.
 
-    triangles(:,:,2) = [0 0 1 ; 1 0 1 ; 0 1 1]'
+    triangles2D = [0 0 0 ; 1 0 0 ; 0 1 0 ; 0 0 1 ; 1 0 1 ; 0 1 1]' ;
 
-    distances = zeffiro.geometry.distancesFromPointsToTriangles(points, triangles)
+    triangles3D = [0 0 0 ; 1 0 0 ; 0 1 0]' ;
+
+    triangles3D(:,:,2) = [0 0 1 ; 1 0 1 ; 0 1 1]'
+
+    distances2D = zeffiro.geometry.distancesFromPointsToTriangles(points, triangles2D)
+
+    distances3D = zeffiro.geometry.distancesFromPointsToTriangles(points, triangles3D)
 
     reference = [ 0, 0, 1, sqrt(2) / 2, sqrt(2) ; 1, 1, sqrt(2), sqrt((sqrt(2) / 2) ^ 2 + 1 ^ 2), sqrt(2 + 1) ]'
 
-    correctDistancesMask = abs(distances - reference) < 1e-10
+    correctDistancesMask2D = abs(distances2D - reference) < 1e-10
+
+    correctDistancesMask3D = abs(distances3D - reference) < 1e-10
 
     assert( ...
-        all(correctDistancesMask(:)), ...
-        "test distancesFromPointsToLines: all distances were not close to reference" ...
+        all(correctDistancesMask2D(:)), ...
+        "test distancesFromPointsToLines: all distances were not close to reference with a 2D triangle array." ...
+    )
+
+    assert( ...
+        all(correctDistancesMask3D(:)), ...
+        "test distancesFromPointsToLines: all distances were not close to reference with a 3D triangle array." ...
     )
 
 

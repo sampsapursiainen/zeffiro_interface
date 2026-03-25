@@ -10,20 +10,28 @@ function distances = distancesFromPointsToTriangles(points,triangles)
 
     arguments
         points (:,:) double { mustBeFinite }
-        triangles (:,3,:) double { mustBeFinite }
+        triangles (:,:,:) double { mustBeFinite }
     end
+
+    triangleArrayDims = numel(size(triangles)) ;
 
     [dimension, pointN] = size(points) ;
 
+    % Names for the 3 different vertices of each triangle.
+
+    if triangleArrayDims == 2
+
+        triangles = reshape(triangles, dimension, 3, size(triangles,2) / 3) ;
+
+    end % if
+
     [~,~,triangleN] = size(triangles) ;
 
-    % Names for the 3 different vertives of each triangle.
+    As = repelem(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN)
 
-    As = repelem(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN) ;
+    Bs = repelem(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN)
 
-    Bs = repelem(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN) ;
-
-    Cs = repelem(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN) ;
+    Cs = repelem(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN)
 
     Ps = repmat(points, 1, triangleN) ;
 
