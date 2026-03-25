@@ -27,11 +27,11 @@ function distances = distancesFromPointsToTriangles(points,triangles)
 
     [~,~,triangleN] = size(triangles) ;
 
-    As = repelem(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN)
+    As = repelem(reshape(triangles(:,1,:), dimension, triangleN), 1, pointN) ;
 
-    Bs = repelem(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN)
+    Bs = repelem(reshape(triangles(:,2,:), dimension, triangleN), 1, pointN) ;
 
-    Cs = repelem(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN)
+    Cs = repelem(reshape(triangles(:,3,:), dimension, triangleN), 1, pointN) ;
 
     Ps = repmat(points, 1, triangleN) ;
 
