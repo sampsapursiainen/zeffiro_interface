@@ -11,12 +11,20 @@ function distances = distancesFromPointsToLines(points, lines)
 
     arguments
         points (:,:) double { mustBeFinite }
-        lines (:,2,:) double { mustBeFinite }
+        lines (:,:,:) double { mustBeFinite }
+    end
+
+    [dimension, pointN] = size(points) ;
+
+    lineArrayDims = numel(size(lines)) ;
+
+    if lineArrayDims == 2
+
+        lines = reshape(lines, dimension, 2, size(lines, 2) / 2) ;
+
     end
 
     [~,~,lineN] = size(lines) ;
-
-    [dimension, pointN] = size(points) ;
 
     lineStartPoints = reshape(lines(:,1,:), dimension, lineN) ;
 
