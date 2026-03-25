@@ -35,5 +35,4 @@ function distancesFromPointsToTriangles
         "test distancesFromPointsToLines: all distances were not close to reference with a 3D triangle array." ...
     )
 
-
 end % function
