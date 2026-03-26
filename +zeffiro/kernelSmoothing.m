@@ -14,7 +14,7 @@ function smoothedField = kernelSmoothing(sourcePositions, field, kwargs)
 %
 % The field that is to be smoothed.
 %
-%   kwargs.variances (1,3) double { mustBeFinite } = ones(size(sourcePositions))
+%   kwargs.variances (3,:) double { mustBeFinite } = ones(size(sourcePositions))
 %
 % The widths squared of the wanted kernel functions.
 %
@@ -22,7 +22,7 @@ function smoothedField = kernelSmoothing(sourcePositions, field, kwargs)
     arguments
         sourcePositions (3,:) double { mustBeFinite }
         field (3,:) double { mustBeFinite }
-        kwargs.variances (1,3) double { mustBeFinite } = ones(size(sourcePositions))
+        kwargs.variances (3,:) double { mustBeFinite } = ones(size(sourcePositions))
     end
 
     kernels = zeffiro.kernels.gaussianKernel(sourcePositions, sourcePositions, kwargs.variances);
