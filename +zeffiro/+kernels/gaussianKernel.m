@@ -8,11 +8,24 @@ function kernel = gaussianKernel(kwargs)
 
     arguments
         kwargs.samples (1,:) double { mustBePositive, mustBeInteger }
+        kwargs.standardDeviations (1,:) double { mustBeFinite, mustBePositive } = []
     end
 
     axisN = numel(kwargs.samples) ;
 
     axes = cell(axisN,1) ;
+
+    deviationN = numel(kwargs.standardDeviations) ;
+
+    maxDeviations = 3 ;
+
+    if deviationN < maxDeviations
+
+        missingDeviationN = maxDeviations - deviationN ;
+
+        kwargs.standardDeviations(deviationN+1:deviationN+missingDeviationN) = ones(1,missingDeviationN) ;
+
+    end % if
 
     for ii = 1 : axisN
 
@@ -54,8 +67,16 @@ function kernel = gaussianKernel(kwargs)
 
     end
 
-    scalingFactor = 1 ./ sqrt(2 * pi) ;
+    scalingFactor = 1 ;
 
-    kernel = scalingFactor * exp( -  ( (X .^ 2) + (Y .^ 2) + (Z .^ 2) ) / 2 ) ;
+    kernel = scalingFactor * exp( - ( ...
+        (X .^ 2) / kwargs.standardDeviations(1) ...
+        + ...
+        (Y .^ 2) / kwargs.standardDeviations(2) ...
+        + ...
+        (Z .^ 2) / kwargs.standardDeviations(3) ...
+    ) / 2 ) ;
+
+    kernel = kernel / sum(kernel, "all") ;
 
 end % function
