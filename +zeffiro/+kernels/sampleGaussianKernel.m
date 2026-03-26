@@ -1,6 +1,6 @@
-function kernel = gaussianKernel(kwargs)
+function kernel = sampleGaussianKernel(kwargs)
 %
-%   kernel = gaussianKernel(kwargs)
+%   kernel = sampleGaussianKernel(kwargs)
 %
 % Generates a Gaussian kernel of dimensions determined
 % by size of kwargs.samples along the given dimensions.
