@@ -23,14 +23,14 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
     arguments
         centerPoints (:,:) double { mustBeFinite }
         dataPoints (:,:) double { mustBeFinite }
-        variances (1,:) double {mustBeFinite, mustBePositive}
+        variances (:,:) double {mustBeFinite, mustBePositive}
     end
 
     [kernelDimension, centerN] = size(centerPoints) ;
 
     [dataDimension, dataN] = size(dataPoints) ;
 
-    varianceN = numel(variances) ;
+    [varianceDimension, varianceN] = size(variances) ;
 
     assert( ...
         varianceN == centerN, ...
@@ -42,6 +42,11 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
         "gaussianKernel: The dimensionality of the center points needs to match that of the data points." ...
     )
 
+    assert( ...
+        varianceDimension == kernelDimension, ...
+        "gaussianKernel: The number of components of kernel variances did not match that of the kernels themselves." ...
+    )
+
     repeatedCenterPoints = repelem(centerPoints,1, dataN) ;
 
     repeatedVariances = repelem(variances, 1, dataN) ;
@@ -50,9 +55,9 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
 
     repeatedDiffs = repeatedDataPoints - repeatedCenterPoints ;
 
-    repeatedNormsSquared = dot(repeatedDiffs, repeatedDiffs,1) ;
+    repeatedNormsSquared = dot(repeatedDiffs, repeatedDiffs, 1) ;
 
-    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ repeatedVariances ) ;
+    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ prod(repeatedVariances, 1) ) ;
 
     kernel = kernel1 ./ sum(kernel1, "all") ;
 
