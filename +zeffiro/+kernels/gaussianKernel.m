@@ -26,6 +26,10 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
         variances (:,:) double {mustBeFinite, mustBePositive}
     end
 
+    arguments (Output)
+        kernel (:,:) double { mustBeFinite }
+    end
+
     [kernelDimension, centerN] = size(centerPoints) ;
 
     [dataDimension, dataN] = size(dataPoints) ;
@@ -59,8 +63,8 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
 
     kernel1 = exp( - repeatedNormsSquared ./ 2 ./ prod(repeatedVariances, 1) ) ;
 
-    kernel = kernel1 ./ sum(kernel1, "all") ;
+    kernel2 = reshape(kernel1, dataN, centerN) ;
 
-    kernel = reshape(kernel, dataN, centerN) ;
+    kernel = kernel2 ./ sum(kernel2, 1) ;
 
 end % function
