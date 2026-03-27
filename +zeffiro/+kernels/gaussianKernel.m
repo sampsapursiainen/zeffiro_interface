@@ -61,7 +61,7 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
 
     repeatedNormsSquared = dot(repeatedDiffs, repeatedDiffs, 1) ;
 
-    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ prod(repeatedVariances, 1) ) ;
+    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ sum(repeatedVariances, 1) ) ;
 
     kernel2 = reshape(kernel1, dataN, centerN) ;
 
