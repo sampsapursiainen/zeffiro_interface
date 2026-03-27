@@ -20,7 +20,7 @@ function kernel = gaussianKernel(centerPoints, dataPoints, variances)
 % The widths squared of each kernel.
 %
 
-    arguments
+    arguments (Input)
         centerPoints (:,:) double { mustBeFinite }
         dataPoints (:,:) double { mustBeFinite }
         variances (:,:) double {mustBeFinite, mustBePositive}
