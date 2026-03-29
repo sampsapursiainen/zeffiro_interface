@@ -1,13 +1,29 @@
-function isInside = pointsInsideTriangularSurface(points, triangles)
+function isInside = pointsInsideTriangularSurface(points, triangles, kwargs)
 %
-%   isInside = pointsInsideTriangularSurface(points, triangles)
+%   isInside = pointsInsideTriangularSurface(points, triangles, kwargs)
 %
 % Determines whether a given set of points lies inside of a (closed) surface determined by a given set of triangles.
 % The triangles should be oriented such that their surface normals point outward.
 %
+% Arguments:
+%
+%   points (:,:) double { mustBeFinite }
+%
+% The points whose inclusion into the volume bounded by given triangles we are questioning.
+%
+%   triangles (:,:,:) double { mustBeFinite  }
+%
+% The vertices of triangles that define the (closed) surface.
+%
+%   kwargs.includeSurfacePoints (1,1) logical = false
+%
+% If true, a point on a surface or at its vertex is also considered to be included into the volume.
+% If false, only points truly inside the volume are allowed.
+%
     arguments
         points (:,:) double { mustBeFinite }
         triangles (:,:,:) double { mustBeFinite }
+        kwargs.includeSurfacePoints (1,1) logical = false
     end
 
     [dimension, pointN] = size(points) ;
@@ -33,8 +49,6 @@ function isInside = pointsInsideTriangularSurface(points, triangles)
     % Take the triangles ABC that are closest to each point P and form a tetrahedra ABCP out of these.
     % Then compute the volume of the tetra via a triple product.
 
-    tetrahedra = cat(2, triangles(:,:,minIndices), points) ;
-
     relevantTriangles = triangles(:,:,minIndices) ;
 
     triangleCentroids = sum(relevantTriangles,2) / size(triangles,2) ;
@@ -48,6 +62,14 @@ function isInside = pointsInsideTriangularSurface(points, triangles)
     % Positive orientations (multiples of tetra volumes) indicate points being inside
     % the surface when the surface normals of the triangles point outward.
 
-    isInside = orientations > 0 ;
+    if kwargs.includeSurfacePoints
+
+        isInside = orientations >= 0 ;
+
+    else
+
+        isInside = orientations > 0 ;
+
+    end % if
 
 end % function
