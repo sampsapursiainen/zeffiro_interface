@@ -28,9 +28,10 @@ function smoothedField = kernelSmoothing(centerPositions, fieldPositions, field,
         fieldPositions (3,:) double { mustBeFinite }
         field (3,:) double { mustBeFinite }
         kwargs.variances (3,:) double { mustBeFinite } = ones(size(centerPositions))
+        kwargs.filterZeroColumns (1,1) logical = true
     end
 
-    kernels = zeffiro.kernels.gaussianKernel(centerPositions, fieldPositions, kwargs.variances);
+    [kernels, ~] = zeffiro.kernels.gaussianKernel(centerPositions, fieldPositions, kwargs.variances, filterZeroColumns=kwargs.filterZeroColumns);
 
     smoothedField = field * kernels ;
 
