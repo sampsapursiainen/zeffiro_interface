@@ -66,7 +66,7 @@ function [kernel, nonZeroCols] = inverseDistanceKernel(centerPoints, dataPoints,
 
     repeatedNorms = vecnorm(repeatedDiffs) ;
 
-    kernel1 = 1 ./ max(repeatedLatticeUnit, abs(repeatedNorms) ) .^ power ;
+    kernel1 = 1 ./ (repeatedLatticeUnit .^ power +  abs(repeatedNorms) .^ power ) ;
 
     kernel2 = reshape(kernel1, dataN, centerN) ;
 
