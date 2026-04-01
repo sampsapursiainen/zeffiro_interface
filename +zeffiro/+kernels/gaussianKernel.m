@@ -1,9 +1,9 @@
-function [kernel, nonZeroCols] = gaussianKernel(centerPoints, dataPoints, variances, kwargs)
+function [kernel, nonZeroCols] = gaussianKernel(centerPoints, dataPoints, variances)
 %
 %   [kernel, nonZeroCols] = gaussianKernel(centerPoints, dataPoints, variances, kwargs)
 %
 % Generates a matrix of Gaussian kernels based on given kernel centroids, data points and variances.
-% The output has the kernel values for each center point as its columns.
+% The output has the dimensions of dataPoints * centerpoints * variances.
 %
 % Arguments:
 %
@@ -19,30 +19,23 @@ function [kernel, nonZeroCols] = gaussianKernel(centerPoints, dataPoints, varian
 %
 % The widths squared of each kernel.
 %
-%   kwargs.filterZeroColumns (1,1) logical = true
-%
-% Whether to filter out zero columns that might occur when
-% the variances of the kernels are not large enough in relation
-% to the distances between kernel centers and the data points.
-%
 
     arguments (Input)
         centerPoints (:,:) double { mustBeFinite }
         dataPoints (:,:) double { mustBeFinite }
-        variances (:,:) double {mustBeFinite, mustBePositive}
-        kwargs.filterZeroColumns (1,1) logical = true
+        variances (:,:) double { mustBeFinite, mustBePositive }
     end
 
     arguments (Output)
-        kernel (:,:) double { mustBeFinite }
-        nonZeroCols (1,:) double { mustBeFinite  }
+        kernel (:,:,:) double { mustBeFinite }
+        nonZeroCols (1,:,:) double { mustBeFinite }
     end
 
-    [kernelDimension, centerN] = size(centerPoints) ;
+    [centerN, kernelDimension] = size(centerPoints) ;
 
-    [dataDimension, dataN] = size(dataPoints) ;
+    [dataN, dataDimension] = size(dataPoints) ;
 
-    [varianceDimension, varianceN] = size(variances) ;
+    [varianceN, varianceDimension] = size(variances) ;
 
     assert( ...
         varianceN == centerN, ...
@@ -59,36 +52,22 @@ function [kernel, nonZeroCols] = gaussianKernel(centerPoints, dataPoints, varian
         "gaussianKernel: The number of components of kernel variances did not match that of the kernels themselves." ...
     )
 
-    repeatedCenterPoints = repelem(centerPoints,1, dataN) ;
+    repeatedCenterPoints = repelem(centerPoints, dataN, 1) ;
 
-    repeatedVariances = repelem(variances, 1, dataN) ;
+    repeatedVariances = repelem(variances, dataN, 1) ;
 
-    repeatedDataPoints = repmat(dataPoints, 1, centerN) ;
+    repeatedDataPoints = repmat(dataPoints, centerN, 1) ;
 
     repeatedDiffs = repeatedDataPoints - repeatedCenterPoints ;
 
-    repeatedNormsSquared = dot(repeatedDiffs, repeatedDiffs, 1) ;
+    repeatedNormsSquared = dot(repeatedDiffs, repeatedDiffs, 2) ;
 
-    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ sum(repeatedVariances, 1) ) ;
+    kernel1 = exp( - repeatedNormsSquared ./ 2 ./ repeatedVariances ) ;
 
-    kernel2 = reshape(kernel1, dataN, centerN) ;
+    kernel2 = reshape(kernel1, dataN, centerN, varianceDimension) ;
 
     columnSums = sum(kernel2, 1) ;
 
-    nonZeroCols = columnSums > 0 ;
-
-    kernel3 = kernel2 ;
-
-    kernel3(:,nonZeroCols) = kernel3(:,nonZeroCols) ./ columnSums(nonZeroCols) ;
-
-    if kwargs.filterZeroColumns
-
-        kernel = kernel3(:,nonZeroCols) ;
-
-    else
-
-        kernel = kernel3 ;
-
-    end % if
+    kernel = kernel2 ./ columnSums ;
 
 end % function
