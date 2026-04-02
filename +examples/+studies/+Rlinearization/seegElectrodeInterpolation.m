@@ -37,48 +37,22 @@ function seegElectrodeInterpolation(kwargs)
 
     % Create cylinder surface points.
 
-    angles = linspace(0, 2 * pi - eps, kwargs.cylinderAngleSamples) ;
-
-    zCoordinates = linspace(0, kwargs.cylinderLength, kwargs.cylinderLengthSamples) ;
-
-    cylinderSurfacePoints = [
-        0 repmat(kwargs.cylinderRadius .* cos(angles), 1, kwargs.cylinderLengthSamples) 0 ;
-        0 repmat(kwargs.cylinderRadius .* sin(angles), 1, kwargs.cylinderLengthSamples) 0 ;
-        0 repelem(zCoordinates, 1, kwargs.cylinderAngleSamples) zCoordinates(end)
-    ]' ;
-
-    % Create rotation matrix R.
-
-    Rx = [
-        1 0 0 ;
-        0 cos(kwargs.cylinderXRotation) -sin(kwargs.cylinderXRotation) ;
-        0 sin(kwargs.cylinderXRotation) cos(kwargs.cylinderXRotation)
-    ] ;
-
-    Ry = [
-        cos(kwargs.cylinderYRotation) 0 sin(kwargs.cylinderYRotation) ;
-        0 1 0 ;
-        - sin(kwargs.cylinderYRotation) 0 cos(kwargs.cylinderYRotation)];
-
-    Rz = [
-        cos(kwargs.cylinderZRotation) -sin(kwargs.cylinderZRotation) 0 ;
-        sin(kwargs.cylinderZRotation) cos(kwargs.cylinderZRotation) 0 ;
-        0 0 1
-    ] ;
-
-    R = Rz * Ry * Rx ;
-
-    % Rotate and translate cylinder, in this order.
-
-    rotatedCylinderPoints = cylinderSurfacePoints * transpose(R) ;
-
-    translatedCylinderPoints = kwargs.cylinderTranslation + rotatedCylinderPoints ;
+    cylinderSurfacePoints = zeffiro.geometry.cylinderSurfacePoints( ...
+        cylinderRadius = kwargs.cylinderRadius, ...
+        cylinderAngleSamples = kwargs.cylinderAngleSamples, ...
+        cylinderLength = kwargs.cylinderLength,...
+        cylinderLengthSamples = kwargs.cylinderLengthSamples, ...
+        cylinderXRotation = kwargs.cylinderXRotation, ...
+        cylinderYRotation = kwargs.cylinderYRotation, ...
+        cylinderZRotation = kwargs.cylinderZRotation, ...
+        cylinderTranslation = kwargs.cylinderTranslation ...
+    ) ;
 
     %% Debug plotting.
 
     figure ;
 
-    scatter3(translatedCylinderPoints(:,1), translatedCylinderPoints(:,2), translatedCylinderPoints(:,3)) ;
+    scatter3(cylinderSurfacePoints(:,1), cylinderSurfacePoints(:,2), cylinderSurfacePoints(:,3)) ;
 
     xlabel("x") ;
 
