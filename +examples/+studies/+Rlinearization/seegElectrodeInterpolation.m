@@ -35,7 +35,7 @@ function seegElectrodeInterpolation(kwargs)
         "The dimensionality of the srource positions did not match the field dimensions, or the field was not a scalar field." ...
     ) ;
 
-    % Create cylinder points [cx, cy, cz].
+    % Create cylinder surface points.
 
     angles = linspace(0, 2 * pi - eps, kwargs.cylinderAngleSamples) ;
 
