@@ -3,6 +3,7 @@ function seegElectrodeInterpolation(kwargs)
 % seegElectrodeInterpolation(kwargs)
 %
 % TODO
+%
 
     arguments
         kwargs.cylinderRadius (1,1) double { mustBePositive, mustBeFinite  } = 1
@@ -38,19 +39,13 @@ function seegElectrodeInterpolation(kwargs)
 
     angles = linspace(0, 2 * pi - eps, kwargs.cylinderAngleSamples) ;
 
-    xx = kwargs.cylinderRadius .* cos(angles) ;
+    zCoordinates = linspace(0, kwargs.cylinderLength, kwargs.cylinderLengthSamples) ;
 
-    yy = kwargs.cylinderRadius .* sin(angles) ;
-
-    zz = linspace(0, kwargs.cylinderLength, kwargs.cylinderLengthSamples) ;
-
-    [cx, cy, cz] = meshgrid(xx,yy,zz) ;
-
-    cylinderX = cx(abs(cx .^ 2 + cy .^ 2 - kwargs.cylinderRadius ^2) < kwargs.cylinderRadius / kwargs.cylinderAngleSamples) ;
-
-    cylinderY = cy(abs(cx .^ 2 + cy .^ 2 - kwargs.cylinderRadius ^2) < kwargs.cylinderRadius / kwargs.cylinderAngleSamples) ;
-
-    cylinderZ = cz(abs(cx .^ 2 + cy .^ 2 - kwargs.cylinderRadius ^2) < kwargs.cylinderRadius / kwargs.cylinderAngleSamples) ;
+    cylinderSurfacePoints = [
+        0 repmat(kwargs.cylinderRadius .* cos(angles), 1, kwargs.cylinderLengthSamples) 0 ;
+        0 repmat(kwargs.cylinderRadius .* sin(angles), 1, kwargs.cylinderLengthSamples) 0 ;
+        0 repelem(zCoordinates, 1, kwargs.cylinderAngleSamples) zCoordinates(end)
+    ]' ;
 
     % Create rotation matrix R.
 
@@ -75,23 +70,23 @@ function seegElectrodeInterpolation(kwargs)
 
     % Rotate and translate cylinder, in this order.
 
-    rotatedCylinderPoints = [cylinderX(:) cylinderY(:) cylinderZ(:)] * transpose(R) ;
+    rotatedCylinderPoints = cylinderSurfacePoints * transpose(R) ;
 
     translatedCylinderPoints = kwargs.cylinderTranslation + rotatedCylinderPoints ;
 
     %% Debug plotting.
 
-    % figure ;
+    figure ;
 
-    % scatter3(translatedCylinderPoints(:,1), translatedCylinderPoints(:,2), translatedCylinderPoints(:,3)) ;
+    scatter3(translatedCylinderPoints(:,1), translatedCylinderPoints(:,2), translatedCylinderPoints(:,3)) ;
 
-    % xlabel("x") ;
+    xlabel("x") ;
 
-    % ylabel("y") ;
+    ylabel("y") ;
 
-    % zlabel("z") ;
+    zlabel("z") ;
 
-    % axis equal ;
+    axis equal ;
 
     % With the cylinder in place, we interpolate the field values from the source positions to the cylinder surface.
 
