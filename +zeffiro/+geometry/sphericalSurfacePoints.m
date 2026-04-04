@@ -45,7 +45,7 @@ function points = sphericalSurfacePoints(kwargs)
     surfacePoints = [
         0, kwargs.radius .* sin(repeatedElevations) .* cos(repeatedAzimuths), 0 ;
         0, kwargs.radius .* sin(repeatedElevations) .* sin(repeatedAzimuths), 0 ;
-        kwargs.radius, kwargs.radius .* cos(repeatedElevations), -kwargs.radius
+        kwargs.radius, kwargs.radius .* cos(repeatedElevations), -kwargs.radius ;
     ]' ;
 
     points = surfacePoints + kwargs.centerPoint ;
