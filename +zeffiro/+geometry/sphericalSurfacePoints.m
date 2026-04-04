@@ -20,7 +20,7 @@ function points = sphericalSurfacePoints(kwargs)
 %
 %   kwargs.elevationSamples (1,1) double {  mustBeFinite, mustBeInteger, mustBePositive }
 %
-% The number of elevation samples to be generated per azimuthal sample.
+% The number of elevation samples per azimuthal sample between the top and bottom point of the sphere to be generated.
 %
 
     arguments
@@ -32,11 +32,11 @@ function points = sphericalSurfacePoints(kwargs)
 
     azimuthDiff = 2 * pi / kwargs.azimuthSamples ;
 
-    elevationDiff = pi / kwargs.elevationSamples ;
+    elevationDiff = pi / (kwargs.elevationSamples + 1) ;
 
     azimuths = linspace(0, 2 * pi - azimuthDiff, kwargs.azimuthSamples) ;
 
-    elevations = linspace(elevationDiff, pi, kwargs.elevationSamples) ;
+    elevations = linspace(elevationDiff, kwargs.elevationSamples * elevationDiff, kwargs.elevationSamples) ;
 
     repeatedAzimuths = repmat(azimuths, 1, kwargs.elevationSamples) ;
 
