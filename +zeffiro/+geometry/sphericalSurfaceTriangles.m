@@ -5,6 +5,9 @@ function triangles = sphericalSurfaceTriangles(kwargs)
 % Returns the surface triangles (triples of point indices) based on the number of azimuthal and elevation samples.
 % The surface normals of the triangles are facing outward.
 %
+% TODO: if azimuthSamples exceeds elevation samples or vice versa, we end up with too little or too many triangles.
+% This should be fixed.
+%
 
     arguments
         kwargs.azimuthSamples (1,:) double { mustBeFinite, mustBeInteger, mustBePositive  }
