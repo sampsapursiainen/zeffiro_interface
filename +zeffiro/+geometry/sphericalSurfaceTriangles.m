@@ -5,9 +5,6 @@ function triangles = sphericalSurfaceTriangles(kwargs)
 % Returns the surface triangles (triples of point indices) based on the number of azimuthal and elevation samples.
 % The surface normals of the triangles are facing outward.
 %
-% TODO: if azimuthSamples exceeds elevation samples or vice versa, we end up with too little or too many triangles.
-% This should be fixed.
-%
 
     arguments
         kwargs.azimuthSamples (1,:) double { mustBeFinite, mustBeInteger, mustBePositive  }
@@ -16,31 +13,31 @@ function triangles = sphericalSurfaceTriangles(kwargs)
 
     % First construct the base.
 
-    secondBaseVertices = 1 : kwargs.azimuthSamples
+    topVertices = 1 : kwargs.azimuthSamples ;
 
     topTriangles = [
        ones(1,kwargs.azimuthSamples) ;
-       circshift(secondBaseVertices+1, 1) ;
-       secondBaseVertices + 1 ;
+       circshift(topVertices+1, 1) ;
+       topVertices + 1 ;
     ] ;
 
     % Then construct the layers between the base and the top by splitting quadrilaterals into 2 triangles.
 
-    betweenTriangleLayerN = kwargs.elevationSamples - 1
+    betweenTriangleLayerN = kwargs.elevationSamples - 1 ;
 
-    layerNumbers = transpose(repelem(1 : (betweenTriangleLayerN + 1) : (betweenTriangleLayerN * kwargs.elevationSamples), 1, 3))
+    layerNumbers = transpose(repelem(1 : (kwargs.azimuthSamples) : (betweenTriangleLayerN * kwargs.azimuthSamples), 1, 3)) ;
 
-    vertices11 = 1 : kwargs.azimuthSamples
+    vertices11 = 1 : kwargs.azimuthSamples ;
 
-    vertices12 = circshift(vertices11, -1)
+    vertices12 = circshift(vertices11, -1) ;
 
-    vertices13 = (vertices12) + kwargs.azimuthSamples
+    vertices13 = (vertices12) + kwargs.azimuthSamples ;
 
-    vertices21 = vertices11
+    vertices21 = vertices11 ;
 
-    vertices22 = vertices13
+    vertices22 = vertices13 ;
 
-    vertices23 = vertices11 + kwargs.azimuthSamples
+    vertices23 = vertices11 + kwargs.azimuthSamples ;
 
     firstLayerTriangles1 = [
         vertices11 ;
@@ -48,9 +45,9 @@ function triangles = sphericalSurfaceTriangles(kwargs)
         vertices13 ;
     ] ;
 
-    allLayerTriangles1 = repmat(firstLayerTriangles1, betweenTriangleLayerN, 1) + layerNumbers
+    allLayerTriangles1 = repmat(firstLayerTriangles1, betweenTriangleLayerN, 1) + layerNumbers ;
 
-    % TODO: reshape to 0 columns if no between triangles.
+    % Reshape to 0 columns if no between triangles.
 
     if betweenTriangleLayerN > 0
 
@@ -70,7 +67,7 @@ function triangles = sphericalSurfaceTriangles(kwargs)
         vertices23 ;
     ] ;
 
-    allLayerTriangles2 = repmat(firstLayerTriangles2, betweenTriangleLayerN, 1) + layerNumbers
+    allLayerTriangles2 = repmat(firstLayerTriangles2, betweenTriangleLayerN, 1) + layerNumbers ;
 
     betweenLayerTriangles2 = reshape(allLayerTriangles2, 3, multiplier * kwargs.azimuthSamples) ;
 
