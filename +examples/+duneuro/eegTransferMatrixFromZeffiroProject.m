@@ -1,9 +1,10 @@
-function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
+function [eegT, eegL] = eegTransferMatrixFromZeffiroProject(kwargs)
 %
-%   eegT = eegTransferMatrixFromZeffiroProject(kwargs)
+%   [eegT, eegL] = eegTransferMatrixFromZeffiroProject(kwargs)
 %
 % Loads data from a given Zeffiro Project file and computes
 % an EEG transfer matrix using the duneuro-matlab library.
+% Also returns the EEG lead field if requested.
 %
 % Supposes that duneuro-matlab has been installed in a MATLAB
 % package +duneuro somewhere on your MATLAB path.
@@ -28,11 +29,16 @@ function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 % If this is non-empty, the transfer matrix is also automatically saved to a file.
 % The current time and the used source model are appended to the file path prefix.
 %
-    arguments
+    arguments (Input)
         kwargs.projectFilePath (1,1) string { mustBeFile }
         kwargs.electrodeFieldName (1,1) string = "s2_points"
         kwargs.sourceModel (1,:) char = 'whitney'
         kwargs.saveFilePrefix (1,1) string = ""
+    end
+
+    arguments (Output)
+        eegT (:,:,:) double { mustBeFinite }
+        eegL (:,:,:) double { mustBeFinite }
     end
 
     currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
@@ -89,15 +95,41 @@ function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 
     disp("Setting Cartesian source directions...")
 
-    sourceDirections = ones(size(sourcePositions)) ;
+    sourceDirectionsX = [
+        ones(1, size(sourcePositions,2)) ;
+        zeros(2, size(sourcePositions,2)) ;
+    ] ;
 
-    disp("Constructing dipoles...")
+    sourceDirectionsY = [
+        zeros(1, size(sourcePositions,2)) ;
+        ones(1, size(sourcePositions,2)) ;
+        zeros(1, size(sourcePositions,2)) ;
+    ] ;
 
-    dipoles = [ sourcePositions ; sourceDirections ] ;
+    sourceDirectionsZ = [
+        zeros(2, size(sourcePositions,2)) ;
+        ones(1, size(sourcePositions,2)) ;
+    ] ;
+
+    disp("Constructing Cartesian dipoles...")
+
+    dipoles = [ sourcePositions ; sourceDirectionsX ] ;
+
+    dipoles(:,:,2) = [ sourcePositions ; sourceDirectionsY ] ;
+
+    dipoles(:,:,3) = [ sourcePositions ; sourceDirectionsZ ] ;
 
     disp("Loading electrode positions...")
 
     electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName)) ;
+
+    disp("Preallocating lead field componentwise...") ;
+
+    eegL = nan( ...
+        size(electrodePositions,2), ...
+        size(sourcePositions, 2), ...
+        3 ...
+    ) ;
 
     disp("Setting up DUNEuro driver configuration object...")
 
@@ -106,7 +138,6 @@ function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
         elements=elements, ...
         labels=labels, ...
         tensors=tensors, ...
-        dipoles=dipoles, ...
         source_model=kwargs.sourceModel ...
     ) ;
 
@@ -118,19 +149,31 @@ function eegT = eegTransferMatrixFromZeffiroProject(kwargs)
 
     driver.set_electrodes(electrodePositions,electrodeConfig) ;
 
-    disp("Starting transfer matrix computation...")
+    disp("Starting transfer matrix page computation...")
 
     eegT = zeffiro.duneuro.eeg_transfer_matrix(driverConfig, driver) ;
+
+    for page = 1 : 3
+
+        disp("Applying transfer matrix to dipoles to produce lead field page " + page + "...")
+
+        eegL(:,:,page) = driver.apply_eeg_transfer(eegT, dipoles(:,:,page), driverConfig) ;
+
+    end % for
 
     if strlength(kwargs.saveFilePrefix) > 0
 
         outputFilePath = kwargs.saveFilePrefix + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
 
-        disp("Saving eegT to " + outputFilePath + "...")
-
         saveFile = matfile(outputFilePath, Writable=true) ;
 
+        disp("Saving eegT to " + outputFilePath + "...")
+
         saveFile.eegT = eegT ;
+
+        disp("Saving eegL to " + outputFilePath + "...")
+
+        saveFile.eegL = eegL ;
 
     end % if
 
