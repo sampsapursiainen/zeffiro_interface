@@ -7,6 +7,16 @@ function distances = distancesFromPointsToTriangles(points,triangles)
 %
 % Algorithm is from Finite Element Mesh Generation by Daniel Lo.
 %
+% Arguments:
+%
+%   points (:,:) double { mustBeFinite }
+%
+% The points given as the columns of this input array.
+%
+%   triangles (:,:,:) double { mustBeFinite }
+%
+% The triangle vertices given as groups of 3 columns of a 2D array, or as the 3-column pages of a 3D array.
+%
 
     arguments
         points (:,:) double { mustBeFinite }
