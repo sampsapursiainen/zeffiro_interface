@@ -2,11 +2,21 @@ function distances = distancesFromPointsToLines(points, lines)
 %
 %   distances = distancesFromPointsToLines(points, lines)
 %
-% Computes the distances from points to line segments defined by pairs of endpoints given in a 3D array.
+% Computes the distances from points to line segments defined by pairs of endpoints given in a 2D or 3D array.
 % The first columns are the line segment start points and the second columns the endpoints.
 % The output has a size of points times lines.
 %
 % Algorithm from the book Finite Element Mesh Generation by Daniel Lo.
+%
+% Arguments:
+%
+%   points (:,:) double { mustBeFinite }
+%
+% The points given as the columns of this input array.
+%
+%   lines (:,:,:) double { mustBeFinite }
+%
+% The line endpoints given as groups of 2 columns of a 2D array, or as the 2-column pages of a 3D array.
 %
 
     arguments
