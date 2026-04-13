@@ -30,7 +30,7 @@ function smoothedField = kernelSmoothing(centerPositions, fieldPositions, field,
         kwargs.variances (:,3) double { mustBeFinite } = ones(size(centerPositions))
     end
 
-    kernels = zeffiro.kernels.gaussianKernel(centerPositions, fieldPositions, kwargs.variances) ;
+    kernels = pagetranspose(zeffiro.kernels.gaussianKernel(centerPositions, fieldPositions, kwargs.variances)) ;
 
     [fieldSamples, fieldDimension] = size(field) ;
 
