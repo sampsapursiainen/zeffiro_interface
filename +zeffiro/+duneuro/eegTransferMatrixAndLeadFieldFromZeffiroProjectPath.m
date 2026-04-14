@@ -1,6 +1,6 @@
-function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
+function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
 %
-%   [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
+%   [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
 %
 % Loads data from a given Zeffiro Project file and computes
 % an EEG transfer matrix using the duneuro-matlab library.
@@ -53,6 +53,7 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
     arguments (Output)
         eegT (:,:) double { mustBeFinite }
         eegL (:,:,:) double { mustBeFinite }
+        finalElectrodePositions (3,:) double { mustBeFinite }
     end
 
     currentTime = datetime("now", Format="yyyy-MM-dd-HH-mm-ss-SSS") ;
