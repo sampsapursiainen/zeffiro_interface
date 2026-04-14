@@ -35,12 +35,19 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 % A vector for translating the electrodes found in the given project file.
 % The default position is sometimes a bit off.
 %
+%   kwargs.skinCompartmentIndex (1,1) double { mustBeInteger  } = 0
+%
+% If this is given and positive, the electrodes will be projected to the nearest points
+% on surface mesh of the skin after translation by electrodeTranslationVector,
+% before the transfer matrix computation starts.
+%
     arguments (Input)
         kwargs.projectFilePath (1,1) string { mustBeFile }
         kwargs.electrodeFieldName (1,1) string = "s2_points"
         kwargs.sourceModel (1,:) char = 'whitney'
         kwargs.saveFilePrefix (1,1) string = ""
         kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
+        kwargs.skinCompartmentIndex (1,1) double { mustBeInteger  } = 0
     end
 
     arguments (Output)
@@ -130,7 +137,35 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
     disp("Loading electrode positions...")
 
-    electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName) + kwargs.electrodeTranslationVector) ;
+    electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName)) ;
+
+    disp("Translating electrode positions by [" + strjoin(string(kwargs.electrodeTranslationVector), ",") + "]...")
+
+    translatedElectrodePositions = electrodePositions + transpose(kwargs.electrodeTranslationVector) ;
+
+    if kwargs.skinCompartmentIndex > 0
+
+        disp("Projecting eletrode points to skin surface...") ;
+
+        skinPoints = transpose(projectFileHandle.("c" + kwargs.skinCompartmentIndex + "_points")) ;
+
+        skinTriangles = transpose(projectFileHandle.("c" + kwargs.skinCompartmentIndex + "_triangles")) ;
+
+        skinTriangleVertices = transpose(skinPoints(:,skin)) ;
+
+        distancesToTriangles = zeffiro.geometry.distancesFromPointsToTriangles(translatedElectrodePositions) ;
+
+        [~,minDistanceI] = min(distancesToTriangles,[],2) ;
+
+        [triangleCentroids,~,~,~] = zeffiro.geometry.triangleCentroids(skinPoints, skinTriangles(:,minDistanceI)) ;
+
+        finalElectrodePositions = triangleCentroids ;
+
+    else
+
+        finalElectodePositions = translatedElectrodePositions ;
+
+    end % if
 
     disp("Preallocating lead field componentwise...") ;
 
