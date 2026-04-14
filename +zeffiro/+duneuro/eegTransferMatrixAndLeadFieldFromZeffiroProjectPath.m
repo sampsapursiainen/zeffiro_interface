@@ -30,11 +30,17 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 % If this is non-empty, the transfer matrix is also automatically saved to a file.
 % The current time and the used source model are appended to the file path prefix.
 %
+%   kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
+%
+% A vector for translating the electrodes found in the given project file.
+% The default position is sometimes a bit off.
+%
     arguments (Input)
         kwargs.projectFilePath (1,1) string { mustBeFile }
         kwargs.electrodeFieldName (1,1) string = "s2_points"
         kwargs.sourceModel (1,:) char = 'whitney'
         kwargs.saveFilePrefix (1,1) string = ""
+        kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
     end
 
     arguments (Output)
@@ -124,7 +130,7 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
     disp("Loading electrode positions...")
 
-    electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName)) ;
+    electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName) + kwargs.electrodeTranslationVector) ;
 
     disp("Preallocating lead field componentwise...") ;
 
