@@ -169,7 +169,7 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
     else
 
-        finalElectodePositions = translatedElectrodePositions ;
+        finalElectrodePositions = translatedElectrodePositions ;
 
     end % if
 
@@ -197,7 +197,7 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
     disp("Setting driver electrodes...")
 
-    driver.set_electrodes(electrodePositions,electrodeConfig) ;
+    driver.set_electrodes(finalElectrodePositions,electrodeConfig) ;
 
     disp("Starting transfer matrix computation...")
 
