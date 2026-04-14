@@ -151,13 +151,19 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
         skinTriangles = transpose(projectFileHandle.("c" + kwargs.skinCompartmentIndex + "_triangles")) ;
 
-        skinTriangleVertices = transpose(skinPoints(:,skin)) ;
+        skinTriangleVertices = skinPoints(:,skinTriangles) ;
 
-        distancesToTriangles = zeffiro.geometry.distancesFromPointsToTriangles(translatedElectrodePositions) ;
+        disp("Computing distances of electrodes to triangles...") ;
+
+        distancesToTriangles = zeffiro.geometry.distancesFromPointsToTriangles(translatedElectrodePositions,skinTriangleVertices) ;
+
+        disp("Finding smallest distances per electrode...")
 
         [~,minDistanceI] = min(distancesToTriangles,[],2) ;
 
-        [triangleCentroids,~,~,~] = zeffiro.geometry.triangleCentroids(skinPoints, skinTriangles(:,minDistanceI)) ;
+        disp("Attaching electrodes to triangles...") ;
+
+        triangleCentroids = zeffiro.geometry.elementCentroids(skinTriangles(:,minDistanceI),skinPoints) ;
 
         finalElectrodePositions = triangleCentroids ;
 
