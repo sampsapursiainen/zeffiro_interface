@@ -225,6 +225,10 @@ function [eegT, eegL] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwar
 
         saveFile.eegL = eegL ;
 
+        disp("Saving electrode positions to " + outputFilePath + "...") ;
+
+        saveFile.electrodePositions = finalElectrodePositions ;
+
     end % if
 
     disp("Done.")
