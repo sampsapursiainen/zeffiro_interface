@@ -43,11 +43,11 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 %
     arguments (Input)
         kwargs.projectFilePath (1,1) string { mustBeFile }
-        kwargs.electrodeFieldName (1,1) string = "s2_points"
         kwargs.sourceModel (1,:) char = 'whitney'
-        kwargs.saveFilePrefix (1,1) string = ""
+        kwargs.electrodeFieldName (1,1) string = "sensors"
         kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
-        kwargs.skinCompartmentIndex (1,1) double { mustBeInteger  } = 0
+        kwargs.saveFilePrefix (1,1) string = ""
+        kwargs.skinCompartmentIndex (1,1) double { mustBeInteger } = 0
     end
 
     arguments (Output)
@@ -138,7 +138,9 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     disp("Loading electrode positions...")
 
-    electrodePositions = transpose(projectFileHandle.(kwargs.electrodeFieldName)) ;
+    loadedElectrodePositions = projectFileHandle.(kwargs.electrodeFieldName) ;
+
+    electrodePositions = transpose(loadedElectrodePositions(:,1:3)) ;
 
     disp("Translating electrode positions by [" + strjoin(string(kwargs.electrodeTranslationVector), ",") + "]...")
 
@@ -146,11 +148,11 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     if kwargs.skinCompartmentIndex > 0
 
-        disp("Projecting eletrode points to skin surface...") ;
+        disp("Projecting electrode points to skin surface...") ;
 
-        skinPoints = transpose(projectFileHandle.("c" + kwargs.skinCompartmentIndex + "_points")) ;
+        skinPoints = transpose(projectFileHandle.reuna_p{kwargs.skinCompartmentIndex}) ;
 
-        skinTriangles = transpose(projectFileHandle.("c" + kwargs.skinCompartmentIndex + "_triangles")) ;
+        skinTriangles = transpose(projectFileHandle.reuna_t{kwargs.skinCompartmentIndex}) ;
 
         skinTriangleVertices = skinPoints(:,skinTriangles) ;
 
@@ -228,7 +230,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Saving electrode positions to " + outputFilePath + "...") ;
 
-        saveFile.electrodePositions = finalElectrodePositions ;
+        saveFile.electrodePositions = squeeze(finalElectrodePositions) ;
 
     end % if
 
