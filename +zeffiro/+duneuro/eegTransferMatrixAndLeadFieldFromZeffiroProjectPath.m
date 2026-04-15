@@ -16,7 +16,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 %
 % A path to the Zeffiro project file
 %
-%    kwargs.electrodeFieldName (1,1) string = "s2_points"
+%    kwargs.electrodeFieldName (1,1) string = "sensors"
 %
 % A field name of the electrode positions stored in the project file.
 %
@@ -150,9 +150,13 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Projecting electrode points to skin surface...") ;
 
-        skinPoints = transpose(projectFileHandle.reuna_p{kwargs.skinCompartmentIndex}) ;
+        skinPointsCells = projectFileHandle.reuna_p ;
 
-        skinTriangles = transpose(projectFileHandle.reuna_t{kwargs.skinCompartmentIndex}) ;
+        skinPoints = transpose(skinPointsCells{kwargs.skinCompartmentIndex}) ;
+
+        skinTrianglesCells = projectFileHandle.reuna_t ;
+
+        skinTriangles = transpose(skinTrianglesCells{kwargs.skinCompartmentIndex}) ;
 
         skinTriangleVertices = skinPoints(:,skinTriangles) ;
 
