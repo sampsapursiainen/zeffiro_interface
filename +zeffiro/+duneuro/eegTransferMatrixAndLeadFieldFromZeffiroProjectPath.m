@@ -14,6 +14,16 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 %
 %    kwargs.projectFilePath (1,1) string { mustBeFile }
 %
+%   kwargs.eegT (:,:) double { mustBeFinite } = []
+%
+% A transfer matrix related to the geometry, source and sensor positions in the given project file.
+% This takes precedence over other eegT arguments if not empty.
+%
+%   kwargs.eegTFilePath (1,1) string = ""
+%
+% The transfer matrix file path related to the geometry, source and sensor positions in the given project file.
+% This is used if kwargs.eegT was not given and this points to an existing .mat file.
+%
 % A path to the Zeffiro project file
 %
 %    kwargs.electrodeFieldName (1,1) string = "sensors"
@@ -43,6 +53,8 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 %
     arguments (Input)
         kwargs.projectFilePath (1,1) string { mustBeFile }
+        kwargs.eegT (:,:) double { mustBeFinite } = []
+        kwargs.eegTFilePath (1,1) string = ""
         kwargs.sourceModel (1,:) char = 'whitney'
         kwargs.electrodeFieldName (1,1) string = "sensors"
         kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
@@ -208,7 +220,31 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     disp("Starting transfer matrix computation...")
 
-    eegT = driver.compute_eeg_transfer_matrix(driverConfig) ;
+    if ~ isempty(kwargs.eegT)
+
+        eegT = kwargs.eegT ;
+
+    elseif isfile(kwargs.eegTFilePath)
+
+        eegTFile = matfile(kwargs.eegTFilePath) ;
+
+        eegT = eegTFile.eegT ;
+
+    else
+
+        eegT = driver.compute_eeg_transfer_matrix(driverConfig) ;
+
+    end % if
+
+    meshPointN = size(meshPoints,2) ;
+
+    electrodeN = size(electrodePositions,2) ;
+
+    eegTSize = size(eegT) ;
+
+    assert(all(eegTSize == [meshPointN,electrodeN]), "The given eegT did not have a size of mesh points times electrodes.") ;
+
+    assert(all(isfinite(eegT), "all"), "The utilized eegT had Inf or NaN elements.") ;
 
     for page = 1 : 3
 
