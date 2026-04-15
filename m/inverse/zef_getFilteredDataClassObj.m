@@ -11,7 +11,7 @@ end
 
 if isequal(zef.inv_data_mode,'filtered_temporal') %what is this???
 
-    f = eval('zef.measurements');
+    f = zef.measurements;
     
 high_pass = ClassObj.low_cut_frequency;
 low_pass = ClassObj.high_cut_frequency;
@@ -41,7 +41,7 @@ end
 
 elseif isequal(zef.inv_data_mode,'raw')
     
-    f = eval('zef.measurements');
+    f = zef.measurements;
 
 end
 

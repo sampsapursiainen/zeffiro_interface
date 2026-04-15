@@ -4,8 +4,8 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-table_data = eval('zef.h_sensors_table.Data');
-sensor_sets_selected = eval('zef.sensor_sets_selected');
+table_data = zef.h_sensors_table.Data;
+sensor_sets_selected = zef.sensor_sets_selected;
 
 for i = 1 : length(sensor_sets_selected)
     if not(table_data{sensor_sets_selected(i),4})

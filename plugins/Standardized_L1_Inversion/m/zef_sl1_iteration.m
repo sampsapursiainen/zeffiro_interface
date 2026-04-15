@@ -8,38 +8,38 @@ h = zef_waitbar(0,1,['Standardized L1 MAP iteration.']);
 [s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(s_ind_1);
 
-sl1_hyperprior = eval('zef.sl1_hyperprior');
-snr_val = eval('zef.sl1_snr');
-sl1_type = eval('zef.sl1_type');
-pm_val = eval('zef.inv_prior_over_measurement_db');
-amplitude_db = eval('zef.inv_amplitude_db');
+sl1_hyperprior = zef.sl1_hyperprior;
+snr_val = zef.sl1_snr;
+sl1_type = zef.sl1_type;
+pm_val = zef.inv_prior_over_measurement_db;
+amplitude_db = zef.inv_amplitude_db;
 pm_val = pm_val - amplitude_db;
 std_lhood = 10^(-snr_val/20);
-sampling_freq = eval('zef.sl1_sampling_frequency');
-high_pass = eval('zef.sl1_low_cut_frequency');
-low_pass = eval('zef.sl1_high_cut_frequency');
-number_of_frames = eval('zef.sl1_number_of_frames');
-source_direction_mode = eval('zef.source_direction_mode');
-source_directions = eval('zef.source_directions');
+sampling_freq = zef.sl1_sampling_frequency;
+high_pass = zef.sl1_low_cut_frequency;
+low_pass = zef.sl1_high_cut_frequency;
+number_of_frames = zef.sl1_number_of_frames;
+source_direction_mode = zef.source_direction_mode;
+source_directions = zef.source_directions;
 
 reconstruction_information.tag = 'sl1';
-reconstruction_information.inv_time_1 = eval('zef.sl1_time_1');
-reconstruction_information.inv_time_2 = eval('zef.sl1_time_2');
-reconstruction_information.inv_time_3 = eval('zef.sl1_time_3');
-reconstruction_information.sampling_freq = eval('zef.sl1_sampling_frequency');
-reconstruction_information.low_pass = eval('zef.sl1_high_cut_frequency');
-reconstruction_information.high_pass = eval('zef.sl1_low_cut_frequency');
-reconstruction_information.number_of_frames = eval('zef.sl1_number_of_frames');
-reconstruction_information.source_direction_mode = eval('zef.source_direction_mode');
-reconstruction_information.source_directions = eval('zef.source_directions');
-reconstruction_information.sl1_hyperprior = eval('zef.sl1_hyperprior');
-reconstruction_information.snr_val = eval('zef.sl1_snr');
-reconstruction_information.pm_val = eval('zef.inv_prior_over_measurement_db');
+reconstruction_information.inv_time_1 = zef.sl1_time_1;
+reconstruction_information.inv_time_2 = zef.sl1_time_2;
+reconstruction_information.inv_time_3 = zef.sl1_time_3;
+reconstruction_information.sampling_freq = zef.sl1_sampling_frequency;
+reconstruction_information.low_pass = zef.sl1_high_cut_frequency;
+reconstruction_information.high_pass = zef.sl1_low_cut_frequency;
+reconstruction_information.number_of_frames = zef.sl1_number_of_frames;
+reconstruction_information.source_direction_mode = zef.source_direction_mode;
+reconstruction_information.source_directions = zef.source_directions;
+reconstruction_information.sl1_hyperprior = zef.sl1_hyperprior;
+reconstruction_information.snr_val = zef.sl1_snr;
+reconstruction_information.pm_val = zef.inv_prior_over_measurement_db;
 
 [L,n_interp, procFile] = zef_processLeadfields(zef);
 
 source_count = n_interp;
-if eval('zef.sl1_normalize_data')==1;
+if zef.sl1_normalize_data==1;
     normalize_data = 'maximum';
 else
     normalize_data = 'average';
@@ -51,7 +51,7 @@ else
     balance_spatially = 0;
 end
 
-    [beta, theta0] = zef_find_ig_hyperprior((snr_val-pm_val)/2,2*eval('zef.inv_hyperprior_tail_length_db'),L,size(L,2),eval('zef.sl1_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
+    [beta, theta0] = zef_find_ig_hyperprior((snr_val-pm_val)/2,2*zef.inv_hyperprior_tail_length_db,L,size(L,2),zef.sl1_normalize_data,balance_spatially,zef.inv_hyperprior_weight);
 
         options = optimoptions('quadprog');
         options = optimoptions(options, 'OptimalityTolerance', 1e-6);
@@ -62,7 +62,7 @@ end
 
         options_lin = optimoptions('linprog');
 
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+if zef.use_gpu == 1 & zef.gpu_count > 0
     L = gpuArray(L);
 end
 
@@ -91,9 +91,9 @@ for f_ind = 1 : number_of_frames
     if f_ind == 1
         zef_waitbar(0,1,h,['Standardized L1 MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
-    n_sl1_map_iter = eval('zef.sl1_n_map_iterations');
+    n_sl1_map_iter = zef.sl1_n_map_iterations;
 
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         f = gpuArray(f);
     end
 
@@ -117,7 +117,7 @@ for f_ind = 1 : number_of_frames
           z_vec = z_vec./(max(abs(L))');
       end 
 
-         if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+         if zef.use_gpu == 1 & zef.gpu_count > 0
             z_vec = gather(z_vec);
         end
 

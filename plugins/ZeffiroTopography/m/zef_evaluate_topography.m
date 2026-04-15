@@ -3,11 +3,11 @@
 function [z] = zef_evaluate_topography(zef)
 
 h = zef_waitbar(0,1,['Topography.']);
-sampling_freq = eval('zef.top_sampling_frequency');
-high_pass = eval('zef.top_low_cut_frequency');
-low_pass = eval('zef.top_high_cut_frequency');
-number_of_frames = eval('zef.top_number_of_frames');
-time_step = eval('zef.top_time_3');
+sampling_freq = zef.top_sampling_frequency;
+high_pass = zef.top_low_cut_frequency;
+low_pass = zef.top_high_cut_frequency;
+number_of_frames = zef.top_number_of_frames;
+time_step = zef.top_time_3;
 triangles = eval('zef.reuna_t{end-1}');
 triangle_points = eval('zef.reuna_p{end-1}');
 sensor_points = eval('zef.sensors(:,1:3)');
@@ -32,7 +32,7 @@ for f_ind = 1 : number_of_frames
 
     zef_waitbar(f_ind,number_of_frames,h,['Topography. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
 
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         f = gpuArray(f);
     end
 
@@ -40,7 +40,7 @@ for f_ind = 1 : number_of_frames
     for sensor_ind = 1 : size(sensor_points,1)
         dist_vec = sqrt(sum((triangle_points-sensor_points(sensor_ind*ones(size(triangle_points,1),1),:)).^2,2));
         dist_vec = dist_vec/min(dist_vec);
-        z_aux = z_aux + f(sensor_ind)./(eval('zef.top_regularization_parameter')+(dist_vec));
+        z_aux = z_aux + f(sensor_ind)./(zef.top_regularization_parameter+(dist_vec));
     end
 
     if number_of_frames > 1

@@ -10,7 +10,7 @@ end
 
 if not(isempty(zef))
 
-    dpq_table = eval('zef.dynamical_plot_queue_table');
+    dpq_table = zef.dynamical_plot_queue_table;
 
     for dpq_ind = 1 : size(dpq_table,1)
 

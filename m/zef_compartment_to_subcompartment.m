@@ -4,7 +4,7 @@ if isempty(zef)
     zef = evalin('base','zef');
 end
 
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 
 subcompartment_ind = [];
 

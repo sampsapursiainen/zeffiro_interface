@@ -7,27 +7,27 @@ h = zef_waitbar(0,1,['IAS MAP iteration.']);
 s_ind_0 = s_ind_1;
 n_interp = length(s_ind_1(:));
 
-iasroi_hyperprior = eval('zef.iasroi_hyperprior');
-source_positions = eval('zef.source_positions');
+iasroi_hyperprior = zef.iasroi_hyperprior;
+source_positions = zef.source_positions;
 source_positions = source_positions(s_ind_1,:);
-roi_mode = eval('zef.iasroi_roi_mode');
-roi_threshold = eval('zef.iasroi_roi_threshold');
+roi_mode = zef.iasroi_roi_mode;
+roi_threshold = zef.iasroi_roi_threshold;
 roi_sphere = eval( 'zef.iasroi_roi_sphere');
 rec_source = eval( 'zef.iasroi_rec_source');
 r_roi = roi_sphere(:,4);
 c_roi = roi_sphere(:,1:3)';
-snr_val = eval('zef.iasroi_snr');
-pm_val = eval('zef.inv_prior_over_measurement_db');
-amplitude_db = eval('zef.inv_amplitude_db');
+snr_val = zef.iasroi_snr;
+pm_val = zef.inv_prior_over_measurement_db;
+amplitude_db = zef.inv_amplitude_db;
 pm_val = pm_val - amplitude_db;
 std_lhood = 10^(-snr_val/20);
-sampling_freq = eval('zef.iasroi_sampling_frequency');
-high_pass = eval('zef.iasroi_low_cut_frequency');
-low_pass = eval('zef.iasroi_high_cut_frequency');
-number_of_frames = eval('zef.iasroi_number_of_frames');
-time_step = eval('zef.iasroi_time_3');
-source_direction_mode = eval('zef.source_direction_mode');
-source_directions = eval('zef.source_directions');
+sampling_freq = zef.iasroi_sampling_frequency;
+high_pass = zef.iasroi_low_cut_frequency;
+low_pass = zef.iasroi_high_cut_frequency;
+number_of_frames = zef.iasroi_number_of_frames;
+time_step = zef.iasroi_time_3;
+source_direction_mode = zef.source_direction_mode;
+source_directions = zef.source_directions;
 
 if source_direction_mode == 2
 
@@ -42,7 +42,7 @@ if source_direction_mode == 2
     aux_brain_ind = [];
     aux_dir_mode = [];
     submesh_cell = cell(0);
-    compartment_tags = eval('zef.compartment_tags');
+    compartment_tags = zef.compartment_tags;
     for k = 1 : length(compartment_tags)
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
@@ -109,7 +109,7 @@ end
 
 s_ind_1 = s_ind_1(:);
 
-L = eval('zef.L');
+L = zef.L;
 L = L(:,s_ind_1);
 
 if source_direction_mode == 2
@@ -145,7 +145,7 @@ if roi_mode == 1
 end
 
 if roi_mode == 2
-    reconstruction = eval('zef.reconstruction');
+    reconstruction = zef.reconstruction;
     reconstruction = reconstruction(s_ind_1);
     reconstruction = reshape(reconstruction,length(reconstruction)/3,3);
     reconstruction = sqrt(sum(reconstruction.^2,2));
@@ -156,7 +156,7 @@ end
 if roi_mode == 3
     source_ind_aux = eval('zef.source_interpolation_ind{1}');
     p_ind_aux_1 = [];
-    p_selected = eval('zef.parcellation_selected');
+    p_selected = zef.parcellation_selected;
     for p_ind = 1 : length(p_selected)
         p_ind_aux_2 = eval(['zef.parcellation_interp_ind{' int2str(p_selected(p_ind)) '}{1}']);
         p_ind_aux_1 = [p_ind_aux_1 ;  unique(p_ind_aux_2)];
@@ -183,7 +183,7 @@ n_lead_field = size(L,2);
 L = L(:,roi_aux_ind);
 
 source_count = n_interp;
-if eval('zef.iasroi_normalize_data')==1;
+if zef.iasroi_normalize_data==1;
     normalize_data = 'maximum';
 else
     normalize_data = 'average';
@@ -193,18 +193,18 @@ if iasroi_hyperprior == 1
 else
     balance_spatially = 0;
 end
-if eval('zef.inv_hyperprior') == 1
-    [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,eval('zef.inv_hyperprior_tail_length_db'),L,size(L,2),eval('zef.iasroi_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
-elseif eval('zef.inv_hyperprior') == 2
-    [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,eval('zef.inv_hyperprior_tail_length_db'),L,size(L,2),eval('zef.iasroi_normalize_data'),balance_spatially,eval('zef.inv_hyperprior_weight'));
+if zef.inv_hyperprior == 1
+    [beta, theta0] = zef_find_ig_hyperprior(snr_val-pm_val,zef.inv_hyperprior_tail_length_db,L,size(L,2),zef.iasroi_normalize_data,balance_spatially,zef.inv_hyperprior_weight);
+elseif zef.inv_hyperprior == 2
+    [beta, theta0] = zef_find_g_hyperprior(snr_val-pm_val,zef.inv_hyperprior_tail_length_db,L,size(L,2),zef.iasroi_normalize_data,balance_spatially,zef.inv_hyperprior_weight);
 end
 
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+if zef.use_gpu == 1 & zef.gpu_count > 0
     L = gpuArray(L);
 end
 L_aux = L;
 S_mat = std_lhood^2*eye(size(L,1));
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+if zef.use_gpu == 1 & zef.gpu_count > 0
     S_mat = gpuArray(S_mat);
 end
 
@@ -214,23 +214,23 @@ else
     number_of_frames = 1;
 end
 
-if iscell(eval('zef.measurements'));
-    f = eval(['zef.measurements{' int2str(eval('zef.iasroi_data_segment')) '}']);
+if iscell(zef.measurements);
+    f = eval(['zef.measurements{' int2str(zef.iasroi_data_segment) '}']);
 else
-    f = eval('zef.measurements');
+    f = zef.measurements;
 end
 
 inverse_gamma_ind = [1:4]
 gamma_ind = [5:10];
 
 data_norm = 1;
-if eval('zef.iasroi_normalize_data')==1;
+if zef.iasroi_normalize_data==1;
     data_norm = max(abs(f(:)));
     %std_lhood = std_lhood^2;
-elseif eval('zef.iasroi_normalize_data')==2;
+elseif zef.iasroi_normalize_data==2;
     data_norm = max(sqrt(sum(abs(f).^2)));
     %std_lhood = std_lhood^2;
-elseif eval('zef.iasroi_normalize_data')==3;
+elseif zef.iasroi_normalize_data==3;
     data_norm = sum(sqrt(sum(abs(f).^2)))/size(f,2);
     %std_lhood = std_lhood^2;
 end;
@@ -264,13 +264,13 @@ for f_ind = 1 : number_of_frames
     end
     z_vec = ones(size(L,2),1);
 
-    if eval('zef.inv_hyperprior') == 1
+    if zef.inv_hyperprior == 1
         if length(theta0) > 1  || length(beta) > 1
             theta = theta0./(beta-1);
         else
             theta = (theta0./(beta-1))*ones(size(L,2),1);
         end
-    elseif eval('zef.inv_hyperprior') == 2
+    elseif zef.inv_hyperprior == 2
         if length(theta0) > 1  || length(beta) > 1
             theta = theta0.*beta;
         else
@@ -283,8 +283,8 @@ for f_ind = 1 : number_of_frames
     %theta = theta0*aux_norm;
 
     if size_f > 1
-        if eval('zef.iasroi_time_2') >=0 0 && eval('zef.iasroi_time_1') >= 0 & 1 + sampling_freq*eval('zef.iasroi_time_1') <= size_f;
-            f = f_data(:, max(1, 1 + floor(sampling_freq*eval('zef.iasroi_time_1')+sampling_freq*(f_ind - 1)*eval('zef.iasroi_time_3'))) : min(size_f, 1 + floor(sampling_freq*(eval('zef.iasroi_time_1') + eval('zef.iasroi_time_2'))+sampling_freq*(f_ind - 1)*eval('zef.iasroi_time_3'))));
+        if zef.iasroi_time_2 >=0 0 && zef.iasroi_time_1 >= 0 & 1 + sampling_freq*zef.iasroi_time_1 <= size_f;
+            f = f_data(:, max(1, 1 + floor(sampling_freq*zef.iasroi_time_1+sampling_freq*(f_ind - 1)*zef.iasroi_time_3)) : min(size_f, 1 + floor(sampling_freq*(zef.iasroi_time_1 + zef.iasroi_time_2)+sampling_freq*(f_ind - 1)*zef.iasroi_time_3)));
         end
     end
     if size_f > 1
@@ -296,9 +296,9 @@ for f_ind = 1 : number_of_frames
     if f_ind == 1
         zef_waitbar(0,1,h,['IAS MAP iteration. Time step ' int2str(f_ind) ' of ' int2str(number_of_frames) '.']);
     end
-    n_ias_map_iter = eval('zef.iasroi_n_map_iterations');
+    n_ias_map_iter = zef.iasroi_n_map_iterations;
 
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         f = gpuArray(f);
     end
 
@@ -312,18 +312,18 @@ for f_ind = 1 : number_of_frames
         u = zeros(length(z_vec),1);
         z_vec = zeros(length(z_vec),1);
         d_sqrt = sqrt(theta);
-        if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+        if zef.use_gpu == 1 & zef.gpu_count > 0
             d_sqrt = gpuArray(d_sqrt);
         end
         L = L_aux.*repmat(d_sqrt',size(L,1),1);
         z_vec = d_sqrt.*(L'*((L*L' + S_mat)\f));
 
-        if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+        if zef.use_gpu == 1 & zef.gpu_count > 0
             z_vec = gather(z_vec);
         end
-        if eval('zef.inv_hyperprior') == 1
+        if zef.inv_hyperprior == 1
             theta = (theta0+0.5*z_vec.^2)./(beta + 1.5);
-        elseif eval('zef.inv_hyperprior') == 2
+        elseif zef.inv_hyperprior == 2
             theta = theta0.*(beta-1.5 + sqrt((1./(2.*theta0)).*z_vec.^2 + (beta+1.5).^2));
         end
     end;

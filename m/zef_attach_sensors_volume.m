@@ -83,7 +83,7 @@ if ismember(zef.imaging_method,[1,4,5])
     end
     use_depth_electrodes =zef.use_depth_electrodes;
 
-    %if eval('zef.use_gpu')
+    %if zef.use_gpu
     %    nodes = gpuArray(nodes);
     %    sensors = gpuArray(sensors);
     %end

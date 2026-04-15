@@ -68,13 +68,13 @@ end
 
 zef.parcellation_colormap = 0.5*zef.parcellation_colormap;
 
-if  isempty(eval('zef.parcellation_colortable'))
+if  isempty(zef.parcellation_colortable)
     set(zef.h_import_parcellation_colortable,'foregroundcolor',[1 0 0]);
 else
     set(zef.h_import_parcellation_colortable,'foregroundcolor',[0 0 0]);
 end
 
-if  isempty(eval('zef.parcellation_points'))
+if  isempty(zef.parcellation_points)
     set(zef.h_zef_import_parcellation_points,'foregroundcolor',[1 0 0]);
 else
     set(zef.h_zef_import_parcellation_points,'foregroundcolor',[0 0 0]);

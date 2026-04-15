@@ -9,7 +9,7 @@ end
 if not(isempty(varargin))
     h_1 = varargin{1};
 else
-    h_1 = eval('zef.h_axes1');
+    h_1 = zef.h_axes1;
 end
 
 delete(findobj(h_1.Children,'Type','Light'));

@@ -7,7 +7,7 @@ if not(isempty(varargin))
 end
 
 if eval('isfield(zef,''h_axes1'');')
-    if isvalid(eval('zef.h_axes1'))
+    if isvalid(zef.h_axes1)
 
         if set_mode == 0
 

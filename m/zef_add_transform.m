@@ -5,7 +5,7 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-if not(eval('zef.lock_transforms_on'))
+if not(zef.lock_transforms_on)
 
     zef_i = 1 + eval(['length(zef.' zef.current_tag '_transform_name)']);
 

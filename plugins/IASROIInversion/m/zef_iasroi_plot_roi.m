@@ -6,10 +6,10 @@ if nargin == 0
     zef = eval('base','zef');
 end
 
-h_iasroi_roi_sphere_1 = eval('zef.h_iasroi_roi_sphere_1');
-h_iasroi_roi_sphere_2 = eval('zef.h_iasroi_roi_sphere_2');
-h_iasroi_roi_sphere_3 = eval('zef.h_iasroi_roi_sphere_3');
-h_iasroi_roi_sphere_4 = eval('zef.h_iasroi_roi_sphere_4');
+h_iasroi_roi_sphere_1 = zef.h_iasroi_roi_sphere_1;
+h_iasroi_roi_sphere_2 = zef.h_iasroi_roi_sphere_2;
+h_iasroi_roi_sphere_3 = zef.h_iasroi_roi_sphere_3;
+h_iasroi_roi_sphere_4 = zef.h_iasroi_roi_sphere_4;
 iasroi_roi_sphere = str2num(get(h_iasroi_roi_sphere_1 ,'string'));
 iasroi_roi_sphere = iasroi_roi_sphere(:);
 iasroi_roi_sphere = [ iasroi_roi_sphere ...
@@ -19,10 +19,10 @@ iasroi_roi_sphere = [ iasroi_roi_sphere ...
     ];
 
 [s_x,s_y,s_z] = sphere(100);
-h_axes1 = eval('zef.h_axes1');
+h_axes1 = zef.h_axes1;
 hold(h_axes1,'on');
-if isfield(eval('zef'),'h_roi_sphere')
-    h_roi_sphere = eval('zef.h_roi_sphere');
+if isfield(zef,'h_roi_sphere')
+    h_roi_sphere = zef.h_roi_sphere;
     if ishandle(h_roi_sphere)
         delete(h_roi_sphere);
     end

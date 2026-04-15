@@ -6,7 +6,7 @@ if not(isempty(varargin))
     parameter_index = varargin{1};
 end
 
-parameter_profile = eval('zef.parameter_profile');
+parameter_profile = zef.parameter_profile;
 
 zef_n = 0;
 

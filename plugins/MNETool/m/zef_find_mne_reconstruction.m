@@ -10,13 +10,13 @@ h = zef_waitbar(0,1,['MNE Reconstruction.']);
 [procFile.s_ind_1] = unique(eval('zef.source_interpolation_ind{1}'));
 n_interp = length(procFile.s_ind_1);
 
-pm_val = eval('zef.inv_prior_over_measurement_db');
-amplitude_db = eval('zef.inv_amplitude_db');
+pm_val = zef.inv_prior_over_measurement_db;
+amplitude_db = zef.inv_amplitude_db;
 pm_val = pm_val - amplitude_db;
 
-snr_val = eval('zef.inv_snr');
-mne_type = eval('zef.mne_type');
-mne_prior = eval('zef.mne_prior');
+snr_val = zef.inv_snr;
+mne_type = zef.mne_type;
+mne_prior = zef.mne_prior;
 mne_exponent = 0.6;                            %EXPONENT PARAMETER HERE!, JL
 std_lhood = 10^(-snr_val/20);
 
@@ -28,29 +28,29 @@ zef.inv_time_1 = zef.mne_time_1;
 zef.inv_time_2 = zef.mne_time_2;
 zef.inv_time_3 = zef.mne_time_3;
 
-source_direction_mode = eval('zef.source_direction_mode');
-source_directions = eval('zef.source_directions');
+source_direction_mode = zef.source_direction_mode;
+source_directions = zef.source_directions;
 
 info=[];
 info.tag='mne_type';
 info.type='mne_type';
 info.std_lhood=std_lhood;
 
-info.snr_val = eval('zef.inv_snr');
-info.mne_type = eval('zef.mne_type');
-info.mne_prior = eval('zef.mne_prior');
-info.sampling_freq = eval('zef.mne_sampling_frequency');
-info.high_pass = eval('zef.mne_low_cut_frequency');
-info.low_pass = eval('zef.mne_high_cut_frequency');
-info.number_of_frames = eval('zef.mne_number_of_frames');
-info.time_step = eval('zef.mne_time_3');
-info.source_direction_mode = eval('zef.source_direction_mode');
-info.source_directions = eval('zef.source_directions');
+info.snr_val = zef.inv_snr;
+info.mne_type = zef.mne_type;
+info.mne_prior = zef.mne_prior;
+info.sampling_freq = zef.mne_sampling_frequency;
+info.high_pass = zef.mne_low_cut_frequency;
+info.low_pass = zef.mne_high_cut_frequency;
+info.number_of_frames = zef.mne_number_of_frames;
+info.time_step = zef.mne_time_3;
+info.source_direction_mode = zef.source_direction_mode;
+info.source_directions = zef.source_directions;
 
 [L,n_interp, procFile] = zef_processLeadfields(zef);
 
 source_count = n_interp;
-if eval('zef.mne_normalize_data')==1;
+if zef.mne_normalize_data==1;
     normalize_data = 'maximum';
 else
     normalize_data = 'average';
@@ -62,14 +62,14 @@ else
     balance_spatially = 0;
 end
 
-[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),eval('zef.mne_normalize_data'),balance_spatially);
+[theta0] = zef_find_gaussian_prior(snr_val-pm_val,L,size(L,2),zef.mne_normalize_data,balance_spatially);
 
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+if zef.use_gpu == 1 & zef.gpu_count > 0
     L = gpuArray(L);
 end
 
 S_mat = std_lhood^2*eye(size(L,1));
-if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+if zef.use_gpu == 1 & zef.gpu_count > 0
     S_mat = gpuArray(S_mat);
 end
 
@@ -108,7 +108,7 @@ for f_ind = 1 : zef.number_of_frames
         zef_waitbar(0,1,h,['MNE reconstruction. Time step ' int2str(f_ind) ' of ' int2str(zef.number_of_frames) '.']);
     end
 
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         f = gpuArray(f);
     end
 
@@ -133,7 +133,7 @@ for f_ind = 1 : zef.number_of_frames
     end
     
     
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         d_sqrt = gpuArray(d_sqrt);
     end
     L_inv = L.*repmat(d_sqrt',size(L,1),1);
@@ -155,7 +155,7 @@ for f_ind = 1 : zef.number_of_frames
 
     z_vec = L_inv * f;
 
-    if eval('zef.use_gpu') == 1 & eval('zef.gpu_count') > 0
+    if zef.use_gpu == 1 & zef.gpu_count > 0
         z_vec = gather(z_vec);
     end
 

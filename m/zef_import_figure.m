@@ -18,11 +18,11 @@ eval('zef.zeffiro_current_size_aux = zef.zeffiro_current_size;');
 eval('zef.zeffiro_current_size = cell(0);');
 
 if isempty(file_name)
-    if eval('zef.use_display')
-        [file_name folder_name] = uigetfile({'*.fig'},'Open figure file',eval('zef.save_file_path'));
+    if zef.use_display
+        [file_name folder_name] = uigetfile({'*.fig'},'Open figure file',zef.save_file_path);
     else
-        file_name = eval('zef.file');
-        folder_name = eval('zef.file_path');
+        file_name = zef.file;
+        folder_name = zef.file_path;
     end
 end
 

@@ -16,29 +16,29 @@ zef.apply_transform_sensors = zef.sensors;
 zef.apply_transform_reuna_p = zef.reuna_p;
 zef.apply_transform_reuna_t = zef.reuna_t;
 
-eval(['zef.' eval('zef.current_sensors') '_points = zef.apply_transform_sensors(:,1:3);']);
+eval(['zef.' zef.current_sensors '_points = zef.apply_transform_sensors(:,1:3);']);
 
-if ismember(eval('zef.imaging_method'),[2 3])
-    eval(['zef.' eval('zef.current_sensors')  '_directions(:,1:3) = zef.apply_transform_sensors(:,4:6);']);
+if ismember(zef.imaging_method,[2 3])
+    eval(['zef.' zef.current_sensors  '_directions(:,1:3) = zef.apply_transform_sensors(:,4:6);']);
 end
 
-if size(eval(['zef.' eval('zef.current_sensors') '_directions']),2) == 6
-    eval(['zef.' eval('zef.current_sensors') '_directions(:,4:6) = zef.apply_transform_sensors(:,7:9);']);
+if size(eval(['zef.' zef.current_sensors '_directions']),2) == 6
+    eval(['zef.' zef.current_sensors '_directions(:,4:6) = zef.apply_transform_sensors(:,7:9);']);
 end
 
-eval(['zef.' eval('zef.current_sensors') '_scaling = 1;']);
-eval(['zef.' eval('zef.current_sensors') '_x_correction = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_y_correction = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_z_correction = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_xy_rotation = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_yz_rotation = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_zx_rotation = 0;']);
-eval(['zef.' eval('zef.current_sensors') '_affine_transform = {[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]};']);
+eval(['zef.' zef.current_sensors '_scaling = 1;']);
+eval(['zef.' zef.current_sensors '_x_correction = 0;']);
+eval(['zef.' zef.current_sensors '_y_correction = 0;']);
+eval(['zef.' zef.current_sensors '_z_correction = 0;']);
+eval(['zef.' zef.current_sensors '_xy_rotation = 0;']);
+eval(['zef.' zef.current_sensors '_yz_rotation = 0;']);
+eval(['zef.' zef.current_sensors '_zx_rotation = 0;']);
+eval(['zef.' zef.current_sensors '_affine_transform = {[1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1]};']);
 
 
-eval(['zef.' eval('zef.current_sensors') '_transform_name =  {''Transform 1''};']);
+eval(['zef.' zef.current_sensors '_transform_name =  {''Transform 1''};']);
 
-zef.apply_transform_compartment_tags = eval('zef.compartment_tags');
+zef.apply_transform_compartment_tags = zef.compartment_tags;
 zef_k = 0;
 for zef_i = 1 : length(zef.apply_transform_compartment_tags)
 

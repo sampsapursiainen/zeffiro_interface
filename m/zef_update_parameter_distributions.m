@@ -1,6 +1,6 @@
 function zef = zef_update_parameter_distributions(zef)
 
-parameter_profile = eval('zef.parameter_profile');
+parameter_profile = zef.parameter_profile;
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')

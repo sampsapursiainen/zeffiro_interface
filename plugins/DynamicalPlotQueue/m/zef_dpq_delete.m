@@ -4,9 +4,9 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-data_table = eval('zef.h_dynamical_plot_queue_table.Data');
+data_table = zef.h_dynamical_plot_queue_table.Data;
 
-selected_ind = eval('zef.dpq_selected');
+selected_ind = zef.dpq_selected;
 aux_ind = setdiff([1 : size(data_table,1)]', selected_ind);
 
 data_table = data_table(aux_ind,:);

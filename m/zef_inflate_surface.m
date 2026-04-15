@@ -4,9 +4,9 @@ N = size(nodes,1);
 if not(isempty(varargin))
 smoothing_steps_surf = varargin{1};
 else
-smoothing_steps_surf = eval('zef.inflate_n_iterations');
+smoothing_steps_surf = zef.inflate_n_iterations;
 end
-smoothing_param = eval('zef.inflate_strength');
+smoothing_param = zef.inflate_strength;
 
 A = sparse(N, N, 0);
 diag_ind_aux = unique(surface_triangles);
@@ -33,7 +33,7 @@ sum_A = sum_A(:,[1 1 1]);
 taubin_lambda = 1;
 taubin_mu = -1;
 
-if eval('zef.use_gpu') && eval('zef.gpu_count') > 0
+if zef.use_gpu && zef.gpu_count > 0
     A = gpuArray(A);
     sum_A = gpuArray(sum_A);
     taubin_lambda = gpuArray(taubin_lambda);

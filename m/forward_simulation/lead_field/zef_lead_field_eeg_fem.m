@@ -43,7 +43,7 @@ function [L_eeg, dipole_locations, dipole_directions] = lead_field_eeg_fem( ...
 %
 
 n_of_nodes = size(nodes,1);
-source_model = eval('zef.source_model');
+source_model = zef.source_model;
 
 if iscell(elements)
     tetrahedra = elements{1};

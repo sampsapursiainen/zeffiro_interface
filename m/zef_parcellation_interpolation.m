@@ -3,11 +3,11 @@
 function [parcellation_interpolation_ind] = zef_parcellation_interpolation(zef)
 
 domain_labels = eval('zef.domain_labels(zef.brain_ind)');
-submesh_ind_vec = eval('zef.submesh_ind');
-parcellation_compartment = eval('zef.parcellation_compartment');
+submesh_ind_vec = zef.submesh_ind;
+parcellation_compartment = zef.parcellation_compartment;
 
 if isempty(parcellation_compartment) || isequal(parcellation_compartment,{'g'})
-    compartment_tags = eval('zef.compartment_tags');
+    compartment_tags = zef.compartment_tags;
     parcellation_compartment = [];
     for i = 1 : length(compartment_tags)
         activity = eval(['zef.' compartment_tags{i} '_sources']);
@@ -27,7 +27,7 @@ color_cell = cell(0);
 aux_brain_ind = [];
 aux_dir_mode = [];
 submesh_cell = cell(0);
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 for k = 1 : length(compartment_tags)
 
     var_0 = ['zef.' compartment_tags{k} '_on'];
@@ -60,10 +60,10 @@ for k = 1 : length(compartment_tags)
     end
 end
 
-p_colortable = eval('zef.parcellation_colortable');
-p_points = eval('zef.parcellation_points');
-p_tolerance = eval('zef.parcellation_tolerance');
-p_selected = eval('zef.parcellation_selected');
+p_colortable = zef.parcellation_colortable;
+p_points = zef.parcellation_points;
+p_tolerance = zef.parcellation_tolerance;
+p_selected = zef.parcellation_selected;
 
 p_length = 0;
 c_length = 1;
@@ -115,15 +115,15 @@ for i = 1 : length(p_points)
     end
 end
 
-brain_ind = eval('zef.brain_ind');
-nodes = eval('zef.nodes');
-tetra = eval('zef.tetra');
+brain_ind = zef.brain_ind;
+nodes = zef.nodes;
+tetra = zef.tetra;
 
-if eval('zef.location_unit_current') == 2
+if zef.location_unit_current == 2
     parcellation_p = 10*parcellation_p;
 end
 
-if eval('zef.location_unit_current') == 3
+if zef.location_unit_current == 3
     zef.parcellation_p = 1000*parcellation_p;
 end
 
@@ -133,7 +133,7 @@ p_counter = 0;
 for p_ind = p_selected + 1
     p_counter = p_counter + 1;
 
-    I_compartment = find(ismember(eval('zef.domain_labels'),p_compartment(p_ind-1,1:end-1)));
+    I_compartment = find(ismember(zef.domain_labels,p_compartment(p_ind-1,1:end-1)));
     brain_cortex_ind = find(ismember(brain_ind,I_compartment) & ismember(submesh_ind_vec,p_compartment(p_ind-1,end)));
     cortex_ind = brain_ind(brain_cortex_ind);
 

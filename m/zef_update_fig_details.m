@@ -35,52 +35,52 @@ zef.aux_field = {['Nodes: ' num2str(size(zef.nodes,1))],...
     ['Tetrahedra: ' num2str(size(zef.tetra,1))],...
     };
 
-if eval('zef.on_screen') == 0
+if zef.on_screen == 0
     zef.aux_field = [zef.aux_field, {'Visualization: '}];
 end
-if eval('zef.on_screen') == 1
+if zef.on_screen == 1
     zef.aux_field = [zef.aux_field, {'Visualization: Volume'}];
 end
-if eval('zef.on_screen') == 2
+if zef.on_screen == 2
     zef.aux_field = [zef.aux_field, {'Visualization: Surfaces'}];
 end
-if eval('zef.inv_scale') == 1
+if zef.inv_scale == 1
     zef.aux_field = [zef.aux_field, {'Scale: Logarithmic'}];
 end
-if eval('zef.inv_scale') == 2
+if zef.inv_scale == 2
     zef.aux_field = [zef.aux_field, {'Scale: Linear'}];
 end
-if eval('zef.inv_scale') == 3
+if zef.inv_scale == 3
     zef.aux_field = [zef.aux_field, {'Scale: Square root'}];
 end
-if eval('zef.source_direction_mode') == 1
+if zef.source_direction_mode == 1
     zef.aux_field = [zef.aux_field, {'Field basis: Cartesian'}];
 end
-if eval('zef.source_direction_mode') == 2
+if zef.source_direction_mode == 2
     zef.aux_field = [zef.aux_field, {'Field basis: Normal'}];
 end
-if eval('zef.source_direction_mode') == 3
+if zef.source_direction_mode == 3
     zef.aux_field = [zef.aux_field, {'Field basis: Mesh'}];
 end
-if eval('zef.reconstruction_type') == 1
+if zef.reconstruction_type == 1
     zef.aux_field = [zef.aux_field, {'Field: Amplitude'}];
 end
-if eval('zef.reconstruction_type') == 2
+if zef.reconstruction_type == 2
     zef.aux_field = [zef.aux_field, {'Field: Normal'}];
 end
-if eval('zef.reconstruction_type') == 3
+if zef.reconstruction_type == 3
     zef.aux_field = [zef.aux_field, {'Field: Tangential'}];
 end
-if eval('zef.reconstruction_type') == 4
+if zef.reconstruction_type == 4
     zef.aux_field = [zef.aux_field, {'Field: Normal (+)'}];
 end
-if eval('zef.reconstruction_type') == 5
+if zef.reconstruction_type == 5
     zef.aux_field = [zef.aux_field, {'Field: Normal (-)'}];
 end
-if eval('zef.reconstruction_type') == 6
+if zef.reconstruction_type == 6
     zef.aux_field = [zef.aux_field, {'Field: Value'}];
 end
-if eval('zef.reconstruction_type') == 7
+if zef.reconstruction_type == 7
     zef.aux_field = [zef.aux_field, {'Field: Amplitude smoothed'}];
 end
 

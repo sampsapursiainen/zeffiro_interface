@@ -2,14 +2,14 @@
 %See: https://github.com/sampsapursiainen/zeffiro_interface
 
 function [meas_data,all_roi_sources,orientations,n_multiple_sources] = zef_find_source_patch(zef)
-source_positions = eval('zef.source_positions');
+source_positions = zef.source_positions;
 noise_level = eval('zef.inv_synth_source(1,8)');
 s_p = eval('zef.inv_synth_source(:,1:3)');
 s_o = eval('zef.inv_synth_source(:,4:6)');
 s_o = s_o./repmat(sqrt(sum(s_o.^2,2)),1,3);
 s_a = eval('zef.inv_synth_source(:,7)');
 s_f = 1e-3*repmat(s_a,1,3).*s_o;
-L = eval('zef.L');
+L = zef.L;
 use_volume = eval('zef.inv_synth_source(1,11)');
 radius = eval('zef.inv_synth_source(:,12)');
 use_norm_ori = eval('zef.inv_synth_source(1,13)');

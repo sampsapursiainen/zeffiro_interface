@@ -6,14 +6,14 @@ c_table = cell(0);
 c_points = cell(0);
 c_ind = 0;
 
-submesh_ind = eval('zef.submesh_ind');
+submesh_ind = zef.submesh_ind;
 if isempty(submesh_ind)
-    submesh_ind = ones(size(eval('zef.active_compartment_ind')));
+    submesh_ind = ones(size(zef.active_compartment_ind));
 end
 
-if eval('zef.parcellation_merge')
-    c_table = eval('zef.parcellation_colortable');
-    c_points = eval('zef.parcellation_points');
+if zef.parcellation_merge
+    c_table = zef.parcellation_colortable;
+    c_points = zef.parcellation_points;
 else
     eval('zef.parcellation_selected = [];');
 end
@@ -36,7 +36,7 @@ priority_vec = [];
 visible_vec = [];
 color_cell = cell(0);
 aux_active_compartment_ind = [];
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 for k = 1 : length(compartment_tags)
     var_0 = ['zef.' compartment_tags{k} '_on'];
     var_1 = ['zef.' compartment_tags{k} '_sigma'];

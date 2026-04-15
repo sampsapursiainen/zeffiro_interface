@@ -11,7 +11,7 @@ function [L_meg, dipole_locations, dipole_directions] = lead_field_meg_grad_fem(
     )
 
 N = size(nodes,1);
-source_model = eval('zef.source_model');
+source_model = zef.source_model;
 
 if iscell(elements)
     tetrahedra = elements{1};
@@ -412,7 +412,7 @@ clear cross_mat;
 
 zef_waitbar(0,1,h,'PCG iteration.');
 
-if eval('zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
+if zef.use_gpu==1 && evalin('base','zef.gpu_count') > 0
     precond_vec = gpuArray(1./full(diag(A)));
     A = gpuArray(A);
 
@@ -482,9 +482,9 @@ else
 
     %Define block size
     delete(gcp('nocreate'))
-    parallel_processes = eval('zef.parallel_processes');
+    parallel_processes = zef.parallel_processes;
     parpool(parallel_processes);
-    processes_per_core = eval('zef.processes_per_core');
+    processes_per_core = zef.processes_per_core;
     tic;
     block_size =  parallel_processes*processes_per_core;
     for i = 1 : block_size : L
@@ -574,7 +574,7 @@ end
 
 if isequal(lower(direction_mode),'cartesian')  || isequal(lower(direction_mode),'normal')
 
-    if eval('zef.surface_sources')
+    if zef.surface_sources
         source_nonzero_ind = full(find(sum(T_fi)>=0))';
     else
         source_nonzero_ind = full(find(sum(T_fi)>=4))';

@@ -57,35 +57,35 @@ end
 end
 
 if not(ismember(type, [6]))
-    if eval('zef.inv_scale') == 1
-        reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
-    elseif eval('zef.inv_scale') == 2
-        reconstruction = (max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
-    elseif eval('zef.inv_scale') == 3
-        reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/eval('zef.inv_dynamic_range')));
+    if zef.inv_scale == 1
+        reconstruction = -min_rec_log10 + 20*log10(max(reconstruction,max_abs_reconstruction/zef.inv_dynamic_range));
+    elseif zef.inv_scale == 2
+        reconstruction = (max(reconstruction,max_abs_reconstruction/zef.inv_dynamic_range));
+    elseif zef.inv_scale == 3
+        reconstruction = sqrt(max(reconstruction,max_abs_reconstruction/zef.inv_dynamic_range));
     end
 end
 
 end
 
 
-if eval('zef.use_parcellation')
+if zef.use_parcellation
 
-    if eval('zef.parcellation_type') > 1
+    if zef.parcellation_type > 1
         rec_aux = zeros(size(reconstruction));
-        if eval('zef.parcellation_type') == 2
+        if zef.parcellation_type == 2
             for p_ind = selected_list
-                rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),eval('zef.parcellation_quantile'));
+                rec_aux(p_cell{p_ind+1}) = quantile(reconstruction(p_cell{p_ind+1}),zef.parcellation_quantile);
             end
-        elseif eval('zef.parcellation_type') == 3
+        elseif zef.parcellation_type == 3
             for p_ind = selected_list
-                rec_aux(p_cell{p_ind+1}) = quantile(sqrt(reconstruction(p_cell{p_ind+1})),eval('zef.parcellation_quantile'));
+                rec_aux(p_cell{p_ind+1}) = quantile(sqrt(reconstruction(p_cell{p_ind+1})),zef.parcellation_quantile);
             end
-        elseif eval('zef.parcellation_type') == 4
+        elseif zef.parcellation_type == 4
             for p_ind = selected_list
-                rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),eval('zef.parcellation_quantile'));
+                rec_aux(p_cell{p_ind+1}) = quantile((reconstruction(p_cell{p_ind+1})).^(1/3),zef.parcellation_quantile);
             end
-        elseif eval('zef.parcellation_type') == 5
+        elseif zef.parcellation_type == 5
             for p_ind = selected_list
                 rec_aux(p_cell{p_ind+1}) = mean(reconstruction(p_cell{p_ind+1}));
             end

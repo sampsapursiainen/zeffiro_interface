@@ -8,10 +8,10 @@ domain_label_counter = 0;
 atlas_on = 0;
 if nargin < 3
     if zef.use_display
-        [file_name, folder_name] = uigetfile({'*.zef;*.mat'},'Segmentation data file and folder',eval('zef.save_file_path'));
+        [file_name, folder_name] = uigetfile({'*.zef;*.mat'},'Segmentation data file and folder',zef.save_file_path);
     else
-        file_name = eval('zef.file');
-        folder_name = eval('zef.file_path');
+        file_name = zef.file;
+        folder_name = zef.file_path;
     end
 end
 

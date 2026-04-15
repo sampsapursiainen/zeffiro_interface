@@ -15,7 +15,7 @@ iter_ind_aux_0 = 0;
 
 [condition_number, tilavuus] = zef_condition_number(nodes,tetra);
 
-while not(isempty(tetra_ind)) & iter_ind_aux_0 < eval('zef.mesh_optimization_repetitions')
+while not(isempty(tetra_ind)) & iter_ind_aux_0 < zef.mesh_optimization_repetitions
 
     iter_ind_aux_0 =  iter_ind_aux_0 + 1;
 
