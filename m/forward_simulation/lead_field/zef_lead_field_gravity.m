@@ -39,7 +39,7 @@ source_model = evalin('base','zef.source_model');
 
 % Convert source model to new format.
 
-source_model = zefCore.ZefSourceModel.from(source_model);
+source_model = zeffiro.SourceModel.from(source_model);
 
 if iscell(elements)
     tetrahedra = elements{1};
