@@ -12,7 +12,7 @@ end
 
 h = zef_waitbar(0,1,'Mesh post-processing');
 
-parameter_profile = eval('zef.parameter_profile');
+parameter_profile = zef.parameter_profile;
 
 for zef_j = 1 : size(parameter_profile,1)
     if isequal(parameter_profile{zef_j,8},'Segmentation') && isequal(parameter_profile{zef_j,3},'Scalar') && isequal(parameter_profile{zef_j,6},'On')
@@ -26,8 +26,8 @@ sigma_prisms = [];
 non_source_ind = [];
 optimizer_flag = 1;
 
-thresh_val = eval('zef.mesh_optimization_parameter');
-compartment_tags = eval('zef.compartment_tags');
+thresh_val = zef.mesh_optimization_parameter;
+compartment_tags = zef.compartment_tags;
 aux_compartment_ind = zeros(1,length(compartment_tags));
 
 sigma = [];
@@ -112,8 +112,8 @@ zef_smoothing_step;
 
 refinement_flag = 2;
 
-surface_refinement_on = eval('zef.refinement_surface_on_2');
-n_surface_refinement = eval('zef.refinement_surface_number_2');
+surface_refinement_on = zef.refinement_surface_on_2;
+n_surface_refinement = zef.refinement_surface_number_2;
 
 if surface_refinement_on
 
@@ -140,7 +140,7 @@ if surface_refinement_on
 end
 
 
-if eval('zef.refinement_volume_on_2');
+if zef.refinement_volume_on_2;
     zef_waitbar(0,1,h,'Volume refinement.');
     n_refinement = zef.refinement_volume_number_2;
     refinement_compartments_aux = zef.refinement_volume_compartments_2;
@@ -187,7 +187,7 @@ domain_labels_with_subdomains = domain_labels;
 [domain_labels] = submesh_ind_1(domain_labels);
 active_compartment_ind = zef_find_active_compartment_ind(zef,domain_labels);
 
-if eval('zef.exclude_box')
+if zef.exclude_box
  
    %I = find(not(ismember(domain_labels,find(pml_vec,1))));
 I = find(not(ismember(domain_labels,max(domain_labels,[],'all'))));

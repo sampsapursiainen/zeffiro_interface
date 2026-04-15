@@ -7,7 +7,7 @@ end
 
 threshold_value = zef.meshing_threshold;
 
-fix_n_max = eval('zef.mesh_optimization_repetitions');
+fix_n_max = zef.mesh_optimization_repetitions;
 fix_param = 0.5;
 fix_it = 0;
 

@@ -17,10 +17,10 @@ else
     waitbar_opened = 1;
 end
 
-inflation_strength = eval('zef.fem_mesh_inflation_strength');
-reuna_t = eval('zef.reuna_t');
-reuna_p = eval('zef.reuna_p');
-reuna_type = eval('zef.reuna_type');
+inflation_strength = zef.fem_mesh_inflation_strength;
+reuna_t = zef.reuna_t;
+reuna_p = zef.reuna_p;
+reuna_type = zef.reuna_type;
 
 if isequal(reuna_type{end,1},-1)
     compartment_length = length(reuna_p)-1;
@@ -49,8 +49,8 @@ for compartment_counter = 1 : compartment_length
         zef_waitbar([0 compartment_counter], [1 length(reuna_p)], h, 'Inflating.');
 
         length_node_list = size(node_list,1);
-        par_num = eval('zef.parallel_processes');
-        vec_num = eval('zef.parallel_vectors');
+        par_num = zef.parallel_processes;
+        vec_num = zef.parallel_vectors;
         n_restarts = ceil(length_node_list/(vec_num*par_num));
         bar_ind = ceil(length_node_list/(50*par_num));
         i_ind = 0;

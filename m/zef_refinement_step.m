@@ -3,14 +3,14 @@ if ismember(refinement_flag, [1, 3])
     tetra_aux = tetra;
 end
 
-if eval('zef.refinement_on')
+if zef.refinement_on
 
     if refinement_flag == 1
-        surface_refinement_on = eval('zef.refinement_surface_on');
+        surface_refinement_on = zef.refinement_surface_on;
     elseif refinement_flag == 2
-        surface_refinement_on = eval('zef.refinement_surface_on_2');
+        surface_refinement_on = zef.refinement_surface_on_2;
         %    elseif refinement_flag == 3
-       % surface_refinement_on = eval('zef.refinement_surface_on_3');
+       % surface_refinement_on = zef.refinement_surface_on_3;
     end
 
     if surface_refinement_on

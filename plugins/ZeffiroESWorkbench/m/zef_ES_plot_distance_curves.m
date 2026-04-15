@@ -14,12 +14,12 @@ quantile_val = 0.90;
 smooth_range = 50;
 font_size = 14;
 
-rec_vec_aux = zeros(3,size(eval('zef.source_positions'),1));
-rec_vec_aux(1:eval('length(zef.reconstruction(:))')) = eval('zef.reconstruction');
+rec_vec_aux = zeros(3,size(zef.source_positions,1));
+rec_vec_aux(1:eval('length(zef.reconstruction(:))')) = zef.reconstruction;
 amplitude_vec_aux = rec_vec_aux;
 rec_vec_aux = rec_vec_aux./repmat(sqrt(sum(rec_vec_aux.^2)),3,1);
 amplitude_vec_aux = sqrt(sum(amplitude_vec_aux.^2));
-distance_vec_aux = sqrt(sum((eval('zef.source_positions')-eval('zef.inv_synth_source(ones(size(zef.source_positions,1),1),1:3)')).^2,2));
+distance_vec_aux = sqrt(sum((zef.source_positions-eval('zef.inv_synth_source(ones(size(zef.source_positions,1),1),1:3)')).^2,2));
 dipole_vec_aux = eval('zef.inv_synth_source(1,4:6)');
 dipole_vec_aux = dipole_vec_aux(:)./norm(dipole_vec_aux,2);
 distance_vec = linspace(0,max_distance,n_distances)';

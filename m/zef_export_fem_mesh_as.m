@@ -4,19 +4,19 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-if eval('zef.use_display')
-    [file path] = uiputfile('*.mat','Export FEM mesh as...',eval('zef.save_file_path'));
+if zef.use_display
+    [file path] = uiputfile('*.mat','Export FEM mesh as...',zef.save_file_path);
 else
-    file = eval('zef.file');
-    path = eval('zef.file_path');
+    file = zef.file;
+    path = zef.file_path;
 end
 
 if not(isequal(file,0))
 
-    tetra = eval('zef.tetra');
-    nodes = eval('zef.nodes');
-    domain_labels = eval('zef.domain_labels');
-    name_tags = eval('zef.name_tags');
+    tetra = zef.tetra;
+    nodes = zef.nodes;
+    domain_labels = zef.domain_labels;
+    name_tags = zef.name_tags;
     save([path '/' file],'-v7.3','nodes','tetra','domain_labels','name_tags');
 
 

@@ -12,22 +12,22 @@ reconstruction_information.type = 'Dipole';
 reconstruction_information.invMethod=invMethod;
 reconstruction_information.regType=regType;
 reconstruction_information.inv_leadfield_lambda=inv_leadfield_lambda;
-reconstruction_information.inv_time_1 = eval('zef.inv_time_1');
-reconstruction_information.inv_time_2 = eval('zef.inv_time_2');
-reconstruction_information.inv_time_3 = eval('zef.inv_time_3');
-reconstruction_information.sampling_freq = eval('zef.inv_sampling_frequency');
-reconstruction_information.low_pass = eval('zef.inv_high_cut_frequency');
-reconstruction_information.high_pass = eval('zef.inv_low_cut_frequency');
-reconstruction_information.source_direction_mode = eval('zef.source_direction_mode');
-reconstruction_information.source_directions = eval('zef.source_directions');
-reconstruction_information.inv_hyperprior = eval('zef.inv_hyperprior');
-reconstruction_information.snr_val = eval('zef.inv_snr');
-reconstruction_information.number_of_frames = eval('zef.number_of_frames');
+reconstruction_information.inv_time_1 = zef.inv_time_1;
+reconstruction_information.inv_time_2 = zef.inv_time_2;
+reconstruction_information.inv_time_3 = zef.inv_time_3;
+reconstruction_information.sampling_freq = zef.inv_sampling_frequency;
+reconstruction_information.low_pass = zef.inv_high_cut_frequency;
+reconstruction_information.high_pass = zef.inv_low_cut_frequency;
+reconstruction_information.source_direction_mode = zef.source_direction_mode;
+reconstruction_information.source_directions = zef.source_directions;
+reconstruction_information.inv_hyperprior = zef.inv_hyperprior;
+reconstruction_information.snr_val = zef.inv_snr;
+reconstruction_information.number_of_frames = zef.number_of_frames;
 
 h = zef_waitbar(0,1,'Dipole scanning');
 
-number_of_frames = eval('zef.number_of_frames');
-source_direction_mode = eval('zef.source_direction_mode');
+number_of_frames = zef.number_of_frames;
+source_direction_mode = zef.source_direction_mode;
 
 [L,n_interp, procFile] = zef_processLeadfields(zef);
 

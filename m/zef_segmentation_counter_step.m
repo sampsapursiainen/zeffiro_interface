@@ -2,9 +2,9 @@
 pml_ind_aux = [];
 pml_ind = [];
 
-mesh_res = eval('zef.mesh_resolution');
-reuna_type = eval('zef.reuna_type');
-sensors = eval('zef.sensors');
+mesh_res = zef.mesh_resolution;
+reuna_type = zef.reuna_type;
+sensors = zef.sensors;
 
 i = 0;
 sigma_vec = [];
@@ -12,7 +12,7 @@ priority_vec = [];
 labeling_priority_aux_1 = [];
 submesh_cell = zef.reuna_submesh_ind;
 aux_active_compartment_ind = [];
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 
 for k = 1 : length(compartment_tags)
 

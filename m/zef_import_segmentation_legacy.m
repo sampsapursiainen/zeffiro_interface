@@ -8,13 +8,13 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-if eval('zef.use_display')
+if zef.use_display
     if nargin < 2
-        [file_name folder_name] = uigetfile({'*.zef'},'Segmentation data file and folder',eval('zef.save_file_path'));
+        [file_name folder_name] = uigetfile({'*.zef'},'Segmentation data file and folder',zef.save_file_path);
     end
 else
-    file_name = eval('zef.file');
-    folder_name = eval('zef.file_path');
+    file_name = zef.file;
+    folder_name = zef.file_path;
 end
 
 if not(isequal(file_name,0));
@@ -231,7 +231,7 @@ if not(isequal(file_name,0));
             elseif isequal(ini_cell{1}{n_columns*(i-1)+9},'VOL') || isequal(ini_cell{1}{n_columns*(i-1)+9},'vol')
 
                 volume_count_ind = volume_count_ind + 1;
-                [triangle_data, point_data] = zef_surface_mesh(eval('zef.tetra'),eval('zef.nodes'),eval(['find(zef.domain_labels<=' num2str(volume_count_ind) ');']));
+                [triangle_data, point_data] = zef_surface_mesh(zef.tetra,zef.nodes,eval(['find(zef.domain_labels<=' num2str(volume_count_ind) ');']));
 
             else
 

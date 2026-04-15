@@ -9,7 +9,7 @@ fix_amp = eval('zef.inv_synth_source(1,15)');
 radius = eval('zef.inv_synth_source(:,12)');
 s_a = eval('zef.inv_synth_source(:,7)');
 
-source_positions = eval('zef.source_positions');
+source_positions = zef.source_positions;
 arrow_type = 2; 
 s_f = [];
 

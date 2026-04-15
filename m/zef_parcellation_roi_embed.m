@@ -5,9 +5,9 @@ function [c_table,c_points] = zef_parcellation_roi_embed(zef)
 c_table = cell(0);
 c_points = cell(0);
 
-if eval('zef.parcellation_merge')
-    c_table = eval('zef.parcellation_colortable');
-    c_points = eval('zef.parcellation_points');
+if zef.parcellation_merge
+    c_table = zef.parcellation_colortable;
+    c_points = zef.parcellation_points;
 else
     eval('zef.parcellation_selected = [];');
 end

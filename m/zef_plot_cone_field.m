@@ -1,6 +1,6 @@
 function [h_cone_field, h_streamline, h_colorbar] = zef_plot_cone_field(zef, h_axes, varargin)
 
-if eval('zef.cone_draw') || eval('zef.streamline_draw')
+if zef.cone_draw || zef.streamline_draw
 
     rec_ind = 1;
     position_case = 1;
@@ -11,18 +11,18 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
         end
     end
 
-    lattice_res = eval('zef.cone_lattice_resolution');
-    s_p = eval('zef.source_positions');
+    lattice_res = zef.cone_lattice_resolution;
+    s_p = zef.source_positions;
 
     aux_ind_1 = unique(eval('zef.source_interpolation_ind{1}'));
 
     clipped = 0;
 
-    if eval('zef.cp_on')
-        cp_a = eval('zef.cp_a');
-        cp_b = eval('zef.cp_b');
-        cp_c = eval('zef.cp_c');
-        cp_d = eval('zef.cp_d');
+    if zef.cp_on
+        cp_a = zef.cp_a;
+        cp_b = zef.cp_b;
+        cp_c = zef.cp_c;
+        cp_d = zef.cp_d;
 
         clipping_plane = {cp_a,cp_b,cp_c,cp_d};
 
@@ -34,11 +34,11 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
         clipped = 1;
     end
 
-    if eval('zef.cp2_on')
-        cp2_a = eval('zef.cp2_a');
-        cp2_b = eval('zef.cp2_b');
-        cp2_c = eval('zef.cp2_c');
-        cp2_d = eval('zef.cp2_d');
+    if zef.cp2_on
+        cp2_a = zef.cp2_a;
+        cp2_b = zef.cp2_b;
+        cp2_c = zef.cp2_c;
+        cp2_d = zef.cp2_d;
 
         clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
 
@@ -50,11 +50,11 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
         clipped = 1;
     end
 
-    if eval('zef.cp3_on')
-        cp3_a = eval('zef.cp3_a');
-        cp3_b = eval('zef.cp3_b');
-        cp3_c = eval('zef.cp3_c');
-        cp3_d = eval('zef.cp3_d');
+    if zef.cp3_on
+        cp3_a = zef.cp3_a;
+        cp3_b = zef.cp3_b;
+        cp3_c = zef.cp3_c;
+        cp3_d = zef.cp3_d;
 
         clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
 
@@ -72,7 +72,7 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
     end
     s_p = s_p(aux_ind_1,:);
 
-    cone_field = eval('zef.reconstruction');
+    cone_field = zef.reconstruction;
 
     if iscell(cone_field)
         cone_field = cone_field{rec_ind};
@@ -85,8 +85,8 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
 
     norm_cone_field = norm_cone_field(aux_ind_1);
 
-    n_colormap = eval('zef.colormap_size');
-    cone_colormap = zef_blue_brain_1_colormap(eval('zef.colortune_param'),n_colormap);
+    n_colormap = zef.colormap_size;
+    cone_colormap = zef_blue_brain_1_colormap(zef.colortune_param,n_colormap);
 
     min_x = min(s_p(:,1));
     max_x = max(s_p(:,1));
@@ -131,27 +131,27 @@ if eval('zef.cone_draw') || eval('zef.streamline_draw')
 
     axes(h_axes);
 
-    s_val = eval('zef.cone_scale');
+    s_val = zef.cone_scale;
 
     hold on;
     I = [1:size(s_p,1)];
-    I = I(1:round(length(I)/(eval('zef.n_streamline')-1)):end);
+    I = I(1:round(length(I)/(zef.n_streamline-1)):end);
 
-    if eval('zef.cone_draw')
+    if zef.cone_draw
 
         h_cone_field = coneplot(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,X_lattice,Y_lattice,Z_lattice,s_val,C_field);
         set(h_cone_field,'facecolor','interp');
         set(h_cone_field,'edgecolor','none');
-        set(h_cone_field,'facealpha',eval('zef.cone_alpha'));
+        set(h_cone_field,'facealpha',zef.cone_alpha);
         set(h_cone_field,'Tag','cones');
 
     end
 
-    if eval('zef.streamline_draw')
+    if zef.streamline_draw
         h_streamline = streamline(stream3(X_lattice,Y_lattice,Z_lattice,X_field,Y_field,Z_field,s_p(I,1),s_p(I,2),s_p(I,3)));
-        set(h_streamline,'linewidth',eval('zef.streamline_linewidth'));
-        set(h_streamline,'linestyle',eval('zef.streamline_linestyle'));
-        set(h_streamline,'color',eval('zef.streamline_color'));
+        set(h_streamline,'linewidth',zef.streamline_linewidth);
+        set(h_streamline,'linestyle',zef.streamline_linestyle);
+        set(h_streamline,'color',zef.streamline_color);
     end
 
     if position_case == 1

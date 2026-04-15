@@ -11,14 +11,14 @@ end
 
 if isequal(zef.inv_data_mode,'filtered_temporal')
 
-    f = eval('zef.measurements');
+    f = zef.measurements;
     
 high_pass = eval(['zef.inv_low_cut_frequency']);
 low_pass = eval(['zef.inv_high_cut_frequency']);
 sampling_freq = eval(['zef.inv_sampling_frequency']);
 
 if isfield(zef,'normalize_data')
-switch eval('zef.normalize_data')
+switch zef.normalize_data
     case 1
         data_norm = max(abs(f(:)));
     case 2
@@ -43,7 +43,7 @@ end
 
 elseif isequal(zef.inv_data_mode,'raw')
     
-    f = eval('zef.measurements');
+    f = zef.measurements;
 
 end
 

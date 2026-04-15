@@ -9,7 +9,7 @@ end
 if not(isempty(varargin))
     h_figure = varargin{1};
 else
-    h_figure = eval('zef.h_zeffiro');
+    h_figure = zef.h_zeffiro;
 end
 
 h = findobj(get(h_figure,'Children'),'Tag','axes1');
@@ -17,7 +17,7 @@ h_object_1 = findobj(get(h_figure,'Children'),'Tag','update_contrast_slider');
 h_object_2 = findobj(get(h_figure,'Children'),'Tag','update_brightness_slider');
 h_object_3 = findobj(get(h_figure,'Children'),'Tag','colormapselection');
 if isempty(h_object_1)
-    h_figure = eval('zef.h_zeffiro');
+    h_figure = zef.h_zeffiro;
     h_object_1 = findobj(get(h_figure,'Children'),'Tag','update_contrast_slider');
     h_object_2 = findobj(get(h_figure,'Children'),'Tag','update_brightness_slider');
     h_object_3 = findobj(get(h_figure,'Children'),'Tag','colormapselection');

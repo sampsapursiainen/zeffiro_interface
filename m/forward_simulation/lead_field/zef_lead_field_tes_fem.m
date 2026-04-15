@@ -51,7 +51,7 @@ function [L_tes, S_tes, dof_positions, dof_directions, dof_ind, dof_count] = lea
 %N
 
 N = size(nodes,1);
-source_model = eval('zef.source_model');
+source_model = zef.source_model;
 
 % ifcell - elements part
 if iscell(elements)
@@ -285,12 +285,12 @@ J = eye(size(B'*R_tes));
 S_tes = ( (eye(L)-(1/L)*ones(L,L)) ) * (inv(C) * (J+(B'*R_tes))) * J;
 
 if isfield(zef,'redo_eit_dec')
-    if eval('zef.redo_eit_dec') == 1
+    if zef.redo_eit_dec == 1
         [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind,zef.n_sources);
     else
-        dof_ind   = eval('zef.dof_ind');
-        dof_count = eval('zef.dof_count');
-        dof_positions = eval('zef.source_positions');
+        dof_ind   = zef.dof_ind;
+        dof_count = zef.dof_count;
+        dof_positions = zef.source_positions;
     end
 else
     [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind,zef.n_sources);

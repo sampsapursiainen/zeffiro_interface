@@ -12,9 +12,9 @@ arrow_head_size = 2;
 arrow_n_polygons = 100;
 
 if source_type == 1
-    h_axes1 = eval('zef.h_axes1');
-    if isfield(eval('zef'),'h_synth_source')
-        h_synth_source = eval('zef.h_synth_source');
+    h_axes1 = zef.h_axes1;
+    if isfield(zef,'h_synth_source')
+        h_synth_source = zef.h_synth_source;
         if ishandle(h_synth_source)
             delete(h_synth_source)
         end
@@ -30,7 +30,7 @@ if source_type == 1
     s_a = sqrt(s_a./max(s_a));
     s_o = repmat(s_a,1,3).*s_o;
     s_o = repmat(s_length,1,3).*s_o;
-    h_axes1 = eval('zef.h_axes1');
+    h_axes1 = zef.h_axes1;
     hold(h_axes1,'on');
     h_synth_source = zeros(size(s_p,1),1);
     axes(h_axes1)
@@ -43,9 +43,9 @@ if source_type == 1
     hold(h_axes1,'off');
     h_source = h_synth_source;
 else
-    h_axes1 = eval('zef.h_axes1');
-    if isfield(eval('zef'),'h_rec_source')
-        h_rec_source = eval('zef.h_rec_source');
+    h_axes1 = zef.h_axes1;
+    if isfield(zef,'h_rec_source')
+        h_rec_source = zef.h_rec_source;
         if ishandle(h_rec_source)
             delete(h_rec_source)
         end
@@ -61,7 +61,7 @@ else
     s_a = sqrt(s_a./max(s_a));
     s_o = repmat(s_a,1,3).*s_o;
     s_o = repmat(s_length,1,3).*s_o;
-    h_axes1 = eval('zef.h_axes1');
+    h_axes1 = zef.h_axes1;
     hold(h_axes1,'on');
     h_rec_source = zeros(size(s_p,1),1);
     for i = 1 : size(s_p,1)

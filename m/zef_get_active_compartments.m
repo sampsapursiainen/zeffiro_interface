@@ -8,7 +8,7 @@ if not(isempty(varargin))
     property_name = varargin{1};
 end
 
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 
 aux_compartment_ind = zeros(length(compartment_tags),1);
 aux_brain_ind = zeros(length(compartment_tags),1);

@@ -6,7 +6,7 @@ end
 
 if eval('exist(''zef'')')
     if eval('isfield(zef,''meshing_threshold'')')
-        meshing_threshold = eval('zef.meshing_threshold');
+        meshing_threshold = zef.meshing_threshold;
     else
         meshing_threshold = 0.5;
     end
@@ -31,7 +31,7 @@ min_z = min(reuna_p(:,3));
 max_norm = max(sqrt(sum(reuna_p.^2,2)));
 nodes_norm_vec = sqrt(sum(nodes.^2,2));
 
-meshing_accuracy = eval('zef.meshing_accuracy');
+meshing_accuracy = zef.meshing_accuracy;
 
 if meshing_accuracy < 1
     P.faces = reuna_t;
@@ -66,10 +66,10 @@ nodes_aux = nodes(I,:)';
 
 %%%%%%%%%%%%%%%%GPU part%%%%%%%%%%%%%%%%%%%
 
-use_gpu = eval('zef.use_gpu');
-gpu_num = eval('zef.gpu_num');
+use_gpu = zef.use_gpu;
+gpu_num = zef.gpu_num;
 
-if use_gpu == 1 & eval('zef.gpu_count') > 0
+if use_gpu == 1 & zef.gpu_count > 0
     nodes_aux = gpuArray(nodes_aux);
     aux_vec_1 = gpuArray(aux_vec_1);
     aux_vec_4 = gpuArray(aux_vec_4);
@@ -77,7 +77,7 @@ if use_gpu == 1 & eval('zef.gpu_count') > 0
     ind_vec_aux = gpuArray(ind_vec_aux);
     dist_vec = gpuArray(dist_vec);
 
-    par_num = eval('zef.parallel_vectors');
+    par_num = zef.parallel_vectors;
     bar_ind = ceil(length_I/(50*par_num));
     i_ind = 0;
 
@@ -110,8 +110,8 @@ else
 
     %%%%%%%%%%%%%%%%CPU part%%%%%%%%%%%%%%%%%%%
 
-    par_num = eval('zef.parallel_processes');
-    vec_num = eval('zef.parallel_vectors');
+    par_num = zef.parallel_processes;
+    vec_num = zef.parallel_vectors;
     n_restarts = ceil(length_I/(vec_num*par_num));
     bar_ind = ceil(length_I/(50*par_num));
     i_ind = 0;
@@ -177,7 +177,7 @@ else
 end
 
 
-J = find(gather(ind_vec_aux) > eval('zef.meshing_threshold'));
+J = find(gather(ind_vec_aux) > zef.meshing_threshold);
 I = I(J);
 dist_vec = gather(dist_vec);
 dist_vec = dist_vec(J);

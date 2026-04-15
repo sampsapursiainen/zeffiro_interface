@@ -24,7 +24,7 @@ reuna_submesh_ind = cell(0);
 reuna_type = cell(0);
 reuna_mesh_ind = [];
 
-compartment_tags = eval('zef.compartment_tags');
+compartment_tags = zef.compartment_tags;
 for k = 1 : length(compartment_tags)
 
     var_0 = ['zef.' compartment_tags{k} '_on'];
@@ -140,19 +140,19 @@ reuna_mesh_ind(i) = k;
         end
     end
 
-    sensor_tag = eval('zef.current_sensors');
+    sensor_tag = zef.current_sensors;
 
     s_points = eval(['zef.' sensor_tag '_points']);
     s_data_aux = [];
 
-    if ismember(eval('zef.imaging_method'),1)
+    if ismember(zef.imaging_method,1)
         f_handle = zef.create_patch_sensor;
         if not(isempty(f_handle))
             s_points = f_handle(zef,s_points);
         end
     end
 
-    if ismember(eval('zef.imaging_method'),[2 3])
+    if ismember(zef.imaging_method,[2 3])
         s_directions = eval(['zef.' sensor_tag '_directions(:,1:3)']);
         s_directions_g = [];
         if size(eval(['zef.' sensor_tag '_directions']),2) == 6
@@ -190,8 +190,8 @@ reuna_mesh_ind(i) = k;
         end
     end
     use_pem = 0;
-    if ismember(eval('zef.imaging_method'),[1 5])
-        use_pem = eval('zef.use_pem');
+    if ismember(zef.imaging_method,[1 5])
+        use_pem = zef.use_pem;
     end
 
     for t_ind = 1 : length(s_scaling)
@@ -206,10 +206,10 @@ reuna_mesh_ind(i) = k;
                 sensors_aux = [sensors(:,1:3) ones(size(sensors,1),1)];
                 sensors_aux = sensors_aux*s_affine_transform{t_ind}';
                 sensors(:,1: 3) = sensors_aux(:,1:3);
-                if size(sensors_aux,2) >= 6 && ismember(eval('zef.imaging_method'),[2 3])
+                if size(sensors_aux,2) >= 6 && ismember(zef.imaging_method,[2 3])
                     sensors(:,4:6) = sensors(:,4:6)*s_affine_transform{t_ind}(1:3,1:3)';
                 end
-                if size(sensors_aux,2) >= 9 && ismember(eval('zef.imaging_method'),[3])
+                if size(sensors_aux,2) >= 9 && ismember(zef.imaging_method,[3])
                     sensors(:,7:9) = sensors(:,7:9)*s_affine_transform{t_ind}(1:3,1:3)';
                 end
 
@@ -286,8 +286,8 @@ reuna_mesh_ind(i) = k;
 
     if not(isequal(box_ind,0))
 
-        pml_outer_radius_unit = eval('zef.pml_outer_radius_unit');
-        pml_outer_radius = eval('zef.pml_outer_radius');
+        pml_outer_radius_unit = zef.pml_outer_radius_unit;
+        pml_outer_radius = zef.pml_outer_radius;
         if pml_outer_radius_unit == 1
             box_outer_radius = pml_outer_radius*max_val;
         elseif pml_outer_radius_unit == 2

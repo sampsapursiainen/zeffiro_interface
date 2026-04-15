@@ -13,7 +13,7 @@ if nargin == 0 || isnumeric(zef)
     end
 end
 
-source_directions = eval('zef.source_directions');
+source_directions = zef.source_directions;
 if isempty(source_direction_mode)
 source_direction_mode = zef.source_direction_mode;
 end
@@ -38,7 +38,7 @@ if source_direction_mode == 2
     aux_brain_ind = [];
     aux_dir_mode = [];
     submesh_cell = cell(0);
-    compartment_tags = eval('zef.compartment_tags');
+    compartment_tags = zef.compartment_tags;
     for k = 1 : length(compartment_tags)
         var_0 = ['zef.'  compartment_tags{k} '_on'];
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
@@ -106,7 +106,7 @@ end
 
 s_ind_1 = s_ind_1(:);
 
-L = eval('zef.L');
+L = zef.L;
 L = L(:,s_ind_1);
 
 if source_direction_mode == 2

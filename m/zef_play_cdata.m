@@ -59,7 +59,7 @@ for j = 1 : loop_count
                     details_set = 1;
                 end
                 pause(0.0025)
-                stop_movie = eval('zef.stop_movie');
+                stop_movie = zef.stop_movie;
                 pause(0.0025);
                 if stop_movie
                         return;

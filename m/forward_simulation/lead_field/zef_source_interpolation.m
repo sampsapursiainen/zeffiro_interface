@@ -21,20 +21,20 @@ elseif eval('isequal(size(zef.L,2),3*size(zef.source_positions,1))')
 end
 
 source_interpolation_ind = [];
-active_compartment_ind = eval('zef.active_compartment_ind');
-source_positions = eval('zef.source_positions');
-nodes = eval('zef.nodes');
-tetra = eval('zef.tetra');
+active_compartment_ind = zef.active_compartment_ind;
+source_positions = zef.source_positions;
+nodes = zef.nodes;
+tetra = zef.tetra;
 
 if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not(isempty(nodes)) && not(isempty(tetra))
 
     h = zef_waitbar(0,1,['Interpolation 1.']);
 
-    if eval('zef.location_unit_current') == 2
+    if zef.location_unit_current == 2
         source_positions = 10*source_positions;
     end
 
-    if eval('zef.location_unit_current') == 3
+    if zef.location_unit_current == 3
         zef.source_positions = 1000*source_positions;
     end
 
@@ -57,7 +57,7 @@ if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not
     color_cell = cell(0);
     aux_active_compartment_ind = [];
     aux_dir_mode = [];
-    compartment_tags = eval('zef.compartment_tags');
+    compartment_tags = zef.compartment_tags;
     for k = 1 : length(compartment_tags)
 
         var_0 = ['zef.' compartment_tags{k} '_on'];

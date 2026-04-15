@@ -290,7 +290,7 @@ clear A_aux A_part;
 
 zef_waitbar(0,L-1,h,'PCG iteration.');
 
-if eval('zef.use_gpu')==1 && evalin('base','zef.gpu_count') > 0
+if zef.use_gpu==1 && evalin('base','zef.gpu_count') > 0
     precond_vec = gpuArray(1./full(diag(A)));
     A = gpuArray(A);
 
@@ -387,9 +387,9 @@ else
 
     %Define block size
     delete(gcp('nocreate'))
-    parallel_processes = eval('zef.parallel_processes');
+    parallel_processes = zef.parallel_processes;
     parpool(parallel_processes);
-    processes_per_core = eval('zef.processes_per_core');
+    processes_per_core = zef.processes_per_core;
     tic;
     block_size =  parallel_processes*processes_per_core;
     for i = 1 : block_size : L
@@ -483,18 +483,18 @@ Aux_mat_6 = eye(L,L) - (1/L)*ones(L,L);
 
 
 if isfield(zef,'redo_eit_dec')
-    if eval('zef.redo_eit_dec') == 1
+    if zef.redo_eit_dec == 1
         [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
     else
-        dof_ind = eval('zef.eit_ind');
-        dof_count = eval('zef.eit_count');
-        dof_positions = eval('zef.source_positions');
+        dof_ind = zef.eit_ind;
+        dof_count = zef.eit_count;
+        dof_positions = zef.source_positions;
     end
 else
     [dof_ind, dof_count, dof_positions] = zef_decompose_dof_space(nodes,tetrahedra,brain_ind,source_ind);
 end
 
-Current_pattern = eval('zef.current_pattern');
+Current_pattern = zef.current_pattern;
 bg_data = Aux_mat*Current_pattern;
 bg_data = Aux_mat_6 * bg_data;
 bg_data = bg_data(:);

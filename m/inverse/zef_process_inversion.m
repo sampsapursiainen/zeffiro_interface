@@ -44,7 +44,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     source_direction_mode = zef.source_direction_mode;
 
     %no method use this?:
-    %source_directions = eval('zef.source_directions');
+    %source_directions = zef.source_directions;
 
     %these ok for now
     zef.reconstruction_information.source_direction_mode = zef.source_direction_mode;
