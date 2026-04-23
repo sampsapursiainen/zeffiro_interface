@@ -35,6 +35,16 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 % The source model used by DUNEUro. We use the H(div) source model here to
 % match that of Zeffiro, but another good option is 'local_subtraction'.
 %
+%    kwargs.sourcePositions (3,:) double { mustBeFinite } = []
+%
+% If this is not empty, it will be used as the set of source positions
+% instead of loading the positions from the project file.
+%
+%    kwargs.electrodePositions (3,:) double { mustBeFinite } = []
+%
+% If this is not empty, it will be used as the set of electrode positions
+% instead of loading the electrode positions from the project file.
+%
 %    kwargs.saveFilePrefix (1,1) string = ""
 %
 % If this is non-empty, the transfer matrix is also automatically saved to a file.
@@ -56,6 +66,8 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
         kwargs.eegT (:,:) double { mustBeFinite } = []
         kwargs.eegTFilePath (1,1) string = ""
         kwargs.sourceModel (1,:) char = 'whitney'
+        kwargs.sourcePositions (3,:) double { mustBeFinite } = []
+        kwargs.electrodePositions (3,:) double { mustBeFinite } = []
         kwargs.electrodeFieldName (1,1) string = "sensors"
         kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
         kwargs.saveFilePrefix (1,1) string = ""
@@ -118,7 +130,15 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     disp("Loading source positions...")
 
-    sourcePositions = transpose(projectFileHandle.source_positions) ;
+    if ~ isempty(kwargs.sourcePositions)
+
+        sourcePositions = kwargs.sourcePositions ;
+
+    else
+
+        sourcePositions = transpose(projectFileHandle.source_positions) ;
+
+    end
 
     sourceN = size(sourcePositions,2) ;
 
@@ -150,9 +170,17 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     disp("Loading electrode positions...")
 
-    loadedElectrodePositions = projectFileHandle.(kwargs.electrodeFieldName) ;
+    if ~ isempty(kwargs.electrodePositions)
 
-    electrodePositions = transpose(loadedElectrodePositions(:,1:3)) ;
+        electrodePositions = kwargs.electrodePositions ;
+
+    else
+
+        loadedElectrodePositions = projectFileHandle.(kwargs.electrodeFieldName) ;
+
+        electrodePositions = transpose(loadedElectrodePositions(:,1:3)) ;
+
+    end
 
     disp("Translating electrode positions by [" + strjoin(string(kwargs.electrodeTranslationVector), ",") + "]...")
 
