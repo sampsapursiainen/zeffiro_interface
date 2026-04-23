@@ -300,6 +300,10 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         saveFile.electrodePositions = squeeze(finalElectrodePositions) ;
 
+        disp("Saving source positions to " + outputFilePath + "...") ;
+
+        saveFile.sourcePositions = sourcePositions ;
+
     end % if
 
     disp("Done.")
