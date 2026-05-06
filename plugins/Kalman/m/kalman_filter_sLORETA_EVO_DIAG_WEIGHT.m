@@ -16,7 +16,7 @@ for f_ind = 1: number_of_frames
     s_aux = z_inverse{f_ind};
     s_aux = abs(s_aux(:));
     max_s_aux = max(s_aux);
-    diag_aux = ((1-c_val)*s_aux + c_val)./((1-c_val).*max_s_aux + c_val); 
+    diag_aux = ((1-c_val)*s_aux + c_val)./((1-c_val).*max_s_aux + c_val);
     Q = diag(diag_Q.*diag_aux);
     if (smoothing == 2)
         P_store{f_ind} = gather(P);

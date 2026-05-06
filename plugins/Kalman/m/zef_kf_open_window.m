@@ -25,7 +25,7 @@ zef.KF.inv_snr.Value = '30';
 end
 
 if isfield(zef,'kf_burn_in')
-    zef.KF.burn_in.Value=mun2str(zef.kf_burn_in);
+    zef.KF.burn_in.Value=num2str(zef.kf_burn_in);
 else
     zef.kf_burn_in = 4;
     zef.KF.burn_in.Value='4';

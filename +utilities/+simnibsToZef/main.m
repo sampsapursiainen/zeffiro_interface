@@ -1,0 +1,266 @@
+function [meshStruct,tissueTable] = main(meshFile, tissueListingFile, kwargs)
+%
+% [meshStruct, tissueTable] = utilities.simnibsToZef.main(meshFile, tissueListingFile, kwargs)
+%
+% Loads a mesh and a related tissue data table from a set
+% of given  mesh file and a tissue listing file generated
+% by the charm pipeline of SimNIBS version 4.5.0. Also
+% stores these on disk if asked to do so via a non-empty
+% output folder path.
+%
+% Inputs:
+%
+%   meshFile (1,1) string { mustBeFile }
+%
+% A file containing the nodes, triangles, tetrahedra and
+% the labels of these elements. This should be generated
+% by SimNIBS.
+%
+%   tissueListingFile (1,1) string { mustBeFile }
+%
+% SimNIBS also generates a table of tissue labels, their
+% names and color codes. This path should point to it.
+%
+%   kwargs.outputFolder (1,1) string = ""
+%
+% If given as a non-empty string, a folder called
+% simnibsToZef.dateTime is created inside of this folder.
+% This folder will then contain separate compartment surfaces
+% as STL files, in the case of triangles. The entire mesh
+% (nodes, triangles, tetra and their labels) is also saved
+% into two additional formats within this folder: MAT and
+% HDF5.
+%
+%   kwargs.dateTimeFormat (1,1) string = "yyyy-MM-dd-HH-mm-ss-SSS"
+%
+% A datetime of the result generation is automatically
+% included into the output file names. The datetime will
+% follow this format.
+%
+%   kwargs.labelNameStr (1,1) string = "Label_Name:"
+%
+% The intended column name of tissueTable containing the
+% compartment names. This is mainly useful if SimNIBS
+% decided to change the output file format between versions
+% for some reason.
+%
+%   kwargs.labelStr (1,1) string = "#No."
+%
+% The name of the number label column of tissueTable
+% containing the compartment labels. Again, mainly useful
+% in situations similar to kwargs.labelNameStr.
+%
+%   kwargs.stlOutputFormat (1,1) string { mustBeMember(kwargs.stlOutputFormat, ["text", "binary"]) } = "binary"
+%
+% The output format of the output surface triangulations.
+% Binary is more compact, but slightly harder to parse than
+% the text (ASCII) form of STL files.
+%
+%   kwargs.subjectName (1,1) string = ""
+%
+% If this is given as a non-empty string, it is added to
+% the output folder name for disambiguation purposes.
+%
+
+    arguments
+        meshFile (1,1) string { mustBeFile }
+        tissueListingFile (1,1) string { mustBeFile }
+        kwargs.outputFolder (1,1) string = ""
+        kwargs.dateTimeFormat (1,1) string = "yyyy-MM-dd-HH-mm-ss-SSS"
+        kwargs.labelNameStr (1,1) string = "Label_Name:"
+        kwargs.labelStr (1,1) string = "#No."
+        kwargs.stlOutputFormat (1,1) string { mustBeMember(kwargs.stlOutputFormat, ["text", "binary"]) } = "binary"
+        kwargs.subjectName (1,1) string = ""
+    end % arguments
+
+    % Save start time.
+
+    dateTime = datetime("now", Format=kwargs.dateTimeFormat) ;
+
+    dateTimeStr = string(dateTime) ;
+
+    % Load mesh from SimNIBS-generated .msh file.
+
+    meshStruct = utilities.simnibsToZef.meshLoadGmsh4(meshFile) ;
+
+    % Load tissue labels and names from tissue listing file.
+
+    tissueTable = readtable(tissueListingFile, CommentStyle='#', WhiteSpace=" \t") ;
+
+    tissueFileLines = readlines(tissueListingFile) ;
+
+    headerRowStr = "" ;
+
+    for ii = 1 : numel(tissueFileLines)
+
+        line = tissueFileLines(ii) ;
+
+        if startsWith(line, "#")
+
+            headerRowStr = line ;
+
+            break
+
+        end % if
+
+    end % for
+
+    headerRowStrings = split(headerRowStr) ;
+
+    if numel(headerRowStrings) > size(tissueTable,2) && headerRowStrings(2) ~= kwargs.labelNameStr
+
+        % We might have the second column name in the tissue file contain a space, meaning it needs to be merged.
+
+        headerRowStrings(2) = strjoin([headerRowStrings(2), headerRowStrings(3)], "_") ;
+
+        headerRowStrings(3 : 6) = headerRowStrings(4:end) ;
+
+        headerRowStrings(end) = [] ;
+
+    end
+
+    tissueTable.Properties.VariableNames = headerRowStrings ;
+
+    if ismember(kwargs.labelNameStr, tissueTable.Properties.VariableNames)
+
+        tissueTable = convertvars(tissueTable, kwargs.labelNameStr, "string") ;
+
+    end % if
+
+    % Go over tissues and save the data to separate STL files.
+
+    if strlength(strtrim(kwargs.outputFolder)) > 0
+
+        writeToFiles = true ;
+
+        if ~ isfolder(kwargs.outputFolder)
+
+            warning("The given input path (" + kwargs.outputFolder + ") did not point to an existing folder. Not saving results to it.") ;
+
+            writeToFiles = false ;
+
+        end % if
+
+        tissueLabels = tissueTable.(kwargs.labelStr) ;
+
+        tissueNames = tissueTable.(kwargs.labelNameStr) ;
+
+        meshNodes = meshStruct.nodes ;
+
+        meshTriangles = meshStruct.triangles ;
+
+        meshTetra = meshStruct.tetrahedra ;
+
+        meshTriangleLabels = meshStruct.triangle_regions ;
+
+        meshTetraLabels = meshStruct.tetrahedron_regions ;
+
+        if strtrim(kwargs.subjectName) == ""
+
+            subjectName = "" ;
+
+        else
+
+            subjectName = kwargs.subjectName + "." ;
+
+        end
+
+        outputPathWithDateTime = fullfile(kwargs.outputFolder, "simnibsToZef." + subjectName + dateTimeStr) ;
+
+        if writeToFiles
+
+            [status, message, messageID] = mkdir(outputPathWithDateTime) ;
+
+            if status ~= 1
+
+                warning("Creation of output folder (" + outputPathWithDateTime + ") failed with a warning message (" + message + ") and message ID (" + messageID + "). Not writing files.")
+
+                writeToFiles = false ;
+
+            end % if
+
+        end % if
+
+        for ii = 1 : numel(tissueLabels)
+
+            if ~ writeToFiles
+
+                break
+
+            end % if
+
+            triangleLabel = tissueLabels(ii) + 1000 ; % Don't ask why this 1000 is here. It's just how it is encoded.
+
+            name = tissueNames(ii) ;
+
+            triangleMask = meshTriangleLabels == triangleLabel ;
+
+            if any(triangleMask)
+
+                trianglePath = fullfile(outputPathWithDateTime, name + ".triangles.stl") ;
+
+                disp("Writing triangles of " + name + " to " + trianglePath) ;
+
+                relevantTriangles = meshTriangles(triangleMask,:) ;
+
+                relevantTriangleNodes = meshNodes ; % TODO: make this reference only relevant nodes.
+
+                triangleTriangulation = triangulation(double(relevantTriangles), relevantTriangleNodes) ;
+
+                stlwrite(triangleTriangulation, trianglePath, kwargs.stlOutputFormat)
+
+            else
+
+                warning("The compartment " + name + " did not contain any triangles. Not generating file.") ;
+
+            end % if
+
+        end % for
+
+        % Also write mesh as a whole instead of splitting it into separate files.
+
+        wholeMeshMatPath = fullfile(outputPathWithDateTime, "wholemesh.mat") ;
+
+        disp("Writing whole mesh to MAT file (" + wholeMeshMatPath + ")" ) ;
+
+        wholeTetraMeshMatFile = matfile(wholeMeshMatPath, Writable=true) ;
+
+        wholeTetraMeshMatFile.nodes = meshNodes ;
+
+        wholeTetraMeshMatFile.triangles = meshTriangles ;
+
+        wholeTetraMeshMatFile.triangleLabels = meshTriangleLabels ;
+
+        wholeTetraMeshMatFileFile.tetra = meshTetra ;
+
+        wholeTetraMeshMatFileFile.tetraLabels = meshTetraLabels ;
+
+        % HDF5 output.
+
+        wholeMeshHDF5Path = fullfile(outputPathWithDateTime, "wholemesh.hdf5") ;
+
+        disp("Writing whole mesh to HDF5 file (" + wholeMeshHDF5Path + ")" ) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/nodes', size(meshNodes)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/triangles', size(meshTriangles)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/triangleLabels', size(meshTriangleLabels)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/tetra', size(meshTetra)) ;
+
+        h5create(wholeMeshHDF5Path, '/mesh/tetraLabels', size(meshTetraLabels)) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/nodes', meshNodes) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/triangles', meshTriangles) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/triangleLabels', meshTriangleLabels) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/tetra', meshTetra) ;
+
+        h5write(wholeMeshHDF5Path, '/mesh/tetraLabels', meshTetraLabels) ;
+
+    end % if
+
+end % function

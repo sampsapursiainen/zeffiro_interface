@@ -130,7 +130,7 @@ function [zef,MethodClassObj] = zef_process_inversion(zef,MethodClassObj)
     end % for
 
     if ismethod(MethodClassObj,'smoother')
-        [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse);
+        [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse, L);
     end
 
     if ismethod(MethodClassObj,'terminateComputation')

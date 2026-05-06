@@ -29,10 +29,10 @@ for f_ind = 1: number_of_frames
     G = B' / (B * B' + R);
     w_t = 1 ./ (sum(G.' .* B, 1)').^standardization_exponent;
     D = w_t .* inv(P_sqrtm);
-    
-    
+
+
     x_hat=I1*D*m;
-    
+
     z_inverse{f_ind} = gather(x_hat);
 end
 close(h);

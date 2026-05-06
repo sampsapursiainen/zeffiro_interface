@@ -6,7 +6,7 @@ function [y_vals, plot_mode] = zef_cov_mean_scaling(time_series)
 %The desctiption and argument definitions shown in ZI are listed below.
 %Description: Covariance, mean scaling
 
-time_series = time_series./max(time_series);
+time_series = time_series./mean(time_series);
 y_vals = cov(time_series');
 
 plot_mode = 2;
