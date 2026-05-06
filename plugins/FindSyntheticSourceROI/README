@@ -1,0 +1,59 @@
+Plugin to simulate an extended source patch consisting of all dipoles within a specified ROI.
+Based on the FindSyntheticSourceLegacy plugin and requires this plugin for plotting dipoles.
+
+Startup:  zef = zef_find_synthetic_source_ROI(zef)
+
+One or several ROIs are placed at specified position(s). Dipoles within the ROI take specified orientation,
+and specified amplitude divided by number of dipoles. Measurement data is calculated from all found dipoles 
+and noise added to total measurement data.
+
+Also contains functions to automatically select dipole orientations based on SVD or normal constraint.
+--> example use cases:
+	- Place a flat ROI along side a cortical wall using the normal orientation setting, 
+		then set dipole orientations to normal to patch surface to simulate an extended cortical patch, 
+		where all the dipoles have the same orientation
+	- Place a flat ROI in radial direction, using min SVD on the MEG leadfield, set curvature >1,
+		set dipole orientations to normal to patch surface to investigate cancelling effects on gyrus crowns
+	- Place a spherical ROI around a real gyrus crown and set dipole orientations to normal to cortex,
+		for the same scenario in a realistic headmodel
+		
+
+Possible ROI shape configurations:
+- Spherical  
+	Parameters:
+		- radius
+		
+- Flat 
+	Parameters:
+		- radius
+		- width (should be slightly >0, depending on source space resolution)
+		- curvature 
+			--> value between -1 and 1, where 0 is a flat plane
+			--> increasing = the plane lies on the surface of a sphere with decreasing radius 
+				(surface area stays the same)
+			--> negative values = curved inwards
+		- orientation
+			--> user input, SVD based, or normal constrained
+- Ellipsoid (Spheroid)
+	Parameters:
+		- radius 
+		- width
+		- orientation
+			--> user input, SVD based, or normal constrained
+	--> not much different from flat, but perhaps advantageous for comparison with GMM ellipsoids. 	
+	
+
+Dipoles within the ROI configurations:
+- Orientation
+	--> user input, SVD based, normal constrained or for flat and ellipsoid surface normal (for ellipsoid that
+		means normal to the plane in which the ellipsoid lies, not the ellipsoid surface)
+Plotting:
+ --> Plot either the ROI or the dipoles within, for many dipoles this takes some time 
+
+For several ROIs with same configurations (e.g. same radius), it suffices to specify the positions,
+all other parameters will be repeated for all ROIs if only one value is given.
+
+To invert orientation, use negative amplitudes.
+
+For radius (and if applies, width) = 0, is equal to a single dipole.
+
