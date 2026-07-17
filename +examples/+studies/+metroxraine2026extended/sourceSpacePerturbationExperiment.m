@@ -32,22 +32,28 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
 
     [elementNeighbours, localConnectingFacets] = zeffiro.geometry.findElementFacetNeighbours(compartmentTetra) ;
 
-    elementNeighbours(1:20,:)
-
-    localConnectingFacets(1:20,:)
-
-    disp("Finding elements with all 4 neighbours...")
+    disp("Finding elements with all 4 neighbours within " + compartmentOfInterest + "...")
 
     counts = histcounts(elementNeighbours(:,1), size(compartmentTetra,1)) ;
 
-    counts(1:20)
-
-    size(counts)
-
-    size(compartmentTetra)
-
     elementsWith4Neighbours = find(counts > 3) ;
 
-    elementsWith4Neighbours(end)
+    disp("Finding nodes in mesh nearest to source positions...")
+
+    nodes = matFile.nodes ;
+
+    sourcePositions = matFile.source_positions ;
+
+    nodesNearestToSourcePositions = knnsearch(nodes, sourcePositions) ;
+
+    tetrasContainingNearestNodes = find(any(ismember(tetra, nodesNearestToSourcePositions),2)) ;
+
+    % TODO: check which of the above tetras actually contains which source position.
+
+    % TODO: move a source to the neighbouring element.
+
+    % TODO: more things to come?
+
+    error("Not fully implemented yet...")
 
 end % function
