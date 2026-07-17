@@ -89,7 +89,7 @@ function [elementNeighbours, connectingLocalFaces] = findElementFacetNeighbours(
 
 end % function
 
-% Helper functions.
+%% Helper functions.
 
 function faceVertexIndices = localTriangleFaceIndices
 %
