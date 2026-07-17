@@ -1,21 +1,22 @@
-function edges = findElementFacetNeighbours(elements)
+function [elementNeighbours, connectingLocalFaces] = findElementFacetNeighbours(elements)
 %
-%   edges = findElementFacetNeighbours(elements)
+%   elementNeighbours, connectingLocalFaces = findElementFacetNeighbours(elements)
 %
-% Finds edges connecting a given set of elements based on
-% whether they share a facet. The kind of elements supported
-% are triangles, tetrahedra and voxels.
+% Finds neighboring elements based on whether they share a facet.
+% The kind of elements supported are triangles, tetrahedra and voxels.
 %
 % Arguments
 %
 %   elements (:,:) int64 { mustBeInteger, mustBePositive  }
 %
-% The elements whose facet connections are being discorered.
-% The addya should be of the size elements times vertices.
+% The elements whose facet connections are being discovered.
+% The array should be of the size elements times vertices.
+% The mesh formed by the elements should be conforming,
+% as in there should be no hanging nodes.
 %
 
     arguments
-        elements (:,:) int64 { mustBeInteger, mustBePositive  }
+        elements (:,:) int64 { mustBeInteger, mustBePositive }
     end
 
     [elementN, vertexN] = size(elements) ;
@@ -40,11 +41,11 @@ function edges = findElementFacetNeighbours(elements)
 
     [faceVertexN,faceN] = size(faceVertexIndices) ;
 
-    repeatedElementIndices = repelem(1:elementN, faceVertexN, faceN)
+    repeatedElementIndices = repelem(1:elementN, faceVertexN, faceN) ;
 
-    repeatedFaceIndices = repmat(faceVertexIndices,1, elementN) ;
+    repeatedFaceVertexIndices = repmat(faceVertexIndices, 1, elementN) ;
 
-    linearIndices = sub2ind(size(elements),repeatedElementIndices',repeatedFaceIndices') ;
+    linearIndices = sub2ind(size(elements), repeatedElementIndices', repeatedFaceVertexIndices') ;
 
     faces = reshape( ...
         elements(linearIndices), ...
@@ -54,9 +55,9 @@ function edges = findElementFacetNeighbours(elements)
 
     facesSortedByCols = sort(faces,2) ;
 
-    [facesSortedByRows,rowSortPermutation] = sortrows(facesSortedByCols)
+    [facesSortedByRows,rowSortPermutation] = sortrows(facesSortedByCols) ;
 
-    sortedElementIndices = repeatedElementIndices(:,rowSortPermutation)
+    sortedElementIndices = repeatedElementIndices(:,rowSortPermutation) ;
 
     faceDifferences = diff(facesSortedByRows,1,1) ;
 
@@ -70,7 +71,19 @@ function edges = findElementFacetNeighbours(elements)
 
     secondVertices = transpose(sortedElementIndices(1,zeroRowNeighbourIndices)) ;
 
-    edges = [firstVertices secondVertices] ;
+    elementNeighbours = dictionary( ...
+        [firstVertices, secondVertices], ...
+        [secondVertices, firstVertices] ...
+    ) ;
+
+    repeatedLocalFacetIndices = repmat(1 : faceN, 1, elementN) ;
+
+    sortedRepeatedLocalFacetIndices = repeatedLocalFacetIndices(rowSortPermutation) ;
+
+    connectingLocalFaces = dictionary( ...
+        [firstVertices, secondVertices], ...
+        sortedRepeatedLocalFacetIndices([zeroRowIndices,zeroRowNeighbourIndices]) ...
+    ) ;
 
 end % function
 
@@ -106,7 +119,6 @@ function faceVertexIndices = localTetraFaceIndices
     ]' ;
 
 end % function
-
 
 function faceVertexIndices = localVoxelFaceIndices
 %
