@@ -23,15 +23,15 @@ function [elementNeighbours, connectingLocalFaces] = findElementFacetNeighbours(
 
     if vertexN == 3
 
-        faceVertexIndices = localTriangleFaceIndices ;
+        faceVertexIndices = zeffiro.geometry.localTriangleFacetIndices ;
 
     elseif vertexN == 4
 
-        faceVertexIndices = localTetraFaceIndices ;
+        faceVertexIndices = zeffiro.geometry.localTetrahedronFacetIndices ;
 
     elseif vertexN == 8
 
-        faceVertexIndices = localVoxelFaceIndices ;
+        faceVertexIndices = zeffiro.geometry.localVoxelFacetIndices ;
 
     else
 
@@ -86,56 +86,5 @@ function [elementNeighbours, connectingLocalFaces] = findElementFacetNeighbours(
     ] ;
 
     connectingLocalFaces = unsortedConnectingLocalFaces(elementNeighbourPermutation,:) ;
-
-end % function
-
-%% Helper functions.
-
-function faceVertexIndices = localTriangleFaceIndices
-%
-%   facesIndices = localTriangleFaceIndices
-%
-% Generates a set of local indices for extracting the faces from a given triangles.
-%
-
-    faceVertexIndices = [
-        1 2 ;
-        2 3 ;
-        3 1 ;
-    ]' ;
-
-end % function
-
-function faceVertexIndices = localTetraFaceIndices
-%
-%   facesIndices = localTetraFaceIndices
-%
-% Generates a set of local indices for extracting the faces from a given tetrahedron.
-%
-
-    faceVertexIndices = [
-        1 3 2 ;
-        1 2 4 ;
-        1 4 3 ;
-        2 3 4 ;
-    ]' ;
-
-end % function
-
-function faceVertexIndices = localVoxelFaceIndices
-%
-%   facesIndices = localVoxelFaceIndices
-%
-% Generates a set of local indices for extracting the faces from a given voxel.
-%
-
-    faceVertexIndices = [
-        1 4 3 2 ;
-        1 2 6 5 ;
-        2 3 7 6 ;
-        3 4 8 7 ;
-        4 1 5 8 ;
-        5 6 7 8 ;
-    ]' ;
 
 end % function
