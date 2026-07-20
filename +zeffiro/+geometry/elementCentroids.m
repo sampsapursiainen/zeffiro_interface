@@ -17,6 +17,6 @@ function centroids = elementCentroids(elements, nodes)
 
     vertices = reshape(nodes(:, elements), dimension, vertexN, elementN) ;
 
-    centroids = sum(vertices, 2) / vertexN ;
+    centroids = reshape(sum(vertices, 2) / vertexN, dimension, elementN) ;
 
 end % function
