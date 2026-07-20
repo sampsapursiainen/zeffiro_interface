@@ -14,6 +14,10 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
 
     matFile = matfile(projectFilePath) ;
 
+    disp("Extracting mesh nodes from " + projectFilePath + "...")
+
+    nodes = matFile.nodes ;
+
     disp("Finding label of given compartment " + compartmentOfInterest + "...")
 
     compartmentLabelInMatFile = zeffiro.utilities.compartmentLabelsFromProjectFile(projectFilePath, compartmentOfInterest) ;
@@ -28,25 +32,49 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
 
     compartmentTetra = tetra(compartmentTetraInds,:) ;
 
+    disp("Extracting mesh nodes from " + projectFilePath + "...")
+
+    sourcePositionsInFile = matFile.source_positions ;
+
     disp("Finding facet-based neighbours of tetra within " + compartmentOfInterest + "...")
 
-    [elementNeighbours, localConnectingFacets] = zeffiro.geometry.findElementFacetNeighbours(compartmentTetra) ;
+    [localElementNeighbours, localConnectingFacets] = zeffiro.geometry.findElementFacetNeighbours(compartmentTetra) ;
 
-    disp("Finding elements with all 4 neighbours within " + compartmentOfInterest + "...")
+    localElementNeighbours(1:10,:)
 
-    counts = histcounts(elementNeighbours(:,1), size(compartmentTetra,1)) ;
+    disp("Mapping local element neighbour indices to global ones...")
 
-    elementsWith4Neighbours = find(counts > 3) ;
+    globalElementNeighbours = localElementNeighbours ;
+
+    globalElementNeighbours(:,1) = compartmentTetraInds(localElementNeighbours(:,1)) ;
+
+    globalElementNeighbours(1:10,:)
+
+    globalConnetingFacets = localConnectingFacets ;
+
+    globalConnectingFacets(:,1) = compartmentTetraInds(localConnectingFacets(:,1)) ;
+
+    disp("Counting elements in compartment adjacency array with all 4 neighbours within " + compartmentOfInterest + "...")
+
+    counts = histcounts(localElementNeighbours(:,1), size(compartmentTetra,1)) ;
+
+    counts = counts(:) ;
+
+    disp("Taking elements which have 4 neighbours...")
+
+    elementsWith4Neighbours = compartmentTetra(counts > 3,:) ;
+
+    disp("Finding centroids of 4-neighbour elements...")
+
+    centroidsOfElementsWith4Neighbours = transpose(zeffiro.geometry.elementCentroids(transpose(elementsWith4Neighbours),transpose(nodes))) ;
+
+    sourcePositions = centroidsOfElementsWith4Neighbours ;
 
     disp("Finding nodes in mesh nearest to source positions...")
 
-    nodes = matFile.nodes ;
-
-    sourcePositions = matFile.source_positions ;
-
     nodesNearestToSourcePositions = knnsearch(nodes, sourcePositions) ;
 
-    tetrasContainingNearestNodes = find(any(ismember(tetra, nodesNearestToSourcePositions),2)) ;
+    tetrasContainingNearestNodes = find(any(ismember(compartmentTetra, nodesNearestToSourcePositions),2)) ;
 
     % TODO: check which of the above tetras actually contains which source position.
 
