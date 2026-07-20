@@ -15,7 +15,7 @@ function centroids = elementCentroids(elements, nodes)
 
     [dimension, nodeN] = size(nodes) ;
 
-    vertices = reshape(nodes(:, elements), dimension, vertexN, elementN) ;
+    vertices = zeffiro.geometry.elementVertices(elements,nodes) ;
 
     centroids = reshape(sum(vertices, 2) / vertexN, dimension, elementN) ;
 
