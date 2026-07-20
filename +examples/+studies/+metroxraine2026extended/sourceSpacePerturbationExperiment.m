@@ -83,11 +83,15 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
     % index in the other direction to find which facet in a neighbouring tetrahedron
     % connects back to the original one. Then pick the opposing node corresponding to this facet.
 
+    [dimension, vertexN, cellN] = size(verticesOfElementsWith4Neighbours) ;
+
     localStartElements = localConnectingFacets(:,1) ;
 
     firstFacetMask = localConnectingFacets(:,2) == 1 ;
 
     neighboursThroughFacet1 = localElementNeighbours(firstFacetMask,2) ;
+
+    disp("Finding back edges...")
 
     backEdgeMask = ismember(localElementNeighbours(:,1), neighboursThroughFacet1) ...
         & ismember(localElementNeighbours(:,2), localStartElements) ;
@@ -97,11 +101,17 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
         2 ...
     ) ;
 
-    % TODO: find out why this does not work. The intention is to one column from each vertex array page.
+    disp("Finding opposing vertices in neighbours based on facet indices...")
 
-    secondVertices = verticesOfElementsWith4Neighbours(:,localFacetsConnectingBack,:)
+    secondVertices = inf(dimension, cellN) ;
 
-    % TODO: form linspaces between first verticves of start elements and opposing vertices in neighbours corresponding to localFacetsConnectingBack.
+    for ii = 1 : cellN
+
+        secondVertices(:,ii) = verticesOfElementsWith4Neighbours(:, localFacetsConnectingBack(ii), ii) ;
+
+    end % for
+
+    % TODO: form linspaces between first vertices of start elements and opposing vertices in neighbours corresponding to localFacetsConnectingBack.
 
     % TODO: more things to come?
 
