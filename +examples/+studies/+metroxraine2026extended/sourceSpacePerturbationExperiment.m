@@ -1,6 +1,6 @@
-function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInterest)
+function [firstVertices, secondVertices] = sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInterest)
 %
-% sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInterest)
+%   [firstVertices, secondVertices] = sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInterest)
 %
 % Tehdään koe, jossa lähdepaikkaa siirretään etäisyyden $\Delta\sourcePosition$ verran ja sitten katsotaan, miten $\leadFieldMatrix$:n normi ko lähdepisteessä eroaa vanhasta.
 %
@@ -74,7 +74,7 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
 
     disp("Taking first vertices of each element...")
 
-    firstVertices = verticesOfElementsWith4Neighbours(:,1,:) ;
+    firstVertices = squeeze(verticesOfElementsWith4Neighbours(:,1,:)) ;
 
     disp("Finding vertices opposing first vertices in adjacent tetra...")
 
@@ -115,6 +115,6 @@ function sourceSpacePerturbationExperiment(projectFilePath, compartmentOfInteres
 
     % TODO: more things to come?
 
-    error("Not fully implemented yet...")
+    warning("Not fully implemented yet...")
 
 end % function
