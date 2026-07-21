@@ -22,23 +22,33 @@ function [firstVertices, secondVertices] = sourceSpacePerturbationExperiment(pro
 
     compartmentLabelInMatFile = zeffiro.utilities.compartmentLabelsFromProjectFile(projectFilePath, compartmentOfInterest) ;
 
-    disp("Finding tetra indices with label " + compartmentLabelInMatFile +  "...")
-
-    compartmentTetraInds = find(matFile.domain_labels == compartmentLabelInMatFile) ;
-
     disp("Extracting tetra from " + projectFilePath + "...")
 
     tetra = matFile.tetra ;
 
-    compartmentTetra = tetra(compartmentTetraInds,:) ;
+    disp("Extracting active compartment indices...")
 
-    disp("Extracting mesh nodes from " + projectFilePath + "...")
+    compartmentTypeTable = matFile.reuna_type
 
-    sourcePositionsInFile = matFile.source_positions ;
+    compartmentActivityVector = cell2mat(compartmentTypeTable(:,1)) ;
 
-    disp("Finding facet-based neighbours of tetra within " + compartmentOfInterest + "...")
+    activeCompartmentLabels = find(compartmentActivityVector > 0 & compartmentActivityVector < 3)
 
-    [localElementNeighbours, localConnectingFacets] = zeffiro.geometry.findElementFacetNeighbours(compartmentTetra) ;
+    disp("Extracting domain labels from " + projectFilePath + "...")
+
+    domainLabels = matFile.domain_labels ;
+
+    disp("Selecting active tetrahedra...")
+
+    activeTetraMask = ismember(domainLabels(:), activeCompartmentLabels) ;
+
+    activeTetraIndices = find(activeTetraMask) ;
+
+    activeTetra = tetra(activeTetraMask,:) ;
+
+    disp("Finding facet-based neighbours of tetra within active compartments...")
+
+    [localElementNeighbours, localConnectingFacets] = zeffiro.geometry.findElementFacetNeighbours(activeTetra) ;
 
     localElementNeighbours(1:10,:)
 
@@ -48,23 +58,21 @@ function [firstVertices, secondVertices] = sourceSpacePerturbationExperiment(pro
 
     globalElementNeighbours = localElementNeighbours ;
 
-    globalElementNeighbours(:,1) = compartmentTetraInds(localElementNeighbours(:,1)) ;
-
-    globalElementNeighbours(1:10,:)
+    globalElementNeighbours(:,1) = activeTetraIndices(localElementNeighbours(:,1)) ;
 
     globalConnetingFacets = localConnectingFacets ;
 
-    globalConnectingFacets(:,1) = compartmentTetraInds(localConnectingFacets(:,1)) ;
+    globalConnectingFacets(:,1) = activeTetraIndices(localConnectingFacets(:,1)) ;
 
     disp("Counting elements in compartment adjacency array with all 4 neighbours within " + compartmentOfInterest + "...")
 
-    neighbourCounts = histcounts(localElementNeighbours(:,1), size(compartmentTetra,1)) ;
+    neighbourCounts = histcounts(localElementNeighbours(:,1), size(activeTetra,1)) ;
 
     neighbourCounts = neighbourCounts(:) ;
 
     disp("Taking elements which have 4 neighbours...")
 
-    elementsWith4Neighbours = compartmentTetra(neighbourCounts > 3,:) ;
+    elementsWith4Neighbours = activeTetra(neighbourCounts > 3,:) ;
 
     size(elementsWith4Neighbours)
 
