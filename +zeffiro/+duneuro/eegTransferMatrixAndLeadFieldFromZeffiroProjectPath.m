@@ -206,7 +206,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Attaching electrodes to triangles...") ;
 
-        triangleCentroids = zeffiro.geometry.elementCentroids(skinTriangles(:,minDistanceI),skinPoints) ;
+        triangleCentroids = zeffiro.geometry.elementCentroids(skinPoints(:,:,minDistanceI)) ;
 
         finalElectrodePositions = triangleCentroids ;
 

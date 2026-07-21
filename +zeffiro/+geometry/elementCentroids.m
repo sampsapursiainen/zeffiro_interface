@@ -1,22 +1,17 @@
-function centroids = elementCentroids(elements, nodes)
+function centroids = elementCentroids(elementVertices)
 %
-%   centroids = elementCentroids(elements, nodes)
+%   centroids = elementCentroids(elementVertices)
 %
 % Computes the centroids or nodal averages of given elements.
 % Supposes that the elements and nodes are given in a column-major order.
 %
 
     arguments
-        elements (:,:) uint64 { mustBePositive }
-        nodes (:,:) double { mustBeFinite }
+        elementVertices (:,:,:) double { mustBeFinite }
     end
 
-    [vertexN, elementN] = size(elements) ;
+    [dimension,vertexN,elementN] = size(elementVertices) ;
 
-    [dimension, nodeN] = size(nodes) ;
-
-    vertices = zeffiro.geometry.elementVertices(elements,nodes) ;
-
-    centroids = reshape(sum(vertices, 2) / vertexN, dimension, elementN) ;
+    centroids = reshape(sum(elementVertices, 2) / vertexN, dimension, elementN) ;
 
 end % function
