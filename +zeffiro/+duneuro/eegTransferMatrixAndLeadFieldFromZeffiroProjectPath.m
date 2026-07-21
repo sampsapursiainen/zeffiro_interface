@@ -55,7 +55,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 % A vector for translating the electrodes found in the given project file.
 % The default position is sometimes a bit off.
 %
-%   kwargs.skinCompartmentIndex (1,1) double { mustBeInteger  } = 0
+%   kwargs.attachElectrodes (1,1) logical = true
 %
 % If this is given and positive, the electrodes will be projected to the nearest points
 % on surface mesh of the skin after translation by electrodeTranslationVector,
@@ -71,7 +71,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
         kwargs.electrodeFieldName (1,1) string = "sensors"
         kwargs.electrodeTranslationVector (1,3) double { mustBeFinite } = [0 0 0]
         kwargs.saveFilePrefix (1,1) string = ""
-        kwargs.skinCompartmentIndex (1,1) double { mustBeInteger } = 0
+        kwargs.attachElectrodes (1,1) logical = true
     end
 
     arguments (Output)
@@ -186,19 +186,15 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     translatedElectrodePositions = electrodePositions + transpose(kwargs.electrodeTranslationVector) ;
 
-    if kwargs.skinCompartmentIndex > 0
+    if kwargs.attachElectrodes
 
-        disp("Projecting electrode points to skin surface...") ;
+        disp("Finding surface of entire mesh (the scalp)...") ;
 
-        skinPointsCells = projectFileHandle.reuna_p ;
+        skinTriangles = zeffiro.geometry.tetraSurfaceTriangles(projectFileHandle.tetra) ;
 
-        skinPoints = transpose(skinPointsCells{kwargs.skinCompartmentIndex}) ;
+        disp("Extracting vertices of surface triangles...")
 
-        skinTrianglesCells = projectFileHandle.reuna_t ;
-
-        skinTriangles = transpose(skinTrianglesCells{kwargs.skinCompartmentIndex}) ;
-
-        skinTriangleVertices = skinPoints(:,skinTriangles) ;
+        skinPoints = zeffiro.geometry.elementVertices(skinTriangles,meshNodes) ;
 
         disp("Computing distances of electrodes to triangles...") ;
 
