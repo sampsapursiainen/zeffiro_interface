@@ -194,7 +194,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Extracting vertices of surface triangles...")
 
-        skinPoints = zeffiro.geometry.elementVertices(skinTriangles,meshNodes) ;
+        skinPoints = zeffiro.geometry.elementVertices(skinTriangles, meshPoints) ;
 
         disp("Computing distances of electrodes to triangles...") ;
 
