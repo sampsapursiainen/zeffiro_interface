@@ -198,7 +198,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Computing distances of electrodes to triangles...") ;
 
-        distancesToTriangles = zeffiro.geometry.distancesFromPointsToTriangles(translatedElectrodePositions,skinTriangleVertices) ;
+        distancesToTriangles = zeffiro.geometry.distancesFromPointsToTriangles(translatedElectrodePositions,skinPoints) ;
 
         disp("Finding smallest distances per electrode...")
 
