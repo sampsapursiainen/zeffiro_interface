@@ -190,7 +190,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
         disp("Finding surface of entire mesh (the scalp)...") ;
 
-        skinTriangles = zeffiro.geometry.tetraSurfaceTriangles(projectFileHandle.tetra) ;
+        skinTriangles = transpose(zeffiro.geometry.tetraSurfaceTriangles(projectFileHandle.tetra)) ;
 
         disp("Extracting vertices of surface triangles...")
 
