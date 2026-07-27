@@ -43,6 +43,8 @@ function colorbarsFromFigures (folder, filetypes, kwargs)
 
         kwargs.decplaces (1,1) double { mustBeInteger } = 1
 
+        kwargs.colormap (:,3) double { mustBeInRange( kwargs.colormap, 0, 1 ) } = []
+
     end
 
     fileStructs = dir ( fullfile ( folder, "**", "*.fig" ) ) ;
@@ -81,7 +83,14 @@ function colorbarsFromFigures (folder, filetypes, kwargs)
 
         pathWithoutExt = fullfile ( stem, name ) ;
 
-        utilities.colorbar_from_figtool_fn (figArray (si), pathWithoutExt, filetypes, resolution=kwargs.resolution, decplaces=kwargs.decplaces)
+        utilities.colorbar_from_figtool_fn ( ...
+            figArray (si), ...
+            pathWithoutExt, ...
+            filetypes, ...
+            resolution=kwargs.resolution, ...
+            decplaces=kwargs.decplaces, ...
+            colormap=kwargs.colormap ...
+        )
 
     end
 
