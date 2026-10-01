@@ -4080,10 +4080,7 @@ function local_tool_pan(src, ~)
 
 src = local_tool_src(src, 'pan');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'toggle', 'pan');
-catch
-end
+zef_figure_interact(h_fig, 'toggle', 'pan');
 
 end
 
@@ -4091,10 +4088,7 @@ function local_tool_rotate(src, ~)
 
 src = local_tool_src(src, 'rotate');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'toggle', 'rotate');
-catch
-end
+zef_figure_interact(h_fig, 'toggle', 'rotate');
 
 end
 
@@ -4102,10 +4096,7 @@ function local_tool_zoom(src, ~)
 
 src = local_tool_src(src, 'zoom');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'zoom_by', 1.6);
-catch
-end
+zef_figure_interact(h_fig, 'zoom_by', 1.6);
 
 end
 
@@ -4113,10 +4104,7 @@ function local_tool_zoomout(src, ~)
 
 src = local_tool_src(src, 'zoomout');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'zoom_by', 1 / 1.6);
-catch
-end
+zef_figure_interact(h_fig, 'zoom_by', 1 / 1.6);
 
 end
 
@@ -4137,10 +4125,7 @@ if isempty(h_fig) || ~isvalid(h_fig)
         h_fig = [];
     end
 end
-try
-    zef_figure_interact(h_fig, 'reset');
-catch
-end
+zef_figure_interact(h_fig, 'reset');
 
 end
 
@@ -4167,44 +4152,34 @@ try
     figure(h_fig);
 catch
 end
-file = '';
-path = '';
-idx = 1;
+start = pwd;
 try
     zef = evalin('base', 'zef');
-    start = pwd;
     if isstruct(zef) && isfield(zef, 'save_file_path') && ~isempty(zef.save_file_path)
         start = zef.save_file_path;
     end
     if isstruct(zef) && isfield(zef, 'use_display') && ~zef.use_display
         return
     end
-    [file, path, idx] = uiputfile( ...
-        {'*.png', 'PNG'; '*.jpg', 'JPEG'; '*.tiff', 'TIFF'}, ...
-        'Print figure to file as...', start);
 catch
-    return
 end
+[file, path, idx] = uiputfile( ...
+    {'*.png', 'PNG'; '*.jpg', 'JPEG'; '*.tiff', 'TIFF'}, ...
+    'Print figure to file as...', start);
 if isequal(file, 0)
     return
 end
 out = fullfile(path, file);
-try
-    if ~isempty(ax) && isvalid(ax)
-        exportgraphics(ax, out, 'Resolution', 200);
-        return
-    end
-catch
+if ~isempty(ax) && isvalid(ax)
+    exportgraphics(ax, out, 'Resolution', 200);
+    return
 end
-try
-    if idx == 1
-        print(h_fig, '-dpng', '-r200', out);
-    elseif idx == 2
-        print(h_fig, '-djpeg', '-r200', out);
-    else
-        print(h_fig, '-dtiff', '-r200', out);
-    end
-catch
+if idx == 1
+    print(h_fig, '-dpng', '-r200', out);
+elseif idx == 2
+    print(h_fig, '-djpeg', '-r200', out);
+else
+    print(h_fig, '-dtiff', '-r200', out);
 end
 
 end
@@ -4243,33 +4218,21 @@ end
 
 function local_set_colormap(pop, idx, h_fig)
 
-try
-    local_dismiss(h_fig);
-catch
-end
+local_dismiss(h_fig);
 pop.Value = idx;
-try
-    cb = pop.Callback;
-    if isa(cb, 'function_handle')
-        cb(pop, []);
-    elseif (ischar(cb) || isstring(cb)) && strlength(cb) > 0
-        evalin('base', char(cb));
-    end
-catch
+cb = pop.Callback;
+if isa(cb, 'function_handle')
+    cb(pop, []);
+elseif (ischar(cb) || isstring(cb)) && strlength(cb) > 0
+    evalin('base', char(cb));
 end
-try
-        evalin('base', 'zef.update_colormap = zef.h_update_colormap.Value; zef_update_contrast_and_brightness(zef.h_zeffiro);');
-catch
-end
+evalin('base', 'zef.update_colormap = zef.h_update_colormap.Value; zef_update_contrast_and_brightness(zef.h_zeffiro);');
 
 end
 
 function local_tool_edges(~, ~)
 
-try
-    zef_toggle_edges;
-catch
-end
+zef_toggle_edges;
 
 end
 
@@ -4277,10 +4240,7 @@ function local_tool_measure(src, ~)
 
 src = local_tool_src(src, 'measure');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'toggle', 'measure');
-catch
-end
+zef_figure_interact(h_fig, 'toggle', 'measure');
 
 end
 
@@ -4288,10 +4248,7 @@ function local_tool_annotate(src, ~)
 
 src = local_tool_src(src, 'annotate');
 h_fig = ancestor(src, 'figure');
-try
-    zef_figure_interact(h_fig, 'toggle', 'annotate');
-catch
-end
+zef_figure_interact(h_fig, 'toggle', 'annotate');
 
 end
 
@@ -4340,10 +4297,7 @@ try
     figure(h_fig);
 catch
 end
-try
-    zef_axes_popup;
-catch
-end
+zef_axes_popup;
 
 end
 
@@ -4375,12 +4329,9 @@ btn = zef_ui_find(h_fig, ['zef_tool_' key]);
 if ~local_ok(btn)
     return
 end
-try
-    cb = btn.Callback;
-    if isa(cb, 'function_handle')
-        cb(btn, []);
-    end
-catch
+cb = btn.Callback;
+if isa(cb, 'function_handle')
+    cb(btn, []);
 end
 
 end

@@ -755,6 +755,57 @@ classdef UiThemeTest < matlab.unittest.TestCase
             testCase.verifyEqual(squeeze(disk(12, 12, :)).', fillc, 'AbsTol', 0.02);
         end
 
+        function roundrectStrokePaintsEveryEdge(testCase)
+            theme = zef_ui_theme();
+            rgb = zef_ui_roundrect(96, 28, 6, theme.color.button, ...
+                theme.color.buttonBorder, theme.color.panel, theme.space.btnStroke);
+            testCase.verifyEqual(size(rgb), [28 96 3]);
+            testCase.verifyEqual(squeeze(rgb(1, 1, :)).', theme.color.panel, 'AbsTol', 0.08);
+            testCase.verifyEqual(squeeze(rgb(14, 48, :)).', theme.color.button, 'AbsTol', 0.02);
+            mid = squeeze(rgb(14, :, :));
+            if size(mid, 1) == 3
+                mid = mid.';
+            end
+            delta = max(abs(mid - theme.color.button), [], 2);
+            testCase.verifyGreaterThan(max(delta), 0.18);
+            hair = zef_ui_roundrect(96, 28, 6, [1 1 1], theme.color.border, [1 1 1]);
+            hair_mid = squeeze(hair(14, :, :));
+            if size(hair_mid, 1) == 3
+                hair_mid = hair_mid.';
+            end
+            hair_delta = max(abs(hair_mid - 1), [], 2);
+            testCase.verifyLessThan(max(hair_delta), 0.02);
+        end
+
+        function roundButtonKeepsBorderAcrossStates(testCase)
+            theme = zef_ui_theme();
+            f = figure('Visible', 'off', 'Color', theme.color.panel, 'MenuBar', 'none');
+            testCase.Figures(end+1) = f;
+            p = uipanel(f, 'Tag', 'figure_sidebar', 'Units', 'pixels', ...
+                'Position', [10 10 220 80], 'BackgroundColor', theme.color.panel, ...
+                'BorderType', 'none');
+            b = uicontrol(p, 'Style', 'pushbutton', 'String', 'Reset', ...
+                'Tag', 'resetbutton', 'Position', [8 8 96 26]);
+            zef_ui_round_button(b, theme, false);
+            idle = b.CData;
+            testCase.verifyGreaterThan(local_edge_contrast(idle, theme.color.button), 0.18);
+            zef_ui_interact(b, 'paint', 'hover');
+            hover = b.CData;
+            testCase.verifyFalse(isequal(hover, idle));
+            testCase.verifyGreaterThan(local_edge_contrast(hover, hover(14, 48, :)), 0.12);
+            zef_ui_interact(b, 'paint', 'press');
+            pressed = b.CData;
+            testCase.verifyGreaterThan(local_edge_contrast(pressed, pressed(14, 48, :)), 0.10);
+            zef_ui_interact(b, 'paint', 'idle');
+            testCase.verifyEqual(b.CData, idle);
+            play = uicontrol(p, 'Style', 'pushbutton', 'String', 'Play', ...
+                'Tag', 'playbutton', 'Position', [112 8 96 26]);
+            zef_ui_round_button(play, theme, true);
+            testCase.verifyGreaterThan(local_edge_contrast(play.CData, theme.color.primary), 0.08);
+            cap = findall(p, 'Tag', 'playbutton_cap');
+            testCase.verifyGreaterThanOrEqual(cap(1).Position(1), play.Position(1) + 3);
+        end
+
         function cardChromeAvoidsPushbuttonBevel(testCase)
             theme = zef_ui_theme();
             f = figure('Visible', 'off', 'Color', theme.color.bg, 'MenuBar', 'none');
@@ -1811,6 +1862,10 @@ classdef UiThemeTest < matlab.unittest.TestCase
             testCase.verifyGreaterThan(theme.color.bg(1), 0.9);
             testCase.verifyLessThan(theme.color.text(1), 0.3);
             testCase.verifyEqual(theme.color.borderSubtle, theme.color.hairline, 'AbsTol', 1e-6);
+            testCase.verifyLessThan(max(theme.color.buttonBorder), 0.80);
+            testCase.verifyGreaterThan(min(theme.color.button - theme.color.buttonBorder), 0.20);
+            testCase.verifyLessThan(theme.color.buttonBorderPrimary, theme.color.primary);
+            testCase.verifyEqual(theme.space.btnStroke, 1);
         end
 
         function applyThemePaintsTableFromTokens(testCase)
@@ -2269,5 +2324,18 @@ if had_zef
 else
     evalin('base', 'clear zef');
 end
+
+end
+
+function contrast = local_edge_contrast(rgb, fillc)
+
+fillc = double(reshape(fillc, 1, []));
+fillc = fillc(1:3);
+row = max(1, round(size(rgb, 1) / 2));
+mid = double(squeeze(rgb(row, :, :)));
+if size(mid, 1) == 3
+    mid = mid.';
+end
+contrast = max(max(abs(mid - fillc), [], 2));
 
 end

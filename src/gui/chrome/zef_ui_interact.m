@@ -662,8 +662,27 @@ try
     catch
     end
     borderc = theme.color.border;
+    stroke = 1;
+    try
+        stored_border = getappdata(btn, 'ZefRoundBorder');
+        if ~isempty(stored_border)
+            borderc = stored_border;
+        elseif isfield(theme.color, 'buttonBorder')
+            borderc = theme.color.buttonBorder;
+        end
+    catch
+    end
+    try
+        stored_stroke = getappdata(btn, 'ZefRoundStroke');
+        if ~isempty(stored_stroke)
+            stroke = stored_stroke;
+        elseif isfield(theme.space, 'btnStroke')
+            stroke = theme.space.btnStroke;
+        end
+    catch
+    end
     cdata = zef_ui_roundrect(w, ht, min(r, floor(min(w, ht) / 2) - 1), ...
-        fillc, borderc, outer);
+        fillc, borderc, outer, stroke);
     setappdata(btn, cache_name, cdata);
     setappdata(btn, [cache_name 'Fill'], fillc);
 catch

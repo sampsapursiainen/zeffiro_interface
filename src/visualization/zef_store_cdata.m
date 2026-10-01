@@ -46,7 +46,7 @@ for i = 1 : length(h_c)
 
         if evalin('base','zef.store_cdata')
 
-            h_c(i).UserData(data_ind).CData = h_c(i).CData;
+            h_c(i).UserData(data_ind).CData = local_face_cdata(h_c(i));
             h_c(i).UserData(data_ind).inv_time_1 = evalin('base','zef.inv_time_1');
             h_c(i).UserData(data_ind).inv_time_2 = evalin('base','zef.inv_time_2');
             h_c(i).UserData(data_ind).inv_time_3 = evalin('base','zef.inv_time_3');
@@ -64,5 +64,27 @@ for i = 1 : length(h_c)
     end
 
 end
+
+end
+
+function c = local_face_cdata(h)
+% Same array as the patch CData getter when FaceVertexCData is one scalar
+% per vertex: each column is that scalar at the face's three vertices.
+% The getter gathers this on the graphics thread; indexing matches it.
+
+if isprop(h,'FaceVertexCData') && isprop(h,'Faces') && isprop(h,'Vertices')
+    fv = h.FaceVertexCData;
+    f = h.Faces;
+    nv = size(h.Vertices,1);
+    if ~isempty(f) && size(fv,1) == nv && size(fv,2) == 1 && size(f,2) == 3
+        fmax = max(f(:));
+        fmin = min(f(:));
+        if ~isempty(fmax) && fmin >= 1 && fmax <= nv
+            c = fv(f.');
+            return
+        end
+    end
+end
+c = h.CData;
 
 end

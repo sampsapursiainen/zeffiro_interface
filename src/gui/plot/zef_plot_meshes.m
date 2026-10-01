@@ -1147,6 +1147,7 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
         % Type 1 (Domain labels) or no reconstruction movie: colour each
         % visible compartment by its stored colour, no CData from zef.reconstruction.
         i = 0;
+        any_surface = false;
 
         for k = 1 : length(compartment_tags)
             on_val = eval(['zef.' compartment_tags{k} '_on']);
@@ -1160,10 +1161,15 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
                         h_surf = trimesh(min_t_aux,min_n_aux(:,1),min_n_aux(:,2),min_n_aux(:,3),'edgecolor','none','facecolor',color_str);
                         set(h_surf,'Tag','surface');
                         set(h_surf,'facealpha',eval('zef.layer_transparency'));
-                        lighting phong;
+                        any_surface = true;
                     end
                 end
             end
+        end
+        % lighting phong sets FaceLighting on every surface already in the
+        % axes. One call after the loop matches the last in-loop call.
+        if any_surface
+            lighting phong;
         end
 
         view(eval('zef.azimuth'),eval('zef.elevation'));

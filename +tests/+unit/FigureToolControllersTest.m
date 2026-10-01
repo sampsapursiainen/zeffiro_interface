@@ -74,9 +74,8 @@ classdef FigureToolControllersTest < matlab.unittest.TestCase
             zef_figure_interact(f, 'set', 'rotate');
             pos0 = ax.CameraPosition;
             ap = getpixelposition(ax, true);
-            fp = getpixelposition(f, true);
-            x0 = (ap(1) - fp(1)) + ap(3) * 0.5;
-            y0 = (ap(2) - fp(2)) + ap(4) * 0.5;
+            x0 = ap(1) + ap(3) * 0.5;
+            y0 = ap(2) + ap(4) * 0.5;
             zef_figure_interact(f, 'drag', x0, y0, x0 + 48, y0 + 18);
             testCase.verifyGreaterThan(norm(ax.CameraPosition - pos0), 1e-6);
             testCase.verifyFalse(isstruct(getappdata(f, 'ZefInteractDrag')));
@@ -133,6 +132,74 @@ classdef FigureToolControllersTest < matlab.unittest.TestCase
             tgt0 = ax.CameraTarget;
             zef_figure_interact(f, 'nudge', 40, -15);
             testCase.verifyGreaterThan(norm(ax.CameraTarget - tgt0), 1e-8);
+        end
+
+        function panDragTranslatesCameraWithPointer(testCase)
+            [f, ax] = local_volume_figure(testCase);
+            zef_figure_interact(f, 'set', 'pan');
+            pos0 = ax.CameraPosition;
+            tgt0 = ax.CameraTarget;
+            up0 = ax.CameraUpVector;
+            fwd = tgt0 - pos0;
+            fwd = fwd / norm(fwd);
+            up = up0 / norm(up0);
+            right = cross(fwd, up);
+            right = right / norm(right);
+            up = cross(right, fwd);
+            up = up / norm(up);
+            ap = ax.Position;
+            x = ap(1) + ap(3) * 0.5;
+            y = ap(2) + ap(4) * 0.5;
+            zef_figure_interact(f, 'drag', x, y, x + 80, y + 40);
+            dpos = ax.CameraPosition - pos0;
+            dtgt = ax.CameraTarget - tgt0;
+            testCase.verifyGreaterThan(norm(dtgt), 1e-4);
+            testCase.verifyLessThan(norm(dpos - dtgt), 1e-6 * max(1, norm(dtgt)));
+            testCase.verifyLessThan(norm((ax.CameraPosition - ax.CameraTarget) - (pos0 - tgt0)), 1e-6);
+            testCase.verifyLessThan(dot(dtgt, right), 0);
+            testCase.verifyLessThan(dot(dtgt, up), 0);
+            view_dir = pos0 - tgt0;
+            dist = norm(view_dir);
+            minor = min(ap(3), ap(4));
+            span = 2 * dist * tand(ax.CameraViewAngle / 2);
+            scale = span / max(1, minor);
+            expect = (-80 * scale) * right + (-40 * scale) * up;
+            testCase.verifyLessThan(norm(dtgt - expect) / max(1, norm(expect)), 0.05);
+        end
+
+        function panDragReachesFarCornerWhenWindowIsOffset(testCase)
+            [f, ax] = local_volume_figure(testCase);
+            f.Position(1:2) = [640 380];
+            viewp = findall(f, 'Tag', 'figure_view');
+            testCase.assertNotEmpty(viewp);
+            ax.Parent = viewp(1);
+            ax.Units = 'pixels';
+            viewp(1).Units = 'pixels';
+            vp = viewp(1).Position;
+            ax.Position = [12, 16, max(120, vp(3) - 28), max(120, vp(4) - 32)];
+            drawnow;
+            zef_figure_interact(f, 'set', 'pan');
+            ap = getpixelposition(ax, true);
+            corners = [
+                ap(1) + 6, ap(2) + 6
+                ap(1) + ap(3) - 6, ap(2) + 6
+                ap(1) + 6, ap(2) + ap(4) - 6
+                ap(1) + ap(3) - 6, ap(2) + ap(4) - 6
+                ];
+            for i = 1:size(corners, 1)
+                zef_figure_interact(f, 'reset');
+                tgt0 = ax.CameraTarget;
+                x0 = corners(i, 1);
+                y0 = corners(i, 2);
+                zef_figure_interact(f, 'drag', x0, y0, x0 + 24, y0 + 10);
+                testCase.verifyGreaterThan(norm(ax.CameraTarget - tgt0), 1e-6, ...
+                    sprintf('corner %d', i));
+                testCase.verifyFalse(isstruct(getappdata(f, 'ZefInteractDrag')));
+            end
+            zef_figure_interact(f, 'reset');
+            tgt0 = ax.CameraTarget;
+            zef_figure_interact(f, 'drag', 2, 2, 30, 16);
+            testCase.verifyLessThan(norm(ax.CameraTarget - tgt0), 1e-8);
         end
 
         function reapplySurvivesClaAndKeepsNativeRotate(testCase)
@@ -206,6 +273,31 @@ classdef FigureToolControllersTest < matlab.unittest.TestCase
             testCase.verifyEqual(double(b(1).UserData), 0);
         end
 
+        function measureClickLandsOnSurfaceAndKeepsTips(testCase)
+            [f, ax] = local_volume_figure(testCase);
+            zef_figure_interact(f, 'set', 'measure');
+            ap = getpixelposition(ax, true);
+            x = ap(1) + ap(3) * 0.5;
+            y = ap(2) + ap(4) * 0.5;
+            zef_figure_interact(f, 'down', [x, y]);
+            zef_figure_interact(f, 'down', [x + 12, y + 6]);
+            marks = [findall(ax, 'Type', 'datatip'); findall(ax, 'Tag', 'zef_datatip_text')];
+            testCase.verifyGreaterThanOrEqual(numel(marks), 2);
+            pos = local_mark_position(marks(1));
+            testCase.verifyLessThan(abs(norm(pos) - 1), 0.25);
+            n0 = numel(marks);
+            zef_figure_interact(f, 'down', [-80, -80]);
+            marks = [findall(ax, 'Type', 'datatip'); findall(ax, 'Tag', 'zef_datatip_text')];
+            testCase.verifyEqual(numel(marks), n0);
+            tb = findall(f, 'Tag', 'zef_shell_toolbar');
+            testCase.assertNotEmpty(tb);
+            tr = getpixelposition(tb(1), true);
+            tpt = [tr(1) + 8, tr(2) + 6];
+            zef_figure_interact(f, 'down', tpt);
+            marks = [findall(ax, 'Type', 'datatip'); findall(ax, 'Tag', 'zef_datatip_text')];
+            testCase.verifyEqual(numel(marks), n0);
+        end
+
         function measureAndAnnotatePlaceOverlays(testCase)
             [f, ax] = local_volume_figure(testCase);
             zef_figure_interact(f, 'set', 'measure');
@@ -216,6 +308,40 @@ classdef FigureToolControllersTest < matlab.unittest.TestCase
             zef_figure_interact(f, 'click');
             notes = findall(ax, 'Tag', 'zef_annotate_text');
             testCase.verifyNotEmpty(notes);
+        end
+
+        function toggleEdgesKeepsDensePatchOnSurface(testCase)
+            [f, ax] = local_volume_figure(testCase);
+            figure(f);
+            prev = [];
+            had = evalin('base', 'exist(''zef'',''var'')');
+            if had
+                prev = evalin('base', 'zef');
+            end
+            delete(findall(ax, 'Type', 'surface'));
+            [xs, ys, zs] = sphere(100);
+            fv = surf2patch(xs, ys, zs, 'triangles');
+            face = [0.85 0.55 0.45];
+            p = patch(ax, 'Faces', fv.faces, 'Vertices', fv.vertices, ...
+                'FaceColor', face, 'EdgeColor', 'none');
+            cam0 = ax.CameraPosition;
+            assignin('base', 'zef', struct('h_zeffiro', f, 'h_axes1', ax));
+            restore = onCleanup(@() local_restore_zef(had, prev)); %#ok<NASGU>
+            zef_toggle_edges;
+            testCase.verifyEqual(p.FaceColor, face, 'AbsTol', 1e-6);
+            testCase.verifyLessThan(norm(ax.CameraPosition - cam0), 1e-6);
+            ln = getappdata(p, 'ZefEdgeOverlay');
+            testCase.verifyTrue(isgraphics(ln));
+            P = double(ln.VertexData);
+            nedge = size(P, 2) / 2;
+            testCase.verifyGreaterThan(nedge, 80);
+            testCase.verifyLessThan(nedge, 9000);
+            seg = sqrt(sum((P(:, 1:2:end) - P(:, 2:2:end)) .^ 2, 1));
+            testCase.verifyLessThan(max(seg), 0.45);
+            zef_toggle_edges;
+            testCase.verifyFalse(isgraphics(ln));
+            testCase.verifyEqual(p.FaceColor, face, 'AbsTol', 1e-6);
+            testCase.verifyLessThan(norm(ax.CameraPosition - cam0), 1e-6);
         end
 
         function toggleEdgesChangesPatchEdgeColor(testCase)
@@ -324,6 +450,17 @@ view(ax, 35, 20);
 axis(ax, 'vis3d');
 camva(ax, 8);
 setappdata(ax, 'ZefHasVolumePlot', true);
+
+end
+
+function pos = local_mark_position(h)
+
+pos = [NaN NaN NaN];
+try
+    pos = double(h.Position);
+    pos = pos(1:3);
+catch
+end
 
 end
 

@@ -8,8 +8,11 @@ function varargout = zef_figure_interact(varargin)
 %
 %   rotate3d is not used. On R2025a+ uifigures, native axes Interactions
 %   never enable, so rotate/pan/zoom use a custom WindowMouseMotion path
-%   (camrotate + a single CameraPosition/UpVector update). Pointer hit
-%   tests use figure-relative pixels so nested figure_view axes work.
+%   (camrotate + a single CameraPosition/UpVector update). A drag paints
+%   with drawnow limitrate while that move is still busy, so motion
+%   events that arrive during the paint only record the latest point.
+%   Pointer hit tests use figure-relative pixels so nested figure_view
+%   axes work.
 %   Modes are mutually exclusive and survive re-plotting via
 %   zef_figure_sync_plot.
 %
@@ -155,7 +158,7 @@ switch action
         if isempty(ax) || strcmp(mode, 'none')
             out = false;
         else
-            out = local_click_overlay(fig, ax, mode);
+        out = local_click_overlay(fig, ax, mode);
         end
     case 'pointer'
         out = local_pointer(fig);
@@ -423,17 +426,12 @@ catch
 end
 origin = local_fig_point(fig);
 if any(strcmp(mode, {'measure', 'annotate'}))
-    obj = [];
-    try
-        obj = hittest(fig);
-    catch
-    end
     local_clear_ptr(fig, clear_ptr);
     if strcmp(mode, 'measure') && local_native_on(ax)
         consumed = false;
         return
     end
-    consumed = local_click_overlay(fig, ax, mode, obj);
+    consumed = local_click_overlay(fig, ax, mode, [], origin);
     return
 end
 cam0 = [];
@@ -516,6 +514,7 @@ try
 catch
 end
 cleanup = onCleanup(@() local_clear_move_busy(fig));
+n_paint = 0;
 while true
     try
         setappdata(fig, 'ZefInteractMovePending', false);
@@ -553,6 +552,12 @@ while true
         if pending
             continue
         end
+        if n_paint < 2 && local_drag_moved(drag)
+            n_paint = n_paint + 1;
+            if local_flush_motion(fig)
+                continue
+            end
+        end
         break
     end
     if (~isfield(drag, 'moved') || ~drag.moved) && local_camera_changed(ax, drag)
@@ -573,10 +578,50 @@ while true
     catch
     end
     if ~pending
+        if n_paint < 2 && local_drag_moved(drag)
+            n_paint = n_paint + 1;
+            if local_flush_motion(fig)
+                continue
+            end
+        end
         break
     end
 end
 clear cleanup;
+
+end
+
+function tf = local_drag_moved(drag)
+
+tf = isstruct(drag) && isfield(drag, 'moved') && logical(drag.moved) ...
+    && ~(isfield(drag, 'delegate') && drag.delegate);
+
+end
+
+function again = local_flush_motion(fig)
+
+% The paint used to happen after local_move returned, when
+% ZefInteractMoveBusy was already clear. Each queued motion event then
+% redrew every patch. Painting here lets those events take the busy
+% path (record the latest point and return).
+again = false;
+vis = 'off';
+try
+    vis = char(string(fig.Visible));
+catch
+end
+if ~strcmpi(vis, 'on')
+    return
+end
+try
+    drawnow limitrate
+catch
+end
+try
+    again = isequal(getappdata(fig, 'ZefInteractMovePending'), true);
+catch
+    again = false;
+end
 
 end
 
@@ -887,38 +932,58 @@ end
 
 function local_cam_pan(ax, dx, dy)
 
-try
-    campan(ax, -dx * 0.15, dy * 0.15);
+% campan leaves CameraPosition where it is and swings CameraTarget, so the
+% head orbits the camera instead of sliding with the pointer. Translate
+% both by the same vector. One pixel matches the view on the shorter side
+% of the axes (CameraViewAngle is that side's field of view).
+if ~isfinite(dx) || ~isfinite(dy) || (dx == 0 && dy == 0)
     return
-catch
 end
+pos = get(ax, 'CameraPosition');
+tgt = get(ax, 'CameraTarget');
+up = get(ax, 'CameraUpVector');
+va = local_view_angle(ax);
+fwd = tgt - pos;
+dist = norm(fwd);
+un = norm(up);
+if dist < eps || un < eps || ~isfinite(va) || va <= 0
+    return
+end
+fwd = fwd / dist;
+up = up / un;
+right = cross(fwd, up);
+rn = norm(right);
+if rn < eps
+    return
+end
+right = right / rn;
+up = cross(right, fwd);
+un = norm(up);
+if un < eps
+    return
+end
+up = up / un;
+wh = local_axes_pixels(ax);
+minor = max(1, min(wh(1), wh(2)));
+scale = (2 * dist * tand(min(va, 179) / 2)) / minor;
+delta = (-dx * scale) * right + (-dy * scale) * up;
+if any(~isfinite(delta))
+    return
+end
+set(ax, 'CameraPosition', pos + delta, 'CameraTarget', tgt + delta);
+
+end
+
+function wh = local_axes_pixels(ax)
+
+wh = [1 1];
 try
-    orig = ax.Units;
-    ax.Units = 'pixels';
-    pos = ax.Position;
-    ax.Units = orig;
-    sx = dx / max(1, pos(3));
-    sy = dy / max(1, pos(4));
-    tgt = ax.CameraTarget;
-    posc = ax.CameraPosition;
-    up = ax.CameraUpVector;
-    fwd = tgt - posc;
-    right = cross(fwd, up);
-    nrm = norm(right);
-    if nrm < eps
-        return
-    end
-    right = right / nrm;
-    upn = cross(right, fwd);
-    un = norm(upn);
-    if un < eps
-        return
-    end
-    upn = upn / un;
-    span = norm(fwd) * tand(local_view_angle(ax));
-    delta = (-sx * span * 2) * right + (sy * span * 2) * upn;
-    set(ax, 'CameraPosition', posc + delta, 'CameraTarget', tgt + delta);
+    p = getpixelposition(ax, false);
 catch
+    p = [];
+end
+if numel(p) >= 4 && all(isfinite(p(3:4)))
+    wh = [max(1, p(3)), max(1, p(4))];
 end
 
 end
@@ -951,109 +1016,228 @@ end
 
 end
 
-function consumed = local_click_overlay(fig, ax, mode, obj)
+function consumed = local_click_overlay(fig, ax, mode, obj, pt)
 
 if nargin < 4
-    obj = [];
-    try
-        obj = hittest(fig);
-    catch
-    end
+    obj = []; %#ok<NASGU>
+end
+if nargin < 5
+    pt = [];
 end
 consumed = true;
-p = local_pick_point(ax, obj);
+allow_center = isempty(pt);
+ray = local_view_ray(fig, ax, pt);
+[p, hit] = local_raycast(ax, ray);
+if (numel(p) < 3 || any(~isfinite(p))) && allow_center
+    [p, hit] = local_raycast(ax, local_view_ray(fig, ax, []));
+end
 if numel(p) < 3 || any(~isfinite(p))
     return
 end
 if strcmp(mode, 'measure')
-    local_place_datatip(ax, obj, p);
+    local_place_datatip(ax, hit, p);
 else
     local_place_note(ax, p);
 end
 
 end
 
-function p = local_pick_point(ax, obj)
+function ray = local_view_ray(fig, ax, pt)
+
+pos = double(ax.CameraPosition);
+tgt = double(ax.CameraTarget);
+up = double(ax.CameraUpVector);
+fwd = tgt - pos;
+dist = norm(fwd);
+fwd = fwd / dist;
+up = up / norm(up);
+right = cross(fwd, up);
+right = right / norm(right);
+up = cross(right, fwd);
+up = up / norm(up);
+va = local_view_angle(ax);
+rect = local_axes_fig_rect(fig, ax);
+if numel(rect) < 4
+    rect = [0 0 1 1];
+end
+wh = [max(1, rect(3)), max(1, rect(4))];
+if numel(pt) >= 2 && all(isfinite(double(pt(1:2))))
+    ax_px = double(pt(1:2)) - rect(1:2);
+else
+    ax_px = wh / 2;
+end
+minor = max(1, min(wh));
+scale = (2 * dist * tand(min(max(va, 0.1), 179) / 2)) / minor;
+dx = (ax_px(1) - wh(1) / 2) * scale;
+dy = (ax_px(2) - wh(2) / 2) * scale;
+proj = 'orthographic';
+try
+    proj = char(string(ax.Projection));
+catch
+end
+if strcmpi(proj, 'orthographic')
+    o = pos + dx * right + dy * up;
+    d = fwd;
+else
+    o = pos;
+    d = tgt + dx * right + dy * up - pos;
+    d = d / norm(d);
+end
+ray = struct('o', o, 'd', d);
+
+end
+
+function [p, hit] = local_raycast(ax, ray)
 
 p = [NaN NaN NaN];
-try
-    cp = ax.CurrentPoint;
-catch
-    cp = [];
+hit = gobjects(0);
+if ~isstruct(ray) || ~isfield(ray, 'o') || ~isfield(ray, 'd')
+    return
 end
-if local_ok(obj)
+objs = findall(ax, 'Type', 'patch', '-or', 'Type', 'surface');
+best = inf;
+for i = 1:numel(objs)
+    obj = objs(i);
+    if ~local_ok(obj)
+        continue
+    end
+    vis = 'on';
     try
-        if isprop(obj, 'Vertices') && ~isempty(obj.Vertices)
-            v = obj.Vertices;
-            if size(v, 2) >= 3
-                if ~isempty(cp) && size(cp, 1) >= 2
-                    r0 = cp(1, 1:3);
-                    r1 = cp(2, 1:3);
-                    d = r1 - r0;
-                    dn = dot(d, d);
-                    if dn > eps
-                        t = ((v(:, 1) - r0(1)) * d(1) + (v(:, 2) - r0(2)) * d(2) ...
-                            + (v(:, 3) - r0(3)) * d(3)) / dn;
-                        proj = r0 + t * d;
-                        dist = sum((v - proj) .^ 2, 2);
-                        [~, idx] = min(dist);
-                        p = v(idx, 1:3);
-                        return
-                    end
-                end
-                p = mean(v(:, 1:3), 1);
-                return
-            end
-        end
+        vis = char(string(obj.Visible));
     catch
     end
+    if strcmpi(vis, 'off')
+        continue
+    end
+    [hp, ht] = local_ray_object(obj, ray.o, ray.d);
+    if ht < best
+        best = ht;
+        p = hp;
+        hit = obj;
+    end
 end
-if isempty(cp) || size(cp, 1) < 2
+
+end
+
+function [p, t] = local_ray_object(obj, o, d)
+
+p = [NaN NaN NaN];
+t = inf;
+kind = '';
+try
+    kind = lower(char(string(obj.Type)));
+catch
+end
+if strcmp(kind, 'patch')
+    [p, t] = local_ray_tris(obj.Vertices, obj.Faces, o, d);
+    return
+end
+if ~strcmp(kind, 'surface')
     return
 end
 try
-    tgt = ax.CameraTarget;
-    r0 = cp(1, 1:3);
-    r1 = cp(2, 1:3);
-    d = r1 - r0;
-    dn = dot(d, d);
-    if dn > eps
-        t = dot(tgt - r0, d) / dn;
-        p = r0 + t * d;
-        return
-    end
+    X = double(obj.XData);
+    Y = double(obj.YData);
+    Z = double(obj.ZData);
 catch
+    return
 end
-p = cp(1, 1:3);
+if ~ismatrix(X) || ~isequal(size(X), size(Y)) || ~isequal(size(X), size(Z))
+    return
+end
+[m, n] = size(X);
+if m < 2 || n < 2
+    return
+end
+V = [X(:), Y(:), Z(:)];
+nf = (m - 1) * (n - 1);
+F = zeros(nf * 2, 3);
+base = 1:(m - 1);
+row = 0;
+for j = 1:(n - 1)
+    i0 = base + (j - 1) * m;
+    a = i0.';
+    b = a + 1;
+    c = a + m;
+    e = b + m;
+    k = row + (1:numel(a));
+    F(k, :) = [a, c, b];
+    F(nf + k, :) = [b, c, e];
+    row = row + numel(a);
+end
+[p, t] = local_ray_tris(V, F, o, d);
+
+end
+
+function [p, t] = local_ray_tris(V, F, o, d)
+
+p = [NaN NaN NaN];
+t = inf;
+if isempty(V) || isempty(F) || size(V, 2) < 3 || size(F, 2) < 3
+    return
+end
+o = double(o(:).');
+d = double(d(:).');
+dn = norm(d);
+if dn < eps
+    return
+end
+d = d / dn;
+if size(F, 2) > 3
+    F = [F(:, 1:3); F(:, [1 3 4])];
+end
+F = F(all(F >= 1, 2) & F(:, 1) ~= F(:, 2) & F(:, 2) ~= F(:, 3), :);
+if isempty(F)
+    return
+end
+nv = size(V, 1);
+if max(F(:)) > nv
+    F = F(all(F <= nv, 2), :);
+end
+if isempty(F)
+    return
+end
+V = double(V(:, 1:3));
+v0 = V(F(:, 1), :);
+v1 = V(F(:, 2), :);
+v2 = V(F(:, 3), :);
+e1 = v1 - v0;
+e2 = v2 - v0;
+pvec = [d(2) * e2(:, 3) - d(3) * e2(:, 2), ...
+    d(3) * e2(:, 1) - d(1) * e2(:, 3), ...
+    d(1) * e2(:, 2) - d(2) * e2(:, 1)];
+det = e1(:, 1) .* pvec(:, 1) + e1(:, 2) .* pvec(:, 2) + e1(:, 3) .* pvec(:, 3);
+ok = abs(det) > 1e-14;
+if ~any(ok)
+    return
+end
+invdet = zeros(size(det));
+invdet(ok) = 1 ./ det(ok);
+tvec = [o(1) - v0(:, 1), o(2) - v0(:, 2), o(3) - v0(:, 3)];
+u = (tvec(:, 1) .* pvec(:, 1) + tvec(:, 2) .* pvec(:, 2) + tvec(:, 3) .* pvec(:, 3)) .* invdet;
+qvec = [tvec(:, 2) .* e1(:, 3) - tvec(:, 3) .* e1(:, 2), ...
+    tvec(:, 3) .* e1(:, 1) - tvec(:, 1) .* e1(:, 3), ...
+    tvec(:, 1) .* e1(:, 2) - tvec(:, 2) .* e1(:, 1)];
+v = (d(1) * qvec(:, 1) + d(2) * qvec(:, 2) + d(3) * qvec(:, 3)) .* invdet;
+th = (e2(:, 1) .* qvec(:, 1) + e2(:, 2) .* qvec(:, 2) + e2(:, 3) .* qvec(:, 3)) .* invdet;
+hit = ok & u >= 0 & v >= 0 & (u + v) <= 1 & th > 1e-5 & isfinite(th);
+if ~any(hit)
+    return
+end
+th(~hit) = inf;
+t = min(th);
+if ~isfinite(t)
+    t = inf;
+    return
+end
+p = o + t * d;
 
 end
 
 function local_place_datatip(ax, obj, p)
 
-try
-    if local_ok(obj) && (isa(obj, 'matlab.graphics.primitive.Patch') ...
-            || isa(obj, 'matlab.graphics.chart.primitive.Surface') ...
-            || isa(obj, 'matlab.graphics.chart.primitive.Line') ...
-            || isa(obj, 'matlab.graphics.chart.primitive.Scatter'))
-        try
-            datatip(obj, p(1), p(2), p(3));
-            return
-        catch
-        end
-        try
-            datatip(obj, p(1), p(2));
-            return
-        catch
-        end
-    end
-catch
-end
-try
-    old = findall(ax, 'Tag', 'zef_datatip_text');
-    if ~isempty(old)
-        delete(old);
-    end
-catch
+if local_tip_near(obj, p)
+    return
 end
 lab = sprintf('x = %.4g\ny = %.4g\nz = %.4g', p(1), p(2), p(3));
 try
@@ -1066,6 +1250,68 @@ try
     catch
     end
 catch
+end
+
+end
+
+function kept = local_tip_near(obj, p)
+
+kept = false;
+if ~local_ok(obj)
+    return
+end
+meshish = isa(obj, 'matlab.graphics.primitive.Patch') ...
+    || isa(obj, 'matlab.graphics.chart.primitive.Surface') ...
+    || isa(obj, 'matlab.graphics.chart.primitive.Line') ...
+    || isa(obj, 'matlab.graphics.chart.primitive.Scatter');
+if ~meshish
+    return
+end
+hdt = [];
+try
+    hdt = datatip(obj, p(1), p(2), p(3));
+catch
+    try
+        hdt = datatip(obj, p(1), p(2));
+    catch
+        hdt = [];
+    end
+end
+if ~local_ok(hdt)
+    return
+end
+got = [];
+try
+    got = double(hdt.Position);
+catch
+end
+tol = local_tip_tol(obj);
+if numel(got) >= 3 && norm(got(1:3) - double(p(1:3))) <= tol
+    kept = true;
+    return
+end
+try
+    delete(hdt);
+catch
+end
+
+end
+
+function tol = local_tip_tol(obj)
+
+tol = 1e-3;
+span = NaN;
+try
+    if isprop(obj, 'Vertices') && ~isempty(obj.Vertices)
+        V = double(obj.Vertices(:, 1:3));
+        span = max(max(V, [], 1) - min(V, [], 1));
+    elseif isprop(obj, 'XData')
+        span = max([range(double(obj.XData(:))), range(double(obj.YData(:))), range(double(obj.ZData(:)))]);
+    end
+catch
+end
+if isfinite(span) && span > 0
+    tol = max(1e-4, 0.03 * span);
 end
 
 end
@@ -1425,37 +1671,28 @@ if numel(pt) < 2
     return
 end
 r = local_axes_fig_rect(fig, ax);
-if numel(r) >= 4
-    tf = pt(1) >= r(1) && pt(1) <= r(1) + r(3) ...
-        && pt(2) >= r(2) && pt(2) <= r(2) + r(4);
-    if tf
-        return
-    end
+if numel(r) < 4
+    return
 end
-ap = [];
-try
-    orig = ax.Units;
-    ax.Units = 'pixels';
-    ap = double(ax.Position);
-    ax.Units = orig;
-catch
-    ap = [];
-end
-if numel(ap) >= 4
-    tf = pt(1) >= ap(1) && pt(1) <= ap(1) + ap(3) ...
-        && pt(2) >= ap(2) && pt(2) <= ap(2) + ap(4);
-end
+tf = pt(1) >= r(1) && pt(1) <= r(1) + r(3) ...
+    && pt(2) >= r(2) && pt(2) <= r(2) + r(4);
 
 end
 
 function r = local_axes_fig_rect(fig, ax)
 
+% getpixelposition(ax, true) is already in figure pixels, the same origin
+% as CurrentPoint and WindowMouse Point. Subtracting the figure's screen
+% position shifts the box by the window origin, so a press on the far
+% side of the plot never starts a drag.
 r = [];
+if ~local_ok(fig) || ~local_ok(ax)
+    return
+end
 try
-    ap = getpixelposition(ax, true);
-    fp = getpixelposition(fig, true);
-    if numel(ap) >= 4 && numel(fp) >= 4
-        r = [ap(1) - fp(1), ap(2) - fp(2), ap(3), ap(4)];
+    ap = double(getpixelposition(ax, true));
+    if numel(ap) >= 4 && all(isfinite(ap(1:4))) && ap(3) > 0 && ap(4) > 0
+        r = ap(1:4);
     end
 catch
 end

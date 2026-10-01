@@ -123,6 +123,7 @@ ind_m = [ 2 4 3 ;
 
 % Find tetra indices I that share a face, by sorting and subtracting.
 
+n_tet = size(tetra,1);
 tetra_sort_1 = uint32([
     tetra(:,[2 4 3]);
     tetra(:,[1 3 4]);
@@ -130,14 +131,16 @@ tetra_sort_1 = uint32([
     tetra(:,[1 2 3]);
     ]);
 
-tetra_sort_2 = uint32([
-    1*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    2*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    3*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    4*ones(size(tetra,1),1) [1:size(tetra,1)]';
-    ]);
-
+% GPU path keeps an explicit (face, tet) table because sortrows runs on
+% the device. On CPU the same ids are recovered from the sort permutation:
+% rows are stacked as four blocks of n_tet, block b row k -> face b, tet k.
 if use_gpu
+    tetra_sort_2 = uint32([
+        1*ones(n_tet,1) [1:n_tet]';
+        2*ones(n_tet,1) [1:n_tet]';
+        3*ones(n_tet,1) [1:n_tet]';
+        4*ones(n_tet,1) [1:n_tet]';
+        ]);
     tetra_sort_1 = gpuArray(tetra_sort_1);
 end
 tetra_sort_1 = sort(tetra_sort_1,2);
@@ -148,19 +151,32 @@ tetra_ind = zeros(size(tetra_sort_1,1),1);
 % Consecutive identical triples are interior faces (shared by two tets).
 I = find(sum(abs(tetra_sort_1(2:end,1:3)-tetra_sort_1(1:end-1,1:3)),2)==0);
 clear tetra_sort_1;
-tetra_sort_2 = tetra_sort_2(J,:);
+if use_gpu
+    tetra_sort_2 = tetra_sort_2(J,:);
+end
 
 tetra_ind(I) = 1;
 tetra_ind(I+1) = 1;
 
 I = find(tetra_ind == 0);
 
-tetra_ind = sub2ind(size(tetra),repmat(tetra_sort_2(I,2),1,3),ind_m(tetra_sort_2(I,1),:));
+if use_gpu
+    tet_rows = tetra_sort_2(I,2);
+    face_rows = tetra_sort_2(I,1);
+    clear tetra_sort_2
+else
+    orig = J(I);
+    face_rows = ceil(orig ./ n_tet);
+    tet_rows = orig - (face_rows - 1) .* n_tet;
+end
+clear J
+
+tetra_ind = sub2ind(size(tetra),repmat(tet_rows,1,3),ind_m(face_rows,:));
 surface_triangles = tetra(tetra_ind);
 surface_triangles = uint32(surface_triangles(:,[1 3 2]));
 
-tetra_ind = tetra_sort_2(I,2);
-face_ind = tetra_sort_2(I,1);
+tetra_ind = uint32(tet_rows);
+face_ind = uint32(face_rows);
 
 if and(nargout > 4, nargin > 1)
     surface_triangles_aux = surface_triangles;

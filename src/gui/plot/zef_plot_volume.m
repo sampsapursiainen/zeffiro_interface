@@ -339,16 +339,23 @@ end
 johtavuus = johtavuus(I);
 
 tetra = tetra(I,:);
-tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
 
 aux_ind = [];
 clipped = 0;
-if eval('zef.cp_on');
+cp_on = eval('zef.cp_on');
+cp2_on = eval('zef.cp2_on');
+cp3_on = eval('zef.cp3_on');
+% Centroids are only an input to the clipping planes. Building them for
+% every visible tet holds about a gigabyte through the surface extraction.
+if cp_on || cp2_on || cp3_on
+    tetra_c = (1/4)*(nodes(tetra(:,1),:) + nodes(tetra(:,2),:) + nodes(tetra(:,3),:) + nodes(tetra(:,4),:));
+end
+if cp_on
     clipping_plane = {cp_a,cp_b,cp_c,cp_d};
     aux_ind = zef_clipping_plane(tetra_c,clipping_plane);
     clipped = 1;
 end
-if eval('zef.cp2_on');
+if cp2_on
     clipping_plane = {cp2_a,cp2_b,cp2_c,cp2_d};
     if clipped
         aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind);
@@ -357,7 +364,7 @@ if eval('zef.cp2_on');
     end
     clipped = 1;
 end
-if eval('zef.cp3_on');
+if cp3_on
     clipping_plane = {cp3_a,cp3_b,cp3_c,cp3_d};
     if clipped
         aux_ind = zef_clipping_plane(tetra_c,clipping_plane,aux_ind);
@@ -366,8 +373,11 @@ if eval('zef.cp3_on');
     end
     clipped = 1;
 end
+if cp_on || cp2_on || cp3_on
+    clear tetra_c
+end
 
-if eval('zef.cp_on') || eval('zef.cp2_on') || eval('zef.cp3_on')
+if cp_on || cp2_on || cp3_on
     if eval('zef.cp_mode') == 1
         tetra = tetra(aux_ind,:);
     elseif eval('zef.cp_mode') == 2
@@ -727,11 +737,18 @@ while loop_movie && loop_count <= eval('zef.loop_movie_count')
 
         %**************************************************************************
 
+        % Label of the tet that owns each exposed face. Active-compartment
+        % labels may already have been zeroed above, so those faces stay
+        % out of the solid-color surfaces. Same membership as testing each
+        % compartment's tet rows with ismember.
+        face_compartment = johtavuus(aux_ind(tetra_ind));
+        if isa(face_compartment,'gpuArray')
+            face_compartment = gather(face_compartment);
+        end
         for i = 1 : n_compartments
 
             if visible_vec(i)
-                I_2 = find(johtavuus(aux_ind) == i);
-                I_3 = find(ismember(tetra_ind,I_2));
+                I_3 = find(face_compartment == i);
                 color_str = color_cell{i};
                 if not(isempty(I_3))
 

@@ -66,17 +66,21 @@ try
 catch
 end
 try
-    bkey = [w, ht, double(is_primary), round(fillc(1) * 1000)];
+    [borderc, stroke] = local_edge(theme, is_primary);
+    bkey = [w, ht, double(is_primary), round(fillc * 1000), ...
+        round(borderc * 1000), round(stroke * 100)];
     prev = getappdata(h, 'ZefRoundKey');
     if ~isequal(prev, bkey)
         h.CData = zef_ui_roundrect(w, ht, min(r, floor(min(w, ht) / 2) - 1), ...
-            fillc, theme.color.border, outer);
+            fillc, borderc, outer, stroke);
         h.BackgroundColor = outer;
         h.ForegroundColor = fg;
         setappdata(h, 'ZefRoundKey', bkey);
         setappdata(h, 'ZefRoundIdle', h.CData);
         setappdata(h, 'ZefRoundFill', fillc);
         setappdata(h, 'ZefRoundOuter', outer);
+        setappdata(h, 'ZefRoundBorder', borderc);
+        setappdata(h, 'ZefRoundStroke', stroke);
         setappdata(h, 'ZefRoundPrimary', is_primary);
         setappdata(h, 'ZefRoundRadius', r);
         try
@@ -122,10 +126,9 @@ try
     end
 catch
 end
-inset = 1;
-if ~is_primary
-    inset = max(3, min(5, r - 1));
-end
+% The caption is an opaque rectangle. Keep it inside the stroke so it
+% does not cover the border or square off the rounded corners.
+inset = max(3, min(5, r - 1));
 cap_pos = [p(1) + inset, p(2) + inset, ...
     max(8, w - 2 * inset), max(10, ht - 2 * inset)];
 if ~isempty(cap) && isvalid(cap)
@@ -168,6 +171,29 @@ try
     uistack(cap, 'top');
 catch
 end
+
+end
+
+function [borderc, stroke] = local_edge(theme, is_primary)
+
+borderc = [0.680 0.720 0.750];
+stroke = 1;
+try
+    borderc = theme.color.buttonBorder;
+catch
+end
+if is_primary
+    try
+        borderc = theme.color.buttonBorderPrimary;
+    catch
+    end
+end
+try
+    stroke = theme.space.btnStroke;
+catch
+end
+borderc = double(borderc(1:3));
+stroke = max(0.5, double(stroke(1)));
 
 end
 
