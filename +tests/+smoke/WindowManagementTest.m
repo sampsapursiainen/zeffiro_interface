@@ -241,6 +241,17 @@ classdef WindowManagementTest < matlab.unittest.TestCase
             testCase.verifyEqual(char(f.WindowStyle), 'normal');
         end
 
+        function standalonePreservesModalDialog(testCase)
+            f = testCase.track(uifigure('Visible', 'off', 'WindowStyle', 'modal', ...
+                'Name', 'ZEFFIRO Interface: Confirm'));
+            testCase.verifyEqual(char(f.WindowStyle), 'modal');
+            zef_window_manager('standalone', f);
+            testCase.verifyEqual(char(f.WindowStyle), 'modal');
+            zef_window_manager('raise', f);
+            testCase.verifyEqual(char(f.WindowStyle), 'modal');
+            testCase.verifyTrue(isvalid(f));
+        end
+
     end
 
 end

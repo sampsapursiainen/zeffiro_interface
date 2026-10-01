@@ -131,64 +131,59 @@ try
 catch
 end
 if wait_for
-    uiwait(fig);
-    if isvalid(fig)
-        try
-            choice = char(string(getappdata(fig, 'ZefConfirmChoice')));
-        catch
-            choice = 'No';
-        end
-        delete(fig);
-        fig = gobjects(0);
-    end
-end
-
-end
-
-function local_finish(src, value)
-
-fig = ancestor(src, 'figure');
-if isempty(fig) || ~isvalid(fig)
-    fig = src;
-end
-if isempty(fig) || ~isvalid(fig)
-    return
-end
-try
-    setappdata(fig, 'ZefConfirmChoice', value);
-catch
-end
-is_modal = false;
-try
-    is_modal = strcmpi(char(fig.WindowStyle), 'modal');
-catch
-end
-try
-    uiresume(fig);
-catch
-end
-if ~is_modal
     try
-        delete(fig);
+        if isvalid(fig) && ~strcmpi(char(fig.WindowStyle), 'modal')
+            fig.WindowStyle = 'modal';
+        end
     catch
     end
-end
-
-end
-
-function local_key(src, evt)
-
-key = '';
-try
-    if isstruct(evt) && isfield(evt, 'Key')
-        key = char(evt.Key);
+    uiwait(fig);
+    if isgraphics(fig) && isvalid(fig)
+        delete(fig);
     end
-catch
+    fig = gobjects(0);
 end
-if any(strcmpi(key, {'escape', 'n'}))
-    local_finish(src, 'No');
-elseif any(strcmpi(key, {'return', 'y', 'space'}))
-    local_finish(src, 'Yes');
-end
+
+    function local_finish(src, value)
+        % Shared with the caller. Must be set before uiresume, because
+        % the figure may close before uiwait returns.
+        choice = value;
+        fig_h = ancestor(src, 'figure');
+        if isempty(fig_h) || ~isvalid(fig_h)
+            fig_h = src;
+        end
+        if isempty(fig_h) || ~isvalid(fig_h)
+            return
+        end
+        try
+            setappdata(fig_h, 'ZefConfirmChoice', value);
+        catch
+        end
+        try
+            uiresume(fig_h);
+        catch
+        end
+        if ~wait_for
+            try
+                delete(fig_h);
+            catch
+            end
+        end
+    end
+
+    function local_key(src, evt)
+        key = '';
+        try
+            if isstruct(evt) && isfield(evt, 'Key')
+                key = char(evt.Key);
+            end
+        catch
+        end
+        if any(strcmpi(key, {'escape', 'n'}))
+            local_finish(src, 'No');
+        elseif any(strcmpi(key, {'return', 'y', 'space'}))
+            local_finish(src, 'Yes');
+        end
+    end
 
 end

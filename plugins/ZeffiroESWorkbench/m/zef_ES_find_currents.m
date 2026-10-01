@@ -84,7 +84,9 @@ end
 
 zef_data.opts.solver = zef_data.solver_package;
 
-if isequal(lower(zef_data.solver_package),'matlab')
+% linprog / quadprog are used only by LP (method 1) and QP (method 5).
+% Least squares and backpropagation must not require Optimization Toolbox.
+if isequal(lower(zef_data.solver_package),'matlab') && ismember(zef_data.search_method, [1 5])
     pwd_aux = pwd;
     dir_aux = [toolboxdir('optim') filesep 'optim'];
     cd(dir_aux);

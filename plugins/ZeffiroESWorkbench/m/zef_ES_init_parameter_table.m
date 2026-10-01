@@ -18,10 +18,8 @@ zef.h_ES_parameter_table.Data = cell(0);
 
 if ismember(zef.ES_opt_solver, 1)
 
-    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 3 4]);
-    zef.h_ES_opt_method.ItemsData    = [1 3 4];
-    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([2 3]);
-    zef.h_ES_opt_algorithm.ItemsData = [2 3];
+    local_set_dropdown(zef.h_ES_opt_method, zef.ES_opt_method_list([1 3 4]), [1 3 4]);
+    local_set_dropdown(zef.h_ES_opt_algorithm, zef.ES_opt_algorithm_list([2 3]), [2 3]);
 
     if not(isequal(zef.ES_opt_method, 4))
         zef = assign_common_parameters(zef);
@@ -48,38 +46,30 @@ if ismember(zef.ES_opt_solver, 1)
 end
 
 if ismember(zef.ES_opt_solver, 2)
-    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 2]);
-    zef.h_ES_opt_method.ItemsData    = [1 2];
-    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list(1);
-    zef.h_ES_opt_algorithm.ItemsData = 1;
+    local_set_dropdown(zef.h_ES_opt_method, zef.ES_opt_method_list([1 2]), [1 2]);
+    local_set_dropdown(zef.h_ES_opt_algorithm, zef.ES_opt_algorithm_list(1), 1);
 
     zef = assign_common_parameters(zef);
 end
 
 if ismember(zef.ES_opt_solver, 3)
-    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list([1 2]);
-    zef.h_ES_opt_method.ItemsData    = [1 2];
-    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list(1);
-    zef.h_ES_opt_algorithm.ItemsData = 1;
+    local_set_dropdown(zef.h_ES_opt_method, zef.ES_opt_method_list([1 2]), [1 2]);
+    local_set_dropdown(zef.h_ES_opt_algorithm, zef.ES_opt_algorithm_list(1), 1);
 
     zef = assign_common_parameters(zef);
 end
 
 if ismember(zef.ES_opt_solver, 4)
-    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list(1);
-    zef.h_ES_opt_method.ItemsData    = 1;
-    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([1 3 4]);
-    zef.h_ES_opt_algorithm.ItemsData = [1 3 4];
+    local_set_dropdown(zef.h_ES_opt_method, zef.ES_opt_method_list(1), 1);
+    local_set_dropdown(zef.h_ES_opt_algorithm, zef.ES_opt_algorithm_list([1 3 4]), [1 3 4]);
 
     zef = assign_common_parameters(zef);
 end
 
 if ismember(zef.ES_opt_solver, 5)
 
-    zef.h_ES_opt_method.Items        = zef.ES_opt_method_list(1);
-    zef.h_ES_opt_method.ItemsData    = 1;
-    zef.h_ES_opt_algorithm.Items     = zef.ES_opt_algorithm_list([1 3 4]);
-    zef.h_ES_opt_algorithm.ItemsData = [1 3 4];
+    local_set_dropdown(zef.h_ES_opt_method, zef.ES_opt_method_list(1), 1);
+    local_set_dropdown(zef.h_ES_opt_algorithm, zef.ES_opt_algorithm_list([1 3 4]), [1 3 4]);
 
     zef = assign_common_parameters(zef);
 end
@@ -123,4 +113,44 @@ if ismember(zef.ES_opt_solver, [1 4 5])
     zef.h_ES_parameter_table.Data{17,1} = 'Maximum time (s)';
     zef.h_ES_parameter_table.Data{17,2} = num2str(zef.ES_max_time);
 end
+end
+
+function local_set_dropdown(h, items, itemsData)
+%LOCAL_SET_DROPDOWN  Replace Items/ItemsData without an illegal Value.
+%   uidropdown rejects ItemsData that does not contain Value, and a
+%   ValueChangedFcn error reverts the control the user just changed.
+    items = cellstr(string(items));
+    items = items(:)';
+    itemsData = reshape(double(itemsData), 1, []);
+    keep = [];
+    try
+        cur = h.Value;
+        if isnumeric(cur) && ismember(cur, itemsData)
+            keep = cur;
+        end
+    catch
+    end
+    prev = [];
+    try
+        prev = h.ValueChangedFcn;
+        h.ValueChangedFcn = '';
+    catch
+    end
+    restore_cb = onCleanup(@() local_restore_callback(h, prev)); %#ok<NASGU>
+    h.ItemsData = [];
+    h.Items = items;
+    h.ItemsData = itemsData;
+    if isempty(keep)
+        keep = itemsData(1);
+    end
+    h.Value = keep;
+end
+
+function local_restore_callback(h, prev)
+    try
+        if isgraphics(h) && isvalid(h)
+            h.ValueChangedFcn = prev;
+        end
+    catch
+    end
 end

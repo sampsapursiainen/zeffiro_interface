@@ -97,8 +97,11 @@ if isempty(h) || ~isscalar(h) || ~isgraphics(h) || ~isvalid(h)
 end
 
 % MATLAB docs (R2025a): set WindowStyle before Position / Resize.
+% Only docked windows are undocked. A modal dialog must stay modal:
+% demoting it makes the Yes/No callback destroy the figure before uiwait
+% can read the choice, so callers see 'No' and do nothing.
 try
-    if isprop(h, 'WindowStyle') && ~strcmpi(char(h.WindowStyle), 'normal')
+    if isprop(h, 'WindowStyle') && strcmpi(char(h.WindowStyle), 'docked')
         h.WindowStyle = 'normal';
     end
 catch
