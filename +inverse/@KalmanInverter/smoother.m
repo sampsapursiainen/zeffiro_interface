@@ -1,4 +1,4 @@
-function [reconstruction, self] = smoother(self, z_inverse, L)
+function [reconstruction, self] = smoother(self, z_inverse, L, opts)
 %smoother  Rauch–Tung–Striebel backward pass over stored posterior covariances.
 %
 %   Zeffiro Interface.
@@ -33,6 +33,8 @@ function [reconstruction, self] = smoother(self, z_inverse, L)
 
         L (:,:)
 
+        opts.use_gpu (1,1) logical = false
+
     end
 
 n_frames = self.number_of_frames;
@@ -41,6 +43,19 @@ if isempty(A)
     A = eye(length(z_inverse{1}));
 end
 Q = self.evolution_cov;
+on_gpu = opts.use_gpu && gpuDeviceCount > 0;
+if on_gpu
+    if issparse(Q)
+        Q = full(Q);
+    end
+    Q = gpuArray(Q);
+    if ~isa(L, "gpuArray")
+        L = gpuArray(L);
+    end
+    if ~isa(self.noise_cov, "gpuArray")
+        self.noise_cov = gpuArray(self.noise_cov);
+    end
+end
 
 h = zef_waitbar(0,'Smoothing');
 cleanup_wb = onCleanup(@() zef_close_waitbar(h));
@@ -52,6 +67,10 @@ if strcmp(self.smoother_type,"RTS")
     
         P = self.posterior_covs{f_ind};
         m = z_inverse{f_ind};
+        if on_gpu
+            P = gpuArray(P);
+            m = gpuArray(m);
+        end
         if inverse.kf.is_identity_transition(A)
             P_ = P + Q;
             m_ = m;
@@ -75,6 +94,12 @@ if strcmp(self.smoother_type,"RTS")
             if f_ind <= numel(self.filter_standardization_D) ...
                     && ~isempty(self.filter_standardization_D{f_ind})
                 reconstruction{f_ind} = self.filter_standardization_D{f_ind} * m_s;
+            elseif on_gpu
+                [P_sqrtm, P_invsqrt] = inverse.kf.spd_sqrt_pair(P_);
+                B = L * P_sqrtm;
+                G = B' / (B * B' + self.noise_cov);
+                w_t = 1 ./ (sum(G.' .* B, 1)').^self.standardization_exponent;
+                reconstruction{f_ind} = w_t .* (P_invsqrt * m_s);
             else
                 P_sqrtm = sqrtm(P_);
                 B = L * P_sqrtm;
@@ -94,6 +119,9 @@ if strcmp(self.smoother_type,"RTS")
                 w_t = 1 ./ (sum(G.' .* K, 1)').^self.standardization_exponent;
                 reconstruction{f_ind} = w_t .* (P_invsqrt * m_s);
             end
+        end
+        if isa(reconstruction{f_ind}, "gpuArray")
+            reconstruction{f_ind} = gather(reconstruction{f_ind});
         end
     end
 elseif strcmp(self.smoother_type,"Sample RTS")

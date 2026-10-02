@@ -74,6 +74,10 @@ if ismethod(MethodClassObj,'precompute')
     MethodClassObj = i_precompute(MethodClassObj, L, procFile);
 end
 
+if zef.use_gpu && zef.gpu_count > 0 && gpuDeviceCount > 0 && ~isa(L, "gpuArray")
+    L = gpuArray(L);
+end
+
 tic;
 for f_ind = 1:MethodClassObj.number_of_frames
     time_val = toc;

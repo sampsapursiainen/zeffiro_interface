@@ -26,11 +26,18 @@ if nargin < 6
     standardization_exponent = 0.5;
 end
 
-P_sqrtm = sqrtm(P);
+% sqrtm is host-only (schur rejects gpuArray). On a device, the symmetric
+% eigendecomposition is the principal square root of this covariance.
+if isa(P, "gpuArray")
+    [P_sqrtm, P_invsqrt] = inverse.kf.spd_sqrt_pair(P);
+else
+    P_sqrtm = sqrtm(P);
+    P_invsqrt = inv(P_sqrtm);
+end
 B = H * P_sqrtm;
 G = B' / (B * B' + R);
 w_t = 1 ./ (sum(G.' .* B, 1)').^standardization_exponent;
-D = w_t .* inv(P_sqrtm);
+D = w_t .* P_invsqrt;
 
 % Standard Kalman update
 v = y - H*m;

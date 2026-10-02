@@ -61,7 +61,13 @@ function out = zef_skf_prasikala_benchmark(opts)
 %   1. SKF (no smoothing)
 %      zef_inverse_run(..., "kalman", "execution","local", MethodParams)
 %      method_type "Standardized Kalman filter", smoother_type "None"
-%      kernel inverse.kf.kf_sL_update (sqrtm).
+%      kernel inverse.kf.kf_sL_update. On the host that square root is
+%      sqrtm. sqrtm does not accept gpuArray, so a visible CUDA device
+%      uses inverse.kf.spd_sqrt_pair (symmetric eigendecomposition), which
+%      is the principal square root of this covariance. Predict, update,
+%      weights, and the RTS gain then stay on that device. Per-frame
+%      covariances for RTS are gathered to host RAM because 80 copies do
+%      not fit in GPU memory; each smoother step is uploaded again.
 %   2. SKF (with smoothing)
 %      same MethodParams, smoother_type "RTS"
 %      RTS reapplies the stored standardization, including alpha.
@@ -107,7 +113,7 @@ function out = zef_skf_prasikala_benchmark(opts)
 %   HEAD MODEL
 %   Not the paper's Brainstorm ICBM152 2023b mesh (published: 2959
 %   positions, 72 x 8877, free orientations). This script's full mode uses
-%     /Users/hsc476/Documents/ICBM152_Models/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat
+%     /media/datadisk1/arash/SuperZeffiro/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat
 %   72 x 9000, 3000 sources, lead_field_type 1. L is not rebuilt or
 %   re-interpolated. The file's source_direction_mode is 2. In the current
 %   tree, zef_processLeadfields treats mode 2 as a normal constraint and
@@ -149,17 +155,22 @@ function out = zef_skf_prasikala_benchmark(opts)
 %     reports bytes for one P, for stored RTS histories, and for full D_t.
 %   "test" — formula check, smoke, guard, then inspect. Not the 9000-state run.
 %
-%   out = zef_skf_prasikala_benchmark()
-%   out = zef_skf_prasikala_benchmark("mode","smoke")
-%   out = zef_skf_prasikala_benchmark("mode","inspect")
-%   out = zef_skf_prasikala_benchmark("mode","full","AllowFullRun",true)
+%   The file lives in +examples/+inverse, so the call is package-qualified.
+%   The project root (the folder that contains +examples) must be on the path.
+%   addpath(genpath(root)) does that; it does not expose this file under the
+%   bare name zef_skf_prasikala_benchmark.
+%
+%   out = examples.inverse.zef_skf_prasikala_benchmark()
+%   out = examples.inverse.zef_skf_prasikala_benchmark("mode","smoke")
+%   out = examples.inverse.zef_skf_prasikala_benchmark("mode","inspect")
+%   out = examples.inverse.zef_skf_prasikala_benchmark("mode","full","AllowFullRun",true)
 %
 %   See also zef_inverse_run, inverse.KalmanInverter, inverse.kf.kf_sL_update.
 
 arguments
-    opts.mode (1,1) string {mustBeMember(opts.mode, ["inspect","smoke","full","test"])} = "smoke"
+    opts.mode (1,1) string {mustBeMember(opts.mode, ["inspect","smoke","full","test"])} = "full"
     opts.AllowFullRun (1,1) logical = false
-    opts.model_file (1,1) string = "/Users/hsc476/Documents/ICBM152_Models/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
+    opts.model_file (1,1) string = "/media/datadisk1/arash/SuperZeffiro/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
     opts.n_repeats (1,1) double {mustBeInteger, mustBePositive} = 1
     opts.request_gb (1,1) double = NaN
     opts.output_dir (1,1) string = ""
@@ -202,6 +213,8 @@ end
 out_dir = i_output_dir(opts, "full");
 fprintf("Full-run byte estimate before loading L: P=%d, RTS history=%d, D_t=%d.\n", ...
     est.bytes_P, est.bytes_rts_history, est.bytes_D_full);
+opts.model_file = i_resolve_model_file(opts.model_file);
+fprintf("Lead-field project: %s\n", opts.model_file);
 
 project = i_load_project_for_inversion(opts.model_file);
 cfg = i_timing_config(opts);
@@ -210,8 +223,25 @@ out = i_run_variants(zef, cfg, fs, n_frames, opts, out_dir, "full", dipole_log);
 out.byte_estimate = est;
 end
 
+function model_file = i_resolve_model_file(requested)
+candidates = [
+    string(requested)
+    "/media/datadisk1/arash/SuperZeffiro/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
+    "/Users/hsc476/Documents/ICBM152_Models/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
+    ];
+for k = 1:numel(candidates)
+    if strlength(strtrim(candidates(k))) > 0 && isfile(candidates(k))
+        model_file = candidates(k);
+        return
+    end
+end
+error("skfBenchmark:MissingModelFile", ...
+    "Lead-field project was not found. Tried: %s", strjoin(candidates, " | "));
+end
+
 function out = i_run_inspect(opts)
 %i_RUN_INSPECT  Sizes and emptiness only. Does not call the inverter.
+opts.model_file = i_resolve_model_file(opts.model_file);
 info = whos("-file", char(opts.model_file));
 names = {info.name};
 i_require_var(names, "L");
@@ -291,6 +321,7 @@ rows = cell(n_rep * numel(specs), 1);
 recon = struct();
 row_i = 0;
 probe_printed = false;
+i_report_device(zef);
 
 for repeat_idx = 1:n_rep
     rng(opts.seed, "twister");
@@ -308,6 +339,8 @@ for repeat_idx = 1:n_rep
     for spec_idx = 1:numel(specs)
         spec = specs(spec_idx);
         params = spec.params;
+        fprintf("Starting %s, kernel %s, smoother %s.\n", ...
+            spec.name, spec.kernel, spec.params.smoother_type);
         sampler = i_start_rss_sampler();
         cpu0 = cputime;
         wall0 = tic;
@@ -690,17 +723,32 @@ else
     inv.prev_step_posterior_cov = diag(inv.theta0(:));
 end
 inv.prev_step_reconstruction = zeros(n_state, 1);
+on_gpu = isfield(zef, "use_gpu") && zef.use_gpu && gpuDeviceCount > 0;
+if on_gpu
+    if issparse(inv.evolution_cov)
+        inv.evolution_cov = full(inv.evolution_cov);
+    end
+    inv.evolution_cov = gpuArray(inv.evolution_cov);
+    inv.noise_cov = gpuArray(inv.noise_cov);
+    inv.prev_step_posterior_cov = gpuArray(inv.prev_step_posterior_cov);
+    inv.prev_step_reconstruction = gpuArray(inv.prev_step_reconstruction);
+    L = gpuArray(L);
+end
 n_frames = inv.number_of_frames;
 z_inverse = cell(1, n_frames);
 offdiag_max = 0;
 for f_ind = 1:n_frames
+    y = bundle.F(:, f_ind);
+    if on_gpu
+        y = gpuArray(y);
+    end
     [m, P] = inverse.kf.class_kf_predict(inv);
-    [m, P, dvec] = i_diag_sqrt_update(m, P, bundle.F(:, f_ind), L, ...
+    [m, P, dvec] = i_diag_sqrt_update(m, P, y, L, ...
         inv.noise_cov, inv.standardization_exponent);
     inv.prev_step_reconstruction = m;
     inv.prev_step_posterior_cov = P;
-    z_inverse{f_ind} = dvec .* m;
-    offdiag_max = max(offdiag_max, max(abs(P - diag(diag(P))), [], "all"));
+    z_inverse{f_ind} = gather(dvec .* m);
+    offdiag_max = max(offdiag_max, gather(max(abs(P - diag(diag(P))), [], "all")));
 end
 run_result = struct();
 run_result.reconstruction = zef_postProcessInverseClassObj(z_inverse, bundle.procFile);
@@ -774,6 +822,28 @@ log_s = struct("deep_index", dipole_log.deep_index, ...
     "seed", seed, "placement", dipole_log.placement);
 end
 
+function [use_gpu, n_gpu] = i_gpu_selection()
+n_gpu = 0;
+try
+    n_gpu = gpuDeviceCount;
+catch
+    n_gpu = 0;
+end
+use_gpu = n_gpu > 0;
+end
+
+function i_report_device(zef)
+if isfield(zef, "use_gpu") && zef.use_gpu
+    dev = gpuDevice;
+    fprintf("GPU: %s, %.2f GB free of %.2f GB. Filter algebra stays on this device.\n", ...
+        dev.Name, dev.AvailableMemory / 1e9, dev.TotalMemory / 1e9);
+    fprintf("sqrtm has no gpuArray method, so the principal square root is the symmetric eigendecomposition.\n");
+    fprintf("RTS history is gathered to host RAM; each smoother step is uploaded and solved on the GPU.\n");
+else
+    fprintf("No CUDA device visible to MATLAB. This run stays on the CPU.\n");
+end
+end
+
 function a = i_hann_pulse(t, center, width)
 u = (t - (center - width / 2)) / width;
 a = zeros(size(t));
@@ -800,8 +870,7 @@ zef.inv_time_1 = 0;
 zef.inv_time_2 = 0.004;
 zef.inv_time_3 = 1 / fs;
 zef.inv_snr = measurement_snr_db;
-zef.use_gpu = false;
-zef.gpu_count = 0;
+[zef.use_gpu, zef.gpu_count] = i_gpu_selection();
 zef.inv_time_interval_averaging = false;
 end
 
@@ -817,8 +886,14 @@ if size(L, 1) ~= 72 || size(L, 2) ~= 3 * size(positions, 1)
 end
 zef = i_make_zef(L, zeros(size(L, 1), n_frames), positions, fs, n_frames, ...
     cfg.measurement_snr_db);
+% L is already the 72-by-9000 source lead field. The file's
+% source_interpolation_ind holds mesh-node indices. zef_processLeadfields
+% expands those with 3*index and then indexes L, which walks off the 9000
+% columns. Keep the 1:n_sources map from i_make_zef so every stored column
+% is used and none are rebuilt.
 if isfield(project, "source_interpolation_ind") && ~isempty(project.source_interpolation_ind)
-    zef.source_interpolation_ind = project.source_interpolation_ind;
+    fprintf("Ignoring stored source_interpolation_ind; L is already %d columns for %d sources.\n", ...
+        size(L, 2), size(positions, 1));
 end
 dipole_log = i_place_dipoles(positions);
 fprintf("File source_direction_mode=%g forced to 1 so Cartesian columns are kept.\n", ...
@@ -884,13 +959,18 @@ end
 function project = i_load_project_for_inversion(model_file)
 % Lead field and source geometry only. Compartment meshes are not required
 % once source_direction_mode is forced to 1.
-wanted = {"L", "source_positions", "source_interpolation_ind", ...
-    "source_direction_mode", "n_sources", "lead_field_type", ...
-    "measurements", "inv_snr", "inv_sampling_frequency", "number_of_frames", ...
-    "inv_time_1", "inv_time_2", "inv_time_3", "inv_prior_over_measurement_db", ...
-    "inv_amplitude_db"};
-present = {whos("-file", char(model_file)).name};
+wanted = {'L', 'source_positions', 'source_interpolation_ind', ...
+    'source_direction_mode', 'n_sources', 'lead_field_type', ...
+    'measurements', 'inv_snr', 'inv_sampling_frequency', 'number_of_frames', ...
+    'inv_time_1', 'inv_time_2', 'inv_time_3', 'inv_prior_over_measurement_db', ...
+    'inv_amplitude_db'};
+info = whos('-file', char(model_file));
+present = {info.name};
 use = wanted(ismember(wanted, present));
+if isempty(use)
+    error("skfBenchmark:MissingLeadField", ...
+        "None of the expected variables were found in %s.", char(model_file));
+end
 project = load(char(model_file), use{:});
 end
 

@@ -92,6 +92,15 @@ if opts.use_gpu && gpuDeviceCount > 0
     self.evolution_cov = gpuArray(self.evolution_cov);
     self.noise_cov = gpuArray(self.noise_cov);
     self.prev_step_posterior_cov = gpuArray(self.prev_step_posterior_cov);
+    if ~isempty(self.prev_step_reconstruction) && ~isa(self.prev_step_reconstruction, "gpuArray")
+        self.prev_step_reconstruction = gpuArray(self.prev_step_reconstruction);
+    end
+    if ~isa(f, "gpuArray")
+        f = gpuArray(f);
+    end
+    if ~isa(L, "gpuArray")
+        L = gpuArray(L);
+    end
 end
 % Basic KF: predict then kf_update; z = x.
 % Standardized / approx sKF always run the sLORETA update so D_t is the
@@ -113,7 +122,7 @@ elseif strcmp(self.method_type,"Standardized Kalman filter")
     % Prediction
     [x, P] = inverse.kf.class_kf_predict(self);
     % Update
-    [x, P, ~, D] = inverse.kf.kf_sL_update(x, gather(P), f, L, self.noise_cov, ...
+    [x, P, ~, D] = inverse.kf.kf_sL_update(x, P, f, L, self.noise_cov, ...
         self.standardization_exponent);
     if self.use_smoothing
         self.posterior_covs = [self.posterior_covs,gather(P)];

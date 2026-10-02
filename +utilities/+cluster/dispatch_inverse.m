@@ -82,7 +82,12 @@ should_smooth = ismethod(MethodClassObj, 'smoother') ...
     && isprop(MethodClassObj, 'use_smoothing') ...
     && MethodClassObj.use_smoothing;
 if should_smooth
-    [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse, bundle.L);
+    use_gpu = isfield(bundle, "use_gpu") && logical(bundle.use_gpu);
+    if use_gpu && isa(MethodClassObj, "inverse.KalmanInverter")
+        [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse, bundle.L, "use_gpu", true);
+    else
+        [z_inverse, MethodClassObj] = MethodClassObj.smoother(z_inverse, bundle.L);
+    end
 end
 if ismethod(MethodClassObj,'terminateComputation')
     MethodClassObj = MethodClassObj.terminateComputation;
