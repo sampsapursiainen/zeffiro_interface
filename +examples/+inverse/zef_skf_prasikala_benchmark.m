@@ -181,6 +181,11 @@ arguments
     opts.standardization_exponent (1,1) double {mustBePositive} = 1.25
 end
 
+% Current folder sees +examples, but zef_inverse_extract_bundle and the
+% waitbar live under src/. A fresh matlab without addpath(genpath(root))
+% otherwise stops at the first lead-field call.
+i_ensure_project_path();
+
 if opts.mode == "full"
     out = i_run_full(opts);
     return
@@ -1097,6 +1102,15 @@ else
 end
 if ~isfolder(out_dir)
     mkdir(out_dir);
+end
+end
+
+function i_ensure_project_path()
+root = i_project_root();
+addpath(root);
+src = fullfile(root, "src");
+if isfolder(src)
+    addpath(genpath(src));
 end
 end
 
