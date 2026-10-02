@@ -90,7 +90,7 @@ if not(isempty(active_compartment_ind)) && not(isempty(source_positions)) && not
         var_1 = ['zef.' compartment_tags{k} '_sigma'];
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
-        color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
+        color_str = eval(['zef.' compartment_tags{k} '_color']);
 
         on_val = eval(var_0);
         sigma_val = eval(var_1);

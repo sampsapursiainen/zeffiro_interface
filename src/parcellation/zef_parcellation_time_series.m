@@ -109,7 +109,7 @@ for k = 1 : length(compartment_tags)
     var_1 = ['zef.' compartment_tags{k} '_sigma'];
     var_2 = ['zef.' compartment_tags{k} '_priority'];
     var_3 = ['zef.' compartment_tags{k} '_sources'];
-    color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
 
     on_val = eval(var_0);
     sigma_val = eval(var_1);
@@ -145,7 +145,7 @@ for k = 1 : length(compartment_tags)
 
     on_val = eval(['zef.' compartment_tags{k} '_on']);
     visible_val = eval(['zef.' compartment_tags{k} '_sources'])>0;
-    color_str =  zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
+    color_str =  eval(['zef.' compartment_tags{k} '_color']);
 
     if on_val
         i = i + 1;

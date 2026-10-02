@@ -95,7 +95,7 @@ if source_direction_mode == 2
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
+        color_str = eval(['zef.' compartment_tags{k} '_color']);
         on_val = eval(var_0);
         sigma_val = eval(var_1);
         priority_val = eval(var_2);

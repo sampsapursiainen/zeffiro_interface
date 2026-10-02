@@ -277,7 +277,7 @@ if eval(['zef.' sensor_tag '_visible'])
         % surfaces (zef_plot_meshes) uses 7:9 for that second cone.
         sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
         h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
-        set(h,'facecolor',zef_rgb_row(eval(['zef.' sensor_tag '_color'])));
+        set(h,'facecolor',eval(['zef.' sensor_tag '_color']));
         set(h,'edgecolor','none');
         set(h,'facealpha',eval('zef.layer_transparency'));
         if size(sensors,2) == 9
@@ -304,7 +304,7 @@ for k = 1 : length(compartment_tags)
     var_1 = ['zef.' compartment_tags{k} '_sigma'];
     var_2 = ['zef.' compartment_tags{k} '_priority'];
     var_3 = ['zef.' compartment_tags{k} '_visible'];
-    color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
+    color_str = eval(['zef.' compartment_tags{k} '_color']);
 
     on_val = evalin('base',var_0);
     sigma_val = evalin('base',var_1);

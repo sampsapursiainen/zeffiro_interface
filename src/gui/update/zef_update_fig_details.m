@@ -26,7 +26,9 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-zef = zef_normalize_colors(zef);
+% Segmentation text such as '0.5000 0 1.0000' is 1-by-15. eval of that
+% text is the 1-by-3 row the compartment list assigns below.
+zef = local_eval_color_fields(zef);
 
 [sensor_names, sensor_colors, n_sensors] = zef_sensor_list_items(zef);
 if isfield(zef, 'h_sensor_visible_color') && isvalid(zef.h_sensor_visible_color)
@@ -48,7 +50,7 @@ if isfield(zef, 'compartment_tags') && iscell(zef.compartment_tags)
         end
         rgb = [0.7 0.7 0.7];
         if isfield(zef, [tag '_color'])
-            rgb = zef_rgb_row(zef.([tag '_color']));
+            rgb = zef.([tag '_color']);
         end
         tagged{end+1} = nm; %#ok<AGROW>
         tagged_rgb(end+1, :) = rgb; %#ok<AGROW>
@@ -206,6 +208,51 @@ end
 
 if nargout == 0
     assignin('base','zef',zef);
+end
+
+end
+
+function zef = local_eval_color_fields(zef)
+
+if ~isstruct(zef)
+    return
+end
+tags = {};
+if isfield(zef, 'compartment_tags') && iscell(zef.compartment_tags)
+    tags = [tags, zef.compartment_tags(:)'];
+end
+if isfield(zef, 'sensor_tags') && iscell(zef.sensor_tags)
+    tags = [tags, zef.sensor_tags(:)'];
+end
+if isfield(zef, 'current_sensors') && ~isempty(zef.current_sensors)
+    tags = [tags, {char(string(zef.current_sensors))}];
+end
+for i = 1:numel(tags)
+    tag = tags{i};
+    if isstring(tag)
+        tag = char(tag);
+    end
+    if ~ischar(tag) || isempty(tag)
+        continue
+    end
+    field = [strtrim(tag) '_color'];
+    if ~isfield(zef, field)
+        continue
+    end
+    rgb = zef.(field);
+    if ischar(rgb) || isstring(rgb)
+        try
+            rgb = eval(['[' char(string(rgb)) ']']);
+        catch
+            rgb = [0.7 0.7 0.7];
+        end
+    end
+    if isnumeric(rgb) && numel(rgb) >= 3
+        rgb = double(rgb(:))';
+        zef.(field) = rgb(1:3);
+    else
+        zef.(field) = [0.7 0.7 0.7];
+    end
 end
 
 end

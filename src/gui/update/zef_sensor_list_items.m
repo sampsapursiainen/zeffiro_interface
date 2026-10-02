@@ -35,7 +35,7 @@ if isfield(zef, 'current_sensors') && ~isempty(zef.current_sensors) ...
     set_color = [0.7 0.7 0.7];
     if isfield(zef, [zef.current_sensors '_color'])
         try
-            set_color = zef_rgb_row(zef.([zef.current_sensors '_color']));
+            set_color = zef.([zef.current_sensors '_color']);
         catch
         end
     end
@@ -43,8 +43,8 @@ if isfield(zef, 'current_sensors') && ~isempty(zef.current_sensors) ...
     colors = zeros(n_pts, 3);
     for i = 1:n_pts
         rgb = set_color;
-        if size(color_table, 1) >= i && ~isempty(color_table)
-            rgb = zef_rgb_row(color_table(i, :), set_color);
+        if size(color_table, 1) >= i && size(color_table, 2) >= 3
+            rgb = color_table(i, 1:3);
         end
         colors(i, :) = rgb;
     end
@@ -64,7 +64,7 @@ if isfield(zef, 'sensor_tags') && iscell(zef.sensor_tags)
         end
         rgb = [0.7 0.7 0.7];
         if isfield(zef, [tag '_color'])
-            rgb = zef_rgb_row(zef.([tag '_color']));
+            rgb = zef.([tag '_color']);
         end
         names{i} = nm;
         colors(i, :) = rgb;
