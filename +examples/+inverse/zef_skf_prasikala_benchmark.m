@@ -227,7 +227,6 @@ function model_file = i_resolve_model_file(requested)
 candidates = [
     string(requested)
     "/media/datadisk1/arash/SuperZeffiro/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
-    "/Users/hsc476/Documents/ICBM152_Models/FS_WS_SIMPLE_ICBM152_mesh_lead_field_3000.mat"
     ];
 for k = 1:numel(candidates)
     if strlength(strtrim(candidates(k))) > 0 && isfile(candidates(k))
