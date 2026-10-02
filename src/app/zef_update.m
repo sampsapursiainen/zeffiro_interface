@@ -37,6 +37,10 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+% Text compartment colors (for example '0.5000 0 1.0000') are 1-by-15.
+% Figure-tool lists and FaceColor need a numeric 1-by-3.
+zef = zef_normalize_colors(zef);
+
 if isfield(zef,'h_zeffiro_window_main')
     if isvalid(zef.h_zeffiro_window_main)
 

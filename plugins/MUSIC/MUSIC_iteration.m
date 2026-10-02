@@ -217,6 +217,7 @@ if source_direction_mode == 2
                 var_3 = 'zef.sc_visible';
                 color_str = evalin('base','zef.sc_color');
         end
+        color_str = zef_rgb_row(color_str);
         on_val = evalin('base',var_0);
         sigma_val = evalin('base',var_1);
         priority_val = evalin('base',var_2);

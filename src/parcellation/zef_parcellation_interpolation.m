@@ -56,7 +56,7 @@ for k = 1 : length(compartment_tags)
     var_2 = ['zef.' compartment_tags{k} '_priority'];
     var_3 = ['zef.' compartment_tags{k} '_visible'];
     var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-    color_str = eval(['zef.' compartment_tags{k} '_color']);
+    color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
 
     on_val = eval(var_0);
     sigma_val = eval(var_1);

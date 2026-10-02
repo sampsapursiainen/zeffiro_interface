@@ -241,6 +241,7 @@ if not(isequal(file_name,0))
             zef = zef_create_compartment(zef, zef.compartment_tags{zef_i});
         end
     end
+    zef = zef_normalize_colors(zef);
 
     try
         zef = zef_set_figure_tool_sliders(zef);

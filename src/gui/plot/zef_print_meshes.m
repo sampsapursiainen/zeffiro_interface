@@ -290,7 +290,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
             % then the cone is still drawn from 4:6 (cyan duplicate).
             sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
             h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
-            set(h,'facecolor',eval(['zef.' sensor_tag 'color']));
+            set(h,'facecolor',zef_rgb_row(eval(['zef.' sensor_tag 'color'])));
             set(h,'edgecolor','none');
             set(h,'facealpha',eval('zef.layer_transparency'));
             if size(sensors,2) == 9
@@ -318,7 +318,7 @@ if ismember(eval('zef.on_screen'), [0,1]) && not(eval('zef.visualization_type')=
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        color_str = eval(['zef.' compartment_tags{k} '_color']);
+        color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
         on_val = evalin('base',var_0);
         sigma_val = evalin('base',var_1);
         priority_val = evalin('base',var_2);
@@ -1389,7 +1389,7 @@ else
         var_2 = ['zef.' compartment_tags{k} '_priority'];
         var_3 = ['zef.' compartment_tags{k} '_visible'];
         var_4 = ['zef.' compartment_tags{k} '_submesh_ind'];
-        color_str = eval(['zef.' compartment_tags{k} '_color']);
+        color_str = zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
         on_val = evalin('base',var_0);
         sigma_val = evalin('base',var_1);
         priority_val = evalin('base',var_2);
@@ -1720,7 +1720,7 @@ if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
             sensors(:,4:6) = sensors(:,4:6)./repmat(sqrt(sum(sensors(:,4:6).^2,2)),1,3);
             h=coneplot(sensors(:,1) + aux_scale_val*sensors(:,4),sensors(:,2) + aux_scale_val*sensors(:,5),sensors(:,3) + aux_scale_val*sensors(:,6),2*aux_scale_val*sensors(:,4),2*aux_scale_val*sensors(:,5),2*aux_scale_val*sensors(:,6),0,'nointerp');
 
-            set(h,'facecolor',eval(['zef.' sensor_tag '_color']));
+            set(h,'facecolor',zef_rgb_row(eval(['zef.' sensor_tag '_color'])));
             set(h,'edgecolor','none');
             set(h,'facealpha',eval('zef.layer_transparency'));
             if size(sensors,2) == 9
@@ -1746,7 +1746,7 @@ if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
         for k = 1 : length(compartment_tags)
             on_val = eval(['zef.' compartment_tags{k} '_on']);
             visible_val = eval(['zef.' compartment_tags{k} '_visible']);
-            color_str =  eval(['zef.' compartment_tags{k} '_color']);
+            color_str =  zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
             if on_val
                 i = i + 1;
                 if visible_val
@@ -2464,7 +2464,7 @@ if not(isempty(sensors_get_functions{unique_sensors_aux_1(i)}))
         for k = 1 : length(compartment_tags)
             on_val = eval(['zef.' compartment_tags{k} '_on']);
             visible_val = eval(['zef.' compartment_tags{k} '_visible']);
-            color_str =  eval(['zef.' compartment_tags{k} '_color']);
+            color_str =  zef_rgb_row(eval(['zef.' compartment_tags{k} '_color']));
             if on_val
                 i = i + 1;
                 if visible_val

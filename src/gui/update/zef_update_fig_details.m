@@ -26,6 +26,8 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
+zef = zef_normalize_colors(zef);
+
 [sensor_names, sensor_colors, n_sensors] = zef_sensor_list_items(zef);
 if isfield(zef, 'h_sensor_visible_color') && isvalid(zef.h_sensor_visible_color)
     zef_colored_list('set', zef.h_sensor_visible_color, sensor_names, sensor_colors);
@@ -46,7 +48,7 @@ if isfield(zef, 'compartment_tags') && iscell(zef.compartment_tags)
         end
         rgb = [0.7 0.7 0.7];
         if isfield(zef, [tag '_color'])
-            rgb = zef.([tag '_color']);
+            rgb = zef_rgb_row(zef.([tag '_color']));
         end
         tagged{end+1} = nm; %#ok<AGROW>
         tagged_rgb(end+1, :) = rgb; %#ok<AGROW>

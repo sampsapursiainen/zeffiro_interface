@@ -93,6 +93,7 @@ Fully qualified names are `tests.unit.<ClassName>`. Parent map: [`../README.md`]
 | `GuiResponsivenessTest` | Resize must not install listener storms or recenter the window |
 | `WindowPlacementTest` | Clamp / centre helpers keep windows on the work area |
 | `SensorListSyncTest` | Figure-tool sensor count matches listed rows |
+| `RgbRowTest` | Text and oversized `*_color` values become 1-by-3 RGB before Figure-tool lists |
 | `SensorTableSyncTest` | Sensors table edits zef only after it was built from zef. Open/remesh does not rename a set or drop a real visibility choice. Mesh widgets display zef and do not replace it. The shipped head project is canonicalized once (electrodes shown, list `Electrode N`, figure text `N`). A later hide of the set or of every contact is kept. |
 | `PluginIniResolutionTest` | Every Start function named in `profile/*/zeffiro_plugins.ini` exists on the path |
 

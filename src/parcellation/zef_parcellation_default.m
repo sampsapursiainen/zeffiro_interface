@@ -62,7 +62,7 @@ for k = 1 : length(compartment_tags)
     var_1 = ['zef.' compartment_tags{k} '_sigma'];
     var_2 = ['zef.' compartment_tags{k} '_priority'];
     var_3 = ['zef.' compartment_tags{k} '_visible'];
-    color_str = eval(['zef.'  compartment_tags{k}  '_color']);
+    color_str = zef_rgb_row(eval(['zef.'  compartment_tags{k}  '_color']));
     on_val = eval(var_0);
     if on_val
         i = i + 1;
@@ -85,7 +85,7 @@ for k = 1 : length(compartment_tags)
                 else
                     c_table{t_ind}{2}{c_ind,1} = [eval(['zef.' c_str '_name'])];
                 end
-                c_table{t_ind}{3}(c_ind,1:3) = eval(['zef.' c_str '_color']);
+                c_table{t_ind}{3}(c_ind,1:3) = zef_rgb_row(eval(['zef.' c_str '_color']));
                 c_table{t_ind}{3}(c_ind,5) =  c_ind;
                 c_table{t_ind}{5}(c_ind,:) = [i submesh_ind_aux(ell_ind)];
                 c_table{t_ind}{4}(J) = c_ind;
