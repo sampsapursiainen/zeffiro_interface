@@ -11,10 +11,13 @@ function self = initialize(self,L,f_data,source_direction_mode)
 %   Resets prev_step_reconstruction / prev_step_posterior_cov so a new run
 %   does not reuse the last filter state. noise_cov defaults to SNR-scaled
 %   identity (or is trace-normalized if the user already set a matrix).
-%   theta0 from early-frame data variance and lead-field sensitivity. Q (evolution_cov
-%   or evolution_var) depends on evolution_prior_model — sensitivity scaling uses
-%   temporal differences of f_data; "User supplied Q" requires evolution_cov to match
-%   size(L,2).
+%   theta0 from early-frame data variance and lead-field sensitivity, unless
+%   theta0 is already set (scalar or one entry per lead-field column). A set
+%   value is kept so a caller can pass the PM-SNR prior of Prasikala et al.,
+%   BSPC 121 (2026) 110233, which is not the sensitivity-scaling expression.
+%   Q (evolution_cov or evolution_var) depends on evolution_prior_model —
+%   sensitivity scaling uses temporal differences of f_data; "User supplied Q"
+%   requires evolution_cov to match size(L,2).
 %
 %   Inputs:  L — lead field; f_data — m×T measurements;
 %            source_direction_mode — 1/2 Cartesian triples (class interleaved),
@@ -37,6 +40,7 @@ function self = initialize(self,L,f_data,source_direction_mode)
     self.prev_step_reconstruction = [];
     self.posterior_covs = cell(0);
     self.filter_standardization_D = cell(0);
+    supplied_theta0 = self.theta0;
 
     external_Q = [];
     if strcmp(self.evolution_prior_model, "User supplied Q")
@@ -65,7 +69,28 @@ function self = initialize(self,L,f_data,source_direction_mode)
         data_power = mean(var(f_data(:, 1:n_noise), 0, 2));
     end
     col_energy = zef_leadfield_column_energy(L, source_direction_mode);
-    self.theta0 = (1-noise_p2)*10.^(self.initial_prior_steering_db/10)*data_power./col_energy;
+    if isempty(supplied_theta0)
+        self.theta0 = (1-noise_p2)*10.^(self.initial_prior_steering_db/10)*data_power./col_energy;
+    else
+        if isa(supplied_theta0, "gpuArray")
+            supplied_theta0 = gather(supplied_theta0);
+        end
+        supplied_theta0 = double(supplied_theta0);
+        n_state = size(L, 2);
+        if ~isscalar(supplied_theta0)
+            supplied_theta0 = supplied_theta0(:);
+            if numel(supplied_theta0) ~= n_state
+                error("KalmanInverter:initialize:BadTheta0", ...
+                    "theta0 must be a positive scalar or a vector of length %d; got %d.", ...
+                    n_state, numel(supplied_theta0));
+            end
+        end
+        if ~all(isfinite(supplied_theta0(:))) || ~all(supplied_theta0(:) > 0)
+            error("KalmanInverter:initialize:BadTheta0", ...
+                "theta0 must be finite and positive.");
+        end
+        self.theta0 = supplied_theta0;
+    end
 
     needs_temporal_diff = ismember(self.evolution_prior_model, ...
         ["Sensitivity scaling", "Avg. sensit. scaling", "SVD-based", "Avg. SVD-based"]);
