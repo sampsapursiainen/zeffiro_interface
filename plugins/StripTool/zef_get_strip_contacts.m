@@ -10,9 +10,9 @@ function [contacts, sensor_info, triangle_ind] = zef_get_strip_contacts(contact_
 %       contact_index, strip_struct, zef, domain_type, global_index)
 %
 %   domain_type default 'model_geometry'. 'points'/'model_points': xyz;
-%   'sensor_info': empty contacts plus strip_id. Models 1/2/3 differ
-%   in contact count and angular layout. Called from plot, add_contacts,
-%   and sensor get_functions. Does not write zef.
+%   'sensor_info': empty contacts plus strip_id. Models 1/2/3 keep their
+%   layouts. Models 4/5 place an 8-column DiSC lattice. Called from plot,
+%   add_contacts, and sensor get_functions. Does not write zef.
 %
 %   See also zef_get_strip_parameters.
 
@@ -76,6 +76,18 @@ if isequal(strip_struct.strip_model,3)
 row_ind_aux = ceil(contact_index/4);
 contacts(3) = 0.75+0.75*(row_ind_aux-1);
 angle_aux = (2*pi/4)*mod(contact_index,4) + (pi/4)*mod(row_ind_aux,2);
+[contacts(1), contacts(2)] = pol2cart(angle_aux,strip_struct.strip_radius);
+end
+
+if ismember(strip_struct.strip_model,[4 5])
+% Eight columns at 2*pi/8, aligned across rows. The sensor point is the
+% patch center (local z = 0.200 + 0.200*(row-1)); roll is strip_angle
+% inside zef_strip_coordinate_transform, not here.
+n_columns_aux = 8;
+row_ind_aux = ceil(contact_index/n_columns_aux);
+column_ind_aux = mod(contact_index-1,n_columns_aux);
+angle_aux = column_ind_aux*(2*pi/n_columns_aux);
+contacts(3) = 0.200+0.200*(row_ind_aux-1);
 [contacts(1), contacts(2)] = pol2cart(angle_aux,strip_struct.strip_radius);
 end
 
@@ -152,6 +164,23 @@ angle_aux = (2*pi/4)*mod(contact_index,4)+ (pi/4)*mod(row_ind_aux,2);
 [center_point_x_aux, center_point_y_aux] = pol2cart(angle_aux,strip_struct.strip_radius);
 center_point_aux = [center_point_x_aux; center_point_y_aux; 0.75 + 0.5*0.75 + 0.75*(row_ind_aux-1)];
 point_ind_aux = find(sqrt(sum((strip_struct.points{1}(point_ind,:)'-center_point_aux).^2))<=0.5*0.75);
+point_ind = point_ind(point_ind_aux);
+end
+
+if ismember(strip_struct.strip_model,[4 5])
+n_columns_aux = 8;
+row_ind_aux = ceil(contact_index/n_columns_aux);
+column_ind_aux = mod(contact_index-1,n_columns_aux);
+angle_aux = column_ind_aux*(2*pi/n_columns_aux);
+z_center_aux = 0.200+0.200*(row_ind_aux-1);
+point_ind = find(strip_struct.points{1}(:,3)>=z_center_aux-0.100 & strip_struct.points{1}(:,3)<=z_center_aux+0.100);
+[center_point_x_aux, center_point_y_aux] = pol2cart(angle_aux,strip_struct.strip_radius);
+center_point_aux = [center_point_x_aux; center_point_y_aux; z_center_aux];
+if isempty(point_ind)
+point_ind_aux = [];
+else
+point_ind_aux = find(sqrt(sum((strip_struct.points{1}(point_ind,:)'-center_point_aux).^2))<=0.060);
+end
 point_ind = point_ind(point_ind_aux);
 end
 

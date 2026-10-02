@@ -12,6 +12,8 @@ function zef = zef_strip_tool_init(zef)
 %   Defaults tip [0 0 0], orientation [0 0 1], length 80 mm,
 %   impedance 1000, conductivity 1e-15, encapsulation on 0.5 mm /
 %   0.33 S/m. Disables geometry edits when strip_status is Embedded.
+%   Sets the Model popup Value from strip_model (or 1 if that field is
+%   missing), clamped to the popup list, before update reads it.
 %   Called from open/add/delete. Does not embed.
 %
 %   See also zef_strip_tool_update.
@@ -34,6 +36,24 @@ zef.strip_tool = struct;
 end
 
 struct_aux = zef.([zef.current_sensors '_strip_cell']){zef.strip_tool.current_strip};
+
+% update stores h_strip_model.Value as strip_model. Put the saved index
+% back on the popup first, so a later update does not replace it with
+% whatever entry the list happened to be showing.
+model_labels = zef.strip_tool.h_strip_model.String;
+if iscell(model_labels) || isstring(model_labels)
+    n_models = numel(model_labels);
+else
+    n_models = size(model_labels, 1);
+end
+if isfield(struct_aux,'strip_model') && ~isempty(struct_aux.strip_model) ...
+        && isnumeric(struct_aux.strip_model) && isfinite(struct_aux.strip_model(1))
+    model_value = round(double(struct_aux.strip_model(1)));
+else
+    model_value = 1;
+end
+model_value = min(max(model_value, 1), max(n_models, 1));
+zef.strip_tool.h_strip_model.Value = model_value;
 
 % Copy stored geometry onto GUIDE String widgets. Missing fields get
 % the defaults in the help (tip origin, +z orientation, 80 mm, …).

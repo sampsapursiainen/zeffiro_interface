@@ -20,7 +20,7 @@ Generic **implanted strip / cylinder** geometry as FEM compartments (optional en
 
 ## Code functionality
 
-1. Add strip entry → tip, orientation, length, impedance, encapsulation options.
+1. Add strip entry → tip, orientation, model (Omnidirectional 4, Directional 8, Directional 40, DiSC 64, DiSC 128), length, impedance, encapsulation options.
 2. **Plot** preview in local/world coordinates.
 3. **Embed** creates compartment(s) via `zef_add_compartment`.
 4. **Add contacts** writes sensor points for stimulation/recording setups.
