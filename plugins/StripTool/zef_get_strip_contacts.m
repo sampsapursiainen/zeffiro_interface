@@ -80,14 +80,12 @@ angle_aux = (2*pi/4)*mod(contact_index,4) + (pi/4)*mod(row_ind_aux,2);
 end
 
 if ismember(strip_struct.strip_model,[4 5])
-% Eight columns at 2*pi/8, aligned across rows. The sensor point is the
-% patch center (local z = 0.200 + 0.200*(row-1)); roll is strip_angle
-% inside zef_strip_coordinate_transform, not here.
-n_columns_aux = 8;
-row_ind_aux = ceil(contact_index/n_columns_aux);
-column_ind_aux = mod(contact_index-1,n_columns_aux);
-angle_aux = column_ind_aux*(2*pi/n_columns_aux);
-contacts(3) = 0.200+0.200*(row_ind_aux-1);
+% Shores et al. 2026 Fig. 1C / Fig. 8: 8 columns on a 0.8 mm shaft.
+% Alternate rows shift by half a column (diamond). Row centers run from
+% one pitch above the tip across a 7.5 mm span. Roll is strip_angle in
+% zef_strip_coordinate_transform, not here.
+[angle_aux, z_center_aux] = local_disc_site(contact_index, strip_struct.strip_model);
+contacts(3) = z_center_aux;
 [contacts(1), contacts(2)] = pol2cart(angle_aux,strip_struct.strip_radius);
 end
 
@@ -168,12 +166,8 @@ point_ind = point_ind(point_ind_aux);
 end
 
 if ismember(strip_struct.strip_model,[4 5])
-n_columns_aux = 8;
-row_ind_aux = ceil(contact_index/n_columns_aux);
-column_ind_aux = mod(contact_index-1,n_columns_aux);
-angle_aux = column_ind_aux*(2*pi/n_columns_aux);
-z_center_aux = 0.200+0.200*(row_ind_aux-1);
-point_ind = find(strip_struct.points{1}(:,3)>=z_center_aux-0.100 & strip_struct.points{1}(:,3)<=z_center_aux+0.100);
+[angle_aux, z_center_aux, pitch_aux] = local_disc_site(contact_index, strip_struct.strip_model);
+point_ind = find(strip_struct.points{1}(:,3)>=z_center_aux-0.5*pitch_aux & strip_struct.points{1}(:,3)<=z_center_aux+0.5*pitch_aux);
 [center_point_x_aux, center_point_y_aux] = pol2cart(angle_aux,strip_struct.strip_radius);
 center_point_aux = [center_point_x_aux; center_point_y_aux; z_center_aux];
 if isempty(point_ind)
@@ -192,5 +186,21 @@ end
 
 end
 end
+
+end
+
+function [angle_aux, z_center_aux, pitch_aux] = local_disc_site(contact_index, strip_model)
+
+n_columns_aux = 8;
+if isequal(strip_model, 4)
+    n_rows_aux = 8;
+else
+    n_rows_aux = 16;
+end
+pitch_aux = 7.5 / (n_rows_aux - 1);
+row_ind_aux = ceil(contact_index / n_columns_aux);
+column_ind_aux = mod(contact_index - 1, n_columns_aux);
+angle_aux = column_ind_aux * (2 * pi / n_columns_aux) + mod(row_ind_aux - 1, 2) * (pi / n_columns_aux);
+z_center_aux = pitch_aux * row_ind_aux;
 
 end

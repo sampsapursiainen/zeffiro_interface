@@ -7,7 +7,8 @@ classdef StripToolDiscTest < matlab.unittest.TestCase
 %   Licensed under the GNU General Public License v3.0 (see LICENSE).
 %
 %   Models 1–3 stay at radius 0.635 mm. Models 4 and 5 are the DiSC
-%   depth array: radius 0.400 mm, 8 columns, 0.200 mm pitch, 0.120 mm
+%   depth array from Shores et al. (bioRxiv 2026.06.11.731746): radius
+%   0.400 mm, 8 columns, diamond row shift, 7.5 mm row span, 0.120 mm
 %   contacts. No figure and no embed on the geometry tests.
 
     methods (TestClassSetup)
@@ -40,11 +41,14 @@ classdef StripToolDiscTest < matlab.unittest.TestCase
         function disc64LatticeAndShaft(testCase)
             s = tests.unit.StripToolDiscTest.built(4);
             pts = tests.unit.StripToolDiscTest.pointsOf(s);
+            pitch = 7.5 / 7;
             [x1, y1] = pol2cart(0, 0.400);
-            testCase.verifyEqual(pts(1, :), [x1 y1 0.200], 'AbsTol', 1e-10);
+            testCase.verifyEqual(pts(1, :), [x1 y1 pitch], 'AbsTol', 1e-10);
             [x8, y8] = pol2cart(7 * 2 * pi / 8, 0.400);
-            testCase.verifyEqual(pts(8, :), [x8 y8 0.200], 'AbsTol', 1e-10);
-            testCase.verifyEqual(pts(9, :), [x1 y1 0.400], 'AbsTol', 1e-10);
+            testCase.verifyEqual(pts(8, :), [x8 y8 pitch], 'AbsTol', 1e-10);
+            [x9, y9] = pol2cart(pi / 8, 0.400);
+            testCase.verifyEqual(pts(9, :), [x9 y9 2 * pitch], 'AbsTol', 1e-10);
+            testCase.verifyEqual(pts(64, 3) - pts(1, 3), 7.5, 'AbsTol', 1e-10);
             tests.unit.StripToolDiscTest.verifyLattice(testCase, pts);
             testCase.verifyGreaterThan(size(s.triangles{1}, 1), 0);
             z = s.points{1}(:, 3);
@@ -57,9 +61,11 @@ classdef StripToolDiscTest < matlab.unittest.TestCase
             s = tests.unit.StripToolDiscTest.built(5);
             pts = tests.unit.StripToolDiscTest.pointsOf(s);
             testCase.verifyEqual(size(pts, 1), 128);
-            [x128, y128] = pol2cart(7 * 2 * pi / 8, 0.400);
-            testCase.verifyEqual(pts(128, :), [x128 y128 3.200], 'AbsTol', 1e-10);
+            pitch = 7.5 / 15;
+            [x128, y128] = pol2cart(7 * 2 * pi / 8 + pi / 8, 0.400);
+            testCase.verifyEqual(pts(128, :), [x128 y128 16 * pitch], 'AbsTol', 1e-10);
             testCase.verifyEqual(hypot(pts(128, 1), pts(128, 2)), 0.400, 'AbsTol', 1e-10);
+            testCase.verifyEqual(pts(128, 3) - pts(1, 3), 7.5, 'AbsTol', 1e-10);
             tests.unit.StripToolDiscTest.verifyLattice(testCase, pts);
         end
 
@@ -149,11 +155,14 @@ classdef StripToolDiscTest < matlab.unittest.TestCase
 
         function verifyLattice(testCase, pts)
             n = size(pts, 1);
+            n_rows = n / 8;
+            pitch = 7.5 / (n_rows - 1);
             for i = 1:n
                 row = ceil(i / 8);
                 column = mod(i - 1, 8);
-                [x, y] = pol2cart(column * (2 * pi / 8), 0.400);
-                z = 0.200 + 0.200 * (row - 1);
+                angle = column * (2 * pi / 8) + mod(row - 1, 2) * (pi / 8);
+                [x, y] = pol2cart(angle, 0.400);
+                z = pitch * row;
                 testCase.verifyEqual(pts(i, :), [x y z], 'AbsTol', 1e-10);
                 testCase.verifyEqual(hypot(pts(i, 1), pts(i, 2)), 0.400, 'AbsTol', 1e-10);
             end
