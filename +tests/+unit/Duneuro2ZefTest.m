@@ -131,6 +131,22 @@ classdef Duneuro2ZefTest < matlab.unittest.TestCase
             testCase.verifyEqual(payload.location_unit, 1);
         end
 
+        function coordinateUnitDoesNotRescaleLeadField(testCase)
+            % A metre mesh is stored in millimetres. That scale belongs on
+            % coordinates only; the lead field is already the DUNEuro solve.
+            n_e = 4;
+            n_s = 5;
+            eegL = randn(n_e, n_s, 3);
+            raw = struct();
+            raw.eegL = eegL;
+            raw.electrodePositions = randn(3, n_e) * 0.08;
+            raw.unit = 'm';
+            payload = utilities.duneuro2zef.convert(raw);
+            expected = reshape(permute(eegL, [1 3 2]), n_e, []);
+            testCase.verifyEqual(payload.L, expected);
+            testCase.verifyEqual(payload.sensors, 1000 * raw.electrodePositions.');
+        end
+
         function anisotropyPackedAsZeffiroColumns(testCase)
             nodes = [0 0 0; 1 0 0; 0 1 0; 0 0 1];
             raw = struct();

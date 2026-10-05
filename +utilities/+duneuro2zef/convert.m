@@ -30,8 +30,14 @@ function [payload, report] = convert(source)
 %
 %   Units: DUNEuro does not convert mesh units. A unit field is honoured
 %   when present. Otherwise a head-sized bounding box maps millimetres vs
-%   metres (diagonal in [50, 500] → mm; [0.05, 0.5] → m, ×1000). Lead-field
-%   values stay in SI V/(A·m); they are not scaled with display units.
+%   metres (diagonal in [50, 500] → mm; [0.05, 0.5] → m, ×1000). That scale
+%   is applied to coordinates only. Lead-field numbers are copied unchanged.
+%   Zeffiro's own EEG assembly divides millimetre nodes by 1000 before the
+%   FEM, so zef.L from zef_lead_field_matrix is volts per ampere-metre.
+%   A DUNEuro solve whose geometry and unit dipole moment live in
+%   millimetres is smaller by about 1e6, and it still will not match a
+%   native lead field unless the mesh, conductivity, electrodes, and
+%   source grid are the same. Do not multiply L to chase a Frobenius norm.
 %
 %   Indexing: DUNE/DUNEuro elements may be 0-based; they are shifted to
 %   MATLAB 1-based when min(elements)==0. Tissue IDs are remapped onto
