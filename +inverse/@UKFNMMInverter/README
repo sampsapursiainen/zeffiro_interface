@@ -1,0 +1,1 @@
+This is SKF+UKF, where spatial estimation comes from SKF and time evolution from the Jansen-Rit neural mass model. JR parameters are estimated through UKF.
