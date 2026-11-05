@@ -1,6 +1,6 @@
-function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
+function [eegT, averagedL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
 %
-%   [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
+%   [eegT, averagedL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFromZeffiroProjectPath(kwargs)
 %
 % Loads data from a given Zeffiro Project file and computes
 % an EEG transfer matrix using the duneuro-matlab library.
@@ -76,7 +76,7 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     arguments (Output)
         eegT (:,:) double { mustBeFinite }
-        eegL (:,:,:) double { mustBeFinite }
+        averagedL (:,:) double { mustBeFinite }
         finalElectrodePositions (3,:) double { mustBeFinite }
     end
 
@@ -278,27 +278,39 @@ function [eegT, eegL, finalElectrodePositions] = eegTransferMatrixAndLeadFieldFr
 
     end % for
 
+    reshapedL = zeros(size(eegL,1), 3 * size(eegL,2)) ;
+
+    reshapedL(:,1:3:end) = eegL(:,:,1) ;
+    reshapedL(:,2:3:end) = eegL(:,:,2) ;
+    reshapedL(:,3:3:end) = eegL(:,:,3) ;
+
+    averagedL = reshapedL - mean(reshapedL,1) ;
+
     if strlength(kwargs.saveFilePrefix) > 0
 
-        outputFilePath = kwargs.saveFilePrefix + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
+        leadFieldFilePath = kwargs.saveFilePrefix + "." + "lead-field" + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
 
-        saveFile = matfile(outputFilePath, Writable=true) ;
+        transferMatrixFilePath = kwargs.saveFilePrefix + "." + "transfer-matrix" + "." + kwargs.sourceModel + "." + string(currentTime) + ".mat" ;
 
-        disp("Saving eegT to " + outputFilePath + "...")
+        transferMatrixFile = matfile(transferMatrixFilePath, Writable=true) ;
 
-        saveFile.eegT = eegT ;
+        leadFieldFileFile = matfile(leadFieldFilePath, Writable=true) ;
 
-        disp("Saving eegL to " + outputFilePath + "...")
+        disp("Saving eegT to " + transferMatrixFilePath + "...")
 
-        saveFile.eegL = eegL ;
+        transferMatrixFile.eegT = eegT ;
 
-        disp("Saving electrode positions to " + outputFilePath + "...") ;
+        transferMatrixFile.meshPoints = meshPoints ;
 
-        saveFile.electrodePositions = squeeze(finalElectrodePositions) ;
+        transferMatrixFile.electrodePositions  = finalElectrodePositions ;
 
-        disp("Saving source positions to " + outputFilePath + "...") ;
+        disp("Saving eegL to " + leadFieldFilePath + "...")
 
-        saveFile.sourcePositions = sourcePositions ;
+        leadFieldFile.eegL = averagedL ;
+
+        leadFieldFile.sourcePositions = sourcePositions ;
+
+        leadFieldFile.electrodePositions  = finalElectrodePositions ;
 
     end % if
 
