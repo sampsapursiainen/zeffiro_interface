@@ -294,7 +294,7 @@ function [eegT, averagedL, finalElectrodePositions] = eegTransferMatrixAndLeadFi
 
         transferMatrixFile = matfile(transferMatrixFilePath, Writable=true) ;
 
-        leadFieldFileFile = matfile(leadFieldFilePath, Writable=true) ;
+        leadFieldFile = matfile(leadFieldFilePath, Writable=true) ;
 
         disp("Saving eegT to " + transferMatrixFilePath + "...")
 
