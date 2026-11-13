@@ -261,8 +261,8 @@ else % Use CPU instead of GPU
         b = full(B(:,block_ind));
         tol_val = min(impedance_vec(block_ind),1)*tol_val_eff;
 
-        if isequal(electrode_model,'PEM') & impedance_inf == 1 & i==1
-            b = zeros(size(b));
+        if isequal(electrode_model,'PEM') && impedance_inf == 1 && i == 1
+            b(:,1) = 0;
         end
 
         %Iterate
