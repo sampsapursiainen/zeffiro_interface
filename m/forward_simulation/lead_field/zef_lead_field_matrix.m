@@ -8,7 +8,7 @@ if nargin == 0
     zef = evalin('base','zef');
 end
 
-zef.brain_ind = zef_find_active_compartment_ind(zef);
+% zef.brain_ind = zef_find_active_compartment_ind(zef);
 zef.active_compartment_ind = zef.brain_ind;
 
 [zef.lead_field_id, zef.lead_field_id_max]  = zef_update_lead_field_id(zef.lead_field_id,zef.lead_field_id_max,'create');
@@ -50,9 +50,9 @@ end
 zef.brain_activity_inds = [];
 zef.aux_vec_sources = zeros(length(zef.compartment_tags),1);
 
-for zef_i = 1 : length(zef.compartment_tags)
-    zef.aux_vec_sources(zef_i) = eval(['isequal(zef.' zef.compartment_tags{zef_i} '_sources_old, zef.' zef.compartment_tags{zef_i} '_sources);']);
-end
+% for zef_i = 1 : length(zef.compartment_tags)
+%     zef.aux_vec_sources(zef_i) = eval(['isequal(zef.' zef.compartment_tags{zef_i} '_sources_old, zef.' zef.compartment_tags{zef_i} '_sources);']);
+% end
 
 % if not(zef.source_space_lock_on) && ( isempty(zef.source_ind) || not(zef.n_sources == zef.n_sources_old) || ismember(false,zef.aux_vec_sources) )
 
@@ -99,9 +99,9 @@ clear valid_source_inds_builder;
 
 zef.n_sources_old = zef.n_sources;
 
-for zef_i = 1 : length(zef.compartment_tags)
-    eval(['zef.' zef.compartment_tags{zef_i} '_sources_old = zef.' zef.compartment_tags{zef_i} '_sources;']);
-end
+% for zef_i = 1 : length(zef.compartment_tags)
+%     eval(['zef.' zef.compartment_tags{zef_i} '_sources_old = zef.' zef.compartment_tags{zef_i} '_sources;']);
+% end
 
 clear zef_i;
 
@@ -127,12 +127,12 @@ zef.n_sources_mod = 0;
 %end % if
 
 zef.sensors_aux = zef.sensors;
-zef.nodes_aux = zef.nodes/1000;
+zef.nodes_aux = zef.nodes;
 
 if ismember(zef.lead_field_type,[1,4,5]) & size(zef.sensors,2) == 3
-    zef.sensors_aux = zef.sensors_attached_volume(:,1:3)/1000;
+    zef.sensors_aux = zef.sensors_attached_volume(:,1:3);
 elseif ismember(zef.lead_field_type,[2,3])
-    zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3)/1000;
+    zef.sensors_aux(:,1:3) = zef.sensors_aux(:,1:3);
 else
     zef.sensors_aux = zef.sensors_attached_volume;
 end
@@ -347,12 +347,12 @@ zef.lead_field_time = toc;
 %% Perform final unit conversions and source interpolation.
 
 if zef.location_unit == 1
-    zef.source_positions = 1000*zef.source_positions;
+    % zef.source_positions = 1000*zef.source_positions;
     zef.location_unit_current = 1;
 end
 
 if zef.location_unit == 2
-    zef.source_positions = 100*zef.source_positions;
+    % zef.source_positions = 100*zef.source_positions;
     zef.location_unit_current = 2;
 end
 

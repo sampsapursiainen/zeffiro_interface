@@ -90,7 +90,7 @@ else
 end
 clear elements;
 
-tol_val = 1e-6;
+tol_val = 1e-8;
 m_max = 3*floor(sqrt(n_of_nodes));
 precond = 'cholinc';
 permutation = 'symamd';
@@ -112,7 +112,9 @@ else
     n_of_electrodes = size(electrodes,1);
     ele_ind = zeros(n_of_electrodes,1);
     for i = 1 : n_of_electrodes
-        [min_val, min_ind] = min(sum((repmat(electrodes(i,:),n_of_nodes,1)' - nodes').^2));
+        size(nodes)
+        size(electrodes)
+        [min_val, min_ind] = min(sum((nodes' - electrodes(i,1:3)').^2));
         ele_ind(i) = min_ind;
     end
     impedance_vec = ones(length(electrodes(:, 1)), 1);
