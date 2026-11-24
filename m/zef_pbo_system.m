@@ -60,7 +60,7 @@ interp_pos = repmat(interp_pos, arg_n_of_coeffs, 1);
 
 pos_diffs = arg_locs - interp_pos;
 
-weight_coefs = zef_L2_norm(pos_diffs, 2);
+weight_coefs = dot(pos_diffs,pos_diffs,2) ;
 
 % Position-based optimization matrix.
 
